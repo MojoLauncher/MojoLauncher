@@ -96,9 +96,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.jar.JarFile;
 
 import git.artdeell.mojo.BuildConfig;
 import git.artdeell.mojo.R;
+import me.andreasmelone.basicmodinfoparser.BasicModInfo;
+import me.andreasmelone.basicmodinfoparser.Platform;
+import me.andreasmelone.basicmodinfoparser.util.ModInfoParseException;
 
 @SuppressWarnings("IOStreamConstructor")
 public final class Tools {
@@ -212,14 +216,32 @@ public final class Tools {
      * @return whether sodium or a sodium-based mod is installed
      */
     private static boolean hasSodium(File gameDir) {
+        // sosium
+        String[] sodiumBasedModIds = new String[] {
+                "sodium", "embeddium", "rubidium", "magnesium"
+        };
+
         File modsDir = new File(gameDir, "mods");
         File[] mods = modsDir.listFiles(file -> file.isFile() && file.getName().endsWith(".jar"));
         if(mods == null) return false;
         for(File file : mods) {
-            String name = file.getName();
-            if(name.contains("sodium") ||
-                    name.contains("embeddium") ||
-                    name.contains("rubidium")) return true;
+            try (JarFile jar = new JarFile(file)) {
+                Platform[] platforms = Platform.findModPlatform(file);
+                for (Platform platform : platforms) {
+                    String content = platform.getInfoFileContent(jar);
+                    if(content == null) continue;
+                    for (BasicModInfo info : platform.parse(content)) {
+                        for (String modId : sodiumBasedModIds) {
+                            String id = info.getId();
+                            if (id != null && id.equalsIgnoreCase(modId)) return true;
+                        }
+                    }
+                }
+            } catch (ModInfoParseException e) {
+                Log.e("CheckSodium", "An exception occurred while parsing mod info for file: " + file.getName(), e);
+            } catch (IOException e) {
+                Log.e("CheckSodium", "An exception occurred while processing file: " + file.getName(), e);
+            }
         }
         return false;
     }
