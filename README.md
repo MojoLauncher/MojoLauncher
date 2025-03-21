@@ -56,24 +56,8 @@ If you want to build from source code, follow the steps below.
 The build instructions for the custom LWJGL are available over the [LWJGL repository](https://github.com/MojoLauncher/lwjgl3)
 
 ### The Launcher
-- Because languages are auto-added by Crowdin, you need to run the language list generator before building. In the project directory, run:
-
-* On Linux, Mac OS:
-```
-chmod +x scripts/languagelist_updater.sh
-bash scripts/languagelist_updater.sh
-```
-* On Windows:
-```
-scripts\languagelist_updater.bat
-```
-Then, run these commands ~~or build using Android Studio~~.
-
-* Build GLFW stub:
-```
-./gradlew :jre_lwjgl3glfw:build
 ```       
-* Build the launcher
+* Build the launcher (it will automatically download all dependencies)
 ```
 ./gradlew :app_pojavlauncher:assembleDebug
 ```
