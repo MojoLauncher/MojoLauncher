@@ -55,8 +55,7 @@ If you want to build from source code, follow the steps below.
 ### LWJGL
 The build instructions for the custom LWJGL are available over the [LWJGL repository](https://github.com/MojoLauncher/lwjgl3)
 
-### The Launcher
-```       
+### The Launcher       
 * Build the launcher (it will automatically download all dependencies)
 ```
 ./gradlew :app_pojavlauncher:assembleDebug
