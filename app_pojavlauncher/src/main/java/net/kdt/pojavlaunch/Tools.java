@@ -336,6 +336,9 @@ public final class Tools {
             javaArgList.add("-Djna.boot.library.path="+dirPath);
         }
 
+        //disables LWJGL checking in sodium
+        javaArgList.add("-Dsodium.checks.issue2561=false");
+
         javaArgList.addAll(Arrays.asList(getMinecraftJVMArgs(versionId, gamedir)));
         javaArgList.add("-cp");
         javaArgList.add(launchClassPath + ":" + getLWJGL3ClassPath());
