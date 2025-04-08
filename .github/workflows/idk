@@ -1,0 +1,86 @@
+name: Android CI
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    env:
+      UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
+#      CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+
+      - name: Get LTW
+        uses: dawidd6/action-download-artifact@v2
+        continue-on-error: true
+        with:
+          repo: artdeell/LTW
+          workflow: android.yml
+          workflow_conclusion: success
+          name: output-aar
+          path: app_pojavlauncher/libs
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.11"
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set JAVA_HOME to JDK 17
+        run: echo "JAVA_HOME=/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.7-4/x64" >> $GITHUB_ENV
+
+      - name: Build Publishing .aab
+        if: github.repository_owner == 'MojoLauncher' && github.ref_name == 'v3_openjdk'
+        run: |
+          gradle :app_pojavlauncher:bundleGplay
+          mkdir out
+          mv app_pojavlauncher/build/outputs/bundle/gplay/app_pojavlauncher-gplay.aab out/app-gplay.aab
+
+      - name: Build Debug .apk
+        env:
+          JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.7-4/x64
+        run: |
+          # Build the launcher
+          gradle :app_pojavlauncher:assembleDebug
+          mv app_pojavlauncher/build/outputs/apk/debug/app_pojavlauncher-debug.apk out/app-debug.apk
+
+      - name: Gen md5sums
+        run: |
+          md5sum out/app-debug.apk > out/app-debug.md5
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug
+          path: out/app-debug.*
+
+      - name: Upload AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-aab
+          path: out/app-gplay.aab
+
+#      - name: Upload onto the Google Play testing track
+#        continue-on-error: true
+#        if: github.repository_owner == 'PojavLauncherTeam' && github.ref_name == 'v3_openjdk'
+#        uses: r0adkll/upload-google-play@v1.1.2
+#        with:
+#          serviceAccountJsonPlainText: ${{ secrets.GPLAY_SERVICE_JSON }}
+#          packageName: net.kdt.pojavlaunch
+#          releaseFiles: out/app-gplay.aab
+#          track: internal
+#          inAppUpdatePriority: 5
