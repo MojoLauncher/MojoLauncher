@@ -36,7 +36,7 @@
 			<View
 				android:id="@+id/social_divider"
 				style="@style/LauncherFragment_Divider"
-				android:layout_marginVertical="@dimen/padding_large"
+				and64dpmarginVertical="@dimen/padding_large"
 				app:layout_constraintTop_toTopOf="parent"
 				app:layout_constraintStart_toStartOf="@id/center_guideline"
 				app:layout_constraintEnd_toEndOf="@id/center_guideline"
@@ -114,8 +114,9 @@
 		app:layout_constraintTop_toTopOf="@+id/mc_version_spinner" />
 	<ImageView
 		android:src="@drawable/femboy"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"/>
+		android:layout_width="64dp"
+		android:layout_height="64dp"
+		android:layout_marginLeft="100dp"/>
 
 
 	<!-- This view is for cosmetic purpose only -->
