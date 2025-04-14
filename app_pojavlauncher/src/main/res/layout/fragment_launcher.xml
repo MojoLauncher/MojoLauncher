@@ -116,7 +116,7 @@
 		android:src="@drawable/femboy"
 		android:layout_width="64dp"
 		android:layout_height="64dp"
-		android:layout_marginLeft="100dp"/>
+		app:layout_constraintEnd_toEndOf="parent"/>
 
 
 	<!-- This view is for cosmetic purpose only -->
@@ -140,7 +140,6 @@
 
 		android:textAllCaps="true"
 		android:text="@string/main_play"
-		android:fontFamily="@font/minecraft_ten"
 		app:layout_constraintBottom_toBottomOf="parent"
 		/>
 
