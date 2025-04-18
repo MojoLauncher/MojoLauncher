@@ -102,6 +102,13 @@
 		app:layout_constraintEnd_toStartOf="@+id/edit_profile_button"
 		app:layout_constraintStart_toStartOf="parent" />
 
+	<ImageView
+		android:src="@drawable/femboy"
+		android:layout_width="64dp"
+		android:layout_height="64dp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintBottom_toBottomOf="parent"/>
+
 	<ImageButton
 		android:id="@+id/edit_profile_button"
 		android:layout_width="@dimen/_52sdp"
@@ -112,13 +119,6 @@
 		app:layout_constraintBottom_toBottomOf="@+id/mc_version_spinner"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintTop_toTopOf="@+id/mc_version_spinner" />
-	<ImageView
-		android:src="@drawable/femboy"
-		android:layout_width="64dp"
-		android:layout_height="64dp"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintBottom_toBottomOf="parent"/>
-
 
 	<!-- This view is for cosmetic purpose only -->
 	<View
