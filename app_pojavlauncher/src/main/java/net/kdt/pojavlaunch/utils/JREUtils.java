@@ -300,6 +300,8 @@ public class JREUtils {
         purgeArg(userArgs, "-Dorg.lwjgl.freetype.libname");
         // Overridden by us to specify the exact number of cores that the android system has
         purgeArg(userArgs, "-XX:ActiveProcessorCount");
+        // This will be automatically added if the launcher detects Sodium
+        purgeArg(userArgs,"-Dsodium.checks.issue2561=false");
 
         //Add automatically generated args
         userArgs.add("-Xms" + LauncherPreferences.PREF_RAM_ALLOCATION + "M");
@@ -312,7 +314,9 @@ public class JREUtils {
 
         // Some phones are not using the right number of cores, fix that
         userArgs.add("-XX:ActiveProcessorCount=" + java.lang.Runtime.getRuntime().availableProcessors());
-
+        // Disable Sodium's LWJGL check to prevent a crash
+        if(Tools.hasSodium(gameDirectory)) userArgs.add("-Dsodium.checks.issue2561=false");
+        
         userArgs.addAll(JVMArgs);
         activity.runOnUiThread(() -> Toast.makeText(activity, activity.getString(R.string.autoram_info_msg,LauncherPreferences.PREF_RAM_ALLOCATION), Toast.LENGTH_SHORT).show());
         System.out.println(JVMArgs);

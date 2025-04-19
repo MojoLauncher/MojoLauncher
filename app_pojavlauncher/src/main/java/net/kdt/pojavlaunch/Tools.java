@@ -209,7 +209,7 @@ public final class Tools {
      * @param gameDir current game directory
      * @return whether sodium or a sodium-based mod is installed
      */
-    private static boolean hasSodium(File gameDir) {
+    public static boolean hasSodium(File gameDir) {
         File modsDir = new File(gameDir, "mods");
         File[] mods = modsDir.listFiles(file -> file.isFile() && file.getName().endsWith(".jar"));
         if(mods == null) return false;
