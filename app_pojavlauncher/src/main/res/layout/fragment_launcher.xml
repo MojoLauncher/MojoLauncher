@@ -36,7 +36,7 @@
 			<View
 				android:id="@+id/social_divider"
 				style="@style/LauncherFragment_Divider"
-				android:layout_marginVertical="@dimen/padding_large"
+				and64dpmarginVertical="@dimen/padding_large"
 				app:layout_constraintTop_toTopOf="parent"
 				app:layout_constraintStart_toStartOf="@id/center_guideline"
 				app:layout_constraintEnd_toEndOf="@id/center_guideline"
@@ -99,8 +99,16 @@
 		app:drawableEndPadding="@dimen/_1sdp"
 
 		app:layout_constraintBottom_toTopOf="@id/play_button"
-		app:layout_constraintEnd_toStartOf="@+id/edit_profile_button"
+		app:layout_constraintEnd_toStartOf="+@id/femboy"
 		app:layout_constraintStart_toStartOf="parent" />
+
+	<ImageView
+		android:id="+@id/femboy"
+		android:src="@drawable/femboy"
+		android:layout_width="64dp"
+		android:layout_height="64dp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintBottom_toBottomOf="parent"/>
 
 	<ImageButton
 		android:id="@+id/edit_profile_button"
@@ -112,7 +120,6 @@
 		app:layout_constraintBottom_toBottomOf="@+id/mc_version_spinner"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintTop_toTopOf="@+id/mc_version_spinner" />
-
 
 	<!-- This view is for cosmetic purpose only -->
 	<View
