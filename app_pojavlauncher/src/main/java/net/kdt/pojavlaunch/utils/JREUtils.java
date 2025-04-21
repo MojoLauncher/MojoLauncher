@@ -315,7 +315,7 @@ public class JREUtils {
         // Some phones are not using the right number of cores, fix that
         userArgs.add("-XX:ActiveProcessorCount=" + java.lang.Runtime.getRuntime().availableProcessors());
         // Disable Sodium's LWJGL check to prevent a crash
-        if(Tools.hasSodium(gameDirectory)) userArgs.add("-Dsodium.checks.issue2561=false");
+        userArgs.add("-Dsodium.checks.issue2561=false");
         
         userArgs.addAll(JVMArgs);
         activity.runOnUiThread(() -> Toast.makeText(activity, activity.getString(R.string.autoram_info_msg,LauncherPreferences.PREF_RAM_ALLOCATION), Toast.LENGTH_SHORT).show());
