@@ -99,10 +99,11 @@
 		app:drawableEndPadding="@dimen/_1sdp"
 
 		app:layout_constraintBottom_toTopOf="@id/play_button"
-		app:layout_constraintEnd_toStartOf="@+id/edit_profile_button"
+		app:layout_constraintEnd_toStartOf="@id/femboy"
 		app:layout_constraintStart_toStartOf="parent" />
 
 	<ImageView
+		android:id="+@id/femboy"
 		android:src="@drawable/femboy"
 		android:layout_width="64dp"
 		android:layout_height="64dp"
