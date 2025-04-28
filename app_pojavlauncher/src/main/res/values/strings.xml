@@ -231,6 +231,9 @@
     <string name="profiles_latest_release">Latest release</string>
     <string name="profiles_profile_name">Name</string>
     <string name="profiles_profile_version">Version</string>
+    <string name="instance_shared_data">Shared data (click to switch)</string>
+    <string name="instance_shared_data_on">Store game data in a shared directory</string>
+    <string name="instance_shared_data_off">Store game data in the instance directory</string>
     <string name="global_delete">Delete</string>
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Renderer</string>

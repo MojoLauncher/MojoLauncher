@@ -72,7 +72,7 @@ public class MainMenuFragment extends Fragment {
     }
 
     private File getCurrentProfileDirectory() {
-        return InstanceManager.getSelectedListedInstance().getInstanceRoot();
+        return InstanceManager.getSelectedListedInstance().getGameDirectory();
     }
 
     @Override

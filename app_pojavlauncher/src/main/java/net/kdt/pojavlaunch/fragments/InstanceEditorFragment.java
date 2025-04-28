@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -47,6 +48,7 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
     private EditText mDefaultName, mDefaultJvmArgument;
     private TextView mDefaultVersion, mDefaultControl;
     private ImageView mInstanceIcon;
+    private CheckBox mSharedDataCheckbox;
     private int mRecommendedIconSize;
     private final ActivityResultLauncher<?> mCropperLauncher = CropperUtils.registerCropper(this, this);
 
@@ -113,6 +115,13 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
             CropperUtils.startCropper(mCropperLauncher);
         });
 
+        mSharedDataCheckbox.setOnCheckedChangeListener((v,checked) ->{
+            mInstance.sharedData = checked;
+            int text = R.string.instance_shared_data_off;
+            if(checked) text = R.string.instance_shared_data_on;
+            mSharedDataCheckbox.setText(text);
+        });
+
         loadValues(InstanceManager.getSelectedListedInstance(), view.getContext());
     }
 
@@ -163,6 +172,7 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         mDefaultJvmArgument.setText(nullToEmpty(instance.jvmArgs));
         mDefaultName.setText(nullToEmpty(instance.name));
         mDefaultControl.setText(mSelectedControlLayout == null ? nullToEmpty(instance.controlLayout) : mSelectedControlLayout);
+        mSharedDataCheckbox.setChecked(instance.sharedData);
     }
 
     private void bindViews(@NonNull View view){
@@ -179,6 +189,7 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         mControlSelectButton = view.findViewById(R.id.vprof_editor_ctrl_button);
         mVersionSelectButton = view.findViewById(R.id.vprof_editor_version_button);
         mInstanceIcon = view.findViewById(R.id.vprof_editor_instance_icon);
+        mSharedDataCheckbox = view.findViewById(R.id.vprof_editor_data_checkbox_container);
     }
 
     private void save(){

@@ -15,6 +15,7 @@ import java.util.UUID;
 public class InstanceManager {
     private static boolean sIsLoaded;
     private static final File sInstancePath = new File(Tools.DIR_GAME_HOME, "instances");
+    public static final File SHARED_DATA_DIRECTORY = new File(Tools.DIR_GAME_HOME, "shared_dir");
     private static Instance sSelectedInstance;
     private static ArrayList<Instance> sInstanceList;
 
@@ -151,7 +152,10 @@ public class InstanceManager {
      * @return the new instance
      */
     public static Instance createDefaultInstance() throws IOException {
-        return createInstance((instance)-> instance.versionId = Instance.VERSION_LATEST_RELEASE, null);
+        return createInstance((instance)-> {
+            instance.sharedData = true;
+            instance.versionId = Instance.VERSION_LATEST_RELEASE;
+        }, null);
     }
 
     /**

@@ -48,7 +48,7 @@ public class ModpackInstaller {
             });
 
             // Install the modpack
-            modLoaderInfo = installFunction.installModpack(modpackFile, instance.getInstanceRoot());
+            modLoaderInfo = installFunction.installModpack(modpackFile, instance.getGameDirectory());
 
             if(modLoaderInfo == null) throw new IOException("Unknown modpack mod loader information");
 

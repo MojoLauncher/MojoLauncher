@@ -282,7 +282,7 @@ public final class Tools {
                 // to start after the activity is shown again
             }
         }
-        File gamedir = instance.getInstanceRoot();
+        File gamedir = instance.getGameDirectory();
         if(checkRenderDistance(gamedir)) {
             LifecycleAwareAlertDialog.DialogCreator dialogCreator = ((alertDialog, dialogBuilder) ->
                     dialogBuilder.setMessage(activity.getString(R.string.ltw_render_distance_warning_msg))

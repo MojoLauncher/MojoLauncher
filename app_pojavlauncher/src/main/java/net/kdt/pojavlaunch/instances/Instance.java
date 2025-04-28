@@ -31,6 +31,7 @@ public class Instance {
     public String selectedRuntime;
     public String controlLayout;
     public String icon;
+    public boolean sharedData;
 
     protected Instance() {
     }
@@ -118,7 +119,8 @@ public class Instance {
         return Tools.CTRLMAP_PATH + "/" + controlLayout;
     }
 
-    public File getInstanceRoot() {
+    public File getGameDirectory() {
+        if(sharedData) return InstanceManager.SHARED_DATA_DIRECTORY;
         return mInstanceRoot;
     }
 

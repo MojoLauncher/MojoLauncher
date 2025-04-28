@@ -138,6 +138,26 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/vprof_editor_ctrl_spinner" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/instance_shared_data"
+                app:layout_constraintBottom_toTopOf="@+id/vprof_editor_data_checkbox_container"
+                app:layout_constraintStart_toStartOf="@+id/vprof_editor_data_checkbox_container"/>
+
+            <CheckBox
+                android:id="@+id/vprof_editor_data_checkbox_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/background_line"
+                android:paddingHorizontal="@dimen/padding_heavy"
+                android:button="@null"
+                android:text="@string/instance_shared_data_off"
+                android:textColor="@color/checkbox_text_color"
+                app:layout_constraintTop_toBottomOf="@+id/vprof_editor_ctrl_spinner"
+                tools:layout_editor_absoluteX="22dp"/>
+
 
             <TextView
                 android:id="@+id/textView6"
@@ -159,7 +179,7 @@
                 android:paddingHorizontal="@dimen/padding_heavy"
                 android:textSize="@dimen/_13ssp"
 
-                app:layout_constraintTop_toBottomOf="@+id/vprof_editor_ctrl_spinner" />
+                app:layout_constraintTop_toBottomOf="@+id/vprof_editor_data_checkbox_container" />
 
             <TextView
                 android:id="@+id/textView2"

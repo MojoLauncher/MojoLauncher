@@ -103,8 +103,8 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         instance = InstanceManager.loadSelectedInstance();
-        AsyncAssetManager.extractDefaultSettings(this, instance.getInstanceRoot());
-        MCOptionUtils.load(instance.getInstanceRoot().getAbsolutePath());
+        AsyncAssetManager.extractDefaultSettings(this, instance.getGameDirectory());
+        MCOptionUtils.load(instance.getGameDirectory().getAbsolutePath());
 
         Intent gameServiceIntent = new Intent(this, GameService.class);
         // Start the service a bit early

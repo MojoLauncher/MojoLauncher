@@ -202,6 +202,9 @@
     <string name="profiles_latest_release">Последний релиз</string>
     <string name="profiles_profile_name">Имя</string>
     <string name="profiles_profile_version">Версия</string>
+    <string name="instance_shared_data">Обьединение данных (нажмите для переключения)</string>
+    <string name="instance_shared_data_on">Хранить данные игры в общей папке</string>
+    <string name="instance_shared_data_off">Хранить данные игры в папке установки</string>
     <string name="global_delete">Удалить</string>
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Визуализатор</string>
