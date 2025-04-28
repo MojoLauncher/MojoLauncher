@@ -300,8 +300,6 @@ public class JREUtils {
         purgeArg(userArgs, "-Dorg.lwjgl.freetype.libname");
         // Overridden by us to specify the exact number of cores that the android system has
         purgeArg(userArgs, "-XX:ActiveProcessorCount");
-        // This will be automatically added if the launcher detects Sodium
-        purgeArg(userArgs,"-Dsodium.checks.issue2561=false");
 
         //Add automatically generated args
         userArgs.add("-Xms" + LauncherPreferences.PREF_RAM_ALLOCATION + "M");
