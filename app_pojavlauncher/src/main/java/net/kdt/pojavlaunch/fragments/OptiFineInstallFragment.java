@@ -1,12 +1,15 @@
 package net.kdt.pojavlaunch.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.widget.ExpandableListAdapter;
 
-import net.kdt.pojavlaunch.JavaGUILauncherActivity;
+import com.kdt.mcgui.ProgressLayout;
+
 import git.artdeell.mojo.R;
+
+import net.kdt.pojavlaunch.instances.InstanceInstaller;
+import net.kdt.pojavlaunch.instances.InstanceManager;
 import net.kdt.pojavlaunch.modloaders.ModloaderListenerProxy;
 import net.kdt.pojavlaunch.modloaders.OptiFineDownloadTask;
 import net.kdt.pojavlaunch.modloaders.OptiFineUtils;
@@ -39,15 +42,31 @@ public class OptiFineInstallFragment extends ModVersionListFragment<OptiFineUtil
         return new OptiFineVersionListAdapter(versionList, layoutInflater);
     }
 
+    private void createInstance(OptiFineUtils.OptiFineVersion version, ModloaderListenerProxy listenerProxy) {
+        try {
+            ProgressLayout.setProgress(ProgressLayout.INSTALL_MODPACK, 0);
+            new OptiFineDownloadTask(version).prepareForInstall();
+            InstanceInstaller instanceInstaller = OptiFineUtils.createInstaller(version);
+            InstanceManager.createInstance(instance -> {
+                instance.name = "OptiFine";
+                instance.installer = instanceInstaller;
+                instance.sharedData = true;
+            }, "OptiFine");
+            ProgressLayout.clearProgress(ProgressLayout.INSTALL_MODPACK);
+            instanceInstaller.start();
+            listenerProxy.onDownloadFinished(null);
+        }catch (Exception e) {
+            listenerProxy.onDownloadError(e);
+        }
+    }
+
     @Override
     public Runnable createDownloadTask(Object selectedVersion, ModloaderListenerProxy listenerProxy) {
-        return new OptiFineDownloadTask((OptiFineUtils.OptiFineVersion) selectedVersion, listenerProxy);
+        return ()->createInstance((OptiFineUtils.OptiFineVersion) selectedVersion, listenerProxy);
     }
 
     @Override
     public void onDownloadFinished(Context context, File downloadedFile) {
-        Intent modInstallerStartIntent = new Intent(context, JavaGUILauncherActivity.class);
-        OptiFineUtils.addAutoInstallArgs(modInstallerStartIntent, downloadedFile);
-        context.startActivity(modInstallerStartIntent);
+
     }
 }

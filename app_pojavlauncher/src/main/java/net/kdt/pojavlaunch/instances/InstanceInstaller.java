@@ -3,6 +3,7 @@ package net.kdt.pojavlaunch.instances;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.kdt.mcgui.ProgressLayout;
 
@@ -15,6 +16,7 @@ import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.instances.profcompat.ProfileWatcher;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutorTask;
+import net.kdt.pojavlaunch.modloaders.OFDownloadPageScraper;
 import net.kdt.pojavlaunch.progresskeeper.DownloaderProgressWrapper;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
 import net.kdt.pojavlaunch.utils.JSONUtils;
@@ -31,13 +33,27 @@ public class InstanceInstaller implements ContextExecutorTask {
 
     public String installerJar;
     private transient File installerJarFile;
+    private transient String mTransformedUrl;
     public String commandLineArgs;
+    public String installerUrlTransformer;
     public String installerDownloadUrl;
     public String installerSha1;
 
     private File installerJar() {
         if(installerJarFile == null) return installerJarFile = new File(installerJar);
         return installerJarFile;
+    }
+
+    private String installerDownloadUrl() throws IOException{
+        if(mTransformedUrl != null) return mTransformedUrl;
+        String newUrl;
+        if ("optifine".equals(installerUrlTransformer)) {
+            newUrl = OFDownloadPageScraper.run(installerDownloadUrl);
+        }else {
+            newUrl = installerDownloadUrl;
+        }
+        mTransformedUrl = newUrl;
+        return newUrl;
     }
 
     private void writeLastInstaller() throws IOException {
@@ -52,7 +68,7 @@ public class InstanceInstaller implements ContextExecutorTask {
             );
             wrapper.extraString = installerJar().getName();
             DownloadUtils.ensureSha1(installerJar(), installerSha1, ()->{
-                DownloadUtils.downloadFileMonitored(installerDownloadUrl, installerJar(), buffer, wrapper);
+                DownloadUtils.downloadFileMonitored(installerDownloadUrl(), installerJar(), buffer, wrapper);
                 return null;
             });
             ContextExecutor.execute(this);
@@ -100,12 +116,16 @@ public class InstanceInstaller implements ContextExecutorTask {
         if (this == object) return true;
         if (!(object instanceof InstanceInstaller)) return false;
         InstanceInstaller that = (InstanceInstaller) object;
-        return Objects.equals(installerJar, that.installerJar) && Objects.equals(commandLineArgs, that.commandLineArgs) && Objects.equals(installerDownloadUrl, that.installerDownloadUrl) && Objects.equals(installerSha1, that.installerSha1);
+        return Objects.equals(installerJar, that.installerJar) &&
+                Objects.equals(commandLineArgs, that.commandLineArgs) &&
+                Objects.equals(installerDownloadUrl, that.installerDownloadUrl) &&
+                Objects.equals(installerUrlTransformer, that.installerUrlTransformer) &&
+                Objects.equals(installerSha1, that.installerSha1);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(installerJar, commandLineArgs, installerDownloadUrl, installerSha1);
+        return Objects.hash(installerJar, commandLineArgs, installerDownloadUrl, installerUrlTransformer, installerSha1);
     }
 
     @Override
