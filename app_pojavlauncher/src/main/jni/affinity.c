@@ -5,6 +5,7 @@
 #define _GNU_SOURCE // we are GNU GPLv3
 
 #include <linux/limits.h>
+#include <stdbool.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -12,12 +13,17 @@
 #include <sched.h>
 #include <string.h>
 
+static _Thread_local bool big_core_affine = false;
+
+static cpu_set_t bigcore_affinity_set;
+static bool has_affinity_set;
+
 #define FREQ_MAX 256
 void bigcore_format_cpu_path(char* buffer, unsigned int cpu_core) {
     snprintf(buffer, PATH_MAX, "/sys/devices/system/cpu/cpu%i/cpufreq/cpuinfo_max_freq", cpu_core);
 }
 
-void bigcore_set_affinity() {
+static void create_affinity_set() {
     char path_buffer[PATH_MAX];
     char freq_buffer[FREQ_MAX];
     char* discard;
@@ -43,13 +49,19 @@ void bigcore_set_affinity() {
         corecnt++;
     }
     printf("bigcore: big CPU number is %u, frequency %lu Hz\n", big_core_id, max_freq);
-    cpu_set_t bigcore_affinity_set;
     CPU_ZERO(&bigcore_affinity_set);
     CPU_SET_S(big_core_id, CPU_SETSIZE, &bigcore_affinity_set);
+    has_affinity_set = true;
+}
+
+void make_big_core_affine() {
+    if(big_core_affine) return;
+    if(!has_affinity_set) create_affinity_set();
     int result = sched_setaffinity(0, CPU_SETSIZE, &bigcore_affinity_set);
     if(result != 0) {
         printf("bigcore: setting affinity failed: %s\n", strerror(result));
     }else{
         printf("bigcore: forced current thread onto big core\n");
+        big_core_affine = true;
     }
 }

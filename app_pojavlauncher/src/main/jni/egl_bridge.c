@@ -217,8 +217,10 @@ EXTERNAL_API void pojavSwapBuffers() {
     br_swap_buffers();
 }
 
+extern void make_big_core_affine();
 
 EXTERNAL_API void pojavMakeCurrent(void* window) {
+    if(getenv("POJAV_BIG_CORE_AFFINITY") != NULL) make_big_core_affine();
     br_make_current((basic_render_window_t*)window);
 }
 
