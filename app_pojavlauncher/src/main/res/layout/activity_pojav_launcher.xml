@@ -13,8 +13,11 @@
 
         android:dropDownWidth="@dimen/_250sdp"
         android:dropDownVerticalOffset="@dimen/_52sdp"
+        android:paddingEnd="@dimen/_52sdp"
 
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RtlSymmetry" />
+    <!-- Ignore because it's  done to fit the ImageButton within spinner background -->
 
     <ImageButton
         android:id="@+id/setting_button"

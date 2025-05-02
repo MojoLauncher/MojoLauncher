@@ -1,36 +1,36 @@
-package net.kdt.pojavlaunch.value;
+package net.kdt.pojavlaunch.authenticator.accounts;
 
 
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import net.kdt.pojavlaunch.*;
-import net.kdt.pojavlaunch.utils.FileUtils;
+import net.kdt.pojavlaunch.authenticator.AuthType;
+import net.kdt.pojavlaunch.utils.JSONUtils;
 
 import java.io.*;
-import com.google.gson.*;
+
 import android.graphics.Bitmap;
 import android.util.Base64;
 
 import androidx.annotation.Keep;
 
-import org.apache.commons.io.IOUtils;
-
-@SuppressWarnings("IOStreamConstructor")
 @Keep
 public class MinecraftAccount {
+    public transient File mSaveLocation;
     public String accessToken = "0"; // access token
-    public String clientToken = "0"; // clientID: refresh and invalidate
     public String profileId = "00000000-0000-0000-0000-000000000000"; // profile UUID, for obtaining skin
     public String username = "Steve";
-    public String selectedVersion = "1.7.10";
+    public AuthType authType = AuthType.LOCAL;
     public boolean isMicrosoft = false;
-    public String msaRefreshToken = "0";
+    public String refreshToken = "0";
     public String xuid;
     public long expiresAt;
     public String skinFaceBase64;
     private Bitmap mFaceCache;
-    
+
+    protected MinecraftAccount() {}
+
     void updateSkinFace(String uuid) {
         try {
             File skinFile = getSkinFaceFile(username);
@@ -52,46 +52,8 @@ public class MinecraftAccount {
         updateSkinFace(profileId);
     }
     
-    public String save(String outPath) throws IOException {
-        Tools.write(outPath, Tools.GLOBAL_GSON.toJson(this));
-        return username;
-    }
-    
-    public String save() throws IOException {
-        return save(Tools.DIR_ACCOUNT_NEW + "/" + username + ".json");
-    }
-    
-    public static MinecraftAccount parse(String content) throws JsonSyntaxException {
-        return Tools.GLOBAL_GSON.fromJson(content, MinecraftAccount.class);
-    }
-
-    public static MinecraftAccount load(String name) {
-        if(!accountExists(name)) return null;
-        try {
-            MinecraftAccount acc = parse(Tools.read(Tools.DIR_ACCOUNT_NEW + "/" + name + ".json"));
-            if (acc.accessToken == null) {
-                acc.accessToken = "0";
-            }
-            if (acc.clientToken == null) {
-                acc.clientToken = "0";
-            }
-            if (acc.profileId == null) {
-                acc.profileId = "00000000-0000-0000-0000-000000000000";
-            }
-            if (acc.username == null) {
-                acc.username = "0";
-            }
-            if (acc.selectedVersion == null) {
-                acc.selectedVersion = "1.7.10";
-            }
-            if (acc.msaRefreshToken == null) {
-                acc.msaRefreshToken = "0";
-            }
-            return acc;
-        } catch(IOException | JsonSyntaxException e) {
-            Log.e(MinecraftAccount.class.getName(), "Caught an exception while loading the profile",e);
-            return null;
-        }
+    public void save() throws IOException {
+        JSONUtils.writeToFile(mSaveLocation, this);
     }
 
     public Bitmap getSkinFace(){
@@ -118,9 +80,5 @@ public class MinecraftAccount {
 
     private static File getSkinFaceFile(String username) {
         return new File(Tools.DIR_CACHE, username + ".png");
-    }
-
-    private static boolean accountExists(String username){
-        return new File(Tools.DIR_ACCOUNT_NEW + "/" + username + ".json").exists();
     }
 }

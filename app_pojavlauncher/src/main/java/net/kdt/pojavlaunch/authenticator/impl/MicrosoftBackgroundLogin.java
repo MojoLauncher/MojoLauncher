@@ -1,4 +1,4 @@
-package net.kdt.pojavlaunch.authenticator.microsoft;
+package net.kdt.pojavlaunch.authenticator.impl;
 
 import static net.kdt.pojavlaunch.PojavApplication.sExecutorService;
 
@@ -6,16 +6,17 @@ import android.util.ArrayMap;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.kdt.mcgui.ProgressLayout;
 
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
-import net.kdt.pojavlaunch.authenticator.listener.DoneListener;
-import net.kdt.pojavlaunch.authenticator.listener.ErrorListener;
-import net.kdt.pojavlaunch.authenticator.listener.ProgressListener;
-import net.kdt.pojavlaunch.value.MinecraftAccount;
+import net.kdt.pojavlaunch.authenticator.AuthType;
+import net.kdt.pojavlaunch.authenticator.BackgroundLogin;
+import net.kdt.pojavlaunch.authenticator.accounts.PojavProfile;
+import net.kdt.pojavlaunch.authenticator.listener.LoginListener;
+import net.kdt.pojavlaunch.authenticator.model.OAuthTokenResponse;
+import net.kdt.pojavlaunch.authenticator.accounts.MinecraftAccount;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,18 +24,18 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 /** Allow to perform a background login on a given account */
-// TODO handle connection errors !
-public class MicrosoftBackgroundLogin {
+public class MicrosoftBackgroundLogin implements BackgroundLogin{
+    public static final BackgroundLogin.Creator CREATOR = MicrosoftBackgroundLogin::new;
+
     private static final String authTokenUrl = "https://login.live.com/oauth20_token.srf";
     private static final String xblAuthUrl = "https://user.auth.xboxlive.com/user/authenticate";
     private static final String xstsAuthUrl = "https://xsts.auth.xboxlive.com/xsts/authorize";
@@ -42,8 +43,6 @@ public class MicrosoftBackgroundLogin {
     private static final String mcProfileUrl = "https://api.minecraftservices.com/minecraft/profile";
     private static final String mcStoreUrl = "https://api.minecraftservices.com/entitlements/mcstore";
 
-    private final boolean mIsRefresh;
-    private final String mAuthCode;
     private static final Map<Long, Integer> XSTS_ERRORS;
     static {
         XSTS_ERRORS = new ArrayMap<>();
@@ -59,98 +58,85 @@ public class MicrosoftBackgroundLogin {
     public String mcName;
     public String mcToken;
     public String mcUuid;
+    public String msXsts;
     public boolean doesOwnGame;
     public long expiresAt;
 
-    public MicrosoftBackgroundLogin(boolean isRefresh, String authCode){
-        mIsRefresh = isRefresh;
-        mAuthCode = authCode;
-    }
+    private MicrosoftBackgroundLogin() {}
 
-    /** Performs a full login, calling back listeners appropriately  */
-    public void performLogin(@Nullable final ProgressListener progressListener,
-                             @Nullable final DoneListener doneListener,
-                             @Nullable final ErrorListener errorListener){
+    private void acquireAccountDetails(
+            @NonNull LoginListener loginListener, Callable<Void> continuation,
+            String code, boolean isRefresh
+    ) {
         sExecutorService.execute(() -> {
             try {
-                notifyProgress(progressListener, 1);
-                String accessToken = acquireAccessToken(mIsRefresh, mAuthCode);
-                notifyProgress(progressListener, 2);
+                notifyProgress(loginListener, 1);
+                String accessToken = acquireAccessToken(isRefresh, code);
+                notifyProgress(loginListener, 2);
                 String xboxLiveToken = acquireXBLToken(accessToken);
-                notifyProgress(progressListener, 3);
+                notifyProgress(loginListener, 3);
                 String[] xsts = acquireXsts(xboxLiveToken);
-                notifyProgress(progressListener, 4);
+                notifyProgress(loginListener, 4);
                 String mcToken = acquireMinecraftToken(xsts[0], xsts[1]);
-                notifyProgress(progressListener, 5);
+                notifyProgress(loginListener, 5);
                 fetchOwnedItems(mcToken);
                 checkMcProfile(mcToken);
-
-                MinecraftAccount acc = MinecraftAccount.load(mcName);
-                if(acc == null) acc = new MinecraftAccount();
-                if (doesOwnGame) {
-                    acc.xuid = xsts[0];
-                    acc.clientToken = "0"; /* FIXME */
-                    acc.accessToken = mcToken;
-                    acc.username = mcName;
-                    acc.profileId = mcUuid;
-                    acc.isMicrosoft = true;
-                    acc.msaRefreshToken = msRefreshToken;
-                    acc.expiresAt = expiresAt;
-                    acc.updateSkinFace();
-                }
-                acc.save();
-
-                if(doneListener != null) {
-                    MinecraftAccount finalAcc = acc;
-                    Tools.runOnUiThread(() -> doneListener.onLoginDone(finalAcc));
-                }
-
+                msXsts  = xsts[0];
+                continuation.call();
             }catch (Exception e){
                 Log.e("MicroAuth", "Exception thrown during authentication", e);
-                if(errorListener != null)
-                    Tools.runOnUiThread(() -> errorListener.onLoginError(e));
+                loginListener.onLoginError(e);
+            } finally {
+                ProgressLayout.clearProgress(ProgressLayout.AUTHENTICATE_MICROSOFT);
             }
-            ProgressLayout.clearProgress(ProgressLayout.AUTHENTICATE_MICROSOFT);
         });
     }
 
-    public String acquireAccessToken(boolean isRefresh, String authcode) throws IOException, JSONException {
-        URL url = new URL(authTokenUrl);
-        Log.i("MicrosoftLogin", "isRefresh=" + isRefresh + ", authCode= "+authcode);
+    private void fillAccount(MinecraftAccount acc) {
+        acc.xuid = msXsts;
+        acc.accessToken = mcToken;
+        acc.username = mcName;
+        acc.profileId = mcUuid;
+        acc.authType = AuthType.MICROSOFT;
+        acc.refreshToken = msRefreshToken;
+        acc.expiresAt = expiresAt;
+        acc.updateSkinFace();
+    }
 
-        String formData = convertToFormData(
+    @Override
+    public void createAccount(@NonNull LoginListener loginListener, String code) {
+        acquireAccountDetails(loginListener, ()->{
+            MinecraftAccount account = PojavProfile.createAccount(this::fillAccount);
+            Tools.runOnUiThread(() -> loginListener.onLoginDone(account));
+            return null;
+        }, code, false);
+    }
+
+    @Override
+    public void refreshAccount(@NonNull LoginListener loginListener, MinecraftAccount account) {
+        acquireAccountDetails(loginListener, ()->{
+            if(doesOwnGame) fillAccount(account);
+            account.save();
+            Tools.runOnUiThread(() -> loginListener.onLoginDone(account));
+            return null;
+        }, account.refreshToken, true);
+    }
+
+    private String acquireAccessToken(boolean isRefresh, String code) throws IOException {
+        URL url = new URL(authTokenUrl);
+        Log.i("MicrosoftLogin", "isRefresh=" + isRefresh + ", authCode= "+code);
+
+        String formData = CommonLoginUtils.convertToFormData(
                 "client_id", "00000000402b5328",
-                isRefresh ? "refresh_token" : "code", authcode,
+                isRefresh ? "refresh_token" : "code", code,
                 "grant_type", isRefresh ? "refresh_token" : "authorization_code",
                 "redirect_url", "https://login.live.com/oauth20_desktop.srf",
                 "scope", "service::user.auth.xboxlive.com::MBI_SSL"
         );
 
-        Log.i("MicroAuth", formData);
-
-        //да пошла yf[eq1 она ваша джава 11
-        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        conn.setRequestProperty("charset", "utf-8");
-        conn.setRequestProperty("Content-Length", Integer.toString(formData.getBytes(StandardCharsets.UTF_8).length));
-        conn.setRequestMethod("POST");
-        conn.setUseCaches(false);
-        conn.setDoInput(true);
-        conn.setDoOutput(true);
-        conn.connect();
-        try(OutputStream wr = conn.getOutputStream()) {
-            wr.write(formData.getBytes(StandardCharsets.UTF_8));
-        }
-        if(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
-            JSONObject jo = new JSONObject(Tools.read(conn.getInputStream()));
-            msRefreshToken = jo.getString("refresh_token");
-            conn.disconnect();
-            Log.i("MicrosoftLogin","Acess Token = " + jo.getString("access_token"));
-            return jo.getString("access_token");
-            //acquireXBLToken(jo.getString("access_token"));
-        }else{
-            throw getResponseThrowable(conn);
-        }
+        OAuthTokenResponse response = CommonLoginUtils.exchangeAuthCode(url, formData);
+        msRefreshToken = response.refreshToken;
+        return response.accessToken;
     }
 
     private String acquireXBLToken(String accessToken) throws IOException, JSONException {
@@ -180,7 +166,7 @@ public class MicrosoftBackgroundLogin {
             return jo.getString("Token");
             //acquireXsts(jo.getString("Token"));
         }else{
-            throw getResponseThrowable(conn);
+            throw CommonLoginUtils.getResponseThrowable(conn);
         }
     }
 
@@ -225,7 +211,7 @@ public class MicrosoftBackgroundLogin {
             }
             throw new PresentedException(new RuntimeException(responseContents), R.string.xerr_unknown, xerr);
         }else{
-            throw getResponseThrowable(conn);
+            throw CommonLoginUtils.getResponseThrowable(conn);
         }
     }
 
@@ -253,7 +239,7 @@ public class MicrosoftBackgroundLogin {
             //checkMcProfile(jo.getString("access_token"));
             return jo.getString("access_token");
         }else{
-            throw getResponseThrowable(conn);
+            throw CommonLoginUtils.getResponseThrowable(conn);
         }
     }
 
@@ -265,7 +251,7 @@ public class MicrosoftBackgroundLogin {
         conn.setUseCaches(false);
         conn.connect();
         if(conn.getResponseCode() < 200 || conn.getResponseCode() >= 300) {
-            throw getResponseThrowable(conn);
+            throw CommonLoginUtils.getResponseThrowable(conn);
         }
         // We don't need any data from this request, it just needs to happen in order for
         // the MS servers to work properly. The data from this is practically useless
@@ -304,10 +290,8 @@ public class MicrosoftBackgroundLogin {
     }
 
     /** Wrapper to ease notifying the listener */
-    private void notifyProgress(@Nullable ProgressListener listener, int step){
-        if(listener != null){
-            Tools.runOnUiThread(() -> listener.onLoginProgress(step));
-        }
+    private void notifyProgress(LoginListener listener, int step){
+        Tools.runOnUiThread(() -> listener.onLoginProgress(step));
         ProgressLayout.setProgress(ProgressLayout.AUTHENTICATE_MICROSOFT, step*20);
     }
 
@@ -326,28 +310,5 @@ public class MicrosoftBackgroundLogin {
         conn.setUseCaches(false);
         conn.setDoInput(true);
         conn.setDoOutput(true);
-    }
-
-    /**
-     * @param data A series a strings: key1, value1, key2, value2...
-     * @return the data converted as a form string for a POST request
-     */
-    private static String convertToFormData(String... data) throws UnsupportedEncodingException {
-        StringBuilder builder = new StringBuilder();
-        for(int i=0; i<data.length; i+=2){
-            if (builder.length() > 0) builder.append("&");
-            builder.append(URLEncoder.encode(data[i], "UTF-8"))
-                    .append("=")
-                    .append(URLEncoder.encode(data[i+1], "UTF-8"));
-        }
-        return builder.toString();
-    }
-
-    private RuntimeException getResponseThrowable(HttpURLConnection conn) throws IOException {
-        Log.i("MicrosoftLogin", "Error code: " + conn.getResponseCode() + ": " + conn.getResponseMessage());
-        if(conn.getResponseCode() == 429) {
-            return new PresentedException(R.string.microsoft_login_retry_later);
-        }
-        return new RuntimeException(conn.getResponseMessage());
     }
 }

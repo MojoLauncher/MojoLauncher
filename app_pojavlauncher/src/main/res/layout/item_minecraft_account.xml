@@ -17,6 +17,7 @@
         android:drawablePadding="@dimen/_6sdp"
         android:paddingStart="@dimen/_8sdp"
         app:drawableStartSize="@dimen/_30sdp"
+        app:drawableEndSize="@dimen/_30sdp"
 
         tools:text="HELLO THERE"
         tools:drawableStart="@mipmap/ic_launcher"
