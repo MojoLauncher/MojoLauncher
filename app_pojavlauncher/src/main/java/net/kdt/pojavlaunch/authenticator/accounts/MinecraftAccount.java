@@ -6,6 +6,7 @@ import android.util.Log;
 
 import net.kdt.pojavlaunch.*;
 import net.kdt.pojavlaunch.authenticator.AuthType;
+import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.JSONUtils;
 
 import java.io.*;
@@ -53,6 +54,7 @@ public class MinecraftAccount {
     }
     
     public void save() throws IOException {
+        FileUtils.ensureDirectory(mSaveLocation);
         JSONUtils.writeToFile(mSaveLocation, this);
     }
 
@@ -72,10 +74,6 @@ public class MinecraftAccount {
         }
 
         return mFaceCache;
-    }
-
-    public static Bitmap getSkinFace(String username) {
-        return BitmapFactory.decodeFile(getSkinFaceFile(username).getAbsolutePath());
     }
 
     private static File getSkinFaceFile(String username) {
