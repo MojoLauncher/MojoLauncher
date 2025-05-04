@@ -47,7 +47,7 @@ import git.artdeell.mojo.R;
 public class AccountSpinner extends AppCompatSpinner implements LoginListener, AdapterView.OnItemSelectedListener, ValueAnimator.AnimatorUpdateListener {
     private Adapter mAdapter;
     /* Login progress bar stuff */
-    private int mMaxSteps;
+    private int mMaxSteps = 5;
     private final ValueAnimator mLoginStepAnimator = ValueAnimator.ofFloat(mMaxSteps);
     private final Paint mLoginBarPaint = new Paint();
     private float mLoginStep;

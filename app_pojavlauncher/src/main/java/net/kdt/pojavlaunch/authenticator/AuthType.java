@@ -4,24 +4,25 @@ import com.google.gson.annotations.SerializedName;
 
 import net.kdt.pojavlaunch.authenticator.impl.ElyByBackgroundLogin;
 import net.kdt.pojavlaunch.authenticator.impl.MicrosoftBackgroundLogin;
-import net.kdt.pojavlaunch.authenticator.accounts.MinecraftAccount;
 
 import git.artdeell.mojo.R;
 
 public enum AuthType {
     @SerializedName("microsoft")
-    MICROSOFT(MicrosoftBackgroundLogin.CREATOR, R.drawable.ic_auth_ms),
+    MICROSOFT(MicrosoftBackgroundLogin.CREATOR, R.drawable.ic_auth_ms, null),
     @SerializedName("elyby")
-    ELY_BY(ElyByBackgroundLogin.CREATOR, R.drawable.ic_auth_elyby),
+    ELY_BY(ElyByBackgroundLogin.CREATOR, R.drawable.ic_auth_elyby, "ely.by"),
     @SerializedName("local")
-    LOCAL(null, 0);
+    LOCAL(null, 0, null);
 
     private final BackgroundLogin.Creator mCreator;
     public final int iconResource;
+    public final String injectorUrl;
 
-    AuthType(BackgroundLogin.Creator creator, int iconResource) {
+    AuthType(BackgroundLogin.Creator creator, int iconResource, String injectorUrl) {
         this.mCreator = creator;
         this.iconResource = iconResource;
+        this.injectorUrl = injectorUrl;
     }
 
     public boolean requiresLogin() {

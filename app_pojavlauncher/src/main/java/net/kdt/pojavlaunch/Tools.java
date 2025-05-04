@@ -365,6 +365,8 @@ public final class Tools {
             javaArgList.add("-Djna.boot.library.path="+dirPath);
         }
 
+        addAuthlibInjectorArgs(javaArgList, minecraftAccount);
+
         javaArgList.addAll(Arrays.asList(getMinecraftJVMArgs(versionId, gamedir)));
         javaArgList.add("-cp");
         javaArgList.add(launchClassPath + ":" + getLWJGL3ClassPath());
@@ -407,6 +409,12 @@ public final class Tools {
         } else {
             Log.w(Tools.APP_NAME, "Failed to create the configuration directory");
         }
+    }
+
+    public static void addAuthlibInjectorArgs(List<String> javaArgList, MinecraftAccount minecraftAccount) {
+        String injectorUrl = minecraftAccount.authType.injectorUrl;
+        if(injectorUrl == null) return;
+        javaArgList.add("-javaagent:"+Tools.DIR_DATA+"/authlib-injector/authlib-injector.jar="+injectorUrl);
     }
 
     public static void getCacioJavaArgs(List<String> javaArgList, boolean isJava8) {
