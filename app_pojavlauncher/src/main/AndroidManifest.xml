@@ -33,7 +33,9 @@
         android:process=":launcher"
         android:resizeableActivity="true"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:networkSecurityConfig="@xml/netconfig"
+        tools:ignore="UnusedAttribute">
         <activity
             android:name="net.kdt.pojavlaunch.MissingStorageActivity"
             android:exported="false" />

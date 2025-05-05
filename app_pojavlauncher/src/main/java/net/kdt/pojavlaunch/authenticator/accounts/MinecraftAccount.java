@@ -10,11 +10,13 @@ import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.JSONUtils;
 
 import java.io.*;
+import java.net.URL;
 
 import android.graphics.Bitmap;
-import android.util.Base64;
 
 import androidx.annotation.Keep;
+
+import org.apache.commons.io.IOUtils;
 
 @Keep
 public class MinecraftAccount {
@@ -27,16 +29,27 @@ public class MinecraftAccount {
     public String refreshToken = "0";
     public String xuid;
     public long expiresAt;
-    public String skinFaceBase64;
     private transient Bitmap mFaceCache;
 
     protected MinecraftAccount() {}
 
-    void updateSkinFace(String uuid) {
+    public void updateSkinFace() {
+        String skinFaceUrlTemplate = authType.skinUrl;
+        if(skinFaceUrlTemplate == null) return;
+        String skinFaceUrl = String.format(skinFaceUrlTemplate, username);
         try {
-            File skinFile = getSkinFaceFile(username);
-            Tools.downloadFile("https://mc-heads.net/head/" + uuid + "/100", skinFile.getAbsolutePath());
-            
+            Log.i("SkinLoader", "Updating skin face...");
+            File skinFile = getSkinFaceFile();
+            // Streaming it directly breaks on some devices
+            byte[] skinBytes = IOUtils.toByteArray(new URL(skinFaceUrl));
+            Bitmap skinBitmap = BitmapFactory.decodeByteArray(skinBytes, 0, skinBytes.length);
+            if(skinBitmap == null) return;
+            Bitmap skinFace = new SkinHeadRenderer().render(100, skinBitmap);
+            skinBitmap.recycle();
+            if(skinFace == null) return;
+            try(FileOutputStream fileOutputStream = new FileOutputStream(skinFile)) {
+                skinFace.compress(Bitmap.CompressFormat.WEBP, 90, fileOutputStream);
+            }
             Log.i("SkinLoader", "Update skin face success");
         } catch (IOException e) {
             // Skin refresh limit, no internet connection, etc...
@@ -49,10 +62,6 @@ public class MinecraftAccount {
         return accessToken.equals("0");
     }
     
-    public void updateSkinFace() {
-        updateSkinFace(profileId);
-    }
-    
     public void save() throws IOException {
         FileUtils.ensureParentDirectory(mSaveLocation);
         JSONUtils.writeToFile(mSaveLocation, this);
@@ -60,23 +69,15 @@ public class MinecraftAccount {
 
     public Bitmap getSkinFace(){
         if(isLocal()) return null;
-
-        File skinFaceFile = getSkinFaceFile(username);
-        if (!skinFaceFile.exists()) {
-            // Legacy version, storing the head inside the json as base 64
-            if(skinFaceBase64 == null) return null;
-            byte[] faceIconBytes = Base64.decode(skinFaceBase64, Base64.DEFAULT);
-            return BitmapFactory.decodeByteArray(faceIconBytes, 0, faceIconBytes.length);
-        } else {
-            if(mFaceCache == null) {
-                mFaceCache = BitmapFactory.decodeFile(skinFaceFile.getAbsolutePath());
-            }
+        File skinFaceFile = getSkinFaceFile();
+        if(!skinFaceFile.exists()) return null;
+        if(mFaceCache == null) {
+            mFaceCache = BitmapFactory.decodeFile(skinFaceFile.getAbsolutePath());
         }
-
         return mFaceCache;
     }
 
-    private static File getSkinFaceFile(String username) {
-        return new File(Tools.DIR_CACHE, username + ".png");
+    private File getSkinFaceFile() {
+        return new File(Tools.DIR_CACHE,  "skin-face-" + profileId +"-"+authType.name() + ".webp");
     }
 }

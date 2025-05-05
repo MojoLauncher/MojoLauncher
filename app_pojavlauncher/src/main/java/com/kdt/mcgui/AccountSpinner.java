@@ -10,7 +10,6 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -152,7 +151,6 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
     private void refreshAccount(MinecraftAccount minecraftAccount) {
         // Wait until all tasks (including other possible login tasks) are done before
         // attempting to refresh the account.
-        Log.i("AccountSpinner", "Submitting account refresh...");
         ProgressKeeper.waitUntilDone(()->{
             AuthType authType = minecraftAccount.authType;
             if(authType.requiresLogin() && System.currentTimeMillis() > minecraftAccount.expiresAt) {
@@ -331,11 +329,7 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
             textview.setText(account.username);
             textview.setCompoundDrawablesRelative(accountHead, null, authType, null);
         }
-        private void cleanup() {
-            for(BitmapDrawable bitmapDrawable : mSkinHeadCache.values()) {
-                bitmapDrawable.getBitmap().recycle();
-            }
-        }
+
         private void showDeleteDialog(Context context, int position) {
             new AlertDialog.Builder(context)
                     .setMessage(R.string.warning_remove_account)

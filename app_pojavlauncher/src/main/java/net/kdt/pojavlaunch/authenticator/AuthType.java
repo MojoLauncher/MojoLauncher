@@ -9,20 +9,32 @@ import git.artdeell.mojo.R;
 
 public enum AuthType {
     @SerializedName("microsoft")
-    MICROSOFT(MicrosoftBackgroundLogin.CREATOR, R.drawable.ic_auth_ms, null),
+    MICROSOFT(
+            MicrosoftBackgroundLogin.CREATOR,
+            R.drawable.ic_auth_ms,
+            null,
+            "https://mineskin.eu/skin/%s" // Switched from mc-heads.net cause blocked in Russia
+    ),
     @SerializedName("elyby")
-    ELY_BY(ElyByBackgroundLogin.CREATOR, R.drawable.ic_auth_elyby, "ely.by"),
+    ELY_BY(
+            ElyByBackgroundLogin.CREATOR,
+            R.drawable.ic_auth_elyby,
+            "ely.by",
+            "http://skinsystem.ely.by/skins/%s.png"
+    ),
     @SerializedName("local")
-    LOCAL(null, 0, null);
+    LOCAL(null, 0, null, null);
 
     private final BackgroundLogin.Creator mCreator;
     public final int iconResource;
     public final String injectorUrl;
+    public final String skinUrl;
 
-    AuthType(BackgroundLogin.Creator creator, int iconResource, String injectorUrl) {
+    AuthType(BackgroundLogin.Creator creator, int iconResource, String injectorUrl, String skinUrl) {
         this.mCreator = creator;
         this.iconResource = iconResource;
         this.injectorUrl = injectorUrl;
+        this.skinUrl = skinUrl;
     }
 
     public boolean requiresLogin() {
