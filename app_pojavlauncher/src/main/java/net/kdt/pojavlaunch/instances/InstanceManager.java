@@ -150,8 +150,8 @@ public class InstanceManager {
     /**
      * Create a new instance intended for first-time launcher users.
      */
-    public static void createFirstTimeInstance() throws IOException {
-        createInstance((instance)-> {
+    private static void createFirstTimeInstance() throws IOException {
+        internalCreateInstance((instance)-> {
             instance.sharedData = true;
             instance.versionId = "1.12.2";
         }, null);
@@ -169,6 +169,21 @@ public class InstanceManager {
     }
 
     /**
+     * Create an instance without attempting to load the instance list first. Only use this
+     * method during initialization.
+     */
+    private static Instance internalCreateInstance(InstanceSetter instanceSetter, String namePrefix) throws IOException{
+        File root = findNewInstanceRoot(namePrefix);
+        FileUtils.ensureDirectory(root);
+        Instance instance = new Instance();
+        instance.mInstanceRoot = root;
+        instanceSetter.setInstanceProperties(instance);
+        instance.write();
+        sInstanceList.add(instance);
+        return instance;
+    }
+
+    /**
      * Create a new instance with defaults set by user
      * @param instanceSetter setter function called to set user parameters
      * @param namePrefix a name prefix (for the user to easily distinguish installed instances)
@@ -178,14 +193,7 @@ public class InstanceManager {
     public static Instance createInstance(InstanceSetter instanceSetter, String namePrefix) throws IOException {
         // Make sure the instance list is loaded before creating a new instance.
         load();
-        File root = findNewInstanceRoot(namePrefix);
-        FileUtils.ensureDirectory(root);
-        Instance instance = new Instance();
-        instance.mInstanceRoot = root;
-        instanceSetter.setInstanceProperties(instance);
-        instance.write();
-        sInstanceList.add(instance);
-        return instance;
+        return internalCreateInstance(instanceSetter, namePrefix);
     }
 
     /**
