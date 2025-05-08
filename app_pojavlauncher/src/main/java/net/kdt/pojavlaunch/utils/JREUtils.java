@@ -220,6 +220,12 @@ public class JREUtils {
                 envMap.put("LIBGL_ES", "3");
                 envMap.put("POJAVEXEC_EGL","libltw.so"); // Use ANGLE EGL
             }
+            if(LOCAL_RENDERER.equals("vulkan_zink")) {
+                // Explicitly tell Mesa to use 4.6/460 GLSL on Zink
+                // This fixes crash on some mobile drivers (Mali r32p1, so far)
+                envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6");
+                envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
+            }
         }
         if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
         envMap.put("AWTSTUB_WIDTH", Integer.toString(CallbackBridge.windowWidth > 0 ? CallbackBridge.windowWidth : CallbackBridge.physicalWidth));
