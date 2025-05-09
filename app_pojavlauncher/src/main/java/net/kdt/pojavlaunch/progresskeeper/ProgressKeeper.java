@@ -2,6 +2,7 @@ package net.kdt.pojavlaunch.progresskeeper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public class ProgressKeeper {
@@ -37,8 +38,9 @@ public class ProgressKeeper {
 
     private static void updateTaskCount(int count) {
         synchronized (sTaskCountListeners) {
-            for(TaskCountListener listener : sTaskCountListeners) {
-                listener.onUpdateTaskCount(count);
+            Iterator<TaskCountListener> iterator = sTaskCountListeners.iterator();
+            while(iterator.hasNext()) {
+                if(iterator.next().onUpdateTaskCount(count)) iterator.remove();
             }
         }
     }
@@ -90,14 +92,12 @@ public class ProgressKeeper {
             runnable.run();
             return;
         }
-        TaskCountListener listener = new TaskCountListener() {
-            @Override
-            public void onUpdateTaskCount(int taskCount) {
-                if(taskCount == 0) {
-                    runnable.run();
-                    removeTaskCountListener(this);
-                }
+        TaskCountListener listener = taskCount -> {
+            if(taskCount == 0) {
+                runnable.run();
+                return true;
             }
+            return false;
         };
         addTaskCountListener(listener);
     }

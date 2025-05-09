@@ -90,7 +90,7 @@ public class ProgressService extends Service implements TaskCountListener {
     }
 
     @Override
-    public void onUpdateTaskCount(int taskCount) {
+    public boolean onUpdateTaskCount(int taskCount) {
         Tools.MAIN_HANDLER.post(()->{
             if(taskCount > 0) {
                 mNotificationBuilder.setContentText(getString(R.string.progresslayout_tasks_in_progress, taskCount));
@@ -99,5 +99,6 @@ public class ProgressService extends Service implements TaskCountListener {
                 stopSelf();
             }
         });
+        return false;
     }
 }

@@ -114,7 +114,7 @@ public class ProgressLayout extends ConstraintLayout implements View.OnClickList
     }
 
     @Override
-    public void onUpdateTaskCount(int tc) {
+    public boolean onUpdateTaskCount(int tc) {
         post(()->{
             if(tc > 0) {
                 mTaskNumberDisplayer.setText(getContext().getString(R.string.progresslayout_tasks_in_progress, tc));
@@ -122,6 +122,7 @@ public class ProgressLayout extends ConstraintLayout implements View.OnClickList
             }else
                 setVisibility(GONE);
         });
+        return false;
     }
 
     class LayoutProgressListener implements ProgressListener {

@@ -133,13 +133,14 @@ public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
-    public void onUpdateTaskCount(int taskCount) {
+    public boolean onUpdateTaskCount(int taskCount) {
         Tools.runOnUiThread(()->{
             mTasksRunning = taskCount != 0;
             for(ViewHolder viewHolder : mViewHolderSet) {
                 viewHolder.updateInstallButtonState();
             }
         });
+        return false;
     }
 
 
