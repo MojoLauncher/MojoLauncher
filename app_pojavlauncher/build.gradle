@@ -182,7 +182,7 @@ class AssetTaskRegistrar {
         variantName = variant.getName().capitalize()
         mergeAssetsTask = variant.getMergeAssetsProvider().get()
 
-        targetAssetsDir = new File(project.projectDir, "build/intermediates/${variantName.toLowerCase()}/remote_asset_set")
+        targetAssetsDir = new File(project.projectDir, "build/intermediates/remote_asset_set/${variantName.toLowerCase()}/")
         createDirectories(targetAssetsDir)
 
         project.android.sourceSets.main.assets.srcDirs += targetAssetsDir.absolutePath
