@@ -44,23 +44,23 @@ jobs:
       - name: Build Publishing .aab
         if: github.repository_owner == 'MojoLauncher' && github.ref_name == 'v3_openjdk'
         run: |
-          gradle :app_pojavlauncher:bundleGplay
-          mv app_pojavlauncher/build/outputs/bundle/gplay/app_pojavlauncher-gplay.aab out/app-gplay.aab
+          gradle :app_pojavlauncher:bundleFullGplay
+          mv app_pojavlauncher/build/outputs/bundle/full/gplay/app_pojavlauncher-full-gplay.aab out/app-gplay.aab
 
       - name: Build Debug .apk
         run: |
           # Build the launcher
           gradle :app_pojavlauncher:assembleFullDebug
-          mv app_pojavlauncher/build/outputs/apk/debug/app_pojavlauncher-debug.apk out/app-debug.apk
+          mv app_pojavlauncher/build/outputs/apk/full/debug/app_pojavlauncher-full-debug.apk out/app-debug-full.apk
 
       - name: Build Debug .apk (No runtime)
         run: |
           gradle :app_pojavlauncher:assembleNoruntimeDebug
-          mv app_pojavlauncher/build/outputs/apk/debug/app_pojavlauncher-debug.apk out/app-debug-noruntime.apk
+          mv app_pojavlauncher/build/outputs/apk/noruntime/debug/app_pojavlauncher-noruntime-debug.apk out/app-debug-noruntime.apk
 
       - name: Gen md5sums
         run: |
-          md5sum out/app-debug.apk > out/app-debug.md5
+          md5sum out/app-debug-full.apk > out/app-debug-full.md5
           md5sum out/app-debug-noruntime.apk > out/app-debug-noruntime.md5
 
       - name: Upload Debug APK

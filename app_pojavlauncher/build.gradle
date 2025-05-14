@@ -264,11 +264,13 @@ afterEvaluate {
         registrar.projectJarDependency project(":arc_dns_injector"), "components/arc_dns_injector"
         registrar.projectJarDependency project(":jre_lwjgl3glfw"), "components/lwjgl3"
 
-        def jreBuildRepository = "https://nightly.link/MojoLauncher/android-openjdk-build-multiarch/workflows/build";
+		if (variant.getName().toLowerCase().contains("full")) {
+        	def jreBuildRepository = "https://nightly.link/MojoLauncher/android-openjdk-build-multiarch/workflows/build";
 
-		registrar.onlineZipDependency "${jreBuildRepository}/buildjre8/jre8-pojav.zip", "ComponentRuntime8", "components/jre/"
-        registrar.onlineZipDependency "${jreBuildRepository}/buildjre17-21/jre17-pojav.zip", "ComponentRuntime17", "components/jre-new"
-        registrar.onlineZipDependency "${jreBuildRepository}/buildjre17-21/jre21-pojav.zip", "ComponentRuntime21", "components/jre-21"
+			registrar.onlineZipDependency "${jreBuildRepository}/buildjre8/jre8-pojav.zip", "ComponentRuntime8", "components/jre/"
+        	registrar.onlineZipDependency "${jreBuildRepository}/buildjre17-21/jre17-pojav.zip", "ComponentRuntime17", "components/jre-new"
+        	registrar.onlineZipDependency "${jreBuildRepository}/buildjre17-21/jre21-pojav.zip", "ComponentRuntime21", "components/jre-21"
+        }
         
 		def cacioBuildRepository = "https://nightly.link/MojoLauncher/%s/workflows/maven/master/caciocavallo.zip"
 
