@@ -67,13 +67,13 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
-          path: out/app-debug.*
+          path: out/app-debug-full.apk
 
       - name: Upload Debug APK (No runtime)
         uses: actions/upload-artifact@v4
         with:
           name: app-debug-noruntime
-          path: out/app-debug-noruntime.*
+          path: out/app-debug-noruntime.apk
 
       - name: Upload AAB
         uses: actions/upload-artifact@v4
