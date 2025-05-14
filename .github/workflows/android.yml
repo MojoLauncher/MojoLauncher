@@ -53,15 +53,27 @@ jobs:
           gradle :app_pojavlauncher:assembleDebug
           mv app_pojavlauncher/build/outputs/apk/debug/app_pojavlauncher-debug.apk out/app-debug.apk
 
+      - name: Build Debug .apk (No runtime)
+        run: |
+          NO_RUNTIME=1 gradle :app_pojavlauncher:assembleDebug
+          mv app_pojavlauncher/build/outputs/apk/debug/app_pojavlauncher-debug.apk out/app-debug-noruntime.apk
+
       - name: Gen md5sums
         run: |
           md5sum out/app-debug.apk > out/app-debug.md5
+          md5sum out/app-debug-noruntime.apk > out/app-debug-noruntime.md5
 
-      - name: Upload APK
+      - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
           path: out/app-debug.*
+
+      - name: Upload Debug APK (No runtime)
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug-noruntime
+          path: out/app-debug-noruntime.*
 
       - name: Upload AAB
         uses: actions/upload-artifact@v4
