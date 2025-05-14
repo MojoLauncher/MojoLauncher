@@ -81,6 +81,19 @@ android {
         resValue 'string', 'curseforge_api_key', getCFApiKey()
     }
 
+    flavorDimensions "runtime"
+    
+    productFlavors {
+        full {
+            dimension "runtime"
+        }
+        
+        noruntime {
+            dimension "runtime"
+            versionNameSuffix "-noruntime"
+        }
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix '.debug'
@@ -162,17 +175,17 @@ class AssetTaskRegistrar {
         this.project = project
 
         targetDownloadDir = new File(project.projectDir, "build/intermediates/download_deps")
-        targetAssetsDir = new File(project.projectDir, "build/intermediates/remote_asset_set")
-
         createDirectories(targetDownloadDir)
-        createDirectories(targetAssetsDir)
-
-        project.android.sourceSets.main.assets.srcDirs += targetAssetsDir.absolutePath
     }
 
     def setVariant(variant) {
         variantName = variant.getName().capitalize()
         mergeAssetsTask = variant.getMergeAssetsProvider().get()
+
+        targetAssetsDir = new File(project.projectDir, "build/intermediates/${variantName.toLowerCase()}/remote_asset_set")
+        createDirectories(targetAssetsDir)
+
+        project.android.sourceSets.main.assets.srcDirs += targetAssetsDir.absolutePath
     }
 
     static def createDirectories(File location) {
@@ -195,13 +208,13 @@ class AssetTaskRegistrar {
         def downloadTarget = new File(targetDownloadDir, name)
 
         def dependencySuffix = "${name}${variantName}"
-        def downloadTask = project.tasks.register("download"+dependencySuffix, Download) {
+        def downloadTask = project.tasks.register("download${dependencySuffix}", Download) {
             src downloadUrl
             dest downloadTarget
             overwrite false
         };
 
-        def unzipTask = project.tasks.register("unzip"+dependencySuffix, Copy) {
+        def unzipTask = project.tasks.register("unzip${dependencySuffix}", Copy) {
             from project.zipTree(downloadTarget)
             into targetExtractionDir
             dependsOn downloadTask
@@ -210,7 +223,7 @@ class AssetTaskRegistrar {
     }
 
     def onlineZipDependency(String downloadUrl, String name, String relativePath) {
-        mergeAssetsTask.dependsOn(onlineUnzipTask downloadUrl, name, assetDestination(relativePath))
+		mergeAssetsTask.dependsOn(onlineUnzipTask downloadUrl, name, assetDestination(relativePath))
     }
 
     def projectJarDependency(Project project, String relativePath) {
@@ -218,7 +231,7 @@ class AssetTaskRegistrar {
         createDirectories targetDir
         // Nasty hack: explicitly reference project by name to force Gradle to configure it.
         // Makes jar task search below work properly for fresh configurations.
-        mergeAssetsTask.dependsOn(":"+project.name+":jar");
+        mergeAssetsTask.dependsOn(":${project.name}:jar");
 
         project.tasks.withType(org.gradle.jvm.tasks.Jar.class).configureEach {
             it.destinationDirectory = targetDir
@@ -241,8 +254,6 @@ class AssetTaskRegistrar {
     }
 }
 
-
-
 afterEvaluate {
     def registrar = new AssetTaskRegistrar(project);
 
@@ -253,26 +264,13 @@ afterEvaluate {
         registrar.projectJarDependency project(":arc_dns_injector"), "components/arc_dns_injector"
         registrar.projectJarDependency project(":jre_lwjgl3glfw"), "components/lwjgl3"
 
-		if (System.getenv("NO_RUNTIME") == null) {
-			def jreBuildRepository = "https://nightly.link/MojoLauncher/android-openjdk-build-multiarch/workflows/build/";
+        def jreBuildRepository = "https://nightly.link/MojoLauncher/android-openjdk-build-multiarch/workflows/build";
 
-        	registrar.onlineZipDependency jreBuildRepository+"buildjre8/jre8-pojav.zip", "ComponentRuntime8", "components/jre/"
-        	registrar.onlineZipDependency jreBuildRepository+"buildjre17-21/jre17-pojav.zip", "ComponentRuntime17", "components/jre-new"
-        	registrar.onlineZipDependency jreBuildRepository+"buildjre17-21/jre21-pojav.zip", "ComponentRuntime21", "components/jre-21"
-		} else {
-			println "Building APK with no packaged JRE runtimes! (NO_RUNTIME is set!)"
-        	fileTree(dir: targetDownloadDir).matching {
-            	include "ComponentRuntime*"
-        	}.each { file ->
-            	file.delete()
-        	}
-        	
-        	project.delete(new File(targetAssetsDir, "components/jre/"))
-        	project.delete(new File(targetAssetsDir, "components/jre-new/"))
-        	project.delete(new File(targetAssetsDir, "components/jre-21/"))
-    	}
-
-        def cacioBuildRepository = "https://nightly.link/MojoLauncher/%s/workflows/maven/master/caciocavallo.zip"
+		registrar.onlineZipDependency "${jreBuildRepository}/buildjre8/jre8-pojav.zip", "ComponentRuntime8", "components/jre/"
+        registrar.onlineZipDependency "${jreBuildRepository}/buildjre17-21/jre17-pojav.zip", "ComponentRuntime17", "components/jre-new"
+        registrar.onlineZipDependency "${jreBuildRepository}/buildjre17-21/jre21-pojav.zip", "ComponentRuntime21", "components/jre-21"
+        
+		def cacioBuildRepository = "https://nightly.link/MojoLauncher/%s/workflows/maven/master/caciocavallo.zip"
 
         registrar.onlineJarDependency String.format(cacioBuildRepository, "caciocavallo"), "Caciocavallo", "components/caciocavallo"
         registrar.onlineJarDependency String.format(cacioBuildRepository, "caciocavallo17"), "Caciocavallo17", "components/caciocavallo17"
