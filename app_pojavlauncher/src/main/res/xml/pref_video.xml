@@ -29,6 +29,7 @@
             app2:min="@integer/resolution_seekbar_min"
             app2:seekBarIncrement="@integer/resolution_seekbar_increment"
             android:icon="@drawable/ic_px_resolution"
+            android:max="250"
             />
 
         <SwitchPreference
