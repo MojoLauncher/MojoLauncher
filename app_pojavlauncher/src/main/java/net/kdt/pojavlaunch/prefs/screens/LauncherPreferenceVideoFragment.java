@@ -29,8 +29,24 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
                 CustomSeekBarPreference.class);
         resolutionSeekbar.setSuffix(" %");
 
+        SwitchPreference extendedResolutionSwitch = requirePreference("extendedResolution",
+                SwitchPreference.class);
+        extendedResolutionSwitch.setOnPreferenceChangeListener((pref, value) -> {
+            if((boolean) value) {
+                resolutionSeekbar.setMaxKeepIncrement(250);
+            } else {
+                resolutionSeekbar.setMaxKeepIncrement(100);
+                if(LauncherPreferences.PREF_SCALE_FACTOR > 1) resolutionSeekbar.setValue(100);
+            }
+            return true;
+        });
+        extendedResolutionSwitch.setChecked(LauncherPreferences.PREF_EXTENDED_RESOLUTION);
+        if(extendedResolutionSwitch.isChecked()) {
+            resolutionSeekbar.setMaxKeepIncrement(250);
+        }
+
         // #724 bug fix
-        if (resolution < 25) {
+        if (resolution < 25 || !extendedResolutionSwitch.isChecked() && resolution > 100) {
             resolutionSeekbar.setValue(100);
         } else {
             resolutionSeekbar.setValue(resolution);

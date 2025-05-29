@@ -214,6 +214,8 @@
     <string name="preference_force_english_description">Allows you to see original strings, as intended by developers. Requires a restart.</string>
     <string name="preference_edit_controls_title">Edit custom controls</string>
     <string name="preference_edit_controls_summary">Tweak the control scheme to fit your needs.</string>
+    <string name="preference_enable_extended_resolution">Allow higher resolutions</string>
+    <string name="preference_enable_extended_resolution_description">Warning: This may cause performance issues!\nAllows selecting resolutions beyond 100%</string>
 
     <string name="preference_category_gyro_controls">Gyroscope controls</string>
     <string name="preference_category_virtual_mouse">Virtual mouse</string>

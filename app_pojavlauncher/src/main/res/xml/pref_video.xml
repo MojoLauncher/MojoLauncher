@@ -20,6 +20,13 @@
             android:icon="@drawable/ic_px_viewport_expand"
             />
 
+        <SwitchPreference
+            android:title="@string/preference_enable_extended_resolution"
+            android:summary="@string/preference_enable_extended_resolution_description"
+            android:key="extendedResolution"
+            android:defaultValue="false"
+            />
+
         <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
             android:key="resolutionRatio"
             android:summary="@string/mcl_setting_subtitle_resolution_scaler"
@@ -29,7 +36,6 @@
             app2:min="@integer/resolution_seekbar_min"
             app2:seekBarIncrement="@integer/resolution_seekbar_increment"
             android:icon="@drawable/ic_px_resolution"
-            android:max="250"
             />
 
         <SwitchPreference

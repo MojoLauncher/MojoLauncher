@@ -48,6 +48,7 @@ public class LauncherPreferences {
     public static boolean PREF_ARC_CAPES = false;
     public static boolean PREF_USE_ALTERNATE_SURFACE = true;
     public static boolean PREF_JAVA_SANDBOX = true;
+    public static boolean PREF_EXTENDED_RESOLUTION = false;
     public static float PREF_SCALE_FACTOR = 1f;
 
     public static boolean PREF_ENABLE_GYRO = false;
@@ -94,6 +95,7 @@ public class LauncherPreferences {
         PREF_ARC_CAPES = DEFAULT_PREF.getBoolean("arc_capes",false);
         PREF_USE_ALTERNATE_SURFACE = DEFAULT_PREF.getBoolean("alternate_surface", isDevicePowerful);
         PREF_JAVA_SANDBOX = DEFAULT_PREF.getBoolean("java_sandbox", true);
+        PREF_EXTENDED_RESOLUTION = DEFAULT_PREF.getBoolean("extendedResolution", false);
         PREF_SCALE_FACTOR = DEFAULT_PREF.getInt("resolutionRatio", findBestResolution(ctx, isDevicePowerful))/100f;
         PREF_ENABLE_GYRO = DEFAULT_PREF.getBoolean("enableGyro", false);
         PREF_GYRO_SENSITIVITY = ((float)DEFAULT_PREF.getInt("gyroSensitivity", 100))/100f;
