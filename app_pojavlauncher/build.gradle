@@ -255,15 +255,20 @@ class AssetTaskRegistrar {
         }
     }
 
-    def onlineJarDependency(String downloadUrl, String name, String relativePath) {
-        File targetDir = assetDestination(relativePath);
-        def unzipTask = onlineUnzipTask(downloadUrl, name, targetDir).get()
-        unzipTask.doLast {
-            println("unzipTask.doLast()")
-            if(!unzipTask.didWork) return
-            writeVersion targetDir
-        }
-        mergeAssetsTask.dependsOn(unzipTask)
+    def onlineJarDependency(String jarUrl, String jarProject, String dependency, String relativePath) {
+        File targetDir = assetDestination(relativePath)
+        createDirectories targetDir
+        def dependencySuffix = "${jarProject}${dependency}${variantName}"
+        def downloadTask = project.tasks.register("download${dependencySuffix}", Download) {
+            src String.format(jarUrl, jarProject, dependency)
+            dest targetDir
+            overwrite false
+            doLast {
+                if(!it.didWork) return
+                writeVersion targetDir
+            }
+        };
+        mergeAssetsTask.dependsOn(downloadTask)
     }
 }
 
@@ -285,10 +290,13 @@ afterEvaluate {
         	registrar.onlineZipDependency "${jreBuildRepository}/buildjre17-21/jre21-pojav.zip", "ComponentRuntime21", "components/jre-21"
         }
         
-		def cacioBuildRepository = "https://nightly.link/MojoLauncher/%s/workflows/maven/master/caciocavallo.zip"
+		def cacioJarUrl = "https://jitpack.io/com/github/MojoLauncher/%1\$s/%2\$s/master-SNAPSHOT/%2\$s-master-SNAPSHOT.jar"
 
-        registrar.onlineJarDependency String.format(cacioBuildRepository, "caciocavallo"), "Caciocavallo", "components/caciocavallo"
-        registrar.onlineJarDependency String.format(cacioBuildRepository, "caciocavallo17"), "Caciocavallo17", "components/caciocavallo17"
+        registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-shared", "components/caciocavallo"
+        registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-androidnw", "components/caciocavallo"
+
+        registrar.onlineJarDependency cacioJarUrl, "caciocavallo17", "cacio-shared", "components/caciocavallo17"
+        registrar.onlineJarDependency cacioJarUrl, "caciocavallo17", "cacio-tta", "components/caciocavallo17"
     }
 }
 
