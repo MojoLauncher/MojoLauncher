@@ -19,25 +19,25 @@ static def getDateSeconds() {
 def getVersionName = {
     def currentBranch = grgit.branch.current()
     def latestCommit = grgit.log(maxCommits: 1)
-    def dateToday = getDate();
+    def dateToday = getDate()
     if(currentBranch == null || latestCommit == null) {
-        return "LOCAL-${dateToday}";
+        return "LOCAL-${dateToday}"
     }else {
-        def branchName = currentBranch.getName();
-        def commitAbbreviation = latestCommit.abbreviatedId;
+        def branchName = currentBranch.getName()
+        def commitAbbreviation = latestCommit.abbreviatedId
         return "hebe-${dateToday}-${commitAbbreviation}-${branchName}"
     }
 }
 
 def getCFApiKey = {
-    String key = System.getenv("CURSEFORGE_API_KEY");
-    if(key != null) return key;
-    File curseforgeKeyFile = new File("./curseforge_key.txt");
+    String key = System.getenv("CURSEFORGE_API_KEY")
+    if(key != null) return key
+    File curseforgeKeyFile = new File("./curseforge_key.txt")
     if(curseforgeKeyFile.canRead() && curseforgeKeyFile.isFile()) {
-        return curseforgeKeyFile.text;
+        return curseforgeKeyFile.text
     }
-    logger.warn('BUILD: You have no CurseForge key, the curseforge api will get disabled !');
-    return "DUMMY";
+    logger.warn('BUILD: You have no CurseForge key, the curseforge api will get disabled !')
+    return "DUMMY"
 }
 
 configurations {
@@ -81,7 +81,7 @@ android {
         resValue 'string', 'curseforge_api_key', getCFApiKey()
     }
 
-    flavorDimensions "runtime"
+    flavorDimensions  = ["runtime"]
     
     productFlavors {
         full {
@@ -202,7 +202,7 @@ class AssetTaskRegistrar {
     }
 
     private def assetDestination(String relativePath) {
-        return new File(targetAssetsDir, relativePath);
+        return new File(targetAssetsDir, relativePath)
     }
 
     private def onlineUnzipTask(String downloadUrl, String name, File targetExtractionDir) {
@@ -215,7 +215,7 @@ class AssetTaskRegistrar {
             src downloadUrl
             dest downloadTarget
             overwrite false
-        };
+        }
 
         def unzipTask = project.tasks.register("unzip${dependencySuffix}", Copy) {
             from project.zipTree(downloadTarget)
@@ -244,7 +244,7 @@ class AssetTaskRegistrar {
             dependsOn ":${project.name}:jar"
         }
 
-        mergeAssetsTask.dependsOn copyTask;
+        mergeAssetsTask.dependsOn copyTask
 
         project.tasks.withType(org.gradle.jvm.tasks.Jar.class).configureEach {
             it.destinationDirectory = jarTargetDir
@@ -267,13 +267,18 @@ class AssetTaskRegistrar {
                 if(!it.didWork) return
                 writeVersion targetDir
             }
-        };
+        }
         mergeAssetsTask.dependsOn(downloadTask)
+    }
+
+    def jreRuntimeDependency(int version, String relPath) {
+        def jreUrl = "https://github.com/MojoLauncher/android-openjdk-build-multiarch/releases/download/rolling/jre%d-pojav.zip"
+        onlineZipDependency(String.format(jreUrl, version), "ComponentRuntime$version", relPath)
     }
 }
 
 afterEvaluate {
-    def registrar = new AssetTaskRegistrar(project);
+    def registrar = new AssetTaskRegistrar(project)
 
     android.applicationVariants.configureEach { variant ->
         registrar.setVariant(variant)
@@ -283,11 +288,9 @@ afterEvaluate {
         registrar.projectJarDependency project(":jre_lwjgl3glfw"), "components/lwjgl3"
 
 		if (variant.getName().toLowerCase().contains("full")) {
-        	def jreBuildRepository = "https://nightly.link/MojoLauncher/android-openjdk-build-multiarch/workflows/build";
-
-			registrar.onlineZipDependency "${jreBuildRepository}/buildjre8/jre8-pojav.zip", "ComponentRuntime8", "components/jre/"
-        	registrar.onlineZipDependency "${jreBuildRepository}/buildjre17-21/jre17-pojav.zip", "ComponentRuntime17", "components/jre-new"
-        	registrar.onlineZipDependency "${jreBuildRepository}/buildjre17-21/jre21-pojav.zip", "ComponentRuntime21", "components/jre-21"
+            registrar.jreRuntimeDependency 8, "components/jre"
+            registrar.jreRuntimeDependency 17, "components/jre-new"
+            registrar.jreRuntimeDependency 21, "components/jre-21"
         }
         
 		def cacioJarUrl = "https://jitpack.io/com/github/MojoLauncher/%1\$s/%2\$s/master-SNAPSHOT/%2\$s-master-SNAPSHOT.jar"
