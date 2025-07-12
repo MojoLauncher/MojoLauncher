@@ -28,7 +28,6 @@ import net.kdt.pojavlaunch.utils.JREUtils;
 import net.kdt.pojavlaunch.utils.MathUtils;
 
 import org.apache.commons.io.IOUtils;
-import org.lwjgl.glfw.CallbackBridge;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -117,8 +116,8 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
                     AWTInputBridge.sendMousePress(AWTInputEvent.BUTTON1_DOWN_MASK);
                 } else {
                     if (action == MotionEvent.ACTION_MOVE) { // 2
-                        mouseX = Math.max(0, Math.min(CallbackBridge.physicalWidth, mouseX + x - prevX));
-                        mouseY = Math.max(0, Math.min(CallbackBridge.physicalHeight, mouseY + y - prevY));
+                        mouseX = Math.max(0, Math.min(v.getWidth(), mouseX + x - prevX));
+                        mouseY = Math.max(0, Math.min(v.getHeight(), mouseY + y - prevY));
                         placeMouseAt(mouseX, mouseY);
                         sendScaledMousePosition(mouseX, mouseY);
                     }
@@ -152,8 +151,9 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         });
 
         try {
+            mTouchPad.post(()->{
 
-            placeMouseAt(CallbackBridge.physicalWidth / 2f, CallbackBridge.physicalHeight / 2f);
+            });
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
                 finish();
@@ -348,6 +348,9 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
     public void toggleVirtualMouse(View v) {
         mIsVirtualMouseEnabled = !mIsVirtualMouseEnabled;
         mTouchPad.setVisibility(mIsVirtualMouseEnabled ? View.VISIBLE : View.GONE);
+        if(mIsVirtualMouseEnabled && mMousePointerImageView.getX() == 0 && mMousePointerImageView.getY() == 0) {
+            mTouchPad.post(()->placeMouseAt(mTouchPad.getWidth() / 2f, mTouchPad.getHeight() / 2f));
+        }
         Toast.makeText(this,
                 mIsVirtualMouseEnabled ? R.string.control_mouseon : R.string.control_mouseoff,
                 Toast.LENGTH_SHORT).show();

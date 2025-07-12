@@ -13,8 +13,6 @@ import net.kdt.pojavlaunch.utils.JSONUtils;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import net.objecthunter.exp4j.function.Function;
 
-import org.lwjgl.glfw.CallbackBridge;
-
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -78,7 +76,7 @@ public class ControlData {
     }
 
     public ControlData(String name, int[] keycodes) {
-        this(name, keycodes, Tools.currentDisplayMetrics.widthPixels / 2f, Tools.currentDisplayMetrics.heightPixels / 2f);
+        this(name, keycodes, 100, 100);
     }
 
     public ControlData(String name, int[] keycodes, float x, float y) {
@@ -250,9 +248,9 @@ public class ControlData {
         conversionMap = new WeakReference<>(keyValueMap);
     }
 
-    public float insertDynamicPos(String dynamicPos) {
+    public float insertDynamicPos(String dynamicPos, int w, int h) {
         // Insert value to ${variable}
-        String insertedPos = JSONUtils.insertSingleJSONValue(dynamicPos, fillConversionMap());
+        String insertedPos = JSONUtils.insertSingleJSONValue(dynamicPos, fillConversionMap(w, h));
 
         // Calculate, because the dynamic position contains some math equations
         return calculate(insertedPos);
@@ -290,19 +288,19 @@ public class ControlData {
      *
      * @return the valueMap to use.
      */
-    private Map<String, String> fillConversionMap() {
+    private Map<String, String> fillConversionMap(int w, int h) {
         ArrayMap<String, String> valueMap = conversionMap.get();
         if (valueMap == null) {
             buildConversionMap();
             valueMap = conversionMap.get();
         }
 
-        valueMap.put("right", Float.toString(CallbackBridge.physicalWidth - getWidth()));
-        valueMap.put("bottom", Float.toString(CallbackBridge.physicalHeight - getHeight()));
+        valueMap.put("right", Float.toString(w - getWidth()));
+        valueMap.put("bottom", Float.toString(h - getHeight()));
         valueMap.put("width", Float.toString(getWidth()));
         valueMap.put("height", Float.toString(getHeight()));
-        valueMap.put("screen_width", Integer.toString(CallbackBridge.physicalWidth));
-        valueMap.put("screen_height", Integer.toString(CallbackBridge.physicalHeight));
+        valueMap.put("screen_width", Integer.toString(w));
+        valueMap.put("screen_height", Integer.toString(h));
         valueMap.put("preferred_scale", Float.toString(LauncherPreferences.PREF_BUTTONSIZE));
 
         return valueMap;

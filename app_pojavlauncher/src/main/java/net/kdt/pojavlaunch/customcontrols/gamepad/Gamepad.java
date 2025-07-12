@@ -123,11 +123,10 @@ public class Gamepad implements GrabListener, GamepadHandler {
         CallbackBridge.sendCursorPos(CallbackBridge.windowWidth/2f, CallbackBridge.windowHeight/2f);
 
         if(showCursor) {
-            ((ViewGroup)contextView.getParent()).addView(mPointerImageView);
+            ViewGroup parent = ((ViewGroup)contextView.getParent());
+            parent.addView(mPointerImageView);
+            placePointerView(parent.getWidth()/2, parent.getHeight()/2);
         }
-
-
-        placePointerView(CallbackBridge.physicalWidth/2, CallbackBridge.physicalHeight/2);
 
         reloadGamepadMaps();
         mMapProvider.attachGrabListener(this);

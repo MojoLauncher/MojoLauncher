@@ -3,8 +3,6 @@ package net.kdt.pojavlaunch.customcontrols.handleview;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-import static net.kdt.pojavlaunch.Tools.currentDisplayMetrics;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -140,7 +138,7 @@ public class EditControlSideDialog extends SideDialogView {
      */
     public void adaptPanelPosition() {
         if (mDisplaying) {
-            boolean isAtRight = mCurrentlyEditedButton.getControlView().getX() + mCurrentlyEditedButton.getControlView().getWidth() / 2f < currentDisplayMetrics.widthPixels / 2f;
+            boolean isAtRight = mCurrentlyEditedButton.getControlView().getX() + mCurrentlyEditedButton.getControlView().getWidth() / 2f < mCurrentlyEditedButton.getControlLayoutParent().getWidth() / 2f;
             appear(isAtRight);
             if (mColorSelector.isDisplaying()) {
                 Tools.runOnUiThread(() -> appearColor(isAtRight, mCurrentlyEditedButton.getProperties().bgColor));

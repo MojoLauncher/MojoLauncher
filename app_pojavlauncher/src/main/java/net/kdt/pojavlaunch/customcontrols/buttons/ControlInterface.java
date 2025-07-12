@@ -13,8 +13,6 @@ import android.os.Build;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
@@ -35,6 +33,10 @@ import org.lwjgl.glfw.CallbackBridge;
  * sending keys has to be implemented by sub classes.
  */
 public interface ControlInterface extends View.OnLongClickListener, GrabListener {
+    /**
+     * Get this ControlInterface implementation as a View.
+     * @return this
+     */
     View getControlView();
 
     ControlData getProperties();
@@ -98,18 +100,9 @@ public interface ControlInterface extends View.OnLongClickListener, GrabListener
     /* This function should be overridden to store the properties */
     @CallSuper
     default void setProperties(ControlData properties, boolean changePos) {
-        if (changePos) {
-            getControlView().setX(properties.insertDynamicPos(getProperties().dynamicX));
-            getControlView().setY(properties.insertDynamicPos(getProperties().dynamicY));
+        if(changePos && !getControlView().isInLayout()) {
+            getControlView().requestLayout();
         }
-
-        // Recycle layout params
-        ViewGroup.LayoutParams params = getControlView().getLayoutParams();
-        if (params == null)
-            params = new FrameLayout.LayoutParams((int) properties.getWidth(), (int) properties.getHeight());
-        params.width = (int) properties.getWidth();
-        params.height = (int) properties.getHeight();
-        getControlView().setLayoutParams(params);
     }
 
     /**
@@ -145,7 +138,6 @@ public interface ControlInterface extends View.OnLongClickListener, GrabListener
      */
     default void setDynamicX(String dynamicX) {
         getProperties().dynamicX = dynamicX;
-        getControlView().setX(getProperties().insertDynamicPos(dynamicX));
     }
 
     /**
@@ -155,7 +147,6 @@ public interface ControlInterface extends View.OnLongClickListener, GrabListener
      */
     default void setDynamicY(String dynamicY) {
         getProperties().dynamicY = dynamicY;
-        getControlView().setY(getProperties().insertDynamicPos(dynamicY));
     }
 
     /**
@@ -165,10 +156,11 @@ public interface ControlInterface extends View.OnLongClickListener, GrabListener
      * @return The equation as a String
      */
     default String generateDynamicX(float x) {
-        if (x + (getProperties().getWidth() / 2f) > CallbackBridge.physicalWidth / 2f) {
-            return (x + getProperties().getWidth()) / CallbackBridge.physicalWidth + " * ${screen_width} - ${width}";
+        int width = getControlLayoutParent().getWidth();
+        if (x + (getProperties().getWidth() / 2f) > width / 2f) {
+            return (x + getProperties().getWidth()) / width + " * ${screen_width} - ${width}";
         } else {
-            return x / CallbackBridge.physicalWidth + " * ${screen_width}";
+            return x / width + " * ${screen_width}";
         }
     }
 
@@ -179,10 +171,11 @@ public interface ControlInterface extends View.OnLongClickListener, GrabListener
      * @return The equation as a String
      */
     default String generateDynamicY(float y) {
-        if (y + (getProperties().getHeight() / 2f) > CallbackBridge.physicalHeight / 2f) {
-            return (y + getProperties().getHeight()) / CallbackBridge.physicalHeight + " * ${screen_height} - ${height}";
+        int height = getControlLayoutParent().getHeight();
+        if (y + (getProperties().getHeight() / 2f) > height / 2f) {
+            return (y + getProperties().getHeight()) / height + " * ${screen_height} - ${height}";
         } else {
-            return y / CallbackBridge.physicalHeight + " * ${screen_height}";
+            return y / height + " * ${screen_height}";
         }
     }
 
@@ -366,14 +359,6 @@ public interface ControlInterface extends View.OnLongClickListener, GrabListener
                     return true;
                 }
 
-                /* If the button can be modified/moved */
-                //Instantiate the gesture detector only when needed
-
-                if (event.getActionMasked() == MotionEvent.ACTION_UP && mCanTriggerLongClick) {
-                    //TODO change this.
-                    onLongClick(view);
-                }
-
                 switch (event.getActionMasked()) {
                     case MotionEvent.ACTION_DOWN:
                         mCanTriggerLongClick = true;
@@ -388,12 +373,18 @@ public interface ControlInterface extends View.OnLongClickListener, GrabListener
                             mCanTriggerLongClick = false;
                         getControlLayoutParent().adaptPanelPosition();
                         snapAndAlign(
-                                MathUtils.clamp(event.getRawX() - downX, 0, CallbackBridge.physicalWidth - view.getWidth()),
-                                MathUtils.clamp(event.getRawY() - downY, 0, CallbackBridge.physicalHeight - view.getHeight())
+                                MathUtils.clamp(event.getRawX() - downX, 0, getControlLayoutParent().getWidth() - view.getWidth()),
+                                MathUtils.clamp(event.getRawY() - downY, 0, getControlLayoutParent().getWidth() - view.getHeight())
                         );
                         break;
+                    case MotionEvent.ACTION_UP:
+                        if(mCanTriggerLongClick) onLongClick(view);
+                        // Internally, setX and setY just set the view translation.
+                        // Reset before layout to apply the layout pos correctly.
+                        view.setTranslationX(0);
+                        view.setTranslationY(0);
+                        view.requestLayout();
                 }
-
                 return true;
             }
         });
@@ -401,13 +392,7 @@ public interface ControlInterface extends View.OnLongClickListener, GrabListener
 
     default void injectLayoutParamBehavior() {
         getControlView().addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-            getProperties().setWidth(right - left);
-            getProperties().setHeight(bottom - top);
             setBackground();
-
-            // Re-calculate position
-            getControlView().setX(getControlView().getX());
-            getControlView().setY(getControlView().getY());
         });
     }
 

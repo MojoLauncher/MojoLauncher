@@ -1,7 +1,6 @@
 package net.kdt.pojavlaunch.customcontrols;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
-import static net.kdt.pojavlaunch.Tools.currentDisplayMetrics;
 
 import static org.lwjgl.glfw.CallbackBridge.isGrabbing;
 
@@ -10,6 +9,7 @@ import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -291,10 +291,7 @@ public class ControlLayout extends FrameLayout {
 	}
 
 	public void refreshControlButtonPositions(){
-		for(ControlInterface button : getButtonChildren()){
-			button.setDynamicX(button.getProperties().dynamicX);
-			button.setDynamicY(button.getProperties().dynamicY);
-		}
+		requestLayout();
 	}
 
     @Override
@@ -322,7 +319,7 @@ public class ControlLayout extends FrameLayout {
 		mControlDialog.internalChanges = true;
 		mControlDialog.setCurrentlyEditedButton(button);
 
-		mControlDialog.appear(button.getControlView().getX() + button.getControlView().getWidth()/2f < currentDisplayMetrics.widthPixels/2f);
+		mControlDialog.appear(button.getControlView().getX() + button.getControlView().getWidth()/2f < getWidth()/2f);
 		button.loadEditValues(mControlDialog);
 
 		mControlDialog.internalChanges = false;
@@ -593,6 +590,91 @@ public class ControlLayout extends FrameLayout {
 		builder.setPositiveButton(R.string.global_yes, (d,w)->exitListener.exitEditor());
 		builder.setNegativeButton(R.string.global_no, (d,w)->{});
 		builder.show();
+	}
+
+	// Copied from https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/widget/FrameLayout.java
+	// (and edited to avoid laying out control buttons)
+	@SuppressWarnings("RtlHardcoded") // Handled explicitly via getAbsoluteGravity()
+	private void layoutNonButtonChildren(int left, int top, int right, int bottom) {
+		final int count = getChildCount();
+		final int parentLeft = getPaddingLeft();
+		final int parentRight = right - left - getPaddingRight();
+		final int parentTop = getPaddingTop();
+		final int parentBottom = bottom - top - getPaddingBottom();
+		final int layoutDirection = getLayoutDirection();
+		for (int i = 0; i < count; i++) {
+			final View child = getChildAt(i);
+			if(child instanceof ControlInterface || child.getVisibility() == GONE) continue;
+			final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+			final int width = child.getMeasuredWidth();
+			final int height = child.getMeasuredHeight();
+			int childLeft, childTop;
+			int gravity = lp.gravity;
+			if (gravity == -1) {
+				gravity = Gravity.START | Gravity.TOP;
+			}
+			final int absoluteGravity = Gravity.getAbsoluteGravity(gravity, layoutDirection);
+			switch (absoluteGravity & Gravity.HORIZONTAL_GRAVITY_MASK) {
+				case Gravity.CENTER_HORIZONTAL:
+					childLeft = parentLeft + (parentRight - parentLeft - width) / 2 +
+							lp.leftMargin - lp.rightMargin;
+					break;
+				case Gravity.RIGHT:
+					childLeft = parentRight - width - lp.rightMargin;
+					break;
+				case Gravity.LEFT:
+				default:
+					childLeft = parentLeft + lp.leftMargin;
+			}
+			switch (gravity & Gravity.VERTICAL_GRAVITY_MASK) {
+				case Gravity.TOP:
+				default:
+					childTop = parentTop + lp.topMargin;
+					break;
+				case Gravity.CENTER_VERTICAL:
+					childTop = parentTop + (parentBottom - parentTop - height) / 2 +
+							lp.topMargin - lp.bottomMargin;
+					break;
+				case Gravity.BOTTOM:
+					childTop = parentBottom - height - lp.bottomMargin;
+					break;
+			}
+			child.layout(childLeft, childTop, childLeft + width, childTop + height);
+		}
+	}
+
+	@Override
+	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+		layoutNonButtonChildren(left, top, right, bottom);
+		int w = right - left;
+		int h = bottom - top;
+
+		for(ControlInterface controlInterface : getButtonChildren()) {
+			ControlData properties = controlInterface.getProperties();
+			View interfaceView = controlInterface.getControlView();
+
+			int width = (int) properties.getWidth();
+			int height = (int) properties.getHeight();
+
+			interfaceView.measure(
+					MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+					MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
+			);
+
+			if(!changed && !interfaceView.isLayoutRequested()) {
+				interfaceView.layout(
+						interfaceView.getLeft(), interfaceView.getTop(),
+						interfaceView.getRight(), interfaceView.getBottom()
+				);
+			} else {
+				int l = (int) (properties.insertDynamicPos(properties.dynamicX, w, h) + left);
+				int t = (int) (properties.insertDynamicPos(properties.dynamicY, w, h) + top);
+
+				int r = l + width;
+				int b = t + height;
+				interfaceView.layout(l, t, r, b);
+			}
+		}
 	}
 
 	public boolean areControlVisible(){
