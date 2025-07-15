@@ -667,15 +667,15 @@ public final class Tools {
 
     public static void setInsetsMode(Activity activity, boolean noSystemBars, boolean ignoreNotch) {
         Window window = activity.getWindow();
-        View insetView = activity.findViewById(android.R.id.content).getRootView();
+        View insetView = activity.findViewById(android.R.id.content);
         // Don't ignore system bars in window mode (will put game behind window button bar)
         if(SDK_INT >= Build.VERSION_CODES.N && activity.isInMultiWindowMode()) noSystemBars = false;
 
-        int bgColor = Color.BLACK;
+        int bgColor;
         // The status bars are completely transparent and will take their color from the inset view
-        // padding.
+        // background drawable.
         if(!noSystemBars) bgColor = activity.getResources().getColor(R.color.background_status_bar);
-        insetView.setBackgroundColor(bgColor);
+        else bgColor = Color.BLACK;
 
         // On API 35 onwards, apps are edge-to-edge by default and are controlled entirely though the
         // inset API. On levels below, we still need to set the correct cutout mode.
@@ -686,6 +686,10 @@ public final class Tools {
         if(SDK_INT < Build.VERSION_CODES.R) {
             setLegacyFullscreen(insetView, noSystemBars);
             return;
+        }
+        // Code below expects this to be set to false, since that's the SDK 35 default.
+        if(SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            window.setDecorFitsSystemWindows(false);
         }
 
         WindowInsetsController insetsController = window.getInsetsController();
@@ -702,9 +706,11 @@ public final class Tools {
             if(!ignoreNotch) insetMask |= WindowInsets.Type.displayCutout();
             if(insetMask != 0) {
                 Insets insets = windowInsets.getInsets(insetMask);
+                v.setBackground(new InsetBackground(insets,bgColor));
                 insetView.setPadding(insets.left, insets.top, insets.right, insets.bottom);
             }else {
                 insetView.setPadding(0, 0, 0, 0);
+                v.setBackground(null);
             }
             return WindowInsets.CONSUMED;
         });
