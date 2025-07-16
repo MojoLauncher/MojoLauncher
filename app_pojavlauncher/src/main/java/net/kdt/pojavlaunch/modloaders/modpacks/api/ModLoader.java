@@ -3,6 +3,7 @@ package net.kdt.pojavlaunch.modloaders.modpacks.api;
 import net.kdt.pojavlaunch.instances.InstanceInstaller;
 import net.kdt.pojavlaunch.modloaders.FabriclikeUtils;
 import net.kdt.pojavlaunch.modloaders.ForgeUtils;
+import net.kdt.pojavlaunch.modloaders.NeoforgeUtils;
 
 import java.io.IOException;
 
@@ -10,6 +11,7 @@ public class ModLoader {
     public static final int MOD_LOADER_FORGE = 0;
     public static final int MOD_LOADER_FABRIC = 1;
     public static final int MOD_LOADER_QUILT = 2;
+    public static final int MOD_LOADER_NEOFORGE = 3;
     public final int modLoaderType;
     public final String modLoaderVersion;
     public final String minecraftVersion;
@@ -32,6 +34,8 @@ public class ModLoader {
                 return "fabric-loader-"+modLoaderVersion+"-"+minecraftVersion;
             case MOD_LOADER_QUILT:
                 return "quilt-loader-"+modLoaderVersion+"-"+minecraftVersion;
+            case MOD_LOADER_NEOFORGE:
+                return "neoforge-" + modLoaderVersion;
             default:
                 return null;
         }
@@ -48,6 +52,7 @@ public class ModLoader {
             case MOD_LOADER_QUILT:
                 return FabriclikeUtils.QUILT_UTILS.install(minecraftVersion, modLoaderVersion);
             case MOD_LOADER_FORGE:
+            case MOD_LOADER_NEOFORGE:
             default:
                 return null;
         }
@@ -59,6 +64,8 @@ public class ModLoader {
      */
     public InstanceInstaller createInstaller() throws IOException {
         switch (modLoaderType) {
+            case MOD_LOADER_NEOFORGE:
+                return NeoforgeUtils.createInstaller(minecraftVersion, modLoaderVersion);
             case MOD_LOADER_FORGE:
                 return ForgeUtils.createInstaller(minecraftVersion, modLoaderVersion);
             case MOD_LOADER_QUILT:
@@ -74,6 +81,11 @@ public class ModLoader {
      */
     public boolean requiresGuiInstallation() {
         switch (modLoaderType) {
+            // technically, neoforge can be installed without a gui
+            // as the installer allows to install it by passing the --installClient arg
+            // but this requires some extra code which I have not done yet
+            // TODO implement headless neoforge installation
+            case MOD_LOADER_NEOFORGE:
             case MOD_LOADER_FORGE:
                 return true;
             case MOD_LOADER_FABRIC:

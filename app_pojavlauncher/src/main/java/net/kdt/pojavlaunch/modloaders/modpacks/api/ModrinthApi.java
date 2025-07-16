@@ -131,6 +131,10 @@ public class ModrinthApi implements ModpackApi{
         if((modLoaderVersion = dependencies.get("quilt-loader")) != null) {
             return new ModLoader(ModLoader.MOD_LOADER_QUILT, modLoaderVersion, mcVersion);
         }
+        if((modLoaderVersion = dependencies.get("neoforge")) != null) {
+            return new ModLoader(ModLoader.MOD_LOADER_NEOFORGE, modLoaderVersion, mcVersion);
+        }
+
         return null;
     }
 

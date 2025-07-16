@@ -213,6 +213,9 @@ public class CurseforgeApi implements ModpackApi{
             case "fabric":
                 modLoaderTypeInt = ModLoader.MOD_LOADER_FABRIC;
                 break;
+            case "neoforge":
+                modLoaderTypeInt = ModLoader.MOD_LOADER_NEOFORGE;
+                break;
             default:
                 return null;
             //TODO: Quilt is also Forge? How does that work?

@@ -303,6 +303,8 @@
     <string name="modloader_dl_failed_to_load_list">Failed to load the version list!</string>
     <string name="forge_dl_no_installer">Sorry, but this version of Forge does not have an installer, which is not yet supported.</string>
     <string name="forge_dl_select_version">Select Forge version</string>
+    <string name="neoforge_dl_no_installer">Sorry, but this version of NeoForge does not have an installer, which is not yet supported.</string>
+    <string name="neoforge_dl_select_version">Select NeoForge version</string>
     <string name="fabric_dl_progress">Downloading %s loader metadata</string>
     <string name="fabric_dl_loader_version">%s loader version</string>
     <string name="fabric_dl_game_version">Minecraft version</string>
@@ -312,6 +314,7 @@
     <string name="modloader_dl_install_fabric_instance">Create Fabric instance</string>
     <string name="modloader_dl_install_quilt_instance">Create Quilt instance</string>
     <string name="modloader_dl_install_forge_instance">Create Forge instance</string>
+    <string name="modloader_dl_install_neoforge_instance">Create NeoForge instance</string>
     <string name="create_instance_vanilla">Create vanilla instance</string>
     <string name="create_profile_vanilla_like_versions">Vanilla-like versions</string>
     <string name="create_profile_modded_versions">Modded versions</string>
