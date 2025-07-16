@@ -76,6 +76,7 @@ public class Agent implements AWTEventListener {
 
     public AbstractButton handleForgeButton(AbstractButton abstractButton) {
         switch(abstractButton.getText()) {
+            case "Proceed":
             case "OK":
                 return  abstractButton; // return the button, so we can press it after processing other stuff
             case "Install client":
