@@ -433,8 +433,8 @@
     <string name="create_bta_instance">Tạo thư mục \"Better than Adventure!\"  </string>
     <string name="select_bta_version">Chọn phiên bản\"Better than Adventure!\" </string>
     <string name="bta_installer_available_versions">Những phiên bản BTA được chọn </string>
-    <string name="bta_installer_untested_versions">Những phiên bản BTA chưa được thử</string>
-    <string name="bta_installer_nightly_versions">Những phiên bản nightly BTA </string>
+    <string name="bta_installer_untested_versions">Những phiên bản BTA chưa được thử nghiệm</string>
+    <string name="bta_installer_nightly_versions">Những phiên bản thử nghiệm (nightly) BTA </string>
     <string name="newdl_extracting_native_libraries">Đang giải nén những thư viện gốc (%d/%d)</string>
     <string name="compat_version_not_supported">Thiết bị của bạn không thể chạy trình kết xuất LTW bởi vì nó không được hỗ trợ trên thiết bị của bạn.</string>
     <string name="oauth_unknown_error">Lỗi xác thực không xác định</string>
