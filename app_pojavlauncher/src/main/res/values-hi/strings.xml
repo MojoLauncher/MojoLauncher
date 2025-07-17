@@ -115,7 +115,7 @@
     <string name="control_mouseoff">Mouse: off</string>
     <string name="control_mouseon">Mouse: on </string>
 
-    <!-- MainActivity: Menu advanced controls -->
+     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">ज़बरदस्ती बंद करें</string>
     <string name="control_viewout">लॉग आउटपुट</string>
     <string name="control_adebug">इनपुट डीबग</string>
@@ -298,7 +298,7 @@
     <string name="preference_force_big_core_desc">Minecraft रेंडर थ्रेड को सबसे ज़्यादा अधिकतम फ़्रीक्वेंसी वाले कोर पर चलने के लिए बाध्य करता है।</string>
     <string name="version_select_hint">एक संस्करण चुनें</string>
     <string name="forge_dl_progress">%s के लिए इंस्टॉलर डाउनलोड हो रहा है</string>
-    <string name="forge_dl_searching">फोर्ज संस्करण नंबर खोजा जा रहा है</string>
+      <string name="forge_dl_searching">फोर्ज संस्करण नंबर खोजा जा रहा है</string>
     <string name="modloader_dl_failed_to_load_list">संस्करण सूची लोड करने में विफल!</string>
     <string name="forge_dl_no_installer">माफ़ करें, लेकिन फोर्ज के इस संस्करण में इंस्टॉलर नहीं है, जो अभी तक समर्थित नहीं है।</string>
     <string name="forge_dl_select_version">फोर्ज संस्करण चुनें</string>
@@ -306,7 +306,7 @@
     <string name="fabric_dl_loader_version">%s लोडर संस्करण</string>
     <string name="fabric_dl_game_version">Minecraft संस्करण</string>
     <string name="fabric_dl_install">इंस्टॉल करें</string>
-    <string name="fabric_dl_cant_read_meta">%s लोडर मेटाडेटा पढ़ने में विफल। कृपया बाद में फिर से प्रयास करें।/string>
+    <string name="fabric_dl_cant_read_meta">%s लोडर मेटाडेटा पढ़ने में विफल। कृपया बाद में फिर से प्रयास करें।</string>
     <string name="fabric_dl_cant_read_meta2">फैब्रिक लोडर मेटाडेटा पढ़ने में विफल। कृपया बाद में फिर से प्रयास करें।</string>
     <string name="modloader_dl_install_fabric_instance">फैब्रिक इंस्टेंस बनाएँ</string>
     <string name="modloader_dl_install_quilt_instance">क्विल्ट इंस्टेंस बनाएँ</string>
@@ -426,7 +426,7 @@
     <string name="local_login_bad_username_title">अनुपयुक्त यूज़रनेम</string>
     <string name="local_login_bad_username_text">यूज़रनेम 3–16 अक्षरों का होना चाहिए, और इसमें केवल लैटिन अक्षर, 0–9 अंक और अंडरस्कोर होने चाहिए।</string>
     <string name="quick_setting_title">त्वरित सेटिंग्स</string>
-    <string name="create_bta_instance">बेटर दैन एडवेंचर!" इंस्टेंस बनाएँ!\"</string>
+    <string name="create_bta_instance">बेटर दैन एडवेंचर!" इंस्टेंस बनाएँ!"</string>
     <string name="select_bta_version">बेटर दैन एडवेंचर!" संस्करण चुनें</string>
     <string name="bta_installer_available_versions">समर्थित BTA संस्करण</string>
     <string name="bta_installer_untested_versions">अपरिक्षित BTA संस्करण</string>
