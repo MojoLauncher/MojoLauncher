@@ -115,7 +115,7 @@
     <string name="control_mouseoff">Mouse: off</string>
     <string name="control_mouseon">Mouse: on </string>
 
-     <!-- MainActivity: Menu advanced controls -->
+    <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">ज़बरदस्ती बंद करें</string>
     <string name="control_viewout">लॉग आउटपुट</string>
     <string name="control_adebug">इनपुट डीबग</string>
@@ -298,7 +298,7 @@
     <string name="preference_force_big_core_desc">Minecraft रेंडर थ्रेड को सबसे ज़्यादा अधिकतम फ़्रीक्वेंसी वाले कोर पर चलने के लिए बाध्य करता है।</string>
     <string name="version_select_hint">एक संस्करण चुनें</string>
     <string name="forge_dl_progress">%s के लिए इंस्टॉलर डाउनलोड हो रहा है</string>
-      <string name="forge_dl_searching">फोर्ज संस्करण नंबर खोजा जा रहा है</string>
+    <string name="forge_dl_searching">फोर्ज संस्करण नंबर खोजा जा रहा है</string>
     <string name="modloader_dl_failed_to_load_list">संस्करण सूची लोड करने में विफल!</string>
     <string name="forge_dl_no_installer">माफ़ करें, लेकिन फोर्ज के इस संस्करण में इंस्टॉलर नहीं है, जो अभी तक समर्थित नहीं है।</string>
     <string name="forge_dl_select_version">फोर्ज संस्करण चुनें</string>
