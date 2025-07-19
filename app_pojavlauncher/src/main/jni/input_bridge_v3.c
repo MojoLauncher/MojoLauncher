@@ -9,7 +9,7 @@
  * 
  * - Implements glfwSetCursorPos() to handle grab camera pos correctly.
  */
- 
+
 #include <assert.h>
 #include <dlfcn.h>
 #include <jni.h>
@@ -55,6 +55,7 @@ jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
         pojav_environ->method_onGrabStateChanged = (*dvEnv)->GetStaticMethodID(dvEnv, pojav_environ->bridgeClazz, "onGrabStateChanged", "(Z)V");
         pojav_environ->method_onDirectInputEnable = (*dvEnv)->GetStaticMethodID(dvEnv, pojav_environ->bridgeClazz, "onDirectInputEnable", "()V");
         pojav_environ->isUseStackQueueCall = JNI_FALSE;
+        pojav_environ->method_onCursorStateChange = (*dvEnv)->GetStaticMethodID(dvEnv, pojav_environ->bridgeClazz, "onCursorStateUpdate", "(Ljava/nio/ByteBuffer;IIII)V");
     } else if (pojav_environ->dalvikJavaVMPtr != vm) {
         LOGI("Saving JVM environ...");
         pojav_environ->runtimeJavaVMPtr = vm;
@@ -82,7 +83,7 @@ jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
         registerFunctions(env);
     }
     pojav_environ->isGrabbing = JNI_FALSE;
-    
+
     return JNI_VERSION_1_4;
 }
 

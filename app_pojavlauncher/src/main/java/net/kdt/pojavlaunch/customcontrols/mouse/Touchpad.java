@@ -3,8 +3,8 @@ package net.kdt.pojavlaunch.customcontrols.mouse;
 import static net.kdt.pojavlaunch.Tools.currentDisplayMetrics;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
@@ -26,7 +26,7 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
     /* Whether the Touchpad should be displayed */
     private boolean mDisplayState;
     /* Mouse pointer icon used by the touchpad */
-    private Drawable mMousePointerDrawable;
+    private CursorDrawable mMousePointerDrawable;
     private float mMouseX, mMouseY;
     public Touchpad(@NonNull Context context) {
         this(context, null);
@@ -78,21 +78,14 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.translate(mMouseX, mMouseY);
+        canvas.translate(mMouseX - mMousePointerDrawable.getXHotspot(), mMouseY - mMousePointerDrawable.getYHotspot());
         mMousePointerDrawable.draw(canvas);
     }
 
     private void init(){
-        // Setup mouse pointer
-        mMousePointerDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_mouse_pointer, getContext().getTheme());
-        // For some reason it's annotated as Nullable even though it doesn't seem to actually
-        // ever return null
-        assert mMousePointerDrawable != null;
-        mMousePointerDrawable.setBounds(
-                0, 0,
-                (int) (36 * LauncherPreferences.PREF_MOUSESCALE),
-                (int) (54 * LauncherPreferences.PREF_MOUSESCALE)
-        );
+        setupMouse(null);
+        CallbackBridge.setCurrentCursorDrawable(mMousePointerDrawable);
+
         setFocusable(false);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             setDefaultFocusHighlightEnabled(false);
@@ -141,5 +134,22 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
         if(!mDisplayState) return;
         mDisplayState = false;
         _disable();
+    }
+
+    private void setupMouse(Bitmap bitmap) {
+        // Setup mouse pointer
+        mMousePointerDrawable = new CursorDrawable(
+                bitmap,
+                ResourcesCompat.getDrawable(getResources(), R.drawable.ic_mouse_pointer, getContext().getTheme()),
+                36, 54, 0, 0, 1, 1
+        );
+        // For some reason it's annotated as Nullable even though it doesn't seem to actually
+        // ever return null
+        assert mMousePointerDrawable != null;
+        mMousePointerDrawable.setBounds(
+                0, 0,
+                (int) (mMousePointerDrawable.getWidth() * LauncherPreferences.PREF_MOUSESCALE),
+                (int) (mMousePointerDrawable.getHeight() * LauncherPreferences.PREF_MOUSESCALE)
+        );
     }
 }

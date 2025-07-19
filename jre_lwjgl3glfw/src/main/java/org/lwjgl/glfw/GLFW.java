@@ -615,7 +615,10 @@ public class GLFW
         SwapInterval = apiGetFunctionAddress(GLFW, "pojavSwapInterval"),
         PumpEvents = apiGetFunctionAddress(GLFW, "pojavPumpEvents"),
         StopPumping = apiGetFunctionAddress(GLFW, "pojavStopPumping"),
-        StartPumping = apiGetFunctionAddress(GLFW, "pojavStartPumping");
+        StartPumping = apiGetFunctionAddress(GLFW, "pojavStartPumping"),
+        CreateCursor = apiGetFunctionAddress(GLFW, "pojavCreateCursor"),
+        DestroyCursor = apiGetFunctionAddress(GLFW, "pojavDestroyCursor"),
+        SetCursor = apiGetFunctionAddress(GLFW, "pojavSetCursor");
     }
 
     public static SharedLibrary getLibrary() {
@@ -1184,14 +1187,33 @@ public class GLFW
         CallbackBridge.sendGrabbing(mGLFWIsGrabbing, (int) xpos, (int) ypos);
     }*/
 
+    public static long nglfwCreateCursor(long image, int xhot, int yhot) {
+        long __functionAddress = Functions.CreateCursor;
+        if (CHECKS) {
+            GLFWImage.validate(image);
+        }
+        return invokePP(image, xhot, yhot, __functionAddress);
+    }
     public static long glfwCreateCursor(@NativeType("const GLFWimage *") GLFWImage image, int xhot, int yhot) {
-        return 4L;
+        return nglfwCreateCursor(image.address(), xhot, yhot);
     }
     public static long glfwCreateStandardCursor(int shape) {
-        return 4L;
+        return 0L;
     }
-    public static void glfwDestroyCursor(@NativeType("GLFWcursor *") long cursor) {}
-    public static void glfwSetCursor(@NativeType("GLFWwindow *") long window, @NativeType("GLFWcursor *") long cursor) {}
+    public static void glfwDestroyCursor(@NativeType("GLFWcursor *") long cursor) {
+        long __functionAddress = Functions.DestroyCursor;
+        if (CHECKS) {
+            check(cursor);
+        }
+        invokePV(cursor, __functionAddress);
+    }
+    public static void glfwSetCursor(@NativeType("GLFWwindow *") long window, @NativeType("GLFWcursor *") long cursor) {
+        long __functionAddress = Functions.SetCursor;
+        if (CHECKS) {
+            check(window);
+        }
+        invokePPV(window, cursor, __functionAddress);
+    }
 
     public static boolean glfwRawMouseMotionSupported() {
         // Should be not supported?

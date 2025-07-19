@@ -38,6 +38,14 @@
 // This means that you are forced to have this function/variable for ABI compatibility
 #define ABI_COMPAT __attribute__((unused))
 
+#define TRY_ATTACH_ENV(env_name, vm, error_message, then) JNIEnv* env_name;\
+do {                                                                       \
+    env_name = get_attached_env(vm);                                       \
+    if(env_name == NULL) {                                                 \
+        printf(error_message);                                             \
+        then                                                               \
+    }                                                                      \
+} while(0)
 
 struct PotatoBridge {
 
@@ -249,3 +257,27 @@ EXTERNAL_API void pojavSwapInterval(int interval) {
     br_swap_interval(interval);
 }
 
+EXTERNAL_API Cursor* pojavCreateCursor(GLFWImage* image, int xhot, int yhot) {
+    Cursor* cursor = malloc(sizeof(Cursor));
+    cursor->width = image->width;
+    cursor->height = image->height;
+    cursor->image = image->pixels;
+    cursor->xHot = xhot;
+    cursor->yHot = yhot;
+    return cursor;
+}
+
+EXTERNAL_API void pojavDestroyCursor(Cursor* cursor) {
+    if(pojav_environ->cursorState == cursor) {
+        pojav_environ->cursorState = NULL;
+    }
+    free(cursor);
+}
+
+EXTERNAL_API void pojavSetCursor(long window, Cursor* cursor) {
+    pojav_environ->cursorState = cursor;
+
+    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "CallbackBridge.onCursorStateChange failed!\n", return;);
+    jobject buffer = (*env)->NewDirectByteBuffer(env, cursor->image, cursor->width * cursor->height);
+    (*env)->CallStaticVoidMethod(env, pojav_environ->method_onCursorStateChange, buffer, cursor->width, cursor->height, cursor->xHot, cursor->yHot);
+}

@@ -2,8 +2,10 @@ package org.lwjgl.glfw;
 
 import net.kdt.pojavlaunch.*;
 import net.kdt.pojavlaunch.customcontrols.gamepad.direct.DirectGamepadEnableHandler;
+import net.kdt.pojavlaunch.customcontrols.mouse.CursorDrawable;
 
 import android.content.*;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.Choreographer;
 
@@ -24,11 +26,11 @@ public class CallbackBridge {
     private static final ArrayList<GrabListener> grabListeners = new ArrayList<>();
     // Use a weak reference here to avoid possibly statically referencing a Context.
     private static @Nullable WeakReference<DirectGamepadEnableHandler> sDirectGamepadEnableHandler;
-    
+
     public static final int CLIPBOARD_COPY = 2000;
     public static final int CLIPBOARD_PASTE = 2001;
     public static final int CLIPBOARD_OPEN = 2002;
-    
+
     public static volatile int windowWidth, windowHeight;
     public static volatile int physicalWidth, physicalHeight;
     public static float mouseX, mouseY;
@@ -38,6 +40,7 @@ public class CallbackBridge {
     public static final ByteBuffer sGamepadButtonBuffer;
     public static final FloatBuffer sGamepadAxisBuffer;
     public static boolean sGamepadDirectInput = false;
+    private static CursorDrawable sCurrentCursorDrawable;
 
     public static void putMouseEventWithCoords(int button, float x, float y) {
         putMouseEventWithCoords(button, true, x, y);
@@ -177,6 +180,10 @@ public class CallbackBridge {
         }
     }
 
+    public static void setCurrentCursorDrawable(CursorDrawable sCurrentCursorDrawable) {
+        CallbackBridge.sCurrentCursorDrawable = sCurrentCursorDrawable;
+    }
+
     //Called from JRE side
     @SuppressWarnings("unused")
     @Keep
@@ -204,6 +211,18 @@ public class CallbackBridge {
         }, 16);
 
     }
+
+    @SuppressWarnings("unused")
+    @Keep
+    private static void onCursorStateUpdate(ByteBuffer buffer, int width, int height, int xHotspot, int yHotspot) {
+        Bitmap bitmap = sCurrentCursorDrawable.getBitmap();
+
+        if(bitmap.getWidth() != width || bitmap.getHeight() != height) {
+            sCurrentCursorDrawable.setBitmap(bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888));
+        }
+        bitmap.copyPixelsFromBuffer(buffer);
+    }
+
     public static void addGrabListener(GrabListener listener) {
         synchronized (grabListeners) {
             listener.onGrabState(isGrabbing);

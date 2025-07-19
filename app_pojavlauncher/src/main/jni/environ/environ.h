@@ -33,6 +33,20 @@ typedef struct  {
     float axes[6];
 } GLFWgamepadstate;
 
+typedef struct {
+    unsigned char* image;
+    int width;
+    int height;
+    int xHot;
+    int yHot;
+} Cursor;
+
+typedef struct {
+    int width;
+    int height;
+    unsigned char* pixels;
+} GLFWImage;
+
 struct pojav_environ_s {
     struct ANativeWindow* pojavWindow;
     basic_render_window_t* mainWindowBundle;
@@ -64,6 +78,8 @@ struct pojav_environ_s {
     bool shouldUpdateMonitorSize, monitorSizeConsumed;
     int savedWidth, savedHeight;
     GLFWgamepadstate gamepadState;
+    Cursor* cursorState;
+    jmethodID method_onCursorStateChange;
 #define ADD_CALLBACK_WWIN(NAME) \
     GLFW_invoke_##NAME##_func* GLFW_invoke_##NAME;
     ADD_CALLBACK_WWIN(Char);
