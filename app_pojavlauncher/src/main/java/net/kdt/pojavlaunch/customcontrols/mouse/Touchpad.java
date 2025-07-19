@@ -12,6 +12,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.util.Consumer;
 
 import net.kdt.pojavlaunch.GrabListener;
 import git.artdeell.mojo.R;
@@ -28,6 +29,7 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
     /* Mouse pointer icon used by the touchpad */
     private CursorDrawable mMousePointerDrawable;
     private float mMouseX, mMouseY;
+    private final Consumer<CursorDrawable> onCursorChange = cursor->invalidate();
     public Touchpad(@NonNull Context context) {
         this(context, null);
     }
@@ -78,13 +80,16 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.translate(mMouseX - mMousePointerDrawable.getXHotspot(), mMouseY - mMousePointerDrawable.getYHotspot());
+        canvas.translate(mMouseX, mMouseY);
+        canvas.scale(LauncherPreferences.PREF_MOUSESCALE, LauncherPreferences.PREF_MOUSESCALE);
+        canvas.translate(-mMousePointerDrawable.getXHotspot(), -mMousePointerDrawable.getYHotspot());
         mMousePointerDrawable.draw(canvas);
     }
 
     private void init(){
         setupMouse(null);
         CallbackBridge.setCurrentCursorDrawable(mMousePointerDrawable);
+        mMousePointerDrawable.onChange(onCursorChange);
 
         setFocusable(false);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -136,6 +141,23 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
         _disable();
     }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if(mMousePointerDrawable != null) {
+            mMousePointerDrawable.onChange(onCursorChange);
+        }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if(mMousePointerDrawable != null) {
+            mMousePointerDrawable.removeChangeListener(onCursorChange);
+        }
+    }
+
+
     private void setupMouse(Bitmap bitmap) {
         // Setup mouse pointer
         mMousePointerDrawable = new CursorDrawable(
@@ -148,8 +170,8 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
         assert mMousePointerDrawable != null;
         mMousePointerDrawable.setBounds(
                 0, 0,
-                (int) (mMousePointerDrawable.getWidth() * LauncherPreferences.PREF_MOUSESCALE),
-                (int) (mMousePointerDrawable.getHeight() * LauncherPreferences.PREF_MOUSESCALE)
+                mMousePointerDrawable.getWidth(),
+                mMousePointerDrawable.getHeight()
         );
     }
 }

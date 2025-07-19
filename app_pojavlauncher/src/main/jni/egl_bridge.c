@@ -261,23 +261,38 @@ EXTERNAL_API Cursor* pojavCreateCursor(GLFWImage* image, int xhot, int yhot) {
     Cursor* cursor = malloc(sizeof(Cursor));
     cursor->width = image->width;
     cursor->height = image->height;
-    cursor->image = image->pixels;
+    cursor->image = malloc(image->width * image->height * 4);
     cursor->xHot = xhot;
     cursor->yHot = yhot;
-    return cursor;
-}
 
-EXTERNAL_API void pojavDestroyCursor(Cursor* cursor) {
-    if(pojav_environ->cursorState == cursor) {
-        pojav_environ->cursorState = NULL;
-    }
-    free(cursor);
+    memcpy(cursor->image, image->pixels, image->width * image->height * 4);
+
+    return cursor;
 }
 
 EXTERNAL_API void pojavSetCursor(long window, Cursor* cursor) {
     pojav_environ->cursorState = cursor;
 
     TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "CallbackBridge.onCursorStateChange failed!\n", return;);
-    jobject buffer = (*env)->NewDirectByteBuffer(env, cursor->image, cursor->width * cursor->height);
-    (*env)->CallStaticVoidMethod(env, pojav_environ->method_onCursorStateChange, buffer, cursor->width, cursor->height, cursor->xHot, cursor->yHot);
+
+    if(cursor == NULL) {
+        (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz,
+                                     pojav_environ->method_onCursorStateChange, NULL, 0, 0, 0, 0);
+    } else {
+        jobject buffer = (*env)->NewDirectByteBuffer(env, cursor->image, cursor->width * cursor->height * 4);
+        if(buffer == NULL) {
+            return;
+        }
+        (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz,
+                                     pojav_environ->method_onCursorStateChange, buffer,
+                                     cursor->width, cursor->height, cursor->xHot, cursor->yHot);
+    }
 }
+
+EXTERNAL_API void pojavDestroyCursor(Cursor* cursor) {
+    if(pojav_environ->cursorState == cursor) {
+        pojavSetCursor(0, NULL);
+    }
+    free(cursor);
+}
+

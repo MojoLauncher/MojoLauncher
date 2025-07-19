@@ -5,22 +5,26 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.util.Consumer;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class CursorDrawable extends Drawable {
     private Bitmap bitmap;
-    private Paint paint;
     private int fallbackWidth;
     private int fallbackHeight;
     private int xHotspot;
     private int yHotspot;
+    private Set<Consumer<CursorDrawable>> listeners = new HashSet<>();
     private final int xHotspotFallback;
     private final int yHotspotFallback;
     private final Drawable fallback;
+    private final Paint paint = new Paint();
 
     public CursorDrawable(Bitmap bitmap, Drawable fallback, int fallbackWidth, int fallbackHeight, int xHotspot, int yHotspot,
                           int xHotspotFallback, int yHotspotFallback) {
@@ -66,12 +70,34 @@ public class CursorDrawable extends Drawable {
         return yHotspot;
     }
 
+    public void setXHotspot(int xHotspot) {
+        this.xHotspot = xHotspot;
+    }
+
+    public void setYHotspot(int yHotspot) {
+        this.yHotspot = yHotspot;
+    }
+
+    public void markDirty() {
+        for (Consumer<CursorDrawable> listener : this.listeners) {
+            listener.accept(this);
+        }
+    }
+
+    public void onChange(Consumer<CursorDrawable> consumer) {
+        this.listeners.add(consumer);
+    }
+
+    public void removeChangeListener(Consumer<CursorDrawable> onCursorChange) {
+        this.listeners.remove(onCursorChange);
+    }
+
     @Override
     public void draw(@NonNull Canvas canvas) {
         if(this.bitmap == null) {
             fallback.draw(canvas);
         } else {
-            canvas.drawBitmap(bitmap, null, new Rect(), paint);
+            canvas.drawBitmap(bitmap, 0, 0, paint);
         }
     }
 
@@ -90,8 +116,14 @@ public class CursorDrawable extends Drawable {
     @Override
     public int getOpacity() {
         if(this.bitmap != null) {
-            return PixelFormat.TRANSPARENT;
+            return PixelFormat.UNKNOWN;
         }
         return fallback.getOpacity();
+    }
+
+    @Override
+    public void setBounds(int left, int top, int right, int bottom) {
+        super.setBounds(left, top, right, bottom);
+        fallback.setBounds(left, top, right, bottom);
     }
 }

@@ -40,7 +40,7 @@ public class CallbackBridge {
     public static final ByteBuffer sGamepadButtonBuffer;
     public static final FloatBuffer sGamepadAxisBuffer;
     public static boolean sGamepadDirectInput = false;
-    private static CursorDrawable sCurrentCursorDrawable;
+    @Nullable private static CursorDrawable sCurrentCursorDrawable;
 
     public static void putMouseEventWithCoords(int button, float x, float y) {
         putMouseEventWithCoords(button, true, x, y);
@@ -214,13 +214,28 @@ public class CallbackBridge {
 
     @SuppressWarnings("unused")
     @Keep
-    private static void onCursorStateUpdate(ByteBuffer buffer, int width, int height, int xHotspot, int yHotspot) {
+    private static void onCursorStateUpdate(@Nullable ByteBuffer buffer, int width, int height, int xHotspot, int yHotspot) {
+        if(sCurrentCursorDrawable == null) return;
         Bitmap bitmap = sCurrentCursorDrawable.getBitmap();
 
-        if(bitmap.getWidth() != width || bitmap.getHeight() != height) {
-            sCurrentCursorDrawable.setBitmap(bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888));
+        int newWidth, newHeight;
+        if(buffer != null) {
+            if (bitmap == null || bitmap.getWidth() != width || bitmap.getHeight() != height) {
+                sCurrentCursorDrawable.setBitmap(bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888));
+            }
+            bitmap.copyPixelsFromBuffer(buffer);
+            newWidth = width;
+            newHeight = height;
+        } else {
+            sCurrentCursorDrawable.setBitmap(null);
+            newWidth = sCurrentCursorDrawable.getWidth();
+            newHeight = sCurrentCursorDrawable.getHeight();
         }
-        bitmap.copyPixelsFromBuffer(buffer);
+
+        sCurrentCursorDrawable.setBounds(0, 0, newWidth, newHeight);
+        sCurrentCursorDrawable.setXHotspot(xHotspot);
+        sCurrentCursorDrawable.setYHotspot(yHotspot);
+        sCurrentCursorDrawable.markDirty();
     }
 
     public static void addGrabListener(GrabListener listener) {
