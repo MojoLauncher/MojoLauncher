@@ -145,6 +145,10 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         if(!mMoveOnLayout) return;
-        placeMouseAt(getWidth() / 2f, getHeight() / 2f);
+        int w = getMeasuredWidth();
+        int h = getMeasuredHeight();
+        if(w == 0) w = getWidth();
+        if(h == 0) h = getHeight();
+        placeMouseAt(w / 2f, h / 2f);
     }
 }
