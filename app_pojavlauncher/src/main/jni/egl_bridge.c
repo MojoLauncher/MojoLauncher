@@ -261,11 +261,37 @@ EXTERNAL_API Cursor* pojavCreateCursor(GLFWImage* image, int xhot, int yhot) {
     Cursor* cursor = malloc(sizeof(Cursor));
     cursor->width = image->width;
     cursor->height = image->height;
-    cursor->image = malloc(image->width * image->height * 4);
     cursor->xHot = xhot;
     cursor->yHot = yhot;
 
-    memcpy(cursor->image, image->pixels, image->width * image->height * 4);
+    uint8_t* src = (uint8_t*)image->pixels;
+    size_t numPixels = cursor->width * cursor->height;
+    uint8_t* dst = malloc(numPixels * 4);
+
+    if(dst == NULL) {
+        printf("Failed to allocate cursor->image: %i bytes", numPixels * 4);
+        return NULL;
+    }
+
+    for (size_t i = 0; i < numPixels; i++) {
+        uint8_t r = src[i * 4 + 0];
+        uint8_t g = src[i * 4 + 1];
+        uint8_t b = src[i * 4 + 2];
+        uint8_t a = src[i * 4 + 3];
+
+        if (a == 0) {
+            dst[i * 4 + 0] = 0;
+            dst[i * 4 + 1] = 0;
+            dst[i * 4 + 2] = 0;
+        } else {
+            dst[i * 4 + 0] = (r * a) / 255;
+            dst[i * 4 + 1] = (g * a) / 255;
+            dst[i * 4 + 2] = (b * a) / 255;
+        }
+        dst[i * 4 + 3] = a;
+    }
+
+    cursor->image = dst;
 
     return cursor;
 }
@@ -293,6 +319,7 @@ EXTERNAL_API void pojavDestroyCursor(Cursor* cursor) {
     if(pojav_environ->cursorState == cursor) {
         pojavSetCursor(0, NULL);
     }
+    free(cursor->image);
     free(cursor);
 }
 
