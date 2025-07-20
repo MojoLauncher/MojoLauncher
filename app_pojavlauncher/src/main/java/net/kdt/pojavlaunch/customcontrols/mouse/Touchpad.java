@@ -5,14 +5,15 @@ import static net.kdt.pojavlaunch.Tools.currentDisplayMetrics;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.core.util.Consumer;
 
 import net.kdt.pojavlaunch.GrabListener;
 import git.artdeell.mojo.R;
@@ -29,7 +30,23 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
     /* Mouse pointer icon used by the touchpad */
     private CursorDrawable mMousePointerDrawable;
     private float mMouseX, mMouseY;
-    private final Consumer<CursorDrawable> onCursorChange = cursor->invalidate();
+    private final Drawable.Callback cursorDrawableCallback = new Drawable.Callback() {
+        @Override
+        public void invalidateDrawable(@NonNull Drawable drawable) {
+            invalidate();
+        }
+
+        @Override
+        public void scheduleDrawable(@NonNull Drawable drawable, @NonNull Runnable runnable, long l) {
+            postDelayed(runnable, l - SystemClock.uptimeMillis());
+        }
+
+        @Override
+        public void unscheduleDrawable(@NonNull Drawable drawable, @NonNull Runnable runnable) {
+            removeCallbacks(runnable);
+        }
+    };
+
     public Touchpad(@NonNull Context context) {
         this(context, null);
     }
@@ -89,7 +106,7 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
     private void init(){
         setupMouse(null);
         CallbackBridge.setCurrentCursorDrawable(mMousePointerDrawable);
-        mMousePointerDrawable.onChange(onCursorChange);
+        mMousePointerDrawable.setCallback(cursorDrawableCallback);
 
         setFocusable(false);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -145,7 +162,7 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if(mMousePointerDrawable != null) {
-            mMousePointerDrawable.onChange(onCursorChange);
+            mMousePointerDrawable.setCallback(cursorDrawableCallback);
         }
     }
 
@@ -153,7 +170,10 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if(mMousePointerDrawable != null) {
-            mMousePointerDrawable.removeChangeListener(onCursorChange);
+            // if we do not detach the callback
+            // it may cause a memory leak due to the object
+            // storing an instance of this View
+            mMousePointerDrawable.setCallback(null);
         }
     }
 
@@ -165,9 +185,6 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
                 ResourcesCompat.getDrawable(getResources(), R.drawable.ic_mouse_pointer, getContext().getTheme()),
                 36, 54, 0, 0, 1, 1
         );
-        // For some reason it's annotated as Nullable even though it doesn't seem to actually
-        // ever return null
-        assert mMousePointerDrawable != null;
         mMousePointerDrawable.setBounds(
                 0, 0,
                 mMousePointerDrawable.getWidth(),

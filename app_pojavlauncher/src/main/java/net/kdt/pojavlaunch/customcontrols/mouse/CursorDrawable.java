@@ -9,10 +9,6 @@ import android.graphics.drawable.Drawable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.util.Consumer;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class CursorDrawable extends Drawable {
     private Bitmap bitmap;
@@ -20,7 +16,6 @@ public class CursorDrawable extends Drawable {
     private int fallbackHeight;
     private int xHotspot;
     private int yHotspot;
-    private Set<Consumer<CursorDrawable>> listeners = new HashSet<>();
     private final int xHotspotFallback;
     private final int yHotspotFallback;
     private final Drawable fallback;
@@ -78,20 +73,6 @@ public class CursorDrawable extends Drawable {
         this.yHotspot = yHotspot;
     }
 
-    public void markDirty() {
-        for (Consumer<CursorDrawable> listener : this.listeners) {
-            listener.accept(this);
-        }
-    }
-
-    public void onChange(Consumer<CursorDrawable> consumer) {
-        this.listeners.add(consumer);
-    }
-
-    public void removeChangeListener(Consumer<CursorDrawable> onCursorChange) {
-        this.listeners.remove(onCursorChange);
-    }
-
     @Override
     public void draw(@NonNull Canvas canvas) {
         if(this.bitmap == null) {
@@ -116,7 +97,7 @@ public class CursorDrawable extends Drawable {
     @Override
     public int getOpacity() {
         if(this.bitmap != null) {
-            return PixelFormat.UNKNOWN;
+            return PixelFormat.TRANSLUCENT;
         }
         return fallback.getOpacity();
     }

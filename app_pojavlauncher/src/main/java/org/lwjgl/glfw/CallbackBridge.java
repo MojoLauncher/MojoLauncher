@@ -235,7 +235,7 @@ public class CallbackBridge {
         sCurrentCursorDrawable.setBounds(0, 0, newWidth, newHeight);
         sCurrentCursorDrawable.setXHotspot(xHotspot);
         sCurrentCursorDrawable.setYHotspot(yHotspot);
-        sCurrentCursorDrawable.markDirty();
+        sCurrentCursorDrawable.invalidateSelf();
     }
 
     public static void addGrabListener(GrabListener listener) {

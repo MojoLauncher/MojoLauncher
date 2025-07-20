@@ -269,7 +269,8 @@ EXTERNAL_API Cursor* pojavCreateCursor(GLFWImage* image, int xhot, int yhot) {
     uint8_t* dst = malloc(numPixels * 4);
 
     if(dst == NULL) {
-        printf("Failed to allocate cursor->image: %i bytes", numPixels * 4);
+        printf("Failed to allocate cursor->image: %i bytes\n", numPixels * 4);
+        free(cursor);
         return NULL;
     }
 
@@ -307,6 +308,7 @@ EXTERNAL_API void pojavSetCursor(long window, Cursor* cursor) {
     } else {
         jobject buffer = (*env)->NewDirectByteBuffer(env, cursor->image, cursor->width * cursor->height * 4);
         if(buffer == NULL) {
+            printf("Failed to create ByteBuffer for cursor image!\n");
             return;
         }
         (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz,
