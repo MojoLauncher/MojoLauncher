@@ -259,6 +259,11 @@ EXTERNAL_API void pojavSwapInterval(int interval) {
 
 EXTERNAL_API Cursor* pojavCreateCursor(GLFWImage* image, int xhot, int yhot) {
     Cursor* cursor = malloc(sizeof(Cursor));
+    if(cursor == NULL) {
+        printf("Failed to allocate cursor: %zu bytes\n", sizeof(Cursor));
+        return NULL;
+    }
+
     cursor->width = image->width;
     cursor->height = image->height;
     cursor->xHot = xhot;
@@ -269,7 +274,7 @@ EXTERNAL_API Cursor* pojavCreateCursor(GLFWImage* image, int xhot, int yhot) {
     uint8_t* dst = malloc(numPixels * 4);
 
     if(dst == NULL) {
-        printf("Failed to allocate cursor->image: %i bytes\n", numPixels * 4);
+        printf("Failed to allocate cursor->image: %zu bytes\n", numPixels * 4);
         free(cursor);
         return NULL;
     }
@@ -284,6 +289,10 @@ EXTERNAL_API Cursor* pojavCreateCursor(GLFWImage* image, int xhot, int yhot) {
             dst[i * 4 + 0] = 0;
             dst[i * 4 + 1] = 0;
             dst[i * 4 + 2] = 0;
+        } else if (a == 255) {
+            dst[i * 4 + 0] = r;
+            dst[i * 4 + 1] = g;
+            dst[i * 4 + 2] = b;
         } else {
             dst[i * 4 + 0] = (r * a) / 255;
             dst[i * 4 + 1] = (g * a) / 255;

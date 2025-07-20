@@ -221,13 +221,19 @@ public class CallbackBridge {
         int newWidth, newHeight;
         if(buffer != null) {
             if (bitmap == null || bitmap.getWidth() != width || bitmap.getHeight() != height) {
+                if (bitmap != null) {
+                    bitmap.recycle();
+                }
                 sCurrentCursorDrawable.setBitmap(bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888));
             }
             bitmap.copyPixelsFromBuffer(buffer);
             newWidth = width;
             newHeight = height;
         } else {
-            sCurrentCursorDrawable.setBitmap(null);
+            if (bitmap != null) {
+                bitmap.recycle();
+                sCurrentCursorDrawable.setBitmap(null);
+            }
             newWidth = sCurrentCursorDrawable.getWidth();
             newHeight = sCurrentCursorDrawable.getHeight();
         }
