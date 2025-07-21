@@ -291,6 +291,7 @@ EXTERNAL_API void* pojavCreateCursor(GLFWimage* image, int xhot, int yhot) {
                                           image->width, image->height, xhot, yhot);
     jobject globalCursor = (*env)->NewGlobalRef(env, cursor);
     // not needed anymore
+    (*env)->DeleteLocalRef(env, cursor);
     (*env)->DeleteLocalRef(env, buffer);
 
     linkedlist_append(pojav_environ->cursors, globalCursor);
@@ -321,6 +322,10 @@ EXTERNAL_API void pojavDestroyCursor(jobject cursor) {
             } else {
                 prev->next = current->next;
             }
+            if (current == pojav_environ->cursors->last) {
+                pojav_environ->cursors->last = prev;
+            }
+
             (*env)->DeleteGlobalRef(env, current->value);
             free(current);
             break;
