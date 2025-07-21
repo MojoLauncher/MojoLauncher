@@ -67,7 +67,6 @@ struct PotatoBridge potatoBridge;
 #define RENDERER_VK_ZINK 2
 #define RENDERER_VULKAN 4
 
-// TODO implement cursor tracking and global ref deletion
 EXTERNAL_API void pojavTerminate() {
     printf("EGLBridge: Terminating\n");
 
@@ -89,6 +88,9 @@ EXTERNAL_API void pojavTerminate() {
             // Nothing to do here
         } break;
     }
+
+    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavTerminate!\n", return;);
+    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_removeAllCursors);
 }
 
 JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_setupBridgeWindow(JNIEnv* env, ABI_COMPAT jclass clazz, jobject surface) {
@@ -259,10 +261,16 @@ EXTERNAL_API void pojavSwapInterval(int interval) {
 }
 
 EXTERNAL_API void* pojavCreateStandardCursor(int shape) {
+    if(pojav_environ->standardCursor != NULL) return pojav_environ->standardCursor;
+
     TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavCreateStandardCursor!\n", return NULL;);
     jobject cursor = (*env)->CallStaticObjectMethod(env, pojav_environ->bridgeClazz,
                                           pojav_environ->method_getDefaultCursor);
-    return (*env)->NewGlobalRef(env, cursor);
+    jobject globalCursor = (*env)->NewGlobalRef(env, cursor);
+    (*env)->DeleteLocalRef(env, cursor);
+
+    pojav_environ->standardCursor = globalCursor;
+    return pojav_environ->standardCursor;
 }
 
 EXTERNAL_API void* pojavCreateCursor(GLFWimage* image, int xhot, int yhot) {
@@ -305,7 +313,7 @@ EXTERNAL_API void pojavSetCursor(void* window, jobject cursor) {
     (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_setCursor, cursor);
 }
 
-EXTERNAL_API void pojavDestroyCursor(void* window, jobject cursor) {
+EXTERNAL_API void pojavDestroyCursor(jobject cursor) {
     if(cursor == NULL) {
         printf("Passed cursor to pojavDestroyCursor is null!\n");
         return;
@@ -313,5 +321,4 @@ EXTERNAL_API void pojavDestroyCursor(void* window, jobject cursor) {
 
     TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavDestroyCursor!\n", return;);
     (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_removeCursor, cursor);
-    (*env)->DeleteGlobalRef(env, cursor);
 }

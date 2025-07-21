@@ -55,6 +55,7 @@ public class CallbackBridge {
     @Nullable private static CursorContainer sDefaultCursor = null;
     @Nullable private static CursorContainer sCursor;
     private static Set<Consumer<CursorContainer>> cursorChangeListeners = new HashSet<>();
+    private static Set<CursorContainer> cursors = new HashSet<>();
 
     public static void putMouseEventWithCoords(int button, float x, float y) {
         putMouseEventWithCoords(button, true, x, y);
@@ -275,7 +276,19 @@ public class CallbackBridge {
     @SuppressWarnings("unused")
     @Keep
     public static void removeCursor(@NonNull CursorContainer cursor) {
+        if(cursor == getDefaultCursor()) return;
         if(sCursor == cursor) setCursor(getDefaultCursor());
+        cursors.remove(cursor);
+        nativeDeleteGlobalRef(cursor);
+    }
+
+    @SuppressWarnings("unused")
+    @Keep
+    public static void removeAllCursors() {
+        setCursor(getDefaultCursor());
+        for (CursorContainer cursor : cursors) {
+            removeCursor(cursor);
+        }
     }
 
     @SuppressWarnings("unused")
@@ -291,13 +304,11 @@ public class CallbackBridge {
         // I am not sure why this works, but when this is here
         // the bitmap becomes premultiplied, although this quite literally
         // does nothing
-        drawable.setColorFilter(new ColorMatrixColorFilter(new ColorMatrix(new float[] {
-                1, 0, 0, 0, 0,
-                0, 1, 0, 0, 0,
-                0, 0, 1, 0, 0,
-                0, 0, 0, 1, 0
-        })));
-        return new CursorContainer(drawable, xHot, yHot);
+        drawable.setColorFilter(new ColorMatrixColorFilter(new ColorMatrix()));
+
+        CursorContainer cursor = new CursorContainer(drawable, xHot, yHot);
+        cursors.add(cursor);
+        return cursor;
     }
 
     public static void addCursorChangeListener(Consumer<CursorContainer> listener) {
@@ -322,6 +333,7 @@ public class CallbackBridge {
     public static native void nativeSetWindowAttrib(int attrib, int value);
     private static native ByteBuffer nativeCreateGamepadButtonBuffer();
     private static native ByteBuffer nativeCreateGamepadAxisBuffer();
+    private static native void nativeDeleteGlobalRef(Object object);
     static {
         System.loadLibrary("pojavexec");
         sGamepadButtonBuffer = nativeCreateGamepadButtonBuffer();

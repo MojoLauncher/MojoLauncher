@@ -58,6 +58,7 @@ jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
         pojav_environ->method_getDefaultCursor = (*dvEnv)->GetStaticMethodID(dvEnv, pojav_environ->bridgeClazz, "getDefaultCursor", "()Lnet/kdt/pojavlaunch/customcontrols/mouse/CursorContainer;");
         pojav_environ->method_setCursor = (*dvEnv)->GetStaticMethodID(dvEnv, pojav_environ->bridgeClazz, "setCursor", "(Lnet/kdt/pojavlaunch/customcontrols/mouse/CursorContainer;)V");
         pojav_environ->method_removeCursor = (*dvEnv)->GetStaticMethodID(dvEnv, pojav_environ->bridgeClazz, "removeCursor", "(Lnet/kdt/pojavlaunch/customcontrols/mouse/CursorContainer;)V");
+        pojav_environ->method_removeAllCursors = (*dvEnv)->GetStaticMethodID(dvEnv, pojav_environ->bridgeClazz, "removeAllCursors", "()V");
         pojav_environ->isUseStackQueueCall = JNI_FALSE;
     } else if (pojav_environ->dalvikJavaVMPtr != vm) {
         LOGI("Saving JVM environ...");
@@ -88,6 +89,18 @@ jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
     pojav_environ->isGrabbing = JNI_FALSE;
     
     return JNI_VERSION_1_4;
+}
+
+void JNI_OnUnload(JavaVM* vm, __attribute__((unused)) void* reserved) {
+    if(pojav_environ->dalvikJavaVMPtr == vm) {
+        JNIEnv *vmEnv;
+        (*vm)->GetEnv(vm, (void**) &vmEnv, JNI_VERSION_1_4);
+
+        if(pojav_environ->standardCursor != NULL) {
+            (*vmEnv)->DeleteGlobalRef(vmEnv, pojav_environ->standardCursor);
+            pojav_environ->standardCursor = NULL;
+        }
+    }
 }
 
 #define ADD_CALLBACK_WWIN(NAME) \
@@ -557,4 +570,10 @@ Java_org_lwjgl_glfw_CallbackBridge_nativeCreateGamepadButtonBuffer(JNIEnv *env, 
 JNIEXPORT jobject JNICALL
 Java_org_lwjgl_glfw_CallbackBridge_nativeCreateGamepadAxisBuffer(JNIEnv *env, jclass clazz) {
     return (*env)->NewDirectByteBuffer(env, &pojav_environ->gamepadState.axes, sizeof(pojav_environ->gamepadState.axes));
+}
+
+JNIEXPORT void JNICALL
+Java_org_lwjgl_glfw_CallbackBridge_nativeDeleteGlobalRef(JNIEnv *env, jclass clazz,
+                                                         jobject object) {
+    (*env)->DeleteGlobalRef(env, object);
 }
