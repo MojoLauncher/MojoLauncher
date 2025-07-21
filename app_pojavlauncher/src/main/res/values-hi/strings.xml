@@ -237,7 +237,7 @@
     <string name="pedit_java_runtime">जावा रनटाइम</string>
     <string name="pedit_renderer">रेंडरर</string>
     <string name="arc_capes_title">कॉस्मेटिका केप्स</string>
-    <string name="arc_capes_desc">कॉस्मेटिका (पहले Arc) से केप्स सक्षम करता है। अधिक जानकारी के लिए कृपया https://cosmetica.cc पर जाएँ। ऑप्टिफाइन आवश्यक है।</string>
+    <string name="arc_capes_desc">कॉस्मेटिका (पहले Arc) से केप्स सक्षम करता है। अधिक जानकारी के लिए कृपया https://cosmetica.cc पर जाएँ। OptifFine की आवश्यक है।</string>
     <string name="color_default_hex" translatable="false">FFFF0000</string>
     <string name="notif_channel_name">सामान्य</string>
     <string name="notif_channel_id" translatable="false">channel_id</string>
