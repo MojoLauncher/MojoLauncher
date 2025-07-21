@@ -2,18 +2,22 @@ package net.kdt.pojavlaunch.customcontrols.mouse;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.util.Consumer;
 
 import net.kdt.pojavlaunch.GrabListener;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 import org.lwjgl.glfw.CallbackBridge;
+
+import git.artdeell.mojo.R;
 
 /**
  * Class dealing with the virtual mouse
@@ -24,6 +28,7 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
     /* Mouse pointer icon used by the touchpad */
     private float mMouseX, mMouseY;
     private boolean mMoveOnLayout;
+    private Drawable mMouseCursorDrawable;
     private final Consumer<CursorContainer> onCursorChange = cursor->invalidate();
     public Touchpad(@NonNull Context context) {
         this(context, null);
@@ -77,10 +82,19 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
     protected void onDraw(Canvas canvas) {
         canvas.translate(mMouseX, mMouseY);
         canvas.scale(LauncherPreferences.PREF_MOUSESCALE, LauncherPreferences.PREF_MOUSESCALE);
-        CallbackBridge.getCursor().draw(canvas);
+        if(CallbackBridge.getCursor() != null) {
+            CallbackBridge.getCursor().draw(canvas);
+        } else {
+            mMouseCursorDrawable.draw(canvas);
+        }
     }
 
     private void init() {
+        mMouseCursorDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_mouse_pointer, getContext().getTheme());
+        // For some reason it's annotated as Nullable even though it doesn't seem to actually
+        // ever return null
+        assert mMouseCursorDrawable != null;
+        mMouseCursorDrawable.setBounds(0, 0, 36, 54);
         CallbackBridge.addCursorChangeListener(onCursorChange);
 
         setFocusable(false);

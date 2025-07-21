@@ -7,21 +7,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.res.ResourcesCompat;
 
-import net.kdt.pojavlaunch.customcontrols.mouse.CursorContainer;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.tasks.AsyncAssetManager;
 import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.LocaleUtils;
-
-import org.lwjgl.glfw.CallbackBridge;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -33,7 +28,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import git.artdeell.mojo.BuildConfig;
-import git.artdeell.mojo.R;
 
 public class PojavApplication extends Application {
 	public static final String CRASH_REPORT_TAG = "PojavCrashReport";
@@ -93,16 +87,6 @@ public class PojavApplication extends Application {
 			ferrorIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
 			startActivity(ferrorIntent);
 		}
-
-		Drawable mousePointerDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_mouse_pointer, getTheme());
-		// For some reason it's annotated as Nullable even though it doesn't seem to actually
-		// ever return null
-		assert mousePointerDrawable != null;
-		mousePointerDrawable.setBounds(0, 0, 36, 54);
-		CallbackBridge.setupDefaultCursor(new CursorContainer(
-				mousePointerDrawable,
-				1, 1
-		));
 	}
 
 	@Override

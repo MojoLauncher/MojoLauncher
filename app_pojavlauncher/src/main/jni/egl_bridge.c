@@ -62,6 +62,7 @@ struct PotatoBridge potatoBridge;
 
 #include "ctxbridges/egl_loader.h"
 #include "ctxbridges/osmesa_loader.h"
+#include "linkedlist.h"
 
 #define RENDERER_GL4ES 1
 #define RENDERER_VK_ZINK 2
@@ -89,8 +90,19 @@ EXTERNAL_API void pojavTerminate() {
         } break;
     }
 
-    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavTerminate!\n", return;);
-    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_removeAllCursors);
+    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "Failed to attach to env from pojavTerminate!\n", return;);
+
+    LinkedListNode* current = pojav_environ->cursors->first;
+    while (current) {
+        LinkedListNode* next = current->next;
+        (*env)->DeleteGlobalRef(env, current->value);
+        free(current);
+        current = next;
+    }
+    pojav_environ->cursors->first = NULL;
+    pojav_environ->cursors->last = NULL;
+
+    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_setCursor, NULL);
 }
 
 JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_setupBridgeWindow(JNIEnv* env, ABI_COMPAT jclass clazz, jobject surface) {
@@ -260,19 +272,6 @@ EXTERNAL_API void pojavSwapInterval(int interval) {
     br_swap_interval(interval);
 }
 
-EXTERNAL_API void* pojavCreateStandardCursor(__attribute__((unused)) int shape) {
-    if(pojav_environ->standardCursor != NULL) return pojav_environ->standardCursor;
-
-    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavCreateStandardCursor!\n", return NULL;);
-    jobject cursor = (*env)->CallStaticObjectMethod(env, pojav_environ->bridgeClazz,
-                                          pojav_environ->method_getDefaultCursor);
-    jobject globalCursor = (*env)->NewGlobalRef(env, cursor);
-    (*env)->DeleteLocalRef(env, cursor);
-
-    pojav_environ->standardCursor = globalCursor;
-    return pojav_environ->standardCursor;
-}
-
 EXTERNAL_API void* pojavCreateCursor(GLFWimage* image, int xhot, int yhot) {
     if(image == NULL) {
         printf("Passed image is null!\n");
@@ -287,27 +286,20 @@ EXTERNAL_API void* pojavCreateCursor(GLFWimage* image, int xhot, int yhot) {
         return NULL;
     }
 
-    // creates a global ref so there is no need to create one here
-    jlong cursor = (*env)->CallStaticLongMethod(env, pojav_environ->bridgeClazz,
+    jobject cursor = (*env)->CallStaticObjectMethod(env, pojav_environ->bridgeClazz,
                                           pojav_environ->method_createCursor, buffer,
                                           image->width, image->height, xhot, yhot);
+    jobject globalCursor = (*env)->NewGlobalRef(env, cursor);
     // not needed anymore
     (*env)->DeleteLocalRef(env, buffer);
-    return (jobject)cursor;
+
+    linkedlist_append(pojav_environ->cursors, globalCursor);
+    return globalCursor;
 }
 
 EXTERNAL_API void pojavSetCursor(__attribute__((unused)) void* window, jobject cursor) {
-    if(cursor == NULL) {
-        void* standardCursor = pojavCreateStandardCursor(0);
-        if(standardCursor == NULL) {
-            printf("Failed to get standard cursor in pojavSetCursor\n");
-            return;
-        }
-        cursor = standardCursor;
-    }
-
     TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavSetCursor!\n", return;);
-    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_setCursor, (jlong)cursor);
+    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_setCursor, cursor);
 }
 
 EXTERNAL_API void pojavDestroyCursor(jobject cursor) {
@@ -317,5 +309,23 @@ EXTERNAL_API void pojavDestroyCursor(jobject cursor) {
     }
 
     TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavDestroyCursor!\n", return;);
-    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_removeCursor, (jlong)cursor);
+    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_removeCursor, cursor);
+
+    LinkedListNode* current = pojav_environ->cursors->first;
+    LinkedListNode* prev = NULL;
+
+    while (current) {
+        if (current->value == cursor) {
+            if (prev == NULL) {
+                pojav_environ->cursors->first = current->next;
+            } else {
+                prev->next = current->next;
+            }
+            (*env)->DeleteGlobalRef(env, current->value);
+            free(current);
+            break;
+        }
+        prev = current;
+        current = current->next;
+    }
 }

@@ -8,6 +8,7 @@
 #include <ctxbridges/common.h>
 #include <stdatomic.h>
 #include <jni.h>
+#include "linkedlist.h"
 
 /* How many events can be handled at the same time */
 #define EVENT_WINDOW_SIZE 8000
@@ -71,12 +72,10 @@ struct pojav_environ_s {
     bool shouldUpdateMonitorSize, monitorSizeConsumed;
     int savedWidth, savedHeight;
     GLFWgamepadstate gamepadState;
-    jmethodID method_getDefaultCursor;
     jmethodID method_setCursor;
     jmethodID method_removeCursor;
     jmethodID method_createCursor;
-    jmethodID method_removeAllCursors;
-    jobject standardCursor;
+    LinkedList* cursors;
 #define ADD_CALLBACK_WWIN(NAME) \
     GLFW_invoke_##NAME##_func* GLFW_invoke_##NAME;
     ADD_CALLBACK_WWIN(Char);

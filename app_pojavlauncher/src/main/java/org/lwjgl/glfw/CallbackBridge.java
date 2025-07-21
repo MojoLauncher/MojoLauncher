@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.Choreographer;
 
 import androidx.annotation.Keep;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Consumer;
 
@@ -52,10 +51,8 @@ public class CallbackBridge {
     public static final FloatBuffer sGamepadAxisBuffer;
     public static boolean sGamepadDirectInput = false;
 
-    @Nullable private static CursorContainer sDefaultCursor = null;
     @Nullable private static CursorContainer sCursor;
     private static Set<Consumer<CursorContainer>> cursorChangeListeners = new HashSet<>();
-    private static Set<Long> cursorPointers = new HashSet<>();
 
     public static void putMouseEventWithCoords(int button, float x, float y) {
         putMouseEventWithCoords(button, true, x, y);
@@ -244,29 +241,12 @@ public class CallbackBridge {
         sDirectGamepadEnableHandler = new WeakReference<>(h);
     }
 
-    public static void setupDefaultCursor(CursorContainer cursor) {
-        if (sDefaultCursor != null) {
-            throw new IllegalStateException("Default cursor already initialized!");
-        }
-        sDefaultCursor = cursor;
-    }
-
-    // these methods should only ever be called after setupDefaultCursor
-    public static CursorContainer getDefaultCursor() {
-        if(sDefaultCursor == null) {
-            throw new IllegalStateException("Default cursor not yet initialized!");
-        }
-        return sDefaultCursor;
-    }
-
+    @Nullable
     public static CursorContainer getCursor() {
-        if(sCursor == null) {
-            setCursor(getDefaultCursor());
-        }
         return sCursor;
     }
 
-    public static void setCursor(@NonNull CursorContainer cursor) {
+    public static void setCursor(@Nullable CursorContainer cursor) {
         sCursor = cursor;
         for (Consumer<CursorContainer> listener : cursorChangeListeners) {
             listener.accept(cursor);
@@ -275,28 +255,14 @@ public class CallbackBridge {
 
     @SuppressWarnings("unused")
     @Keep
-    public static void removeCursor(long ptr) {
-        CursorContainer cursor = (CursorContainer) nativeGetGlobalRef(ptr);
-
-        if(cursor == getDefaultCursor()) return;
-        if(sCursor == cursor) setCursor(getDefaultCursor());
-
-        cursorPointers.remove(ptr);
-        nativeDeleteGlobalRef(ptr);
+    private static void removeCursor(@Nullable CursorContainer cursor) {
+        if(cursor == null) return;
+        if(sCursor == cursor) setCursor(null);
     }
 
     @SuppressWarnings("unused")
     @Keep
-    public static void removeAllCursors() {
-        setCursor(getDefaultCursor());
-        for (long ptr : cursorPointers) {
-            removeCursor(ptr);
-        }
-    }
-
-    @SuppressWarnings("unused")
-    @Keep
-    public static long createCursor(ByteBuffer imageBuffer, int width, int height, int xHot, int yHot) {
+    private static CursorContainer createCursor(ByteBuffer imageBuffer, int width, int height, int xHot, int yHot) {
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         bitmap.copyPixelsFromBuffer(imageBuffer);
         // using the system resources isn't really a good practice
@@ -309,9 +275,7 @@ public class CallbackBridge {
         // does nothing
         drawable.setColorFilter(new ColorMatrixColorFilter(new ColorMatrix()));
 
-        long cursor = nativeCreateGlobalRef(new CursorContainer(drawable, xHot, yHot));
-        cursorPointers.add(cursor);
-        return cursor;
+        return new CursorContainer(drawable, xHot, yHot);
     }
 
     public static void addCursorChangeListener(Consumer<CursorContainer> listener) {
@@ -336,9 +300,6 @@ public class CallbackBridge {
     public static native void nativeSetWindowAttrib(int attrib, int value);
     private static native ByteBuffer nativeCreateGamepadButtonBuffer();
     private static native ByteBuffer nativeCreateGamepadAxisBuffer();
-    private static native long nativeCreateGlobalRef(Object obj);
-    private static native Object nativeGetGlobalRef(long pointer);
-    private static native void nativeDeleteGlobalRef(long object);
     static {
         System.loadLibrary("pojavexec");
         sGamepadButtonBuffer = nativeCreateGamepadButtonBuffer();
