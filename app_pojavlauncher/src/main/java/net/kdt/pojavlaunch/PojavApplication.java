@@ -2,29 +2,38 @@ package net.kdt.pojavlaunch;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
-import android.app.*;
-import android.content.*;
-import android.content.pm.*;
-import android.content.res.*;
-import android.os.*;
-import androidx.core.app.*;
+import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.util.Log;
 
-import android.util.*;
-import java.io.*;
-import java.text.*;
-import java.util.*;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.res.ResourcesCompat;
+
+import net.kdt.pojavlaunch.customcontrols.mouse.CursorContainer;
+import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
+import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.tasks.AsyncAssetManager;
+import net.kdt.pojavlaunch.utils.FileUtils;
+import net.kdt.pojavlaunch.utils.LocaleUtils;
+
+import org.lwjgl.glfw.CallbackBridge;
+
+import java.io.File;
+import java.io.PrintStream;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
-import net.kdt.pojavlaunch.prefs.LauncherPreferences;
-import net.kdt.pojavlaunch.tasks.AsyncAssetManager;
-import net.kdt.pojavlaunch.utils.*;
-import net.kdt.pojavlaunch.utils.FileUtils;
-
 import git.artdeell.mojo.BuildConfig;
+import git.artdeell.mojo.R;
 
 public class PojavApplication extends Application {
 	public static final String CRASH_REPORT_TAG = "PojavCrashReport";
@@ -84,6 +93,16 @@ public class PojavApplication extends Application {
 			ferrorIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
 			startActivity(ferrorIntent);
 		}
+
+		Drawable mousePointerDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_mouse_pointer, getTheme());
+		// For some reason it's annotated as Nullable even though it doesn't seem to actually
+		// ever return null
+		assert mousePointerDrawable != null;
+		mousePointerDrawable.setBounds(0, 0, 36, 54);
+		CallbackBridge.setupDefaultCursor(new CursorContainer(
+				mousePointerDrawable,
+				1, 1
+		));
 	}
 
 	@Override

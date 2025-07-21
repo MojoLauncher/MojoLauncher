@@ -1,20 +1,34 @@
 package org.lwjgl.glfw;
 
-import net.kdt.pojavlaunch.*;
-import net.kdt.pojavlaunch.customcontrols.gamepad.direct.DirectGamepadEnableHandler;
-
-import android.content.*;
+import android.content.ClipData;
+import android.content.ClipDescription;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.view.Choreographer;
 
 import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.util.Consumer;
+
+import net.kdt.pojavlaunch.GrabListener;
+import net.kdt.pojavlaunch.LwjglGlfwKeycode;
+import net.kdt.pojavlaunch.MainActivity;
+import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.customcontrols.gamepad.direct.DirectGamepadEnableHandler;
+import net.kdt.pojavlaunch.customcontrols.mouse.CursorContainer;
 
 import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import dalvik.annotation.optimization.CriticalNative;
 
@@ -24,11 +38,11 @@ public class CallbackBridge {
     private static final ArrayList<GrabListener> grabListeners = new ArrayList<>();
     // Use a weak reference here to avoid possibly statically referencing a Context.
     private static @Nullable WeakReference<DirectGamepadEnableHandler> sDirectGamepadEnableHandler;
-    
+
     public static final int CLIPBOARD_COPY = 2000;
     public static final int CLIPBOARD_PASTE = 2001;
     public static final int CLIPBOARD_OPEN = 2002;
-    
+
     public static volatile int windowWidth, windowHeight;
     public static float mouseX, mouseY;
     public volatile static boolean holdingAlt, holdingCapslock, holdingCtrl,
@@ -38,11 +52,15 @@ public class CallbackBridge {
     public static final FloatBuffer sGamepadAxisBuffer;
     public static boolean sGamepadDirectInput = false;
 
+    @Nullable private static CursorContainer sDefaultCursor = null;
+    @Nullable private static CursorContainer sCursor;
+    private static Set<Consumer<CursorContainer>> cursorChangeListeners = new HashSet<>();
+
     public static void putMouseEventWithCoords(int button, float x, float y) {
         putMouseEventWithCoords(button, true, x, y);
         sChoreographer.postFrameCallbackDelayed(l -> putMouseEventWithCoords(button, false, x, y), 33);
     }
-    
+
     public static void putMouseEventWithCoords(int button, boolean isDown, float x, float y /* , int dz, long nanos */) {
         sendCursorPos(x, y);
         sendMouseKeycode(button, CallbackBridge.getCurrentMods(), isDown);
@@ -99,7 +117,7 @@ public class CallbackBridge {
         sendMouseKeycode(keycode, CallbackBridge.getCurrentMods(), true);
         sendMouseKeycode(keycode, CallbackBridge.getCurrentMods(), false);
     }
-    
+
     public static void sendScroll(double xoffset, double yoffset) {
         nativeSendScroll(xoffset, yoffset);
     }
@@ -223,6 +241,71 @@ public class CallbackBridge {
 
     public static void setDirectGamepadEnableHandler(DirectGamepadEnableHandler h) {
         sDirectGamepadEnableHandler = new WeakReference<>(h);
+    }
+
+    public static void setupDefaultCursor(CursorContainer cursor) {
+        if (sDefaultCursor != null) {
+            throw new IllegalStateException("Default cursor already initialized!");
+        }
+        sDefaultCursor = cursor;
+    }
+
+    // these methods should only ever be called after setupDefaultCursor
+    public static CursorContainer getDefaultCursor() {
+        if(sDefaultCursor == null) {
+            throw new IllegalStateException("Default cursor not yet initialized!");
+        }
+        return sDefaultCursor;
+    }
+
+    public static CursorContainer getCursor() {
+        if(sCursor == null) {
+            setCursor(getDefaultCursor());
+        }
+        return sCursor;
+    }
+
+    public static void setCursor(@NonNull CursorContainer cursor) {
+        sCursor = cursor;
+        for (Consumer<CursorContainer> listener : cursorChangeListeners) {
+            listener.accept(cursor);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    @Keep
+    public static void removeCursor(@NonNull CursorContainer cursor) {
+        if(sCursor == cursor) setCursor(getDefaultCursor());
+    }
+
+    @SuppressWarnings("unused")
+    @Keep
+    public static CursorContainer createCursor(ByteBuffer imageBuffer, int width, int height, int xHot, int yHot) {
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        bitmap.copyPixelsFromBuffer(imageBuffer);
+        // using the system resources isn't really a good practice
+        // but we do not have access to our context here
+        BitmapDrawable drawable = new BitmapDrawable(Resources.getSystem(), bitmap);
+        drawable.setBounds(0, 0, width, height);
+
+        // I am not sure why this works, but when this is here
+        // the bitmap becomes premultiplied, although this quite literally
+        // does nothing
+        drawable.setColorFilter(new ColorMatrixColorFilter(new ColorMatrix(new float[] {
+                1, 0, 0, 0, 0,
+                0, 1, 0, 0, 0,
+                0, 0, 1, 0, 0,
+                0, 0, 0, 1, 0
+        })));
+        return new CursorContainer(drawable, xHot, yHot);
+    }
+
+    public static void addCursorChangeListener(Consumer<CursorContainer> listener) {
+        cursorChangeListeners.add(listener);
+    }
+
+    public static void removeCursorChangeListener(Consumer<CursorContainer> listener) {
+        cursorChangeListeners.remove(listener);
     }
 
     @Keep @CriticalNative public static native void nativeSetUseInputStackQueue(boolean useInputStackQueue);

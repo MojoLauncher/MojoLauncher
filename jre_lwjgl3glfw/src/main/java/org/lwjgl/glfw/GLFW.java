@@ -4,24 +4,43 @@
  */
 package org.lwjgl.glfw;
 
-import android.util.*;
+import static org.lwjgl.opengl.GL20.GL_EXTENSIONS;
+import static org.lwjgl.opengl.GL20.glGetString;
+import static org.lwjgl.system.APIUtil.apiGetFunctionAddress;
+import static org.lwjgl.system.Checks.CHECKS;
+import static org.lwjgl.system.Checks.check;
+import static org.lwjgl.system.Checks.checkSafe;
+import static org.lwjgl.system.JNI.callJV;
+import static org.lwjgl.system.JNI.callV;
+import static org.lwjgl.system.JNI.invokeI;
+import static org.lwjgl.system.JNI.invokeP;
+import static org.lwjgl.system.JNI.invokePP;
+import static org.lwjgl.system.JNI.invokePPV;
+import static org.lwjgl.system.JNI.invokePV;
+import static org.lwjgl.system.JNI.invokeV;
+import static org.lwjgl.system.MemoryStack.stackGet;
+import static org.lwjgl.system.MemoryUtil.memAddressSafe;
+import static org.lwjgl.system.MemoryUtil.memPutInt;
+import static org.lwjgl.system.MemoryUtil.memUTF8Safe;
 
-import java.lang.reflect.*;
-import java.nio.*;
+import android.util.ArrayMap;
 
-import javax.annotation.*;
-
-import org.lwjgl.*;
-import org.lwjgl.system.*;
+import org.lwjgl.PointerBuffer;
+import org.lwjgl.system.Library;
+import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
+import org.lwjgl.system.NativeType;
+import org.lwjgl.system.SharedLibrary;
 
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.system.APIUtil.*;
-import static org.lwjgl.system.Checks.*;
-import static org.lwjgl.system.JNI.*;
-import static org.lwjgl.system.MemoryStack.*;
-import static org.lwjgl.system.MemoryUtil.*;
-import java.util.*;
+import java.lang.reflect.Field;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.DoubleBuffer;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.util.Map;
+
+import javax.annotation.Nullable;
 
 public class GLFW
 {
@@ -599,7 +618,6 @@ public class GLFW
 
     /** Contains the function pointers loaded from the glfw {@link SharedLibrary}. */
     public static final class Functions {
-
         private Functions() {}
 
         /** Function address. */
@@ -615,7 +633,11 @@ public class GLFW
         SwapInterval = apiGetFunctionAddress(GLFW, "pojavSwapInterval"),
         PumpEvents = apiGetFunctionAddress(GLFW, "pojavPumpEvents"),
         StopPumping = apiGetFunctionAddress(GLFW, "pojavStopPumping"),
-        StartPumping = apiGetFunctionAddress(GLFW, "pojavStartPumping");
+        StartPumping = apiGetFunctionAddress(GLFW, "pojavStartPumping"),
+        CreateCursor = apiGetFunctionAddress(GLFW, "pojavCreateCursor"),
+        SetCursor = apiGetFunctionAddress(GLFW, "pojavSetCursor"),
+        CreateStandardCursor = apiGetFunctionAddress(GLFW, "pojavCreateStandardCursor"),
+        DestroyCursor = apiGetFunctionAddress(GLFW, "pojavDestroyCursor");
     }
 
     public static SharedLibrary getLibrary() {
@@ -1184,14 +1206,37 @@ public class GLFW
         CallbackBridge.sendGrabbing(mGLFWIsGrabbing, (int) xpos, (int) ypos);
     }*/
 
-    public static long glfwCreateCursor(@NativeType("const GLFWimage *") GLFWImage image, int xhot, int yhot) {
-        return 4L;
+    public static long nglfwCreateCursor(long image, int xhot, int yhot) {
+        long __functionAddress = Functions.CreateCursor;
+        if (CHECKS) {
+            GLFWImage.validate(image);
+        }
+        return invokePP(image, xhot, yhot, __functionAddress);
     }
+
+    @NativeType("GLFWcursor *")
+    public static long glfwCreateCursor(@NativeType("GLFWimage const *") GLFWImage image, int xhot, int yhot) {
+        return nglfwCreateCursor(image.address(), xhot, yhot);
+    }
+    @NativeType("GLFWcursor *")
     public static long glfwCreateStandardCursor(int shape) {
-        return 4L;
+        long __functionAddress = Functions.CreateStandardCursor;
+        return invokeP(shape, __functionAddress);
     }
-    public static void glfwDestroyCursor(@NativeType("GLFWcursor *") long cursor) {}
-    public static void glfwSetCursor(@NativeType("GLFWwindow *") long window, @NativeType("GLFWcursor *") long cursor) {}
+    public static void glfwDestroyCursor(@NativeType("GLFWcursor *") long cursor) {
+        long __functionAddress = Functions.DestroyCursor;
+        if (CHECKS) {
+            check(cursor);
+        }
+        invokePV(cursor, __functionAddress);
+    }
+    public static void glfwSetCursor(@NativeType("GLFWwindow *") long window, @NativeType("GLFWcursor *") long cursor) {
+        long __functionAddress = Functions.SetCursor;
+        if (CHECKS) {
+            check(window);
+        }
+        invokePPV(window, cursor, __functionAddress);
+    }
 
     public static boolean glfwRawMouseMotionSupported() {
         // Should be not supported?

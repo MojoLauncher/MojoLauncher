@@ -38,6 +38,14 @@
 // This means that you are forced to have this function/variable for ABI compatibility
 #define ABI_COMPAT __attribute__((unused))
 
+#define TRY_ATTACH_ENV(env_name, vm, error_message, then) JNIEnv* env_name;\
+do {                                                                       \
+    env_name = get_attached_env(vm);                                       \
+    if(env_name == NULL) {                                                 \
+        printf(error_message);                                             \
+        then                                                               \
+    }                                                                      \
+} while(0)
 
 struct PotatoBridge {
 
@@ -59,6 +67,7 @@ struct PotatoBridge potatoBridge;
 #define RENDERER_VK_ZINK 2
 #define RENDERER_VULKAN 4
 
+// TODO implement cursor tracking and global ref deletion
 EXTERNAL_API void pojavTerminate() {
     printf("EGLBridge: Terminating\n");
 
@@ -249,3 +258,60 @@ EXTERNAL_API void pojavSwapInterval(int interval) {
     br_swap_interval(interval);
 }
 
+EXTERNAL_API void* pojavCreateStandardCursor(int shape) {
+    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavCreateStandardCursor!\n", return NULL;);
+    jobject cursor = (*env)->CallStaticObjectMethod(env, pojav_environ->bridgeClazz,
+                                          pojav_environ->method_getDefaultCursor);
+    return (*env)->NewGlobalRef(env, cursor);
+}
+
+EXTERNAL_API void* pojavCreateCursor(GLFWimage* image, int xhot, int yhot) {
+    if(image == NULL) {
+        printf("Passed image is null!\n");
+        return NULL;
+    }
+
+    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavCreateCursor!\n", return NULL;);
+    size_t imageBytes = image->width * image->height * 4;
+    jobject buffer = (*env)->NewDirectByteBuffer(env, image->pixels, imageBytes);
+    if(buffer == NULL) {
+        printf("Failed to create ByteBuffer for cursor image!\n");
+        return NULL;
+    }
+
+    jobject cursor = (*env)->CallStaticObjectMethod(env, pojav_environ->bridgeClazz,
+                                          pojav_environ->method_createCursor, buffer,
+                                          image->width, image->height, xhot, yhot);
+    jobject globalCursorRef = (*env)->NewGlobalRef(env, cursor);
+
+    // not needed anymore
+    (*env)->DeleteLocalRef(env, buffer);
+    (*env)->DeleteLocalRef(env, cursor);
+
+    return globalCursorRef;
+}
+
+EXTERNAL_API void pojavSetCursor(void* window, jobject cursor) {
+    if(cursor == NULL) {
+        void* standardCursor = pojavCreateStandardCursor(0);
+        if(standardCursor == NULL) {
+            printf("Failed to get standard cursor in pojavSetCursor\n");
+            return;
+        }
+        cursor = standardCursor;
+    }
+
+    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavSetCursor!\n", return;);
+    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_setCursor, cursor);
+}
+
+EXTERNAL_API void pojavDestroyCursor(void* window, jobject cursor) {
+    if(cursor == NULL) {
+        printf("Passed cursor to pojavDestroyCursor is null!\n");
+        return;
+    }
+
+    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavDestroyCursor!\n", return;);
+    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_removeCursor, cursor);
+    (*env)->DeleteGlobalRef(env, cursor);
+}

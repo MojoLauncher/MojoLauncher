@@ -2,17 +2,15 @@ package net.kdt.pojavlaunch.customcontrols.mouse;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
+import androidx.core.util.Consumer;
 
 import net.kdt.pojavlaunch.GrabListener;
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 import org.lwjgl.glfw.CallbackBridge;
@@ -24,9 +22,9 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
     /* Whether the Touchpad should be displayed */
     private boolean mDisplayState;
     /* Mouse pointer icon used by the touchpad */
-    private Drawable mMousePointerDrawable;
     private float mMouseX, mMouseY;
     private boolean mMoveOnLayout;
+    private final Consumer<CursorContainer> onCursorChange = cursor->invalidate();
     public Touchpad(@NonNull Context context) {
         this(context, null);
     }
@@ -78,20 +76,13 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.translate(mMouseX, mMouseY);
-        mMousePointerDrawable.draw(canvas);
+        canvas.scale(LauncherPreferences.PREF_MOUSESCALE, LauncherPreferences.PREF_MOUSESCALE);
+        CallbackBridge.getCursor().draw(canvas);
     }
 
-    private void init(){
-        // Setup mouse pointer
-        mMousePointerDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_mouse_pointer, getContext().getTheme());
-        // For some reason it's annotated as Nullable even though it doesn't seem to actually
-        // ever return null
-        assert mMousePointerDrawable != null;
-        mMousePointerDrawable.setBounds(
-                0, 0,
-                (int) (36 * LauncherPreferences.PREF_MOUSESCALE),
-                (int) (54 * LauncherPreferences.PREF_MOUSESCALE)
-        );
+    private void init() {
+        CallbackBridge.addCursorChangeListener(onCursorChange);
+
         setFocusable(false);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             setDefaultFocusHighlightEnabled(false);
@@ -150,5 +141,20 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
         if(w == 0) w = getWidth();
         if(h == 0) h = getHeight();
         placeMouseAt(w / 2f, h / 2f);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        CallbackBridge.addCursorChangeListener(onCursorChange);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        // if we do not detach the listener
+        // it may cause a memory leak due to the object
+        // storing an instance of this View
+        CallbackBridge.removeCursorChangeListener(onCursorChange);
     }
 }
