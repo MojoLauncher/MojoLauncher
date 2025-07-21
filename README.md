@@ -9,8 +9,7 @@
 
 * MojoLauncher is a launcher, based on [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher), that allows you to play Minecraft: Java Edition on your Android device!
 
-* It can run almost every version of Minecraft, allowing you to use .jar only installers to install modloaders such as [Forge](https://files.minecraftforge.net/) and [Fabric](http://fabricmc.net/), mods like [OptiFine](https://optifine.net) and [LabyMod](https://www.labymod.net/en), as well as hack clients like [Wurst](https://www.wurstclient.net/), and much more!
-
+* It can run almost every version of Minecraft, allowing you to use .jar only installers to install modloaders such as [Forge](https://files.minecraftforge.net/) and [Fabric](http://fabricmc.net/), also it can run optimization mods like [OptiFine](https://optifine.net), [Sodium](https://modrinth.com/mod/sodium) and many more!
 ## Navigation
 - [Introduction](#introduction)  
 - [Getting MojoLauncher](#getting-mojolauncher)
