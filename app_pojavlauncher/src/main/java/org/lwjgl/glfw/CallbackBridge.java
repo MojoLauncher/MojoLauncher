@@ -55,7 +55,7 @@ public class CallbackBridge {
     @Nullable private static CursorContainer sDefaultCursor = null;
     @Nullable private static CursorContainer sCursor;
     private static Set<Consumer<CursorContainer>> cursorChangeListeners = new HashSet<>();
-    private static Set<CursorContainer> cursors = new HashSet<>();
+    private static Set<Long> cursorPointers = new HashSet<>();
 
     public static void putMouseEventWithCoords(int button, float x, float y) {
         putMouseEventWithCoords(button, true, x, y);
@@ -275,25 +275,28 @@ public class CallbackBridge {
 
     @SuppressWarnings("unused")
     @Keep
-    public static void removeCursor(@NonNull CursorContainer cursor) {
+    public static void removeCursor(long ptr) {
+        CursorContainer cursor = (CursorContainer) nativeGetGlobalRef(ptr);
+
         if(cursor == getDefaultCursor()) return;
         if(sCursor == cursor) setCursor(getDefaultCursor());
-        cursors.remove(cursor);
-        nativeDeleteGlobalRef(cursor);
+
+        cursorPointers.remove(ptr);
+        nativeDeleteGlobalRef(ptr);
     }
 
     @SuppressWarnings("unused")
     @Keep
     public static void removeAllCursors() {
         setCursor(getDefaultCursor());
-        for (CursorContainer cursor : cursors) {
-            removeCursor(cursor);
+        for (long ptr : cursorPointers) {
+            removeCursor(ptr);
         }
     }
 
     @SuppressWarnings("unused")
     @Keep
-    public static CursorContainer createCursor(ByteBuffer imageBuffer, int width, int height, int xHot, int yHot) {
+    public static long createCursor(ByteBuffer imageBuffer, int width, int height, int xHot, int yHot) {
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         bitmap.copyPixelsFromBuffer(imageBuffer);
         // using the system resources isn't really a good practice
@@ -306,8 +309,8 @@ public class CallbackBridge {
         // does nothing
         drawable.setColorFilter(new ColorMatrixColorFilter(new ColorMatrix()));
 
-        CursorContainer cursor = new CursorContainer(drawable, xHot, yHot);
-        cursors.add(cursor);
+        long cursor = nativeCreateGlobalRef(new CursorContainer(drawable, xHot, yHot));
+        cursorPointers.add(cursor);
         return cursor;
     }
 
@@ -333,7 +336,9 @@ public class CallbackBridge {
     public static native void nativeSetWindowAttrib(int attrib, int value);
     private static native ByteBuffer nativeCreateGamepadButtonBuffer();
     private static native ByteBuffer nativeCreateGamepadAxisBuffer();
-    private static native void nativeDeleteGlobalRef(Object object);
+    private static native long nativeCreateGlobalRef(Object obj);
+    private static native Object nativeGetGlobalRef(long pointer);
+    private static native void nativeDeleteGlobalRef(long object);
     static {
         System.loadLibrary("pojavexec");
         sGamepadButtonBuffer = nativeCreateGamepadButtonBuffer();
