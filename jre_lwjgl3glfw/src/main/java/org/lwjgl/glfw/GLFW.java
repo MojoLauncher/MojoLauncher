@@ -12,6 +12,7 @@ import java.nio.*;
 import javax.annotation.*;
 
 import org.lwjgl.*;
+import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 import org.lwjgl.system.MemoryUtil;
 
@@ -994,6 +995,15 @@ public class GLFW
         // win.width = width;
         // win.height = height;
 
+        int[] glVer = pojavGetGLVer();
+        win.windowAttribs.put(GLFW_CONTEXT_VERSION_MAJOR, glVer[0]);
+        win.windowAttribs.put(GLFW_CONTEXT_VERSION_MINOR, glVer[1]);
+        win.windowAttribs.put(GLFW_CONTEXT_REVISION, glVer[2]);
+        win.windowAttribs.put(GLFW_CLIENT_API, GLFW_OPENGL_API);
+
+        boolean isVulkan = System.getProperty("MOJO_RENDERER").toLowerCase().contains("vulkan");
+        win.windowAttribs.put(GLFW_CONTEXT_CREATION_API, isVulkan ? GLFW_OSMESA_CONTEXT_API : GLFW_EGL_CONTEXT_API);
+
         win.width = mGLFWWindowWidth;
         win.height = mGLFWWindowHeight;
         win.title = title;
@@ -1009,6 +1019,27 @@ public class GLFW
 
         return ptr;
         //Return our context
+    }
+
+    private static int[] pojavGetGLVer() {
+        // I don't like this but it's required
+        GL.createCapabilities();
+
+        String ver = GL11.glGetString(GL_VERSION);
+        if(ver == null) return new int[] { 0, 0, 0 };
+        String[] verSpaceSplit = ver.trim().split(" ", 2);
+        String[] verDotSplit = verSpaceSplit[0].split("\\.");
+
+        int[] vers = new int[] { 0, 0, 0 };
+        for (int i = 0; i < Math.min(3, verDotSplit.length); i++) {
+            try {
+                vers[i] = Integer.parseInt(verDotSplit[i]);
+            } catch (NumberFormatException e) {
+                vers[i] = 0;
+            }
+        }
+
+        return vers;
     }
 
     public static void glfwDestroyWindow(long window) {
