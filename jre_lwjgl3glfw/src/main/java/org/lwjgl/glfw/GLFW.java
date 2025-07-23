@@ -1001,9 +1001,6 @@ public class GLFW
         win.windowAttribs.put(GLFW_CONTEXT_REVISION, glVer[2]);
         win.windowAttribs.put(GLFW_CLIENT_API, GLFW_OPENGL_API);
 
-        boolean isVulkan = System.getProperty("MOJO_RENDERER").toLowerCase().contains("vulkan");
-        win.windowAttribs.put(GLFW_CONTEXT_CREATION_API, isVulkan ? GLFW_OSMESA_CONTEXT_API : GLFW_EGL_CONTEXT_API);
-
         win.width = mGLFWWindowWidth;
         win.height = mGLFWWindowHeight;
         win.title = title;
