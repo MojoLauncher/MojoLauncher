@@ -2,10 +2,11 @@ package net.kdt.pojavlaunch.modloaders;
 
 import android.util.Log;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSyntaxException;
 
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.instances.InstanceInstaller;
@@ -29,16 +30,17 @@ public class NeoforgeUtils {
 
     public static List<String> fetchNeoForgeVersions() throws IOException {
         String url = VERSIONS_ENDPOINT + NEOFORGE_GAV;
+
+        String json;
         try {
-            String json = fetchJson(url);
-            return parseAndFilterNeoForgeVersions(json);
+            json = fetchJson(url);
         } catch (IOException e) {
             Log.e("NeoforgeUtils", "Main NeoForge maven failed, trying fallback", e);
 
             String fallbackUrl = FALLBACK_VERSIONS_ENDPOINT + NEOFORGE_GAV;
-            String json = fetchJson(fallbackUrl);
-            return parseAndFilterNeoForgeVersions(json);
+            json = fetchJson(fallbackUrl);
         }
+        return parseAndFilterNeoForgeVersions(json);
     }
 
     public static String getInstallerUrl(String version) {
@@ -57,13 +59,33 @@ public class NeoforgeUtils {
     }
 
     private static List<String> parseAndFilterNeoForgeVersions(String json) {
-        JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
-        JsonArray versionsArray = obj.getAsJsonArray("versions");
-
         List<String> versions = new ArrayList<>();
-        for (JsonElement element : versionsArray) {
-            String version = element.getAsString();
-            if (!version.startsWith("0")) { // filter out april fools versions
+        JsonObject obj;
+        try {
+            JsonElement element = JsonParser.parseString(json);
+            if (!element.isJsonObject()) {
+                Log.e("NeoforgeUtils", "Parsed JSON is not an object: " + json);
+                return versions;
+            }
+            obj = element.getAsJsonObject();
+        } catch (JsonSyntaxException e) {
+            Log.e("NeoforgeUtils", "Failed to parse JSON string: " + json, e);
+            return versions;
+        }
+
+        JsonElement versionsArray = obj.get("versions");
+        if (!obj.has("versions") || !versionsArray.isJsonArray()) {
+            Log.e("NeoforgeUtils", "Field 'versions' is missing or not an array: " + json);
+            return versions;
+        }
+
+        for (JsonElement versionElement : versionsArray.getAsJsonArray()) {
+            if (!versionElement.isJsonPrimitive()) continue;
+            JsonPrimitive primitive = versionElement.getAsJsonPrimitive();
+            if (!primitive.isString()) continue;
+
+            String version = primitive.getAsString();
+            if (!version.startsWith("0")) {
                 versions.add(version);
             }
         }
@@ -72,9 +94,17 @@ public class NeoforgeUtils {
     }
 
     public static String getMcVersionForNeoVersion(String neoVersion) {
+        // I feel like it's necessary to explain the NeoForge versioning format
+        // basically, what it does is it trims the major version from minecrafts version
+        // e.g.: 1.20.1 -> 20.1, and then appends its own "patch" version to that
+        // e.g.: 20.1 -> 20.1.8, which means the version string includes both, the minecraft
+        // and the loader version at once
         try {
             int firstIndex = neoVersion.indexOf('.');
             int secondIndex = neoVersion.indexOf('.', firstIndex + 1);
+            if(firstIndex == -1 || secondIndex == -1) {
+                Log.e("NeoforgeUtils", "Failed to parse neoforge version: " + neoVersion + "; not enough '.' found");
+            }
             return "1." + neoVersion.substring(0, secondIndex);
         } catch (StringIndexOutOfBoundsException e) {
             Log.e("NeoforgeUtils", "Failed to parse neoforge version: " + neoVersion, e);
@@ -82,20 +112,10 @@ public class NeoforgeUtils {
         }
     }
 
-    public static InstanceInstaller createInstaller(String gameVersion, String modLoaderVersion) throws IOException {
-        List<String> versions = NeoforgeUtils.fetchNeoForgeVersions();
-        if(versions == null) return null;
-        for(String versionName : versions) {
-            if(!versionName.startsWith(modLoaderVersion)) continue;
-            return createInstaller(versionName);
-        }
-        return null;
-    }
-
-    public static InstanceInstaller createInstaller(String fullVersion) throws IOException {
-        String downloadUrl = getInstallerUrl(fullVersion);
+    public static InstanceInstaller createInstaller(String neoVersion) throws IOException {
+        String downloadUrl = getInstallerUrl(neoVersion);
         String hash = DownloadUtils.downloadString(downloadUrl+".sha1");
-        File installerLocation = new File(Tools.DIR_CACHE, "neoforge-installer-"+fullVersion+".jar");
+        File installerLocation = new File(Tools.DIR_CACHE, "neoforge-installer-"+neoVersion+".jar");
         InstanceInstaller instanceInstaller = new InstanceInstaller();
         // if the language is not explicitly set to english, neoforge
         // may set it to something else, which causes the OK button to be renamed

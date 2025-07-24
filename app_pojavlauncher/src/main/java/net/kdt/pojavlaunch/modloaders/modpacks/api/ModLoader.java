@@ -65,7 +65,7 @@ public class ModLoader {
     public InstanceInstaller createInstaller() throws IOException {
         switch (modLoaderType) {
             case MOD_LOADER_NEOFORGE:
-                return NeoforgeUtils.createInstaller(minecraftVersion, modLoaderVersion);
+                return NeoforgeUtils.createInstaller(modLoaderVersion);
             case MOD_LOADER_FORGE:
                 return ForgeUtils.createInstaller(minecraftVersion, modLoaderVersion);
             case MOD_LOADER_QUILT:
