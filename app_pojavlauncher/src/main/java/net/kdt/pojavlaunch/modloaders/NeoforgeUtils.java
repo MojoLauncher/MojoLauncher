@@ -12,12 +12,8 @@ import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.instances.InstanceInstaller;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,54 +25,49 @@ public class NeoforgeUtils {
     private static final String NEOFORGE_INSTALLER_URL = "https://maven.neoforged.net/releases/net/neoforged/neoforge/%1$s/neoforge-%1$s-installer.jar";
 
     public static List<String> fetchNeoForgeVersions() throws IOException {
-        String url = VERSIONS_ENDPOINT + NEOFORGE_GAV;
+        String mainUrl = VERSIONS_ENDPOINT + NEOFORGE_GAV;
+        String fallbackUrl = FALLBACK_VERSIONS_ENDPOINT + NEOFORGE_GAV;
+        DownloadUtils.ParseCallback<List<String>> callback = (data) -> {
+            try {
+                return NeoforgeUtils.parseAndFilterNeoForgeVersions(data);
+            } catch (NeoForgeJsonParseException e) {
+                throw new DownloadUtils.ParseException(e);
+            }
+        };
 
-        String json;
         try {
-            json = fetchJson(url);
-        } catch (IOException e) {
-            Log.e("NeoforgeUtils", "Main NeoForge maven failed, trying fallback", e);
-
-            String fallbackUrl = FALLBACK_VERSIONS_ENDPOINT + NEOFORGE_GAV;
-            json = fetchJson(fallbackUrl);
+            try {
+                return DownloadUtils.downloadStringCached(mainUrl, "neoforge_versions", callback);
+            } catch (IOException e) {
+                Log.e("NeoforgeUtils", "Main NeoForge maven failed, trying fallback", e);
+                return DownloadUtils.downloadStringCached(fallbackUrl, "neoforge_versions_fallback", callback);
+            }
+        } catch (DownloadUtils.ParseException e) {
+            Log.e("NeoforgeUtils", "Failed to parse NeoForge versions!", e);
+            return null;
         }
-        return parseAndFilterNeoForgeVersions(json);
     }
 
     public static String getInstallerUrl(String version) {
         return String.format(NEOFORGE_INSTALLER_URL, version);
     }
 
-    private static String fetchJson(String endpoint) throws IOException {
-        HttpURLConnection conn = (HttpURLConnection) new URL(endpoint).openConnection();
-        conn.setRequestProperty("Accept", "application/json");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        StringBuilder result = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) result.append(line);
-        reader.close();
-        return result.toString();
-    }
-
-    private static List<String> parseAndFilterNeoForgeVersions(String json) {
+    private static List<String> parseAndFilterNeoForgeVersions(String json) throws NeoForgeJsonParseException {
         List<String> versions = new ArrayList<>();
         JsonObject obj;
         try {
             JsonElement element = JsonParser.parseString(json);
             if (!element.isJsonObject()) {
-                Log.e("NeoforgeUtils", "Parsed JSON is not an object: " + json);
-                return versions;
+                throw new NeoForgeJsonParseException("Parsed JSON is not an object: " + json);
             }
             obj = element.getAsJsonObject();
         } catch (JsonSyntaxException e) {
-            Log.e("NeoforgeUtils", "Failed to parse JSON string: " + json, e);
-            return versions;
+            throw new NeoForgeJsonParseException("Failed to parse JSON string: " + json, e);
         }
 
         JsonElement versionsArray = obj.get("versions");
         if (!obj.has("versions") || !versionsArray.isJsonArray()) {
-            Log.e("NeoforgeUtils", "Field 'versions' is missing or not an array: " + json);
-            return versions;
+            throw new NeoForgeJsonParseException("Field 'versions' is missing or not an array: " + json);
         }
 
         for (JsonElement versionElement : versionsArray.getAsJsonArray()) {
@@ -197,6 +188,16 @@ public class NeoforgeUtils {
             } catch (NumberFormatException e) {
                 return new ComparableVersionString(str);
             }
+        }
+    }
+
+    public static class NeoForgeJsonParseException extends Exception {
+        public NeoForgeJsonParseException(String message) {
+            super(message);
+        }
+
+        public NeoForgeJsonParseException(String message, Throwable cause) {
+            super(message, cause);
         }
     }
 }
