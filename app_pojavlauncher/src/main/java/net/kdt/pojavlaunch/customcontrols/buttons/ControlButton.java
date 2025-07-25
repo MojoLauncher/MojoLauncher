@@ -43,7 +43,6 @@ public class ControlButton extends TextView implements ControlInterface {
     private boolean mHasBitmap;
 
     protected boolean mIsToggled = false;
-    protected boolean mIsPointerOutOfBounds = false;
 
     public ControlButton(ControlLayout layout, ControlData properties) {
         super(layout.getContext());
@@ -136,65 +135,53 @@ public class ControlButton extends TextView implements ControlInterface {
         getControlLayoutParent().removeView(this);
     }
 
+    @Override
+    public void handlePressed() {
+        if(!getProperties().isToggle){
+            sendKeyPresses(true);
+        }
+    }
+
+    @Override
+    public void handleReleased() {
+        if(!triggerToggle()) {
+            sendKeyPresses(false);
+        }
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getActionMasked()){
+        ControlData properties = getProperties();
+        int action = event.getActionMasked();
+        switch (action) {
             case MotionEvent.ACTION_MOVE:
-                //Send the event to be taken as a mouse action
-                if(getProperties().passThruEnabled && CallbackBridge.isGrabbing()){
-                    View gameSurface = getControlLayoutParent().getGameSurface();
-                    if(gameSurface != null) gameSurface.dispatchTouchEvent(event);
-                }
-
-                //If out of bounds
-                if(event.getX() < getControlView().getLeft() || event.getX() > getControlView().getRight() ||
-                        event.getY() < getControlView().getTop()  || event.getY() > getControlView().getBottom()){
-                    if(getProperties().isSwipeable && !mIsPointerOutOfBounds){
-                        //Remove keys
-                        if(!triggerToggle()) {
-                            sendKeyPresses(false);
-                        }
-                    }
-                    mIsPointerOutOfBounds = true;
-                    getControlLayoutParent().onTouch(this, event);
-                    break;
-                }
-
-                //Else if we now are in bounds
-                if(mIsPointerOutOfBounds) {
-                    getControlLayoutParent().onTouch(this, event);
-                    //RE-press the button
-                    if(getProperties().isSwipeable && !getProperties().isToggle){
-                        sendKeyPresses(true);
-                    }
-                }
-                mIsPointerOutOfBounds = false;
-                break;
-
-            case MotionEvent.ACTION_DOWN: // 0
-            case MotionEvent.ACTION_POINTER_DOWN: // 5
-                if(!getProperties().isToggle){
-                    sendKeyPresses(true);
-                }
-                break;
-
             case MotionEvent.ACTION_UP: // 1
             case MotionEvent.ACTION_CANCEL: // 3
             case MotionEvent.ACTION_POINTER_UP: // 6
-                if(getProperties().passThruEnabled){
+                if(properties.passThruEnabled){
+                    //Send the event to be taken as a mouse action
                     View gameSurface = getControlLayoutParent().getGameSurface();
                     if(gameSurface != null) gameSurface.dispatchTouchEvent(event);
                 }
-                if(mIsPointerOutOfBounds) getControlLayoutParent().onTouch(this, event);
-                mIsPointerOutOfBounds = false;
-
-                if(!triggerToggle()) {
-                    sendKeyPresses(false);
-                }
                 break;
+        }
 
+        if(getProperties().isSwipeable) {
+            getControlLayoutParent().onTouch(this, event);
+            return true;
+        }
+
+        switch (action){
+            case MotionEvent.ACTION_DOWN: // 0
+            case MotionEvent.ACTION_POINTER_DOWN: // 5
+                handlePressed();
+                break;
+            case MotionEvent.ACTION_UP: // 1
+            case MotionEvent.ACTION_CANCEL: // 3
+            case MotionEvent.ACTION_POINTER_UP: // 6
+                handleReleased();
+                break;
             default:
                 return false;
         }

@@ -62,7 +62,8 @@ public interface ControlInterface extends View.OnLongClickListener, GrabListener
             getControlView().setVisibility(isVisible ? VISIBLE : GONE);
     }
 
-    void sendKeyPresses(boolean isDown);
+    void handlePressed();
+    void handleReleased();
 
     /**
      * Load the values and hide non useful forms
@@ -391,9 +392,7 @@ public interface ControlInterface extends View.OnLongClickListener, GrabListener
     }
 
     default void injectLayoutParamBehavior() {
-        getControlView().addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-            setBackground();
-        });
+        getControlView().addOnLayoutChangeListener((v, l, t, r, b, ol, or, ot, ob) -> setBackground());
     }
 
     @Override

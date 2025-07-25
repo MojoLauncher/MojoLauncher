@@ -345,8 +345,15 @@ public class ControlLayout extends FrameLayout {
 
 	final HashMap<View, ControlInterface> mapTable = new HashMap<>();
 
+	private static boolean eventInViewBounds(MotionEvent event, View view) {
+		float x = event.getX();
+		float y = event.getY();
+		return x > view.getLeft() && x < view.getRight() && y > view.getTop() && y < view.getBottom();
+	}
+
 	//While this is called onTouch, this should only be called from a ControlButton.
 	public void onTouch(View v, MotionEvent ev) {
+		int action = ev.getActionMasked();
 		ControlInterface lastControlButton = mapTable.get(v);
 
 		// Map location to screen coordinates
@@ -354,44 +361,34 @@ public class ControlLayout extends FrameLayout {
 
 
 		//Check if the action is cancelling, reset the lastControl button associated to the view
-		if (ev.getActionMasked() == MotionEvent.ACTION_UP
-				|| ev.getActionMasked() == MotionEvent.ACTION_CANCEL
-				|| ev.getActionMasked() == MotionEvent.ACTION_POINTER_UP) {
-			if (lastControlButton != null) lastControlButton.sendKeyPresses(false);
+		if (action == MotionEvent.ACTION_UP
+				|| action == MotionEvent.ACTION_CANCEL
+				|| action == MotionEvent.ACTION_POINTER_UP) {
+			if (lastControlButton != null) lastControlButton.handleReleased();
 			mapTable.put(v, null);
 			return;
 		}
 
-		if (ev.getActionMasked() != MotionEvent.ACTION_MOVE) return;
-
+		if (action != MotionEvent.ACTION_MOVE && action != MotionEvent.ACTION_DOWN) return;
 
 		//Optimization pass to avoid looking at all children again
 		if (lastControlButton != null) {
-			System.out.println("last control button check" + ev.getX() + "-" + ev.getY() + "-" + lastControlButton.getControlView().getX() + "-" + lastControlButton.getControlView().getY());
-			if (ev.getX() > lastControlButton.getControlView().getX()
-					&& ev.getX() < lastControlButton.getControlView().getX() + lastControlButton.getControlView().getWidth()
-					&& ev.getY() > lastControlButton.getControlView().getY()
-					&& ev.getY() < lastControlButton.getControlView().getY() + lastControlButton.getControlView().getHeight()) {
+			if (eventInViewBounds(ev, lastControlButton.getControlView())) {
 				return;
 			}
 		}
 
 		//Release last keys
-		if (lastControlButton != null) lastControlButton.sendKeyPresses(false);
+		if (lastControlButton != null) lastControlButton.handleReleased();
 		mapTable.remove(v);
 
 		// Update the state of all swipeable buttons
 		for (ControlInterface button : getButtonChildren()) {
 			if (!button.getProperties().isSwipeable) continue;
-
-			if (ev.getX() > button.getControlView().getX()
-					&& ev.getX() < button.getControlView().getX() + button.getControlView().getWidth()
-					&& ev.getY() > button.getControlView().getY()
-					&& ev.getY() < button.getControlView().getY() + button.getControlView().getHeight()) {
-
+			if (eventInViewBounds(ev, button.getControlView())) {
 				//Press the new key
 				if (!button.equals(lastControlButton)) {
-					button.sendKeyPresses(true);
+					button.handlePressed();
 					mapTable.put(v, button);
 					return;
 				}
