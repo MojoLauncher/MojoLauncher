@@ -254,7 +254,8 @@ android.applicationVariants.configureEach { variant ->
     registrar.onlineZipDependency jreBuildRepository+"buildjre17-21/jre17-pojav.zip", "ComponentRuntime17", "components/jre-new"
     registrar.onlineZipDependency jreBuildRepository+"buildjre17-21/jre21-pojav.zip", "ComponentRuntime21", "components/jre-21"
 
-    def cacioBuildRepository = "https://nightly.link/MojoLauncher/%s/workflows/maven/master/caciocavallo.zip"
+//    def cacioBuildRepository = "https://nightly.link/MojoLauncher/%s/workflows/maven/master/caciocavallo.zip"
+    def cacioBuildRepository = "https://nightly.link/MojoLauncher/caciocavallo17/actions/runs/15824628013/caciocavallo.zip";
 
     registrar.onlineJarDependency String.format(cacioBuildRepository, "caciocavallo"), "Caciocavallo", "components/caciocavallo"
     registrar.onlineJarDependency String.format(cacioBuildRepository, "caciocavallo17"), "Caciocavallo17", "components/caciocavallo17"

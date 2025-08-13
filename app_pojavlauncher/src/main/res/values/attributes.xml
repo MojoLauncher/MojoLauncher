@@ -6,4 +6,16 @@
         <!-- Redefine to be able to fetch the value -->
         <attr name="android:min" />
     </declare-styleable>
+
+    <attr name="colorControlButton" format="color"/>
+    <attr name="colorControlButtonPressed" format="color"/>
+    <attr name="colorMineButton" format="color"/>
+    <attr name="colorBackgroundApp" format="color"/>
+    <attr name="colorDivider" format="color"/>
+    <attr name="colorBackgroundOverlay" format="color"/>
+    <attr name="colorBackgroundStatusBar" format="color"/>
+    <attr name="colorBackgroundBottomBar" format="color"/>
+    <attr name="colorIconOutline" format="color"/>
+    <attr name="colorPrimaryText" format="color"/>
+    <attr name="colorSecondaryText" format="color"/>
 </resources>

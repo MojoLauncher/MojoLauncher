@@ -1,13 +1,13 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item android:id="@android:id/background">
-        <color android:color="@color/background_app"/>
+        <color android:color="?attr/colorBackgroundApp"/>
     </item>
 
 
     <item android:id="@android:id/progress">
         <clip>
-             <color android:color='@color/minebutton_color'/>
+             <color android:color='?attr/colorMineButton'/>
         </clip>
     </item>
 

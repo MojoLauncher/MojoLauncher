@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="@color/background_app"
+    android:background="?attr/colorBackgroundApp"
     android:gravity="center"
     android:orientation="vertical"
     android:paddingHorizontal="@dimen/fragment_padding_medium">

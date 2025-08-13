@@ -9,7 +9,7 @@
 
             <stroke
                 android:width="@dimen/_2sdp"
-                android:color="@color/minebutton_color"/>
+                android:color="?attr/colorMineButton"/>
         </shape>
     </item>
 </layer-list>

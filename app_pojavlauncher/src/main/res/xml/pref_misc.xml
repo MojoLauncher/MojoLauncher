@@ -36,6 +36,12 @@
             android:summary="@string/preference_vulkan_driver_system_description"
             android:title="@string/preference_vulkan_driver_system_title"/>
 
+        <androidx.preference.ListPreference
+            android:title="Select Theme"
+            android:summary="Select one of the installed themes"
+            android:key="select_theme"
+            />
+
     </PreferenceCategory>
 
 </PreferenceScreen>
