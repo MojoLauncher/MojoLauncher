@@ -17,6 +17,7 @@
         android:drawablePadding="@dimen/_6sdp"
         android:paddingStart="@dimen/_8sdp"
         app:drawableStartSize="@dimen/_30sdp"
+        app:drawableEndSize="@dimen/_30sdp"
 
         tools:text="HELLO THERE"
         tools:drawableStart="@mipmap/ic_launcher"
@@ -30,7 +31,7 @@
         android:layout_width="@dimen/_52sdp"
         android:layout_height="match_parent"
         android:background="?attr/selectableItemBackground"
-        android:src="@drawable/ic_menu_delete_forever"
+        android:src="@drawable/ic_px_trash"
 
         android:padding="@dimen/padding_moderate"
         />

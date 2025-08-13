@@ -162,7 +162,7 @@ int pojavInitOpenGL() {
         pojav_environ->force_vsync = true;
 
     // NOTE: Override for now.
-    const char *renderer = getenv("POJAV_RENDERER");
+    const char *renderer = getenv("MOJO_RENDERER");
     if (strncmp("opengles", renderer, 8) == 0) {
         pojav_environ->config_renderer = RENDERER_GL4ES;
         set_gl_bridge_tbl();
@@ -217,8 +217,10 @@ EXTERNAL_API void pojavSwapBuffers() {
     br_swap_buffers();
 }
 
+extern void make_big_core_affine();
 
 EXTERNAL_API void pojavMakeCurrent(void* window) {
+    if(getenv("POJAV_BIG_CORE_AFFINITY") != NULL) make_big_core_affine();
     br_make_current((basic_render_window_t*)window);
 }
 

@@ -132,7 +132,7 @@ public class CurseforgeApi implements ModpackApi{
     }
 
     @Override
-    public ModLoader installMod(ModDetail modDetail, int selectedVersion) throws IOException{
+    public ModLoader installModpack(ModDetail modDetail, int selectedVersion) throws IOException{
         //TODO considering only modpacks for now
         return ModpackInstaller.installModpack(modDetail, selectedVersion, this::installCurseforgeZip);
     }
@@ -145,13 +145,15 @@ public class CurseforgeApi implements ModpackApi{
 
         JsonObject response = mApiHandler.get("mods/"+modId+"/files", params, JsonObject.class);
         JsonArray data = GsonJsonUtils.getJsonArraySafe(response, "data");
+        Log.i("CurseforgeApi", "data...");
         if(data == null) return CURSEFORGE_PAGINATION_ERROR;
-
+        Log.i("CurseforgeApi", "filtering...");
         for(int i = 0; i < data.size(); i++) {
             JsonObject fileInfo = data.get(i).getAsJsonObject();
             if(fileInfo.get("isServerPack").getAsBoolean()) continue;
             objectList.add(fileInfo);
         }
+        Log.i("CurseforgeApi", "pag_end");
         if(data.size() < CURSEFORGE_PAGINATION_SIZE) {
             return CURSEFORGE_PAGINATION_END_REACHED; // we read the remainder! yay!
         }

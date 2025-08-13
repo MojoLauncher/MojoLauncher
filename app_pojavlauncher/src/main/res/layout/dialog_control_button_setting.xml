@@ -333,6 +333,24 @@
         app:layout_constraintTop_toBottomOf="@id/checkboxForwardLock"
         tools:ignore="UseSwitchCompatOrMaterialXml"/>
 
+    <!-- BACKGROUND IMAGE SECTION -->
+    <fr.spse.extended_view.ExtendedTextView
+        android:id="@+id/setBackgroundBitmap_textView"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_35sdp"
+        android:background="?attr/selectableItemBackground"
+        android:drawableEnd="@drawable/spinner_arrow_right"
+        android:gravity="center_vertical"
+        android:paddingEnd="5dp"
+        android:text="@string/customctrl_background_bitmap"
+        app:drawableEndIntegerScaling="true"
+        app:drawableEndSize="20dp"
+
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkboxAbsoluteFingerTracking" />
+
     <!-- BACKGROUND COLOR SECTION -->
     <fr.spse.extended_view.ExtendedTextView
         android:id="@+id/editBackgroundColor_textView"
@@ -349,8 +367,24 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/checkboxAbsoluteFingerTracking" />
+        app:layout_constraintTop_toBottomOf="@id/setBackgroundBitmap_textView" />
 
+    <fr.spse.extended_view.ExtendedTextView
+        android:id="@+id/editBackgroundColorWarning_textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:drawableStart="?android:attr/alertDialogIcon"
+        android:gravity="center_vertical"
+        android:padding="5dp"
+        android:drawablePadding="5dp"
+        android:text="@string/customctrl_background_color_warning"
+        app:drawableStartSize="20dp"
+
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editBackgroundColor_textView" />
 
     <!-- STROKE WIDTH -->
     <TextView
@@ -402,7 +436,7 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editBackgroundColor_textView" />
+        app:layout_constraintTop_toBottomOf="@+id/editBackgroundColorWarning_textView" />
 
 
     <!-- CORNER RADIUS SECTION -->

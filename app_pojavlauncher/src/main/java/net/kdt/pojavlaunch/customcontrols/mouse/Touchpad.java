@@ -1,7 +1,5 @@
 package net.kdt.pojavlaunch.customcontrols.mouse;
 
-import static net.kdt.pojavlaunch.Tools.currentDisplayMetrics;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
@@ -28,6 +26,7 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
     /* Mouse pointer icon used by the touchpad */
     private Drawable mMousePointerDrawable;
     private float mMouseX, mMouseY;
+    private boolean mMoveOnLayout;
     public Touchpad(@NonNull Context context) {
         this(context, null);
     }
@@ -40,7 +39,7 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
     /** Enable the touchpad */
     private void _enable(){
         setVisibility(VISIBLE);
-        placeMouseAt(currentDisplayMetrics.widthPixels / 2f, currentDisplayMetrics.heightPixels / 2f);
+        mMoveOnLayout = true;
     }
 
     /** Disable the touchpad and hides the mouse */
@@ -123,8 +122,8 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
 
     @Override
     public void applyMotionVector(float x, float y) {
-        mMouseX = Math.max(0, Math.min(currentDisplayMetrics.widthPixels, mMouseX + x * LauncherPreferences.PREF_MOUSESPEED));
-        mMouseY = Math.max(0, Math.min(currentDisplayMetrics.heightPixels, mMouseY + y * LauncherPreferences.PREF_MOUSESPEED));
+        mMouseX = Math.max(0, Math.min(getWidth(), mMouseX + x * LauncherPreferences.PREF_MOUSESPEED));
+        mMouseY = Math.max(0, Math.min(getHeight(), mMouseY + y * LauncherPreferences.PREF_MOUSESPEED));
         updateMousePosition();
     }
 
@@ -141,5 +140,15 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
         if(!mDisplayState) return;
         mDisplayState = false;
         _disable();
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        if(!mMoveOnLayout) return;
+        int w = getMeasuredWidth();
+        int h = getMeasuredHeight();
+        if(w == 0) w = getWidth();
+        if(h == 0) h = getHeight();
+        placeMouseAt(w / 2f, h / 2f);
     }
 }

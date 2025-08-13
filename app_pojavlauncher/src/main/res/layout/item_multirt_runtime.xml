@@ -48,7 +48,7 @@
         android:paddingVertical="@dimen/padding_heavy"
         android:scaleType="fitCenter"
 
-        android:src="@drawable/ic_menu_delete_forever"
+        android:src="@drawable/ic_px_trash"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

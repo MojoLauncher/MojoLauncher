@@ -109,6 +109,12 @@ public class ControlJoystick extends JoystickView implements ControlInterface {
         getControlLayoutParent().addJoystickButton(data);
     }
 
+    @Override
+    public void handlePressed() {/*STUB since non swipeable*/}
+
+    @Override
+    public void handleReleased() {/*STUB since non swipeable*/}
+
 
     @Override
     public void setBackground() {
@@ -116,9 +122,6 @@ public class ControlJoystick extends JoystickView implements ControlInterface {
         setBorderColor(getProperties().strokeColor);
         setBackgroundColor(getProperties().bgColor);
     }
-
-    @Override
-    public void sendKeyPresses(boolean isDown) {/*STUB since non swipeable*/ }
 
     @Override
     public void loadEditValues(EditControlSideDialog editControlPopup) {

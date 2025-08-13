@@ -1,16 +1,17 @@
 package net.kdt.pojavlaunch.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.widget.ExpandableListAdapter;
 
 import androidx.annotation.NonNull;
 
-import net.kdt.pojavlaunch.JavaGUILauncherActivity;
+import com.kdt.mcgui.ProgressLayout;
+
 import git.artdeell.mojo.R;
-import net.kdt.pojavlaunch.Tools;
-import net.kdt.pojavlaunch.modloaders.ForgeDownloadTask;
+
+import net.kdt.pojavlaunch.instances.InstanceInstaller;
+import net.kdt.pojavlaunch.instances.InstanceManager;
 import net.kdt.pojavlaunch.modloaders.ForgeUtils;
 import net.kdt.pojavlaunch.modloaders.ForgeVersionListAdapter;
 import net.kdt.pojavlaunch.modloaders.ModloaderListenerProxy;
@@ -52,13 +53,28 @@ public class ForgeInstallFragment extends ModVersionListFragment<List<String>> {
 
     @Override
     public Runnable createDownloadTask(Object selectedVersion, ModloaderListenerProxy listenerProxy) {
-        return new ForgeDownloadTask(listenerProxy, (String) selectedVersion);
+        return ()->createInstance((String) selectedVersion, listenerProxy);
+    }
+
+    private static void createInstance(String selectedVersion, ModloaderListenerProxy listenerProxy) {
+        try {
+            ProgressLayout.setProgress(ProgressLayout.INSTALL_MODPACK, 0);
+            InstanceInstaller instanceInstaller = ForgeUtils.createInstaller(selectedVersion);
+            InstanceManager.createInstance(instance -> {
+                instance.name = "Forge";
+                instance.icon = "forge";
+                instance.installer = instanceInstaller;
+            }, selectedVersion);
+            ProgressLayout.clearProgress(ProgressLayout.INSTALL_MODPACK);
+            instanceInstaller.start();
+            listenerProxy.onDownloadFinished(null);
+        }catch (IOException e) {
+            listenerProxy.onDownloadError(e);
+        }
     }
 
     @Override
     public void onDownloadFinished(Context context, File downloadedFile) {
-        Intent modInstallerStartIntent = new Intent(context, JavaGUILauncherActivity.class);
-        ForgeUtils.addAutoInstallArgs(modInstallerStartIntent, downloadedFile, true);
-        context.startActivity(modInstallerStartIntent);
+
     }
 }

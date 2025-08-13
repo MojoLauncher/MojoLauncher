@@ -88,12 +88,13 @@ public class HotbarView extends View implements MCOptionUtils.MCOptionListener, 
         ViewGroup.LayoutParams layoutParams = getLayoutParams();
         if(!(layoutParams instanceof ViewGroup.MarginLayoutParams))
             throw new RuntimeException("Incorrect LayoutParams type, expected ViewGroup.MarginLayoutParams");
+        ViewGroup parent = (ViewGroup) getParent();
         ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) layoutParams;
         int height;
         marginLayoutParams.width = mWidth = mcScale(180);
         marginLayoutParams.height = height = mcScale(20);
-        marginLayoutParams.leftMargin = (CallbackBridge.physicalWidth / 2) - (mWidth / 2);
-        marginLayoutParams.topMargin = CallbackBridge.physicalHeight - height;
+        marginLayoutParams.leftMargin = (parent.getWidth() / 2) - (mWidth / 2);
+        marginLayoutParams.topMargin = parent.getHeight() - height;
         setLayoutParams(marginLayoutParams);
     }
 

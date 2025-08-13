@@ -12,15 +12,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.collection.ArrayMap;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import git.artdeell.mojo.R;
-import net.kdt.pojavlaunch.extra.ExtraCore;
+
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
 import net.kdt.pojavlaunch.progresskeeper.ProgressListener;
 import net.kdt.pojavlaunch.progresskeeper.TaskCountListener;
-import net.kdt.pojavlaunch.services.ProgressService;
 
 import java.util.ArrayList;
 
@@ -34,10 +32,11 @@ public class ProgressLayout extends ConstraintLayout implements View.OnClickList
     public static final String UNPACK_RUNTIME = "unpack_runtime";
     public static final String DOWNLOAD_MINECRAFT = "download_minecraft";
     public static final String DOWNLOAD_VERSION_LIST = "download_verlist";
-    public static final String AUTHENTICATE_MICROSOFT = "authenticate_microsoft";
+    public static final String AUTHENTICATE = "authenticate";
     public static final String INSTALL_MODPACK = "install_modpack";
     public static final String EXTRACT_COMPONENTS = "extract_components";
     public static final String EXTRACT_SINGLE_FILES = "extract_single_files";
+    public static final String INSTANCE_INSTALL = "instance_install";
 
     public ProgressLayout(@NonNull Context context) {
         super(context);
@@ -115,7 +114,7 @@ public class ProgressLayout extends ConstraintLayout implements View.OnClickList
     }
 
     @Override
-    public void onUpdateTaskCount(int tc) {
+    public boolean onUpdateTaskCount(int tc) {
         post(()->{
             if(tc > 0) {
                 mTaskNumberDisplayer.setText(getContext().getString(R.string.progresslayout_tasks_in_progress, tc));
@@ -123,12 +122,14 @@ public class ProgressLayout extends ConstraintLayout implements View.OnClickList
             }else
                 setVisibility(GONE);
         });
+        return false;
     }
 
     class LayoutProgressListener implements ProgressListener {
         final String progressKey;
         final TextProgressBar textView;
         final LinearLayout.LayoutParams params;
+        boolean isAttached = false;
         public LayoutProgressListener(String progressKey) {
             this.progressKey = progressKey;
             textView = new TextProgressBar(getContext());
@@ -141,7 +142,8 @@ public class ProgressLayout extends ConstraintLayout implements View.OnClickList
         public void onProgressStarted() {
             post(()-> {
                 Log.i("ProgressLayout", "onProgressStarted");
-                mLinearLayout.addView(textView, params);
+                if(!isAttached) mLinearLayout.addView(textView, params);
+                isAttached = true;
             });
         }
 
@@ -159,6 +161,7 @@ public class ProgressLayout extends ConstraintLayout implements View.OnClickList
         public void onProgressEnded() {
             post(()-> {
                 mLinearLayout.removeView(textView);
+                isAttached = false;
             });
         }
     }

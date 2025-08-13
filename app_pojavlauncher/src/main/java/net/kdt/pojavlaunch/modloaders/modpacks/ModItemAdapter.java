@@ -133,13 +133,14 @@ public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
-    public void onUpdateTaskCount(int taskCount) {
+    public boolean onUpdateTaskCount(int taskCount) {
         Tools.runOnUiThread(()->{
             mTasksRunning = taskCount != 0;
             for(ViewHolder viewHolder : mViewHolderSet) {
                 viewHolder.updateInstallButtonState();
             }
         });
+        return false;
     }
 
 
@@ -175,7 +176,7 @@ public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     mExtendedSpinner = mExtendedLayout.findViewById(R.id.mod_extended_version_spinner);
                     mExtendedErrorTextView = mExtendedLayout.findViewById(R.id.mod_extended_error_textview);
 
-                    mExtendedButton.setOnClickListener(v1 -> mModpackApi.handleInstallation(
+                    mExtendedButton.setOnClickListener(v1 -> mModpackApi.handleModpackInstallation(
                             mExtendedButton.getContext().getApplicationContext(),
                             mModDetail,
                             mExtendedSpinner.getSelectedItemPosition()));

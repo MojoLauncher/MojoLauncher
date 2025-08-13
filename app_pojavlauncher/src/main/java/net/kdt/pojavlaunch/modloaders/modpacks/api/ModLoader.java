@@ -1,16 +1,10 @@
 package net.kdt.pojavlaunch.modloaders.modpacks.api;
 
-import android.content.Context;
-import android.content.Intent;
-
-import net.kdt.pojavlaunch.JavaGUILauncherActivity;
-import net.kdt.pojavlaunch.modloaders.FabriclikeDownloadTask;
+import net.kdt.pojavlaunch.instances.InstanceInstaller;
 import net.kdt.pojavlaunch.modloaders.FabriclikeUtils;
-import net.kdt.pojavlaunch.modloaders.ForgeDownloadTask;
 import net.kdt.pojavlaunch.modloaders.ForgeUtils;
-import net.kdt.pojavlaunch.modloaders.ModloaderDownloadListener;
 
-import java.io.File;
+import java.io.IOException;
 
 public class ModLoader {
     public static final int MOD_LOADER_FORGE = 0;
@@ -44,39 +38,29 @@ public class ModLoader {
     }
 
     /**
-     * Get the Runnable that needs to run in order to download the mod loader.
-     * The task will also install the mod loader if it does not require GUI installation
-     * @param listener the listener that gets notified of the installation status
-     * @return the task Runnable that needs to be ran
+     * Perform the installation of a mod loader headlessly, if possible
+     * @return the real version ID
      */
-    public Runnable getDownloadTask(ModloaderDownloadListener listener) {
+    public String installHeadlessly() throws IOException{
         switch (modLoaderType) {
-            case MOD_LOADER_FORGE:
-                return new ForgeDownloadTask(listener, minecraftVersion, modLoaderVersion);
             case MOD_LOADER_FABRIC:
-                return createFabriclikeTask(listener, FabriclikeUtils.FABRIC_UTILS);
+                return FabriclikeUtils.FABRIC_UTILS.install(minecraftVersion, modLoaderVersion);
             case MOD_LOADER_QUILT:
-                return createFabriclikeTask(listener, FabriclikeUtils.QUILT_UTILS);
+                return FabriclikeUtils.QUILT_UTILS.install(minecraftVersion, modLoaderVersion);
+            case MOD_LOADER_FORGE:
             default:
                 return null;
         }
     }
 
     /**
-     * Get the Intent to start the graphical installation of the mod loader.
-     * This method should only be ran after the download task of the specified mod loader finishes.
-     * This method returns null if the mod loader does not require GUI installation
-     * @param context the package resolving Context (can be the base context)
-     * @param modInstallerJar the JAR file of the mod installer, provided by ModloaderDownloadListener after the installation
-     *                        finishes.
-     * @return the Intent which the launcher needs to start in order to install the mod loader
+     * Create an InstanceInstaller, if GUI installation is required by this mod loader.
+     * @return the InstanceInstaller that is used to complete mod loader installation.
      */
-    public Intent getInstallationIntent(Context context, File modInstallerJar) {
-        Intent baseIntent = new Intent(context, JavaGUILauncherActivity.class);
+    public InstanceInstaller createInstaller() throws IOException {
         switch (modLoaderType) {
             case MOD_LOADER_FORGE:
-                ForgeUtils.addAutoInstallArgs(baseIntent, modInstallerJar, getVersionId());
-                return baseIntent;
+                return ForgeUtils.createInstaller(minecraftVersion, modLoaderVersion);
             case MOD_LOADER_QUILT:
             case MOD_LOADER_FABRIC:
             default:
@@ -97,9 +81,5 @@ public class ModLoader {
             default:
                 return false;
         }
-    }
-
-    private FabriclikeDownloadTask createFabriclikeTask(ModloaderDownloadListener modloaderDownloadListener, FabriclikeUtils utils) {
-        return new FabriclikeDownloadTask(modloaderDownloadListener, utils, minecraftVersion, modLoaderVersion, false);
     }
 }

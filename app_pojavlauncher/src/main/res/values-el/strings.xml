@@ -202,7 +202,7 @@
     <string name="arc_capes_desc">Ενεργοποιεί κάπες από τη Cosmetica (προηγουμένως Arc). Για περισσότερες πληροφορίες, παρακαλώ επισκεφθείτε την ιστοσελίδα https://cosmetica.cc. Απαιτείται 
 το OptiFine.</string>
     <string name="notif_channel_name">Γενικά</string>
-    <string name="lazy_service_default_title">Υπηρεσία Προσκήνιου Pojav</string>
+    <string name="lazy_service_default_title">Υπηρεσία Προσκήνιου Mojo</string>
     <string name="mcl_setting_veroption_installed">Εγκατεστημένο</string>
     <string name="use_global_default">(Χρήση της γενικής προεπιλογής)</string>
     <string name="default_control">Προεπιλεγμένος χάρτης ελέγχου</string>
@@ -264,17 +264,12 @@
     <string name="fabric_dl_game_version">Έκδοση Minecraft</string>
     <string name="fabric_dl_install">Εγκατάσταση</string>
     <string name="fabric_dl_cant_read_meta">Αποτυχία ανάγνωσης μεταδεδομένων φορτωτή %s. Παρακαλώ προσπαθήστε ξανά αργότερα.</string>
-    <string name="modloader_dl_install_fabric">Δημιουργία προφίλ Fabric</string>
-    <string name="modloader_dl_install_quilt">Δημιουργία προφίλ Quilt</string>
-    <string name="modloader_dl_install_forge">Δημιουργία προφίλ Forge</string>
-    <string name="create_profile_vanilla">Δημιουργία νέου κανονικού προφίλ</string>
     <string name="create_profile_vanilla_like_versions">Σχεδόν κανονικές εκδόσεις</string>
     <string name="create_profile_modded_versions">Τροποποιημένες εκδόσεις</string>
     <string name="fabric_dl_loader_title">Επιλέξτε εκδόσεις</string>
     <string name="of_dl_select_version">Επιλέξτε την έκδοση του OptiFine</string>
     <string name="of_dl_failed_to_scrape">Αποτυχία συλλογής δεδομένων για εγκατάσταση του OptiFine</string>
     <string name="of_dl_progress">Γίνεται λήψη %s</string>
-    <string name="create_profile_optifine">Δημιουργία OptiFine προφίλ</string>
     <string name="hint_search_modpack">Αναζήτηση για modpacks</string>
     <string name="preference_vulkan_driver_system_title">Χρήση προγράμματος οδήγησης Vulkan</string>
     <string name="preference_vulkan_driver_system_description">Εξαναγκάστε τον εκκινητή να χρησιμοποιήσει τον οδηγό Vulkan αντί για το Turnip στις Adreno GPUs. Επηρεάζει μόνο το Zink και τα mods που χρησιμοποιούν το Vulkan.</string>
@@ -288,12 +283,11 @@
     <string name="modpack_download_downloading_mods">Λήψη mods (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Λήψη mods (Αρχείο %d από %d)</string>
     <string name="modpack_download_applying_overrides">Εφαρμογή παρακάμψεων (%d/%d)</string>
-    <string name="modpack_install_notification_title">Pojav Modpack Installer</string>
+    <string name="modpack_install_notification_title">Mojo Modpack Installer</string>
     <string name="modpack_install_notification_success">Κάντε κλικ εδώ για να ολοκληρώσετε την εγκατάσταση modpack</string>
     <string name="modpack_install_notification_data_not_available">Αποτυχία λήψης πληροφοριών για το mod loader</string>
     <string name="modpack_install_modloader_download_failed">Αποτυχία λήψης των αρχείων του mod loader</string>
     <string name="modpack_install_download_failed">Αποτυχία λήψης των αρχείων του modpack</string>
-    <string name="modpack_install_button">Δημιουργία προφίλ modpack</string>
     <string name="notif_error_occured">Παρουσιάστηκε ένα σφάλμα</string>
     <string name="notif_error_occured_desc">Κάντε κλικ για να δείτε περισσότερες λεπτομέρειες</string>
     <string name="fabric_dl_only_stable">Εμφάνιση μόνο σταθερών εκδόσεων</string>

@@ -12,7 +12,7 @@
     <string name="warning_remove_account">Et ob hoc remotus!</string>
     <!-- AlertDialog title -->
     <!-- Error messages -->
-    <string name="error_fatal">Pojav launcher crashed subito</string>
+    <string name="error_fatal">Mojo launcher crashed subito</string>
     <!-- Toast messages -->
     <!--
     <string name="toast_3">Exit</string>

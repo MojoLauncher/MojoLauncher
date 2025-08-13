@@ -13,9 +13,11 @@ import android.view.WindowManager;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import androidx.activity.result.ActivityResultCaller;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import net.kdt.pojavlaunch.PojavApplication;
@@ -30,20 +32,28 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class CropperUtils {
-    public static ActivityResultLauncher<?> registerCropper(Fragment fragment, final CropperListener cropperListener) {
-        return fragment.registerForActivityResult(new ActivityResultContracts.OpenDocument(), (result)->{
-            Context context = fragment.getContext();
+    public static ActivityResultLauncher<?> registerCropper(AppCompatActivity activity, final CropperReceiver cropperReceiver) {
+        return registerCropper(new ActivityContextProvider(activity), cropperReceiver);
+    }
+
+    public static ActivityResultLauncher<?> registerCropper(Fragment fragment, final CropperReceiver cropperReceiver) {
+        return registerCropper(new FragmentContextProvider(fragment), cropperReceiver);
+    }
+
+    private static ActivityResultLauncher<?> registerCropper(ContextProvider contextProvider, final CropperReceiver cropperReceiver) {
+        return contextProvider.getResultCaller().registerForActivityResult(new ActivityResultContracts.OpenDocument(), (result)->{
+            Context context = contextProvider.getContext();
             if(context == null) return;
             if (result == null) {
                 Toast.makeText(context, R.string.cropper_select_cancelled, Toast.LENGTH_SHORT).show();
                 return;
             }
-            openCropperDialog(context, result, cropperListener);
+            openCropperDialog(context, result, cropperReceiver);
         });
     }
 
     private static void openCropperDialog(Context context, Uri selectedUri,
-                                          final CropperListener cropperListener) {
+                                          final CropperReceiver cropperReceiver) {
         ContentResolver contentResolver = context.getContentResolver();
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle(R.string.cropper_title)
@@ -56,18 +66,17 @@ public class CropperUtils {
         assert cropImageView != null;
         assert finishProgressBar != null;
         bindViews(dialog, cropImageView);
+        cropImageView.setAspectRatio(cropperReceiver.getAspectRatio());
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v->{
             dialog.dismiss();
-            // I chose 70 dp here because it resolves to 192x192 on my device
-            // (which has a typical screen density of 395 dpi)
-            cropperListener.onCropped(cropImageView.crop((int) Tools.dpToPx(70)));
+            cropperReceiver.onCropped(cropImageView.crop(cropperReceiver.getTargetMaxSide()));
         });
         PojavApplication.sExecutorService.execute(()->{
             CropperBehaviour cropperBehaviour = null;
             try {
                  cropperBehaviour = createBehaviour(cropImageView, contentResolver, selectedUri);
             }catch (Exception e) {
-                cropperListener.onFailed(e);
+                cropperReceiver.onFailed(e);
             }
             CropperBehaviour finalBehaviour = cropperBehaviour;
             Tools.runOnUiThread(()->finishSetup(dialog, finishProgressBar, cropImageView, finalBehaviour));
@@ -151,8 +160,49 @@ public class CropperUtils {
                 (ActivityResultLauncher<String[]>) resultLauncher;
         realResultLauncher.launch(new String[]{"image/*"});
     }
-    public interface CropperListener {
+
+    public interface CropperReceiver {
+        float getAspectRatio();
+        int getTargetMaxSide();
         void onCropped(Bitmap contentBitmap);
         void onFailed(Exception exception);
+    }
+
+    private interface ContextProvider {
+        Context getContext();
+        ActivityResultCaller getResultCaller();
+    }
+
+    private static class FragmentContextProvider implements ContextProvider {
+        private final Fragment mFragment;
+        public FragmentContextProvider(Fragment fragment) {
+            this.mFragment = fragment;
+        }
+        @Override
+        public Context getContext() {
+            return mFragment.getContext();
+        }
+
+        @Override
+        public ActivityResultCaller getResultCaller() {
+            return mFragment;
+        }
+    }
+
+    private static class ActivityContextProvider implements ContextProvider {
+        private final AppCompatActivity mActivity;
+        public ActivityContextProvider(AppCompatActivity activity) {
+            this.mActivity = activity;
+        }
+        @Override
+        public Context getContext() {
+            if(mActivity.isDestroyed() || mActivity.isFinishing()) return null;
+            return mActivity;
+        }
+
+        @Override
+        public ActivityResultCaller getResultCaller() {
+            return mActivity;
+        }
     }
 }

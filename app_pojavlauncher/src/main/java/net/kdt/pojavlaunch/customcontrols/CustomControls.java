@@ -3,6 +3,7 @@ import android.content.*;
 
 import androidx.annotation.Keep;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 import net.kdt.pojavlaunch.*;
@@ -16,6 +17,7 @@ public class CustomControls {
 	public List<ControlData> mControlDataList;
 	public List<ControlDrawerData> mDrawerDataList;
 	public List<ControlJoystickData> mJoystickDataList;
+	public transient LayoutBitmaps mLayoutBitmaps;
 	public CustomControls() {
 		this(new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 	}
@@ -62,11 +64,15 @@ public class CustomControls {
 		version = 8;
 	}
 
-	
 	public void save(String path) throws IOException {
 		//Current version is the V3.2 so the version as to be marked as 8 !
 		version = 8;
-
-		Tools.write(path, Tools.GLOBAL_GSON.toJson(this));
+		String jsonControls = Tools.GLOBAL_GSON.toJson(this);
+		try(FileOutputStream fileOutputStream = new FileOutputStream(path)) {
+			LayoutBitmaps.store(fileOutputStream, new LayoutBitmaps.ControlsContainer(
+					jsonControls,
+					mLayoutBitmaps
+			));
+		}
 	}
 }

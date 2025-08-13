@@ -1,9 +1,9 @@
 package net.kdt.pojavlaunch.prefs.screens;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-
 import androidx.preference.ListPreference;
 import androidx.preference.SwitchPreference;
 import androidx.preference.SwitchPreferenceCompat;
@@ -21,9 +21,6 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
     public void onCreatePreferences(Bundle b, String str) {
         addPreferencesFromResource(R.xml.pref_video);
         int resolution = (int) (LauncherPreferences.PREF_SCALE_FACTOR * 100);
-
-        //Disable notch checking behavior on android 8.1 and below.
-        requirePreference("ignoreNotch").setVisible(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && LauncherPreferences.PREF_NOTCH_SIZE > 0);
 
         CustomSeekBarPreference resolutionSeekbar = requirePreference("resolutionRatio",
                 CustomSeekBarPreference.class);
@@ -52,6 +49,15 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         rendererListPreference.setEntryValues(renderersList.rendererIds.toArray(new String[0]));
 
         computeVisibility();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Activity activity = getActivity();
+        if(activity != null) {
+            requirePreference("ignoreNotch").setVisible(LauncherPreferences.hasNotch(activity));
+        }
     }
 
     @Override

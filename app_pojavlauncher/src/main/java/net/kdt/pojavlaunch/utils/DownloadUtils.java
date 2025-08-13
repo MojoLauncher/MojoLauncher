@@ -159,16 +159,19 @@ public class DownloadUtils {
      * Get the content length for a given URL.
      * @param url the URL to get the length for
      * @return the length in bytes or -1 if not available
-     * @throws IOException if an I/O error occurs.
      */
-    public static long getContentLength(String url) throws IOException {
-        HttpURLConnection urlConnection = (HttpURLConnection) new URL(url).openConnection();
-        urlConnection.setRequestMethod("HEAD");
-        urlConnection.setDoInput(false);
-        urlConnection.setDoOutput(false);
-        urlConnection.connect();
-        int responseCode = urlConnection.getResponseCode();
-        if(responseCode >= 200 && responseCode <= 299) return urlConnection.getContentLength();
+    public static long getContentLength(String url) {
+        try {
+            HttpURLConnection urlConnection = (HttpURLConnection) new URL(url).openConnection();
+            urlConnection.setRequestMethod("HEAD");
+            urlConnection.setDoInput(false);
+            urlConnection.setDoOutput(false);
+            urlConnection.connect();
+            int responseCode = urlConnection.getResponseCode();
+            if(responseCode >= 200 && responseCode <= 299) return urlConnection.getContentLength();
+        }catch (IOException e) {
+            Log.w("DownloadUtils", "Failed to get content length", e);
+        }
         return -1;
     }
 

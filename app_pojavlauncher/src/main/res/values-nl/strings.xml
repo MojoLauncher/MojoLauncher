@@ -197,7 +197,7 @@
     <string name="arc_capes_title">Cosmetica Capes</string>
     <string name="arc_capes_desc">Schakelt capes van Cosmetica in (voorheen Arc). Voor meer informatie ga naar https://cosmetica.cc. Vereist OptiFine.</string>
     <string name="notif_channel_name">Algemeen</string>
-    <string name="lazy_service_default_title">Pojav voorgrond Service</string>
+    <string name="lazy_service_default_title">Mojo voorgrond Service</string>
     <string name="use_global_default">(Gebruik globale standaardwaarde)</string>
     <string name="default_control">Standaard controlmap</string>
     <string name="progresslayout_tasks_in_progress">%d taken in uitvoering</string>
@@ -232,12 +232,11 @@
     <string name="modpack_download_downloading_mods">Mods downloaden (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Mods downloaden (File %d van de %d)</string>
     <string name="modpack_download_applying_overrides">Toepassen van overrides (%d/%d)</string>
-    <string name="modpack_install_notification_title">Pojav Modpack Installer</string>
+    <string name="modpack_install_notification_title">Mojo Modpack Installer</string>
     <string name="modpack_install_notification_success">Klik hier om de installatie van modpack te voltooien</string>
     <string name="modpack_install_notification_data_not_available">Downloaden van mod loader gegevens mislukt</string>
     <string name="modpack_install_modloader_download_failed">Downloaden van mod laader bestanden mislukt</string>
     <string name="modpack_install_download_failed">Fout bij het downloaden van modpack bestanden</string>
-    <string name="modpack_install_button">Maak modpack profiel aan</string>
     <string name="notif_error_occured">Er is een fout opgetreden</string>
     <string name="notif_error_occured_desc">Klik voor meer details</string>
     <string name="fabric_dl_only_stable">Toon alleen stabiele versies</string>

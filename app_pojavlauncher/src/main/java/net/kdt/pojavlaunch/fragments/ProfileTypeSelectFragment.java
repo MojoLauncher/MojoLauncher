@@ -9,6 +9,10 @@ import androidx.fragment.app.Fragment;
 
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.instances.Instance;
+import net.kdt.pojavlaunch.instances.InstanceManager;
+
+import java.io.IOException;
 
 public class ProfileTypeSelectFragment extends Fragment {
     public static final String TAG = "ProfileTypeSelectFragment";
@@ -19,8 +23,16 @@ public class ProfileTypeSelectFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.findViewById(R.id.vanilla_profile).setOnClickListener(v -> Tools.swapFragment(requireActivity(), ProfileEditorFragment.class,
-                ProfileEditorFragment.TAG, new Bundle(1)));
+        view.findViewById(R.id.vanilla_profile).setOnClickListener(v -> {
+            try {
+                Instance instance = InstanceManager.createDefaultInstance();
+                InstanceManager.setSelectedInstance(instance);
+                Tools.swapFragment(requireActivity(), InstanceEditorFragment.class,
+                        InstanceEditorFragment.TAG, new Bundle(1));
+            }catch (IOException e) {
+                Tools.showError(view.getContext(), e);
+            }
+        });
 
         // NOTE: Special care needed! If you wll decide to add these to the back stack, please read
         // the comment in FabricInstallFragment.onDownloadFinished() and amend the code

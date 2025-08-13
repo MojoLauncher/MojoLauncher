@@ -6,11 +6,11 @@ import android.app.Activity;
 import android.content.res.AssetManager;
 import android.util.Log;
 
+import net.kdt.pojavlaunch.instances.Instance;
+import net.kdt.pojavlaunch.instances.InstanceManager;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.Runtime;
 import net.kdt.pojavlaunch.utils.MathUtils;
-import net.kdt.pojavlaunch.value.launcherprofiles.LauncherProfiles;
-import net.kdt.pojavlaunch.value.launcherprofiles.MinecraftProfile;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -76,10 +76,9 @@ public class NewJREUtil {
 
         int gameRequiredVersion = versionInfo.javaVersion.majorVersion;
 
-        LauncherProfiles.load();
         AssetManager assetManager = activity.getAssets();
-        MinecraftProfile minecraftProfile = LauncherProfiles.getCurrentProfile();
-        String profileRuntime = Tools.getSelectedRuntime(minecraftProfile);
+        Instance instance = InstanceManager.getSelectedListedInstance();
+        String profileRuntime = Tools.getSelectedRuntime(instance);
         Runtime runtime = MultiRTUtils.read(profileRuntime);
         // Partly trust the user with his own selection, if the game can even try to run in this case
         if (runtime.javaVersion >= gameRequiredVersion) {
@@ -133,8 +132,13 @@ public class NewJREUtil {
             return false;
         }
 
-        minecraftProfile.javaDir = Tools.LAUNCHERPROFILES_RTPREFIX + appropriateRuntime;
-        LauncherProfiles.write();
+        instance.selectedRuntime = appropriateRuntime;
+        try {
+            instance.write();
+        }catch (IOException e) {
+            Tools.showErrorRemote(e);
+            return false;
+        }
         return true;
     }
 

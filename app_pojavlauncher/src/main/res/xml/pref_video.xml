@@ -9,7 +9,7 @@
             android:title="@string/mcl_setting_category_renderer"
             android:key="renderer"
             android:defaultValue="opengles2"
-            android:icon="@drawable/ic_setting_engine"
+            android:icon="@drawable/ic_px_image_renderer"
             app2:useSimpleSummaryProvider="true"/>
 
         <androidx.preference.SwitchPreferenceCompat
@@ -17,7 +17,7 @@
             android:key="ignoreNotch"
             android:summary="@string/mcl_setting_subtitle_ignore_notch"
             android:title="@string/mcl_setting_title_ignore_notch"
-            android:icon="@drawable/ic_setting_hide_notch"
+            android:icon="@drawable/ic_px_viewport_expand"
             />
 
         <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
@@ -28,7 +28,7 @@
             app2:selectable="false"
             app2:min="@integer/resolution_seekbar_min"
             app2:seekBarIncrement="@integer/resolution_seekbar_increment"
-            android:icon="@drawable/ic_setting_screen_resolution"
+            android:icon="@drawable/ic_px_resolution"
             />
 
         <SwitchPreference

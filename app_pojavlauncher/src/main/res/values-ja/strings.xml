@@ -176,7 +176,7 @@
     <string name="arc_capes_title">コスメチカ・ケープズ</string>
     <string name="arc_capes_desc">Cosmetica（以前のArc）のケープを有効にします。詳細については、https：//cosmetica.ccをご覧ください。 OptiFineが必要です。</string>
     <string name="notif_channel_name">一般</string>
-    <string name="lazy_service_default_title">Pojav フォアグラウンドサービス</string>
+    <string name="lazy_service_default_title">Mojo フォアグラウンドサービス</string>
     <string name="mcl_setting_veroption_installed">インストール済み</string>
     <string name="use_global_default">(グローバル既定値を使用する)</string>
     <string name="progresslayout_tasks_in_progress">%d タスクが進行中</string>
@@ -217,10 +217,6 @@
     <string name="forge_dl_select_version">Forge のバージョンを選択</string>
     <string name="fabric_dl_game_version">Minecraft バージョン</string>
     <string name="fabric_dl_install">インストール</string>
-    <string name="modloader_dl_install_fabric">Fabric プロファイルを作成する</string>
-    <string name="modloader_dl_install_quilt">Quilt プロファイルを作成する</string>
-    <string name="modloader_dl_install_forge">Forge プロファイルを作成する</string>
-    <string name="create_profile_vanilla">新規プロファイル(Vanilla) を作成する</string>
     <string name="fabric_dl_loader_title">バージョンの選択</string>
     <string name="of_dl_select_version">OptiFine のバージョンを選択</string>
     <string name="of_dl_progress">%s をダウンロード中</string>

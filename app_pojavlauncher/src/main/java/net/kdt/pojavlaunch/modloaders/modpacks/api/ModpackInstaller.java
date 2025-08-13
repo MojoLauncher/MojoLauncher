@@ -4,12 +4,12 @@ import com.kdt.mcgui.ProgressLayout;
 
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.instances.InstanceManager;
+import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.modloaders.modpacks.imagecache.ModIconCache;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
 import net.kdt.pojavlaunch.progresskeeper.DownloaderProgressWrapper;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
-import net.kdt.pojavlaunch.value.launcherprofiles.LauncherProfiles;
-import net.kdt.pojavlaunch.value.launcherprofiles.MinecraftProfile;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +35,9 @@ public class ModpackInstaller {
         // Get the modpack file
         File modpackFile = new File(Tools.DIR_CACHE, modpackName + ".cf"); // Cache File
         ModLoader modLoaderInfo;
+        Instance instance = InstanceManager.createInstance(i->{
+            i.name = modDetail.title;
+        }, modpackName.substring(0, Math.min(16,modpackName.length())));
         try {
             byte[] downloadBuffer = new byte[8192];
             DownloadUtils.ensureSha1(modpackFile, versionHash, (Callable<Void>) () -> {
@@ -45,26 +48,31 @@ public class ModpackInstaller {
             });
 
             // Install the modpack
-            modLoaderInfo = installFunction.installModpack(modpackFile, new File(Tools.DIR_GAME_HOME, "custom_instances/"+modpackName));
+            modLoaderInfo = installFunction.installModpack(modpackFile, instance.getGameDirectory());
 
+            if(modLoaderInfo == null) throw new IOException("Unknown modpack mod loader information");
+
+            if(modLoaderInfo.requiresGuiInstallation()) {
+                instance.installer = modLoaderInfo.createInstaller();
+            } else {
+                String versionId = modLoaderInfo.installHeadlessly();
+                if(versionId == null) throw new IOException("Unknown mod loader version");
+                instance.versionId = versionId;
+            }
+            instance.write();
+            ModIconCache.writeInstanceImage(instance, modDetail.getIconCacheTag());
+
+            InstanceManager.setSelectedInstance(instance);
+            if(modLoaderInfo.requiresGuiInstallation()) {
+                instance.installer.start();
+            }
+        } catch (IOException e) {
+            InstanceManager.removeInstance(instance);
+            throw e;
         } finally {
             modpackFile.delete();
             ProgressLayout.clearProgress(ProgressLayout.INSTALL_MODPACK);
         }
-        if(modLoaderInfo == null) {
-            return null;
-        }
-
-        // Create the instance
-        MinecraftProfile profile = new MinecraftProfile();
-        profile.gameDir = "./custom_instances/" + modpackName;
-        profile.name = modDetail.title;
-        profile.lastVersionId = modLoaderInfo.getVersionId();
-        profile.icon = ModIconCache.getBase64Image(modDetail.getIconCacheTag());
-
-
-        LauncherProfiles.mainProfileJson.profiles.put(modpackName, profile);
-        LauncherProfiles.write();
 
         return modLoaderInfo;
     }

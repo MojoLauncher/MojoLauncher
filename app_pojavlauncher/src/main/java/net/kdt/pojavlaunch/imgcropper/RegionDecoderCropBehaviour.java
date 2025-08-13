@@ -190,30 +190,32 @@ public class RegionDecoderCropBehaviour extends BitmapCropBehaviour {
 
     @Override
     public Bitmap crop(int targetMaxSide) {
+        Rect hostSelection = mHostView.mSelectionRect;
         RectF drawRect = new RectF();
-        Bitmap regionBitmap = decodeRegionBitmap(drawRect, new RectF(mHostView.mSelectionRect));
+        Bitmap regionBitmap = decodeRegionBitmap(drawRect, new RectF(hostSelection));
         if(regionBitmap == null) {
             // If we can't decode a hi-res region, just crop out of the low-res preview. Yes, this will in fact
             // cause the image to be low res, but we can't really avoid that in this case.
             return super.crop(targetMaxSide);
         }
+        // Offset the drawRect by the host selection's top-right corner, to properly position it within the resulting bitmap
+        drawRect.offset(-hostSelection.left, -hostSelection.top);
+        Rect selectionDims = new Rect(mHostView.mSelectionRect);
+        selectionDims.offsetTo(0, 0);
 
-        int targetDimension = targetMaxSide;
-        // Use Math.max here as the region bitmap may not always be a square, and we need to make it one without
-        // losing detail.
-        int regionBitmapSide = Math.max(regionBitmap.getWidth(), regionBitmap.getHeight());
-        if(regionBitmapSide < targetDimension) targetDimension = regionBitmapSide;
-        // The drawRect will be a subsection of the selectionRect, so we will need to scale it
-        // down in order to fit it into the targetDimension x targetDimension bitmap
-        // that we will return.
-        float scaleRatio = (float)targetDimension / mHostView.mSelectionRect.width();
+        int maxSide = Math.max(selectionDims.width(), selectionDims.height());
+        float scaleFactor = (float) targetMaxSide / maxSide;
+
         Matrix drawRectScaleMatrix = new Matrix();
-        drawRectScaleMatrix.setScale(scaleRatio, scaleRatio);
-        MatrixUtils.transformRect(drawRect, drawRectScaleMatrix);
+        drawRectScaleMatrix.setScale(scaleFactor, scaleFactor);
 
-        Bitmap returnBitmap = Bitmap.createBitmap(targetDimension, targetDimension, regionBitmap.getConfig());
+        MatrixUtils.transformRect(drawRect, drawRectScaleMatrix);
+        MatrixUtils.transformRect(selectionDims, drawRectScaleMatrix);
+
+        Bitmap returnBitmap = Bitmap.createBitmap(selectionDims.width(), selectionDims.height(), regionBitmap.getConfig());
         Canvas canvas = new Canvas(returnBitmap);
         canvas.drawBitmap(regionBitmap, null, drawRect, null);
+        regionBitmap.recycle();
         return returnBitmap;
     }
 }

@@ -138,7 +138,9 @@
 
     <string name="customctrl_mapping">Mapping</string>
     <string name="customctrl_orientation">Orientation</string>
+    <string name="customctrl_background_bitmap">Background image</string>
     <string name="customctrl_background_color">Background color</string>
+    <string name="customctrl_background_color_warning">Changing background color will reset the background image</string>
     <string name="customctrl_corner_radius">Corner radius</string>
     <string name="customctrl_stroke_width">Stroke width</string>
     <string name="customctrl_stroke_color">Stroke color</string>
@@ -229,6 +231,9 @@
     <string name="profiles_latest_release">Latest release</string>
     <string name="profiles_profile_name">Name</string>
     <string name="profiles_profile_version">Version</string>
+    <string name="instance_shared_data">Shared data (click to switch)</string>
+    <string name="instance_shared_data_on">Store game data in a shared directory</string>
+    <string name="instance_shared_data_off">Store game data in the instance directory</string>
     <string name="global_delete">Delete</string>
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Renderer</string>
@@ -237,7 +242,7 @@
     <string name="color_default_hex" translatable="false">FFFF0000</string>
     <string name="notif_channel_name">General</string>
     <string name="notif_channel_id" translatable="false">channel_id</string>
-    <string name="lazy_service_default_title">Pojav Foreground Service</string>
+    <string name="lazy_service_default_title">Mojo Foreground Service</string>
     <string name="mcl_setting_veroption_installed">Installed</string>
     <string name="use_global_default">(Use global default)</string>
     <string name="default_control">Default controlmap</string>
@@ -270,7 +275,7 @@
     <string name="storage_required">MojoLauncher requires external storage to be attached. Please reconnect it and restart the app.</string>
     <string name="mcl_setting_title_buttonallcaps">Only use capital letters in button labels</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Disable this if you want to use lowercase letters in your controls.</string>
-    <string name="create_profile">Create new profile</string>
+    <string name="create_instance">Create new instance</string>
     <string name="preference_shader_dump_title">Enable shader dumping</string>
     <string name="preference_shader_dump_description">Log converted shaders into the log file.</string>
     <string name="percent_format">%d%%</string>
@@ -303,17 +308,18 @@
     <string name="fabric_dl_game_version">Minecraft version</string>
     <string name="fabric_dl_install">Install</string>
     <string name="fabric_dl_cant_read_meta">Failed to read %s loader metadata. Please try again later.</string>
-    <string name="modloader_dl_install_fabric">Create Fabric profile</string>
-    <string name="modloader_dl_install_quilt">Create Quilt profile</string>
-    <string name="modloader_dl_install_forge">Create Forge profile</string>
-    <string name="create_profile_vanilla">Create vanilla profile</string>
+    <string name="fabric_dl_cant_read_meta2">Failed to read Fabric loader metadata. Please try again later.</string>
+    <string name="modloader_dl_install_fabric_instance">Create Fabric instance</string>
+    <string name="modloader_dl_install_quilt_instance">Create Quilt instance</string>
+    <string name="modloader_dl_install_forge_instance">Create Forge instance</string>
+    <string name="create_instance_vanilla">Create vanilla instance</string>
     <string name="create_profile_vanilla_like_versions">Vanilla-like versions</string>
     <string name="create_profile_modded_versions">Modded versions</string>
     <string name="fabric_dl_loader_title">Select versions</string>
     <string name="of_dl_select_version">Select OptiFine version</string>
     <string name="of_dl_failed_to_scrape">Failed to collect data for OptiFine installation</string>
     <string name="of_dl_progress">Downloading %s</string>
-    <string name="create_profile_optifine">Create OptiFine profile</string>
+    <string name="mod_dl_install_optifine">Install OptiFine</string>
 
 
     <string name="hint_search_modpack">Search for modpacks</string>
@@ -333,12 +339,12 @@
     <string name="modpack_download_downloading_mods">Downloading mods (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Downloading mods (File %d out of %d)</string>
     <string name="modpack_download_applying_overrides">Applying overrides (%d/%d)</string>
-    <string name="modpack_install_notification_title">Pojav Modpack Installer</string>
+    <string name="modpack_install_notification_title">Mojo Modpack Installer</string>
     <string name="modpack_install_notification_success">Click here to finish modpack installation</string>
     <string name="modpack_install_notification_data_not_available">Failed to download mod loader information</string>
     <string name="modpack_install_modloader_download_failed">Failed to download the mod loader files</string>
     <string name="modpack_install_download_failed">Failed to download modpack files</string>
-    <string name="modpack_install_button">Create modpack profile</string>
+    <string name="modpack_install_instance_button">Create modpack instance</string>
 
     <string name="notif_error_occured">An error has occurred</string>
     <string name="notif_error_occured_desc">Click to see more details</string>
@@ -420,14 +426,21 @@
     <string name="mcl_button_discord">Discord</string>
     <string name="ltw_render_distance_warning_msg">Your GPU is not capable of rendering above 7 render distance without Sodium or other similar mods. The render distance will be automatically reduced when you click "OK".</string>
     <string name="mcl_button_open_directory">Open game directory</string>
-    <string name="discord_invite" translatable="false">https://discord.com/invite/aenk3EUvER</string>
+    <string name="discord_invite" translatable="false">https://discord.gg/VHdwQFsaGX</string>
     <string name="local_login_bad_username_title">Unsuitable username</string>
     <string name="local_login_bad_username_text">The username must be between 3–16 characters long, and must only contain latin letters, numbers 0–9 and underscores.</string>
     <string name="quick_setting_title">Quick settings</string>
-    <string name="create_bta_profile">Create \"Better than Adventure!\" profile</string>
+    <string name="create_bta_instance">Create \"Better than Adventure!\" instance</string>
     <string name="select_bta_version">Select \"Better than Adventure!\" version</string>
     <string name="bta_installer_available_versions">Supported BTA versions</string>
     <string name="bta_installer_untested_versions">Untested BTA versions</string>
     <string name="bta_installer_nightly_versions">Nightly BTA versions</string>
     <string name="newdl_extracting_native_libraries">Extracting native libraries (%d/%d)</string>
+    <string name="compat_version_not_supported">Your device cannot run this version because LTW is not supported on your device.</string>
+    <string name="oauth_unknown_error">Unknown authentication error</string>
+    <string name="oauth_web_complete">Authenticating…</string>
+    <string name="auth_select_microsoft">Microsoft account</string>
+    <string name="auth_select_elyby">Ely.by account</string>
+    <string name="auth_select_local">Local account</string>
+    <string name="instance_dir_missing">Instance is missing</string>
 </resources>

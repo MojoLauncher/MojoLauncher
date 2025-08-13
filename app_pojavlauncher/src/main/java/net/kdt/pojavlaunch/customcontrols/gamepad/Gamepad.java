@@ -124,10 +124,8 @@ public class Gamepad implements GrabListener, GamepadHandler {
 
         if(showCursor) {
             ((ViewGroup)contextView.getParent()).addView(mPointerImageView);
+            centerPointer();
         }
-
-
-        placePointerView(CallbackBridge.physicalWidth/2, CallbackBridge.physicalHeight/2);
 
         reloadGamepadMaps();
         mMapProvider.attachGrabListener(this);
@@ -336,7 +334,7 @@ public class Gamepad implements GrabListener, GamepadHandler {
         sendDirectionalKeycode(mCurrentJoystickDirection, false, mGameMap); // removing what we were doing
 
         CallbackBridge.sendCursorPos(CallbackBridge.windowWidth/2f, CallbackBridge.windowHeight/2f);
-        placePointerView(CallbackBridge.physicalWidth/2, CallbackBridge.physicalHeight/2);
+        centerPointer();
         mPointerImageView.setVisibility(View.VISIBLE);
         // Sensitivity in menu is MC and HARDWARE resolution dependent
         mMouseSensitivity = 19 * PREF_SCALE_FACTOR / mSensitivityFactor;
@@ -453,6 +451,12 @@ public class Gamepad implements GrabListener, GamepadHandler {
                 sendKeyPress(LwjglGlfwKeycode.GLFW_KEY_SPACE, CallbackBridge.getCurrentMods(), isKeyEventDown);
                 break;
         }
+    }
+
+    private void centerPointer() {
+        ViewGroup parent = (ViewGroup) mPointerImageView.getParent();
+        if(parent == null) return;
+        placePointerView(parent.getWidth()/2, parent.getHeight()/2);
     }
 
     /**

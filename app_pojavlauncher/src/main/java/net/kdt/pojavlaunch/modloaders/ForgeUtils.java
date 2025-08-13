@@ -3,6 +3,7 @@ package net.kdt.pojavlaunch.modloaders;
 import android.content.Intent;
 
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.instances.InstanceInstaller;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
 
 import org.xml.sax.InputSource;
@@ -49,18 +50,31 @@ public class ForgeUtils {
         }
 
     }
+
     public static String getInstallerUrl(String version) {
         return String.format(FORGE_INSTALLER_URL, version);
     }
 
-    public static void addAutoInstallArgs(Intent intent, File modInstallerJar, boolean createProfile) {
-        intent.putExtra("javaArgs", "-javaagent:"+ Tools.DIR_DATA+"/forge_installer/forge_installer.jar"
-                + (createProfile ? "=NPS" : "") + // No Profile Suppression
-                " -jar "+modInstallerJar.getAbsolutePath());
+    public static InstanceInstaller createInstaller(String gameVersion, String modLoaderVersion) throws IOException {
+        List<String> forgeVersions = ForgeUtils.downloadForgeVersions();
+        if(forgeVersions == null) return null;
+        String versionStart = gameVersion+"-"+modLoaderVersion;
+        for(String versionName : forgeVersions) {
+            if(!versionName.startsWith(versionStart)) continue;
+            return createInstaller(versionName);
+        }
+        return null;
     }
-    public static void addAutoInstallArgs(Intent intent, File modInstallerJar, String modpackFixupId) {
-        intent.putExtra("javaArgs", "-javaagent:"+ Tools.DIR_DATA+"/forge_installer/forge_installer.jar"
-                + "=\"" + modpackFixupId +"\"" +
-                " -jar "+modInstallerJar.getAbsolutePath());
+
+    public static InstanceInstaller createInstaller(String fullVersion) throws IOException {
+        String downloadUrl = getInstallerUrl(fullVersion);
+        String hash = DownloadUtils.downloadString(downloadUrl+".sha1");
+        File installerLocation = new File(Tools.DIR_CACHE, "forge-installer-"+fullVersion+".jar");
+        InstanceInstaller instanceInstaller = new InstanceInstaller();
+        instanceInstaller.commandLineArgs = "-javaagent:"+ Tools.DIR_DATA+"/forge_installer/forge_installer.jar";
+        instanceInstaller.installerJar = installerLocation.getAbsolutePath();
+        instanceInstaller.installerSha1 = hash;
+        instanceInstaller.installerDownloadUrl = downloadUrl;
+        return instanceInstaller;
     }
 }

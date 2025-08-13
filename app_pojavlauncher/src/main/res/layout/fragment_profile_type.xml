@@ -42,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/padding_large"
-            android:text="@string/create_profile_vanilla"
+            android:text="@string/create_instance_vanilla"
             android:layout_marginTop="@dimen/padding_large"
             app:layout_constraintTop_toBottomOf="@+id/view" />
 
@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/padding_large"
-            android:text="@string/create_profile_optifine"
+            android:text="@string/mod_dl_install_optifine"
             android:layout_marginTop="@dimen/padding_large"
             app:layout_constraintTop_toBottomOf="@+id/view" />
 
@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/padding_large"
             android:layout_marginTop="@dimen/padding_large"
-            android:text="@string/modloader_dl_install_fabric" />
+            android:text="@string/modloader_dl_install_fabric_instance" />
 
         <com.kdt.mcgui.MineButton
             android:id="@+id/modded_profile_quilt"
@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/padding_large"
             android:layout_marginTop="@dimen/padding_large"
-            android:text="@string/modloader_dl_install_quilt" />
+            android:text="@string/modloader_dl_install_quilt_instance" />
 
         <com.kdt.mcgui.MineButton
             android:id="@+id/modded_profile_forge"
@@ -101,7 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/padding_large"
             android:layout_marginTop="@dimen/padding_large"
-            android:text="@string/modloader_dl_install_forge" />
+            android:text="@string/modloader_dl_install_forge_instance" />
 
         <com.kdt.mcgui.MineButton
             android:id="@+id/modded_profile_modpack"
@@ -109,7 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/padding_large"
             android:layout_marginTop="@dimen/padding_large"
-            android:text="@string/modpack_install_button" />
+            android:text="@string/modpack_install_instance_button" />
 
         <com.kdt.mcgui.MineButton
             android:id="@+id/modded_profile_bta"
@@ -117,7 +117,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/padding_large"
             android:layout_marginTop="@dimen/padding_large"
-            android:text="@string/create_bta_profile" />
+            android:text="@string/create_bta_instance" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"

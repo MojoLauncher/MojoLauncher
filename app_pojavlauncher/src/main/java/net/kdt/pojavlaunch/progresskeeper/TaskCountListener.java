@@ -1,5 +1,8 @@
 package net.kdt.pojavlaunch.progresskeeper;
 
 public interface TaskCountListener {
-    void onUpdateTaskCount(int taskCount);
+    /**
+     * @return whether to remove self after this callback.
+     */
+    boolean onUpdateTaskCount(int taskCount);
 }

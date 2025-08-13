@@ -130,7 +130,7 @@ public class BitmapCropBehaviour implements CropperBehaviour{
         float vRatio =  (float)selectionRectHeight / imageHeight;
         float ratio  = Math.min (hRatio, vRatio);
         float centerShift_x = (selectionRectWidth - imageWidth*ratio) / 2;
-        float centerShift_y = (selectionRectWidth - imageHeight*ratio) / 2;
+        float centerShift_y = (selectionRectHeight - imageHeight*ratio) / 2;
         centerShift_x += mHostView.mSelectionRect.left;
         centerShift_y += mHostView.mSelectionRect.top;
         // By doing setScale() we don't have to reset() the matrix beforehand saving us a

@@ -1,83 +1,48 @@
 package net.kdt.pojavlaunch.tasks;
 
 import static net.kdt.pojavlaunch.PojavApplication.sExecutorService;
-import static net.kdt.pojavlaunch.utils.DownloadUtils.downloadString;
-
-import android.util.Log;
 
 import androidx.annotation.Nullable;
-
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.stream.JsonReader;
 
 import net.kdt.pojavlaunch.JMinecraftVersionList;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.utils.DownloadUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 
 /** Class getting the version list, and that's all really */
 public class AsyncVersionList {
+    private static final int MAX_RETRIES = 5;
 
-    public void getVersionList(@Nullable VersionDoneListener listener, boolean secondPass){
-        sExecutorService.execute(() -> {
-            File versionFile = new File(Tools.DIR_DATA + "/version_list.json");
-            JMinecraftVersionList versionList = null;
-            try{
-                if(!versionFile.exists() || (System.currentTimeMillis() > versionFile.lastModified() + 86400000 )){
-                    versionList = downloadVersionList(LauncherPreferences.PREF_VERSION_REPOS);
-                }
-            }catch (Exception e){
-                Log.e("AsyncVersionList", "Refreshing version list failed :" + e);
-                e.printStackTrace();
-            }
-
-            // Fallback when no network or not needed
-            if (versionList == null) {
-                try {
-                    versionList = Tools.GLOBAL_GSON.fromJson(new JsonReader(new FileReader(versionFile)), JMinecraftVersionList.class);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (JsonIOException | JsonSyntaxException e) {
-                    e.printStackTrace();
-                    versionFile.delete();
-                    if(!secondPass)
-                        getVersionList(listener, true);
-                }
-            }
-
-            if(listener != null)
-                listener.onVersionDone(versionList);
-        });
+    private static JMinecraftVersionList parseList(String input) throws DownloadUtils.ParseException{
+        try {
+            return Tools.GLOBAL_GSON.fromJson(input, JMinecraftVersionList.class);
+        }catch (Exception e) {
+            throw new DownloadUtils.ParseException(e);
+        }
     }
 
-
-    @SuppressWarnings("SameParameterValue")
-    private JMinecraftVersionList downloadVersionList(String mirror){
-        JMinecraftVersionList list = null;
-        try{
-            Log.i("ExtVL", "Syncing to external: " + mirror);
-            String jsonString = downloadString(mirror);
-            list = Tools.GLOBAL_GSON.fromJson(jsonString, JMinecraftVersionList.class);
-            Log.i("ExtVL","Downloaded the version list, len=" + list.versions.length);
-
-            // Then save the version list
-            //TODO make it not save at times ?
-            FileOutputStream fos = new FileOutputStream(Tools.DIR_DATA + "/version_list.json");
-            fos.write(jsonString.getBytes());
-            fos.close();
-
-
-
-        }catch (IOException e){
-            Log.e("AsyncVersionList", e.toString());
+    private void getVersionListAsync(VersionDoneListener versionDoneListener, int retries) {
+        try {
+            JMinecraftVersionList versionList = DownloadUtils.downloadStringCached(
+                    LauncherPreferences.PREF_VERSION_REPOS,
+                    "version_list",
+                    AsyncVersionList::parseList
+            );
+            if(versionDoneListener != null) versionDoneListener.onVersionDone(versionList);
+        }catch (IOException | DownloadUtils.ParseException e) {
+            if(retries < MAX_RETRIES) {
+                getVersionListAsync(versionDoneListener, retries + 1);
+            } else {
+                versionDoneListener.onVersionDone(null);
+                Tools.showErrorRemote(e);
+            }
         }
-        return list;
+    }
+
+    public void getVersionList(@Nullable VersionDoneListener listener) {
+        sExecutorService.execute(() -> getVersionListAsync(listener, 0));
     }
 
     /** Basic listener, acting as a callback */

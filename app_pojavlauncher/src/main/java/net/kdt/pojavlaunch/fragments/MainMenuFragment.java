@@ -21,10 +21,8 @@ import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
-import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.instances.InstanceManager;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
-import net.kdt.pojavlaunch.value.launcherprofiles.LauncherProfiles;
-import net.kdt.pojavlaunch.value.launcherprofiles.MinecraftProfile;
 
 import java.io.File;
 
@@ -74,18 +72,13 @@ public class MainMenuFragment extends Fragment {
     }
 
     private File getCurrentProfileDirectory() {
-        String currentProfile = LauncherPreferences.DEFAULT_PREF.getString(LauncherPreferences.PREF_KEY_CURRENT_PROFILE, null);
-        if(!Tools.isValidString(currentProfile)) return new File(Tools.DIR_GAME_NEW);
-        LauncherProfiles.load();
-        MinecraftProfile profileObject = LauncherProfiles.mainProfileJson.profiles.get(currentProfile);
-        if(profileObject == null) return new File(Tools.DIR_GAME_NEW);
-        return Tools.getGameDirPath(profileObject);
+        return InstanceManager.getSelectedListedInstance().getGameDirectory();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mVersionSpinner.reloadProfiles();
+        ExtraCore.setValue(ExtraConstants.REFRESH_ACCOUNT_SPINNER, true);
     }
 
     private void runInstallerWithConfirmation(boolean isCustomArgs) {

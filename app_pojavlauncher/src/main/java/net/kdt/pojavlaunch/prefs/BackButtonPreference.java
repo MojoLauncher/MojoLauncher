@@ -24,7 +24,7 @@ public class BackButtonPreference extends Preference {
             setTitle(R.string.preference_back_title);
         }
         if(getIcon() == null){
-            setIcon(R.drawable.ic_arrow_back_white);
+            setIcon(R.drawable.ic_px_arrow_left);
         }
     }
 

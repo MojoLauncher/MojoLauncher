@@ -2,6 +2,7 @@ package net.kdt.pojavlaunch.progresskeeper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public class ProgressKeeper {
@@ -16,11 +17,10 @@ public class ProgressKeeper {
         if(shouldCallEnded) {
             shouldCallStarted = false;
             sProgressStates.remove(progressRecord);
-            updateTaskCount();
         }else if(shouldCallStarted){
             sProgressStates.put(progressRecord, (progressState = new ProgressState()));
-            updateTaskCount();
         }
+        if(shouldCallEnded || shouldCallStarted) updateTaskCount(sProgressStates.size());
         if(progressState != null) {
             progressState.progress = progress;
             progressState.resid = resid;
@@ -36,10 +36,12 @@ public class ProgressKeeper {
             }
     }
 
-    private static synchronized void updateTaskCount() {
-        int count = sProgressStates.size();
-        for(TaskCountListener listener : sTaskCountListeners) {
-            listener.onUpdateTaskCount(count);
+    private static void updateTaskCount(int count) {
+        synchronized (sTaskCountListeners) {
+            Iterator<TaskCountListener> iterator = sTaskCountListeners.iterator();
+            while(iterator.hasNext()) {
+                if(iterator.next().onUpdateTaskCount(count)) iterator.remove();
+            }
         }
     }
 
@@ -61,16 +63,21 @@ public class ProgressKeeper {
         if(listenerWeakReferenceList != null) listenerWeakReferenceList.remove(listener);
     }
 
-    public static synchronized void addTaskCountListener(TaskCountListener listener) {
-        listener.onUpdateTaskCount(sProgressStates.size());
-        if(!sTaskCountListeners.contains(listener)) sTaskCountListeners.add(listener);
+    public static void addTaskCountListener(TaskCountListener listener) {
+        addTaskCountListener(listener, true);
     }
-    public static synchronized void addTaskCountListener(TaskCountListener listener, boolean runUpdate) {
-        if(runUpdate) listener.onUpdateTaskCount(sProgressStates.size());
-        if(!sTaskCountListeners.contains(listener)) sTaskCountListeners.add(listener);
+    public static void addTaskCountListener(TaskCountListener listener, boolean runUpdate) {
+        if(runUpdate) synchronized (ProgressKeeper.class) {
+            listener.onUpdateTaskCount(sProgressStates.size());
+        }
+        synchronized (sTaskCountListeners) {
+            if(!sTaskCountListeners.contains(listener)) sTaskCountListeners.add(listener);
+        }
     }
-    public static synchronized void removeTaskCountListener(TaskCountListener listener) {
-        sTaskCountListeners.remove(listener);
+    public static void removeTaskCountListener(TaskCountListener listener) {
+        synchronized (sTaskCountListeners) {
+            sTaskCountListeners.remove(listener);
+        }
     }
 
     /**
@@ -85,14 +92,12 @@ public class ProgressKeeper {
             runnable.run();
             return;
         }
-        TaskCountListener listener = new TaskCountListener() {
-            @Override
-            public void onUpdateTaskCount(int taskCount) {
-                if(taskCount == 0) {
-                    runnable.run();
-                    removeTaskCountListener(this);
-                }
+        TaskCountListener listener = taskCount -> {
+            if(taskCount == 0) {
+                runnable.run();
+                return true;
             }
+            return false;
         };
         addTaskCountListener(listener);
     }

@@ -193,7 +193,7 @@
     <string name="arc_capes_title">شنل های Cosmetica</string>
     <string name="arc_capes_desc">شنل های Cosmetica (قبلاً Arc) را فعال می کند. برای اطلاعات بیشتر لطفاً به https://cosmetica.cc مراجعه کنید. به OptiFine نیاز دارد.</string>
     <string name="notif_channel_name">عمومی</string>
-    <string name="lazy_service_default_title">سرویس پیش‌زمینه Pojav</string>
+    <string name="lazy_service_default_title">سرویس پیش‌زمینه Mojo</string>
     <string name="mcl_setting_veroption_installed">نصب شد</string>
     <string name="use_global_default">(از پیش‌فرض استفاده کنید)</string>
     <string name="progresslayout_tasks_in_progress">%d وظیفه در حال انجام</string>
@@ -222,17 +222,12 @@
     <string name="fabric_dl_game_version">ورژن ماینکرفت</string>
     <string name="fabric_dl_install">نصب</string>
     <string name="fabric_dl_cant_read_meta">موفق به خواندن %s لودر metadata نشدیم. لطفاً دوباره تلاش کنید.</string>
-    <string name="modloader_dl_install_fabric">ساختن پروفایل Fabric</string>
-    <string name="modloader_dl_install_quilt">ساختن پروفایل Quilt</string>
-    <string name="modloader_dl_install_forge">ساختن پروفایل Forge</string>
-    <string name="create_profile_vanilla">ساختن پروفایل Vanilla</string>
     <string name="create_profile_vanilla_like_versions">نسخه های شبیه Vanilla</string>
     <string name="create_profile_modded_versions">نسخه های سفارشی</string>
     <string name="fabric_dl_loader_title">انتخاب نسخه ها</string>
     <string name="of_dl_select_version">نسخه OptiFine را انتخاب کنید</string>
     <string name="of_dl_failed_to_scrape">ناموفق در دریافت اطلاعات برای نصب OptiFine</string>
     <string name="of_dl_progress">در حال دانلود %s</string>
-    <string name="create_profile_optifine">ساختن پروفایل OptiFine</string>
     <string name="hint_search_modpack">گشتن به دنبال مادپک ها</string>
     <string name="preference_vulkan_driver_system_title">استفاده از Vulkan درایور دستگاه</string>
     <string name="preference_vulkan_driver_system_description">اجبار لانچر برای استفاده از Vulkan درایور دستگاه به جای Turnip در GPU های Adreno. فقط بر Zink و ماد هایی که از Vulkan استفاده میکنند اثر دارد.</string>
@@ -251,7 +246,6 @@
     <string name="modpack_install_notification_data_not_available">ناموفق در دانلود اطلاعات اجرا کننده ماد</string>
     <string name="modpack_install_modloader_download_failed">ناموفق در دانلود فایل‌های اجراکننده ماد</string>
     <string name="modpack_install_download_failed">ناموفق در دانلود فایل‌های مادپک</string>
-    <string name="modpack_install_button">ساختن پروفایل مادپک</string>
     <string name="notif_error_occured">مشکلی پیش آمد</string>
     <string name="notif_error_occured_desc">برای اطلاعات بیشتر کلیک کنید</string>
     <string name="fabric_dl_only_stable">فقط نسخه های پایدار را نشان بده</string>

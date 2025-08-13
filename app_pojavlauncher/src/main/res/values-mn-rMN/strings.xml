@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">Pojav Эхлүүлэгч (Minecraft: Java Edition-ийг Гар утсан дээр)</string>
-    <string name="app_short_name">Pojavlauncher</string>
+    <string name="app_name">Mojo Эхлүүлэгч (Minecraft: Java Edition-ийг Гар утсан дээр)</string>
+    <string name="app_short_name">Mojolauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -13,7 +13,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Татах гэж буй client, mod-ийнхаа .jar file-ийг сонгоно уу.</string>
     <!-- Error messages -->
-    <string name="error_fatal">Pojav эхлүүлэгчэд гэнэт алдаа гарлаа</string>
+    <string name="error_fatal">Mojo эхлүүлэгчэд гэнэт алдаа гарлаа</string>
     <string name="error_no_version">Хувилбар сонгоогүй</string>
     <string name="error_show_more">Бүгдийн харуулах</string>
     <string name="error_show_less">Бүгдийн нуух</string>

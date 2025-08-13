@@ -8,7 +8,7 @@
     <Preference
         android:title="@string/preference_edit_controls_title"
         android:summary="@string/preference_edit_controls_summary"
-        app2:icon="@drawable/ic_menu_custom_controls"
+        app2:icon="@drawable/ic_px_gamepad"
         >
         <intent android:targetPackage="@string/application_package" android:targetClass="net.kdt.pojavlaunch.CustomControlsActivity" android:action=".CustomControlsActivity"/>
     </Preference>
@@ -18,7 +18,7 @@
 
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
-            android:icon="@drawable/ic_setting_gesture_disable"
+            android:icon="@drawable/ic_px_nogestures"
             android:key="disableGestures"
             android:summary="@string/mcl_disable_gestures_subtitle"
             android:title="@string/mcl_disable_gestures" />
@@ -38,7 +38,7 @@
             app2:min="@integer/gesture_delay_seekbar_min"
             android:max="@integer/gesture_delay_seekbar_max"
             app2:seekBarIncrement="@integer/gesture_delay_seekbar_increment"
-            android:icon="@drawable/ic_setting_gesture_time"
+            android:icon="@drawable/ic_px_gestures"
             />
 
     </PreferenceCategory>
@@ -55,7 +55,7 @@
             app2:min="@integer/button_scale_seekbar_min"
             android:max="@integer/button_scale_seekbar_max"
             app2:seekBarIncrement="@integer/button_scale_seekbar_increment"
-            android:icon="@drawable/ic_setting_control_scale"
+            android:icon="@drawable/ic_px_control_size"
             />
         <SwitchPreference
             android:key="buttonAllCaps"
@@ -79,14 +79,14 @@
             android:max="@integer/mouse_scale_seekbar_max"
             app2:seekBarIncrement="@integer/mouse_scale_seekbar_increment"
             app2:showSeekBarValue="true"
-            android:icon="@drawable/ic_setting_pointer_scale"
+            android:icon="@drawable/ic_px_mouse"
             />
 
         <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
             android:key="mousespeed"
             android:summary="@string/mcl_setting_subtitle_mousespeed"
             android:title="@string/mcl_setting_title_mousespeed"
-            android:icon="@drawable/ic_setting_mouse_speed"
+            android:icon="@drawable/ic_px_speed"
             app2:selectable="false"
             app2:min="@integer/mouse_speed_seekbar_min"
             android:max="@integer/mouse_speed_seekbar_max"

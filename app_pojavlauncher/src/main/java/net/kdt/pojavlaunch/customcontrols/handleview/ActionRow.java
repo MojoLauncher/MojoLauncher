@@ -1,7 +1,5 @@
 package net.kdt.pojavlaunch.customcontrols.handleview;
 
-import static net.kdt.pojavlaunch.Tools.currentDisplayMetrics;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
@@ -111,7 +109,7 @@ public class ActionRow extends LinearLayout {
         if(mFollowedView == null) return;
         int side = pickSide();
 
-        setX(MathUtils.clamp(getXPosition(side), 0, currentDisplayMetrics.widthPixels - getWidth()));
+        setX(MathUtils.clamp(getXPosition(side), 0, ((ViewGroup) getParent()).getWidth() - getWidth()));
         setY(getYPosition(side));
     }
 

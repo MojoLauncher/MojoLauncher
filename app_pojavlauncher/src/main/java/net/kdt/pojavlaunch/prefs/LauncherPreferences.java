@@ -22,7 +22,7 @@ import java.io.IOException;
 import git.artdeell.mojo.R;
 
 public class LauncherPreferences {
-    public static final String PREF_KEY_CURRENT_PROFILE = "currentProfile";
+    public static final String PREF_KEY_CURRENT_INSTANCE = "currentInstance";
     public static final String PREF_KEY_SKIP_NOTIFICATION_CHECK = "skipNotificationPermissionCheck";
 
     public static SharedPreferences DEFAULT_PREF;
@@ -195,9 +195,9 @@ public class LauncherPreferences {
         return false;
     }
 
-    /** Compute the notch size to avoid being out of bounds */
-    public static void computeNotchSize(Activity activity) {
-        if (Build.VERSION.SDK_INT < P) return;
+    /** Check if the device has a display cutout */
+    public static boolean hasNotch(Activity activity) {
+        if (Build.VERSION.SDK_INT < P) return false;
         try {
             final Rect cutout;
             if(SDK_INT >= Build.VERSION_CODES.S){
@@ -205,17 +205,10 @@ public class LauncherPreferences {
             } else {
                 cutout = activity.getWindow().getDecorView().getRootWindowInsets().getDisplayCutout().getBoundingRects().get(0);
             }
-
-            // Notch values are rotation sensitive, handle all cases
-            int orientation = activity.getResources().getConfiguration().orientation;
-            if (orientation == Configuration.ORIENTATION_PORTRAIT) LauncherPreferences.PREF_NOTCH_SIZE = cutout.height();
-            else if (orientation == Configuration.ORIENTATION_LANDSCAPE) LauncherPreferences.PREF_NOTCH_SIZE = cutout.width();
-            else LauncherPreferences.PREF_NOTCH_SIZE = Math.min(cutout.width(), cutout.height());
-
+            return cutout.width() != 0 || cutout.height() != 0;
         }catch (Exception e){
             Log.i("NOTCH DETECTION", "No notch detected, or the device if in split screen mode");
-            LauncherPreferences.PREF_NOTCH_SIZE = -1;
+            return false;
         }
-        Tools.updateWindowSize(activity);
     }
 }

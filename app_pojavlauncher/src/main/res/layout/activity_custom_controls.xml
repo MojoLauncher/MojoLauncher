@@ -5,7 +5,8 @@
 	android:layout_height="match_parent"
 	android:layout_width="match_parent"
 	android:layout_alignParentRight="true"
-	android:id="@+id/customctrl_drawerlayout">
+	android:id="@+id/customctrl_drawerlayout"
+	android:background="@color/background_status_bar">
 
 
 	<androidx.constraintlayout.widget.ConstraintLayout

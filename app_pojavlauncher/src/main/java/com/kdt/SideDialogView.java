@@ -1,6 +1,5 @@
 package com.kdt;
 
-import static net.kdt.pojavlaunch.Tools.currentDisplayMetrics;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -161,10 +160,11 @@ public abstract class SideDialogView {
 
         // To avoid UI sizing issue when the dialog is not fully inflated
         onAppear();
+        ViewGroup parent = getParent();
         Tools.runOnUiThread(() -> {
             if (fromRight) {
                 if (!mDisplaying || !isAtRight()) {
-                    mSideDialogAnimator.setFloatValues(currentDisplayMetrics.widthPixels, currentDisplayMetrics.widthPixels - mScrollView.getWidth() - mMargin);
+                    mSideDialogAnimator.setFloatValues(parent.getWidth(), parent.getWidth() - mScrollView.getWidth() - mMargin);
                     mSideDialogAnimator.start();
                     mDisplaying = true;
                 }
@@ -179,7 +179,7 @@ public abstract class SideDialogView {
     }
 
     protected final boolean isAtRight() {
-        return mDialogLayout.getX() > currentDisplayMetrics.widthPixels / 2f;
+        return mDialogLayout.getX() > getParent().getWidth() / 2f;
     }
 
     /**
@@ -205,7 +205,7 @@ public abstract class SideDialogView {
 
         mDisplaying = false;
         if (isAtRight())
-            mSideDialogAnimator.setFloatValues(currentDisplayMetrics.widthPixels - mDialogLayout.getWidth() - mMargin, currentDisplayMetrics.widthPixels);
+            mSideDialogAnimator.setFloatValues(getParent().getWidth() - mDialogLayout.getWidth() - mMargin, getParent().getWidth());
         else
             mSideDialogAnimator.setFloatValues(mMargin, -mDialogLayout.getWidth());
 
@@ -221,6 +221,10 @@ public abstract class SideDialogView {
         }
 
         mSideDialogAnimator.start();
+    }
+
+    private ViewGroup getParent() {
+        return (ViewGroup) mDialogLayout.getParent();
     }
 
     /** @return Whether the dialog is currently displaying */

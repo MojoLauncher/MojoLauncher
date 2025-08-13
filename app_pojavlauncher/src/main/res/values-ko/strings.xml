@@ -204,7 +204,7 @@
 더 많은 정보를 위해 https://cosmetica.cc 를 방문해주세요.
 옵티파인이 필요합니다.</string>
     <string name="notif_channel_name">일반</string>
-    <string name="lazy_service_default_title">Pojav 포그라운드 서비스</string>
+    <string name="lazy_service_default_title">Mojo 포그라운드 서비스</string>
     <string name="mcl_setting_veroption_installed">이미 설치되어 있는 버전입니다.</string>
     <string name="use_global_default">(글로벌 기본값 사용)</string>
     <string name="default_control">기본 조작</string>
@@ -235,7 +235,7 @@
     <string name="preference_gyro_sample_rate_title">자이로스코프 샘플링 속도</string>
     <string name="preference_gyro_sample_rate_description">자이로스코프 컨트롤을 사용할때 성능 문제가 발생한다면 이것을 높이세요.</string>
     <string name="microsoft_login_retry_later">요청이 너무 많습니다. 잠시후 다시 시도해 주세요.</string>
-    <string name="storage_required">PojavLuancher를 사용하려면 외부 저장소를 연결해야합니다. 다시 연결한 후 앱을 다시 시작하세요.</string>
+    <string name="storage_required">MojoLuancher를 사용하려면 외부 저장소를 연결해야합니다. 다시 연결한 후 앱을 다시 시작하세요.</string>
     <string name="mcl_setting_title_buttonallcaps">컨트롤 버튼 문자에 대문자만 사용</string>
     <string name="mcl_setting_subtitle_buttonallcaps">컨트롤 버튼 문자에 소문자를 사용하려면 이것을 비활성화하세요.</string>
     <string name="create_profile">새 프로필 생성</string>
@@ -267,17 +267,12 @@
     <string name="fabric_dl_game_version">마인크래프트 버전</string>
     <string name="fabric_dl_install">설치</string>
     <string name="fabric_dl_cant_read_meta">%s 메타데이터 읽기 실패. 나중에 다시 시도하십시오.</string>
-    <string name="modloader_dl_install_fabric">Fabric 프로필 생성</string>
-    <string name="modloader_dl_install_quilt">Quilt 프로필 생성</string>
-    <string name="modloader_dl_install_forge">Forge 프로필 생성</string>
-    <string name="create_profile_vanilla">바닐라 프로필 생성</string>
     <string name="create_profile_vanilla_like_versions">바닐라와 비슷한 버전</string>
     <string name="create_profile_modded_versions">수정된 버전</string>
     <string name="fabric_dl_loader_title">버전 선택</string>
     <string name="of_dl_select_version">OptiFine 버전 선택</string>
     <string name="of_dl_failed_to_scrape">OptiFine 설치 정보 수집 실패</string>
     <string name="of_dl_progress">%s 다운로드 중</string>
-    <string name="create_profile_optifine">OptiFine 프로필 생성</string>
     <string name="hint_search_modpack">모드팩 검색</string>
     <string name="preference_vulkan_driver_system_title">시스템 Vulkan 드라이버 사용</string>
     <string name="preference_vulkan_driver_system_description">런처가 Adreno GPU에서 Turnip 대신 시스템 Vulkan 드라이버를 사용하도록 강제합니다. Vulkan을 사용하는 Zink 및 모드에서만 영향을 미칩니다.</string>
@@ -296,7 +291,6 @@
     <string name="modpack_install_notification_data_not_available">모드 로더 정보 다운로드 실패</string>
     <string name="modpack_install_modloader_download_failed">모드 로더 파일 다운로드 실패</string>
     <string name="modpack_install_download_failed">모드팩 파일 다운로드에 실패하였습니다</string>
-    <string name="modpack_install_button">모드팩 프로필 생성</string>
     <string name="notif_error_occured">오류가 발생하였습니다.</string>
     <string name="notif_error_occured_desc">클릭하여 상세 정보 보기</string>
     <string name="fabric_dl_only_stable">정식 버전만 표시</string>
@@ -321,7 +315,7 @@
     <string name="preference_category_miscellaneous">기타 설정</string>
     <string name="preference_category_video">비디오 설정</string>
     <string name="notification_permission_dialog_title">권한 요청</string>
-    <string name="notification_permission_dialog_text">PojavLuancher는 앱을 종료할 때 게임/모드팩 다운로드가 중지되는 것을 방지하기 위해 알림을 게시할 수 있는 권한이 필요합니다. 이 권한이 없으면 MojoLauncher를 백그라운드 모드로 전환할 때 Android에서 다운로드를 종료할 수 있습니다.</string>
+    <string name="notification_permission_dialog_text">MojoLuancher는 앱을 종료할 때 게임/모드팩 다운로드가 중지되는 것을 방지하기 위해 알림을 게시할 수 있는 권한이 필요합니다. 이 권한이 없으면 MojoLauncher를 백그라운드 모드로 전환할 때 Android에서 다운로드를 종료할 수 있습니다.</string>
     <string name="notification_permission_toast">추후에 설정에서 언제든지 변경 가능합니다</string>
     <string name="preference_ask_for_notification_title">알람 허용</string>
     <string name="preference_ask_for_notification_description">게임/모드팩 백그라운드 다운로드가 제대로 작동하는 데 필요한 알림 권한을 다시 요청하려면 클릭하세요.</string>

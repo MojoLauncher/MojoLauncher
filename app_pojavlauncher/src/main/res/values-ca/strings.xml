@@ -149,7 +149,7 @@
     <string name="arc_capes_title">Capes de Cosmetica</string>
     <string name="arc_capes_desc">Activa les capes de Cosmetica (anteriorment Arc). Per a més informació visiteu https://cosmetica.cc. Requereix l\'OptiFine.</string>
     <string name="notif_channel_name">General</string>
-    <string name="lazy_service_default_title">Servei de primer plà del Pojav</string>
+    <string name="lazy_service_default_title">Servei de primer plà del Mojo</string>
     <string name="use_global_default">(Usa el valor global per defecte)</string>
     <string name="default_control">Mapa de control per defecte</string>
     <string name="progresslayout_tasks_in_progress">%d tasques en procés</string>
@@ -183,12 +183,11 @@
     <string name="generic_debug">Debug</string>
     <string name="modpack_download_downloading_mods_fc">Baixant mods (Fitxer %d de %d)</string>
     <string name="modpack_download_applying_overrides">Aplicant anul·lacions (%d/%d)</string>
-    <string name="modpack_install_notification_title">Instal·lador de Modpacks del Pojav</string>
+    <string name="modpack_install_notification_title">Instal·lador de Modpacks del Mojo</string>
     <string name="modpack_install_notification_success">Prem ací per acabar la instal·lació del modpack</string>
     <string name="modpack_install_notification_data_not_available">No s\'ha pogut baixar la informació del carregador de mods</string>
     <string name="modpack_install_modloader_download_failed">No s\'ha pogut baixar els fitxers del carregador de mods</string>
     <string name="modpack_install_download_failed">No s\'han pogut baixar els fitxers del modpack</string>
-    <string name="modpack_install_button">Crear perfil de modpack</string>
     <string name="notif_error_occured">Ha ocorregut un error</string>
     <string name="notif_error_occured_desc">Prem per veure més detalls</string>
     <string name="fabric_dl_only_stable">Mostra només versions estables</string>

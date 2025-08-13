@@ -1,23 +1,21 @@
 package net.kdt.pojavlaunch.modloaders;
 
-import android.util.Base64;
-import android.util.Base64OutputStream;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.kdt.mcgui.ProgressLayout;
 
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.instances.Instance;
+import net.kdt.pojavlaunch.instances.InstanceManager;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
-import net.kdt.pojavlaunch.utils.DownloadUtils;
 import net.kdt.pojavlaunch.utils.FileUtils;
-import net.kdt.pojavlaunch.value.launcherprofiles.LauncherProfiles;
-import net.kdt.pojavlaunch.value.launcherprofiles.MinecraftProfile;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.net.URL;
 
 public class BTADownloadTask implements Runnable {
     private static final String BASE_JSON = "{\"inheritsFrom\":\"b1.7.3\",\"mainClass\":\"net.minecraft.client.Minecraft\",\"libraries\":[{\"name\":\"bta-client:bta-client:%1$s\",\"downloads\":{\"artifact\":{\"path\":\"bta-client/bta-client-%1$s.jar\",\"url\":\"%2$s\"}}}],\"id\":\"%3$s\"}";
@@ -41,24 +39,13 @@ public class BTADownloadTask implements Runnable {
         ProgressLayout.clearProgress(ProgressLayout.INSTALL_MODPACK);
     }
 
-    private String tryDownloadIcon() {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        try (Base64OutputStream base64OutputStream = new Base64OutputStream(byteArrayOutputStream, Base64.DEFAULT)){
-            // Instead of appending and wasting memory with a StringBuilder, just write the prefix
-            // to the stream before the base64 icon data.
-            byteArrayOutputStream.write("data:image/png;base64,".getBytes(StandardCharsets.US_ASCII));
-            DownloadUtils.download(mBtaVersion.iconUrl, base64OutputStream);
-            return new String(byteArrayOutputStream.toByteArray(), StandardCharsets.US_ASCII);
+    private void tryDownloadIcon(Instance targetInstance) {
+        try {
+            Bitmap iconBitmap = BitmapFactory.decodeStream(new URL(mBtaVersion.iconUrl).openStream());
+            targetInstance.encodeNewIcon(iconBitmap);
         }catch (IOException e) {
-            Log.w("BTADownloadTask", "Failed to download base64 icon", e);
-        }finally {
-            try {
-                byteArrayOutputStream.close();
-            } catch (IOException e) {
-                Log.wtf("BTADownloadTask", "Failed to close a byte array stream??", e);
-            }
+            Log.w("BTADownloadTask", "Failed to download bta icon", e);
         }
-        return null;
     }
 
     private void createJson(String btaVersionId) throws IOException {
@@ -79,15 +66,11 @@ public class BTADownloadTask implements Runnable {
     }
 
     private void createProfile(String btaVersionId) throws IOException {
-        LauncherProfiles.load();
-        MinecraftProfile btaProfile = new MinecraftProfile();
-        btaProfile.lastVersionId = btaVersionId;
-        btaProfile.name = "Better than Adventure!";
-        // Allows for smooth upgrades
-        btaProfile.gameDir = "./custom_instances/better_than_adventure";
-        btaProfile.icon = tryDownloadIcon();
-        LauncherProfiles.insertMinecraftProfile(btaProfile);
-        LauncherProfiles.write();
+        Instance instance = InstanceManager.createInstance(i -> {
+            i.versionId = btaVersionId;
+            i.name = "Better than Adventure!";
+        }, "BTA-"+btaVersionId);
+        tryDownloadIcon(instance);
     }
 
     public void runCatching() throws IOException {

@@ -4,6 +4,8 @@ fov:0.0
 gamma:0.5070422
 saturation:0.0
 renderDistance:2
+simulationDistance:5
+renderClouds:"fast"
 guiScale:3
 particles:1
 bobView:false
@@ -17,7 +19,6 @@ ao:0
 clouds:true
 resourcePacks:[]
 lastServer:
-lang:en_US
 chatVisibility:0
 chatColors:true
 chatLinks:true

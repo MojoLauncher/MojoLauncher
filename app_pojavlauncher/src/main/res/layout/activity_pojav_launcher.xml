@@ -6,22 +6,25 @@
     android:layout_height="match_parent"
     android:background="@android:color/transparent">
 
-    <com.kdt.mcgui.mcAccountSpinner
+    <com.kdt.mcgui.AccountSpinner
         android:id="@+id/account_spinner"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_52sdp"
 
         android:dropDownWidth="@dimen/_250sdp"
         android:dropDownVerticalOffset="@dimen/_52sdp"
+        android:paddingEnd="@dimen/_52sdp"
 
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RtlSymmetry" />
+    <!-- Ignore because it's  done to fit the ImageButton within spinner background -->
 
     <ImageButton
         android:id="@+id/setting_button"
         android:layout_width="@dimen/_52sdp"
         android:layout_height="@dimen/_52sdp"
         android:background="?attr/selectableItemBackground"
-        android:src="@drawable/ic_menu_settings"
+        android:src="@drawable/ic_px_sliders"
         android:scaleType="fitCenter"
         android:paddingVertical="@dimen/_8sdp"
 

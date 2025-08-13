@@ -76,7 +76,7 @@ public class DownloadMirror {
      * @param urlInput The original (Mojang) URL for the download
      * @return the length of the file denoted by the URL in bytes, or -1 if not available
      */
-    public static long getContentLengthMirrored(int downloadClass, String urlInput) throws IOException {
+    public static long getContentLengthMirrored(int downloadClass, String urlInput) throws MalformedURLException {
         long length = DownloadUtils.getContentLength(getMirrorMapping(downloadClass, urlInput));
         if(length < 1) {
             Log.w("DownloadMirror", "Unable to get content length from mirror");

@@ -8,10 +8,12 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import net.kdt.pojavlaunch.Tools;
@@ -26,6 +28,7 @@ public class CropperView extends View {
     private float mHighlightThickness;
     private float mLastDistance = -1f;
     private float mSelectionPadding;
+    private float mAspectRatio = 1f; // w/h
     private int mLastTrackedPointer;
     private Paint mSelectionPaint;
     private CropperBehaviour mCropperBehaviour = CropperBehaviour.DUMMY;
@@ -44,6 +47,11 @@ public class CropperView extends View {
         super(context, attrs, defStyleAttr);
         init();
     }
+
+    public void setAspectRatio(float ratio) {
+        mAspectRatio = ratio;
+    }
+
     protected void init() {
         setBackground(new CheckerboardDrawable.Builder().build());
         mSelectionPadding = Tools.dpToPx(24);
@@ -72,6 +80,14 @@ public class CropperView extends View {
             if(mLastDistance != -1) {
                 float distanceDelta = distance - mLastDistance;
                 float multiplier = 0.005f;
+                if(horizontalLock) {
+                    x1 = mSelectionRect.left;
+                    x2 = mSelectionRect.right;
+                }
+                if(verticalLock) {
+                    y1 = mSelectionRect.top;
+                    y2 = mSelectionRect.bottom;
+                }
                 float midpointX = (x1 + x2) / 2;
                 float midpointY = (y1 + y2) / 2;
                 mCropperBehaviour.zoom(1 + distanceDelta * multiplier, midpointX, midpointY);
@@ -118,7 +134,7 @@ public class CropperView extends View {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
         canvas.save();
         mCropperBehaviour.drawPreHighlight(canvas);
@@ -144,12 +160,23 @@ public class CropperView extends View {
         super.onSizeChanged(w, h, oldW, oldH);
         int lesserDimension = (int)(Math.min(w, h) - mSelectionPadding);
         // Calculate the corners of the new selection frame. It should always appear at the center of the view.
+        // Accounts for the aspect ratio.
+        int targetWidth = lesserDimension;
         int centerShiftX = (w - lesserDimension) / 2;
+        int targetHeight = lesserDimension;
         int centerShiftY = (h - lesserDimension) / 2;
+        if(mAspectRatio < 1) {
+            targetWidth = (int)(lesserDimension * mAspectRatio);
+            centerShiftX = (w - targetWidth) / 2;
+        }else if(mAspectRatio > 1) {
+            targetHeight = (int)(lesserDimension * (1f / mAspectRatio));
+            centerShiftY = (h - targetHeight) / 2;
+        }
+
         mSelectionRect.left = centerShiftX;
         mSelectionRect.top = centerShiftY;
-        mSelectionRect.right = centerShiftX + lesserDimension;
-        mSelectionRect.bottom = centerShiftY + lesserDimension;
+        mSelectionRect.right = centerShiftX + targetWidth;
+        mSelectionRect.bottom = centerShiftY + targetHeight;
         mCropperBehaviour.onSelectionRectUpdated();
         // Adjust the selection highlight rectangle to be bigger than the selection area
         // by the highlight thickness, to make sure that the entire inside of the selection highlight

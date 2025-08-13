@@ -30,7 +30,6 @@ public class CallbackBridge {
     public static final int CLIPBOARD_OPEN = 2002;
     
     public static volatile int windowWidth, windowHeight;
-    public static volatile int physicalWidth, physicalHeight;
     public static float mouseX, mouseY;
     public volatile static boolean holdingAlt, holdingCapslock, holdingCtrl,
             holdingNumlock, holdingShift;

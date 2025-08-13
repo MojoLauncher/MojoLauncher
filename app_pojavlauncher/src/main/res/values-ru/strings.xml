@@ -117,7 +117,9 @@
     <string name="customctrl_size">Размер</string>
     <string name="customctrl_mapping">Клавиши</string>
     <string name="customctrl_orientation">Сторона разворота</string>
+    <string name="customctrl_background_bitmap">Фоновое изображение</string>
     <string name="customctrl_background_color">Цвет фона</string>
+    <string name="customctrl_background_color_warning">Изменение цвета фона сбросит фоновое изображение</string>
     <string name="customctrl_corner_radius">Радиус скругления</string>
     <string name="customctrl_stroke_width">Ширина контура</string>
     <string name="customctrl_stroke_color">Цвет контура</string>
@@ -200,13 +202,16 @@
     <string name="profiles_latest_release">Последний релиз</string>
     <string name="profiles_profile_name">Имя</string>
     <string name="profiles_profile_version">Версия</string>
+    <string name="instance_shared_data">Обьединение данных (нажмите для переключения)</string>
+    <string name="instance_shared_data_on">Хранить данные игры в общей папке</string>
+    <string name="instance_shared_data_off">Хранить данные игры в папке установки</string>
     <string name="global_delete">Удалить</string>
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Визуализатор</string>
     <string name="arc_capes_title">Плащи Cosmetica</string>
     <string name="arc_capes_desc">Включает плащи от Cosmetica (ранее Arc). Для получения дополнительной информации посетите https://cosmetica.cc. Требуется OptiFine.</string>
     <string name="notif_channel_name">Общее</string>
-    <string name="lazy_service_default_title">Активная служба Pojav</string>
+    <string name="lazy_service_default_title">Активная служба Mojo</string>
     <string name="mcl_setting_veroption_installed">Установленные</string>
     <string name="use_global_default">(Как везде)</string>
     <string name="default_control">Раскладка управления</string>
@@ -240,6 +245,7 @@
     <string name="mcl_setting_title_buttonallcaps">Заглавные буквы на кнопках</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Отключите, если хотите использовать строчные буквы в своей раскладке управления.</string>
     <string name="create_profile">Новый профиль</string>
+    <string name="create_instance">Создать новую установку</string>
     <string name="preference_shader_dump_title">Сохранять дамп шейдеров</string>
     <string name="preference_shader_dump_description">Записывать в файл журнала данные о конвертации шейдеров.</string>
     <string name="percent_format">%d %%</string>
@@ -269,17 +275,14 @@
     <string name="fabric_dl_game_version">Версия игры</string>
     <string name="fabric_dl_install">Установить</string>
     <string name="fabric_dl_cant_read_meta">Не удалось прочитать метаданные %s. Повторите попытку позже.</string>
-    <string name="modloader_dl_install_fabric">Версия с Fabric</string>
-    <string name="modloader_dl_install_quilt">Версия с Quilt</string>
-    <string name="modloader_dl_install_forge">Версия с Forge</string>
-    <string name="create_profile_vanilla">Немодифицированная версия</string>
+    <string name="create_instance_vanilla">Немодифицированная версия</string>
     <string name="create_profile_vanilla_like_versions">Стандартные версии</string>
     <string name="create_profile_modded_versions">Загрузчики модов</string>
     <string name="fabric_dl_loader_title">Выбор версий</string>
     <string name="of_dl_select_version">Выбор версии OptiFine</string>
     <string name="of_dl_failed_to_scrape">Не удалось собрать данные для установки OptiFine.</string>
     <string name="of_dl_progress">Загрузка %s</string>
-    <string name="create_profile_optifine">Версия с OptiFine</string>
+    <string name="mod_dl_install_optifine">Установить OptiFine</string>
     <string name="hint_search_modpack">Поиск сборок</string>
     <string name="preference_vulkan_driver_system_title">Системный драйвер Vulkan</string>
     <string name="preference_vulkan_driver_system_description">Принудительно использовать системный Vulkan вместо драйвера Turnip на графике Adreno. Повлияет только на Zink и моды, напрямую использующие Vulkan.</string>
@@ -298,7 +301,7 @@
     <string name="modpack_install_notification_data_not_available">Не удалось загрузить информацию о загрузчике модов</string>
     <string name="modpack_install_modloader_download_failed">Не удалось загрузить файлы загрузчика модов</string>
     <string name="modpack_install_download_failed">Не удалось загрузить файлы сборки</string>
-    <string name="modpack_install_button">Сборка модов</string>
+    <string name="modpack_install_instance_button">Установка со сборкой модов</string>
     <string name="notif_error_occured">Возникла ошибка</string>
     <string name="notif_error_occured_desc">Нажмите для получения дополнительных сведений</string>
     <string name="fabric_dl_only_stable">Только стабильные версии</string>
@@ -381,4 +384,15 @@
     <string name="local_login_bad_username_title">Неподходящее имя пользователя</string>
     <string name="local_login_bad_username_text">Имя пользователя должно быть от 3 до 16 символов в длину и содержать только латинские символы, цифры 0–9 или нижние подчёркивания.</string>
     <string name="quick_setting_title">Быстрые настройки</string>
+    <string name="create_bta_instance">Создать установку \"Better than Adventure!\"</string>
+    <string name="select_bta_version">Выбрать версию \"Better than Adventure!\"</string>
+    <string name="bta_installer_available_versions">Поддерживаемые версии BTA</string>
+    <string name="bta_installer_untested_versions">Нетестированные версии BTA</string>
+    <string name="bta_installer_nightly_versions">Экспериментальные версии BTA</string>
+    <string name="newdl_extracting_native_libraries">Распаковка дополнительных библиотек... (%d/%d)</string>
+    <string name="fabric_dl_cant_read_meta2">Ошибка чтения метаданных Fabric</string>
+    <string name="modloader_dl_install_fabric_instance">Установка с Fabric</string>
+    <string name="modloader_dl_install_quilt_instance">Установка с Quilt</string>
+    <string name="modloader_dl_install_forge_instance">Установка с Forge</string>
+    <string name="discord_invite" translatable="false">https://discord.gg/CuuqPbbnUY</string>
 </resources>
