@@ -13,6 +13,8 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
+        resValue 'dimen', '_12ssp', '12sp'
+        resValue 'dimen', '_14ssp', '14sp'
     }
 
     flavorDimensions "runtime"
@@ -60,4 +62,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.preference:preference:1.2.1'
 }
