@@ -15,6 +15,8 @@ android {
         multiDexEnabled true
         resValue 'dimen', '_12ssp', '12sp'
         resValue 'dimen', '_14ssp', '14sp'
+        resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mojo.scoped.gamefolder'
+        resValue 'string', 'application_package', 'git.artdeell.mojo'
     }
 
     flavorDimensions "runtime"
