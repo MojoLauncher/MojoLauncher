@@ -15,7 +15,7 @@ public class LauncherPreferenceExperimentalFragment extends LauncherPreferenceFr
     public void onCreatePreferences(Bundle b, String str) {
         addPreferencesFromResource(R.xml.pref_experimental);
 
-        ListPreference themesPref = requirePreference("select_theme", ListPreference.class);
+        ListPreference themesPref = requirePreference("selectTheme", ListPreference.class);
         List<String> newEntries = new ArrayList<>();
         newEntries.add("Default");
         newEntries.add("Midnight");
