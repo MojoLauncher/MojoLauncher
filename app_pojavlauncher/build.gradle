@@ -55,8 +55,7 @@ android {
     lintOptions {
         abortOnError false
     }
-
-    signingConfigs {
+signingConfigs {
         customDebug {
             storeFile file("debug.keystore")
             storePassword "android"
@@ -113,8 +112,7 @@ android {
             initWith proguard
             debuggable false
         }
-
-        release {
+release {
             // Don't set to true or java.awt will be a.a or something similar.
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -180,8 +178,7 @@ class AssetTaskRegistrar {
         createDirectories targetDownloadDir
         createDirectories projectJarDir
     }
-
-    def setVariant(variant) {
+def setVariant(variant) {
         variantName = variant.getName().capitalize()
         mergeAssetsTask = variant.getMergeAssetsProvider().get()
 
@@ -228,8 +225,7 @@ class AssetTaskRegistrar {
     def onlineZipDependency(String downloadUrl, String name, String relativePath) {
 	    mergeAssetsTask.dependsOn(onlineUnzipTask downloadUrl, name, assetDestination(relativePath))
     }
-
-    def projectJarDependency(Project project, String relativePath) {
+def projectJarDependency(Project project, String relativePath) {
         def assetTargetDir = assetDestination(relativePath)
         def jarTargetDir = new File(projectJarDir, relativePath)
         createDirectories assetTargetDir
@@ -279,8 +275,7 @@ class AssetTaskRegistrar {
 
 afterEvaluate {
     def registrar = new AssetTaskRegistrar(project)
-
-    android.applicationVariants.configureEach { variant ->
+android.applicationVariants.configureEach { variant ->
         registrar.setVariant(variant)
 
         registrar.projectJarDependency project(":forge_installer"), "components/forge_installer"
@@ -293,7 +288,7 @@ afterEvaluate {
             registrar.jreRuntimeDependency 21, "components/jre-21"
         }
         
-		def cacioJarUrl = "https://jitpack.io/com/github/MojoLauncher/%1\$s/%2\$s/master-SNAPSHOT/%2\$s-master-SNAPSHOT.jar"
+		def cacioJarUrl = "https://jitpack.io/com/github/MojoLauncher/%1\\$s/%2\\$s/master-SNAPSHOT/%2\\$s-master-SNAPSHOT.jar"
 
         registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-shared", "components/caciocavallo"
         registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-androidnw", "components/caciocavallo"
@@ -302,7 +297,6 @@ afterEvaluate {
         registrar.onlineJarDependency cacioJarUrl, "caciocavallo17", "cacio-tta", "components/caciocavallo17"
     }
 }
-
 dependencies {
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
     implementation 'commons-codec:commons-codec:1.15'
