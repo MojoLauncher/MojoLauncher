@@ -11,7 +11,7 @@ android {
         minSdk 21
         targetSdk 35
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         multiDexEnabled true
         resValue 'dimen', '_12ssp', '12sp'
         resValue 'dimen', '_14ssp', '14sp'
@@ -34,7 +34,8 @@ android {
             shrinkResources false
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -50,7 +51,7 @@ android {
     }
 
     packagingOptions {
-        jniLibs { useLegacyPackaging = true }
+        jniLibs { useLegacyPackaging = false }
         pickFirst '**/libbytehook.so'
     }
 

@@ -66,28 +66,21 @@ public class LauncherActivity extends BaseActivity {
     private NotificationManager mNotificationManager;
 
     /* Allows to switch from one button "type" to another */
-    private final FragmentManager.FragmentLifecycleCallbacks mFragmentCallbackListener = new FragmentManager.FragmentLifecycleCallbacks() {
-        @Override
-        public void onFragmentResumed(@NonNull FragmentManager fm, @NonNull Fragment f) {
-            mSettingsButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), f instanceof MainMenuFragment
+    private final FragmentManager.FragmentLifecycleCallbacks mFragmentCallbackListener =
+            (fm, f) -> mSettingsButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), f instanceof MainMenuFragment
                     ? R.drawable.ic_px_sliders : R.drawable.ic_px_home));
-        }
-    };
 
     /* Listener for the back button in settings */
     private final ExtraListener<String> mBackPreferenceListener = (key, value) -> {
-        if(value.equals("true")) onBackPressed();
+        if (value.equals("true")) getOnBackPressedDispatcher().onBackPressed();
         return false;
     };
 
     /* Listener for the auth method selection screen */
     private final ExtraListener<Boolean> mSelectAuthMethod = (key, value) -> {
-        // The "false" value is used to stop auth method selection
-        if(!value) return false;
+        if (!value) return false;
         Fragment fragment = getSupportFragmentManager().findFragmentById(mFragmentView.getId());
-        // Allow starting the add account only from the main menu, should it be moved to fragment itself ?
-        if(!(fragment instanceof MainMenuFragment)) return false;
-
+        if (!(fragment instanceof MainMenuFragment)) return false;
         Tools.swapFragment(this, SelectAuthFragment.class, SelectAuthFragment.TAG, null);
         return false;
     };
@@ -95,45 +88,35 @@ public class LauncherActivity extends BaseActivity {
     /* Listener for the settings fragment */
     private final View.OnClickListener mSettingButtonListener = v -> {
         Fragment fragment = getSupportFragmentManager().findFragmentById(mFragmentView.getId());
-        if(fragment instanceof MainMenuFragment){
+        if (fragment instanceof MainMenuFragment) {
             Tools.swapFragment(this, LauncherPreferenceFragment.class, SETTING_FRAGMENT_TAG, null);
-        } else{
-            // The setting button doubles as a home button now
+        } else {
             Tools.backToMainMenu(this);
         }
     };
 
     private final ExtraListener<Boolean> mLaunchGameListener = (key, value) -> {
-        if(mProgressLayout.hasProcesses()){
+        if (mProgressLayout.hasProcesses()) {
             Toast.makeText(this, R.string.tasks_ongoing, Toast.LENGTH_LONG).show();
             return false;
         }
-
         Instance selectedInstance = InstanceManager.getSelectedListedInstance();
-
-        if(selectedInstance.installer != null) {
+        if (selectedInstance.installer != null) {
             selectedInstance.installer.start();
             return false;
         }
-
-        if (!Tools.isValidString(selectedInstance.versionId)){
+        if (!Tools.isValidString(selectedInstance.versionId)) {
             Toast.makeText(this, R.string.error_no_version, Toast.LENGTH_LONG).show();
             return false;
         }
-
-        if(PojavProfile.getCurrentProfileContent(true) == null){
+        if (PojavProfile.getCurrentProfileContent(true) == null) {
             Toast.makeText(this, R.string.no_saved_accounts, Toast.LENGTH_LONG).show();
             ExtraCore.setValue(ExtraConstants.SELECT_AUTH_METHOD, true);
             return false;
         }
         String normalizedVersionId = AsyncMinecraftDownloader.normalizeVersionId(selectedInstance.versionId);
         JMinecraftVersionList.Version mcVersion = AsyncMinecraftDownloader.getListedVersion(normalizedVersionId);
-        new MinecraftDownloader().start(
-                this,
-                mcVersion,
-                normalizedVersionId,
-                new ContextAwareDoneListener(this, normalizedVersionId)
-        );
+        new MinecraftDownloader().start(this, mcVersion, normalizedVersionId, new ContextAwareDoneListener(this, normalizedVersionId));
         return false;
     };
 
@@ -264,18 +247,18 @@ public class LauncherActivity extends BaseActivity {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private Fragment getVisibleFragment(String tag){
+    private Fragment getVisibleFragment(String tag) {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
-        if(fragment != null && fragment.isVisible()) {
+        if (fragment != null && fragment.isVisible()) {
             return fragment;
         }
         return null;
     }
 
     @SuppressWarnings("unused")
-    private Fragment getVisibleFragment(int id){
+    private Fragment getVisibleFragment(int id) {
         Fragment fragment = getSupportFragmentManager().findFragmentById(id);
-        if(fragment != null && fragment.isVisible()) {
+        if (fragment != null && fragment.isVisible()) {
             return fragment;
         }
         return null;
