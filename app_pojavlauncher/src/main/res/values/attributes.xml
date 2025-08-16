@@ -11,5 +11,6 @@
         <attr name="drawableStartSize" format="dimension" />
         <attr name="drawableEndPadding" format="dimension" />
         <attr name="drawableStartIntegerScaling" format="boolean" />
+        <attr name="drawableEndSize" format="dimension" />
     </declare-styleable>
 </resources>
