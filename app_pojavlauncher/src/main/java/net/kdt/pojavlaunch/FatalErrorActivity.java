@@ -26,23 +26,33 @@ public class FatalErrorActivity extends AppCompatActivity {
 		Throwable throwable = (Throwable) extras.getSerializable("throwable");
 		final String stackTrace = throwable != null ? Tools.printToString(throwable) : "<null>";
 		String strSavePath = extras.getString("savePath");
-		String errHeader = storageAllow ?
-			"Crash stack trace saved to " + strSavePath + "." :
-			"Storage permission is required to save crash stack trace!";
-		
-		new AlertDialog.Builder(this)
-			.setTitle(R.string.error_fatal)
-			.setMessage(errHeader + "\n\n" + stackTrace)
-			.setPositiveButton(android.R.string.ok, (p1, p2) -> finish())
-			.setNegativeButton(R.string.global_restart, (p1, p2) -> startActivity(new Intent(FatalErrorActivity.this, LauncherActivity.class)))
-			.setNeutralButton(android.R.string.copy, (p1, p2) -> {
-				ClipboardManager mgr = (ClipboardManager) FatalErrorActivity.this.getSystemService(CLIPBOARD_SERVICE);
-				mgr.setPrimaryClip(ClipData.newPlainText("error", stackTrace));
+		      String errHeader = storageAllow ?
+		              "Crash stack trace saved to " + strSavePath + "." :
+		              "Storage permission is required to save crash stack trace!";
 
-				finish();
-			})
-			.setCancelable(false)
-			.show();
+		      new AlertDialog.Builder(this)
+		              .setTitle(R.string.error_fatal)
+		              .setMessage(errHeader)
+		              .setPositiveButton(R.string.error_show_more, (p1, p2) -> {
+		                  new AlertDialog.Builder(this)
+		                          .setTitle(R.string.error_fatal)
+		                          .setMessage(stackTrace)
+		                          .setPositiveButton(android.R.string.ok, (p3, p4) -> finish())
+		                          .setNeutralButton(android.R.string.copy, (p5, p6) -> {
+		                              ClipboardManager mgr = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+		                              mgr.setPrimaryClip(ClipData.newPlainText("error", stackTrace));
+		                              finish();
+		                          })
+		                          .show();
+		              })
+		              .setNegativeButton(R.string.global_restart, (p1, p2) -> startActivity(new Intent(FatalErrorActivity.this, LauncherActivity.class)))
+		                              .setNeutralButton(android.R.string.copy, (p1, p2) -> {
+		                  ClipboardManager mgr = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+		                  mgr.setPrimaryClip(ClipData.newPlainText("error", errHeader + "\n\n" + stackTrace));
+		                  finish();
+		              })
+		              .setCancelable(false)
+		              .show();
 	}
 
 	public static void showError(Context ctx, String savePath, boolean storageAllow, Throwable th) {

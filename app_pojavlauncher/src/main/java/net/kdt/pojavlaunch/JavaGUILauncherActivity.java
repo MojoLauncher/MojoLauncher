@@ -94,58 +94,32 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
             params.height = (int) (54 * LauncherPreferences.PREF_MOUSESCALE);
         });
 
-        mTouchPad.setOnTouchListener(new View.OnTouchListener() {
+        mTouchPad.setOnTouchListener((v, event) -> {
+            float x = event.getX();
+            float y = event.getY();
             float prevX = 0, prevY = 0;
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // MotionEvent reports input details from the touch screen
-                // and other input controls. In this case, you are only
-                // interested in events where the touch position changed.
-                // int index = event.getActionIndex();
-                int action = event.getActionMasked();
-
-                float x = event.getX();
-                float y = event.getY();
-                float mouseX, mouseY;
-
-                mouseX = mMousePointerImageView.getX();
-                mouseY = mMousePointerImageView.getY();
-
-                if (mGestureDetector.onTouchEvent(event)) {
-                    sendScaledMousePosition(mouseX,mouseY);
-                    AWTInputBridge.sendMousePress(AWTInputEvent.BUTTON1_DOWN_MASK);
-                } else {
-                    if (action == MotionEvent.ACTION_MOVE) { // 2
-                        mouseX = Math.max(0, Math.min(v.getWidth(), mouseX + x - prevX));
-                        mouseY = Math.max(0, Math.min(v.getHeight(), mouseY + y - prevY));
-                        placeMouseAt(mouseX, mouseY);
-                        sendScaledMousePosition(mouseX, mouseY);
-                    }
-                }
-
-                prevY = y;
-                prevX = x;
-                return true;
+            if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                float mouseX = mMousePointerImageView.getX() + x - prevX;
+                float mouseY = mMousePointerImageView.getY() + y - prevY;
+                placeMouseAt(mouseX, mouseY);
+                sendScaledMousePosition(mouseX, mouseY);
+            } else if (mGestureDetector.onTouchEvent(event)) {
+                sendScaledMousePosition(mMousePointerImageView.getX(), mMousePointerImageView.getY());
+                AWTInputBridge.sendMousePress(AWTInputEvent.BUTTON1_DOWN_MASK);
             }
+            prevX = x;
+            prevY = y;
+            return true;
         });
 
         mTextureView.setOnTouchListener((v, event) -> {
-            float x = event.getX();
+            float x = event.getX() + mTextureView.getX();
             float y = event.getY();
             if (mGestureDetector.onTouchEvent(event)) {
-                sendScaledMousePosition(x + mTextureView.getX(), y);
+                sendScaledMousePosition(x, y);
                 AWTInputBridge.sendMousePress(AWTInputEvent.BUTTON1_DOWN_MASK);
-                return true;
-            }
-
-            switch (event.getActionMasked()) {
-                case MotionEvent.ACTION_UP: // 1
-                case MotionEvent.ACTION_CANCEL: // 3
-                case MotionEvent.ACTION_POINTER_UP: // 6
-                    break;
-                case MotionEvent.ACTION_MOVE: // 2
-                    sendScaledMousePosition(x + mTextureView.getX(), y);
-                    break;
+            } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                sendScaledMousePosition(x, y);
             }
             return true;
         });
@@ -427,7 +401,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
             short majorVersion = byteBuffer.getShort();
             Log.i("JavaGUILauncher", majorVersion+","+minorVersion);
             return classVersionToJavaVersion(majorVersion);
-        }catch (Exception e) {
+        } catch (IOException | IllegalArgumentException e) {
             Log.e("JavaVersion", "Exception thrown", e);
             return -1;
         }
