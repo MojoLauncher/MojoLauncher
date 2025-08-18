@@ -15,21 +15,30 @@ public class CompleteMetadataTask extends DownloaderTask {
 
     @Override
     protected void performTask() throws IOException {
-        if(mMetadata.sha1Hash == null && mMetadata.mirrorType == DownloadMirror.DOWNLOAD_CLASS_LIBRARIES) {
-            try {
-                mMetadata.sha1Hash = mDownloader.downloadString(new URL(mMetadata.url + ".sha1"));
-            }catch (FileNotFoundException e) {
-                Log.i("CompleteMetadataTask", "No server hash for file "+mMetadata.path.getName());
-            }
-        }
-        if(mMetadata.size == -1) {
-            mMetadata.size = mDownloader.getFileContentLength(mMetadata.url);
-            Log.i("CompleteMetadataTask", "Got size: "+mMetadata.size +" for "+mMetadata.path.getName());
+        if(mMetadata.url != null) {
+            getLibrarySha1Hash();
+            getFileSize();
         }
         if(mMetadata.size == -1) {
             mDownloader.disableSizeCounter();
         }
         mDownloader.fileComplete();
+    }
+
+    private void getLibrarySha1Hash() throws IOException {
+        if(mMetadata.sha1Hash != null) return;
+        if(mMetadata.mirrorType != DownloadMirror.DOWNLOAD_CLASS_LIBRARIES) return;
+        try {
+            mMetadata.sha1Hash = mDownloader.downloadString(new URL(mMetadata.url + ".sha1"));
+        }catch (FileNotFoundException e) {
+            Log.i("CompleteMetadataTask", "No server hash for file "+mMetadata.path.getName());
+        }
+    }
+
+    private void getFileSize() throws IOException {
+        if(mMetadata.size != -1) return;
+        mMetadata.size = mDownloader.getFileContentLength(mMetadata.url);
+        Log.i("CompleteMetadataTask", "Got size: "+mMetadata.size +" for "+mMetadata.path.getName());
     }
 
     protected static boolean shouldCompleteMetadata(TaskMetadata metadata) {

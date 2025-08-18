@@ -223,7 +223,9 @@ public class MinecraftDownloader extends Downloader {
                                   long size) throws IOException {
         FileUtils.ensureParentDirectory(targetFile);
         if(!Tools.isValidString(sha1)) sha1 = null;
-        TaskMetadata taskMetadata = new TaskMetadata(targetFile, new URL(url), size, sha1, downloadClass);
+        URL urlObject = null;
+        if(Tools.isValidString(url)) urlObject = new URL(url);
+        TaskMetadata taskMetadata = new TaskMetadata(targetFile, urlObject, size, sha1, downloadClass);
         mScheduledDownloadTasks.add(taskMetadata);
     }
 
