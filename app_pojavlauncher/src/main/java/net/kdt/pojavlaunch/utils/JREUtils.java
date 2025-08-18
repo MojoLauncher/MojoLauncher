@@ -197,6 +197,11 @@ public class JREUtils {
         // The OPEN GL version is changed according
         envMap.put("LIBGL_ES", (String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION));
 
+	    // HACK: GL/GLSL version override for Mesa-based renderers (i.e. Zink)
+	    // Required to run the game properly on some mobile Vulkan drivers (Minecraft fails to compile shaders without)
+	    envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6");
+        envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
+
         envMap.put("FORCE_VSYNC", String.valueOf(LauncherPreferences.PREF_FORCE_VSYNC));
 
         envMap.put("MESA_GLSL_CACHE_DIR", Tools.DIR_CACHE.getAbsolutePath());
