@@ -222,7 +222,7 @@ class AssetTaskRegistrar {
         def unzipTask = project.tasks.register("unzip${dependencySuffix}", Copy) {
             from project.zipTree(downloadTarget)
             into targetExtractionDir
-            mustRunAfter downloadTask
+            dependsOn downloadTask
         }
         return unzipTask
     }
