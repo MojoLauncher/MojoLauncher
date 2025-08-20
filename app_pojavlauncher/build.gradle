@@ -1,7 +1,7 @@
 plugins {
-    id 'com.android.application' version '8.7.2'
+    id 'com.android.application' version '8.11.1'
     id 'de.undercouch.download' version '5.6.0'
-    id 'org.ajoberstar.grgit' version '4.1.1'
+    id 'org.ajoberstar.grgit' version '5.3.2'
 }
 
 apply from: rootProject.file('gradle/prefab_bypass.gradle')
@@ -52,7 +52,7 @@ configurations {
 android {
     namespace 'git.artdeell.mojo'
 
-    compileSdk = 35
+    compileSdk = 36
 
     lintOptions {
         abortOnError false
@@ -162,8 +162,6 @@ android {
         prefab true
         buildConfig true
     }
-
-    buildToolsVersion = '34.0.0'
 }
 
 class AssetTaskRegistrar {
