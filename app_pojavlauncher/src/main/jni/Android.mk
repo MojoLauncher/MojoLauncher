@@ -76,12 +76,13 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := awt_headless
 include $(BUILD_SHARED_LIBRARY)
 
-# GLESBridge library, used for compatibility with pure ES contexts
+# EGLWrapper library, used for providing direct access to the system EGL/GL/GLES instances
 include $(CLEAR_VARS)
-LOCAL_MODULE := glesbridge
+LOCAL_PATH := $(HERE_PATH)/eglwrap
+LOCAL_MODULE := egl_wrapper
 LOCAL_LDLIBS := -ldl -lEGL
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
-LOCAL_SRC_FILES := gles_bridge.c
+LOCAL_SRC_FILES := egl_wrapper.c
 include $(BUILD_SHARED_LIBRARY)
 
 # libawt_xawt without X11, used to get Caciocavallo working
