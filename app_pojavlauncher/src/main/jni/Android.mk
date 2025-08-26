@@ -76,6 +76,14 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := awt_headless
 include $(BUILD_SHARED_LIBRARY)
 
+# GLESBridge library, used for compatibility with pure ES contexts
+include $(CLEAR_VARS)
+LOCAL_MODULE := glesbridge
+LOCAL_LDLIBS := -ldl
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
+LOCAL_SRC_FILES := gles_bridge.c
+include $(BUILD_SHARED_LIBRARY)
+
 # libawt_xawt without X11, used to get Caciocavallo working
 LOCAL_PATH := $(HERE_PATH)/awt_xawt
 include $(CLEAR_VARS)
@@ -85,6 +93,8 @@ LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_SHARED_LIBRARIES := awt_headless
 LOCAL_SRC_FILES := xawt_fake.c
 include $(BUILD_SHARED_LIBRARY)
+
+
 
 # delete fake libs after linked
 $(info $(shell (rm $(HERE_PATH)/../jniLibs/*/libawt_headless.so)))
