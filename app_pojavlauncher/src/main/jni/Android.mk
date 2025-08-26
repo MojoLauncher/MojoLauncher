@@ -79,7 +79,7 @@ include $(BUILD_SHARED_LIBRARY)
 # GLESBridge library, used for compatibility with pure ES contexts
 include $(CLEAR_VARS)
 LOCAL_MODULE := glesbridge
-LOCAL_LDLIBS := -ldl
+LOCAL_LDLIBS := -ldl -lEGL
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_SRC_FILES := gles_bridge.c
 include $(BUILD_SHARED_LIBRARY)

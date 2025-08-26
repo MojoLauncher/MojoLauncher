@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <dlfcn.h>
 
-eglFuncPointer sys_eglGetProcAddress;
+eglFuncPointer (*sys_eglGetProcAddress)(const char* func_name);
 
 
 __attribute((constructor)) void init(){
@@ -34,5 +34,9 @@ eglFuncPointer glXGetProcAddress(const char* func_name){
         return NULL;
     }
     return func;
+}
+// Stub required for libpojavexec - it loads EGL functions via wrapper library
+eglFuncPointer eglGetProcAddress(const char* func_name){
+    return sys_eglGetProcAddress(func_name);
 }
 
