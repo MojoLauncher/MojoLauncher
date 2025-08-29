@@ -337,5 +337,5 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
 
-    implementation project(":NG-GL4ES")
+    implementation project(":ng_gl4es")
 }
