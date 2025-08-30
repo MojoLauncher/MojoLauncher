@@ -60,6 +60,7 @@ import net.kdt.pojavlaunch.memory.MemoryHoleFinder;
 import net.kdt.pojavlaunch.memory.SelfMapsParser;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.Runtime;
+import net.kdt.pojavlaunch.plugins.AnglePlugin;
 import net.kdt.pojavlaunch.plugins.FFmpegPlugin;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.DateUtils;
@@ -377,6 +378,7 @@ public final class Tools {
         // ctx.appendlnToLog("full args: "+javaArgList.toString());
         String args = instance.getLaunchArgs();
         FFmpegPlugin.discover(activity);
+        AnglePlugin.discover(activity);
         Tools.releaseRenderersCache();
         JREUtils.launchJavaVM(activity, runtime, gamedir, javaArgList, args);
         // If we returned, this means that the JVM exit dialog has been shown and we don't need to be active anymore.

@@ -13,6 +13,9 @@ public class AnglePlugin {
     private static String glesPath;
 
     public static void discover(Context ctx){
+        // Don't reinit if available
+        if(available)
+            return;
         try {
             PackageInfo anglePackage = ctx.getPackageManager().getPackageInfo("git.mojo.angle", PackageManager.GET_SHARED_LIBRARY_FILES);
             File eglPath = new File(anglePackage.applicationInfo.nativeLibraryDir, "libEGL_angle.so");
