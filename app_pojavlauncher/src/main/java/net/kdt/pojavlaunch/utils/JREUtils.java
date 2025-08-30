@@ -219,8 +219,8 @@ public class JREUtils {
         }
         // Check for AnglePlugin availability and point LTW/gl4es to ANGLE's EGL
         if(LauncherPreferences.PREF_USE_ANGLE && AnglePlugin.isAvailable()){
-            String eglPath = AnglePlugin.getEGLPath();
-            envMap.put("LIBGL_EGL", eglPath);
+            envMap.put("LIBGL_EGL", AnglePlugin.getEGLPath());
+            envMap.put("LIBGL_GLES", AnglePlugin.getGLESPath());
         }
 
         if(LOCAL_RENDERER != null) {
