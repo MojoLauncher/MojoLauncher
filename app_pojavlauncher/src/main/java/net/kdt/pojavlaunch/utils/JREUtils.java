@@ -27,6 +27,7 @@ import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.lifecycle.LifecycleAwareAlertDialog;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.Runtime;
+import net.kdt.pojavlaunch.plugins.AnglePlugin;
 import net.kdt.pojavlaunch.plugins.FFmpegPlugin;
 import net.kdt.pojavlaunch.prefs.*;
 
@@ -215,6 +216,11 @@ public class JREUtils {
         envMap.put("PATH", jreHome + "/bin:" + Os.getenv("PATH"));
         if(FFmpegPlugin.isAvailable) {
             envMap.put("POJAV_FFMPEG_PATH", FFmpegPlugin.executablePath);
+        }
+        // Check for AnglePlugin availability and point LTW to ANGLE's EGL
+        if(LauncherPreferences.PREF_USE_ANGLE && AnglePlugin.isAvailable()){
+            String eglPath = AnglePlugin.getEGLPath();
+            envMap.put("EGL_PATH", eglPath);
         }
 
         if(LOCAL_RENDERER != null) {

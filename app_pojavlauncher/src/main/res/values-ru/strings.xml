@@ -184,6 +184,8 @@
     <string name="preference_sustained_performance_description">Уменьшает перегрев устройства за счёт ограничения максимальной производительности.</string>
     <string name="preference_force_vsync_title">Принудительная вертикальная синхронизация</string>
     <string name="preference_force_vsync_description">Уменьшает перегрев устройства за счёт ограничения максимальной производительности.</string>
+    <string name="preference_use_angle_title">Использовать ANGLE</string>
+    <string name="preference_use_angle_description">Позволяет использовать ANGLE вместо системного драйвера для LTW. Может исправить некоторые графические проблемы при использовании модов на некоторых видеоядрах</string>
     <string name="preference_force_english_title">Принудительно включить английский</string>
     <string name="preference_force_english_description">Позволяет увидеть оригинальные строки такими, какими их задумали разработчики. Требуется перезапуск.</string>
     <string name="preference_edit_controls_title">Изменить раскладку</string>

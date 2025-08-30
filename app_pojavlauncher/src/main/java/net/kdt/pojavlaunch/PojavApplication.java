@@ -19,6 +19,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
+import net.kdt.pojavlaunch.plugins.AnglePlugin;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.tasks.AsyncAssetManager;
 import net.kdt.pojavlaunch.utils.*;
@@ -70,6 +71,10 @@ public class PojavApplication extends Application {
 				Tools.initEarlyConstants(this);
 			}
 			Tools.DEVICE_ARCHITECTURE = Architecture.getDeviceArchitecture();
+
+			// Discover AnglePlugin early
+			AnglePlugin.discover(this);
+
 			//Force x86 lib directory for Asus x86 based zenfones
 			if(Architecture.isx86Device() && Architecture.is32BitsDevice()){
 				String originalJNIDirectory = getApplicationInfo().nativeLibraryDir;

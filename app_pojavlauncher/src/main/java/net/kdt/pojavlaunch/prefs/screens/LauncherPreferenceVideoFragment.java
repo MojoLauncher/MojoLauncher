@@ -10,6 +10,7 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.plugins.AnglePlugin;
 import net.kdt.pojavlaunch.prefs.CustomSeekBarPreference;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
@@ -41,6 +42,11 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
 
         requirePreference("alternate_surface", SwitchPreferenceCompat.class).setChecked(LauncherPreferences.PREF_USE_ALTERNATE_SURFACE);
         requirePreference("force_vsync", SwitchPreferenceCompat.class).setChecked(LauncherPreferences.PREF_FORCE_VSYNC);
+
+        // Show ANGLE switch only if AnglePlugin is available
+        SwitchPreferenceCompat angleSwitch = requirePreference("use_angle", SwitchPreferenceCompat.class);
+        angleSwitch.setVisible(AnglePlugin.isAvailable());
+        angleSwitch.setChecked(LauncherPreferences.PREF_USE_ANGLE);
 
         ListPreference rendererListPreference = requirePreference("renderer",
                 ListPreference.class);
