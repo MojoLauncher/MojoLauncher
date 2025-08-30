@@ -218,7 +218,8 @@ public class JREUtils {
             envMap.put("POJAV_FFMPEG_PATH", FFmpegPlugin.executablePath);
         }
         // Check for AnglePlugin availability and point LTW/gl4es to ANGLE's EGL
-        if(LauncherPreferences.PREF_USE_ANGLE && AnglePlugin.isAvailable()){
+		// gl4es is, apparently, incompatible with gl4es, enable ANGLE only for LTW for now
+        if(LauncherPreferences.PREF_USE_ANGLE && AnglePlugin.isAvailable() && LOCAL_RENDERER.equals("opengles3_ltw")){
             envMap.put("LIBGL_EGL", AnglePlugin.getEGLPath());
             envMap.put("LIBGL_GLES", AnglePlugin.getGLESPath());
         }
