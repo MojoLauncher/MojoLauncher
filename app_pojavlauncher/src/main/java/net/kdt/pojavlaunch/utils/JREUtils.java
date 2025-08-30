@@ -217,10 +217,10 @@ public class JREUtils {
         if(FFmpegPlugin.isAvailable) {
             envMap.put("POJAV_FFMPEG_PATH", FFmpegPlugin.executablePath);
         }
-        // Check for AnglePlugin availability and point LTW to ANGLE's EGL
+        // Check for AnglePlugin availability and point LTW/gl4es to ANGLE's EGL
         if(LauncherPreferences.PREF_USE_ANGLE && AnglePlugin.isAvailable()){
             String eglPath = AnglePlugin.getEGLPath();
-            envMap.put("EGL_PATH", eglPath);
+            envMap.put("LIBGL_EGL", eglPath);
         }
 
         if(LOCAL_RENDERER != null) {
