@@ -44,6 +44,8 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         requirePreference("force_vsync", SwitchPreferenceCompat.class).setChecked(LauncherPreferences.PREF_FORCE_VSYNC);
 
         // Show ANGLE switch only if AnglePlugin is available
+
+        AnglePlugin.discover(getContext());
         SwitchPreferenceCompat angleSwitch = requirePreference("use_angle", SwitchPreferenceCompat.class);
         angleSwitch.setVisible(AnglePlugin.isAvailable());
         angleSwitch.setChecked(LauncherPreferences.PREF_USE_ANGLE);
