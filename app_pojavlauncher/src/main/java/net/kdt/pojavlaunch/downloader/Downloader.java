@@ -45,7 +45,7 @@ public class Downloader {
         this.mProgressKey = mProgressKey;
     }
 
-    protected void runDownloads(ArrayList<TaskMetadata> downloads) throws IOException, InterruptedException {
+    protected void runDownloads(ArrayList<? extends TaskMetadata> downloads) throws IOException, InterruptedException {
         try {
             insertMetadata(downloads);
         }catch (IOException e) {
@@ -55,7 +55,7 @@ public class Downloader {
         performDownloads(downloads);
     }
 
-    private void performDownloads(ArrayList<TaskMetadata> metadata) throws IOException, InterruptedException {
+    private void performDownloads(ArrayList<? extends TaskMetadata> metadata) throws IOException, InterruptedException {
         mThreadException.set(null);
         mDownloadedFileCounter.set(0);
         mDownloadedSizeCounter.set(0);
@@ -84,12 +84,12 @@ public class Downloader {
         mDownloadService.shutdown();
         mVerifyService.shutdown();
         if(!mDownloadService.awaitTermination(100, TimeUnit.MILLISECONDS) ||
-                !mDownloadService.awaitTermination(100, TimeUnit.MILLISECONDS)) {
+                !mVerifyService.awaitTermination(100, TimeUnit.MILLISECONDS)) {
             throw new RuntimeException("BUG! The file counter is wrong. Maybe. Send this to artDev.");
         }
     }
 
-    private void insertMetadata(ArrayList<TaskMetadata> metadata) throws IOException, InterruptedException {
+    private void insertMetadata(ArrayList<? extends TaskMetadata> metadata) throws IOException, InterruptedException {
         mThreadException.set(null);
         mDownloadedFileCounter.set(0);
         ArrayList<TaskMetadata> reducedList = new ArrayList<>();
@@ -98,17 +98,14 @@ public class Downloader {
             reducedList.add(element);
         }
         if(reducedList.isEmpty()) return;
-        ExecutorService executorService = Executors.newFixedThreadPool(4);
-        for(TaskMetadata element : reducedList) executorService.submit(new CompleteMetadataTask(element, this));
-        executorService.shutdown();
-        try {
+        try (ExecutorService executorService = Executors.newFixedThreadPool(4)) {
+            for(TaskMetadata element : reducedList) executorService.submit(new CompleteMetadataTask(element, this));
+            executorService.shutdown();
             while (!executorService.awaitTermination(33, TimeUnit.MILLISECONDS)) {
                 IOException exception = mThreadException.get();
                 if(exception != null) throw exception;
                 reportCountProgress(R.string.newerdl_inserting_metadata_count, reducedList.size());
             }
-        } finally {
-            executorService.shutdownNow();
         }
     }
 

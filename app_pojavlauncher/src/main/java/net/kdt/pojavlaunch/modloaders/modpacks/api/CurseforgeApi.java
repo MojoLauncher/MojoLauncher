@@ -10,21 +10,24 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.kdt.mcgui.ProgressLayout;
 
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.downloader.AcquireableTaskMetadata;
+import net.kdt.pojavlaunch.downloader.Downloader;
+import net.kdt.pojavlaunch.mirrors.DownloadMirror;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.Constants;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.CurseManifest;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModItem;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchFilters;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchResult;
-import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
 import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.GsonJsonUtils;
 import net.kdt.pojavlaunch.utils.ZipUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
@@ -169,21 +172,11 @@ public class CurseforgeApi implements ModpackApi{
                 Log.i("CurseforgeApi","manifest verification failed");
                 return null;
             }
-            ModDownloader modDownloader = new ModDownloader(new File(instanceDestination,"mods"), true);
-            int fileCount = curseManifest.files.length;
-            for(int i = 0; i < fileCount; i++) {
-                final CurseManifest.CurseFile curseFile = curseManifest.files[i];
-                modDownloader.submitDownload(()->{
-                    String url = getDownloadUrl(curseFile.projectID, curseFile.fileID);
-                    if(url == null && curseFile.required)
-                        throw new IOException("Failed to obtain download URL for "+curseFile.projectID+" "+curseFile.fileID);
-                    else if(url == null) return null;
-                    return new ModDownloader.FileInfo(url, FileUtils.getFileName(url), getDownloadSha1(curseFile.projectID, curseFile.fileID));
-                });
+            try {
+                new CurseDownloader().start(curseManifest, instanceDestination);
+            }catch (InterruptedException e) {
+                throw new IOException("NIY: InterruptedException", e);
             }
-            modDownloader.awaitFinish((c,m)->
-                    ProgressKeeper.submitProgress(ProgressLayout.INSTALL_MODPACK, (int) Math.max((float)c/m*100,0), R.string.modpack_download_downloading_mods_fc, c, m)
-            );
             String overridesDir = "overrides";
             if(curseManifest.overrides != null) overridesDir = curseManifest.overrides;
             ZipUtils.zipExtract(modpackZipFile, overridesDir, instanceDestination);
@@ -220,29 +213,37 @@ public class CurseforgeApi implements ModpackApi{
         return new ModLoader(modLoaderTypeInt, modLoaderVersion, minecraft.version);
     }
 
-    private String getDownloadUrl(long projectID, long fileID) {
+    private String getDownloadUrl(JsonObject fileMetadata) throws IOException {
+        if(fileMetadata.get("modId").isJsonNull() || fileMetadata.get("id").isJsonNull()) throw new IOException("Bad metadata schema!");
+        long projectID = fileMetadata.get("modId").getAsLong();
+        long fileID = fileMetadata.get("id").getAsLong();
+
         // First try the official api endpoint
         JsonObject response = mApiHandler.get("mods/"+projectID+"/files/"+fileID+"/download-url", JsonObject.class);
         if (response != null && !response.get("data").isJsonNull())
             return response.get("data").getAsString();
 
         // Otherwise, fallback to building an edge link
-        JsonObject fallbackResponse = mApiHandler.get(String.format("mods/%s/files/%s", projectID, fileID), JsonObject.class);
-        if (fallbackResponse != null && !fallbackResponse.get("data").isJsonNull()){
-            JsonObject modData = fallbackResponse.get("data").getAsJsonObject();
-            int id = modData.get("id").getAsInt();
-            return String.format("https://edge.forgecdn.net/files/%s/%s/%s", id/1000, id % 1000, modData.get("fileName").getAsString());
-        }
-
-        return null;
+        return String.format("https://edge.forgecdn.net/files/%s/%s/%s", fileID/1000, fileID % 1000, fileMetadata.get("fileName").getAsString());
     }
 
-    private @Nullable String getDownloadSha1(long projectID, long fileID) {
-        // Try the api endpoint, die in the other case
+    private void checkRequiredFileFields(JsonObject fileMetadata) throws IOException {
+        if(fileMetadata == null || fileMetadata.isJsonNull()) throw new IOException("File metadata is null!");
+        boolean hasProjectId = fileMetadata.has("modId");
+        boolean hasFileId = fileMetadata.has("id");
+        boolean hasLength = fileMetadata.has("fileLength");
+        if(!hasProjectId || !hasFileId || !hasLength) {
+            StringBuilder builder = new StringBuilder().append("File metadata is mising the following fields:");
+            if(!hasProjectId) builder.append(" modId");
+            if(!hasFileId) builder.append(" id");
+            if(!hasLength) builder.append(" fileLength");
+            throw new IOException(builder.toString());
+        }
+    }
+
+    private @Nullable JsonObject getFile(long projectID, long fileID) {
         JsonObject response = mApiHandler.get("mods/"+projectID+"/files/"+fileID, JsonObject.class);
-        JsonObject data = GsonJsonUtils.getJsonObjectSafe(response, "data");
-        if(data == null) return null;
-        return getSha1FromModData(data);
+        return GsonJsonUtils.getJsonObjectSafe(response, "data");
     }
 
     private String getSha1FromModData(@NonNull JsonObject object) {
@@ -272,5 +273,43 @@ public class CurseforgeApi implements ModpackApi{
 
     static class CurseforgeSearchResult extends SearchResult {
         int previousOffset;
+    }
+
+    class CurseDownloader extends Downloader {
+
+        public CurseDownloader() {
+            super(ProgressLayout.INSTALL_MODPACK);
+        }
+
+        public void start(CurseManifest curseManifest, File instanceDestination) throws IOException, InterruptedException {
+            ArrayList<AcquireableTaskMetadata> taskMetadatas = new ArrayList<>(curseManifest.files.length);
+            for(final CurseManifest.CurseFile file : curseManifest.files) {
+                taskMetadatas.add(new CurseTaskMetadata(file, instanceDestination));
+            }
+            runDownloads(taskMetadatas);
+        }
+    }
+
+    class CurseTaskMetadata extends AcquireableTaskMetadata {
+        private final CurseManifest.CurseFile mFile;
+        private final File mInstanceDestination;
+
+        public CurseTaskMetadata(CurseManifest.CurseFile mFile, File mInstanceDestination) {
+            super(DownloadMirror.DOWNLOAD_CLASS_METADATA);
+            this.mFile = mFile;
+            this.mInstanceDestination = mInstanceDestination;
+        }
+
+        @Override
+        public void acquireMetadata() throws IOException {
+            JsonObject fileMetadata = getFile(mFile.projectID, mFile.fileID);
+            checkRequiredFileFields(fileMetadata);
+            String url = getDownloadUrl(fileMetadata);
+            this.url = new URL(url);
+            this.path = new File(mInstanceDestination, "mods/"+ URLDecoder.decode(FileUtils.getFileName(url),"UTF-8"));
+            FileUtils.ensureParentDirectorySilently(this.path);
+            this.sha1Hash = getSha1FromModData(fileMetadata);
+            this.size = fileMetadata.get("fileLength").getAsLong();
+        }
     }
 }

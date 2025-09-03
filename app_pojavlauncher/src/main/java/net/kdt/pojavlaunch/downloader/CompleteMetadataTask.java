@@ -15,6 +15,10 @@ public class CompleteMetadataTask extends DownloaderTask {
 
     @Override
     protected void performTask() throws IOException {
+        if(mMetadata instanceof AcquireableTaskMetadata) {
+            ((AcquireableTaskMetadata)mMetadata).acquireMetadata();
+            if(mMetadata.url == null) throw new IOException("Metadata acquisition did not supply the URL!");
+        }
         if(mMetadata.url != null) {
             getLibrarySha1Hash();
             getFileSize();
@@ -42,6 +46,6 @@ public class CompleteMetadataTask extends DownloaderTask {
     }
 
     protected static boolean shouldCompleteMetadata(TaskMetadata metadata) {
-        return (metadata.sha1Hash == null && metadata.mirrorType == DownloadMirror.DOWNLOAD_CLASS_LIBRARIES) || metadata.size == -1;
+        return metadata instanceof AcquireableTaskMetadata || (metadata.sha1Hash == null && metadata.mirrorType == DownloadMirror.DOWNLOAD_CLASS_LIBRARIES) || metadata.size == -1;
     }
 }

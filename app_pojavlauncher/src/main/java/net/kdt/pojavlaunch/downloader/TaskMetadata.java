@@ -6,8 +6,8 @@ import java.io.File;
 import java.net.URL;
 
 public class TaskMetadata {
-    public final File path;
-    public final URL url;
+    public File path;
+    public URL url;
     public final int mirrorType;
     public long size;
     public String sha1Hash;
