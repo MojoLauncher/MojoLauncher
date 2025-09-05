@@ -228,8 +228,9 @@ public class JREUtils {
 
         envMap.put("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
         envMap.put("PATH", jreHome + "/bin:" + Os.getenv("PATH"));
-        if(FFmpegPlugin.isAvailable) {
-            envMap.put("POJAV_FFMPEG_PATH", FFmpegPlugin.executablePath);
+        if(LibraryPlugin.isAvailable(LibraryPlugin.KnownPlugins.FFMPEG_PLUGIN.id)) {
+            envMap.put("POJAV_FFMPEG_PATH",
+                    LibraryPlugin.getPlugin(LibraryPlugin.KnownPlugins.FFMPEG_PLUGIN.id).resolveAbsolutePath("libffmpeg.so"));
         }
         // Check for AnglePlugin availability and point LTW/gl4es to ANGLE's EGL
 		// gl4es is, apparently, incompatible with gl4es, enable ANGLE only for LTW for now

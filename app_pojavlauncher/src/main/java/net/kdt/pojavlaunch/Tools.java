@@ -378,7 +378,7 @@ public final class Tools {
         javaArgList.addAll(Arrays.asList(launchArgs));
         // ctx.appendlnToLog("full args: "+javaArgList.toString());
         String args = instance.getLaunchArgs();
-        FFmpegPlugin.discover(activity);
+        LibraryPlugin.discoverPlugin(activity, LibraryPlugin.KnownPlugins.FFMPEG_PLUGIN.id);
         LibraryPlugin.discoverPlugin(activity, LibraryPlugin.KnownPlugins.ANGLE_PLUGIN.id);
         Tools.releaseRenderersCache();
         JREUtils.launchJavaVM(activity, runtime, gamedir, javaArgList, args);
