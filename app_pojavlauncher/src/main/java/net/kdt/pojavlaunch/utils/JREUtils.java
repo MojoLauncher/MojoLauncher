@@ -157,8 +157,8 @@ public class JREUtils {
 
         String libName = is64BitsDevice() ? "lib64" : "lib";
         StringBuilder ldLibraryPath = new StringBuilder();
-        if(FFmpegPlugin.isAvailable) {
-            ldLibraryPath.append(FFmpegPlugin.libraryPath).append(":");
+        if(LibraryPlugin.isAvailable(LibraryPlugin.KnownPlugins.FFMPEG_PLUGIN.id)) {
+            ldLibraryPath.append(LibraryPlugin.getPlugin(LibraryPlugin.KnownPlugins.FFMPEG_PLUGIN.id).getLibraryPath()).append(":");
         }
         ldLibraryPath.append(jreHome)
                 .append("/").append(Tools.DIRNAME_HOME_JRE)
