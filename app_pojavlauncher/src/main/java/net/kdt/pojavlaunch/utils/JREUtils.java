@@ -171,6 +171,19 @@ public class JREUtils {
         LD_LIBRARY_PATH = ldLibraryPath.toString();
     }
 
+    // Setups ANGLE driver environment
+    public static void setupAngleEnv(Map<String, String> envMap){
+        if(!LauncherPreferences.PREF_USE_ANGLE) return;
+        LibraryPlugin plugin = LibraryPlugin.getPlugin(LibraryPlugin.KnownPlugins.ANGLE_PLUGIN.id);
+        if(plugin == null) return;
+        String[] angleLibs = {"libEGL_angle.so", "libGLESv2_angle.so"};
+        if(!plugin.checkLibraries(angleLibs)){
+            Log.e("AngleEnvSetup", "AnglePlugin exists, but the ANGLE libraries are not present. Is it corrupted?");
+            return;
+        }
+        envMap.put("LIBGL_EGL", plugin.resolveAbsolutePath(angleLibs[0]));
+        envMap.put("LIBGL_GLES", plugin.resolveAbsolutePath(angleLibs[1]));
+    }
     public static void setJavaEnvironment(Activity activity, String jreHome) throws Throwable {
         Map<String, String> envMap = new ArrayMap<>();
         envMap.put("POJAV_NATIVEDIR", NATIVE_LIB_DIR);
@@ -220,13 +233,7 @@ public class JREUtils {
         }
         // Check for AnglePlugin availability and point LTW/gl4es to ANGLE's EGL
 		// gl4es is, apparently, incompatible with gl4es, enable ANGLE only for LTW for now
-        if(LauncherPreferences.PREF_USE_ANGLE &&
-                LibraryPlugin.isAvailable(LibraryPlugin.KnownPlugins.ANGLE_PLUGIN.id) &&
-                LibraryPlugin.getPlugin(LibraryPlugin.KnownPlugins.ANGLE_PLUGIN.id).checkLibraries("libEGL_angle.so", "libGLESv2_angle.so") &&
-                LOCAL_RENDERER.equals("opengles3_ltw")){
-            envMap.put("LIBGL_EGL", LibraryPlugin.getPlugin(LibraryPlugin.KnownPlugins.ANGLE_PLUGIN.id).resolveAbsolutePath("libEGL_angle.so"));
-            envMap.put("LIBGL_GLES", LibraryPlugin.getPlugin(LibraryPlugin.KnownPlugins.ANGLE_PLUGIN.id).resolveAbsolutePath("libGLESv2_angle.so"));
-        }
+        setupAngleEnv(envMap);
 
         if(LOCAL_RENDERER != null) {
             envMap.put("MOJO_RENDERER", LOCAL_RENDERER);
