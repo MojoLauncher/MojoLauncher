@@ -178,7 +178,7 @@ public class JREUtils {
         if(plugin == null) return;
         String[] angleLibs = {"libEGL_angle.so", "libGLESv2_angle.so"};
         if(!plugin.checkLibraries(angleLibs)){
-            Log.e("AngleEnvSetup", "AnglePlugin exists, but the ANGLE libraries are not present. Is it corrupted?");
+            Log.e("AngleEnvSetup", "AnglePlugin exists, but the ANGLE libraries are not present. Is the plugin corrupted?");
             return;
         }
         envMap.put("LIBGL_EGL", plugin.resolveAbsolutePath(angleLibs[0]));
