@@ -29,6 +29,7 @@ import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.Runtime;
 import net.kdt.pojavlaunch.plugins.AnglePlugin;
 import net.kdt.pojavlaunch.plugins.FFmpegPlugin;
+import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.*;
 
 import git.artdeell.mojo.R;
@@ -219,9 +220,12 @@ public class JREUtils {
         }
         // Check for AnglePlugin availability and point LTW/gl4es to ANGLE's EGL
 		// gl4es is, apparently, incompatible with gl4es, enable ANGLE only for LTW for now
-        if(LauncherPreferences.PREF_USE_ANGLE && AnglePlugin.isAvailable() && LOCAL_RENDERER.equals("opengles3_ltw")){
-            envMap.put("LIBGL_EGL", AnglePlugin.getEGLPath());
-            envMap.put("LIBGL_GLES", AnglePlugin.getGLESPath());
+        if(LauncherPreferences.PREF_USE_ANGLE &&
+                LibraryPlugin.isAvailable(LibraryPlugin.KnownPlugins.ANGLE_PLUGIN.id) &&
+                LibraryPlugin.getPlugin(LibraryPlugin.KnownPlugins.ANGLE_PLUGIN.id).checkLibraries("libEGL_angle.so", "libGLESv2_angle.so") &&
+                LOCAL_RENDERER.equals("opengles3_ltw")){
+            envMap.put("LIBGL_EGL", LibraryPlugin.getPlugin(LibraryPlugin.KnownPlugins.ANGLE_PLUGIN.id).resolveAbsolutePath("libEGL_angle.so"));
+            envMap.put("LIBGL_GLES", LibraryPlugin.getPlugin(LibraryPlugin.KnownPlugins.ANGLE_PLUGIN.id).resolveAbsolutePath("libGLESv2_angle.so"));
         }
 
         if(LOCAL_RENDERER != null) {
