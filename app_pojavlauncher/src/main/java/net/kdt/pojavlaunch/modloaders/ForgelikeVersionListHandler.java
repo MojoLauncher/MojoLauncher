@@ -7,7 +7,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ForgeVersionListHandler extends DefaultHandler {
+public class ForgelikeVersionListHandler extends DefaultHandler {
     private List<String> mForgeVersions;
     private StringBuilder mCurrentVersion = null;
     @Override

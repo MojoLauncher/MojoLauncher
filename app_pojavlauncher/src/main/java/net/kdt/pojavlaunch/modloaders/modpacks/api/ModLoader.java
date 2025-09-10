@@ -2,8 +2,7 @@ package net.kdt.pojavlaunch.modloaders.modpacks.api;
 
 import net.kdt.pojavlaunch.instances.InstanceInstaller;
 import net.kdt.pojavlaunch.modloaders.FabriclikeUtils;
-import net.kdt.pojavlaunch.modloaders.ForgeUtils;
-import net.kdt.pojavlaunch.modloaders.NeoforgeUtils;
+import net.kdt.pojavlaunch.modloaders.ForgelikeUtils;
 
 import java.io.IOException;
 
@@ -65,9 +64,9 @@ public class ModLoader {
     public InstanceInstaller createInstaller() throws IOException {
         switch (modLoaderType) {
             case MOD_LOADER_NEOFORGE:
-                return NeoforgeUtils.createInstaller(modLoaderVersion);
+                return ForgelikeUtils.NEOFORGE_UTILS.createInstaller(minecraftVersion, modLoaderVersion);
             case MOD_LOADER_FORGE:
-                return ForgeUtils.createInstaller(minecraftVersion, modLoaderVersion);
+                return ForgelikeUtils.FORGE_UTILS.createInstaller(minecraftVersion, modLoaderVersion);
             case MOD_LOADER_QUILT:
             case MOD_LOADER_FABRIC:
             default:
