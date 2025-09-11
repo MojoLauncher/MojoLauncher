@@ -80,10 +80,6 @@ public class ModLoader {
      */
     public boolean requiresGuiInstallation() {
         switch (modLoaderType) {
-            // technically, neoforge can be installed without a gui
-            // as the installer allows to install it by passing the --installClient arg
-            // but this requires some extra code which I have not done yet
-            // TODO implement headless neoforge installation
             case MOD_LOADER_NEOFORGE:
             case MOD_LOADER_FORGE:
                 return true;
