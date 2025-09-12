@@ -14,7 +14,7 @@ public class LibraryPlugin {
 
     // Known plugins constants
     public static final String ID_ANGLE_PLUGIN = "git.mojo.angle";
-    public static final String ID_FFMPEG_PLUGIN = "net.kdt.pojavlaunch.ffmpeg";
+    public static final String ID_FFMPEG_PLUGIN = "git.mojo.ffmpeg";
 
     private static Map<String, LibraryPlugin> loadedPlugins = new HashMap<>();
     private String appId;
