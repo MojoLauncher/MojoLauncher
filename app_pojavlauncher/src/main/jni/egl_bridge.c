@@ -13,6 +13,7 @@
 #include <GL/osmesa.h>
 #include "ctxbridges/osmesa_loader.h"
 #include "driver_helper/nsbypass.h"
+#include <android/log.h>
 
 #ifdef GLES_TEST
 #include <GLES2/gl2.h>
@@ -272,7 +273,7 @@ EXTERNAL_API void pojavSwapInterval(int interval) {
     br_swap_interval(interval);
 }
 
-EXTERNAL_API void* pojavCreateCursor(GLFWimage* image, int xhot, int yhot) {
+EXTERNAL_API LinkedListNode* pojavCreateCursor(GLFWimage* image, int xhot, int yhot) {
     if(image == NULL) {
         printf("Passed image is null!\n");
         return NULL;
@@ -294,43 +295,25 @@ EXTERNAL_API void* pojavCreateCursor(GLFWimage* image, int xhot, int yhot) {
     (*env)->DeleteLocalRef(env, cursor);
     (*env)->DeleteLocalRef(env, buffer);
 
-    linkedlist_append(pojav_environ->cursors, globalCursor);
-    return globalCursor;
+    return linkedlist_append(pojav_environ->cursors, globalCursor);
 }
 
-EXTERNAL_API void pojavSetCursor(__attribute__((unused)) void* window, jobject cursor) {
+EXTERNAL_API void pojavSetCursor(__attribute__((unused)) void* window, LinkedListNode* cursor) {
+    jobject value = NULL;
+    if(cursor) value = cursor->value;
     TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavSetCursor!\n", return;);
-    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_setCursor, cursor);
+    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_setCursor, value);
 }
 
-EXTERNAL_API void pojavDestroyCursor(jobject cursor) {
-    if(cursor == NULL) {
+EXTERNAL_API void pojavDestroyCursor(LinkedListNode* cursor) {
+    if(cursor == NULL || cursor->value == NULL) {
         printf("Passed cursor to pojavDestroyCursor is null!\n");
         return;
     }
 
     TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavDestroyCursor!\n", return;);
-    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_removeCursor, cursor);
+    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_removeCursor, cursor->value);
 
-    LinkedListNode* current = pojav_environ->cursors->first;
-    LinkedListNode* prev = NULL;
-
-    while (current) {
-        if (current->value == cursor) {
-            if (prev == NULL) {
-                pojav_environ->cursors->first = current->next;
-            } else {
-                prev->next = current->next;
-            }
-            if (current == pojav_environ->cursors->last) {
-                pojav_environ->cursors->last = prev;
-            }
-
-            (*env)->DeleteGlobalRef(env, current->value);
-            free(current);
-            break;
-        }
-        prev = current;
-        current = current->next;
-    }
+    (*env)->DeleteGlobalRef(env, cursor->value);
+    linkedlist_remove(pojav_environ->cursors, cursor);
 }

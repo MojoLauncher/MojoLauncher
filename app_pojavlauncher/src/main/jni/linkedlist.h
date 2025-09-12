@@ -8,6 +8,7 @@
 typedef struct LinkedListNode {
     void* value;
     struct LinkedListNode* next;
+    struct LinkedListNode* prev;
 } LinkedListNode;
 
 typedef struct {
@@ -16,7 +17,7 @@ typedef struct {
 } LinkedList;
 
 LinkedList* linkedlist_init();
-void linkedlist_append(LinkedList* list, void* value);
-void linkedlist_free(LinkedList* list);
+LinkedListNode *linkedlist_append(LinkedList* list, void* value);
+void linkedlist_remove(LinkedList* list, LinkedListNode* node);
 
 #endif //POJAVLAUNCHER_LINKEDLIST_H
