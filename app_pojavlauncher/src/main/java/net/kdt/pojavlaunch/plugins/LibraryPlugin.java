@@ -12,6 +12,10 @@ import java.util.Map;
 public class LibraryPlugin {
     private static final String TAG = "LibraryPlugin";
 
+    // Known plugins constants
+    public static final String ID_ANGLE_PLUGIN = "git.mojo.angle";
+    public static final String ID_FFMPEG_PLUGIN = "net.kdt.pojavlaunch.ffmpeg";
+
     private static Map<String, LibraryPlugin> loadedPlugins = new HashMap<>();
     private String appId;
     private String libraryPath;
@@ -64,16 +68,5 @@ public class LibraryPlugin {
             if(!(new File(libraryPath, lib).exists())) return false;
         }
         return true;
-    }
-
-    public enum KnownPlugins {
-        ANGLE_PLUGIN("git.mojo.angle"),
-        FFMPEG_PLUGIN("net.kdt.pojavlaunch.ffmpeg")
-        ;
-
-        public final String id;
-        KnownPlugins(String id){
-            this.id = id;
-        }
     }
 }

@@ -155,8 +155,8 @@ public class JREUtils {
 
         String libName = is64BitsDevice() ? "lib64" : "lib";
         StringBuilder ldLibraryPath = new StringBuilder();
-        if(LibraryPlugin.isAvailable(LibraryPlugin.KnownPlugins.FFMPEG_PLUGIN.id)) {
-            ldLibraryPath.append(LibraryPlugin.getPlugin(LibraryPlugin.KnownPlugins.FFMPEG_PLUGIN.id).getLibraryPath()).append(":");
+        if(LibraryPlugin.isAvailable(LibraryPlugin.ID_FFMPEG_PLUGIN)) {
+            ldLibraryPath.append(LibraryPlugin.getPlugin(LibraryPlugin.ID_FFMPEG_PLUGIN).getLibraryPath()).append(":");
         }
         ldLibraryPath.append(jreHome)
                 .append("/").append(Tools.DIRNAME_HOME_JRE)
@@ -172,7 +172,7 @@ public class JREUtils {
     // Setups ANGLE driver environment
     public static void setupAngleEnv(Map<String, String> envMap){
         if(!LauncherPreferences.PREF_USE_ANGLE) return;
-        LibraryPlugin plugin = LibraryPlugin.getPlugin(LibraryPlugin.KnownPlugins.ANGLE_PLUGIN.id);
+        LibraryPlugin plugin = LibraryPlugin.getPlugin(LibraryPlugin.ID_ANGLE_PLUGIN);
         if(plugin == null) return;
         String[] angleLibs = {"libEGL_angle.so", "libGLESv2_angle.so"};
         if(!plugin.checkLibraries(angleLibs)){
@@ -226,9 +226,9 @@ public class JREUtils {
 
         envMap.put("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
         envMap.put("PATH", jreHome + "/bin:" + Os.getenv("PATH"));
-        if(LibraryPlugin.isAvailable(LibraryPlugin.KnownPlugins.FFMPEG_PLUGIN.id)) {
+        if(LibraryPlugin.isAvailable(LibraryPlugin.ID_FFMPEG_PLUGIN)) {
             envMap.put("POJAV_FFMPEG_PATH",
-                    LibraryPlugin.getPlugin(LibraryPlugin.KnownPlugins.FFMPEG_PLUGIN.id).resolveAbsolutePath("libffmpeg.so"));
+                    LibraryPlugin.getPlugin(LibraryPlugin.ID_FFMPEG_PLUGIN).resolveAbsolutePath("libffmpeg.so"));
         }
         // Check for AnglePlugin availability and point LTW/gl4es to ANGLE's EGL
 		// gl4es is, apparently, incompatible with gl4es, enable ANGLE only for LTW for now
