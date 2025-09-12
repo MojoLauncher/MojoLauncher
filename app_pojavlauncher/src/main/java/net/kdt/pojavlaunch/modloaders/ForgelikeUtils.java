@@ -1,5 +1,10 @@
 package net.kdt.pojavlaunch.modloaders;
 
+import android.util.Log;
+
+import androidx.arch.core.util.Function;
+import androidx.core.util.Predicate;
+
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.instances.InstanceInstaller;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
@@ -18,9 +23,11 @@ import javax.xml.parsers.SAXParserFactory;
 
 public class ForgelikeUtils {
     public static final ForgelikeUtils FORGE_UTILS =
-            new ForgelikeUtils("Forge", "forge", "forge", "%1$s-%2$s", "https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml", "https://maven.minecraftforge.net/net/minecraftforge/forge/%1$s/forge-%1$s-installer.jar");
+            new ForgelikeUtils("Forge", "forge", "forge", "%1$s-%2$s", "https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml", "https://maven.minecraftforge.net/net/minecraftforge/forge/%1$s/forge-%1$s-installer.jar",
+                    ver -> ver.substring(0, ver.indexOf("-")), noopPredicate(), false);
     public static final ForgelikeUtils NEOFORGE_UTILS =
-            new ForgelikeUtils("NeoForge", "neoforge", "neoforge", "%2$s", "https://maven.neoforged.net/net/neoforged/neoforge/maven-metadata.xml", "https://maven.neoforged.net/releases/net/neoforged/neoforge/%1$s/neoforge-%1$s-installer.jar");
+            new ForgelikeUtils("NeoForge", "neoforge", "neoforge", "%2$s", "https://maven.neoforged.net/net/neoforged/neoforge/maven-metadata.xml", "https://maven.neoforged.net/releases/net/neoforged/neoforge/%1$s/neoforge-%1$s-installer.jar",
+                    ver -> ComparableVersionString.parse(getMcVersionForNeoVersion(ver)).getProper(), (ver) -> !ver.startsWith("0"), true);
 
     private final String mName;
     private final String mCachePrefix;
@@ -28,14 +35,20 @@ public class ForgelikeUtils {
     private final String mIconName;
     private final String mMetadataUrl;
     private final String mInstallerUrl;
+    private final Function<String, String> mVersionProcessor;
+    private final Predicate<String> mVersionFilter;
+    private final boolean mVersionOrderInversed;
 
-    private ForgelikeUtils(String name, String cachePrefix, String iconName, String versionResolver, String metadataUrl, String installerUrl) {
+    private ForgelikeUtils(String name, String cachePrefix, String iconName, String versionResolver, String metadataUrl, String installerUrl, Function<String, String> versionProcessor, Predicate<String> versionFilter, boolean versionOrderInversed) {
         this.mName = name;
         this.mCachePrefix = cachePrefix;
         this.mIconName = iconName;
         this.mVersionResolver = versionResolver;
         this.mMetadataUrl = metadataUrl;
         this.mInstallerUrl = installerUrl;
+        this.mVersionProcessor = versionProcessor;
+        this.mVersionFilter = versionFilter;
+        this.mVersionOrderInversed = versionOrderInversed;
     }
 
     public List<String> downloadVersions() throws IOException {
@@ -100,5 +113,40 @@ public class ForgelikeUtils {
 
     public String getIconName() {
         return mIconName;
+    }
+
+    public String processVersionString(String version) {
+        return mVersionProcessor.apply(version);
+    }
+
+    public boolean shouldSkipVersion(String version) {
+        return !mVersionFilter.test(version);
+    }
+
+    public boolean isVersionOrderInversed() {
+        return mVersionOrderInversed;
+    }
+
+    private static <T> Predicate<T> noopPredicate() {
+        return (s) -> true;
+    }
+
+    private static String getMcVersionForNeoVersion(String neoVersion) {
+        // I feel like it's necessary to explain the NeoForge versioning format
+        // basically, what it does is it trims the major version from minecrafts version
+        // e.g.: 1.20.1 -> 20.1, and then appends its own "patch" version to that
+        // e.g.: 20.1 -> 20.1.8, which means the version string includes both, the minecraft
+        // and the loader version at once
+        try {
+            int firstIndex = neoVersion.indexOf('.');
+            int secondIndex = neoVersion.indexOf('.', firstIndex + 1);
+            if (firstIndex == -1 || secondIndex == -1) {
+                Log.e("NeoforgeUtils", "Failed to parse neoforge version: " + neoVersion + "; not enough '.' found");
+            }
+            return "1." + neoVersion.substring(0, secondIndex);
+        } catch (StringIndexOutOfBoundsException e) {
+            Log.e("NeoforgeUtils", "Failed to parse neoforge version: " + neoVersion, e);
+            return neoVersion;
+        }
     }
 }

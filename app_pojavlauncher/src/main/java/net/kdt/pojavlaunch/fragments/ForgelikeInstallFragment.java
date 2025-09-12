@@ -1,12 +1,15 @@
 package net.kdt.pojavlaunch.fragments;
 
 import android.content.Context;
+import android.view.LayoutInflater;
+import android.widget.ExpandableListAdapter;
 
 import com.kdt.mcgui.ProgressLayout;
 
 import net.kdt.pojavlaunch.instances.InstanceInstaller;
 import net.kdt.pojavlaunch.instances.InstanceManager;
 import net.kdt.pojavlaunch.modloaders.ForgelikeUtils;
+import net.kdt.pojavlaunch.modloaders.ForgelikeVersionListAdapter;
 import net.kdt.pojavlaunch.modloaders.ModloaderListenerProxy;
 
 import java.io.File;
@@ -28,6 +31,11 @@ public abstract class ForgelikeInstallFragment extends ModVersionListFragment<Li
     @Override
     public Runnable createDownloadTask(Object selectedVersion, ModloaderListenerProxy listenerProxy) {
         return ()->createInstance((String) selectedVersion, listenerProxy);
+    }
+
+    @Override
+    public ExpandableListAdapter createAdapter(List<String> versionList, LayoutInflater layoutInflater) {
+        return new ForgelikeVersionListAdapter(versionList, layoutInflater, mUtils);
     }
 
     @Override

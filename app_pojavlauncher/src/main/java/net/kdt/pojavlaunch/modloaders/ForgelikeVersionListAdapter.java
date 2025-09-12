@@ -8,29 +8,37 @@ import android.widget.ExpandableListAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class ForgeVersionListAdapter extends BaseExpandableListAdapter implements ExpandableListAdapter {
+public class ForgelikeVersionListAdapter extends BaseExpandableListAdapter implements ExpandableListAdapter {
     private final List<String> mGameVersions;
-    private final List<List<String>> mForgeVersions;
+    private final List<List<String>> mLoaderVersions;
     private final LayoutInflater mLayoutInflater;
 
-    public ForgeVersionListAdapter(List<String> forgeVersions, LayoutInflater layoutInflater) {
+    public ForgelikeVersionListAdapter(List<String> forgeVersions, LayoutInflater layoutInflater, ForgelikeUtils utils) {
         this.mLayoutInflater = layoutInflater;
         mGameVersions = new ArrayList<>();
-        mForgeVersions = new ArrayList<>();
+        mLoaderVersions = new ArrayList<>();
         for(String version : forgeVersions) {
-            int dashIndex = version.indexOf("-");
-            String gameVersion = version.substring(0, dashIndex);
+            if(utils.shouldSkipVersion(version)) continue;
+            String gameVersion = utils.processVersionString(version);
             List<String> versionList;
             int gameVersionIndex = mGameVersions.indexOf(gameVersion);
-            if(gameVersionIndex != -1) versionList = mForgeVersions.get(gameVersionIndex);
-            else {
+            if(gameVersionIndex != -1) {
+                versionList = mLoaderVersions.get(gameVersionIndex);
+            } else {
                 versionList = new ArrayList<>();
                 mGameVersions.add(gameVersion);
-                mForgeVersions.add(versionList);
+                mLoaderVersions.add(versionList);
             }
             versionList.add(version);
+        }
+        if(utils.isVersionOrderInversed()) {
+            for (List<String> versionList : mLoaderVersions) {
+                Collections.sort(versionList, Collections.reverseOrder());
+            }
+            Collections.sort(mGameVersions, Collections.reverseOrder());
         }
     }
 
@@ -41,7 +49,7 @@ public class ForgeVersionListAdapter extends BaseExpandableListAdapter implement
 
     @Override
     public int getChildrenCount(int i) {
-        return mForgeVersions.get(i).size();
+        return mLoaderVersions.get(i).size();
     }
 
     @Override
@@ -92,7 +100,7 @@ public class ForgeVersionListAdapter extends BaseExpandableListAdapter implement
     }
 
     private String getForgeVersion(int i, int i1){
-        return mForgeVersions.get(i).get(i1);
+        return mLoaderVersions.get(i).get(i1);
     }
 
     @Override

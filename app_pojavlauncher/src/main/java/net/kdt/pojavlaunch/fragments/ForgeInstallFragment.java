@@ -1,17 +1,12 @@
 package net.kdt.pojavlaunch.fragments;
 
 import android.content.Context;
-import android.view.LayoutInflater;
-import android.widget.ExpandableListAdapter;
 
 import androidx.annotation.NonNull;
 
 import git.artdeell.mojo.R;
 
-import net.kdt.pojavlaunch.modloaders.ForgeVersionListAdapter;
 import net.kdt.pojavlaunch.modloaders.ForgelikeUtils;
-
-import java.util.List;
 
 public class ForgeInstallFragment extends ForgelikeInstallFragment {
     public static final String TAG = "ForgeInstallFragment";
@@ -32,10 +27,5 @@ public class ForgeInstallFragment extends ForgelikeInstallFragment {
     @Override
     public int getNoDataMsg() {
         return R.string.forge_dl_no_installer;
-    }
-
-    @Override
-    public ExpandableListAdapter createAdapter(List<String> versionList, LayoutInflater layoutInflater) {
-        return new ForgeVersionListAdapter(versionList, layoutInflater);
     }
 }
