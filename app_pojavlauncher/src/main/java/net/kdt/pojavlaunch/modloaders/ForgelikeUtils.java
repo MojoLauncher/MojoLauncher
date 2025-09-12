@@ -18,18 +18,18 @@ import javax.xml.parsers.SAXParserFactory;
 
 public class ForgelikeUtils {
     public static final ForgelikeUtils FORGE_UTILS =
-            new ForgelikeUtils("Forge", "forge", "forge", (mc, loader) -> mc + "-" + loader, "https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml", "https://maven.minecraftforge.net/net/minecraftforge/forge/%1$s/forge-%1$s-installer.jar");
+            new ForgelikeUtils("Forge", "forge", "forge", "%1$s-%2$s", "https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml", "https://maven.minecraftforge.net/net/minecraftforge/forge/%1$s/forge-%1$s-installer.jar");
     public static final ForgelikeUtils NEOFORGE_UTILS =
-            new ForgelikeUtils("NeoForge", "neoforge", "neoforge", (mc, loader) -> loader, "https://maven.neoforged.net/net/neoforged/neoforge/maven-metadata.xml", "https://maven.neoforged.net/releases/net/neoforged/neoforge/%1$s/neoforge-%1$s-installer.jar");
+            new ForgelikeUtils("NeoForge", "neoforge", "neoforge", "%2$s", "https://maven.neoforged.net/net/neoforged/neoforge/maven-metadata.xml", "https://maven.neoforged.net/releases/net/neoforged/neoforge/%1$s/neoforge-%1$s-installer.jar");
 
     private final String mName;
     private final String mCachePrefix;
-    private final VersionResolver mVersionResolver;
+    private final String mVersionResolver;
     private final String mIconName;
     private final String mMetadataUrl;
     private final String mInstallerUrl;
 
-    private ForgelikeUtils(String name, String cachePrefix, String iconName, VersionResolver versionResolver, String metadataUrl, String installerUrl) {
+    private ForgelikeUtils(String name, String cachePrefix, String iconName, String versionResolver, String metadataUrl, String installerUrl) {
         this.mName = name;
         this.mCachePrefix = cachePrefix;
         this.mIconName = iconName;
@@ -74,7 +74,7 @@ public class ForgelikeUtils {
     public InstanceInstaller createInstaller(String gameVersion, String modLoaderVersion) throws IOException {
         List<String> versions = downloadVersions();
         if (versions == null) return null;
-        String versionStart = mVersionResolver.resolveVersion(gameVersion, modLoaderVersion);
+        String versionStart = String.format(mVersionResolver, gameVersion, modLoaderVersion);
         for (String versionName : versions) {
             if (!versionName.startsWith(versionStart)) continue;
             return createInstaller(versionName);
