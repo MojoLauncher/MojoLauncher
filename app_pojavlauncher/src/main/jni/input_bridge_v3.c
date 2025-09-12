@@ -616,7 +616,12 @@ LinkedListNode* pojavCreateCursor(GLFWimage* image, int xhot, int yhot) {
     (*env)->DeleteLocalRef(env, cursor);
     (*env)->DeleteLocalRef(env, buffer);
 
-    return linkedlist_append(pojav_environ->cursors, globalCursor);
+    LinkedListNode* node = linkedlist_append(pojav_environ->cursors, globalCursor);
+    if(!node) {
+        (*env)->DeleteGlobalRef(env, globalCursor);
+        return NULL;
+    }
+    return node;
 }
 
 void pojavSetCursor(__attribute__((unused)) void* window, LinkedListNode* cursor) {

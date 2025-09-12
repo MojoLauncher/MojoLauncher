@@ -14,6 +14,7 @@ LinkedList* linkedlist_init() {
 
 LinkedListNode *linkedlist_append(LinkedList* list, void* value) {
     LinkedListNode* node = malloc(sizeof(LinkedListNode));
+    if(!node) return NULL;
     node->value = value;
     node->next = NULL;
     node->prev = list->last;
