@@ -2,9 +2,6 @@ package net.kdt.pojavlaunch.modloaders;
 
 import android.util.Log;
 
-import androidx.arch.core.util.Function;
-import androidx.core.util.Predicate;
-
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.instances.InstanceInstaller;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
@@ -21,13 +18,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-public class ForgelikeUtils {
-    public static final ForgelikeUtils FORGE_UTILS =
-            new ForgelikeUtils("Forge", "forge", "forge", "%1$s-%2$s", "https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml", "https://maven.minecraftforge.net/net/minecraftforge/forge/%1$s/forge-%1$s-installer.jar",
-                    ver -> ver.substring(0, ver.indexOf("-")), noopPredicate(), false);
-    public static final ForgelikeUtils NEOFORGE_UTILS =
-            new ForgelikeUtils("NeoForge", "neoforge", "neoforge", "%2$s", "https://maven.neoforged.net/net/neoforged/neoforge/maven-metadata.xml", "https://maven.neoforged.net/releases/net/neoforged/neoforge/%1$s/neoforge-%1$s-installer.jar",
-                    ver -> ComparableVersionString.parse(getMcVersionForNeoVersion(ver)).getProper(), (ver) -> !ver.startsWith("0"), true);
+public abstract class ForgelikeUtils {
+    public static final ForgelikeUtils FORGE_UTILS = new ForgeUtils();
+    public static final ForgelikeUtils NEOFORGE_UTILS = new NeoforgeUtils();
 
     private final String mName;
     private final String mCachePrefix;
@@ -35,19 +28,15 @@ public class ForgelikeUtils {
     private final String mIconName;
     private final String mMetadataUrl;
     private final String mInstallerUrl;
-    private final Function<String, String> mVersionProcessor;
-    private final Predicate<String> mVersionFilter;
     private final boolean mVersionOrderInversed;
 
-    private ForgelikeUtils(String name, String cachePrefix, String iconName, String versionResolver, String metadataUrl, String installerUrl, Function<String, String> versionProcessor, Predicate<String> versionFilter, boolean versionOrderInversed) {
+    private ForgelikeUtils(String name, String cachePrefix, String iconName, String versionResolver, String metadataUrl, String installerUrl, boolean versionOrderInversed) {
         this.mName = name;
         this.mCachePrefix = cachePrefix;
         this.mIconName = iconName;
         this.mVersionResolver = versionResolver;
         this.mMetadataUrl = metadataUrl;
         this.mInstallerUrl = installerUrl;
-        this.mVersionProcessor = versionProcessor;
-        this.mVersionFilter = versionFilter;
         this.mVersionOrderInversed = versionOrderInversed;
     }
 
@@ -115,20 +104,12 @@ public class ForgelikeUtils {
         return mIconName;
     }
 
-    public String processVersionString(String version) {
-        return mVersionProcessor.apply(version);
-    }
+    public abstract String processVersionString(String version);
 
-    public boolean shouldSkipVersion(String version) {
-        return !mVersionFilter.test(version);
-    }
+    public abstract boolean shouldSkipVersion(String version);
 
     public boolean isVersionOrderInversed() {
         return mVersionOrderInversed;
-    }
-
-    private static <T> Predicate<T> noopPredicate() {
-        return (s) -> true;
     }
 
     private static String getMcVersionForNeoVersion(String neoVersion) {
@@ -147,6 +128,49 @@ public class ForgelikeUtils {
         } catch (StringIndexOutOfBoundsException e) {
             Log.e("NeoforgeUtils", "Failed to parse neoforge version: " + neoVersion, e);
             return neoVersion;
+        }
+    }
+
+    private static class ForgeUtils extends ForgelikeUtils {
+        public ForgeUtils() {
+            super(
+                    "Forge", "forge", "forge", "%1$s-%2$s",
+                    "https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml",
+                    "https://maven.minecraftforge.net/net/minecraftforge/forge/%1$s/forge-%1$s-installer.jar",
+                    false
+            );
+        }
+
+        @Override
+        public String processVersionString(String version) {
+            int dashIndex = version.indexOf("-");
+            return version.substring(0, dashIndex);
+        }
+
+        @Override
+        public boolean shouldSkipVersion(String version) {
+            return false;
+        }
+    }
+
+    private static class NeoforgeUtils extends ForgelikeUtils {
+        public NeoforgeUtils() {
+            super(
+                    "NeoForge", "neoforge", "neoforge", "%2$s",
+                    "https://maven.neoforged.net/net/neoforged/neoforge/maven-metadata.xml",
+                    "https://maven.neoforged.net/releases/net/neoforged/neoforge/%1$s/neoforge-%1$s-installer.jar",
+                    true
+            );
+        }
+
+        @Override
+        public String processVersionString(String version) {
+            return ComparableVersionString.parse(getMcVersionForNeoVersion(version)).getProper();
+        }
+
+        @Override
+        public boolean shouldSkipVersion(String version) {
+            return version.startsWith("0");
         }
     }
 }
