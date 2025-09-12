@@ -576,3 +576,65 @@ JNIEXPORT jobject JNICALL
 Java_org_lwjgl_glfw_CallbackBridge_nativeCreateGamepadAxisBuffer(JNIEnv *env, jclass clazz) {
     return (*env)->NewDirectByteBuffer(env, &pojav_environ->gamepadState.axes, sizeof(pojav_environ->gamepadState.axes));
 }
+
+void destroyAllCursors() {
+    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "Failed to attach to env from pojavTerminate!\n", return;);
+
+    LinkedListNode* current = pojav_environ->cursors->first;
+    while (current) {
+        LinkedListNode* next = current->next;
+        (*env)->DeleteGlobalRef(env, current->value);
+        free(current);
+        current = next;
+    }
+    pojav_environ->cursors->first = NULL;
+    pojav_environ->cursors->last = NULL;
+
+    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_setCursor, NULL);
+}
+
+// the methods below are called from org/lwjgl/glfw/GLFW
+LinkedListNode* pojavCreateCursor(GLFWimage* image, int xhot, int yhot) {
+    if(image == NULL) {
+        printf("Passed image is null!\n");
+        return NULL;
+    }
+
+    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavCreateCursor!\n", return NULL;);
+    size_t imageBytes = image->width * image->height * 4;
+    jobject buffer = (*env)->NewDirectByteBuffer(env, image->pixels, imageBytes);
+    if(buffer == NULL) {
+        printf("Failed to create ByteBuffer for cursor image!\n");
+        return NULL;
+    }
+
+    jobject cursor = (*env)->CallStaticObjectMethod(env, pojav_environ->bridgeClazz,
+                                                    pojav_environ->method_createCursor, buffer,
+                                                    image->width, image->height, xhot, yhot);
+    jobject globalCursor = (*env)->NewGlobalRef(env, cursor);
+    // not needed anymore
+    (*env)->DeleteLocalRef(env, cursor);
+    (*env)->DeleteLocalRef(env, buffer);
+
+    return linkedlist_append(pojav_environ->cursors, globalCursor);
+}
+
+void pojavSetCursor(__attribute__((unused)) void* window, LinkedListNode* cursor) {
+    jobject value = NULL;
+    if(cursor) value = cursor->value;
+    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavSetCursor!\n", return;);
+    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_setCursor, value);
+}
+
+void pojavDestroyCursor(LinkedListNode* cursor) {
+    if(cursor == NULL || cursor->value == NULL) {
+        printf("Passed cursor to pojavDestroyCursor is null!\n");
+        return;
+    }
+
+    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavDestroyCursor!\n", return;);
+    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_removeCursor, cursor->value);
+
+    (*env)->DeleteGlobalRef(env, cursor->value);
+    linkedlist_remove(pojav_environ->cursors, cursor);
+}

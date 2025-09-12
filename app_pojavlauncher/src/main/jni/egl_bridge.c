@@ -13,7 +13,6 @@
 #include <GL/osmesa.h>
 #include "ctxbridges/osmesa_loader.h"
 #include "driver_helper/nsbypass.h"
-#include <android/log.h>
 
 #ifdef GLES_TEST
 #include <GLES2/gl2.h>
@@ -39,15 +38,6 @@
 // This means that you are forced to have this function/variable for ABI compatibility
 #define ABI_COMPAT __attribute__((unused))
 
-#define TRY_ATTACH_ENV(env_name, vm, error_message, then) JNIEnv* env_name;\
-do {                                                                       \
-    env_name = get_attached_env(vm);                                       \
-    if(env_name == NULL) {                                                 \
-        printf(error_message);                                             \
-        then                                                               \
-    }                                                                      \
-} while(0)
-
 struct PotatoBridge {
 
     /* EGLContext */ void* eglContext;
@@ -68,6 +58,8 @@ struct PotatoBridge potatoBridge;
 #define RENDERER_GL4ES 1
 #define RENDERER_VK_ZINK 2
 #define RENDERER_VULKAN 4
+
+extern void destroyAllCursors();
 
 EXTERNAL_API void pojavTerminate() {
     printf("EGLBridge: Terminating\n");
@@ -91,19 +83,7 @@ EXTERNAL_API void pojavTerminate() {
         } break;
     }
 
-    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "Failed to attach to env from pojavTerminate!\n", return;);
-
-    LinkedListNode* current = pojav_environ->cursors->first;
-    while (current) {
-        LinkedListNode* next = current->next;
-        (*env)->DeleteGlobalRef(env, current->value);
-        free(current);
-        current = next;
-    }
-    pojav_environ->cursors->first = NULL;
-    pojav_environ->cursors->last = NULL;
-
-    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_setCursor, NULL);
+    destroyAllCursors();
 }
 
 JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_setupBridgeWindow(JNIEnv* env, ABI_COMPAT jclass clazz, jobject surface) {
@@ -271,49 +251,4 @@ Java_org_lwjgl_vulkan_VK_getVulkanDriverHandle(ABI_COMPAT JNIEnv *env, ABI_COMPA
 
 EXTERNAL_API void pojavSwapInterval(int interval) {
     br_swap_interval(interval);
-}
-
-EXTERNAL_API LinkedListNode* pojavCreateCursor(GLFWimage* image, int xhot, int yhot) {
-    if(image == NULL) {
-        printf("Passed image is null!\n");
-        return NULL;
-    }
-
-    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavCreateCursor!\n", return NULL;);
-    size_t imageBytes = image->width * image->height * 4;
-    jobject buffer = (*env)->NewDirectByteBuffer(env, image->pixels, imageBytes);
-    if(buffer == NULL) {
-        printf("Failed to create ByteBuffer for cursor image!\n");
-        return NULL;
-    }
-
-    jobject cursor = (*env)->CallStaticObjectMethod(env, pojav_environ->bridgeClazz,
-                                          pojav_environ->method_createCursor, buffer,
-                                          image->width, image->height, xhot, yhot);
-    jobject globalCursor = (*env)->NewGlobalRef(env, cursor);
-    // not needed anymore
-    (*env)->DeleteLocalRef(env, cursor);
-    (*env)->DeleteLocalRef(env, buffer);
-
-    return linkedlist_append(pojav_environ->cursors, globalCursor);
-}
-
-EXTERNAL_API void pojavSetCursor(__attribute__((unused)) void* window, LinkedListNode* cursor) {
-    jobject value = NULL;
-    if(cursor) value = cursor->value;
-    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavSetCursor!\n", return;);
-    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_setCursor, value);
-}
-
-EXTERNAL_API void pojavDestroyCursor(LinkedListNode* cursor) {
-    if(cursor == NULL || cursor->value == NULL) {
-        printf("Passed cursor to pojavDestroyCursor is null!\n");
-        return;
-    }
-
-    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavDestroyCursor!\n", return;);
-    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_removeCursor, cursor->value);
-
-    (*env)->DeleteGlobalRef(env, cursor->value);
-    linkedlist_remove(pojav_environ->cursors, cursor);
 }
