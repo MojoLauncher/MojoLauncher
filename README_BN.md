@@ -9,7 +9,7 @@
 
 * MojoLauncher হলো একটি লঞ্চার, যা [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher)-এর উপর ভিত্তি করে তৈরি, এবং এটি আপনাকে আপনার অ্যান্ড্রয়েড ডিভাইসে Minecraft: Java Edition খেলতে দেয়!  
 
-* এটি প্রায় প্রতিটি Minecraft সংস্করণ চালাতে পারে, এবং আপনাকে শুধুমাত্র `.jar` ইনস্টলার ব্যবহার করে [Forge](https://files.minecraftforge.net/) ও [Fabric](http://fabricmc.net/) এর মতো মডলোডার, [OptiFine](https://optifine.net) ও এবং আরও অনেক কিছু!
+* এটি প্রায় প্রতিটি Minecraft সংস্করণ চালাতে পারে, এবং আপনাকে শুধুমাত্র `.jar` ইনস্টলার ব্যবহার করে [Forge](https://files.minecraftforge.net/) ও [Fabric](http://fabricmc.net/) এর মতো মডলোডার, [OptiFine](https://optifine.net) ও এবং আরও অনেক কিছু ব্যবহার করতে দেয়‌!
 
 ## নেভিগেশন
 - [পরিচিতি](#introduction)  
