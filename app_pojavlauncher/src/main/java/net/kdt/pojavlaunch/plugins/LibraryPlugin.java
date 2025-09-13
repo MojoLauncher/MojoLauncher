@@ -19,25 +19,26 @@ public class LibraryPlugin {
     private static Map<String, LibraryPlugin> loadedPlugins = new HashMap<>();
     private String appId;
     private String libraryPath;
-    private boolean pluginAvailable = false;
-    private LibraryPlugin(Context ctx, String app){
+    private LibraryPlugin(String app, String libraryPath){
         this.appId = app;
-        Log.i(TAG, "Discovering plugin " + appId);
-        try {
-            PackageInfo pluginPackage = ctx.getPackageManager().getPackageInfo(appId, PackageManager.GET_SHARED_LIBRARY_FILES);
-            this.libraryPath = pluginPackage.applicationInfo.nativeLibraryDir;
-            pluginAvailable = true;
-
-        } catch (Exception e){
-            Log.e(TAG, "Plugin discover failed: " + e.getMessage());
-        }
+        this.libraryPath = libraryPath;
     }
 
     public static LibraryPlugin discoverPlugin(Context ctx, String appId){
         // Do not recreate plugin instance if it was discovered before
        if(loadedPlugins.containsKey(appId))
            return loadedPlugins.get(appId);
-       LibraryPlugin plugin = new LibraryPlugin(ctx, appId);
+        Log.i(TAG, "Discovering plugin " + appId);
+        String libraryPath;
+        try {
+            PackageInfo pluginPackage = ctx.getPackageManager().getPackageInfo(appId, PackageManager.GET_SHARED_LIBRARY_FILES);
+            libraryPath = pluginPackage.applicationInfo.nativeLibraryDir;
+
+        } catch (Exception e){
+            Log.e(TAG, "Plugin discover failed: " + e.getMessage());
+            return null;
+        }
+       LibraryPlugin plugin = new LibraryPlugin(appId, libraryPath);
        loadedPlugins.put(appId, plugin);
        return plugin;
     }
@@ -45,11 +46,7 @@ public class LibraryPlugin {
         return loadedPlugins.get(appId);
     }
     public static boolean isAvailable(String appId){
-        return loadedPlugins.get(appId) != null && loadedPlugins.get(appId).isPluginAvailable();
-    }
-
-    public boolean isPluginAvailable() {
-        return pluginAvailable;
+        return loadedPlugins.get(appId) != null;
     }
 
     public String getId(){
