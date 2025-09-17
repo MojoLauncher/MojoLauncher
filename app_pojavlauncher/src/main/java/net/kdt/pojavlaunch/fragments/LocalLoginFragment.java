@@ -41,14 +41,8 @@ public class LocalLoginFragment extends Fragment {
                 Tools.dialog(context, context.getString(R.string.local_login_bad_username_title), context.getString(R.string.local_login_bad_username_text));
                 return;
             }
-            // License nag notification (tells first launch user to buy the game in the future)
-            if(!LauncherPreferences.PREF_LICENSE_NAGGED){
-                MinecraftAccount profile;
-                if((profile = PojavProfile.getCurrentProfileContent(true)) == null || !profile.isMicrosoft){
-                    Tools.dialog(context, context.getString(R.string.local_login_buy_game_title), context.getString(R.string.local_login_buy_game));
-                    LauncherPreferences.DEFAULT_PREF.edit().putBoolean("licenseNagged", true).apply();
-                }
-            }
+            if(PojavProfile.getCurrentProfileContent(true) == null)
+                Tools.maybeShowLicenseNag(context);
             ExtraCore.setValue(ExtraConstants.MOJANG_LOGIN_TODO, new String[]{
                     mUsernameEditText.getText().toString(), "" });
             Tools.swapFragment(requireActivity(), MainMenuFragment.class, MainMenuFragment.TAG, null);
