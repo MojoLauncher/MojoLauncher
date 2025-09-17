@@ -372,4 +372,6 @@
     <string name="local_login_bad_username_title">اسم المستخدم غير مناسب</string>
     <string name="local_login_bad_username_text">يجب أن يكون اسم المستخدم بين 3–16 حرفاً، ويجب أن يحتوي فقط على أحرف لاتينية وأرقام 0-9 وتسطيرات سفلية.</string>
     <string name="quick_setting_title">قائمة الإعدادات السريعة</string>
+    <string name="local_login_buy_game_title>ااشتري ماينكرافت!</string>
+    <string name="local_login_buy_game>يمكنك اللعب بحساب محلي مجانا، لكن ماينكرافت لعبة مدفوعة. نحن نؤمن ان الكل يجب ان يحصل على فرصة لتجربة اللعبة، نأمل ان تشتري اللعبة</string>
 </resources>
