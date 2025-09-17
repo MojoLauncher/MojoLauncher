@@ -140,7 +140,7 @@ public class JREUtils {
 
     }
 
-    public static void relocateLibPath(Runtime runtime, String jreHome) {
+    public static void relocateLibPath(Runtime runtime, String jreHome, String ffmpegPath) {
         String JRE_ARCHITECTURE = runtime.arch;
         if (Architecture.archAsInt(JRE_ARCHITECTURE) == ARCH_X86){
             JRE_ARCHITECTURE = "i386/i486/i586";
@@ -155,8 +155,8 @@ public class JREUtils {
 
         String libName = is64BitsDevice() ? "lib64" : "lib";
         StringBuilder ldLibraryPath = new StringBuilder();
-        if(LibraryPlugin.isAvailable(LibraryPlugin.ID_FFMPEG_PLUGIN)) {
-            ldLibraryPath.append(LibraryPlugin.getPlugin(LibraryPlugin.ID_FFMPEG_PLUGIN).getLibraryPath()).append(":");
+        if(ffmpegPath != null) {
+            ldLibraryPath.append(ffmpegPath).append(":");
         }
         ldLibraryPath.append(jreHome)
                 .append("/").append(Tools.DIRNAME_HOME_JRE)
@@ -170,17 +170,17 @@ public class JREUtils {
     }
 
     // Setups ANGLE driver environment
-    public static void setupAngleEnv(Map<String, String> envMap){
+    public static void setupAngleEnv(Context ctx, Map<String, String> envMap){
         if(!LauncherPreferences.PREF_USE_ANGLE) return;
-        LibraryPlugin plugin = LibraryPlugin.getPlugin(LibraryPlugin.ID_ANGLE_PLUGIN);
-        if(plugin == null) return;
+        LibraryPlugin angle = LibraryPlugin.discoverPlugin(ctx, LibraryPlugin.ID_ANGLE_PLUGIN);
+        if(angle == null) return;
         String[] angleLibs = {"libEGL_angle.so", "libGLESv2_angle.so"};
-        if(!plugin.checkLibraries(angleLibs)){
+        if(!angle.checkLibraries(angleLibs)){
             Log.e("AngleEnvSetup", "AnglePlugin exists, but the ANGLE libraries are not present. Is the plugin corrupted?");
             return;
         }
-        envMap.put("LIBGL_EGL", plugin.resolveAbsolutePath(angleLibs[0]));
-        envMap.put("LIBGL_GLES", plugin.resolveAbsolutePath(angleLibs[1]));
+        envMap.put("LIBGL_EGL", angle.resolveAbsolutePath(angleLibs[0]));
+        envMap.put("LIBGL_GLES", angle.resolveAbsolutePath(angleLibs[1]));
     }
     public static void setJavaEnvironment(Activity activity, String jreHome) throws Throwable {
         Map<String, String> envMap = new ArrayMap<>();
@@ -226,13 +226,10 @@ public class JREUtils {
 
         envMap.put("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
         envMap.put("PATH", jreHome + "/bin:" + Os.getenv("PATH"));
-        if(LibraryPlugin.isAvailable(LibraryPlugin.ID_FFMPEG_PLUGIN)) {
-            envMap.put("POJAV_FFMPEG_PATH",
-                    LibraryPlugin.getPlugin(LibraryPlugin.ID_FFMPEG_PLUGIN).resolveAbsolutePath("libffmpeg.so"));
-        }
-        // Check for AnglePlugin availability and point LTW/gl4es to ANGLE's EGL
-		// gl4es is, apparently, incompatible with gl4es, enable ANGLE only for LTW for now
-        setupAngleEnv(envMap);
+        LibraryPlugin ffmpeg = LibraryPlugin.discoverPlugin(activity, LibraryPlugin.ID_FFMPEG_PLUGIN);
+        if(ffmpeg != null)
+            envMap.put("POJAV_FFMPEG_PATH", ffmpeg.resolveAbsolutePath("libffmpeg.so"));
+        setupAngleEnv(activity, envMap);
 
         if(LOCAL_RENDERER != null) {
             envMap.put("MOJO_RENDERER", LOCAL_RENDERER);
@@ -296,8 +293,10 @@ public class JREUtils {
 
     public static void launchJavaVM(final AppCompatActivity activity, final Runtime runtime, File gameDirectory, final List<String> JVMArgs, final String userArgsString) throws Throwable {
         String runtimeHome = MultiRTUtils.getRuntimeHome(runtime.name).getAbsolutePath();
+        LibraryPlugin ffmpeg = LibraryPlugin.discoverPlugin(activity, LibraryPlugin.ID_FFMPEG_PLUGIN);
+        String ffmpegPath = ffmpeg == null ? null : ffmpeg.getLibraryPath();
 
-        JREUtils.relocateLibPath(runtime, runtimeHome);
+        JREUtils.relocateLibPath(runtime, runtimeHome, ffmpegPath);
 
         setJavaEnvironment(activity, runtimeHome);
 

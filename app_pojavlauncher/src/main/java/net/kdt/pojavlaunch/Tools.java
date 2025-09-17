@@ -376,8 +376,6 @@ public final class Tools {
         javaArgList.addAll(Arrays.asList(launchArgs));
         // ctx.appendlnToLog("full args: "+javaArgList.toString());
         String args = instance.getLaunchArgs();
-        LibraryPlugin.discoverPlugin(activity, LibraryPlugin.ID_FFMPEG_PLUGIN);
-        LibraryPlugin.discoverPlugin(activity, LibraryPlugin.ID_ANGLE_PLUGIN);
         Tools.releaseRenderersCache();
         JREUtils.launchJavaVM(activity, runtime, gamedir, javaArgList, args);
         // If we returned, this means that the JVM exit dialog has been shown and we don't need to be active anymore.
