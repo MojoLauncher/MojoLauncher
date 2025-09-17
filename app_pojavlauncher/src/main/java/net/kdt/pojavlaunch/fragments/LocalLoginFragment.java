@@ -1,6 +1,7 @@
 package net.kdt.pojavlaunch.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -8,6 +9,7 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.preference.Preference;
 
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
@@ -42,12 +44,10 @@ public class LocalLoginFragment extends Fragment {
                 return;
             }
             // License nag notification (tells first launch user to buy the game in the future)
-            if(!LauncherPreferences.PREF_LICENSE_NAGGED){
-                MinecraftAccount profile;
-                if((profile = PojavProfile.getCurrentProfileContent(true)) == null || !profile.isMicrosoft){
-                    Tools.dialog(context, context.getString(R.string.local_login_buy_game_title), context.getString(R.string.local_login_buy_game));
-                    LauncherPreferences.PREF_LICENSE_NAGGED = true;
-                }
+            // TODO: show the message only once
+            MinecraftAccount profile;
+            if((profile = PojavProfile.getCurrentProfileContent(true)) == null || !profile.isMicrosoft){
+                Tools.dialog(context, context.getString(R.string.local_login_buy_game_title), context.getString(R.string.local_login_buy_game));
             }
             ExtraCore.setValue(ExtraConstants.MOJANG_LOGIN_TODO, new String[]{
                     mUsernameEditText.getText().toString(), "" });
