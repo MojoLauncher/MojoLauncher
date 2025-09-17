@@ -383,7 +383,7 @@
     <string name="mcl_button_open_directory">Открыть папку игры</string>
     <string name="local_login_bad_username_title">Неподходящее имя пользователя</string>
     <string name="local_login_bad_username_text">Имя пользователя должно быть от 3 до 16 символов в длину и содержать только латинские символы, цифры 0–9 или нижние подчёркивания.</string>
-    <string name="local_login_buy_game_title">Купите игру</string>
+    <string name="local_login_buy_game_title">Купите Minecraft</string>
     <string name="local_login_buy_game">Хоть локальный аккаунт и бесплатен, Minecraft все ещё является платной игрой. Мы считаем, что каждый должен иметь возможность играть бесплатно, однако предполагаем, что когда-нибудь вы купите Minecraft</string>
     <string name="quick_setting_title">Быстрые настройки</string>
     <string name="create_bta_instance">Создать установку \"Better than Adventure!\"</string>

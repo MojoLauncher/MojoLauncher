@@ -432,7 +432,7 @@
     <string name="discord_invite" translatable="false">https://discord.gg/VHdwQFsaGX</string>
     <string name="local_login_bad_username_title">Unsuitable username</string>
     <string name="local_login_bad_username_text">The username must be between 3–16 characters long, and must only contain latin letters, numbers 0–9 and underscores.</string>
-    <string name="local_login_buy_game_title">Buy the game</string>
+    <string name="local_login_buy_game_title">Buy Minecraft</string>
     <string name="local_login_buy_game">While local account is free, Minecraft is a paid game. We believe everyone should have a chance to try it, and hope that one day you will purchase it.</string>
     <string name="quick_setting_title">Quick settings</string>
     <string name="create_bta_instance">Create \"Better than Adventure!\" instance</string>
