@@ -182,7 +182,7 @@ public class JREUtils {
         envMap.put("LIBGL_EGL", angle.resolveAbsolutePath(angleLibs[0]));
         envMap.put("LIBGL_GLES", angle.resolveAbsolutePath(angleLibs[1]));
     }
-    public static void setJavaEnvironment(Activity activity, String jreHome) throws Throwable {
+    public static void setJavaEnvironment(Activity activity, String jreHome, LibraryPlugin ffmpegPlugin) throws Throwable {
         Map<String, String> envMap = new ArrayMap<>();
         envMap.put("POJAV_NATIVEDIR", NATIVE_LIB_DIR);
         envMap.put("JAVA_HOME", jreHome);
@@ -226,9 +226,8 @@ public class JREUtils {
 
         envMap.put("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
         envMap.put("PATH", jreHome + "/bin:" + Os.getenv("PATH"));
-        LibraryPlugin ffmpeg = LibraryPlugin.discoverPlugin(activity, LibraryPlugin.ID_FFMPEG_PLUGIN);
-        if(ffmpeg != null)
-            envMap.put("POJAV_FFMPEG_PATH", ffmpeg.resolveAbsolutePath("libffmpeg.so"));
+        if(ffmpegPlugin != null)
+            envMap.put("POJAV_FFMPEG_PATH", ffmpegPlugin.resolveAbsolutePath("libffmpeg.so"));
         setupAngleEnv(activity, envMap);
 
         if(LOCAL_RENDERER != null) {
@@ -298,7 +297,7 @@ public class JREUtils {
 
         JREUtils.relocateLibPath(runtime, runtimeHome, ffmpegPath);
 
-        setJavaEnvironment(activity, runtimeHome);
+        setJavaEnvironment(activity, runtimeHome, ffmpeg);
 
         final String graphicsLib = loadGraphicsLibrary();
         List<String> userArgs = getJavaArgs(activity, runtimeHome, userArgsString);
