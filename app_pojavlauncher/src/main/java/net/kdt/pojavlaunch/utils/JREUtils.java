@@ -478,6 +478,7 @@ public class JREUtils {
     public static String loadGraphicsLibrary(){
         if(LOCAL_RENDERER == null) return null;
         String renderLibrary;
+
         switch (LOCAL_RENDERER){
             case "opengles2":
             case "opengles2_5":
@@ -490,7 +491,11 @@ public class JREUtils {
                 renderLibrary = "libgl4es_114.so";
                 break;
         }
-
+        // Load EGLWrapper instead of the selected renderer if env var is present
+        if(System.getenv("MOJO_USE_SYSEGL") != null && System.getenv("MOJO_USE_SYSEGL").equals("1")){
+            Log.i("RENDER_LIBRARY", "Loading EGLWrapper instead of the selected renderer as requested");
+            renderLibrary = "libegl_wrapper.so";
+        }
         if (!dlopen(renderLibrary) && !dlopen(findInLdLibPath(renderLibrary))) {
             Log.e("RENDER_LIBRARY","Failed to load renderer " + renderLibrary + ". Falling back to GL4ES 1.1.4");
             LOCAL_RENDERER = "opengles2";
