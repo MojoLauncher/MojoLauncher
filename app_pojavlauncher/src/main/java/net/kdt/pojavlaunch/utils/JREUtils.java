@@ -18,6 +18,7 @@ import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.multirt.Runtime;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
+import net.kdt.pojavlaunch.plugins.MGPlugin;
 import net.kdt.pojavlaunch.prefs.*;
 
 public class JREUtils {
@@ -143,7 +144,6 @@ public class JREUtils {
 
         if(renderer.equals("opengles3_ltw")) {
             envMap.put("POJAVEXEC_EGL","libltw.so");
-        }
 
         if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
 
@@ -162,6 +162,7 @@ public class JREUtils {
             }
         }
     }
+        }
 
     public static void launchJavaVM(final AppCompatActivity activity, final Runtime runtime, File gameDirectory, final List<String> JVMArgs, final String userArgsString) throws Throwable {
 
@@ -240,6 +241,7 @@ public class JREUtils {
                 renderLibrary = "libgl4es_114.so"; break;
             case "vulkan_zink": renderLibrary = "libOSMesa.so"; break;
             case "opengles3_ltw" : renderLibrary = "libltw.so"; break;
+            case "opengles3_mg" : renderLibrary = MGPlugin.mgPlugin != null ? MGPlugin.MG_PATH : "libltw.so"; MGPlugin.load(); break; // Use LTW if MG not present
             default:
                 Log.w("RENDER_LIBRARY", "No renderer selected, defaulting to opengles2");
                 renderLibrary = "libgl4es_114.so";
