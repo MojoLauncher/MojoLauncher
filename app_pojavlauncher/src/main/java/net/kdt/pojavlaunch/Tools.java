@@ -1445,4 +1445,11 @@ public final class Tools {
                     }
                 }).show();
     }
+    // License nag notification (tells first launch user to buy the game in the future)
+    public static void maybeShowLicenseNag(Context context){
+        if(!LauncherPreferences.DEFAULT_PREF.getBoolean("licenseNagged", false)){
+            Tools.dialog(context, context.getString(R.string.local_login_buy_game_title), context.getString(R.string.local_login_buy_game));
+            LauncherPreferences.DEFAULT_PREF.edit().putBoolean("licenseNagged", true).apply();
+        }
+    }
 }

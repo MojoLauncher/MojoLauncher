@@ -318,6 +318,8 @@
     <string name="exception_failed_to_unpack_jre17">JRE 17 quraşdırmaq alınmadı</string>
     <string name="newdl_starting">Oyun metadatası oxunur…</string>
     <string name="newdl_downloading_metadata">Oyun metadatası endirilir (%s)</string>
+    <string name="local_login_buy_game_title">Minecraft-ı Alın</string>
+    <string name="local_login_buy_game">Lokal hesab pulsuz olsa da, Minecraft pullu bir oyundur. İnanırıq ki, hər kəsin bunu sınamaq şansı vardır və ümid edirik ki, bir gün bu oyunu alacaqsınız</string>
     <string name="controller_button_a">A</string>
     <string name="controller_button_b">B</string>
     <string name="controller_button_x">X</string>

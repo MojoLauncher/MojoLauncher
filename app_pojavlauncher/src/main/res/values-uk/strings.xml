@@ -326,4 +326,7 @@
     <string name="controller_button_start">Почати</string>
     <string name="controller_button_select">Обрати</string>
     <string name="customctrl_visibility_title">Видимість</string>
+    <string name="local_login_buy_game_title">Купіть Minecraft</string>
+    <string name="local_login_buy_game">Хоча локальний акаунт і дозволяє гру запускати безкоштовно, Minecraft все ще лишається платним, однак сподіваємося, що коли-небудь ви купите Minecraft</string>
+    <string name="quick_setting_title">Швидкі налаштування</string>
 </resources>
