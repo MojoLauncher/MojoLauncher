@@ -1,5 +1,5 @@
 plugins {
-    id 'com.android.application' version '8.11.1'
+    id 'com.android.application'
     id 'de.undercouch.download' version '5.6.0'
     id 'org.ajoberstar.grgit' version '5.3.2'
 }
@@ -336,4 +336,6 @@ dependencies {
     // implementation 'net.sourceforge.streamsupport:streamsupport-cfuture:1.7.0'
 
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+
+    implementation project(":ng_gl4es")
 }

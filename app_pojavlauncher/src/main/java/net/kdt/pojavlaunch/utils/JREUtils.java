@@ -480,22 +480,22 @@ public class JREUtils {
         String renderLibrary;
         switch (LOCAL_RENDERER){
             case "opengles2":
-            case "opengles2_5":
+            case "opengles2_5": 
             case "opengles3":
-                renderLibrary = "libgl4es_114.so"; break;
+                renderLibrary = "libng_gl4es.so"; break;
             case "vulkan_zink": renderLibrary = "libOSMesa.so"; break;
             case "opengles3_ltw" : renderLibrary = "libltw.so"; break;
             default:
-                Log.w("RENDER_LIBRARY", "No renderer selected, defaulting to opengles2");
-                renderLibrary = "libgl4es_114.so";
+                Log.w("RENDER_LIBRARY", "No renderer selected, defaulting to opengles3");
+                renderLibrary = "libng_gl4es.so";
                 break;
         }
 
         if (!dlopen(renderLibrary) && !dlopen(findInLdLibPath(renderLibrary))) {
-            Log.e("RENDER_LIBRARY","Failed to load renderer " + renderLibrary + ". Falling back to GL4ES 1.1.4");
-            LOCAL_RENDERER = "opengles2";
-            renderLibrary = "libgl4es_114.so";
-            dlopen(NATIVE_LIB_DIR + "/libgl4es_114.so");
+            Log.e("RENDER_LIBRARY","Failed to load renderer " + renderLibrary + ". Falling back to NG GL4ES 0.4.1");
+            LOCAL_RENDERER = "opengles3";
+            renderLibrary = "libng_gl4es.so";
+            dlopen(NATIVE_LIB_DIR + "/libng_gl4es.so");
         }
         return renderLibrary;
     }

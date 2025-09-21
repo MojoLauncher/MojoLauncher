@@ -47,6 +47,7 @@ You can get MojoLauncher via three methods:
 ## Current roadmap
 - [x] Instance system in favor of profiles
 - [x] Out-of-the box 1.21.5 support
+- [x] Replace Holy-GL4ES 1.1.5 with KW
 - [ ] LTW: resolve issues with Create
 - [ ] LTW: enable compute shader/image extensions
 - [ ] LTW: switch to a color-renderable format for framebuffers
@@ -54,7 +55,6 @@ You can get MojoLauncher via three methods:
 - [ ] mrpack/CurseForge zip import
 - [ ] MMC-compatible instance import
 - [ ] Patch-on-dlopen for mod native libraries
-- [ ] Replace Holy-GL4ES 1.1.5 with KW (maybe? need to figure out requirements)
 
 ## Known Issues
 - Some physical mice may have very slow mouse speed
