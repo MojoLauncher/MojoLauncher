@@ -55,6 +55,7 @@ jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
         pojav_environ->method_onGrabStateChanged = (*dvEnv)->GetStaticMethodID(dvEnv, pojav_environ->bridgeClazz, "onGrabStateChanged", "(Z)V");
         pojav_environ->method_onDirectInputEnable = (*dvEnv)->GetStaticMethodID(dvEnv, pojav_environ->bridgeClazz, "onDirectInputEnable", "()V");
         pojav_environ->method_createCursor = (*dvEnv)->GetStaticMethodID(dvEnv, pojav_environ->bridgeClazz, "createCursor", "(Ljava/nio/ByteBuffer;IIII)Lnet/kdt/pojavlaunch/customcontrols/mouse/CursorContainer;");
+        pojav_environ->method_createStandardCursor = (*dvEnv)->GetStaticMethodID(dvEnv, pojav_environ->bridgeClazz, "createStandardCursor", "(I)Lnet/kdt/pojavlaunch/customcontrols/mouse/CursorContainer;");
         pojav_environ->method_setCursor = (*dvEnv)->GetStaticMethodID(dvEnv, pojav_environ->bridgeClazz, "setCursor", "(Lnet/kdt/pojavlaunch/customcontrols/mouse/CursorContainer;)V");
         pojav_environ->method_removeCursor = (*dvEnv)->GetStaticMethodID(dvEnv, pojav_environ->bridgeClazz, "removeCursor", "(Lnet/kdt/pojavlaunch/customcontrols/mouse/CursorContainer;)V");
         pojav_environ->isUseStackQueueCall = JNI_FALSE;
@@ -615,6 +616,25 @@ LinkedListNode* pojavCreateCursor(GLFWimage* image, int xhot, int yhot) {
     // not needed anymore
     (*env)->DeleteLocalRef(env, cursor);
     (*env)->DeleteLocalRef(env, buffer);
+
+    LinkedListNode* node = linkedlist_append(pojav_environ->cursors, globalCursor);
+    if(!node) {
+        (*env)->DeleteGlobalRef(env, globalCursor);
+        return NULL;
+    }
+    return node;
+}
+
+LinkedListNode* pojavCreateStandardCursor(int shape) {
+    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavCreateStandardCursor!\n", return NULL;);
+    jobject cursor = (*env)->CallStaticObjectMethod(env, pojav_environ->bridgeClazz,
+                                                    pojav_environ->method_createStandardCursor, shape);
+    if(cursor == NULL) {
+        return NULL;
+    }
+    jobject globalCursor = (*env)->NewGlobalRef(env, cursor);
+    // not needed anymore
+    (*env)->DeleteLocalRef(env, cursor);
 
     LinkedListNode* node = linkedlist_append(pojav_environ->cursors, globalCursor);
     if(!node) {

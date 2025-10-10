@@ -1,7 +1,9 @@
 package net.kdt.pojavlaunch.customcontrols.mouse;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -22,13 +24,13 @@ import git.artdeell.mojo.R;
 /**
  * Class dealing with the virtual mouse
  */
-public class Touchpad extends View implements GrabListener, AbstractTouchpad {
+public class Touchpad extends View implements GrabListener, AbstractTouchpad, DefaultCursorCreator {
     /* Whether the Touchpad should be displayed */
     private boolean mDisplayState;
     /* Mouse pointer icon used by the touchpad */
     private float mMouseX, mMouseY;
     private boolean mMoveOnLayout;
-    private Drawable mMouseCursorDrawable;
+    private CursorContainer mDefaultContainer;
     private final Consumer<CursorContainer> onCursorChange = cursor->invalidate();
     public Touchpad(@NonNull Context context) {
         this(context, null);
@@ -37,6 +39,7 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
     public Touchpad(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
+        CallbackBridge.setCursorCreator(this);
     }
 
     /** Enable the touchpad */
@@ -85,16 +88,12 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
         if(CallbackBridge.getCursor() != null) {
             CallbackBridge.getCursor().draw(canvas);
         } else {
-            mMouseCursorDrawable.draw(canvas);
+            mDefaultContainer.draw(canvas);
         }
     }
 
     private void init() {
-        mMouseCursorDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_mouse_pointer, getContext().getTheme());
-        // For some reason it's annotated as Nullable even though it doesn't seem to actually
-        // ever return null
-        assert mMouseCursorDrawable != null;
-        mMouseCursorDrawable.setBounds(0, 0, 36, 54);
+        mDefaultContainer = createDefaultCursor(0x00036001);
         CallbackBridge.addCursorChangeListener(onCursorChange);
 
         setFocusable(false);
@@ -170,5 +169,36 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
         // it may cause a memory leak due to the object
         // storing an instance of this View
         CallbackBridge.removeCursorChangeListener(onCursorChange);
+    }
+
+    @Override
+    public CursorContainer createDefaultCursor(int shape) {
+        int cursorResource, cursorHotspotX = 0, cursorHotspotY = 0;
+        switch (shape) {
+            case 0x00036001: // GLFW_ARROW_CURSOR
+                cursorResource = R.drawable.cursor_arrow;
+                break;
+            case 0x00036002: // GLFW_IBEAM_CURSOR
+                cursorResource = R.drawable.cursor_ibeam;
+                cursorHotspotX = 9;
+                cursorHotspotY = 16;
+                break;
+            case 0x00036004: // GLFW_HAND_CURSOR
+                cursorResource = R.drawable.cursor_pointer;
+                cursorHotspotY = 3;
+                break;
+            default:
+                return null;
+        }
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), cursorResource, getContext().getTheme());
+        assert drawable != null;
+        if(drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            bitmapDrawable.setFilterBitmap(false);
+            bitmapDrawable.setAntiAlias(false);
+            Bitmap bitmap = bitmapDrawable.getBitmap();
+            drawable.setBounds(0, 0, bitmap.getWidth() * 2, bitmap.getHeight() * 2);
+        }
+        return new CursorContainer(drawable, cursorHotspotX, cursorHotspotY);
     }
 }

@@ -20,6 +20,7 @@ import net.kdt.pojavlaunch.MainActivity;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.customcontrols.gamepad.direct.DirectGamepadEnableHandler;
 import net.kdt.pojavlaunch.customcontrols.mouse.CursorContainer;
+import net.kdt.pojavlaunch.customcontrols.mouse.DefaultCursorCreator;
 
 import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
@@ -53,6 +54,7 @@ public class CallbackBridge {
 
     @Nullable private static CursorContainer sCursor;
     private static Set<Consumer<CursorContainer>> cursorChangeListeners = new HashSet<>();
+    @Nullable private static WeakReference<DefaultCursorCreator> sCursorCreator = null;
 
     public static void putMouseEventWithCoords(int button, float x, float y) {
         putMouseEventWithCoords(button, true, x, y);
@@ -258,6 +260,20 @@ public class CallbackBridge {
     private static void removeCursor(@Nullable CursorContainer cursor) {
         if(cursor == null) return;
         if(sCursor == cursor) setCursor(null);
+    }
+
+    public static void setCursorCreator(DefaultCursorCreator mCursorCreator) {
+        sCursorCreator = new WeakReference<>(mCursorCreator);
+    }
+
+    @SuppressWarnings("unused")
+    @Keep
+    @Nullable
+    private static CursorContainer createStandardCursor(int shape) {
+        Log.i("CallbackBridge", "createDefaultCursor("+shape+")");
+        DefaultCursorCreator creator = Tools.getWeakReference(sCursorCreator);
+        if(creator == null) return null;
+        return creator.createDefaultCursor(shape);
     }
 
     @SuppressWarnings("unused")

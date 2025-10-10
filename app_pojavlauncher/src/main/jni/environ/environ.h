@@ -75,6 +75,7 @@ struct pojav_environ_s {
     jmethodID method_setCursor;
     jmethodID method_removeCursor;
     jmethodID method_createCursor;
+    jmethodID method_createStandardCursor;
     LinkedList* cursors;
 #define ADD_CALLBACK_WWIN(NAME) \
     GLFW_invoke_##NAME##_func* GLFW_invoke_##NAME;

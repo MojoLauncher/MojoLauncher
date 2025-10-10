@@ -635,6 +635,7 @@ public class GLFW
         StopPumping = apiGetFunctionAddress(GLFW, "pojavStopPumping"),
         StartPumping = apiGetFunctionAddress(GLFW, "pojavStartPumping"),
         CreateCursor = apiGetFunctionAddress(GLFW, "pojavCreateCursor"),
+        CreateStandardCursor = apiGetFunctionAddress(GLFW, "pojavCreateStandardCursor"),
         SetCursor = apiGetFunctionAddress(GLFW, "pojavSetCursor"),
         DestroyCursor = apiGetFunctionAddress(GLFW, "pojavDestroyCursor");
     }
@@ -1213,13 +1214,18 @@ public class GLFW
         return invokePP(image, xhot, yhot, __functionAddress);
     }
 
+    public static long nglfwCreateStandardCursor(int shape) {
+        long __functionAddress = Functions.CreateStandardCursor;
+        return invokeP(shape, __functionAddress);
+    }
+
     @NativeType("GLFWcursor *")
     public static long glfwCreateCursor(@NativeType("GLFWimage const *") GLFWImage image, int xhot, int yhot) {
         return nglfwCreateCursor(image.address(), xhot, yhot);
     }
     @NativeType("GLFWcursor *")
     public static long glfwCreateStandardCursor(int shape) {
-        return 0L; // default cursor is rendered when cursor == null
+        return nglfwCreateStandardCursor(shape);
     }
     public static void glfwDestroyCursor(@NativeType("GLFWcursor *") long cursor) {
         long __functionAddress = Functions.DestroyCursor;
