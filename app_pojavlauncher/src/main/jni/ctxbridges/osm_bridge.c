@@ -58,8 +58,6 @@ void osm_swap_surfaces(osm_render_window_t* bundle) {
         LOGI("Switching to new native surface");
         bundle->nativeSurface = bundle->newNativeSurface;
         bundle->newNativeSurface = NULL;
-        ANativeWindow_acquire(bundle->nativeSurface);
-        ANativeWindow_setBuffersGeometry(bundle->nativeSurface, 0, 0, WINDOW_FORMAT_RGBX_8888);
         bundle->disable_rendering = false;
         return;
     }else {
