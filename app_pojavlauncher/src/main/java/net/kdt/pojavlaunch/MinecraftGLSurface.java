@@ -356,6 +356,9 @@ public class MinecraftGLSurface extends View implements GrabListener, DirectGame
 
     @Override
     public void onSurfaceAvailable(Surface surface) {
+        if (LauncherPreferences.PREF_USE_ALTERNATE_SURFACE && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            surface.setFrameRate(LauncherPreferences.PREF_REFRESH_RATE, Surface.FRAME_RATE_COMPATIBILITY_DEFAULT);
+        }
         JREUtils.setupBridgeWindow(surface);
         if(mRefreshOnly) return;
         realStart();

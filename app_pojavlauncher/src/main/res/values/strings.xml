@@ -471,4 +471,7 @@
     <string name="vml_err_exists">The VM is already loaded</string>
     <string name="vml_err_inval">Bad arguments</string>
     <string name="gr_err_renderer_load_Failed">Failed to load renderer library</string>
+    <string name="refresh_rate">%.2f Hz</string>
+    <string name="preference_set_refresh_rate_name">Syggest display refresh rate</string>
+    <string name="preference_set_refresh_rate_summary">Suggests a different game frame rate to the OS. Current value is: %s</string>
 </resources>

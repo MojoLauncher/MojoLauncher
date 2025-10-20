@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.preference.DropDownPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.SwitchPreference;
 import androidx.preference.SwitchPreferenceCompat;
@@ -59,6 +61,27 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         computeVisibility();
     }
 
+    private void updateRefreshRates() {
+        DropDownPreference dropDownPreference = requirePreference("frame_rate", DropDownPreference.class);
+        float[] refreshRates = requireView().getDisplay().getSupportedRefreshRates();
+        int ratesCount = 0;
+        for (float refreshRate : refreshRates) {
+            if (refreshRate < 59) continue;
+            ratesCount++;
+        }
+        String[] refreshRateNames = new String[ratesCount];
+        String[] refreshRateValues = new String[ratesCount];
+        int j = -1;
+        for (float rate : refreshRates) {
+            if (rate < 59) continue;
+            refreshRateNames[++j] = getString(R.string.refresh_rate, rate);
+            refreshRateValues[j] = Float.toString(rate);
+        }
+        dropDownPreference.setEntries(refreshRateNames);
+        dropDownPreference.setEntryValues(refreshRateValues);
+        dropDownPreference.setSummaryProvider((pref)-> getString(R.string.preference_set_refresh_rate_summary, ((DropDownPreference)pref).getEntry()));
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -66,6 +89,7 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         if(activity != null) {
             requirePreference("ignoreNotch").setVisible(LauncherPreferences.hasNotch(activity));
         }
+        updateRefreshRates();
     }
 
     @Override
@@ -77,5 +101,7 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
     private void computeVisibility(){
         requirePreference("force_vsync", SwitchPreferenceCompat.class)
                 .setVisible(LauncherPreferences.PREF_USE_ALTERNATE_SURFACE);
+        requirePreference("frame_rate", DropDownPreference.class)
+                .setVisible(LauncherPreferences.PREF_USE_ALTERNATE_SURFACE && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R);
     }
 }
