@@ -17,7 +17,9 @@ import net.kdt.pojavlaunch.mirrors.DownloadMirror;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.Constants;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.CurseManifest;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
+import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDownload;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModItem;
+import net.kdt.pojavlaunch.modloaders.modpacks.models.ModSource;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchFilters;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchResult;
 import net.kdt.pojavlaunch.utils.FileUtils;
@@ -99,7 +101,7 @@ public class CurseforgeApi implements ModpackApi{
     }
 
     @Override
-    public ModDetail getModDetails(ModItem item) {
+    public ModDownload[] getDownloads(ModSource item) {
         ArrayList<JsonObject> allModDetails = new ArrayList<>();
         int index = 0;
         while(index != CURSEFORGE_PAGINATION_END_REACHED &&
@@ -108,30 +110,26 @@ public class CurseforgeApi implements ModpackApi{
         }
         if(index == CURSEFORGE_PAGINATION_ERROR) return null;
         int length = allModDetails.size();
-        String[] versionNames = new String[length];
-        String[] mcVersionNames = new String[length];
-        String[] versionUrls = new String[length];
-        String[] hashes = new String[length];
+        ModDownload[] downloads = new ModDownload[length];
         for(int i = 0; i < allModDetails.size(); i++) {
             JsonObject modDetail = allModDetails.get(i);
-            versionNames[i] = modDetail.get("displayName").getAsString();
-
-            JsonElement downloadUrl = modDetail.get("downloadUrl");
-            versionUrls[i] = downloadUrl.getAsString();
-
+            String versionName = modDetail.get("displayName").getAsString();
+            String downloadUrl = modDetail.get("downloadUrl").getAsString();
+            String mcVersion = null;
             JsonArray gameVersions = modDetail.getAsJsonArray("gameVersions");
             for(JsonElement jsonElement : gameVersions) {
                 String gameVersion = jsonElement.getAsString();
                 if(!sMcVersionPattern.matcher(gameVersion).matches()) {
                     continue;
                 }
-                mcVersionNames[i] = gameVersion;
+                mcVersion = gameVersion;
                 break;
             }
 
-            hashes[i] = getSha1FromModData(modDetail);
+            String hash = getSha1FromModData(modDetail);
+            downloads[i] = new ModDownload(versionName, mcVersion, downloadUrl, hash);
         }
-        return new ModDetail(item, versionNames, mcVersionNames, versionUrls, hashes);
+        return downloads;
     }
 
     @Override

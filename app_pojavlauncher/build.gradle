@@ -331,6 +331,7 @@ dependencies {
 
     implementation 'com.github.MojoLauncher:alsoft-android-aar:f369161d5f'
 
+    implementation 'org.tomlj:tomlj:1.1.1'
     // implementation 'net.sourceforge.streamsupport:streamsupport-cfuture:1.7.0'
 
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])

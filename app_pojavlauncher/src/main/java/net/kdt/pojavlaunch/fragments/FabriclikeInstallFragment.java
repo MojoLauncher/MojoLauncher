@@ -118,6 +118,7 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
                 i.name = "Fabric";
                 i.icon = mFabriclikeUtils.getIconName();
                 i.versionId = versionId;
+                i.modded = true;
             }, versionId);
             getListenerProxy().onDownloadFinished(null);
         }catch (IOException e) {

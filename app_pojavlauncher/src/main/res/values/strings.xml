@@ -471,4 +471,11 @@
     <string name="vml_err_exists">The VM is already loaded</string>
     <string name="vml_err_inval">Bad arguments</string>
     <string name="gr_err_renderer_load_Failed">Failed to load renderer library</string>
+    <string name="vprof_editor_manage_mods">Manage mods</string>
+    <string name="mod_manager_import_mod">Import</string>
+    <string name="mod_manager_mod_corrupt">Corrupt mod</string>
+    <string name="mod_manager_mod_corrupt_cant_read">This file cannot be read</string>
+    <string name="mod_manager_mod_corrupt_not_a_mod">This file isn\'t a mod or isn\'t compatible with this mod loader</string>
+    <string name="mod_manager_mod_unknown_description">No description</string>
+    <string name="mod_manager_mod_unknown_version">Unknown version</string>
 </resources>

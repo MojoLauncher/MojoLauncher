@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/background_app">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/search_mod_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:translationZ="10dp"
+        android:background="@drawable/background_overlay"
+        android:paddingHorizontal="@dimen/padding_medium"
+        android:paddingVertical="@dimen/padding_medium"
+        android:layout_marginTop="@dimen/fragment_padding_medium"
+        android:layout_marginHorizontal="@dimen/fragment_padding_medium"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+
+        >
+        <!-- Search text -->
+        <EditText
+            android:id="@+id/search_mod_edittext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_line"
+            android:textSize="@dimen/_13ssp"
+            android:translationZ="2dp"
+
+            android:ems="10"
+            android:hint="@string/hint_search_modpack"
+            android:inputType="textPersonName"
+            android:paddingHorizontal="@dimen/padding_heavy"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <ProgressBar
+            android:id="@+id/search_mod_progressbar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/search_mod_edittext"
+            tools:layout_editor_absoluteX="13dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:clipToPadding="false"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/mod_manager_recyclerview"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/mod_manager_import_button"/>
+
+    <com.kdt.mcgui.MineButton
+        android:id="@+id/mod_manager_import_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_moderate"
+        android:layout_marginHorizontal="@dimen/padding_moderate"
+        android:text="IMPORT"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

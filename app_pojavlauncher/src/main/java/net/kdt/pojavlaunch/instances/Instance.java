@@ -32,6 +32,7 @@ public class Instance {
     public String controlLayout;
     public String icon;
     public boolean sharedData;
+    public boolean modded;
 
     protected Instance() {
     }

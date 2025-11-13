@@ -44,10 +44,10 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
 
     private Instance mInstance;
     private String mSelectedControlLayout;
-    private Button mSaveButton, mDeleteButton, mControlSelectButton, mVersionSelectButton;
+    private Button mSaveButton, mDeleteButton, mControlSelectButton, mVersionSelectButton, mManageModsButton;
     private Spinner mDefaultRuntime, mDefaultRenderer;
     private EditText mDefaultName, mDefaultJvmArgument;
-    private TextView mDefaultVersion, mDefaultControl;
+    private TextView mDefaultVersion, mDefaultControl, mVersionLabel, mSharedDataLabel;
     private ImageView mInstanceIcon;
     private CheckBox mSharedDataCheckbox;
     private int mRecommendedIconSize;
@@ -123,6 +123,10 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
             mSharedDataCheckbox.setText(text);
         });
 
+        mManageModsButton.setOnClickListener(v -> {
+            Tools.swapFragment(requireActivity(), ModManagerFragment.class, ModManagerFragment.TAG, null);
+        });
+
         loadValues(InstanceManager.getSelectedListedInstance(), view.getContext());
     }
 
@@ -151,6 +155,14 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         mInstanceIcon.setImageDrawable(
                 InstanceIconProvider.fetchIcon(getResources(), instance)
         );
+        if(instance.modded) {
+            mVersionSelectButton.setVisibility(View.GONE);
+            mDefaultVersion.setVisibility(View.GONE);
+            mVersionLabel.setVisibility(View.GONE);
+            mSharedDataCheckbox.setVisibility(View.GONE);
+            mSharedDataLabel.setVisibility(View.GONE);
+            mManageModsButton.setVisibility(View.VISIBLE);
+        }
 
         // Runtime spinner
         List<Runtime> runtimes = MultiRTUtils.getRuntimes();
@@ -181,6 +193,7 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         mDefaultRuntime = view.findViewById(R.id.vprof_editor_spinner_runtime);
         mDefaultRenderer = view.findViewById(R.id.vprof_editor_instance_renderer);
         mDefaultVersion = view.findViewById(R.id.vprof_editor_version_spinner);
+        mVersionLabel = view.findViewById(R.id.vprof_editor_version_sub);
 
         mDefaultName = view.findViewById(R.id.vprof_editor_instance_name);
         mDefaultJvmArgument = view.findViewById(R.id.vprof_editor_jre_args);
@@ -191,6 +204,8 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         mVersionSelectButton = view.findViewById(R.id.vprof_editor_version_button);
         mInstanceIcon = view.findViewById(R.id.vprof_editor_instance_icon);
         mSharedDataCheckbox = view.findViewById(R.id.vprof_editor_data_checkbox_container);
+        mSharedDataLabel = view.findViewById(R.id.vprof_editor_data_checkbox_sub);
+        mManageModsButton = view.findViewById(R.id.vprof_editor_manage_mods);
     }
 
     private void save(){

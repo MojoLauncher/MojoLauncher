@@ -9,7 +9,9 @@ import net.kdt.pojavlaunch.PojavApplication;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
+import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDownload;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModItem;
+import net.kdt.pojavlaunch.modloaders.modpacks.models.ModSource;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchFilters;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchResult;
 
@@ -40,7 +42,11 @@ public interface ModpackApi {
      * @param item The moditem that was selected
      * @return Detailed data about a mod(pack)
      */
-    ModDetail getModDetails(ModItem item);
+    default ModDetail getModDetails(ModItem item) {
+        return new ModDetail(item, getDownloads(item));
+    }
+
+    ModDownload[] getDownloads(ModSource source);
 
     /**
      * Download and install the modpack

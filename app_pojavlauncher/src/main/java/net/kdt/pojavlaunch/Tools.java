@@ -39,8 +39,10 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.math.MathUtils;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -73,6 +75,7 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -888,5 +891,39 @@ public final class Tools {
                         Log.w(Tools.APP_NAME, "Could not enable System.exit() method!", th);
                     }
                 }).show();
+    }
+
+    public static void setupOverlayView(RecyclerView recyclerView, View overlayView) {
+        float mOverlayTopCache = recyclerView.getResources().getDimension(R.dimen.fragment_padding_medium);; // Padding cache reduce resource lookup
+
+        final RecyclerView.OnScrollListener mOverlayPositionListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                overlayView.setY(MathUtils.clamp(overlayView.getY() - dy, -overlayView.getHeight(), mOverlayTopCache));
+            }
+        };
+        recyclerView.addOnScrollListener(mOverlayPositionListener);
+        overlayView.post(()->{
+            int overlayHeight = (int)(overlayView.getHeight() + mOverlayTopCache);
+            recyclerView.setPadding(recyclerView.getPaddingLeft(),
+                    recyclerView.getPaddingTop() + overlayHeight,
+                    recyclerView.getPaddingRight(),
+                    recyclerView.getPaddingBottom());
+        });
+    }
+
+    public static <T> Iterable<T> arrayIterable(T[] array) {
+        return ()->new Iterator<T>() {
+            private int mPos = 0;
+            @Override
+            public boolean hasNext() {
+                return array.length > mPos;
+            }
+
+            @Override
+            public T next() {
+                return array[mPos++];
+            }
+        };
     }
 }

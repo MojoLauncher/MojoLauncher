@@ -28,6 +28,7 @@ import net.kdt.pojavlaunch.modloaders.modpacks.imagecache.ImageReceiver;
 import net.kdt.pojavlaunch.modloaders.modpacks.imagecache.ModIconCache;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.Constants;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
+import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDownload;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModItem;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchFilters;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchResult;
@@ -163,7 +164,7 @@ public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private boolean mInstallEnabled;
 
         /* Used to display available versions of the mod(pack) */
-        private final SimpleArrayAdapter<String> mVersionAdapter = new SimpleArrayAdapter<>(null);
+        private final SimpleArrayAdapter<ModDownload> mVersionAdapter = new SimpleArrayAdapter<>(null);
 
         public ViewHolder(View view) {
             super(view);
@@ -272,7 +273,7 @@ public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if(detailedItem != null) {
                 setInstallEnabled(true);
                 mExtendedErrorTextView.setVisibility(View.GONE);
-                mVersionAdapter.setObjects(Arrays.asList(detailedItem.versionNames));
+                mVersionAdapter.setObjects(Arrays.asList(detailedItem.downloads));
                 mExtendedSpinner.setAdapter(mVersionAdapter);
             } else {
                 closeDetailedView();

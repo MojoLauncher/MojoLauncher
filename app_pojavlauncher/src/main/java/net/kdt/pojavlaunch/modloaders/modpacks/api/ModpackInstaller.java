@@ -8,6 +8,7 @@ import net.kdt.pojavlaunch.instances.InstanceManager;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.modloaders.modpacks.imagecache.ModIconCache;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
+import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDownload;
 import net.kdt.pojavlaunch.progresskeeper.DownloaderProgressWrapper;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
 
@@ -18,13 +19,12 @@ import java.util.concurrent.Callable;
 
 public class ModpackInstaller {
 
-    public static ModLoader installModpack(ModDetail modDetail, int selectedVersion, InstallFunction installFunction) throws IOException {
-        String versionUrl = modDetail.versionUrls[selectedVersion];
-        String versionHash = modDetail.versionHashes[selectedVersion];
-        String modpackName = (modDetail.title.toLowerCase(Locale.ROOT) + " " + modDetail.versionNames[selectedVersion])
+    protected static ModLoader installModpack(ModDetail modDetail, int selectedVersion, InstallFunction installFunction) throws IOException {
+        ModDownload modDownload = modDetail.downloads[selectedVersion];
+        String modpackName = (modDetail.title.toLowerCase(Locale.ROOT) + " " + modDownload.versionName)
                 .trim().replaceAll("[\\\\/:*?\"<>| \\t\\n]", "_" );
-        if (versionHash != null) {
-            modpackName += "_" + versionHash;
+        if (modDownload.versionHash != null) {
+            modpackName += "_" + modDownload.versionHash;
         }
         if (modpackName.length() > 255){
             modpackName = modpackName.substring(0,255);
@@ -35,13 +35,14 @@ public class ModpackInstaller {
         // Get the modpack file
         File modpackFile = new File(Tools.DIR_CACHE, modpackName + ".cf"); // Cache File
         ModLoader modLoaderInfo;
-        Instance instance = InstanceManager.createInstance(i->{
-            i.name = modDetail.title;
-        }, modpackName.substring(0, Math.min(16,modpackName.length())));
+        Instance instance = InstanceManager.createInstance(
+                i->i.name = modDetail.title,
+                modpackName.substring(0, Math.min(16,modpackName.length()))
+        );
         try {
             byte[] downloadBuffer = new byte[8192];
-            DownloadUtils.ensureSha1(modpackFile, versionHash, (Callable<Void>) () -> {
-                DownloadUtils.downloadFileMonitored(versionUrl, modpackFile, downloadBuffer,
+            DownloadUtils.ensureSha1(modpackFile, modDownload.versionHash, (Callable<Void>) () -> {
+                DownloadUtils.downloadFileMonitored(modDownload.versionUrl, modpackFile, downloadBuffer,
                         new DownloaderProgressWrapper(R.string.modpack_download_downloading_metadata,
                                 ProgressLayout.INSTALL_MODPACK));
                 return null;
@@ -77,7 +78,7 @@ public class ModpackInstaller {
         return modLoaderInfo;
     }
 
-    interface InstallFunction {
+    protected interface InstallFunction {
         ModLoader installModpack(File modpackFile, File instanceDestination) throws IOException;
     }
 }

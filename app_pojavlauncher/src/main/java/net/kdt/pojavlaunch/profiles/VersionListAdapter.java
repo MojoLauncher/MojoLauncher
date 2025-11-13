@@ -30,11 +30,11 @@ public class VersionListAdapter extends BaseExpandableListAdapter implements Exp
     public VersionListAdapter(JMinecraftVersionList.Version[] versionList, boolean hideCustomVersions, Context ctx){
         mHideCustomVersions = hideCustomVersions;
         mLayoutInflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        List<JMinecraftVersionList.Version> releaseList = new FilteredSubList<>(versionList, item -> item.type.equals("release"));
-        List<JMinecraftVersionList.Version> snapshotList = new FilteredSubList<>(versionList, item -> item.type.equals("snapshot"));
-        List<JMinecraftVersionList.Version> betaList = new FilteredSubList<>(versionList, item -> item.type.equals("old_beta"));
-        List<JMinecraftVersionList.Version> alphaList = new FilteredSubList<>(versionList, item -> item.type.equals("old_alpha"));
+        Iterable<JMinecraftVersionList.Version> versionsIterable = Tools.arrayIterable(versionList);
+        List<JMinecraftVersionList.Version> releaseList = new FilteredSubList<>(versionsIterable, item -> item.type.equals("release"));
+        List<JMinecraftVersionList.Version> snapshotList = new FilteredSubList<>(versionsIterable, item -> item.type.equals("snapshot"));
+        List<JMinecraftVersionList.Version> betaList = new FilteredSubList<>(versionsIterable, item -> item.type.equals("old_beta"));
+        List<JMinecraftVersionList.Version> alphaList = new FilteredSubList<>(versionsIterable, item -> item.type.equals("old_alpha"));
 
         // Query installed versions
         mInstalledVersions = new File(Tools.DIR_GAME_NEW + "/versions").list();

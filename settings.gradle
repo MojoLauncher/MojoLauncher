@@ -11,6 +11,10 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven { url "https://jitpack.io" }
+        maven {
+            name "radRepo"
+            url "https://maven.radsteve.net/public"
+        }
     }
 }
 
