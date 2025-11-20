@@ -113,19 +113,19 @@ public class JREUtils {
         // Fix white color on banner and sheep, since GL4ES 1.1.5
         envMap.put("LIBGL_NORMALIZE", "1");
 
-        if(PREF_DUMP_SHADERS)
+        if (PREF_DUMP_SHADERS)
             envMap.put("LIBGL_VGPU_DUMP", "1");
-        if(PREF_VSYNC_IN_ZINK)
+        if (PREF_VSYNC_IN_ZINK)
             envMap.put("POJAV_VSYNC_IN_ZINK", "1");
-        if(Tools.deviceHasHangingLinker())
+        if (Tools.deviceHasHangingLinker())
             envMap.put("POJAV_EMUI_ITERATOR_MITIGATE", "1");
 
 
         // The OPEN GL version is changed according
         envMap.put("LIBGL_ES", (String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION));
 
-	    // HACK: GLSL version override for Mesa-based renderers (i.e. Zink)
-	    // Required to run the game properly on some mobile Vulkan drivers (Minecraft fails to compile shaders without)
+        // HACK: GLSL version override for Mesa-based renderers (i.e. Zink)
+        // Required to run the game properly on some mobile Vulkan drivers (Minecraft fails to compile shaders without)
         envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
 
         envMap.put("FORCE_VSYNC", String.valueOf(LauncherPreferences.PREF_FORCE_VSYNC));
@@ -135,19 +135,30 @@ public class JREUtils {
         envMap.put("allow_higher_compat_version", "true");
         envMap.put("allow_glsl_extension_directive_midshader", "true");
 
-        if(!renderer.equals("opengles2")) { // Don't enable ANGLE for GL4ES for now (it's currently broken)
+        if (!renderer.equals("opengles2")) { // Don't enable ANGLE for GL4ES for now (it's currently broken)
             setupAngleEnv(context, envMap);
         }
         setupFfmpegEnv(context, envMap);
 
         envMap.put("MOJO_RENDERER", renderer);
 
-        if(renderer.equals("opengles3_ltw")) {
-            envMap.put("POJAVEXEC_EGL","libltw.so");
+        // Pick EGL based renderer
+        String pickedRenderer;
+        switch (renderer) {
+            case "opengles3_mg":
+                // HACK HACK HACK
+                // Load MGPlugin just in case
+                MGPlugin.initialize(context);
+                pickedRenderer = "libmobileglues.so";
+            case "opengles3_ltw":
+            default:
+                pickedRenderer = "libltw.so";
+        }
+        envMap.put("POJAVEXEC_EGL", pickedRenderer);
 
-        if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
+        if (LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
 
-        if(GLInfoUtils.getGlInfo().isAdreno() && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
+        if (GLInfoUtils.getGlInfo().isAdreno() && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
             envMap.put("POJAV_LOAD_TURNIP", "1");
         }
 
@@ -157,12 +168,11 @@ public class JREUtils {
             Logger.appendToLog("Added custom env: " + env.getKey() + "=" + env.getValue());
             try {
                 Os.setenv(env.getKey(), env.getValue(), true);
-            }catch (NullPointerException exception){
+            } catch (NullPointerException exception) {
                 Log.e("JREUtils", exception.toString());
             }
         }
     }
-        }
 
     public static void launchJavaVM(final AppCompatActivity activity, final Runtime runtime, File gameDirectory, final List<String> JVMArgs, final String userArgsString) throws Throwable {
 
