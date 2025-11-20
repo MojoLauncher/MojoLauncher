@@ -51,9 +51,6 @@ import net.kdt.pojavlaunch.lifecycle.ContextExecutorTask;
 import net.kdt.pojavlaunch.memory.MemoryHoleFinder;
 import net.kdt.pojavlaunch.memory.SelfMapsParser;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
-import net.kdt.pojavlaunch.multirt.Runtime;
-import net.kdt.pojavlaunch.plugins.LibraryPlugin;
-import net.kdt.pojavlaunch.plugins.MGPlugin;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.GLInfoUtils;
@@ -80,8 +77,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import git.artdeell.mojo.R;
 import git.artdeell.mojo.BuildConfig;
+import git.artdeell.mojo.R;
 
 @SuppressWarnings("IOStreamConstructor")
 public final class Tools {
@@ -443,14 +440,9 @@ public final class Tools {
         act.startActivity(browserIntent);
     }
 
-    private static boolean checkRules(JMinecraftVersionList.Arguments.ArgValue.ArgRules[] rules) {
-        if(rules == null) return true; // always allow
-        for (JMinecraftVersionList.Arguments.ArgValue.ArgRules rule : rules) {
-            if (rule.action.equals("allow") && rule.os != null && rule.os.name.equals("osx")) {
-                return false; //disallow
-            }
-        }
-        return true; // allow if none match
+    public static boolean shouldSkipLibrary(DependentLibrary library) {
+        // Don't use lwjgl from libraries, we have our own bundled in.
+        return library.name.startsWith("org.lwjgl");
     }
 
     public static void preProcessLibraries(DependentLibrary[] libraries) {
