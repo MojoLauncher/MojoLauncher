@@ -441,7 +441,7 @@ public class GameRunner {
         boolean usesLWJGL3 = false;
         for (DependentLibrary libItem : info.libraries) {
             if(libItem.name.startsWith("org.lwjgl:lwjgl:3.")) usesLWJGL3 = true;
-            if(!checkRules(libItem.rules) || Tools.shouldSkipLibrary(libItem)) continue;
+            if(!checkRules(libItem.rules)) continue;
             File library = new File(Tools.DIR_HOME_LIBRARY, Tools.artifactToPath(libItem));
             if(!library.exists()) continue;
             String name = trimLibVersion(libItem.name);
