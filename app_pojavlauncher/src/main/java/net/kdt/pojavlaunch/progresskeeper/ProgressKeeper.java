@@ -45,6 +45,10 @@ public class ProgressKeeper {
         }
     }
 
+    public static synchronized boolean hasProgressKey(String key) {
+        return sProgressStates.get(key) != null;
+    }
+
     public static synchronized void addListener(String progressRecord, ProgressListener listener) {
         ProgressState state = sProgressStates.get(progressRecord);
         if(state != null && (state.resid != -1 || state.progress != -1)) {

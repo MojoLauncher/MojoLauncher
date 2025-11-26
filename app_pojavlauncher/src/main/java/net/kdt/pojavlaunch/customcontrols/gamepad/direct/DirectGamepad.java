@@ -12,6 +12,7 @@ public class DirectGamepad implements GamepadHandler {
     @Override
     public void handleGamepadInput(int keycode, float value) {
         int gKeycode = -1, gAxis = -1;
+        boolean normalize = false;
         switch (keycode) {
             case KeyEvent.KEYCODE_BUTTON_A: gKeycode = GamepadKeycodes.GLFW_GAMEPAD_BUTTON_A; break;
             case KeyEvent.KEYCODE_BUTTON_B: gKeycode = GamepadKeycodes.GLFW_GAMEPAD_BUTTON_B; break;
@@ -22,10 +23,12 @@ public class DirectGamepad implements GamepadHandler {
             case KeyEvent.KEYCODE_BUTTON_L2:
             case MotionEvent.AXIS_LTRIGGER:
                 gAxis = GamepadKeycodes.GLFW_GAMEPAD_AXIS_LEFT_TRIGGER;
+                normalize = true;
                 break;
             case KeyEvent.KEYCODE_BUTTON_R2:
             case MotionEvent.AXIS_RTRIGGER:
                 gAxis = GamepadKeycodes.GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER;
+                normalize = true;
                 break;
             case KeyEvent.KEYCODE_BUTTON_THUMBL: gKeycode = GamepadKeycodes.GLFW_GAMEPAD_BUTTON_LEFT_THUMB; break;
             case KeyEvent.KEYCODE_BUTTON_THUMBR: gKeycode = GamepadKeycodes.GLFW_GAMEPAD_BUTTON_RIGHT_THUMB; break;
@@ -72,6 +75,7 @@ public class DirectGamepad implements GamepadHandler {
             sGamepadButtonBuffer.put(gKeycode, value > 0.85 ? GamepadKeycodes.GLFW_PRESS : GamepadKeycodes.GLFW_RELEASE);
         }
         if(gAxis != -1) {
+            if(normalize) value = value * 2 - 1;
             sGamepadAxisBuffer.put(gAxis, value);
         }
     }

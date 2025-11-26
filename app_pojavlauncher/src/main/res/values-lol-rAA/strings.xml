@@ -196,8 +196,6 @@
     <string name="global_delete">Delete</string>
     <string name="pedit_java_runtime">Java runtime</string>
     <string name="pedit_renderer">Renderer</string>
-    <string name="arc_capes_title">Cosmetica Capes just like superman\'</string>
-    <string name="arc_capes_desc">Enablez capez from cosmetica (previously arc). For more informashun pleez visit https://cosmetica.cc. Requirez optifine.</string>
     <string name="notif_channel_name">Geneal</string>
     <string name="lazy_service_default_title">Mojo background police</string>
     <string name="use_global_default">(Use Base Normal)</string>
@@ -231,7 +229,6 @@
     <string name="storage_required">pojavlauncher requirez external storage to be attached. purrlease reconnect it an restart da app.</string>
     <string name="mcl_setting_title_buttonallcaps">only use capital letterz in button labelz</string>
     <string name="mcl_setting_subtitle_buttonallcaps">disable dis if yu want to use lowurcase letturz in yor controlz.</string>
-    <string name="create_profile">Create new profile like</string>
     <string name="preference_shader_dump_title">Enable shader dumping</string>
     <string name="preference_shader_dump_description">log converted shaderz into da log file.</string>
     <string name="percent_format">%d%%</string>

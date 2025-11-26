@@ -77,7 +77,6 @@
     <string name="global_default">預設</string>
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">應用程式/遊戲以代碼 %d 結束，請查看 latestlog.txt 以取得更多詳細資訊。</string>
-    <string name="mcn_signal_title">應用程式/遊戲發生嚴重錯誤（%d）並已中止，請檢查 latestlog.txt 以取得更多資訊。</string>
     <string name="mcn_exit_confirm">您確定要強制關閉嗎？</string>
     <string name="mcn_check_fail_vulkan_support">這部裝置不支援 Zink 渲染器！</string>
     <!-- MainActivity: Control buttons -->
@@ -203,8 +202,6 @@
     <string name="global_delete">刪除</string>
     <string name="pedit_java_runtime">Java 執行環境</string>
     <string name="pedit_renderer">渲染器</string>
-    <string name="arc_capes_title">Cosmetica 披風</string>
-    <string name="arc_capes_desc">透過 Cosmetica（前身為 Arc）啟用披風。需要 OptiFine。如需更多資訊請至 https://cosmetica.cc。</string>
     <string name="notif_channel_name">一般設定</string>
     <string name="lazy_service_default_title">Mojo 背景服務</string>
     <string name="mcl_setting_veroption_installed">已安裝</string>
@@ -239,7 +236,6 @@
     <string name="storage_required">MojoLauncher 需要連接外部儲存空間，請重新連接並重新啟動應用程式。</string>
     <string name="mcl_setting_title_buttonallcaps">在按鈕標籤中僅使用大寫字母</string>
     <string name="mcl_setting_subtitle_buttonallcaps">如果你想在控制鍵中使用並顯示小寫字母，請關閉此設定。</string>
-    <string name="create_profile">新增設定檔</string>
     <string name="preference_shader_dump_title">啟用著色器傾印</string>
     <string name="preference_shader_dump_description">將轉換後的著色器記錄到記錄檔中。</string>
     <string name="percent_format">%d%%</string>
@@ -369,7 +365,7 @@
     <string name="controller_remapper_expand_entry">展開以變更按鍵碼</string>
     <string name="preference_remap_controller_title">變更控制器按鍵綁定</string>
     <string name="preference_remap_controller_description">允許你修改綁定至每個控制器按鈕的鍵盤按鍵</string>
-    <string name="mcl_button_discord">Discord</string>
+    <string name="mcl_button_social_media">Discord</string>
     <string name="ltw_render_distance_warning_msg">你的 GPU 無法在不使用 Sodium 或其他類似模組的情況下，繪製超過 7 的顯示距離。當你輕觸「確定」時，顯示距離將會自動降低。</string>
     <string name="mcl_button_open_directory">開啟遊戲目錄</string>
     <string name="local_login_bad_username_title">不適當的使用者名稱</string>

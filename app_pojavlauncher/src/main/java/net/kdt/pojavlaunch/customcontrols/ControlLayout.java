@@ -6,6 +6,7 @@ import static org.lwjgl.glfw.CallbackBridge.isGrabbing;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Insets;
 import android.graphics.Point;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -13,11 +14,13 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowInsets;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.gson.JsonSyntaxException;
@@ -397,16 +400,32 @@ public class ControlLayout extends FrameLayout {
 		}
 	}
 
+    @RequiresApi(30)
+    private boolean isKeyboardShown() {
+        WindowInsets windowInsets = getRootWindowInsets();
+        Insets imeInsets = windowInsets.getInsets(WindowInsets.Type.ime());
+        return imeInsets.bottom != 0 || imeInsets.left != 0 || imeInsets.top != 0 || imeInsets.right != 0;
+    }
+
 	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if (mModifiable && event.getActionMasked() != MotionEvent.ACTION_UP || mControlDialog == null)
 			return true;
-
 		InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
 
-		// When the input window cannot be hidden, it returns false
-		if(!imm.hideSoftInputFromWindow(getWindowToken(), 0)){
+        boolean isKeyboardHidden;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            boolean keyboardShown = isKeyboardShown();
+            isKeyboardHidden = !keyboardShown;
+            if(keyboardShown) imm.hideSoftInputFromWindow(getWindowToken(), 0);
+        }else {
+            // When the input window cannot be hidden (meaning it's already hidden), it returns false
+            // Docs don't seem to suggest that this is the case anymore. But it is on a10 and i
+            // don't want to mess with the way insets are done on a10
+            isKeyboardHidden = !imm.hideSoftInputFromWindow(getWindowToken(), 0);
+        }
+        if(isKeyboardHidden){
 			if(mControlDialog.disappearLayer()){
 				mActionRow.setFollowedButton(null);
 				mHandleView.hide();

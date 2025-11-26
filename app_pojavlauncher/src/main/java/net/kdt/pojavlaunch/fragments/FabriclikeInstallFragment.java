@@ -22,7 +22,7 @@ import net.kdt.pojavlaunch.PojavApplication;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraCore;
-import net.kdt.pojavlaunch.instances.InstanceManager;
+import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.modloaders.FabriclikeUtils;
 import net.kdt.pojavlaunch.modloaders.FabricVersion;
 import net.kdt.pojavlaunch.modloaders.ModloaderDownloadListener;
@@ -114,7 +114,7 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
                 getListenerProxy().onDataNotAvailable();
                 return;
             }
-            InstanceManager.createInstance((i)->{
+            Instances.createInstance((i)->{
                 i.name = "Fabric";
                 i.icon = mFabriclikeUtils.getIconName();
                 i.versionId = versionId;

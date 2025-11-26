@@ -77,7 +77,6 @@
     <string name="global_default">Domyślny</string>
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Aplikacja/gra zakończyła się błędem o kodzie %d, sprawdź latestlog.txt, aby uzyskać więcej informacji.</string>
-    <string name="mcn_signal_title">Aplikacja/gra zakończyła się błędem o kodzie %d, sprawdź plik latestlog.txt, aby uzyskać więcej informacji.</string>
     <string name="mcn_exit_confirm">Czy na pewno chcesz wymusić zamknięcie?</string>
     <string name="mcn_check_fail_vulkan_support">Renderer Zink (Vulkan) nie jest wspierany na tym urządzeniu!</string>
     <!-- MainActivity: Control buttons -->
@@ -203,8 +202,6 @@
     <string name="global_delete">Usuń</string>
     <string name="pedit_java_runtime">Środowisko wykonawcze Javy</string>
     <string name="pedit_renderer">Silnik renderujący</string>
-    <string name="arc_capes_title">Peleryny Cosmetica</string>
-    <string name="arc_capes_desc">Aktywuje peleryny z Cosmetica (wcześniej Arc). Aby dowiedzieć się więcej, odwiedź https://cosmetica.cc. Wymaga OptiFine.</string>
     <string name="notif_channel_name">Ogólne</string>
     <string name="lazy_service_default_title">Usługa Mojo Foreground</string>
     <string name="mcl_setting_veroption_installed">Zainstalowane</string>
@@ -239,7 +236,6 @@
     <string name="storage_required">MojoLauncher wymaga podłączonej pamięci zewnętrznej. Podłącz ją ponownie i zrestartuj aplikację.</string>
     <string name="mcl_setting_title_buttonallcaps">Używaj tylko dużych liter w etykietach przycisków</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Wyłącz tę opcję, jeśli chcesz używać małych liter w sterowaniu dotykowym.</string>
-    <string name="create_profile">Utwórz nowy profil</string>
     <string name="preference_shader_dump_title">Włącz dumping shaderów</string>
     <string name="preference_shader_dump_description">Rejestrowanie przekonwertowanych shaderów w pliku dziennika.</string>
     <string name="percent_format">%d%%</string>
@@ -369,7 +365,7 @@
     <string name="controller_remapper_expand_entry">Rozwiń, aby zmienić przypisania przycisków</string>
     <string name="preference_remap_controller_title">Zmień przypisania przycisków kontrolera</string>
     <string name="preference_remap_controller_description">Pozwala na modyfikację przycisków klawiatury przypisanych do każdego przycisku kontrolera</string>
-    <string name="mcl_button_discord">Discord</string>
+    <string name="mcl_button_social_media">Discord</string>
     <string name="ltw_render_distance_warning_msg">Twoje GPU nie jest kompatybilne z zasięgiem renderowania powyżej 7 bez Sodium lub innych podobnych modów. Zasięg renderowanie zostanie automatycznie zmniejszony, jeśli klikniesz \"OK\".</string>
     <string name="mcl_button_open_directory">Otwórz lokalizację plików gry</string>
     <string name="local_login_bad_username_title">Nieodpowiednia nazwa użytkownika</string>

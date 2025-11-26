@@ -1,7 +1,5 @@
 package net.kdt.pojavlaunch.modloaders;
 
-import android.content.Intent;
-
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.instances.InstanceInstaller;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
@@ -30,7 +28,7 @@ public class OptiFineUtils {
         instanceInstaller.installerUrlTransformer = "optifine";
         instanceInstaller.installerDownloadUrl = version.downloadUrl;
         instanceInstaller.installerJar = installerLocation.getAbsolutePath();
-        instanceInstaller.commandLineArgs = "-javaagent:"+ Tools.DIR_DATA+"/forge_installer/forge_installer.jar=OF";
+        instanceInstaller.commandLineArgs = List.of("-javaagent:"+ Tools.DIR_DATA+"/forge_installer/forge_installer.jar=OF");
         return instanceInstaller;
     }
 

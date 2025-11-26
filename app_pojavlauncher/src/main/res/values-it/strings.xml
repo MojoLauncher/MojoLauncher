@@ -77,7 +77,6 @@
     <string name="global_default">Predefinito</string>
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">L\'applicazione/gioco si è chiuso con il codice %d, controlla il lastlog.txt per più dettagli.</string>
-    <string name="mcn_signal_title">Applicazione/gioco interrotto dal segnale fatale %d, controllare latestlog.txt per maggiori dettagli.</string>
     <string name="mcn_exit_confirm">Sei sicuro di voler eseguire una chiusura forzata?</string>
     <string name="mcn_check_fail_vulkan_support">Il renderer Zink (Vulkan) non è supportato su questo dispositivo!</string>
     <!-- MainActivity: Control buttons -->
@@ -203,8 +202,6 @@
     <string name="global_delete">Elimina</string>
     <string name="pedit_java_runtime">Runtime Java</string>
     <string name="pedit_renderer">Renderer</string>
-    <string name="arc_capes_title">Mantelli Cosmetica</string>
-    <string name="arc_capes_desc">Abilità i mantelli di Cosmetica (precedentemente Arc). Per ulteriori informazioni visita https://cosmetica.cc. Necessita OptiFine.</string>
     <string name="notif_channel_name">Generale</string>
     <string name="lazy_service_default_title">Servizio di Foreground Mojo</string>
     <string name="mcl_setting_veroption_installed">Installato</string>
@@ -240,7 +237,6 @@ Accedi almeno una volta su https://minecraft.net/ e riprova.</string>
     <string name="storage_required">MojoLauncher necessita della memoria esterna, connettila e riavvia l\'applicazione</string>
     <string name="mcl_setting_title_buttonallcaps">Usa solo lettere maiuscole nelle etichette dei pulsanti</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Disabilita questa opzione se vuoi usare lettere minuscole nei tuoi controlli.</string>
-    <string name="create_profile">Crea nuovo profilo</string>
     <string name="preference_shader_dump_title">Abilità shader dumping</string>
     <string name="preference_shader_dump_description">Registra gli shader convertiti nel file di log.</string>
     <string name="percent_format">%d%%</string>

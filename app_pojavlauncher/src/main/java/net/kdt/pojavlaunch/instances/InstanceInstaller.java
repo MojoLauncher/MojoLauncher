@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.os.Bundle;
 
 import com.kdt.mcgui.ProgressLayout;
 
@@ -24,6 +25,8 @@ import net.kdt.pojavlaunch.utils.NotificationUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import git.artdeell.mojo.R;
@@ -34,7 +37,7 @@ public class InstanceInstaller implements ContextExecutorTask {
     public String installerJar;
     private transient File installerJarFile;
     private transient String mTransformedUrl;
-    public String commandLineArgs;
+    public List<String> commandLineArgs;
     public String installerUrlTransformer;
     public String installerDownloadUrl;
     public String installerSha1;
@@ -84,7 +87,7 @@ public class InstanceInstaller implements ContextExecutorTask {
         if(!sLastInstallInfo.delete()) throw new IOException("Failed to delete mod installer info");
         String targetVersionId = ProfileWatcher.consumePendingVersion(assetManager);
         if(targetVersionId == null) return;
-        for(Instance instance : InstanceManager.getImmutableInstanceList()) {
+        for(Instance instance : Instances.loadAllInstances()) {
             if(!lastInstaller.equals(instance.installer)) continue;
             instance.installer = null;
             instance.versionId = targetVersionId;
@@ -98,10 +101,14 @@ public class InstanceInstaller implements ContextExecutorTask {
             InstanceInstaller.postInstallCheck(context.getAssets());
         }catch (Exception e) {
             Tools.showError(context, e);
+            if (sLastInstallInfo.isFile()) {
+                boolean ignored = sLastInstallInfo.delete();
+            }
         }
     }
 
     public void start() {
+        ProgressLayout.setProgress(ProgressLayout.INSTANCE_INSTALL, 0);
         PojavApplication.sExecutorService.execute(()->{
             try {
                 threadedStart();
@@ -138,7 +145,10 @@ public class InstanceInstaller implements ContextExecutorTask {
             return;
         }
         Intent intent = new Intent(activity, JavaGUILauncherActivity.class);
-        intent.putExtra("javaArgs", commandLineArgs +" -jar "+installerJar().getAbsolutePath());
+        Bundle extras = new Bundle();
+        extras.putStringArrayList("javaArgs", new ArrayList<>(commandLineArgs));
+        extras.putString("modPath", installerJar);
+        intent.putExtras(extras);
         activity.startActivity(intent);
     }
 

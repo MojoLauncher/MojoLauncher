@@ -77,7 +77,6 @@
     <string name="global_default">Standard</string>
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Anwendung/Spiel wurde mit dem Code %d beendet. Für weitere Details, siehe latestlog.txt.</string>
-    <string name="mcn_signal_title">Anwendung/Spiel wurde mit dem Fehlercode %d beendet. Für weitere Details, siehe latestlog.txt.</string>
     <string name="mcn_exit_confirm">Beenden wirklich erzwingen?</string>
     <string name="mcn_check_fail_vulkan_support">Der Zink-Renderer (Vulkan) wird auf diesem Gerät nicht unterstützt!</string>
     <!-- MainActivity: Control buttons -->
@@ -203,8 +202,6 @@
     <string name="global_delete">Löschen</string>
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Renderer</string>
-    <string name="arc_capes_title">Cosmetica-Umhänge</string>
-    <string name="arc_capes_desc">Aktiviert Umhänge von Cosmetica (früher Arc). Für weitere Informationen, siehe https://cosmetica.cc. OptiFine wird benötigt.</string>
     <string name="notif_channel_name">Allgemein</string>
     <string name="lazy_service_default_title">Mojo-Vordergrunddienst</string>
     <string name="mcl_setting_veroption_installed">Installiert</string>
@@ -239,7 +236,6 @@
     <string name="storage_required">MojoLauncher benötigt einen verbundenen externen Speicher. Bitte verbinde ihn erneut und starte dann die App neu.</string>
     <string name="mcl_setting_title_buttonallcaps">Nur Großbuchstaben in Tastenbeschriftungen verwenden</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Deaktivieren, um Kleinbuchstaben für die Steuerung zu verwenden.</string>
-    <string name="create_profile">Neues Profil erstellen</string>
     <string name="preference_shader_dump_title">Shader-Dumping aktivieren</string>
     <string name="preference_shader_dump_description">Konvertierte Shader mit in die Protokolldatei schreiben.</string>
     <string name="percent_format">%d%%</string>
@@ -369,7 +365,7 @@ Um die offizielle Download-Quelle zu verwenden, drücke \"Auf offizielle Seite u
     <string name="controller_remapper_expand_entry">Zeige mehr an, um die Keycodes zu ändern</string>
     <string name="preference_remap_controller_title">Controller-Tastenbelegung ändern</string>
     <string name="preference_remap_controller_description">Ermöglicht es dir, die Tastaturtaste zu ändern, die jeder Controller-Taste zugeordnet ist</string>
-    <string name="mcl_button_discord">Discord</string>
+    <string name="mcl_button_social_media">Discord</string>
     <string name="ltw_render_distance_warning_msg">Deine GPU ist ohne Sodium oder ähnliche Mods nicht in der Lage, eine Renderdistanz von über 7 Chunks zu rendern. Solltest du auf OK tippen, wird die Renderdistanz automatisch reduziert.</string>
     <string name="mcl_button_open_directory">Spielverzeichnis öffnen</string>
     <string name="local_login_bad_username_title">Ungeeigneter Benutzername</string>

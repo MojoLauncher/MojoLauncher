@@ -43,6 +43,16 @@ do {                                                                       \
 
 static void registerFunctions(JNIEnv *env);
 
+static void initGlfwControllerState() {
+#define GLFW_GAMEPAD_AXIS_LEFT_TRIGGER 4
+#define GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER 5
+    // In idle state, the trigger values are -1 AND NOT 0
+    pojav_environ->gamepadState.axes[GLFW_GAMEPAD_AXIS_LEFT_TRIGGER] = -1.0f;
+    pojav_environ->gamepadState.axes[GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER] = -1.0f;
+#undef GLFW_GAMEPAD_AXIS_LEFT_TRIGGER
+#undef GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER
+}
+
 jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
     if (pojav_environ->dalvikJavaVMPtr == NULL) {
         LOGI("Saving DVM environ...");
@@ -54,6 +64,9 @@ jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
         pojav_environ->method_accessAndroidClipboard = (*dvEnv)->GetStaticMethodID(dvEnv, pojav_environ->bridgeClazz, "accessAndroidClipboard", "(ILjava/lang/String;)Ljava/lang/String;");
         pojav_environ->method_onGrabStateChanged = (*dvEnv)->GetStaticMethodID(dvEnv, pojav_environ->bridgeClazz, "onGrabStateChanged", "(Z)V");
         pojav_environ->method_onDirectInputEnable = (*dvEnv)->GetStaticMethodID(dvEnv, pojav_environ->bridgeClazz, "onDirectInputEnable", "()V");
+        pojav_environ->method_createCursor = (*dvEnv)->GetStaticMethodID(dvEnv, pojav_environ->bridgeClazz, "createCursor", "(Ljava/nio/ByteBuffer;IIII)Lnet/kdt/pojavlaunch/customcontrols/mouse/CursorContainer;");
+        pojav_environ->method_setCursor = (*dvEnv)->GetStaticMethodID(dvEnv, pojav_environ->bridgeClazz, "setCursor", "(Lnet/kdt/pojavlaunch/customcontrols/mouse/CursorContainer;)V");
+        pojav_environ->method_removeCursor = (*dvEnv)->GetStaticMethodID(dvEnv, pojav_environ->bridgeClazz, "removeCursor", "(Lnet/kdt/pojavlaunch/customcontrols/mouse/CursorContainer;)V");
         pojav_environ->isUseStackQueueCall = JNI_FALSE;
     } else if (pojav_environ->dalvikJavaVMPtr != vm) {
         LOGI("Saving JVM environ...");
@@ -70,9 +83,11 @@ jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
         jfieldID field_mouseDownBuffer = (*vmEnv)->GetStaticFieldID(vmEnv, pojav_environ->vmGlfwClass, "mouseDownBuffer", "Ljava/nio/ByteBuffer;");
         jobject mouseDownBufferJ = (*vmEnv)->GetStaticObjectField(vmEnv, pojav_environ->vmGlfwClass, field_mouseDownBuffer);
         pojav_environ->mouseDownBuffer = (*vmEnv)->GetDirectBufferAddress(vmEnv, mouseDownBufferJ);
+        initGlfwControllerState();
         hookExec(vmEnv);
         installLwjglDlopenHook(vmEnv);
         installEMUIIteratorMititgation(vmEnv);
+        pojav_environ->cursors = linkedlist_init();
     }
 
     if(pojav_environ->dalvikJavaVMPtr == vm) {
@@ -84,6 +99,24 @@ jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
     pojav_environ->isGrabbing = JNI_FALSE;
     
     return JNI_VERSION_1_4;
+}
+
+void JNI_OnUnload(JavaVM* vm, __attribute__((unused)) void* reserved) {
+    if(pojav_environ->dalvikJavaVMPtr == vm) {
+        JNIEnv *dkEnv;
+        (*vm)->GetEnv(vm, (void**) &dkEnv, JNI_VERSION_1_4);
+
+        if(pojav_environ->cursors != NULL) {
+            LinkedListNode* current = pojav_environ->cursors->first;
+            while (current) {
+                LinkedListNode* next = current->next;
+                (*dkEnv)->DeleteGlobalRef(dkEnv, current->value);
+                free(current);
+                current = next;
+            }
+            pojav_environ->cursors = NULL;
+        }
+    }
 }
 
 #define ADD_CALLBACK_WWIN(NAME) \
@@ -103,20 +136,28 @@ ADD_CALLBACK_WWIN(Scroll)
 
 #undef ADD_CALLBACK_WWIN
 
-void updateMonitorSize(int width, int height) {
-    (*pojav_environ->glfwThreadVmEnv)->CallStaticVoidMethod(pojav_environ->glfwThreadVmEnv, pojav_environ->vmGlfwClass, pojav_environ->method_internalChangeMonitorSize, width, height);
+void updateMonitorSize(JNIEnv *env, int width, int height) {
+    (*env)->CallStaticVoidMethod(env, pojav_environ->vmGlfwClass, pojav_environ->method_internalChangeMonitorSize, width, height);
 }
-void updateWindowSize(void* window) {
-    (*pojav_environ->glfwThreadVmEnv)->CallStaticVoidMethod(pojav_environ->glfwThreadVmEnv, pojav_environ->vmGlfwClass, pojav_environ->method_internalWindowSizeChanged, (jlong)window);
+void updateWindowSize(JNIEnv *env, void* window) {
+    (*env)->CallStaticVoidMethod(env, pojav_environ->vmGlfwClass, pojav_environ->method_internalWindowSizeChanged, (jlong)window);
 }
 
+#define VALID_ENV JNIEnv *env; \
+if(glfw_main_thread){ \
+    env = pojav_environ->glfwThreadVmEnv;                          \
+} else {                       \
+    (*pojav_environ->runtimeJavaVMPtr)->GetEnv(pojav_environ->runtimeJavaVMPtr, (void**) &env, JNI_VERSION_1_6);                               \
+};
+
 void pojavPumpEvents(void* window) {
+    VALID_ENV
     if(pojav_environ->shouldUpdateMouse) {
         pojav_environ->GLFW_invoke_CursorPos(window, floor(pojav_environ->cursorX),
                                              floor(pojav_environ->cursorY));
     }
     if(pojav_environ->shouldUpdateMonitorSize) {
-        updateWindowSize(window);
+        updateWindowSize(env,window);
     }
 
     size_t index = pojav_environ->outEventIndex;
@@ -152,6 +193,7 @@ void pojavPumpEvents(void* window) {
 
 /** Prepare the library for sending out callbacks to all windows */
 void pojavStartPumping() {
+    VALID_ENV
     size_t counter = atomic_load_explicit(&pojav_environ->eventCounter, memory_order_acquire);
     size_t index = pojav_environ->outEventIndex;
 
@@ -171,7 +213,7 @@ void pojavStartPumping() {
     }
     if(pojav_environ->shouldUpdateMonitorSize) {
         // Perform a monitor size update here to avoid doing it on every single window
-        updateMonitorSize(pojav_environ->savedWidth, pojav_environ->savedHeight);
+        updateMonitorSize(env, pojav_environ->savedWidth, pojav_environ->savedHeight);
         // Mark the monitor size as consumed (since GLFW was made aware of it)
         pojav_environ->monitorSizeConsumed = true;
     }
@@ -179,6 +221,7 @@ void pojavStartPumping() {
 
 /** Prepare the library for the next round of new events */
 void pojavStopPumping() {
+    VALID_ENV
     pojav_environ->outEventIndex = pojav_environ->outTargetIndex;
 
     // New events may have arrived while pumping, so remove only the difference before the start and end of execution
@@ -254,9 +297,7 @@ JNIEXPORT jstring JNICALL Java_org_lwjgl_glfw_CallbackBridge_nativeClipboard(JNI
 #ifdef DEBUG
     LOGD("Debug: Clipboard access is going on\n", pojav_environ->isUseStackQueueCall);
 #endif
-
-    JNIEnv *dalvikEnv;
-    (*pojav_environ->dalvikJavaVMPtr)->AttachCurrentThread(pojav_environ->dalvikJavaVMPtr, &dalvikEnv, NULL);
+    TRY_ATTACH_ENV(dalvikEnv, pojav_environ->dalvikJavaVMPtr, "Failed to attach thread for clipboard", return NULL;);
     assert(dalvikEnv != NULL);
     assert(pojav_environ->bridgeClazz != NULL);
 
@@ -275,7 +316,6 @@ JNIEXPORT jstring JNICALL Java_org_lwjgl_glfw_CallbackBridge_nativeClipboard(JNI
         (*dalvikEnv)->DeleteLocalRef(dalvikEnv, copyDst);
         (*env)->ReleaseByteArrayElements(env, copySrc, (jbyte *)copySrcC, 0);
     }
-    (*pojav_environ->dalvikJavaVMPtr)->DetachCurrentThread(pojav_environ->dalvikJavaVMPtr);
     return pasteDst;
 }
 
@@ -469,7 +509,7 @@ JNIEXPORT void JNICALL Java_org_lwjgl_glfw_CallbackBridge_nativeSetWindowAttrib(
     (*jvm_env)->CallStaticVoidMethod(
             jvm_env, pojav_environ->vmGlfwClass,
             pojav_environ->method_glftSetWindowAttrib,
-            (jlong) pojav_environ->showingWindow, attrib, value
+            pojav_environ->showingWindow, attrib, value
     );
 
     // Attaching every time is annoying, so stick the attachment to the Android GUI thread around
@@ -553,4 +593,71 @@ Java_org_lwjgl_glfw_CallbackBridge_nativeCreateGamepadButtonBuffer(JNIEnv *env, 
 JNIEXPORT jobject JNICALL
 Java_org_lwjgl_glfw_CallbackBridge_nativeCreateGamepadAxisBuffer(JNIEnv *env, jclass clazz) {
     return (*env)->NewDirectByteBuffer(env, &pojav_environ->gamepadState.axes, sizeof(pojav_environ->gamepadState.axes));
+}
+
+void destroyAllCursors() {
+    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "Failed to attach to env from pojavTerminate!\n", return;);
+
+    LinkedListNode* current = pojav_environ->cursors->first;
+    while (current) {
+        LinkedListNode* next = current->next;
+        (*env)->DeleteGlobalRef(env, current->value);
+        free(current);
+        current = next;
+    }
+    pojav_environ->cursors->first = NULL;
+    pojav_environ->cursors->last = NULL;
+
+    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_setCursor, NULL);
+}
+
+// the methods below are called from org/lwjgl/glfw/GLFW
+LinkedListNode* pojavCreateCursor(GLFWimage* image, int xhot, int yhot) {
+    if(image == NULL) {
+        printf("Passed image is null!\n");
+        return NULL;
+    }
+
+    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavCreateCursor!\n", return NULL;);
+    size_t imageBytes = image->width * image->height * 4;
+    jobject buffer = (*env)->NewDirectByteBuffer(env, image->pixels, imageBytes);
+    if(buffer == NULL) {
+        printf("Failed to create ByteBuffer for cursor image!\n");
+        return NULL;
+    }
+
+    jobject cursor = (*env)->CallStaticObjectMethod(env, pojav_environ->bridgeClazz,
+                                                    pojav_environ->method_createCursor, buffer,
+                                                    image->width, image->height, xhot, yhot);
+    jobject globalCursor = (*env)->NewGlobalRef(env, cursor);
+    // not needed anymore
+    (*env)->DeleteLocalRef(env, cursor);
+    (*env)->DeleteLocalRef(env, buffer);
+
+    LinkedListNode* node = linkedlist_append(pojav_environ->cursors, globalCursor);
+    if(!node) {
+        (*env)->DeleteGlobalRef(env, globalCursor);
+        return NULL;
+    }
+    return node;
+}
+
+void pojavSetCursor(__attribute__((unused)) void* window, LinkedListNode* cursor) {
+    jobject value = NULL;
+    if(cursor) value = cursor->value;
+    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavSetCursor!\n", return;);
+    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_setCursor, value);
+}
+
+void pojavDestroyCursor(LinkedListNode* cursor) {
+    if(cursor == NULL || cursor->value == NULL) {
+        printf("Passed cursor to pojavDestroyCursor is null!\n");
+        return;
+    }
+
+    TRY_ATTACH_ENV(env, pojav_environ->dalvikJavaVMPtr, "failed to attach env from pojavDestroyCursor!\n", return;);
+    (*env)->CallStaticVoidMethod(env, pojav_environ->bridgeClazz, pojav_environ->method_removeCursor, cursor->value);
+
+    (*env)->DeleteGlobalRef(env, cursor->value);
+    linkedlist_remove(pojav_environ->cursors, cursor);
 }

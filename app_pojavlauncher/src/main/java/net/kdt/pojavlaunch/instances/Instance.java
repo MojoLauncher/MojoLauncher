@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class Instance {
+public class Instance extends DisplayInstance {
     public static final int ARGS_MODE_REPLACE = 0;
     public static final int ARGS_MODE_MERGE_DEFAULT_FIRST = 1;
     public static final int ARGS_MODE_MERGE_INSTANCE_FIRST = 2;
@@ -21,24 +21,21 @@ public class Instance {
     public static final String VERSION_LATEST_RELEASE = "latest_release";
     public static final String VERSION_LATEST_SNAPSHOT = "latest_snapshot";
 
-    protected transient File mInstanceRoot;
-    public String name;
-    public String versionId;
     public InstanceInstaller installer;
     public String renderer;
     public String jvmArgs;
     public int argsMode;
     public String selectedRuntime;
     public String controlLayout;
-    public String icon;
     public boolean sharedData;
 
     protected Instance() {
     }
 
+    @Override
     protected void sanitize() {
+        super.sanitize();
         sanitizeArgs();
-        sanitizeIcon();
     }
 
     private void sanitizeArgs() {
@@ -48,18 +45,12 @@ public class Instance {
         }
     }
 
-    private void sanitizeIcon() {
-        if(!InstanceIconProvider.hasStaticIcon(icon)) {
-            icon = InstanceIconProvider.FALLBACK_ICON_NAME;
-        }
-    }
-
     /**
      * Write the current contents of the instance to persistent storage.
      * @throws IOException in case of write errors
      */
     public void write() throws IOException {
-        JSONUtils.writeToFile(InstanceManager.metadataLocation(mInstanceRoot), this);
+        JSONUtils.writeToFile(Instances.metadataLocation(mInstanceRoot), this);
     }
 
     /**
@@ -120,15 +111,7 @@ public class Instance {
     }
 
     public File getGameDirectory() {
-        if(sharedData) return InstanceManager.SHARED_DATA_DIRECTORY;
+        if(sharedData) return Instances.SHARED_DATA_DIRECTORY;
         return mInstanceRoot;
-    }
-
-    protected File getInstanceIconLocation() {
-        return new File(mInstanceRoot, "icon.webp");
-    }
-
-    public boolean isSelected() {
-        return this == InstanceManager.getSelectedListedInstance();
     }
 }

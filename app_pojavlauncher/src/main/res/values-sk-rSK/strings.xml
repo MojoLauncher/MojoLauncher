@@ -196,8 +196,6 @@
     <string name="global_delete">Vymazať</string>
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Vykresľovač</string>
-    <string name="arc_capes_title">Cosmetica Capeky</string>
-    <string name="arc_capes_desc">Aktivuje capeky (plášte) Cosmetica. Pre info navštívte https://cosmetica.cc. Pre ich funkčnosť je potrebný OptiFine.</string>
     <string name="notif_channel_name">Všeobecné nastavenia notifikácií</string>
     <string name="lazy_service_default_title">Mojo Foreground Service</string>
     <string name="use_global_default">(Použiť predvolené nastavenie)</string>
@@ -231,7 +229,6 @@
     <string name="storage_required">MojoLauncher vyžaduje pripojené externé úložisko. Pripojte ho a reštartujte aplikáciu.</string>
     <string name="mcl_setting_title_buttonallcaps">V označeniach tlačidiel používať len veľké písmená</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Ak chcete v ovládacích prvkoch používať malé písmená, vypnite toto.</string>
-    <string name="create_profile">Vytvoriť nový profil</string>
     <string name="preference_shader_dump_title">Povolenie shader dumpingu</string>
     <string name="preference_shader_dump_description">Všetky konvertované shadery sa vypíšu do logu.</string>
     <string name="percent_format">%d%%</string>

@@ -153,8 +153,6 @@
     <string name="global_delete">Șterge</string>
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Randator</string>
-    <string name="arc_capes_title">Pelerine Cosmetica</string>
-    <string name="arc_capes_desc">Activează pelerinele de la Cosmetica (anterior Arc). Pentru mai multe informații, vizitează https://cosmetica.cc. Necesită OptiFine.</string>
     <string name="notif_channel_name">General</string>
     <string name="lazy_service_default_title">Serviciu Mojo prim-plan</string>
     <string name="mcl_setting_veroption_installed">Instalat</string>
@@ -179,7 +177,6 @@
     <string name="preference_gyro_sensitivity_title">Controalele tiroscopului controlează sensibilitatea</string>
     <string name="preference_gyro_sample_rate_title">Rata de eşantionare giroscopică</string>
     <string name="microsoft_login_retry_later">Prea multe solicitări, vă rugăm să încercaţi din nou mai târziu.</string>
-    <string name="create_profile">Creează un profil nou</string>
     <string name="preference_shader_dump_title">Activează dumping pentru shader</string>
     <string name="percent_format">%d%%</string>
     <string name="customctrl_editor_exit_title">Părăsiți?</string>

@@ -77,7 +77,6 @@
     <string name="global_default">默认</string>
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">应用程序/游戏以代码 %d退出，请查看 latestlog.txt 了解详情；如果你不知道发生了什么，请点击 “分享日志文件” 将日志文件发送给他人分析，而不是在此页面截屏。</string>
-    <string name="mcn_signal_title">应用程序/游戏以致命信号 %d 中止，请查看 latestlog.txt 以了解更多详情。</string>
     <string name="mcn_exit_confirm">您确定要强制关闭？</string>
     <string name="mcn_check_fail_vulkan_support">此设备不支持 Zink（Vulkan）渲染器！</string>
     <!-- MainActivity: Control buttons -->
@@ -203,8 +202,6 @@
     <string name="global_delete">删除</string>
     <string name="pedit_java_runtime">Java 运行环境</string>
     <string name="pedit_renderer">渲染器</string>
-    <string name="arc_capes_title">Cosmetica 披风</string>
-    <string name="arc_capes_desc">启用来自 Cosmetica（原 Arc）的披风，需要 OptiFine，欲知详情请访问 https://arcapes.com。</string>
     <string name="notif_channel_name">常规</string>
     <string name="lazy_service_default_title">Mojo 前台服务</string>
     <string name="mcl_setting_veroption_installed">已安装</string>
@@ -239,7 +236,6 @@
     <string name="storage_required">MojoLauncher 需要连接外部存储，请重新连接并重启应用。</string>
     <string name="mcl_setting_title_buttonallcaps">在按钮标签中仅使用大写字母</string>
     <string name="mcl_setting_subtitle_buttonallcaps">如果您想在按键中显示小写字母，请关闭此设置。</string>
-    <string name="create_profile">创建新配置</string>
     <string name="preference_shader_dump_title">启用着色器输出</string>
     <string name="preference_shader_dump_description">记录切换的着色器到日志文件中。</string>
     <string name="percent_format">%d%%</string>
@@ -369,7 +365,7 @@
     <string name="controller_remapper_expand_entry">展开以更改键码</string>
     <string name="preference_remap_controller_title">更改手柄按键绑定</string>
     <string name="preference_remap_controller_description">允许你修改绑定到每个手柄按钮的键盘按键</string>
-    <string name="mcl_button_discord">Discord</string>
+    <string name="mcl_button_social_media">Discord</string>
     <string name="ltw_render_distance_warning_msg">如果没有 Sodium 或其他类似模组，你的 GPU 将无法渲染 7 以上的渲染距离。点击“确定”后，渲染距离将自动缩短。</string>
     <string name="mcl_button_open_directory">打开游戏目录</string>
     <string name="local_login_bad_username_title">用户名不合适</string>

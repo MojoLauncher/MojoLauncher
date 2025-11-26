@@ -1,9 +1,10 @@
 package net.kdt.pojavlaunch.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.widget.Toast;
+
+import androidx.fragment.app.FragmentActivity;
 
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraCore;
@@ -33,7 +34,8 @@ public class OAuthFragment extends WebViewCompletionFragment {
 
     @Override
     protected void signalCompletion(String fullUrl) {
-        Activity activity = requireActivity();
+        FragmentActivity activity = getActivity();
+        if(activity == null) return;
         Uri uri = Uri.parse(fullUrl);
         String error = uri.getQueryParameter(QUERY_ERROR_NAME);
         String code = uri.getQueryParameter(QUERY_OAUTH_CODE);
@@ -48,6 +50,6 @@ public class OAuthFragment extends WebViewCompletionFragment {
         // Captured by the listener in the mcAccountSpinner
         ExtraCore.setValue(mExtraCoreConstant, code);
         Toast.makeText(activity, R.string.oauth_web_complete, Toast.LENGTH_SHORT).show();
-        Tools.backToMainMenu(requireActivity());
+        Tools.backToMainMenu(activity);
     }
 }

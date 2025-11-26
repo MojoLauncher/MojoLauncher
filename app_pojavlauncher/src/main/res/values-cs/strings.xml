@@ -77,7 +77,6 @@
     <string name="global_default">Výchozí</string>
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Aplikace/Hra spadla s kódem %d, zkontroluj latestlog.txt pro více informací.</string>
-    <string name="mcn_signal_title">Aplikace/Hra skončila s fatálním signálem %d, zkontroluj latestlog.txt pro detaily.</string>
     <string name="mcn_exit_confirm">Opravdu chcete vynutit ukončení?</string>
     <string name="mcn_check_fail_vulkan_support">Vykreslovač Zink (Vulkan) není v tomto zařízení podporován!</string>
     <!-- MainActivity: Control buttons -->
@@ -203,8 +202,6 @@
     <string name="global_delete">Odstranit</string>
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Vykreslovač</string>
-    <string name="arc_capes_title">Kápě z Cosmeticy</string>
-    <string name="arc_capes_desc">Zapne kápě z Cosmeticy (dříve Arc) Pro více informací navštivte https://cosmetica.cc. Vyžaduje OptiFine.</string>
     <string name="notif_channel_name">Všeobecné</string>
     <string name="lazy_service_default_title">Služba Popředí Mojou</string>
     <string name="mcl_setting_veroption_installed">Nainstalováno</string>
@@ -239,7 +236,6 @@
     <string name="storage_required">MojoLauncher vyžaduje přípojené externí úložiště. Připojte jej prosím znovu a restartujte tuto aplikaci.</string>
     <string name="mcl_setting_title_buttonallcaps">Zobrazovat pouze velká písmena na popiscích tlačítek</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Vypněte toto, chcete-li užívat malá písmena ve vlastních ovládání.</string>
-    <string name="create_profile">Vytvořit nový profil</string>
     <string name="preference_shader_dump_title">Povolit vyhazování shaderů</string>
     <string name="preference_shader_dump_description">Zaznamenat převedené shadery do souboru záznamu.</string>
     <string name="percent_format">%d%%</string>
@@ -369,7 +365,7 @@
     <string name="controller_remapper_expand_entry">Rozbal pro změny kódů kláves</string>
     <string name="preference_remap_controller_title">Změnit nastavení kláves ovladače</string>
     <string name="preference_remap_controller_description">Umožňuje změnit jaké klávesy každé tlačítko ovladače produkuje</string>
-    <string name="mcl_button_discord">Discord</string>
+    <string name="mcl_button_social_media">Discord</string>
     <string name="ltw_render_distance_warning_msg">Tvá GPU není schopna vykreslovat víc než 7 chunků dohledu bez Sodium či podobnách módů. Vykreslovací vzdálenost bude snížena kliknete-li \"OK\".</string>
     <string name="mcl_button_open_directory">Otevřít složku hry</string>
     <string name="local_login_bad_username_title">Špatné uživatelské jméno</string>

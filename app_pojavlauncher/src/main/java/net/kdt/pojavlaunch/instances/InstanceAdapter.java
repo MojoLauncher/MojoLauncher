@@ -10,9 +10,8 @@ import android.widget.BaseAdapter;
 import androidx.core.graphics.ColorUtils;
 
 import git.artdeell.mojo.R;
-import net.kdt.pojavlaunch.Tools;
 
-import java.util.List;
+import net.kdt.pojavlaunch.Tools;
 
 import fr.spse.extended_view.ExtendedTextView;
 
@@ -20,19 +19,21 @@ import fr.spse.extended_view.ExtendedTextView;
  * Adapter for listing launcher profiles in a Spinner
  */
 public class InstanceAdapter extends BaseAdapter {
-    private List<Instance> mInstances;
-    private InstanceAdapterExtra[] mExtraEntires;
+    private Instances mInstances;
+    private int mSelectionIndex;
+    private final InstanceAdapterExtra[] mExtraEntires;
 
 
     public InstanceAdapter(InstanceAdapterExtra[] extraEntries) {
-        reloadProfiles(extraEntries);
+        if(extraEntries == null) extraEntries = new InstanceAdapterExtra[0];
+        mExtraEntires = extraEntries;
     }
     /**
      * @return how much entries (both instances and extra adapter entries) are in the adapter right now
      */
     @Override
     public int getCount() {
-        return mInstances.size() + mExtraEntires.length;
+        return mInstances.list.size() + mExtraEntires.length;
     }
     /**
      * Gets the adapter entry at a given index
@@ -41,19 +42,14 @@ public class InstanceAdapter extends BaseAdapter {
      */
     @Override
     public Object getItem(int position) {
-        int instanceListSize = mInstances.size();
+        int instanceListSize = mInstances.list.size();
         int extraPosition = position - instanceListSize;
         if(position < instanceListSize) {
-            return mInstances.get(position);
+            return mInstances.list.get(position);
         }else if(extraPosition >= 0 && extraPosition < mExtraEntires.length){
             return mExtraEntires[extraPosition];
         }
         return null;
-    }
-
-
-    public int resolveInstanceIndex(Instance instance) {
-        return mInstances.indexOf(instance);
     }
 
     @Override
@@ -62,20 +58,14 @@ public class InstanceAdapter extends BaseAdapter {
     }
 
     @Override
-    public void notifyDataSetChanged() {
-        mInstances = InstanceManager.getImmutableInstanceList();
-        super.notifyDataSetChanged();
-    }
-
-    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
         if (v == null) v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_version_profile_layout,parent,false);
-        setView(v, getItem(position), true);
+        setView(v, position, true);
         return v;
     }
 
-    public void setViewInstance(View v, Instance i, boolean displaySelection) {
+    public void setViewInstance(View v, DisplayInstance i, int idx, boolean displaySelection) {
         ExtendedTextView extendedTextView = (ExtendedTextView) v;
 
         //MinecraftProfile minecraftProfile = mProfiles.get(nm);
@@ -101,7 +91,7 @@ public class InstanceAdapter extends BaseAdapter {
         else extendedTextView.setText(String.format("%s - %s", profileName, versionName));
 
         // Set selected background if needed
-        if(displaySelection && i.isSelected()) {
+        if(idx == mSelectionIndex && displaySelection) {
             extendedTextView.setBackgroundColor(ColorUtils.setAlphaComponent(Color.WHITE, 60));
         }else {
             extendedTextView.setBackgroundColor(Color.TRANSPARENT);
@@ -115,24 +105,22 @@ public class InstanceAdapter extends BaseAdapter {
         extendedTextView.setBackgroundColor(Color.TRANSPARENT);
     }
 
-    public void setView(View v, Object object, boolean displaySelection) {
-        if(object instanceof Instance) {
-            setViewInstance(v, (Instance) object, displaySelection);
+    public void setView(View v, int index, boolean displaySelection) {
+        Object object = getItem(index);
+        if(object instanceof DisplayInstance) {
+            setViewInstance(v, (DisplayInstance) object, index, displaySelection);
         }else if(object instanceof InstanceAdapterExtra) {
             setViewExtra(v, (InstanceAdapterExtra) object);
         }
     }
 
-    /** Reload profiles from the file */
-    public void reloadProfiles() {
-        mInstances = InstanceManager.getImmutableInstanceList();
-        notifyDataSetChanged();
+    public void applySelectionIndex(int index) {
+        mSelectionIndex = index;
     }
 
-    /** Reload profiles from the file, with additional extra entries */
-    public void reloadProfiles(InstanceAdapterExtra[] extraEntries) {
-        if(extraEntries == null) mExtraEntires = new InstanceAdapterExtra[0];
-        else mExtraEntires = extraEntries;
-        this.reloadProfiles();
+    public void applyInstances(Instances instances) {
+        mInstances = instances;
+        mSelectionIndex = instances.selectedIndex;
+        notifyDataSetChanged();
     }
 }

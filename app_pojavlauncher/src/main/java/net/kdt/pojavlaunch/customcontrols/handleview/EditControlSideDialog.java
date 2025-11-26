@@ -137,7 +137,7 @@ public class EditControlSideDialog extends SideDialogView {
      * Switch the panels position if needed
      */
     public void adaptPanelPosition() {
-        if (mDisplaying) {
+        if (mDisplaying && mCurrentlyEditedButton != null) {
             boolean isAtRight = mCurrentlyEditedButton.getControlView().getX() + mCurrentlyEditedButton.getControlView().getWidth() / 2f < mCurrentlyEditedButton.getControlLayoutParent().getWidth() / 2f;
             appear(isAtRight);
             if (mColorSelector.isDisplaying()) {
@@ -390,6 +390,7 @@ public class EditControlSideDialog extends SideDialogView {
         mWidthEditText.addTextChangedListener((SimpleTextWatcher) s -> {
             if (internalChanges) return;
 
+            internalChanges = true;
             float width = safeParseFloat(s.toString());
             if (width >= 0) {
                 mCurrentlyEditedButton.getProperties().setWidth(width);
@@ -399,11 +400,14 @@ public class EditControlSideDialog extends SideDialogView {
                 }
                 mCurrentlyEditedButton.updateProperties();
             }
+            // Unset after the layout pass, to avoid resetting the text in the edittext
+            mCurrentlyEditedButton.getControlView().post(()->internalChanges = false);
         });
 
         mHeightEditText.addTextChangedListener((SimpleTextWatcher) s -> {
             if (internalChanges) return;
 
+            internalChanges = true;
             float height = safeParseFloat(s.toString());
             if (height >= 0) {
                 mCurrentlyEditedButton.getProperties().setHeight(height);
@@ -413,6 +417,7 @@ public class EditControlSideDialog extends SideDialogView {
                 }
                 mCurrentlyEditedButton.updateProperties();
             }
+            mCurrentlyEditedButton.getControlView().post(()->internalChanges = false);
         });
 
         mSwipeableSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {

@@ -1,10 +1,6 @@
 LOCAL_PATH := $(call my-dir)
 HERE_PATH := $(LOCAL_PATH)
 
-# include $(HERE_PATH)/crash_dump/libbase/Android.mk
-# include $(HERE_PATH)/crash_dump/libbacktrace/Android.mk
-# include $(HERE_PATH)/crash_dump/debuggerd/Android.mk
-
 
 LOCAL_PATH := $(HERE_PATH)
 
@@ -12,12 +8,8 @@ $(call import-module,prefab/bytehook)
 LOCAL_PATH := $(HERE_PATH)
 
 include $(CLEAR_VARS)
-# Link GLESv2 for test
 LOCAL_LDLIBS := -ldl -llog -landroid
-# -lGLESv2
 LOCAL_MODULE := pojavexec
-# LOCAL_CFLAGS += -DDEBUG
-# -DGLES_TEST
 LOCAL_SRC_FILES := \
     affinity.c \
     egl_bridge.c \
@@ -32,10 +24,14 @@ LOCAL_SRC_FILES := \
     jvm_hooks/java_exec_hooks.c \
     jvm_hooks/lwjgl_dlopen_hook.c \
     input_bridge_v3.c \
-    jre_launcher.c \
+    jre_launcher/jre_launcher.c \
+    jre_launcher/native_library_hook.c \
+    jre_launcher/elf_hinter.c \
+    jre_launcher/abort_wait.c \
     utils.c \
     stdio_is.c \
-    driver_helper/nsbypass.c
+    driver_helper/nsbypass.c \
+    linkedlist.c
 
 ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
 LOCAL_CFLAGS += -DADRENO_POSSIBLE

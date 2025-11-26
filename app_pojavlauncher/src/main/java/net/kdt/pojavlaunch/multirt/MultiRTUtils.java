@@ -2,6 +2,7 @@ package net.kdt.pojavlaunch.multirt;
 
 import static net.kdt.pojavlaunch.Tools.NATIVE_LIB_DIR;
 import static org.apache.commons.io.FileUtils.listFiles;
+import static org.apache.commons.io.FileUtils.write;
 
 import android.system.Os;
 import android.util.Log;
@@ -23,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -71,11 +73,14 @@ public class MultiRTUtils {
     public static void installRuntimeNamed(String nativeLibDir, InputStream runtimeInputStream, String name) throws IOException {
         File dest = new File(RUNTIME_FOLDER,"/"+name);
         if(dest.exists()) FileUtils.deleteDirectory(dest);
-        uncompressTarXZ(runtimeInputStream,dest);
-        runtimeInputStream.close();
-        unpack200(nativeLibDir,RUNTIME_FOLDER + "/" + name);
-        ProgressLayout.clearProgress(ProgressLayout.UNPACK_RUNTIME);
-        read(name);
+        try {
+            uncompressTarXZ(runtimeInputStream, dest);
+            runtimeInputStream.close();
+            unpack200(nativeLibDir, RUNTIME_FOLDER + "/" + name);
+            read(name);
+        } finally {
+            ProgressLayout.clearProgress(ProgressLayout.UNPACK_RUNTIME);
+        }
     }
 
     public static void postPrepare(String name) throws IOException {
@@ -97,19 +102,18 @@ public class MultiRTUtils {
     public static void installRuntimeNamedBinpack(InputStream universalFileInputStream, InputStream platformBinsInputStream, String name, String binpackVersion) throws IOException {
         File dest = new File(RUNTIME_FOLDER,"/"+name);
         if(dest.exists()) FileUtils.deleteDirectory(dest);
-        installRuntimeNamedNoRemove(universalFileInputStream,dest);
-        installRuntimeNamedNoRemove(platformBinsInputStream,dest);
+        try {
+            installRuntimeNamedNoRemove(universalFileInputStream, dest);
+            installRuntimeNamedNoRemove(platformBinsInputStream, dest);
 
-        unpack200(NATIVE_LIB_DIR,RUNTIME_FOLDER + "/" + name);
+            unpack200(NATIVE_LIB_DIR, RUNTIME_FOLDER + "/" + name);
 
-        File binpack_verfile = new File(RUNTIME_FOLDER,"/"+name+"/pojav_version");
-        FileOutputStream fos = new FileOutputStream(binpack_verfile);
-        fos.write(binpackVersion.getBytes());
-        fos.close();
-
-        ProgressLayout.clearProgress(ProgressLayout.UNPACK_RUNTIME);
-
-        forceReread(name);
+            File binpack_verfile = new File(RUNTIME_FOLDER, "/" + name + "/pojav_version");
+            write(binpack_verfile, binpackVersion, StandardCharsets.UTF_8);
+            forceReread(name);
+        } finally {
+            ProgressLayout.clearProgress(ProgressLayout.UNPACK_RUNTIME);
+        }
     }
 
 
@@ -219,37 +223,32 @@ public class MultiRTUtils {
         net.kdt.pojavlaunch.utils.FileUtils.ensureDirectory(dest);
 
         byte[] buffer = new byte[8192];
-        TarArchiveInputStream tarIn = new TarArchiveInputStream(
-                new XZCompressorInputStream(tarFileInputStream)
-        );
-        TarArchiveEntry tarEntry = tarIn.getNextTarEntry();
-        // tarIn is a TarArchiveInputStream
-        while (tarEntry != null) {
+        try(TarArchiveInputStream tarIn = new TarArchiveInputStream(new XZCompressorInputStream(tarFileInputStream))) {
+            TarArchiveEntry tarEntry;
+            // tarIn is a TarArchiveInputStream
+            while ((tarEntry = tarIn.getNextTarEntry()) != null) {
 
-            final String tarEntryName = tarEntry.getName();
-            // publishProgress(null, "Unpacking " + tarEntry.getName());
-            ProgressLayout.setProgress(ProgressLayout.UNPACK_RUNTIME, 100, R.string.global_unpacking, tarEntryName);
+                final String tarEntryName = tarEntry.getName();
+                ProgressLayout.setProgress(ProgressLayout.UNPACK_RUNTIME, 100, R.string.global_unpacking, tarEntryName);
 
-            File destPath = new File(dest, tarEntry.getName());
-            net.kdt.pojavlaunch.utils.FileUtils.ensureParentDirectory(destPath);
-            if (tarEntry.isSymbolicLink()) {
-                try {
-                    // android.system.Os
-                    // Libcore one support all Android versions
-                    Os.symlink(tarEntry.getName(), tarEntry.getLinkName());
-                } catch (Throwable e) {
-                    Log.e("MultiRT", e.toString());
+                File destPath = new File(dest, tarEntry.getName());
+                net.kdt.pojavlaunch.utils.FileUtils.ensureParentDirectory(destPath);
+                if (tarEntry.isSymbolicLink()) {
+                    try {
+                        // android.system.Os
+                        // Libcore one support all Android versions
+                        Os.symlink(tarEntry.getName(), tarEntry.getLinkName());
+                    } catch (Throwable e) {
+                        Log.e("MultiRT", e.toString());
+                    }
+                } else if (tarEntry.isDirectory()) {
+                    net.kdt.pojavlaunch.utils.FileUtils.ensureDirectory(destPath);
+                } else if (!destPath.exists() || destPath.length() != tarEntry.getSize()) {
+                    FileOutputStream os = new FileOutputStream(destPath);
+                    IOUtils.copyLarge(tarIn, os, buffer);
+                    os.close();
                 }
-
-            } else if (tarEntry.isDirectory()) {
-                net.kdt.pojavlaunch.utils.FileUtils.ensureDirectory(destPath);
-            } else if (!destPath.exists() || destPath.length() != tarEntry.getSize()) {
-                FileOutputStream os = new FileOutputStream(destPath);
-                IOUtils.copyLarge(tarIn, os, buffer);
-                os.close();
             }
-            tarEntry = tarIn.getNextTarEntry();
         }
-        tarIn.close();
     }
 }

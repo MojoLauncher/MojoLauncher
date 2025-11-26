@@ -72,17 +72,32 @@ static jint hooked_ProcessImpl_forkAndExec(JNIEnv *env, jobject process, jint mo
 
 // Hook the forkAndExec method in the Java runtime for custom executable overriding.
 void hookExec(JNIEnv *env) {
+    void* libjava = dlopen("libjava.so", RTLD_NOLOAD);
+    if(libjava == NULL) {
+        printf("Failed to register forkAndExec: libjava not found\n");
+        return;
+    }
     jclass hookClass;
-    orig_ProcessImpl_forkAndExec = dlsym(RTLD_DEFAULT, "Java_java_lang_UNIXProcess_forkAndExec");
+    orig_ProcessImpl_forkAndExec = dlsym(libjava, "Java_java_lang_UNIXProcess_forkAndExec");
     if (!orig_ProcessImpl_forkAndExec) {
-        orig_ProcessImpl_forkAndExec = dlsym(RTLD_DEFAULT, "Java_java_lang_ProcessImpl_forkAndExec");
+        orig_ProcessImpl_forkAndExec = dlsym(libjava, "Java_java_lang_ProcessImpl_forkAndExec");
         hookClass = (*env)->FindClass(env, "java/lang/ProcessImpl");
     } else {
         hookClass = (*env)->FindClass(env, "java/lang/UNIXProcess");
+    }
+    if(hookClass == NULL) {
+        (*env)->ExceptionDescribe(env);
+        (*env)->ExceptionClear(env);
+        return;
     }
     JNINativeMethod methods[] = {
             {"forkAndExec", "(I[B[B[BI[BI[B[IZ)I", (void *)&hooked_ProcessImpl_forkAndExec}
     };
     (*env)->RegisterNatives(env, hookClass, methods, 1);
-    printf("Registered forkAndExec\n");
+    if((*env)->ExceptionCheck(env)) {
+        (*env)->ExceptionDescribe(env);
+        (*env)->ExceptionClear(env);
+    }else {
+        printf("Registered forkAndExec\n");
+    }
 }

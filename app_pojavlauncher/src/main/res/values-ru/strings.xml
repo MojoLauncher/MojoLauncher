@@ -77,7 +77,7 @@
     <string name="global_default">По умолчанию</string>
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Произошёл собой приложения/игры с кодом %d. Проверьте latestlog.txt, чтобы получить больше информации.</string>
-    <string name="mcn_signal_title">Произошло аварийное завершение игры с сигналом %d. Проверьте latestlog.txt, чтобы получить больше информации.</string>
+    <string name="mcn_abort_title">Произошла аварийноая остановка приложения. Проверьте latestlog.txt для получения дополнительной информации</string>
     <string name="mcn_exit_confirm">Вы уверены, что хотите принудительно завершить игру?</string>
     <string name="mcn_check_fail_vulkan_support">Визуализатор Zink (Vulkan) не поддерживается на вашем устройстве.</string>
     <!-- MainActivity: Control buttons -->
@@ -184,6 +184,8 @@
     <string name="preference_sustained_performance_description">Уменьшает перегрев устройства за счёт ограничения максимальной производительности.</string>
     <string name="preference_force_vsync_title">Принудительная вертикальная синхронизация</string>
     <string name="preference_force_vsync_description">Уменьшает перегрев устройства за счёт ограничения максимальной производительности.</string>
+    <string name="preference_use_angle_title">Использовать ANGLE</string>
+    <string name="preference_use_angle_description">Позволяет использовать ANGLE вместо системного драйвера для LTW. Может исправить некоторые графические проблемы при использовании модов на некоторых видеоядрах</string>
     <string name="preference_force_english_title">Принудительно включить английский</string>
     <string name="preference_force_english_description">Позволяет увидеть оригинальные строки такими, какими их задумали разработчики. Требуется перезапуск.</string>
     <string name="preference_edit_controls_title">Изменить раскладку</string>
@@ -208,8 +210,6 @@
     <string name="global_delete">Удалить</string>
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Визуализатор</string>
-    <string name="arc_capes_title">Плащи Cosmetica</string>
-    <string name="arc_capes_desc">Включает плащи от Cosmetica (ранее Arc). Для получения дополнительной информации посетите https://cosmetica.cc. Требуется OptiFine.</string>
     <string name="notif_channel_name">Общее</string>
     <string name="lazy_service_default_title">Активная служба Mojo</string>
     <string name="mcl_setting_veroption_installed">Установленные</string>
@@ -244,7 +244,6 @@
     <string name="storage_required">MojoLauncher требует подключения к внешнему хранилищу. Переподключите его и перезапустите приложение.</string>
     <string name="mcl_setting_title_buttonallcaps">Заглавные буквы на кнопках</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Отключите, если хотите использовать строчные буквы в своей раскладке управления.</string>
-    <string name="create_profile">Новый профиль</string>
     <string name="create_instance">Создать новую установку</string>
     <string name="preference_shader_dump_title">Сохранять дамп шейдеров</string>
     <string name="preference_shader_dump_description">Записывать в файл журнала данные о конвертации шейдеров.</string>
@@ -270,11 +269,13 @@
     <string name="modloader_dl_failed_to_load_list">Не удалось загрузить список версий.</string>
     <string name="forge_dl_no_installer">К сожалению, у этой версии Forge отсутствует поддерживаемый установщик.</string>
     <string name="forge_dl_select_version">Выбор версии Forge</string>
+    <string name="neoforge_dl_select_version">Выбор версии NeoForge</string>
     <string name="fabric_dl_progress">Загрузка метаданных %s</string>
     <string name="fabric_dl_loader_version">Версия загрузчика %s</string>
     <string name="fabric_dl_game_version">Версия игры</string>
     <string name="fabric_dl_install">Установить</string>
     <string name="fabric_dl_cant_read_meta">Не удалось прочитать метаданные %s. Повторите попытку позже.</string>
+    <string name="modloader_dl_install_neoforge_instance">Установка с NeoForge</string>
     <string name="create_instance_vanilla">Немодифицированная версия</string>
     <string name="create_profile_vanilla_like_versions">Стандартные версии</string>
     <string name="create_profile_modded_versions">Загрузчики модов</string>
@@ -378,7 +379,7 @@
     <string name="controller_remapper_expand_entry">Нажмите для изменения кодов клавиш</string>
     <string name="preference_remap_controller_title">Изменить назначения клавиш контроллера</string>
     <string name="preference_remap_controller_description">Позволяет настраивать привязку клавиш клавиатуры к кнопкам контроллера</string>
-    <string name="mcl_button_discord">Discord</string>
+    <string name="mcl_button_social_media">Telegram</string>
     <string name="ltw_render_distance_warning_msg">Ваше видеоядро не поддерживает прорисовку более 7 чанков без использования Sodium или его аналогов. Нажмите «ОК», чтобы автоматически снизить прорисовку.</string>
     <string name="mcl_button_open_directory">Открыть папку игры</string>
     <string name="local_login_bad_username_title">Неподходящее имя пользователя</string>
@@ -389,10 +390,44 @@
     <string name="bta_installer_available_versions">Поддерживаемые версии BTA</string>
     <string name="bta_installer_untested_versions">Нетестированные версии BTA</string>
     <string name="bta_installer_nightly_versions">Экспериментальные версии BTA</string>
-    <string name="newdl_extracting_native_libraries">Распаковка дополнительных библиотек... (%d/%d)</string>
+    <string name="newdl_extracting_native_libraries">Распаковка дополнительных библиотек… (%d/%d)</string>
     <string name="fabric_dl_cant_read_meta2">Ошибка чтения метаданных Fabric</string>
     <string name="modloader_dl_install_fabric_instance">Установка с Fabric</string>
     <string name="modloader_dl_install_quilt_instance">Установка с Quilt</string>
     <string name="modloader_dl_install_forge_instance">Установка с Forge</string>
-    <string name="discord_invite" translatable="false">https://discord.gg/CuuqPbbnUY</string>
+    <string name="social_media_invite" translatable="false">https://t.me/mojolauncher</string>
+    <string name="compat_version_not_supported">Ваше устройство не может запустить эту версию поскольку LTW не поддерживается</string>
+    <string name="oauth_unknown_error">Неизвестная ошибка авторизации</string>
+    <string name="oauth_web_complete">Авторизация…</string>
+    <string name="auth_select_microsoft">Аккаунт Microsoft</string>
+    <string name="auth_select_elyby">Аккаунт Ely.by</string>
+    <string name="auth_select_local">Без пароля</string>
+    <string name="instance_dir_missing">Установки нет</string>
+    <string name="gamedir_open_failed">Ошибка открытия папки игры</string>
+    <string name="newerdl_inserting_metadata">Поиск метаданных файлов…</string>
+    <string name="newerdl_inserting_metadata_count">Поиск метаданных файлов… (%d/%d)</string>
+    <string name="newerdl_downloading_files_count">Загрузка файлов… (%d/%d, %.2f MB/s)</string>
+    <string name="newerdl_downloading_files_size">Загрузка файлов… (%.2f/%.2f MB, %.2f MB/s)</string>
+    <string name="preference_verify_game_files_title">Проверять файлы игры</string>
+    <string name="preference_verify_game_files_description">Проверять загружаемые файлы игры по контрольной сумме и размеру из метаданных. Файлы метаданных проверяются вне зависимости от этой настройки.</string>
+    <string name="preference_go_vroom_title">Быстрый запуск игры</string>
+    <string name="preference_go_vroom_description">Не проверять контрольные суммы файлов при повторных запусках. Делает запуск игры гораздо быстрее.</string>
+    <string name="vml_fail_load_runtime">Ошибка загрузки виртуальной машины Java: %s</string>
+    <string name="vml_fail_create_runtime">Ошибка создания виртуальной машины Java: %s</string>
+    <string name="vml_fail_find_hooks_native">Не найдены нужные классы.</string>
+    <string name="vml_fail_find_hooks">Не найдены нужные методы. Проверьте latestlog.txt</string>
+    <string name="vml_fail_insert_hooks">Не возможно зарегистрировать методы: %s</string>
+    <string name="vml_fail_load_classpath">Ошибка загрузки списка библиотек. Проверьте latestlog.txt</string>
+    <string name="vml_fail_run_main">Ошибка запуска основоного класса. Проверьте latestlog.txt</string>
+    <string name="vml_huh">\???</string>
+    <string name="vml_err_ok">Успешно</string>
+    <string name="vml_err_unknown">Неизвестная ошибка</string>
+    <string name="vml_err_detached">Этот поток не привязан к виртуальной машине</string>
+    <string name="vml_err_version">Несовместимая версия JNI</string>
+    <string name="vml_err_nomem">Не хватает ОЗУ</string>
+    <string name="vml_err_exists">Виртуальная машина уже загружена</string>
+    <string name="vml_err_inval">Неверные аргументы</string>
+    <string name="gr_err_renderer_load_Failed">Ошибка загрузки визуализатора</string>
+    <string name="ltw_4x_msaa_warning_msg">Похоже, вы включили настройку \"Включить 4x MSAA\" в разделе \"Для разработчиков\". Пожалуйста отключите её чтобы избежать проблем с визуализацией.</string>
+    <string name="no_instance">Не выбрано установки. Пожалуйста создайте установку или выберите существующую.</string>
 </resources>

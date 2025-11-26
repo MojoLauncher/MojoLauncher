@@ -16,6 +16,8 @@ jar {
         }
     }
     exclude 'net/java/openjdk/cacio/ctc/**'
+    exclude 'org/lwjgl/input/Mouse.class'
+    exclude 'org/lwjgl/input/Mouse$EmptyCursorGrabListener.class'
 }
 
 java {

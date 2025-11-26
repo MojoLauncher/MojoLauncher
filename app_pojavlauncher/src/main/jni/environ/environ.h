@@ -8,6 +8,7 @@
 #include <ctxbridges/common.h>
 #include <stdatomic.h>
 #include <jni.h>
+#include "linkedlist.h"
 
 /* How many events can be handled at the same time */
 #define EVENT_WINDOW_SIZE 8000
@@ -32,6 +33,13 @@ typedef struct  {
     unsigned char buttons [15];
     float axes[6];
 } GLFWgamepadstate;
+
+// https://www.glfw.org/docs/3.1/structGLFWimage.html
+typedef struct {
+    int width;
+    int height;
+    unsigned char* pixels;
+} GLFWimage;
 
 struct pojav_environ_s {
     struct ANativeWindow* pojavWindow;
@@ -59,11 +67,15 @@ struct pojav_environ_s {
     JavaVM* runtimeJavaVMPtr;
     JNIEnv* glfwThreadVmEnv;
     JavaVM* dalvikJavaVMPtr;
-    long showingWindow;
+    jlong showingWindow;
     bool isInputReady, isCursorEntered, isUseStackQueueCall, shouldUpdateMouse;
     bool shouldUpdateMonitorSize, monitorSizeConsumed;
     int savedWidth, savedHeight;
     GLFWgamepadstate gamepadState;
+    jmethodID method_setCursor;
+    jmethodID method_removeCursor;
+    jmethodID method_createCursor;
+    LinkedList* cursors;
 #define ADD_CALLBACK_WWIN(NAME) \
     GLFW_invoke_##NAME##_func* GLFW_invoke_##NAME;
     ADD_CALLBACK_WWIN(Char);
@@ -77,5 +89,6 @@ struct pojav_environ_s {
 #undef ADD_CALLBACK_WWIN
 };
 extern struct pojav_environ_s *pojav_environ;
+extern __thread bool glfw_main_thread;
 
 #endif //POJAVLAUNCHER_ENVIRON_H

@@ -93,7 +93,6 @@
 
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">एप्लिकेशन/गेम कोड %d के साथ बंद हो गया, अधिक जानकारी के लिए latestlog.txt देखें।</string>
-    <string name="mcn_signal_title">एप्लिकेशन/गेम घातक सिग्नल %d द्वारा निरस्त किया गया, अधिक जानकारी के लिए latestlog.txt देखें।</string>
     <string name="mcn_exit_confirm">क्या आप वाकई ज़बरदस्ती बंद करना चाहते हैं?</string>
     <string name="mcn_check_fail_vulkan_support">ज़िंक (वल्कन) रेंडरर इस डिवाइस पर समर्थित नहीं/नहीं चलेगा  है!</string>
 
@@ -236,8 +235,6 @@
     <string name="global_delete">डिलीट करें</string>
     <string name="pedit_java_runtime">जावा रनटाइम</string>
     <string name="pedit_renderer">रेंडरर</string>
-    <string name="arc_capes_title">कॉस्मेटिका केप्स</string>
-    <string name="arc_capes_desc">कॉस्मेटिका (पहले Arc) से केप्स सक्षम करता है। अधिक जानकारी के लिए कृपया https://cosmetica.cc पर जाएँ। OptifFine की आवश्यक है।</string>
     <string name="color_default_hex" translatable="false">FFFF0000</string>
     <string name="notif_channel_name">सामान्य</string>
     <string name="notif_channel_id" translatable="false">channel_id</string>
@@ -419,10 +416,9 @@
     <string name="controller_remapper_expand_entry">कीकोड बदलने के लिए विस्तार करें</string>
     <string name="preference_remap_controller_title">कंट्रोलर की बाइंडिंग बदलें</string>
     <string name="preference_remap_controller_description">यह आपको प्रत्येक कंट्रोलर बटन से बाउंड कीबोर्ड कुंजियों को संशोधित करने की अनुमति देता है</string>
-    <string name="mcl_button_discord">डिस्कॉर्ड</string>
+    <string name="mcl_button_social_media">डिस्कॉर्ड</string>
     <string name="ltw_render_distance_warning_msg">आपका GPU सोडियम या अन्य समान मॉड्स के बिना 7 से ज़्यादा रेंडर दूरी पर रेंडर करने में सक्षम नहीं है। जब आप "ठीक है" पर क्लिक करेंगे तो रेंडर दूरी अपने आप कम हो जाएगी।</string>
     <string name="mcl_button_open_directory">गेम डायरेक्टरी खोलें</string>
-    <string name="discord_invite" translatable="false">https://discord.gg/VHdwQFsaGX</string>
     <string name="local_login_bad_username_title">अनुपयुक्त यूज़रनेम</string>
     <string name="local_login_bad_username_text">यूज़रनेम 3–16 अक्षरों का होना चाहिए, और इसमें केवल लैटिन अक्षर, 0–9 अंक और अंडरस्कोर होने चाहिए।</string>
     <string name="quick_setting_title">त्वरित सेटिंग्स</string>

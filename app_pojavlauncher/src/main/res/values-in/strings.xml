@@ -77,7 +77,6 @@
     <string name="global_default">Default</string>
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Aplikasi/permainan keluar dengan kode %d, cek latestlog.txt untuk detail lebih lanjut.</string>
-    <string name="mcn_signal_title">Aplikasi/Game keluar dengan sinyal fatal %d, cek latestlog.txt untuk detail lebih lanjut.</string>
     <string name="mcn_exit_confirm">Apa anda yakin mau tutup secara paksa?</string>
     <string name="mcn_check_fail_vulkan_support">Renderer Zink (Vulkan) tidak didukung di perangkat ini!</string>
     <!-- MainActivity: Control buttons -->
@@ -203,8 +202,6 @@
     <string name="global_delete">Hapus</string>
     <string name="pedit_java_runtime">Runtime Java</string>
     <string name="pedit_renderer">Renderer</string>
-    <string name="arc_capes_title">Capes Cosmetica</string>
-    <string name="arc_capes_desc">Mengaktifkan capes dari Cosmetica (sebelumnya Arc). Untuk informasi lebih lanjut silahkan kunjungi https://cosmetica.cc. Membutuhkan OptiFine.</string>
     <string name="notif_channel_name">Umum</string>
     <string name="lazy_service_default_title">Mojo Foreground Service</string>
     <string name="mcl_setting_veroption_installed">Terpasang</string>
@@ -239,7 +236,6 @@
     <string name="storage_required">MojoLauncher membutuhkan penyimpanan eksternal. Mohon untuk dipasang kembali dan merestart aplikasi.</string>
     <string name="mcl_setting_title_buttonallcaps">Hanya gunakan huruf kapital di label tombol</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Matikan ini jika kamu ingin menggunakan huruf kecil di kontrol.</string>
-    <string name="create_profile">Buat profil baru</string>
     <string name="preference_shader_dump_title">Aktifkan shader dumping</string>
     <string name="preference_shader_dump_description">Simpan catatan shader ke sebuah berkas.</string>
     <string name="percent_format">%d%%</string>
@@ -369,7 +365,7 @@
     <string name="controller_remapper_expand_entry">Besarkan untuk mengganti kode kunci</string>
     <string name="preference_remap_controller_title">Ganti pengikatan kunci kontroller</string>
     <string name="preference_remap_controller_description">Memperbolehkan anda untuk memodifikasikan kunci yang terikat ke setiap tombol kontroller</string>
-    <string name="mcl_button_discord">Discord</string>
+    <string name="mcl_button_social_media">Discord</string>
     <string name="ltw_render_distance_warning_msg">GPU anda tidak mampu untuk merender diatas 7 jarak render tanpa menginstall Sodium atau modifikasi serupa. Jarak render akan di kurangi secara otomatis setelah anda mengklik \"OK\".</string>
     <string name="mcl_button_open_directory">Buka direktori permainan</string>
     <string name="local_login_bad_username_title">Username tidak cocok</string>

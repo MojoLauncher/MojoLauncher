@@ -176,8 +176,6 @@
     <string name="global_delete">Ištrinti</string>
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Vaizdo generatorius</string>
-    <string name="arc_capes_title">\"Cosmetica\" apvalkalai</string>
-    <string name="arc_capes_desc">Įjungia apvalkalus iš \"Cosmetica\" (anksčiau \"Arc\"). Daugiau informacijos rasite https://cosmetica.cc. Reikalingas OptiFine.</string>
     <string name="notif_channel_name">Pagrindinis</string>
     <string name="lazy_service_default_title">Mojo foninis servisas</string>
     <string name="mcl_setting_veroption_installed">Instaliuota</string>
@@ -201,7 +199,6 @@
     <string name="preference_enable_gyro_description">Įjungus leis pasisukti žaidime pasukant telefoną.</string>
     <string name="preference_gyro_sensitivity_title">Gyroskopo kontroliu sensityvumas</string>
     <string name="microsoft_login_retry_later">Per daug užklausų, pabandykite dar kartą vėliau.</string>
-    <string name="create_profile">Sukurti naują profilį</string>
     <string name="percent_format">%d%%</string>
     <string name="customctrl_editor_exit_title">Išeinate?</string>
     <string name="customctrl_editor_exit_msg">Ar tikrai norite išeiti?</string>

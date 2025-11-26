@@ -173,8 +173,6 @@
     <string name="global_delete">削除</string>
     <string name="pedit_java_runtime">Javaランタイム</string>
     <string name="pedit_renderer">レンダラー</string>
-    <string name="arc_capes_title">コスメチカ・ケープズ</string>
-    <string name="arc_capes_desc">Cosmetica（以前のArc）のケープを有効にします。詳細については、https：//cosmetica.ccをご覧ください。 OptiFineが必要です。</string>
     <string name="notif_channel_name">一般</string>
     <string name="lazy_service_default_title">Mojo フォアグラウンドサービス</string>
     <string name="mcl_setting_veroption_installed">インストール済み</string>
@@ -201,7 +199,6 @@
     <string name="preference_gyro_sensitivity_title">ジャイロコントロールの感度</string>
     <string name="preference_gyro_sample_rate_title">ジャイロコントロールサンプリングの速度</string>
     <string name="microsoft_login_retry_later">リクエストが多すぎるため、後でもう一度お試しください。</string>
-    <string name="create_profile">新規プロフィールの作成</string>
     <string name="preference_shader_dump_title">シェーダーダンプをオンにする</string>
     <string name="percent_format">%d%%</string>
     <string name="customctrl_editor_exit_title">終了しますか？</string>

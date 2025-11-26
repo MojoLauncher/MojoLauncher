@@ -91,7 +91,6 @@
 
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Ứng dụng/Trò chơi đã thoát với mã %d, kiểm tra nhật kí trình khởi chạy (latestlog.txt) để biết thêm chi tiết.</string>
-    <string name="mcn_signal_title">Ứng dụng/Trò chơi đã thoát với mã %d, kiểm tra nhật kí trình khởi chạy (latestlog.txt) để biết thêm chi tiết.</string>
     <string name="mcn_exit_confirm">Bạn có chắc muốn bắt buộc thoát chương trình?</string>
     <string name="mcn_check_fail_vulkan_support">Trình kết xuất Zink (Vulkan) không được hỗ trợ trên thiết bị này!</string>
 
@@ -231,8 +230,6 @@
     <string name="global_delete">Xóa</string>
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Trình kết xuất</string>
-    <string name="arc_capes_title">Áo choàng Cosmetica</string>
-    <string name="arc_capes_desc">Sử dụng áo choàng từ dịch vụ Cosmetica (trước đây là Arc). Để biết thêm thông tin, truy cập https://cosmetica.cc. Yêu cầu có OptiFine.</string>
     <string name="color_default_hex" translatable="false">FFFF0000</string>
     <string name="notif_channel_name">Chung</string>
     <string name="notif_channel_id" translatable="false">channel_id</string>
@@ -415,10 +412,9 @@
     <string name="controller_remapper_expand_entry">Mở rộng để thay đổi mã phím</string>
     <string name="preference_remap_controller_title">Thay đổi liên kết nút tay cầm</string>
     <string name="preference_remap_controller_description">Cho phép bạn sửa đổi các phím bàn phím được gán cho mỗi nút điều khiển</string>
-    <string name="mcl_button_discord">Discord</string>
+    <string name="mcl_button_social_media">Discord</string>
     <string name="ltw_render_distance_warning_msg">GPU của bạn không thể kết xuất với khoảng cách trên 7 chunks nếu không có Sodium hoặc các mod tương tự khác. Khoảng cách kết xuất sẽ được tự điều chỉnh lại khi nhấn OK.</string>
     <string name="mcl_button_open_directory">Mở thư mục trò chơi</string>
-    <string name="discord_invite" translatable="false">https://discord.gg/VHdwQFsaGX</string>
     <string name="local_login_bad_username_title">Tên người dùng không phù hợp</string>
     <string name="local_login_bad_username_text">Tên người dùng phải có từ 3 đến 16 kí tự, và chỉ có chữ cái Latinh, chữ số và dấu gạch chân.</string>
     <string name="quick_setting_title">Cài đặt nhanh</string>

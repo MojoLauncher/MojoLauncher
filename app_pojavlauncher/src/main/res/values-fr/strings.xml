@@ -77,7 +77,6 @@
     <string name="global_default">Par défaut</string>
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">L\'Application/Jeu a quitté avec le code %d, vérifiez le fichier latestlog.txt pour plus de détails.</string>
-    <string name="mcn_signal_title">L\'application/Le jeu s\'est fermé(e) avec le code %d, vérifiez le fichier latestlog.txt pour plus de détails.</string>
     <string name="mcn_exit_confirm">Voulez-vous vraiment forcer la fermeture ?</string>
     <string name="mcn_check_fail_vulkan_support">Le moteur de rendu Zink (Vulkan) n\'est pas pris en charge sur votre appareil !</string>
     <!-- MainActivity: Control buttons -->
@@ -203,8 +202,6 @@
     <string name="global_delete">Supprimer</string>
     <string name="pedit_java_runtime">Exécutable Java</string>
     <string name="pedit_renderer">Moteur de rendu</string>
-    <string name="arc_capes_title">Capes Cosmetica</string>
-    <string name="arc_capes_desc">Active les capes Cosmetica. Pour plus d\'informations visitez https://cosmetica.cc. Nécessite OptiFine.</string>
     <string name="notif_channel_name">Général</string>
     <string name="lazy_service_default_title">Service de premier plan de Mojo</string>
     <string name="mcl_setting_veroption_installed">Installés</string>
@@ -239,7 +236,6 @@
     <string name="storage_required">MojoLauncher nécessite que le stockage externe soit connecté. Veuillez le reconnecter et redémarrer l\'application.</string>
     <string name="mcl_setting_title_buttonallcaps">N\'utilisez que des lettres majuscules dans les libellés des boutons</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Désactivez cette option si vous souhaitez utiliser des lettres minuscules dans vos contrôles.</string>
-    <string name="create_profile">Créer un nouveau profil</string>
     <string name="preference_shader_dump_title">Activer le dumping du shader</string>
     <string name="preference_shader_dump_description">Enregistre les shaders convertis dans le fichier journal.</string>
     <string name="percent_format">%d%%</string>

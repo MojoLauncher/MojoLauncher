@@ -9,9 +9,9 @@ import java.io.IOException;
 import java.util.*;
 
 public class JSONUtils {
-    public static String[] insertJSONValueList(String[] args, Map<String, String> keyValueMap) {
-        for (int i = 0; i < args.length; i++) {
-            args[i] = insertSingleJSONValue(args[i], keyValueMap);
+    public static List<String> insertJSONValueList(List<String> args, Map<String, String> keyValueMap) {
+        for (int i = 0; i < args.size(); i++) {
+            args.set(i, insertSingleJSONValue(args.get(i), keyValueMap));
         }
         return args;
     }

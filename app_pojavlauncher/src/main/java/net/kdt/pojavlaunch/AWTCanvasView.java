@@ -2,10 +2,12 @@ package net.kdt.pojavlaunch;
 
 import android.content.*;
 import android.graphics.*;
+import android.os.Build;
 import android.text.*;
 import android.util.*;
 import android.view.*;
 
+import java.nio.ByteBuffer;
 import java.util.*;
 import net.kdt.pojavlaunch.utils.*;
 
@@ -31,7 +33,7 @@ public class AWTCanvasView extends TextureView implements TextureView.SurfaceTex
         mFpsPaint.setColor(Color.WHITE);
         mFpsPaint.setTextSize(20);
 
-
+        setOpaque(true);
         setSurfaceTextureListener(this);
 
         post(this::refreshSize);
@@ -65,21 +67,30 @@ public class AWTCanvasView extends TextureView implements TextureView.SurfaceTex
         Canvas canvas;
         Surface surface = new Surface(getSurfaceTexture());
         Bitmap rgbArrayBitmap = Bitmap.createBitmap(AWT_CANVAS_WIDTH, AWT_CANVAS_HEIGHT, Bitmap.Config.ARGB_8888);
+        ByteBuffer targetBuffer = ByteBuffer.allocateDirect(rgbArrayBitmap.getByteCount());
         Paint paint = new Paint();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            paint.setBlendMode(BlendMode.SRC);
+        }else{
+            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
+        }
+        boolean mDrawing;
         try {
+            canvas = surface.lockCanvas(null);
             while (!mIsDestroyed && surface.isValid()) {
+                surface.unlockCanvasAndPost(canvas);
                 canvas = surface.lockCanvas(null);
-                canvas.drawRGB(0, 0, 0);
-                int[] rgbArray = JREUtils.renderAWTScreenFrame(/* canvas, mWidth, mHeight */);
-                boolean mDrawing = rgbArray != null;
-                if (rgbArray != null) {
+                mDrawing = JREUtils.renderAWTScreenFrame(targetBuffer);
+                targetBuffer.rewind();
+                if (mDrawing) {
                     canvas.save();
-                    rgbArrayBitmap.setPixels(rgbArray, 0, AWT_CANVAS_WIDTH, 0, 0, AWT_CANVAS_WIDTH, AWT_CANVAS_HEIGHT);
+                    rgbArrayBitmap.copyPixelsFromBuffer(targetBuffer);
                     canvas.drawBitmap(rgbArrayBitmap, 0, 0, paint);
                     canvas.restore();
+                }else {
+                    canvas.drawRGB(0,0,0);
                 }
                 canvas.drawText("FPS: " + (Math.round(fps() * 10) / 10) + ", drawing=" + mDrawing, 0, 20, mFpsPaint);
-                surface.unlockCanvasAndPost(canvas);
             }
         } catch (Throwable throwable) {
             Tools.showError(getContext(), throwable);

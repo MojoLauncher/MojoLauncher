@@ -130,7 +130,6 @@
     <string name="global_delete">Бетерү</string>
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Күрсәткеч</string>
-    <string name="arc_capes_title">Cosmetica япмалары</string>
     <string name="notif_channel_name">Гомуми</string>
     <string name="mcl_setting_veroption_installed">Утыртылган</string>
     <string name="notification_terminate">Тәмамлау</string>
@@ -142,7 +141,6 @@
     <string name="main_add_account">Аккаунт өстәү</string>
     <string name="no_saved_accounts">Сакланган аккаунтлар юк</string>
     <string name="mc_download_failed">Minecraft йөкләнеп булмады! Бу акрын тоташу яки файл урнашуда хаталар аркасында туа ала торган.</string>
-    <string name="create_profile">Яңа профиль ясау</string>
     <string name="percent_format">%d%%</string>
     <string name="customctrl_editor_exit_title">Чыгумы?</string>
     <string name="global_save_and_exit">Саклау һәм чыгу</string>

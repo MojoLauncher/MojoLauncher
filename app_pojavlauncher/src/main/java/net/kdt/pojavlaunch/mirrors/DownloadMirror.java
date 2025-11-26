@@ -1,19 +1,14 @@
 package net.kdt.pojavlaunch.mirrors;
 
-import android.util.Log;
-
-import androidx.annotation.Nullable;
-
-import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
 public class DownloadMirror {
+    public static final int DOWNLOAD_CLASS_NONE = -1;
     public static final int DOWNLOAD_CLASS_LIBRARIES = 0;
     public static final int DOWNLOAD_CLASS_METADATA = 1;
     public static final int DOWNLOAD_CLASS_ASSETS = 2;
@@ -26,88 +21,15 @@ public class DownloadMirror {
     };
 
     /**
-     * Download a file with the current mirror. If the file is missing on the mirror,
-     * fall back to the official source.
-     * @param downloadClass Class of the download. Can either be DOWNLOAD_CLASS_LIBRARIES,
-     *                      DOWNLOAD_CLASS_METADATA or DOWNLOAD_CLASS_ASSETS
-     * @param urlInput The original (Mojang) URL for the download
-     * @param outputFile The output file for the download
-     * @param buffer The shared buffer
-     * @param monitor The download monitor.
-     */
-    public static void downloadFileMirrored(int downloadClass, String urlInput, File outputFile,
-                                            @Nullable byte[] buffer, Tools.DownloaderFeedback monitor) throws IOException {
-        try {
-            DownloadUtils.downloadFileMonitored(getMirrorMapping(downloadClass, urlInput),
-                    outputFile, buffer, monitor);
-            return;
-        }catch (FileNotFoundException e) {
-            Log.w("DownloadMirror", "Cannot find the file on the mirror", e);
-            Log.i("DownloadMirror", "Falling back to default source");
-        }
-        DownloadUtils.downloadFileMonitored(urlInput, outputFile, buffer, monitor);
-    }
-
-    /**
-     * Download a file with the current mirror. If the file is missing on the mirror,
-     * fall back to the official source.
+     * Download a file with the current mirror (or no mirror)
      * @param downloadClass Class of the download. Can either be DOWNLOAD_CLASS_LIBRARIES,
      *                      DOWNLOAD_CLASS_METADATA or DOWNLOAD_CLASS_ASSETS
      * @param urlInput The original (Mojang) URL for the download
      * @param outputFile The output file for the download
      */
     public static void downloadFileMirrored(int downloadClass, String urlInput, File outputFile) throws IOException {
-        try {
-            DownloadUtils.downloadFile(getMirrorMapping(downloadClass, urlInput),
+        DownloadUtils.downloadFile(getMirrorMapping(downloadClass, urlInput),
                     outputFile);
-            return;
-        }catch (FileNotFoundException e) {
-            Log.w("DownloadMirror", "Cannot find the file on the mirror", e);
-            Log.i("DownloadMirror", "Falling back to default source");
-        }
-        DownloadUtils.downloadFile(urlInput, outputFile);
-    }
-
-    /**
-     * Get the content length of a file on the current mirror. If the file is missing on the mirror,
-     * or the mirror does not give out the length, request the length from the original source
-     * @param downloadClass Class of the download. Can either be DOWNLOAD_CLASS_LIBRARIES,
-     *                      DOWNLOAD_CLASS_METADATA or DOWNLOAD_CLASS_ASSETS
-     * @param urlInput The original (Mojang) URL for the download
-     * @return the length of the file denoted by the URL in bytes, or -1 if not available
-     */
-    public static long getContentLengthMirrored(int downloadClass, String urlInput) throws MalformedURLException {
-        long length = DownloadUtils.getContentLength(getMirrorMapping(downloadClass, urlInput));
-        if(length < 1) {
-            Log.w("DownloadMirror", "Unable to get content length from mirror");
-            Log.i("DownloadMirror", "Falling back to default source");
-            return DownloadUtils.getContentLength(urlInput);
-        }else {
-            return length;
-        }
-    }
-
-    /**
-     * Download a file as a string from the current mirror. If the file does not exist on the mirror
-     * or the mirror returns an invalid string, request the file from the original source
-     * @param downloadClass Class of the download. Can either be DOWNLOAD_CLASS_LIBRARIES,
-     *                      DOWNLOAD_CLASS_METADATA or DOWNLOAD_CLASS_ASSETS
-     * @param urlInput The original (Mojang) URL for the download
-     * @return the contents of the downloaded file as a String.
-     */
-    public static String downloadStringMirrored(int downloadClass, String urlInput) throws IOException{
-        String resultString = null;
-        try {
-            resultString = DownloadUtils.downloadString(getMirrorMapping(downloadClass,urlInput));
-        }catch (FileNotFoundException e) {
-            Log.w("DownloadMirror", "Failed to download string from mirror", e);
-        }
-        if(Tools.isValidString(resultString)) {
-            return resultString;
-        }else {
-            Log.w("DownloadMirror", "Downloaded string is invalid, falling back to default");
-        }
-        return DownloadUtils.downloadString(urlInput);
     }
 
     /**
@@ -127,7 +49,17 @@ public class DownloadMirror {
         }
     }
 
-    private static String getMirrorMapping(int downloadClass, String mojangUrl) throws MalformedURLException{
+    //TODO make use of this
+
+    /**
+     * Get the transformed URL for downloading a file through a mirror.
+     * @param downloadClass the download class (one of the constants above)
+     * @param mojangUrl the original URL
+     * @return the transformed URL
+     * @throws MalformedURLException if the URL isn't formatted correctly
+     */
+    public static String getMirrorMapping(int downloadClass, String mojangUrl) throws MalformedURLException {
+        if(downloadClass == DOWNLOAD_CLASS_NONE) return mojangUrl;
         String[] mirrorSettings = getMirrorSettings();
         if(mirrorSettings == null) return mojangUrl;
         int urlTail = getBaseUrlTail(mojangUrl);

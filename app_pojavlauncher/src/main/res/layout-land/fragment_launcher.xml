@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_menu_main"
     android:gravity="top"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="?attr/colorBackgroundApp">
 
@@ -46,11 +46,11 @@
                 app:layout_constraintEnd_toEndOf="@id/center_guideline"
                 app:layout_constraintBottom_toBottomOf="@id/news_button"/>
             <com.kdt.mcgui.LauncherMenuButton
-                android:id="@+id/discord_button"
+                android:id="@+id/social_media_button"
                 style="@style/LauncherMenuButton.Universal"
                 android:layout_width="0dp"
                 android:drawableStart="@drawable/ic_discord"
-                android:text="@string/mcl_button_discord"
+                android:text="@string/mcl_button_social_media"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/social_divider"/>

@@ -190,8 +190,6 @@
     <string name="global_delete">حذف</string>
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">رندر کننده</string>
-    <string name="arc_capes_title">شنل های Cosmetica</string>
-    <string name="arc_capes_desc">شنل های Cosmetica (قبلاً Arc) را فعال می کند. برای اطلاعات بیشتر لطفاً به https://cosmetica.cc مراجعه کنید. به OptiFine نیاز دارد.</string>
     <string name="notif_channel_name">عمومی</string>
     <string name="lazy_service_default_title">سرویس پیش‌زمینه Mojo</string>
     <string name="mcl_setting_veroption_installed">نصب شد</string>

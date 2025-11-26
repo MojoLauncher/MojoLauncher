@@ -93,7 +93,7 @@
 
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Application/Game exited with code %d, check latestlog.txt for more details.</string>
-    <string name="mcn_signal_title">Application/Game aborted by fatal signal %d, check latestlog.txt for more details.</string>
+    <string name="mcn_abort_title">Application/Game aborted, check latestlog.txt for more information</string>
     <string name="mcn_exit_confirm">Are you sure want to force close?</string>
     <string name="mcn_check_fail_vulkan_support">Zink (Vulkan) renderer is not supported on this device!</string>
 
@@ -210,6 +210,8 @@
     <string name="preference_sustained_performance_description">Limit thermal throttling by limiting peak performance.</string>
     <string name="preference_force_vsync_title">Force enable VSync</string>
     <string name="preference_force_vsync_description">Limit thermal throttling by limiting peak performance.</string>
+    <string name="preference_use_angle_title">Use ANGLE</string>
+    <string name="preference_use_angle_description">Allows using ANGLE instead of the system driver for LTW. Can fix graphical issues with mods on some GPUs</string>
     <string name="preference_force_english_title">Force language to English</string>
     <string name="preference_force_english_description">Allows you to see original strings, as intended by developers. Requires a restart.</string>
     <string name="preference_edit_controls_title">Edit custom controls</string>
@@ -237,8 +239,6 @@
     <string name="global_delete">Delete</string>
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Renderer</string>
-    <string name="arc_capes_title">Cosmetica Capes</string>
-    <string name="arc_capes_desc">Enables capes from Cosmetica (previously Arc). For more information please visit https://cosmetica.cc. Requires OptiFine.</string>
     <string name="color_default_hex" translatable="false">FFFF0000</string>
     <string name="notif_channel_name">General</string>
     <string name="notif_channel_id" translatable="false">channel_id</string>
@@ -303,6 +303,8 @@
     <string name="modloader_dl_failed_to_load_list">Failed to load the version list!</string>
     <string name="forge_dl_no_installer">Sorry, but this version of Forge does not have an installer, which is not yet supported.</string>
     <string name="forge_dl_select_version">Select Forge version</string>
+    <string name="neoforge_dl_no_installer">Sorry, but this version of NeoForge does not have an installer, which is not yet supported.</string>
+    <string name="neoforge_dl_select_version">Select NeoForge version</string>
     <string name="fabric_dl_progress">Downloading %s loader metadata</string>
     <string name="fabric_dl_loader_version">%s loader version</string>
     <string name="fabric_dl_game_version">Minecraft version</string>
@@ -312,6 +314,7 @@
     <string name="modloader_dl_install_fabric_instance">Create Fabric instance</string>
     <string name="modloader_dl_install_quilt_instance">Create Quilt instance</string>
     <string name="modloader_dl_install_forge_instance">Create Forge instance</string>
+    <string name="modloader_dl_install_neoforge_instance">Create NeoForge instance</string>
     <string name="create_instance_vanilla">Create vanilla instance</string>
     <string name="create_profile_vanilla_like_versions">Vanilla-like versions</string>
     <string name="create_profile_modded_versions">Modded versions</string>
@@ -423,10 +426,10 @@
     <string name="controller_remapper_expand_entry">Expand to change keycodes</string>
     <string name="preference_remap_controller_title">Change controller key bindings</string>
     <string name="preference_remap_controller_description">Allows you to modify the keyboard keys bound to each controller button</string>
-    <string name="mcl_button_discord">Discord</string>
+    <string name="mcl_button_social_media">Discord</string>
     <string name="ltw_render_distance_warning_msg">Your GPU is not capable of rendering above 7 render distance without Sodium or other similar mods. The render distance will be automatically reduced when you click "OK".</string>
     <string name="mcl_button_open_directory">Open game directory</string>
-    <string name="discord_invite" translatable="false">https://discord.gg/VHdwQFsaGX</string>
+    <string name="social_media_invite" translatable="false">https://discord.gg/VHdwQFsaGX</string>
     <string name="local_login_bad_username_title">Unsuitable username</string>
     <string name="local_login_bad_username_text">The username must be between 3–16 characters long, and must only contain latin letters, numbers 0–9 and underscores.</string>
     <string name="quick_setting_title">Quick settings</string>
@@ -443,4 +446,31 @@
     <string name="auth_select_elyby">Ely.by account</string>
     <string name="auth_select_local">Local account</string>
     <string name="instance_dir_missing">Instance is missing</string>
+    <string name="gamedir_open_failed">Failed to open game directory</string>
+    <string name="newerdl_inserting_metadata">Searching for file metadata…</string>
+    <string name="newerdl_inserting_metadata_count">Searching for file metadata… (%d/%d)</string>
+    <string name="newerdl_downloading_files_count">Downloading files… (%d/%d, %.2f MB/s)</string>
+    <string name="newerdl_downloading_files_size">Downloading files… (%.2f/%.2f MB, %.2f MB/s)</string>
+    <string name="preference_verify_game_files_title">Verify game files</string>
+    <string name="preference_verify_game_files_description">Verify downloaded game files against the checksum and size set in the metadata. Metadata JSON files are verified regardless of this setting.</string>
+    <string name="preference_go_vroom_title">Fast game startup</string>
+    <string name="preference_go_vroom_description">Don\'t verify file checksums upon sequential restarts. Makes the game start-up very fast.</string>
+    <string name="vml_fail_load_runtime">Failed to load the Java virtual machine: %s</string>
+    <string name="vml_fail_create_runtime">Failed to create the Java virtual machine: %s</string>
+    <string name="vml_fail_find_hooks_native">Failed to find native hooks.</string>
+    <string name="vml_fail_find_hooks">Failed to find hook targets. Check latestlog.txt for details</string>
+    <string name="vml_fail_insert_hooks">Failed to install hooks: %s</string>
+    <string name="vml_fail_load_classpath">Failed to load the classpath. Check latestlog.txt for details</string>
+    <string name="vml_fail_run_main">Failed to start the main class. Check latestlog.txt for details</string>
+    <string name="vml_huh">\???</string>
+    <string name="vml_err_ok">Success</string>
+    <string name="vml_err_unknown">Unknown error</string>
+    <string name="vml_err_detached">Thread is detached from the Java VM</string>
+    <string name="vml_err_version">Incompatible JNI version</string>
+    <string name="vml_err_nomem">Out of RAM</string>
+    <string name="vml_err_exists">The VM is already loaded</string>
+    <string name="vml_err_inval">Bad arguments</string>
+    <string name="gr_err_renderer_load_Failed">Failed to load renderer library</string>
+    <string name="ltw_4x_msaa_warning_msg">It appears that you have turned on "Force 4x MSAA" in Developer settings. Please turn it off to avoid rendering issues.</string>
+    <string name="no_instance">No instance is selected. Please create an instance or select one.</string>
 </resources>

@@ -27,6 +27,7 @@ public class InstanceIconProvider {
         sStaticIcons.put("fabric", R.drawable.ic_fabric);
         sStaticIcons.put("quilt", R.drawable.ic_quilt);
         sStaticIcons.put("forge", R.drawable.ic_forge);
+        sStaticIcons.put("neoforge", R.drawable.ic_neoforge);
     }
 
     /**
@@ -35,7 +36,7 @@ public class InstanceIconProvider {
      * @param instance the instance
      * @return an icon drawable
      */
-    public static @NonNull Drawable fetchIcon(Resources resources, @NonNull Instance instance) {
+    public static @NonNull Drawable fetchIcon(Resources resources, @NonNull DisplayInstance instance) {
         int identityHashCode = System.identityHashCode(instance);
 
         Drawable cachedIcon = sIconCache.get(identityHashCode);

@@ -9,6 +9,7 @@ public class DependentLibrary {
     public String name;
     public LibraryDownloads downloads;
     public String url;
+    public transient boolean replaced = false;
 
     @Keep
 	public static class LibraryDownloads {

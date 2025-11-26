@@ -1,7 +1,6 @@
 package net.kdt.pojavlaunch;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.ClipboardManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +25,7 @@ import net.kdt.pojavlaunch.multirt.Runtime;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.JREUtils;
 import net.kdt.pojavlaunch.utils.MathUtils;
+import net.kdt.pojavlaunch.utils.jre.JavaRunner;
 
 import org.apache.commons.io.IOUtils;
 
@@ -35,11 +35,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import git.artdeell.mojo.R;
 
@@ -151,26 +152,21 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         });
 
         try {
-            mTouchPad.post(()->{
-
-            });
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
                 finish();
                 return;
             }
-            final String javaArgs = extras.getString("javaArgs");
-            final Uri resourceUri = (Uri) extras.getParcelable("modUri");
-            if(extras.getBoolean("openLogOutput", false)) openLogOutput(null);
-            if (javaArgs != null) {
-                startModInstaller(null, javaArgs);
-            }else if(resourceUri != null) {
-                ProgressDialog barrierDialog = Tools.getWaitingDialog(this, R.string.multirt_progress_caching);
-                PojavApplication.sExecutorService.execute(()->{
-                    startModInstallerWithUri(resourceUri);
-                    runOnUiThread(barrierDialog::dismiss);
-                });
+            final List<String> javaArgs = extras.getStringArrayList("javaArgs");
+            final Uri resourceUri = extras.getParcelable("modUri");
+            final String jarPath = extras.getString("modPath");
+            if(jarPath != null) {
+                File jarFile = new File(jarPath);
+                startModInstaller(jarFile, javaArgs);
+            }else {
+                PojavApplication.sExecutorService.execute(()->startModInstallerWithUri(resourceUri, javaArgs));
             }
+            if(extras.getBoolean("openLogOutput", false)) openLogOutput(null);
         } catch (Throwable th) {
             Tools.showError(this, th, true);
         }
@@ -184,7 +180,11 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         });
     }
 
-    private void startModInstallerWithUri(Uri uri) {
+    private void startModInstallerWithUri(Uri uri, List<String> javaArgs) {
+        if(uri == null) {
+            startModInstaller(null, javaArgs);
+            return;
+        }
         try {
             File cacheFile = new File(getCacheDir(), "mod-installer-temp");
             InputStream contentStream = getContentResolver().openInputStream(uri);
@@ -193,14 +193,13 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
                 IOUtils.copy(contentStream, fileOutputStream);
             }
             contentStream.close();
-            startModInstaller(cacheFile, null);
+            startModInstaller(cacheFile, javaArgs);
         }catch (IOException e) {
             Tools.showError(this, e, true);
         }
     }
 
-    public Runtime selectRuntime(File modFile) {
-        int javaVersion = getJavaVersion(modFile);
+    public Runtime selectRuntime(int javaVersion) {
         if(javaVersion == -1) {
             finalErrorDialog(getString(R.string.execute_jar_failed_to_read_file));
             return null;
@@ -220,41 +219,47 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         return selectedRuntime;
     }
 
-    private File findModPath(List<String> argList) {
-        int argsSize = argList.size();
-        for(int i = 0; i < argsSize; i++) {
-            // Look for the -jar argument
-            if(!argList.get(i).equals("-jar")) continue;
-            int pathIndex = i+1;
-            // Check if the supposed path is out of the argument bounds
-            if(pathIndex >= argsSize) return null;
-            // Use the path as a file
-            return new File(argList.get(pathIndex));
+    private static class JarFileProperties {
+        public final String mainClass;
+        public final int minJavaVersion;
+
+        private JarFileProperties(String mainClass, int minJavaVersion) {
+            this.mainClass = mainClass;
+            this.minJavaVersion = minJavaVersion;
         }
-        return null;
+
+        public static JarFileProperties read(File file) throws IOException {
+            try (JarFile jarFile = new JarFile(file)) {
+                Manifest manifest = jarFile.getManifest();
+                if(manifest == null) return null;
+                Attributes mainAttrs = manifest.getMainAttributes();
+                if(mainAttrs == null) return null;
+                String mainClass = mainAttrs.getValue("Main-Class");
+                if(mainClass == null) return null;
+                int javaVersion = getJavaVersion(jarFile, mainClass);
+                return new JarFileProperties(mainClass, javaVersion);
+            }
+        }
     }
 
-    private void startModInstaller(File modFile, String javaArgs) {
-        new Thread(() -> {
-            // Maybe replace with more advanced arg parsing logic later
-            List<String> argList = javaArgs != null ? Arrays.asList(javaArgs.split(" ")) : null;
-            File selectedMod = modFile;
-            if(selectedMod == null && argList != null) {
-                // If modFile is not specified directly, try to extract the -jar argument from the javaArgs
-                selectedMod = findModPath(argList);
-            }
-            Runtime selectedRuntime;
-            if(selectedMod == null) {
-                // We were unable to find out the path to the mod. In that case, use the default runtime.
-                selectedRuntime = MultiRTUtils.forceReread(LauncherPreferences.PREF_DEFAULT_RUNTIME);
-            }else {
-                // Autoselect it properly in the other case.
-                selectedRuntime = selectRuntime(selectedMod);
-                // If the selection failed, just return. The autoselect function has already shown the dialog.
-                if(selectedRuntime == null) return;
-            }
-            launchJavaRuntime(selectedRuntime, modFile, argList);
-        }, "JREMainThread").start();
+    private void runModInstaller(File modFile, List<String> javaArgs) {
+        JarFileProperties jarFileProperties = null;
+        try {
+            jarFileProperties = JarFileProperties.read(modFile);
+        }catch (IOException e) {
+            Log.i("JavaGUILauncherActivity", "Failed to read JarFileProperties", e);
+        }
+        if(jarFileProperties == null) {
+            finalErrorDialog(getString(R.string.execute_jar_failed_to_read_file));
+            return;
+        }
+        Runtime selectedRuntime = selectRuntime(jarFileProperties.minJavaVersion);
+        if(selectedRuntime == null) return;
+        launchJavaRuntime(selectedRuntime, javaArgs,  modFile, jarFileProperties.mainClass);
+    }
+
+    private void startModInstaller(File modFile, List<String> javaArgs) {
+        new Thread(() -> runModInstaller(modFile, javaArgs), "JREMainThread").start();
     }
 
     private void finalErrorDialog(CharSequence msg) {
@@ -356,19 +361,13 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
                 Toast.LENGTH_SHORT).show();
     }
 
-    public void launchJavaRuntime(Runtime runtime, File modFile, List<String> javaArgs) {
+    public void launchJavaRuntime(Runtime runtime, List<String> javaArgs, File modFile, String mainClass) {
         JREUtils.redirectAndPrintJRELog();
         try {
             List<String> javaArgList = new ArrayList<>();
 
-            // Enable Caciocavallo
-            Tools.getCacioJavaArgs(javaArgList,runtime.javaVersion == 8);
             if(javaArgs != null) {
                 javaArgList.addAll(javaArgs);
-            }
-            if(modFile != null) {
-                javaArgList.add("-jar");
-                javaArgList.add(modFile.getAbsolutePath());
             }
             
             if (LauncherPreferences.PREF_JAVA_SANDBOX) {
@@ -379,7 +378,10 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
                 Collections.reverse(javaArgList);
             }
 
-            Logger.appendToLog("Info: Java arguments: " + Arrays.toString(javaArgList.toArray(new String[0])));
+            Logger.appendToLog("Info: Java arguments: " + javaArgList);
+
+            JavaRunner.nativeSetupExit(this.getApplicationContext());
+            JavaRunner.startJvm(runtime, javaArgList, Collections.singletonList(modFile.getAbsolutePath()), mainClass, Collections.emptyList());
 
             JREUtils.launchJavaVM(this, runtime,null,javaArgList, LauncherPreferences.PREF_CUSTOM_JAVA_ARGS);
         } catch (Throwable th) {
@@ -402,35 +404,22 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         AWTInputBridge.sendKey(' ', AWTInputEvent.VK_CONTROL, 0);
     }
 
-    public int getJavaVersion(File modFile) {
-        try (ZipFile zipFile = new ZipFile(modFile)){
-            ZipEntry manifest = zipFile.getEntry("META-INF/MANIFEST.MF");
-            if(manifest == null) return -1;
+    private static int getJavaVersion(JarFile jarFile, String mainClass) throws IOException{
+        mainClass = mainClass.trim().replace('.', '/') + ".class";
+        ZipEntry mainClassFile = jarFile.getEntry(mainClass);
+        if(mainClassFile == null) return -1;
 
-            String manifestString = Tools.read(zipFile.getInputStream(manifest));
-            String mainClass = Tools.extractUntilCharacter(manifestString, "Main-Class:", '\n');
-            if(mainClass == null) return -1;
-
-            mainClass = mainClass.trim().replace('.', '/') + ".class";
-            ZipEntry mainClassFile = zipFile.getEntry(mainClass);
-            if(mainClassFile == null) return -1;
-
-            InputStream classStream = zipFile.getInputStream(mainClassFile);
-            byte[] bytesWeNeed = new byte[8];
+        byte[] bytesWeNeed = new byte[8];
+        try(InputStream classStream = jarFile.getInputStream(mainClassFile)) {
             int readCount = classStream.read(bytesWeNeed);
-            classStream.close();
-            if(readCount < 8) return -1;
-
-            ByteBuffer byteBuffer = ByteBuffer.wrap(bytesWeNeed);
-            if(byteBuffer.getInt() != 0xCAFEBABE) return -1;
-            short minorVersion = byteBuffer.getShort();
-            short majorVersion = byteBuffer.getShort();
-            Log.i("JavaGUILauncher", majorVersion+","+minorVersion);
-            return classVersionToJavaVersion(majorVersion);
-        }catch (Exception e) {
-            Log.e("JavaVersion", "Exception thrown", e);
-            return -1;
+            if(readCount < bytesWeNeed.length) return -1;
         }
+        ByteBuffer byteBuffer = ByteBuffer.wrap(bytesWeNeed);
+        if(byteBuffer.getInt() != 0xCAFEBABE) return -1;
+        short minorVersion = byteBuffer.getShort();
+        short majorVersion = byteBuffer.getShort();
+        Log.i("JavaGUILauncher", majorVersion+","+minorVersion);
+        return classVersionToJavaVersion(majorVersion);
     }
     public static int classVersionToJavaVersion(int majorVersion) {
         if(majorVersion < 46) return 2; // there isn't even an arm64 port of jre 1.1 (or anything before 1.8 in fact)

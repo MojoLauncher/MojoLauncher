@@ -77,7 +77,6 @@
     <string name="global_default">الافتراضي</string>
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">تم الخروج من التطبيق/اللعبة بخلل %d، تحقق من latestlog.txt لمزيد من التفاصيل.</string>
-    <string name="mcn_signal_title">تم الخروج من التطبيق/اللعبة بخلل %d، انظر في latestlog.txt لمزيد من التفاصيل.</string>
     <string name="mcn_exit_confirm">هل أنت متأكد من أنك تريد فرض الإغلاق؟</string>
     <string name="mcn_check_fail_vulkan_support">عارض الرسوميات Zink (Vulkan) غير مدعوم على هذا الجهاز!</string>
     <!-- MainActivity: Control buttons -->
@@ -203,8 +202,6 @@
     <string name="global_delete">حذف</string>
     <string name="pedit_java_runtime">بيئة تشغيل Java</string>
     <string name="pedit_renderer">عارض الرسوميات</string>
-    <string name="arc_capes_title">Cosmetica Capes</string>
-    <string name="arc_capes_desc">يفعل أوشحه من Cosmetica, (المعروفة مسبقًا ب Arc). لمزيد من المعلومات، يرجى زيارة https://cosmetica.cc, يتطلب Optifine لكي يعمل.</string>
     <string name="notif_channel_name">عام</string>
     <string name="lazy_service_default_title">خدمة Mojo في المقدمة</string>
     <string name="mcl_setting_veroption_installed">مثبت</string>
@@ -239,7 +236,6 @@
     <string name="storage_required">يتطلب MojoLauncher أن تكون وحدة التخزين الخارجية متصلة. الرجاء إعادة الاتصال بها وإعادة تشغيل التطبيق.</string>
     <string name="mcl_setting_title_buttonallcaps">استخدم الأحرف الكبيرة فقط في اسماء الأزرار</string>
     <string name="mcl_setting_subtitle_buttonallcaps">عطل هذا اذا كنت تريد إستخدام الأحرف الصغيرة.</string>
-    <string name="create_profile">إنشاء ملف شخصي جديد</string>
     <string name="preference_shader_dump_title">تمكين افراغ الشادر</string>
     <string name="preference_shader_dump_description">سجل الShaders المحولة داخل ملف السجل.</string>
     <string name="percent_format">%d%%</string>
@@ -366,7 +362,7 @@
     <string name="controller_remapper_expand_entry">قم بالتوسعة لتغيير رمز الزر</string>
     <string name="preference_remap_controller_title">تغيير إعدادات مفاتيح التحكم</string>
     <string name="preference_remap_controller_description">يسمح لك بتعديل المفتاح المخصص لكل زر في وحدة التحكم</string>
-    <string name="mcl_button_discord">سيرفر الديسكورد</string>
+    <string name="mcl_button_social_media">سيرفر الديسكورد</string>
     <string name="ltw_render_distance_warning_msg">وحدة معالجة الرسوميات الخاصة بك غير قادرة على معالجة أكثر من 7 رندر ديستانس دون مود Sodium أو غيرها من المودات المشابهة. سيتم تخفيض الرندر ديستانس تلقائيًا عند النقر على \"موافق\".</string>
     <string name="mcl_button_open_directory">فتح ملفات اللعبة</string>
     <string name="local_login_bad_username_title">اسم المستخدم غير مناسب</string>

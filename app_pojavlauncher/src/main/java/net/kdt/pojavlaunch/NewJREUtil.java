@@ -7,7 +7,7 @@ import android.content.res.AssetManager;
 import android.util.Log;
 
 import net.kdt.pojavlaunch.instances.Instance;
-import net.kdt.pojavlaunch.instances.InstanceManager;
+import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.Runtime;
 import net.kdt.pojavlaunch.utils.MathUtils;
@@ -77,7 +77,7 @@ public class NewJREUtil {
         int gameRequiredVersion = versionInfo.javaVersion.majorVersion;
 
         AssetManager assetManager = activity.getAssets();
-        Instance instance = InstanceManager.getSelectedListedInstance();
+        Instance instance = Instances.loadSelectedInstance();
         String profileRuntime = Tools.getSelectedRuntime(instance);
         Runtime runtime = MultiRTUtils.read(profileRuntime);
         // Partly trust the user with his own selection, if the game can even try to run in this case

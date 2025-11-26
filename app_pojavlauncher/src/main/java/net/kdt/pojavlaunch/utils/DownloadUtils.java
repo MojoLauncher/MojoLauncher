@@ -131,8 +131,8 @@ public class DownloadUtils {
         }
     }
 
-    private static boolean verifyFile(File file, String sha1) {
-        return file.exists() && Tools.compareSHA1(file, sha1);
+    private static boolean verifyFile(File file, String sha1) throws IOException {
+        return file.exists() && HashUtils.compareSHA1(file, sha1);
     }
 
     public static <T> T ensureSha1(File outputFile, @Nullable String sha1, Callable<T> downloadFunction) throws IOException {

@@ -146,8 +146,6 @@
     <string name="global_delete">Borrar</string>
     <string name="pedit_java_runtime">Runtime de Java</string>
     <string name="pedit_renderer">Renderitzador</string>
-    <string name="arc_capes_title">Capes de Cosmetica</string>
-    <string name="arc_capes_desc">Activa les capes de Cosmetica (anteriorment Arc). Per a més informació visiteu https://cosmetica.cc. Requereix l\'OptiFine.</string>
     <string name="notif_channel_name">General</string>
     <string name="lazy_service_default_title">Servei de primer plà del Mojo</string>
     <string name="use_global_default">(Usa el valor global per defecte)</string>

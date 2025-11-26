@@ -1,8 +1,10 @@
 plugins {
-    id 'com.android.application' version '8.7.2'
+    id 'com.android.application' version '8.11.1'
     id 'de.undercouch.download' version '5.6.0'
-    id 'org.ajoberstar.grgit' version '4.1.1'
+    id 'org.ajoberstar.grgit' version '5.3.2'
 }
+
+apply from: rootProject.file('gradle/prefab_bypass.gradle')
 
 import de.undercouch.gradle.tasks.download.Download
 
@@ -50,7 +52,7 @@ configurations {
 android {
     namespace 'git.artdeell.mojo'
 
-    compileSdk = 35
+    compileSdk = 36
 
     lintOptions {
         abortOnError false
@@ -77,7 +79,7 @@ android {
         targetSdkVersion 35
         versionCode getDateSeconds()
         versionName getVersionName()
-        multiDexEnabled true //important
+        multiDexEnabled false //important
         resValue 'string', 'curseforge_api_key', getCFApiKey()
     }
 
@@ -130,7 +132,7 @@ android {
         }
     }
 
-    ndkVersion = "25.2.9519653"
+    ndkVersion = "28.2.13676358"
 
     externalNativeBuild {
         ndkBuild {
@@ -160,8 +162,6 @@ android {
         prefab true
         buildConfig true
     }
-
-    buildToolsVersion = '34.0.0'
 }
 
 class AssetTaskRegistrar {
@@ -183,7 +183,7 @@ class AssetTaskRegistrar {
 
     def setVariant(variant) {
         variantName = variant.getName().capitalize()
-        mergeAssetsTask = variant.getMergeAssetsProvider().get()
+        mergeAssetsTask = variant.getPreBuildProvider().get()
 
         targetAssetsDir = new File(project.projectDir, "build/intermediates/remote_asset_set/${variantName.toLowerCase()}/")
         createDirectories(targetAssetsDir)
@@ -255,12 +255,12 @@ class AssetTaskRegistrar {
         }
     }
 
-    def onlineJarDependency(String jarUrl, String jarProject, String dependency, String relativePath) {
+    def onlineJarDependency(String jarUrl, String jarProject, String dependency, String version, String suffix,  String relativePath) {
         File targetDir = assetDestination(relativePath)
         createDirectories targetDir
         def dependencySuffix = "${jarProject}${dependency}${variantName}"
         def downloadTask = project.tasks.register("download${dependencySuffix}", Download) {
-            src String.format(jarUrl, jarProject, dependency)
+            src String.format(jarUrl, jarProject, dependency, version, suffix)
             dest targetDir
             overwrite false
             doLast {
@@ -284,7 +284,6 @@ afterEvaluate {
         registrar.setVariant(variant)
 
         registrar.projectJarDependency project(":forge_installer"), "components/forge_installer"
-        registrar.projectJarDependency project(":arc_dns_injector"), "components/arc_dns_injector"
         registrar.projectJarDependency project(":jre_lwjgl3glfw"), "components/lwjgl3"
 
 		if (variant.getName().toLowerCase().contains("full")) {
@@ -293,27 +292,26 @@ afterEvaluate {
             registrar.jreRuntimeDependency 21, "components/jre-21"
         }
         
-		def cacioJarUrl = "https://jitpack.io/com/github/MojoLauncher/%1\$s/%2\$s/master-SNAPSHOT/%2\$s-master-SNAPSHOT.jar"
+		def cacioJarUrl = "https://jitpack.io/com/github/MojoLauncher/%1\$s/%2\$s/%3\$s/%2\$s-%3\$s%4\$s.jar"
 
-        registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-shared", "components/caciocavallo"
-        registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-androidnw", "components/caciocavallo"
+        registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-shared", "-01d2dc1d65-1", "", "components/caciocavallo"
+        registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-androidnw", "-01d2dc1d65-1", "", "components/caciocavallo"
 
-        registrar.onlineJarDependency cacioJarUrl, "caciocavallo17", "cacio-shared", "components/caciocavallo17"
-        registrar.onlineJarDependency cacioJarUrl, "caciocavallo17", "cacio-tta", "components/caciocavallo17"
+        registrar.onlineJarDependency cacioJarUrl, "caciocavallo17", "cacio-tta", "-517c312aef-1", "-jar-with-dependencies", "components/caciocavallo17"
     }
 }
 
 dependencies {
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
-    implementation 'commons-codec:commons-codec:1.15'
+    implementation 'commons-codec:commons-codec:1.19.0'
     // implementation 'com.wu-man:android-bsf-api:3.1.3'
-    implementation 'androidx.preference:preference:1.2.0'
+    implementation 'androidx.preference:preference:1.2.1'
     //implementation 'androidx.core:core:1.7.0'
     implementation 'androidx.drawerlayout:drawerlayout:1.2.0'
-    implementation 'androidx.viewpager2:viewpager2:1.1.0-beta01'
-    implementation 'androidx.annotation:annotation:1.5.0'
+    implementation 'androidx.viewpager2:viewpager2:1.1.0'
+    implementation 'androidx.annotation:annotation:1.9.1'
 
-    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+    implementation "androidx.constraintlayout:constraintlayout:2.2.1"
 
     implementation 'com.github.duanhong169:checkerboarddrawable:1.0.2'
     implementation 'com.github.PojavLauncherTeam:portrait-sdp:ed33e89cbc'
@@ -325,11 +323,13 @@ dependencies {
     // implementation 'com.intuit.sdp:sdp-android:1.0.5'
     // implementation 'com.intuit.ssp:ssp-android:1.0.5'
 
-    implementation 'org.tukaani:xz:1.8'
+    implementation 'org.tukaani:xz:1.10'
     // Our version of exp4j can be built from source at
     // https://github.com/PojavLauncherTeam/exp4j
-    implementation 'net.sourceforge.htmlcleaner:htmlcleaner:2.6.1'
-    implementation 'com.bytedance:bytehook:1.0.9'
+    implementation 'net.sourceforge.htmlcleaner:htmlcleaner:2.29'
+    implementation 'com.bytedance:bytehook:1.1.1'
+
+    implementation 'com.github.MojoLauncher:alsoft-android-aar:f369161d5f'
 
     // implementation 'net.sourceforge.streamsupport:streamsupport-cfuture:1.7.0'
 

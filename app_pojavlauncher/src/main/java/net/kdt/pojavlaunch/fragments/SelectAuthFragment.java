@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.kdt.mcgui.ProgressLayout;
+
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
@@ -32,7 +34,7 @@ public class SelectAuthFragment extends Fragment {
     }
 
     private void launchAuthFragment(Class<? extends  Fragment> fragmentClass, String fragmentTag) {
-        if(ProgressKeeper.hasOngoingTasks()) {
+        if(ProgressKeeper.hasProgressKey(ProgressLayout.AUTHENTICATE)) {
             Toast.makeText(requireContext(), R.string.tasks_ongoing, Toast.LENGTH_SHORT).show();
             return;
         }

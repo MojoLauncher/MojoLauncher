@@ -77,7 +77,6 @@
     <string name="global_default">Padrão</string>
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Aplicativo/jogo fechou com o código %d, verifique latestlog.txt para mais detalhes.</string>
-    <string name="mcn_signal_title">Aplicativo/jogo fechou com o código %d, verifique latestlog.txt para mais detalhes.</string>
     <string name="mcn_exit_confirm">Tem certeza que deseja forçar o encerramento?</string>
     <string name="mcn_check_fail_vulkan_support">O renderizador Zink (Vulkan) não é compatível com este dispositivo!</string>
     <!-- MainActivity: Control buttons -->
@@ -203,8 +202,6 @@
     <string name="global_delete">Excluir</string>
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Renderizador</string>
-    <string name="arc_capes_title">Capas da Cosmetica</string>
-    <string name="arc_capes_desc">Ativa capas da Cosmetica (anteriormente Arc). Para mais informações visite https://cosmetica.cc. Requer OptiFine.</string>
     <string name="notif_channel_name">Geral</string>
     <string name="lazy_service_default_title">Serviço em primeiro plano</string>
     <string name="mcl_setting_veroption_installed">Instalado</string>
@@ -239,7 +236,6 @@
     <string name="storage_required">O MojoLauncher requer que o armazenamento externo seja conectado. Por favor, reconecte-o e reinicie o aplicativo.</string>
     <string name="mcl_setting_title_buttonallcaps">Somente use letras maiúsculas em rótulos de botões</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Desative isso se você quiser usar letras minúsculas em seus controles.</string>
-    <string name="create_profile">Criar novo perfil</string>
     <string name="preference_shader_dump_title">Habilitar despejo de shader</string>
     <string name="preference_shader_dump_description">Registrar shaders convertidos no arquivo de registro.</string>
     <string name="percent_format">%d%%</string>
@@ -364,7 +360,7 @@
     <string name="customctrl_visibility_in_menus">Nos menus</string>
     <string name="preference_remap_controller_title">Alterar mapeamento dos botões</string>
     <string name="preference_remap_controller_description">Permite que você modifique as teclas do teclado vinculadas à cada botão do controle</string>
-    <string name="mcl_button_discord">Discord</string>
+    <string name="mcl_button_social_media">Discord</string>
     <string name="ltw_render_distance_warning_msg">A sua GPU não possui capacidade para renderizar a distância acima de 7 sem o Sodium ou outros mods semelhantes. A renderização de distância será reduzida automaticamente ao clicar em \"OK\".</string>
     <string name="mcl_button_open_directory">Abrir diretório do jogo</string>
     <string name="local_login_bad_username_title">Nome de usuário inadequado</string>
