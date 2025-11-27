@@ -21,6 +21,7 @@ public class LauncherPreferenceExperimentalFragment extends LauncherPreferenceFr
         themesPref.setSummary(LauncherPreferences.PREF_SELECT_THEME);
         List<String> newEntries = new ArrayList<>();
         newEntries.add("Default");
+        newEntries.add("Pojav");
         newEntries.add("Midnight");
         newEntries.add("Amethyst");
         themesPref.setEntries(newEntries.toArray(new String[0]));

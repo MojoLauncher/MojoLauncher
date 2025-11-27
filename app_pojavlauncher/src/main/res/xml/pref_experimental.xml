@@ -18,8 +18,8 @@
         <ListPreference
             android:defaultValue="Default"
             android:key="selectTheme"
-            android:title="Select theme"
-            android:summary="Theme selected"
+            android:title="@string/preference_select_theme"
+            android:summary="Default"
             />
     </PreferenceCategory>
 </PreferenceScreen>

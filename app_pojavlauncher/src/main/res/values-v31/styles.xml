@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="MidnightTheme" parent="BaseMidnightTheme">
-        <item name="windowActionBar">true</item>
-        <item name="android:textSize">@dimen/_16ssp</item>
+        <item name="android:statusBarColor">@android:color/system_neutral1_900</item>
+        <item name="android:navigationBarColor">@android:color/system_neutral1_900</item>
 
         <item name="colorControlButton">#FF000000</item>
         <item name="colorControlButtonPressed">#FF000000</item>

@@ -169,6 +169,9 @@ public class LauncherActivity extends BaseActivity {
             case "Amethyst":
                 setTheme(R.style.AmethystTheme);
                 break;
+            case "Pojav":
+                setTheme(R.style.PojavTheme);
+                break;
             default:
                 setTheme(R.style.AppTheme);
                 break;

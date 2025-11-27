@@ -28,7 +28,11 @@
     <style name="AppTheme" parent="BaseAppTheme" />
 
     <style name="BaseMidnightTheme" parent="AppTheme">
+        <item name="windowNoTitle">true</item>
         <item name="windowActionBar">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+
         <item name="android:textSize">@dimen/_16ssp</item>
     </style>
     <style name="MidnightTheme" parent="BaseMidnightTheme" />
@@ -37,8 +41,8 @@
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:statusBarColor">@color/background_status_bar</item>
-        <item name="android:navigationBarColor">@color/background_app</item>
+        <item name="android:statusBarColor">#242424</item>
+        <item name="android:navigationBarColor">#181818</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 
         <item name="android:textSize">@dimen/_12ssp</item>
@@ -59,6 +63,33 @@
     </style>
 
     <style name="AmethystTheme" parent="BaseAmethystTheme" />
+
+    <style name="BasePojavTheme" parent="@style/Theme.AppCompat.NoActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:statusBarColor">@color/background_status_bar</item>
+        <item name="android:navigationBarColor">@color/background_app</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+
+        <item name="android:textSize">@dimen/_12ssp</item>
+
+        <item name="colorControlButton">#4CC4C4C4</item>
+        <item name="colorControlButtonPressed">#4D000000</item>
+
+        <item name="colorMineButton">#57CC33</item>
+        <item name="colorBackgroundApp">#181818</item>
+        <item name="colorDivider">#464646</item>
+        <item name="colorBackgroundOverlay">#464646</item>
+        <item name="colorBackgroundStatusBar">#242424</item>
+        <item name="colorBackgroundBottomBar">#242424</item>
+        <item name="colorIconOutline">#232323</item>
+
+        <item name="colorPrimaryText">#FFFFFF</item>
+        <item name="colorSecondaryText">#B2B2B2</item>
+    </style>
+
+    <style name="PojavTheme" parent="BasePojavTheme" />
 
     <style name="LauncherFragment_Divider">
         <item name="android:layout_width">@dimen/padding_tiny</item>
