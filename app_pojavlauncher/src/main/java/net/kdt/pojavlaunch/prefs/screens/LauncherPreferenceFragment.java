@@ -4,6 +4,7 @@ package net.kdt.pojavlaunch.prefs.screens;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -23,7 +24,9 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        view.setBackgroundColor(getResources().getColor(R.color.background_app));
+        TypedValue tv = new TypedValue();
+        requireContext().getTheme().resolveAttribute(R.attr.colorBackgroundApp, tv, true);
+        view.setBackgroundColor(tv.data);
         super.onViewCreated(view, savedInstanceState);
     }
 

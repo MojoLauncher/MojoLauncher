@@ -12,6 +12,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Insets;
@@ -27,6 +28,7 @@ import android.provider.DocumentsContract;
 import android.provider.OpenableColumns;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
@@ -894,5 +896,11 @@ public final class Tools {
                         Log.w(Tools.APP_NAME, "Could not enable System.exit() method!", th);
                     }
                 }).show();
+    }
+
+    public static int getColorAttr(Resources.Theme theme, int attr) {
+        TypedValue tv = new TypedValue();
+        theme.resolveAttribute(attr, tv, true);
+        return tv.data;
     }
 }

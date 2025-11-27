@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="MidnightTheme" parent="AppTheme">
+    <style name="MidnightTheme" parent="BaseMidnightTheme">
         <item name="windowActionBar">true</item>
         <item name="android:textSize">@dimen/_16ssp</item>
 

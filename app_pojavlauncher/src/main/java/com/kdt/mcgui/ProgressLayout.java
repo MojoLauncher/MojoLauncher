@@ -16,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import git.artdeell.mojo.R;
 
+import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
 import net.kdt.pojavlaunch.progresskeeper.ProgressListener;
 import net.kdt.pojavlaunch.progresskeeper.TaskCountListener;
@@ -82,7 +83,7 @@ public class ProgressLayout extends ConstraintLayout implements View.OnClickList
         mLinearLayout = findViewById(R.id.progress_linear_layout);
         mTaskNumberDisplayer = findViewById(R.id.progress_textview);
         mFlipArrow = findViewById(R.id.progress_flip_arrow);
-        setBackgroundColor(getResources().getColor(R.color.background_bottom_bar));
+        setBackgroundColor(Tools.getColorAttr(getContext().getTheme(), R.attr.colorBackgroundBottomBar));
         setOnClickListener(this);
     }
 

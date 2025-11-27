@@ -162,6 +162,14 @@ public class LauncherActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        switch(LauncherPreferences.PREF_SELECT_THEME) {
+            case "Midnight":
+                setTheme(R.style.MidnightTheme);
+                break;
+            default:
+                setTheme(R.style.AppTheme);
+                break;
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pojav_launcher);
 

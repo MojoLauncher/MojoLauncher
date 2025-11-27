@@ -20,13 +20,10 @@ public class LauncherPreferenceExperimentalFragment extends LauncherPreferenceFr
         newEntries.add("Default");
         newEntries.add("Midnight");
         themesPref.setEntries(newEntries.toArray(new String[0]));
+        themesPref.setEntryValues(newEntries.toArray(new String[0]));
 
         themesPref.setOnPreferenceChangeListener((preference, newValue) -> {
-            if(newValue.equals("Default")) {
-                requireActivity().setTheme(R.style.AppTheme);
-            } else if(newValue.equals("Midnight")) {
-                requireActivity().setTheme(R.style.MidnightTheme);
-            }
+            requireActivity().recreate();
             return true;
         });
     }
