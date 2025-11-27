@@ -1,6 +1,7 @@
 package net.kdt.pojavlaunch;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
+
 import android.Manifest;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -44,6 +45,7 @@ import net.kdt.pojavlaunch.services.ProgressServiceKeeper;
 import net.kdt.pojavlaunch.tasks.AsyncMinecraftDownloader;
 import net.kdt.pojavlaunch.tasks.AsyncVersionList;
 import net.kdt.pojavlaunch.tasks.MinecraftDownloader;
+import net.kdt.pojavlaunch.theme.ThemeInfo;
 import net.kdt.pojavlaunch.utils.NotificationUtils;
 
 import java.lang.ref.WeakReference;
@@ -162,20 +164,10 @@ public class LauncherActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        switch(LauncherPreferences.PREF_SELECT_THEME) {
-            case "Midnight":
-                setTheme(R.style.MidnightTheme);
-                break;
-            case "Amethyst":
-                setTheme(R.style.AmethystTheme);
-                break;
-            case "Pojav":
-                setTheme(R.style.PojavTheme);
-                break;
-            default:
-                setTheme(R.style.AppTheme);
-                break;
-        }
+        Tools.THEME_MANAGER.registerBaseThemes();
+
+        ThemeInfo theme = Tools.THEME_MANAGER.getTheme(LauncherPreferences.PREF_SELECT_THEME);
+        if(theme != null) theme.applyTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pojav_launcher);
 

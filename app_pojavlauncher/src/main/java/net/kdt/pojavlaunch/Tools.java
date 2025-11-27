@@ -55,6 +55,7 @@ import net.kdt.pojavlaunch.memory.MemoryHoleFinder;
 import net.kdt.pojavlaunch.memory.SelfMapsParser;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.theme.ThemeManager;
 import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.GLInfoUtils;
 import net.kdt.pojavlaunch.value.DependentLibrary;
@@ -91,6 +92,7 @@ public final class Tools {
     public static String APP_NAME = "PojavLauncher";
 
     public static final Gson GLOBAL_GSON = new GsonBuilder().setPrettyPrinting().create();
+    public static final ThemeManager THEME_MANAGER = new ThemeManager();
 
     public static final String URL_HOME = "https://pojavlauncherteam.github.io";
     public static String NATIVE_LIB_DIR;

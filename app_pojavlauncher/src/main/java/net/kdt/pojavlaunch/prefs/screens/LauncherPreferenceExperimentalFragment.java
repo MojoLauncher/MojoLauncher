@@ -4,9 +4,9 @@ import android.os.Bundle;
 
 import androidx.preference.ListPreference;
 
+import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import git.artdeell.mojo.R;
@@ -19,11 +19,7 @@ public class LauncherPreferenceExperimentalFragment extends LauncherPreferenceFr
 
         ListPreference themesPref = requirePreference("selectTheme", ListPreference.class);
         themesPref.setSummary(LauncherPreferences.PREF_SELECT_THEME);
-        List<String> newEntries = new ArrayList<>();
-        newEntries.add("Default");
-        newEntries.add("Pojav");
-        newEntries.add("Midnight");
-        newEntries.add("Amethyst");
+        List<String> newEntries = Tools.THEME_MANAGER.getThemes();
         themesPref.setEntries(newEntries.toArray(new String[0]));
         themesPref.setEntryValues(newEntries.toArray(new String[0]));
 
