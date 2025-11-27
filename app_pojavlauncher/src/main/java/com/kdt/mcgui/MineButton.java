@@ -30,9 +30,9 @@ public class MineButton extends androidx.appcompat.widget.AppCompatButton {
 		Drawable bg = ResourcesCompat.getDrawable(getResources(), R.drawable.mine_button_background, null);
 		if (bg != null) {
 			bg = DrawableCompat.wrap(bg);
-			bg.setColorFilter(new PorterDuffColorFilter(
+			bg.setColorFilter(new LightingColorFilter(
 					Tools.getColorAttr(getContext().getTheme(), R.attr.colorMineButton),
-					PorterDuff.Mode.OVERLAY
+					0x000A0011 // this seems to get the color as close to what I need
 			));
 			setBackground(bg);
 		}
