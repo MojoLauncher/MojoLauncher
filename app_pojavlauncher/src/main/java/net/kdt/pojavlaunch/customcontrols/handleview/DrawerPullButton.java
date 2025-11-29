@@ -10,6 +10,8 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
+import net.kdt.pojavlaunch.Tools;
+
 import git.artdeell.mojo.R;
 
 public class DrawerPullButton extends View {
@@ -20,7 +22,7 @@ public class DrawerPullButton extends View {
     private VectorDrawableCompat mDrawable;
 
     private void init(){
-        mDrawable = VectorDrawableCompat.create(getContext().getResources(), R.drawable.ic_sharp_settings_24, null);
+        mDrawable = VectorDrawableCompat.create(getContext().getResources(), Tools.getReferenceAttr(getContext().getTheme(), R.attr.drawableIconSharpSettings24), null);
         setAlpha(0.33f);
         mBackgroundPaint.setColor(Color.BLACK);
     }

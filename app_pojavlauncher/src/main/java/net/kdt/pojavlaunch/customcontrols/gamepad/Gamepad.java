@@ -9,27 +9,6 @@ import static android.view.MotionEvent.AXIS_RZ;
 import static android.view.MotionEvent.AXIS_X;
 import static android.view.MotionEvent.AXIS_Y;
 import static android.view.MotionEvent.AXIS_Z;
-
-import android.content.Context;
-import android.view.Choreographer;
-import android.view.InputDevice;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-
-import androidx.core.content.res.ResourcesCompat;
-import androidx.core.math.MathUtils;
-
-import net.kdt.pojavlaunch.GrabListener;
-import net.kdt.pojavlaunch.LwjglGlfwKeycode;
-import git.artdeell.mojo.R;
-import net.kdt.pojavlaunch.utils.MCOptionUtils;
-
-import org.lwjgl.glfw.CallbackBridge;
-
 import static net.kdt.pojavlaunch.Tools.currentDisplayMetrics;
 import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTION_EAST;
 import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTION_NONE;
@@ -47,8 +26,28 @@ import static net.kdt.pojavlaunch.utils.MCOptionUtils.getMcScale;
 import static org.lwjgl.glfw.CallbackBridge.sendKeyPress;
 import static org.lwjgl.glfw.CallbackBridge.sendMouseButton;
 
+import android.content.Context;
+import android.view.Choreographer;
+import android.view.InputDevice;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+
+import androidx.core.math.MathUtils;
+
+import net.kdt.pojavlaunch.GrabListener;
+import net.kdt.pojavlaunch.LwjglGlfwKeycode;
+import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.utils.MCOptionUtils;
+
+import org.lwjgl.glfw.CallbackBridge;
+
 import fr.spse.gamepad_remapper.GamepadHandler;
 import fr.spse.gamepad_remapper.Settings;
+import git.artdeell.mojo.R;
 
 public class Gamepad implements GrabListener, GamepadHandler {
 
@@ -112,7 +111,7 @@ public class Gamepad implements GrabListener, GamepadHandler {
 
         Context ctx = contextView.getContext();
         mPointerImageView = new ImageView(contextView.getContext());
-        mPointerImageView.setImageDrawable(ResourcesCompat.getDrawable(ctx.getResources(), R.drawable.ic_gamepad_pointer, ctx.getTheme()));
+        mPointerImageView.setImageDrawable(Tools.getDrawableAttr(ctx.getTheme(), R.attr.drawableIconGamepadPointer));
         mPointerImageView.getDrawable().setFilterBitmap(false);
 
         int size = (int) ((22 * getMcScale()) / PREF_SCALE_FACTOR);

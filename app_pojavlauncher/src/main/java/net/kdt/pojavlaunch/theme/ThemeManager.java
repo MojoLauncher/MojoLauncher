@@ -11,6 +11,9 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
+import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -27,6 +30,14 @@ public class ThemeManager {
 
     private final Map<String, ThemeInfo> themeMap = new LinkedHashMap<>(); // linked hash map to maintain order
 
+
+    public void applyPrefTheme(Context ctx) {
+        this.registerBaseThemes();
+
+        ThemeInfo theme = Tools.THEME_MANAGER.getTheme(LauncherPreferences.PREF_SELECT_THEME);
+        if(theme != null) theme.applyTheme(ctx);
+        else ctx.setTheme(R.style.AppTheme); // fallback
+    }
 
     public @Nullable ThemeInfo getTheme(String name) {
         return this.themeMap.get(name);

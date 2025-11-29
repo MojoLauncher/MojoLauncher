@@ -23,7 +23,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/button_a"
+            app:srcCompat="?attr/drawableButtonA"
             tools:ignore="ContentDescription" />
 
         <ImageView
@@ -37,7 +37,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/spinner_arrow" />
+            app:srcCompat="?attr/drawableSpinnerArrow" />
         <!-- Set in code -->
         <TextView
             android:id="@+id/controller_mapper_keycode_label"

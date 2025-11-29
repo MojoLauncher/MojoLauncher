@@ -9,10 +9,10 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.core.util.Consumer;
 
 import net.kdt.pojavlaunch.GrabListener;
+import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 import org.lwjgl.glfw.CallbackBridge;
@@ -90,7 +90,7 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
     }
 
     private void init() {
-        mMouseCursorDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_mouse_pointer, getContext().getTheme());
+        mMouseCursorDrawable = Tools.getDrawableAttr(getContext().getTheme(), R.attr.drawableIconMousePointer);
         // For some reason it's annotated as Nullable even though it doesn't seem to actually
         // ever return null
         assert mMouseCursorDrawable != null;

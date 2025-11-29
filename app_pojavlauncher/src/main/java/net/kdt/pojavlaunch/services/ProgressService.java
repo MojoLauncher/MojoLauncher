@@ -17,11 +17,12 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
 import net.kdt.pojavlaunch.progresskeeper.TaskCountListener;
 import net.kdt.pojavlaunch.utils.NotificationUtils;
+
+import git.artdeell.mojo.R;
 
 /**
  * Lazy service which allows the process not to get killed.
@@ -49,8 +50,8 @@ public class ProgressService extends Service implements TaskCountListener {
                 , killIntent, Build.VERSION.SDK_INT >=23 ? PendingIntent.FLAG_IMMUTABLE : 0);
         mNotificationBuilder = new NotificationCompat.Builder(this, "channel_id")
                 .setContentTitle(getString(R.string.lazy_service_default_title))
-                .addAction(android.R.drawable.ic_menu_close_clear_cancel,  getString(R.string.notification_terminate), pendingKillIntent)
-                .setSmallIcon(R.drawable.notif_icon)
+                .addAction(Tools.getReferenceAttr(getTheme(), R.attr.drawableIconMenuCloseClearCancel), getString(R.string.notification_terminate), pendingKillIntent)
+                .setSmallIcon(Tools.getReferenceAttr(getTheme(), R.attr.drawableNotificationIcon))
                 .setNotificationSilent();
     }
 

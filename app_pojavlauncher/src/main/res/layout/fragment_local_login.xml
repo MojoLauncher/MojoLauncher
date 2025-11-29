@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorBackgroundApp"
-    android:paddingHorizontal="@dimen/fragment_padding_medium"
-    >
+    android:paddingHorizontal="@dimen/fragment_padding_medium">
 
     <View
         android:id="@+id/login_menu"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_200sdp"
 
-        android:background="@drawable/background_card"
+        android:background="?attr/drawableBackgroundCard"
         android:translationZ="-1dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
@@ -56,7 +53,7 @@
         android:onClick="loginMC"
         android:text="@string/login_online_login_label"
 
-        android:textColor="@android:color/white"
+        android:textColor="?attr/colorPrimaryText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_edit_email" />

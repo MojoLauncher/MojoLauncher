@@ -27,7 +27,7 @@
             android:layout_height="30sp"
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/controller_button_select"
-            app:srcCompat="@drawable/button_select" />
+            app:srcCompat="?attr/drawableButtonSelect" />
 
         <TextView
             android:layout_width="wrap_content"

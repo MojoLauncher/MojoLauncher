@@ -10,17 +10,18 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import androidx.annotation.AttrRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.kdt.pojavlaunch.EfficientAndroidLWJGLKeycode;
 import net.kdt.pojavlaunch.GrabListener;
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 
-import android.widget.TextView;
+import git.artdeell.mojo.R;
 
 public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdapter.ViewHolder> implements GamepadDataProvider {
     private static final int BUTTON_COUNT = 20;
@@ -50,26 +51,26 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
         mRealButtons = new GamepadEmulatedButton[BUTTON_COUNT];
         mSimulatedGamepadMap = new GamepadMap();
         int index = 0;
-        mSimulatedGamepadMap.BUTTON_A = mRebinderButtons[index++] = new RebinderButton(R.drawable.button_a, R.string.controller_button_a);
-        mSimulatedGamepadMap.BUTTON_B = mRebinderButtons[index++] = new RebinderButton(R.drawable.button_b, R.string.controller_button_b);
-        mSimulatedGamepadMap.BUTTON_X = mRebinderButtons[index++] = new RebinderButton(R.drawable.button_x, R.string.controller_button_x);
-        mSimulatedGamepadMap.BUTTON_Y = mRebinderButtons[index++] = new RebinderButton(R.drawable.button_y, R.string.controller_button_y);
-        mSimulatedGamepadMap.BUTTON_START = mRebinderButtons[index++] = new RebinderButton(R.drawable.button_start, R.string.controller_button_start);
-        mSimulatedGamepadMap.BUTTON_SELECT = mRebinderButtons[index++] = new RebinderButton(R.drawable.button_select, R.string.controller_button_select);
-        mSimulatedGamepadMap.TRIGGER_RIGHT = mRebinderButtons[index++] = new RebinderButton(R.drawable.trigger_right, R.string.controller_button_trigger_right);
-        mSimulatedGamepadMap.TRIGGER_LEFT = mRebinderButtons[index++] = new RebinderButton(R.drawable.trigger_left, R.string.controller_button_trigger_left);
-        mSimulatedGamepadMap.SHOULDER_RIGHT = mRebinderButtons[index++] = new RebinderButton(R.drawable.shoulder_right, R.string.controller_button_shoulder_right);
-        mSimulatedGamepadMap.SHOULDER_LEFT = mRebinderButtons[index++] = new RebinderButton(R.drawable.shoulder_left, R.string.controller_button_shoulder_left);
-        mSimulatedGamepadMap.DIRECTION_FORWARD = mRebinderButtons[index++] = new RebinderButton(R.drawable.stick_right, R.string.controller_direction_forward);
-        mSimulatedGamepadMap.DIRECTION_RIGHT = mRebinderButtons[index++] = new RebinderButton(R.drawable.stick_right, R.string.controller_direction_right);
-        mSimulatedGamepadMap.DIRECTION_LEFT = mRebinderButtons[index++] = new RebinderButton(R.drawable.stick_right, R.string.controller_direction_left);
-        mSimulatedGamepadMap.DIRECTION_BACKWARD = mRebinderButtons[index++] = new RebinderButton(R.drawable.stick_right, R.string.controller_direction_backward);
-        mSimulatedGamepadMap.THUMBSTICK_RIGHT = mRebinderButtons[index++] = new RebinderButton(R.drawable.stick_right_click, R.string.controller_stick_press_r);
-        mSimulatedGamepadMap.THUMBSTICK_LEFT = mRebinderButtons[index++] = new RebinderButton(R.drawable.stick_left_click, R.string.controller_stick_press_l);
-        mSimulatedGamepadMap.DPAD_UP = mRebinderButtons[index++] = new RebinderButton(R.drawable.dpad_up, R.string.controller_dpad_up);
-        mSimulatedGamepadMap.DPAD_DOWN = mRebinderButtons[index++] = new RebinderButton(R.drawable.dpad_down, R.string.controller_dpad_down);
-        mSimulatedGamepadMap.DPAD_RIGHT = mRebinderButtons[index++] = new RebinderButton(R.drawable.dpad_right, R.string.controller_dpad_right);
-        mSimulatedGamepadMap.DPAD_LEFT = mRebinderButtons[index] = new RebinderButton(R.drawable.dpad_left, R.string.controller_dpad_left);
+        mSimulatedGamepadMap.BUTTON_A = mRebinderButtons[index++] = new RebinderButton(R.attr.drawableButtonA, R.string.controller_button_a);
+        mSimulatedGamepadMap.BUTTON_B = mRebinderButtons[index++] = new RebinderButton(R.attr.drawableButtonB, R.string.controller_button_b);
+        mSimulatedGamepadMap.BUTTON_X = mRebinderButtons[index++] = new RebinderButton(R.attr.drawableButtonX, R.string.controller_button_x);
+        mSimulatedGamepadMap.BUTTON_Y = mRebinderButtons[index++] = new RebinderButton(R.attr.drawableButtonY, R.string.controller_button_y);
+        mSimulatedGamepadMap.BUTTON_START = mRebinderButtons[index++] = new RebinderButton(R.attr.drawableButtonStart, R.string.controller_button_start);
+        mSimulatedGamepadMap.BUTTON_SELECT = mRebinderButtons[index++] = new RebinderButton(R.attr.drawableButtonSelect, R.string.controller_button_select);
+        mSimulatedGamepadMap.TRIGGER_RIGHT = mRebinderButtons[index++] = new RebinderButton(R.attr.drawableTriggerRight, R.string.controller_button_trigger_right);
+        mSimulatedGamepadMap.TRIGGER_LEFT = mRebinderButtons[index++] = new RebinderButton(R.attr.drawableTriggerLeft, R.string.controller_button_trigger_left);
+        mSimulatedGamepadMap.SHOULDER_RIGHT = mRebinderButtons[index++] = new RebinderButton(R.attr.drawableShoulderRight, R.string.controller_button_shoulder_right);
+        mSimulatedGamepadMap.SHOULDER_LEFT = mRebinderButtons[index++] = new RebinderButton(R.attr.drawableShoulderLeft, R.string.controller_button_shoulder_left);
+        mSimulatedGamepadMap.DIRECTION_FORWARD = mRebinderButtons[index++] = new RebinderButton(R.attr.drawableStickRight, R.string.controller_direction_forward);
+        mSimulatedGamepadMap.DIRECTION_RIGHT = mRebinderButtons[index++] = new RebinderButton(R.attr.drawableStickRight, R.string.controller_direction_right);
+        mSimulatedGamepadMap.DIRECTION_LEFT = mRebinderButtons[index++] = new RebinderButton(R.attr.drawableStickRight, R.string.controller_direction_left);
+        mSimulatedGamepadMap.DIRECTION_BACKWARD = mRebinderButtons[index++] = new RebinderButton(R.attr.drawableStickRight, R.string.controller_direction_backward);
+        mSimulatedGamepadMap.THUMBSTICK_RIGHT = mRebinderButtons[index++] = new RebinderButton(R.attr.drawableStickRightClick, R.string.controller_stick_press_r);
+        mSimulatedGamepadMap.THUMBSTICK_LEFT = mRebinderButtons[index++] = new RebinderButton(R.attr.drawableStickLeftClick, R.string.controller_stick_press_l);
+        mSimulatedGamepadMap.DPAD_UP = mRebinderButtons[index++] = new RebinderButton(R.attr.drawableDpadUp, R.string.controller_dpad_up);
+        mSimulatedGamepadMap.DPAD_DOWN = mRebinderButtons[index++] = new RebinderButton(R.attr.drawableDpadDown, R.string.controller_dpad_down);
+        mSimulatedGamepadMap.DPAD_RIGHT = mRebinderButtons[index++] = new RebinderButton(R.attr.drawableDpadRight, R.string.controller_dpad_right);
+        mSimulatedGamepadMap.DPAD_LEFT = mRebinderButtons[index] = new RebinderButton(R.attr.drawableDpadLeft, R.string.controller_dpad_left);
     }
 
     private void updateRealButtons() {
@@ -124,7 +125,7 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
     private void updateStickIcons() {
         // Which stick is used for keyboard emulation depends on grab state, so we need
         // to update the mapper UI icons accordingly
-        int stickIcon = mGrabState ? R.drawable.stick_left : R.drawable.stick_right;
+        int stickIcon = mGrabState ? R.attr.drawableStickLeft : R.attr.drawableStickRight;
         ((RebinderButton)mSimulatedGamepadMap.DIRECTION_FORWARD).iconResourceId = stickIcon;
         ((RebinderButton)mSimulatedGamepadMap.DIRECTION_BACKWARD).iconResourceId = stickIcon;
         ((RebinderButton)mSimulatedGamepadMap.DIRECTION_RIGHT).iconResourceId = stickIcon;
@@ -132,11 +133,12 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
     }
 
     private static class RebinderButton extends GamepadButton {
+        @AttrRes
         public int iconResourceId;
         public final int localeResourceId;
         private GamepadMapperAdapter.ViewHolder mButtonHolder;
 
-        public RebinderButton(int iconResourceId, int localeResourceId) {
+        public RebinderButton(@AttrRes int iconResourceId, int localeResourceId) {
             this.iconResourceId = iconResourceId;
             this.localeResourceId = localeResourceId;
         }
@@ -190,7 +192,7 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
         private void attach(int index) {
             RebinderButton rebinderButton = mRebinderButtons[index];
             mExpandedView.setVisibility(View.GONE);
-            mButtonIcon.setImageResource(rebinderButton.iconResourceId);
+            mButtonIcon.setImageResource(Tools.getReferenceAttr(mContext.getTheme(), rebinderButton.iconResourceId));
             String buttonName = mContext.getString(rebinderButton.localeResourceId);
             mButtonIcon.setContentDescription(buttonName);
             rebinderButton.changeViewHolder(this);

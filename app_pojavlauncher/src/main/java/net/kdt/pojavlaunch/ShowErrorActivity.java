@@ -22,6 +22,7 @@ public class ShowErrorActivity extends Activity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        Tools.THEME_MANAGER.applyPrefTheme(this);
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         if(intent == null) {

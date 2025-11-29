@@ -47,7 +47,7 @@
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:scaleType="centerCrop"
-        android:src="@android:drawable/ic_delete"
+        android:src="?attr/drawableIconDelete"
         app:layout_constraintBottom_toBottomOf="@+id/top_log_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

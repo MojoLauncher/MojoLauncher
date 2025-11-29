@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:id="@+id/fragment_menu_main"
-	android:gravity="top"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:orientation="vertical"
-	android:background="?attr/colorBackgroundApp"
-	>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_menu_main"
+    android:gravity="top"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/colorBackgroundApp">
 	<ScrollView
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
@@ -29,7 +26,7 @@
 				style="@style/LauncherMenuButton.Universal"
 				android:layout_width="0dp"
 				android:text="@string/mcl_tab_wiki"
-				android:drawableStart="@drawable/ic_px_book"
+				android:drawableStart="?attr/drawableIconBook"
 				app:layout_constraintTop_toTopOf="parent"
 				app:layout_constraintStart_toStartOf="parent"
 				app:layout_constraintEnd_toStartOf="@id/social_divider" />
@@ -46,7 +43,7 @@
 				style="@style/LauncherMenuButton.Universal"
 				android:layout_width="0dp"
 				android:text="@string/mcl_button_social_media"
-				android:drawableStart="@drawable/ic_social_media"
+				android:drawableStart="?attr/drawableIconSocialMedia"
 				app:layout_constraintTop_toTopOf="parent"
 				app:layout_constraintStart_toEndOf="@id/social_divider"
 				app:layout_constraintEnd_toEndOf="parent"/>
@@ -56,7 +53,7 @@
 				android:id="@+id/custom_control_button"
 				style="@style/LauncherMenuButton.Universal"
 				android:layout_width="match_parent"
-				android:drawableStart="@drawable/ic_px_gamepad"
+				android:drawableStart="?attr/drawableIconGamepad"
 				android:text="@string/mcl_option_customcontrol"
 				app:layout_constraintTop_toBottomOf="@id/news_button" />
 
@@ -64,7 +61,7 @@
 				android:id="@+id/install_jar_button"
 				style="@style/LauncherMenuButton.Universal"
 				android:layout_width="match_parent"
-				android:drawableStart="@drawable/ic_px_java_run"
+				android:drawableStart="?attr/drawableIconJavaRun"
 				android:text="@string/main_install_jar_file"
 				app:layout_constraintTop_toBottomOf="@id/custom_control_button" />
 
@@ -72,7 +69,7 @@
 				android:id="@+id/share_logs_button"
 				style="@style/LauncherMenuButton.Universal"
 				android:layout_width="match_parent"
-				android:drawableStart="@drawable/ic_px_sharelog"
+				android:drawableStart="?attr/drawableIconShareLog"
 				android:text="@string/main_share_logs"
 				app:layout_constraintTop_toBottomOf="@id/install_jar_button" />
 
@@ -80,7 +77,7 @@
 				android:id="@+id/open_files_button"
 				style="@style/LauncherMenuButton.Universal"
 				android:layout_width="match_parent"
-				android:drawableStart="@drawable/ic_px_folder"
+				android:drawableStart="?attr/drawableIconFolder"
 				android:text="@string/mcl_button_open_directory"
 				app:layout_constraintTop_toBottomOf="@id/share_logs_button" />
 		</androidx.constraintlayout.widget.ConstraintLayout>
@@ -91,7 +88,7 @@
 		android:layout_width="0dp"
 		android:layout_height="@dimen/_52sdp"
 		android:background="@android:color/transparent"
-		android:drawableEnd="@drawable/spinner_arrow"
+		android:drawableEnd="?attr/drawableSpinnerArrow"
 
 		app:drawableEndSize="@dimen/padding_heavy"
 		app:drawableStartIntegerScaling="true"
@@ -108,7 +105,7 @@
 		android:layout_height="@dimen/_52sdp"
 		android:background="?android:attr/selectableItemBackground"
 
-		android:src="@drawable/ic_px_edit"
+		android:src="?attr/drawableIconEdit"
 		app:layout_constraintBottom_toBottomOf="@+id/mc_version_spinner"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintTop_toTopOf="@+id/mc_version_spinner" />

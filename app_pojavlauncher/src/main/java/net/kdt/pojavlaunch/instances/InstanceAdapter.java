@@ -9,11 +9,10 @@ import android.widget.BaseAdapter;
 
 import androidx.core.graphics.ColorUtils;
 
-import git.artdeell.mojo.R;
-
 import net.kdt.pojavlaunch.Tools;
 
 import fr.spse.extended_view.ExtendedTextView;
+import git.artdeell.mojo.R;
 
 /*
  * Adapter for listing launcher profiles in a Spinner
@@ -70,7 +69,7 @@ public class InstanceAdapter extends BaseAdapter {
 
         //MinecraftProfile minecraftProfile = mProfiles.get(nm);
         //if(minecraftProfile == null) minecraftProfile = dummy;
-        Drawable cachedIcon = InstanceIconProvider.fetchIcon(v.getResources(), i);
+        Drawable cachedIcon = InstanceIconProvider.fetchIcon(v.getContext().getTheme(), i);
         extendedTextView.setCompoundDrawablesRelative(cachedIcon, null, extendedTextView.getCompoundsDrawables()[2], null);
 
         // Historically, the profile name "New" was hardcoded as the default profile name

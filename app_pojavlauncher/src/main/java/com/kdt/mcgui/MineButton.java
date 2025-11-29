@@ -1,9 +1,11 @@
 package com.kdt.mcgui;
 
-import android.content.*;
-import android.graphics.*;
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.LightingColorFilter;
 import android.graphics.drawable.Drawable;
-import android.util.*;
+import android.util.AttributeSet;
+import android.util.TypedValue;
 
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -24,15 +26,16 @@ public class MineButton extends androidx.appcompat.widget.AppCompatButton {
 	}
 
 	public void init() {
-		setTypeface(ResourcesCompat.getFont(getContext(), R.font.noto_sans_bold));
-		setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen._13ssp));
+		Resources.Theme theme = getContext().getTheme();
+		setTypeface(ResourcesCompat.getFont(getContext(), Tools.getReferenceAttr(theme, R.attr.fontMineButton)));
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, Tools.getDimensionSizeAttr(theme, R.attr.fontSizeMineButton));
 
-		Drawable bg = ResourcesCompat.getDrawable(getResources(), R.drawable.mine_button_background, null);
+		Drawable bg = Tools.getDrawableAttr(theme, R.attr.drawableMineButtonBackground);
 		if (bg != null) {
 			bg = DrawableCompat.wrap(bg);
 			bg.setColorFilter(new LightingColorFilter(
-					Tools.getColorAttr(getContext().getTheme(), R.attr.colorMineButton),
-					0x000A0011 // this seems to get the color as close to what I need
+					Tools.getColorAttr(theme, R.attr.colorMineButton),
+					Tools.getColorAttr(theme, R.attr.colorMineButtonAdd)
 			));
 			setBackground(bg);
 		}

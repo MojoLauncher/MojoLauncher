@@ -45,7 +45,6 @@ import net.kdt.pojavlaunch.services.ProgressServiceKeeper;
 import net.kdt.pojavlaunch.tasks.AsyncMinecraftDownloader;
 import net.kdt.pojavlaunch.tasks.AsyncVersionList;
 import net.kdt.pojavlaunch.tasks.MinecraftDownloader;
-import net.kdt.pojavlaunch.theme.ThemeInfo;
 import net.kdt.pojavlaunch.utils.NotificationUtils;
 
 import java.lang.ref.WeakReference;
@@ -65,8 +64,8 @@ public class LauncherActivity extends BaseActivity {
     private final FragmentManager.FragmentLifecycleCallbacks mFragmentCallbackListener = new FragmentManager.FragmentLifecycleCallbacks() {
         @Override
         public void onFragmentResumed(@NonNull FragmentManager fm, @NonNull Fragment f) {
-            mSettingsButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), f instanceof MainMenuFragment
-                    ? R.drawable.ic_px_sliders : R.drawable.ic_px_home));
+            mSettingsButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), Tools.getReferenceAttr(getTheme(), f instanceof MainMenuFragment
+                    ? R.attr.drawableIconSliders : R.attr.drawableIconHome)));
         }
     };
 
@@ -164,10 +163,7 @@ public class LauncherActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Tools.THEME_MANAGER.registerBaseThemes();
-
-        ThemeInfo theme = Tools.THEME_MANAGER.getTheme(LauncherPreferences.PREF_SELECT_THEME);
-        if(theme != null) theme.applyTheme(this);
+        Tools.THEME_MANAGER.applyPrefTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pojav_launcher);
 

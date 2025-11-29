@@ -18,10 +18,10 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.core.content.res.ResourcesCompat;
+
+import net.kdt.pojavlaunch.Tools;
 
 import git.artdeell.mojo.R;
-import net.kdt.pojavlaunch.Tools;
 
 /**
  * The base class for side dialog views
@@ -112,7 +112,7 @@ public abstract class SideDialogView {
         mDialogLayout.setTranslationZ(10);
 
         mDialogLayout.setVisibility(View.VISIBLE);
-        mDialogLayout.setBackground(ResourcesCompat.getDrawable(mDialogLayout.getResources(), R.drawable.background_control_editor, null));
+        mDialogLayout.setBackground(Tools.getDrawableAttr(mDialogLayout.getContext().getTheme(), R.attr.drawableBackgroundControlEditor));
 
         //TODO offset better according to view width
         mDialogLayout.setX(-mDialogLayout.getResources().getDimensionPixelOffset(R.dimen._280sdp));

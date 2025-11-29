@@ -40,6 +40,7 @@ public class ImportControlActivity extends Activity {
     
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        Tools.THEME_MANAGER.applyPrefTheme(this);
         super.onCreate(savedInstanceState);
         if(Tools.checkStorageInteractive(this)) {
             Tools.initStorageConstants(getApplicationContext());

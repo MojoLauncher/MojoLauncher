@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
-    android:background="@drawable/background_control_editor">
+    android:background="?attr/drawableBackgroundControlEditor">
     <TextView
         android:id="@+id/side_dialog_title_textview"
         style="@style/TextAppearance.AppCompat.Large"

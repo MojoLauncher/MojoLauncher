@@ -1,5 +1,7 @@
 package net.kdt.pojavlaunch.authenticator;
 
+import androidx.annotation.AttrRes;
+
 import com.google.gson.annotations.SerializedName;
 
 import net.kdt.pojavlaunch.authenticator.impl.ElyByBackgroundLogin;
@@ -11,14 +13,14 @@ public enum AuthType {
     @SerializedName("microsoft")
     MICROSOFT(
             MicrosoftBackgroundLogin.CREATOR,
-            R.drawable.ic_auth_ms,
+            R.attr.drawableIconAuthMicrosoft,
             null,
             "https://mineskin.eu/skin/%s" // Switched from mc-heads.net cause blocked in Russia
     ),
     @SerializedName("elyby")
     ELY_BY(
             ElyByBackgroundLogin.CREATOR,
-            R.drawable.ic_auth_elyby,
+            R.attr.drawableIconAuthElyby,
             "ely.by",
             "http://skinsystem.ely.by/skins/%s.png"
     ),
@@ -26,11 +28,12 @@ public enum AuthType {
     LOCAL(null, 0, null, null);
 
     private final BackgroundLogin.Creator mCreator;
+    @AttrRes
     public final int iconResource;
     public final String injectorUrl;
     public final String skinUrl;
 
-    AuthType(BackgroundLogin.Creator creator, int iconResource, String injectorUrl, String skinUrl) {
+    AuthType(BackgroundLogin.Creator creator, @AttrRes int iconResource, String injectorUrl, String skinUrl) {
         this.mCreator = creator;
         this.iconResource = iconResource;
         this.injectorUrl = injectorUrl;

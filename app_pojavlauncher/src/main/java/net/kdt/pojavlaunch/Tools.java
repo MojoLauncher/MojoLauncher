@@ -16,6 +16,7 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Insets;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.net.Uri;
@@ -36,11 +37,13 @@ import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.annotation.AttrRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -900,9 +903,25 @@ public final class Tools {
                 }).show();
     }
 
-    public static int getColorAttr(Resources.Theme theme, int attr) {
+    public static int getColorAttr(Resources.Theme theme, @AttrRes int attr) {
         TypedValue tv = new TypedValue();
         theme.resolveAttribute(attr, tv, true);
         return tv.data;
+    }
+
+    public static int getReferenceAttr(Resources.Theme theme, @AttrRes int attr) {
+        TypedValue tv = new TypedValue();
+        theme.resolveAttribute(attr, tv, true);
+        return tv.resourceId;
+    }
+
+    public static int getDimensionSizeAttr(Resources.Theme theme, @AttrRes int attr) {
+        TypedValue tv = new TypedValue();
+        theme.resolveAttribute(attr, tv, true);
+        return TypedValue.complexToDimensionPixelSize(tv.data, theme.getResources().getDisplayMetrics());
+    }
+
+    public static Drawable getDrawableAttr(Resources.Theme theme, @AttrRes int attr) {
+        return ResourcesCompat.getDrawable(theme.getResources(), Tools.getReferenceAttr(theme, attr), theme);
     }
 }

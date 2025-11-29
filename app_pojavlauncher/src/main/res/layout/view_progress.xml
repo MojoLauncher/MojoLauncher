@@ -16,7 +16,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:textSize="@dimen/_12ssp"
-        android:textColor="@android:color/white"
+        android:textColor="?attr/colorPrimaryText"
         android:paddingEnd="@dimen/_40sdp"
 
         tools:text="5 tasks in progress"
@@ -35,7 +35,7 @@
         app:layout_constraintBottom_toBottomOf="@id/progress_generic_progressbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/progress_generic_progressbar"
-        app:srcCompat="@drawable/spinner_arrow" />
+        app:srcCompat="?attr/drawableSpinnerArrow" />
 
     <LinearLayout
         android:id="@+id/progress_linear_layout"
