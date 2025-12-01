@@ -59,7 +59,6 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Tools.THEME_MANAGER.applyPrefTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_java_gui_launcher);
 

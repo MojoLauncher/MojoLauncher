@@ -54,11 +54,15 @@ public class ThemeManager {
         ThemeInfo pojavTheme = new ThemeInfo("Nostalgia (Pojav)", R.style.PojavTheme, ctx -> ctx);
         ThemeInfo midnightTheme = new ThemeInfo("Midnight", R.style.MidnightTheme, ctx -> ctx);
         ThemeInfo amethystTheme = new ThemeInfo("Amethyst", R.style.AmethystTheme, ctx -> ctx);
+        ThemeInfo darkDecayTheme = new ThemeInfo("Dark Decay", R.style.DarkDecayTheme, ctx -> ctx);
+        ThemeInfo lightDecayTheme = new ThemeInfo("Light Decay", R.style.LightDecayTheme, ctx -> ctx);
 
         this.themeMap.put(defaultTheme.getThemeName(), defaultTheme);
         this.themeMap.put(pojavTheme.getThemeName(), pojavTheme);
         this.themeMap.put(midnightTheme.getThemeName(), midnightTheme);
         this.themeMap.put(amethystTheme.getThemeName(), amethystTheme);
+        this.themeMap.put(darkDecayTheme.getThemeName(), darkDecayTheme);
+        this.themeMap.put(lightDecayTheme.getThemeName(), lightDecayTheme);
     }
 
     // unused code, may be useful in the future but not currently due to limitations

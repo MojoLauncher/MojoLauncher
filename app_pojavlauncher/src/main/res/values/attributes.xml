@@ -25,6 +25,8 @@
     <attr name="fontMineButton" format="reference" /> <!-- should always reference a font, otherwise a crash is almost guaranteed -->
     <attr name="fontSizeMineButton" format="dimension" />
 
+    <attr name="colorIcon" format="color" />
+
     <attr name="drawableNoFocusShown" format="reference" />
     <attr name="drawableSettingSignInBackground" format="reference" />
     <attr name="drawableMenuBackground" format="reference" />
@@ -69,6 +71,18 @@
     <attr name="drawableIconHome" format="reference" />
     <attr name="drawableIconCurseforge" format="reference" />
     <attr name="drawableIconModrinth" format="reference" />
+    <attr name="drawableIconNoGestures" format="reference" />
+    <attr name="drawableIconGestures" format="reference" />
+    <attr name="drawableIconControlSize" format="reference" />
+    <attr name="drawableIconMouse" format="reference" />
+    <attr name="drawableIconSpeed" format="reference" />
+    <attr name="drawableIconImage" format="reference" />
+    <attr name="drawableIconJava" format="reference" />
+    <attr name="drawableIconAltSliders" format="reference" />
+    <attr name="drawableIconHash" format="reference" />
+    <attr name="drawableIconImageRenderer" format="reference" />
+    <attr name="drawableIconViewportExpand" format="reference" />
+    <attr name="drawableIconResolution" format="reference" />
 
     <attr name="drawableButtonA" format="reference" />
     <attr name="drawableButtonB" format="reference" />

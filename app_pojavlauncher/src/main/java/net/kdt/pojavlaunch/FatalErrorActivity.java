@@ -15,7 +15,6 @@ public class FatalErrorActivity extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Tools.THEME_MANAGER.applyPrefTheme(this);
 		super.onCreate(savedInstanceState);
 		
 		Bundle extras = getIntent().getExtras();

@@ -7,7 +7,7 @@
     <PreferenceCategory android:title="@string/preference_category_miscellaneous">
         <SwitchPreference
             android:defaultValue="true"
-            android:icon="@drawable/ic_px_hash"
+            android:icon="?attr/drawableIconHash"
             android:key="checkGameFiles"
             android:summary="@string/preference_verify_game_files_description"
             android:title="@string/preference_verify_game_files_title" />

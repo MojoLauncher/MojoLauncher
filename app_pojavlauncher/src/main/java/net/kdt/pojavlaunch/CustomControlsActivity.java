@@ -34,7 +34,6 @@ public class CustomControlsActivity extends BaseActivity implements EditorExitab
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Tools.THEME_MANAGER.applyPrefTheme(this);
 		super.onCreate(savedInstanceState);
 
 		mCropperLauncher = CropperUtils.registerCropper(this, this);

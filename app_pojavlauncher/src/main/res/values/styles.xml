@@ -28,6 +28,8 @@
         <item name="fontMineButton">@font/noto_sans_bold</item>
         <item name="fontSizeMineButton">@dimen/_13ssp</item>
 
+        <item name="colorIcon">@android:color/white</item>
+
         <item name="drawableNoFocusShown">@drawable/no_focus_shown</item>
         <item name="drawableSettingSignInBackground">@drawable/ic_setting_sign_in_background</item>
         <item name="drawableMenuBackground">@drawable/menu_background</item>
@@ -72,6 +74,18 @@
         <item name="drawableIconHome">@drawable/ic_px_home</item>
         <item name="drawableIconCurseforge">@drawable/ic_curseforge</item>
         <item name="drawableIconModrinth">@drawable/ic_modrinth</item>
+        <item name="drawableIconNoGestures">@drawable/ic_px_nogestures</item>
+        <item name="drawableIconGestures">@drawable/ic_px_gestures</item>
+        <item name="drawableIconControlSize">@drawable/ic_px_control_size</item>
+        <item name="drawableIconMouse">@drawable/ic_px_mouse</item>
+        <item name="drawableIconSpeed">@drawable/ic_px_speed</item>
+        <item name="drawableIconImage">@drawable/ic_px_image</item>
+        <item name="drawableIconJava">@drawable/ic_px_java</item>
+        <item name="drawableIconAltSliders">@drawable/ic_px_alt_sliders</item>
+        <item name="drawableIconHash">@drawable/ic_px_hash</item>
+        <item name="drawableIconImageRenderer">@drawable/ic_px_image_renderer</item>
+        <item name="drawableIconViewportExpand">@drawable/ic_px_viewport_expand</item>
+        <item name="drawableIconResolution">@drawable/ic_px_resolution</item>
 
         <item name="drawableButtonA">@drawable/button_a</item>
         <item name="drawableButtonB">@drawable/button_b</item>
@@ -149,6 +163,52 @@
     </style>
 
     <style name="PojavTheme" parent="BasePojavTheme" />
+
+    <style name="BaseDarkDecayTheme" parent="BaseAppTheme">
+        <item name="android:textSize">@dimen/_12ssp</item>
+
+        <item name="colorControlButton">#4CC4C4C4</item>
+        <item name="colorControlButtonPressed">#4D000000</item>
+
+        <item name="colorMineButton">#78dba9</item>
+        <item name="colorMineButtonAdd">#00000000</item>
+        <item name="colorBackgroundApp">#0a0c0f</item>
+        <item name="colorDivider">#101419</item>
+        <item name="colorBackgroundOverlay">#101419</item>
+        <item name="colorBackgroundStatusBar">#0d1014</item>
+        <item name="colorBackgroundBottomBar">#0d1014</item>
+        <item name="colorIconOutline">#6b7078</item>
+
+        <item name="colorPrimaryText">#FFFFFF</item>
+        <item name="colorSecondaryText">#B2B2B2</item>
+    </style>
+    <style name="DarkDecayTheme" parent="BaseDarkDecayTheme" /> <!-- https://github.com/decaycs/decaycs -->
+
+    <style name="BaseLightDecayTheme" parent="BaseAppTheme">
+        <item name="android:textSize">@dimen/_12ssp</item>
+
+        <item name="colorControlButton">#4CC4C4C4</item>
+        <item name="colorControlButtonPressed">#4D000000</item>
+
+        <item name="colorMineButton">#69b373</item>
+        <item name="colorMineButtonAdd">#00000000</item>
+        <item name="colorBackgroundApp">#dee1e6</item>
+        <item name="colorDivider">#1f2328</item>
+        <item name="colorBackgroundOverlay">#1f2328</item>
+        <item name="colorBackgroundStatusBar">#B1B4BD</item>
+        <item name="colorBackgroundBottomBar">#B1B4BD</item>
+        <item name="colorIconOutline">#6b7078</item>
+
+        <item name="colorPrimaryText">#101419</item>
+        <item name="colorSecondaryText">#1f2328</item>
+
+        <item name="android:textColor">?attr/colorPrimaryText</item>
+        <item name="android:textColorPrimary">?attr/colorPrimaryText</item>
+        <item name="android:textColorSecondary">?attr/colorSecondaryText</item>
+
+        <item name="colorIcon">#101419</item>
+    </style>
+    <style name="LightDecayTheme" parent="BaseLightDecayTheme" /> <!-- https://github.com/decaycs/decaycs -->
 
     <style name="LauncherFragment_Divider">
         <item name="android:layout_width">@dimen/padding_tiny</item>

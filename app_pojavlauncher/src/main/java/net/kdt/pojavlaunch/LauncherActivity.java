@@ -64,8 +64,8 @@ public class LauncherActivity extends BaseActivity {
     private final FragmentManager.FragmentLifecycleCallbacks mFragmentCallbackListener = new FragmentManager.FragmentLifecycleCallbacks() {
         @Override
         public void onFragmentResumed(@NonNull FragmentManager fm, @NonNull Fragment f) {
-            mSettingsButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), Tools.getReferenceAttr(getTheme(), f instanceof MainMenuFragment
-                    ? R.attr.drawableIconSliders : R.attr.drawableIconHome)));
+            mSettingsButton.setImageDrawable(Tools.getDrawableAttr(getTheme(), f instanceof MainMenuFragment
+                    ? R.attr.drawableIconSliders : R.attr.drawableIconHome));
         }
     };
 
