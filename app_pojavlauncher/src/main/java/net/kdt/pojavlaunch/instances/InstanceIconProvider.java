@@ -7,14 +7,15 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.res.ResourcesCompat;
 
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.Tools;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import git.artdeell.mojo.R;
 
 public class InstanceIconProvider {
     public static final String FALLBACK_ICON_NAME = "default";
@@ -23,29 +24,29 @@ public class InstanceIconProvider {
     private static final Map<String, Integer> sStaticIcons = new HashMap<>();
 
     static {
-        sStaticIcons.put("default", R.drawable.ic_mojo_full);
-        sStaticIcons.put("fabric", R.drawable.ic_fabric);
-        sStaticIcons.put("quilt", R.drawable.ic_quilt);
-        sStaticIcons.put("forge", R.drawable.ic_forge);
-        sStaticIcons.put("neoforge", R.drawable.ic_neoforge);
+        sStaticIcons.put("default", R.attr.drawableIconMojoFull);
+        sStaticIcons.put("fabric", R.attr.drawableIconFabric);
+        sStaticIcons.put("quilt", R.attr.drawableIconQuilt);
+        sStaticIcons.put("forge", R.attr.drawableIconForge);
+        sStaticIcons.put("neoforge", R.attr.drawableIconNeoforge);
     }
 
     /**
      * Fetch an icon from the cache, or load it if it's not cached.
-     * @param resources the Resources object, used for creating drawables
+     * @param theme the Resources object, used for creating drawables
      * @param instance the instance
      * @return an icon drawable
      */
-    public static @NonNull Drawable fetchIcon(Resources resources, @NonNull DisplayInstance instance) {
+    public static @NonNull Drawable fetchIcon(Resources.Theme theme, @NonNull DisplayInstance instance) {
         int identityHashCode = System.identityHashCode(instance);
 
         Drawable cachedIcon = sIconCache.get(identityHashCode);
         if(cachedIcon != null) return cachedIcon;
 
-        Drawable instanceIcon = fetchInstanceFileIcon(resources, identityHashCode, instance.getInstanceIconLocation());
+        Drawable instanceIcon = fetchInstanceFileIcon(theme.getResources(), identityHashCode, instance.getInstanceIconLocation());
         if(instanceIcon != null) return instanceIcon;
 
-        return fetchStaticIcon(resources, identityHashCode, instance.icon);
+        return fetchStaticIcon(theme, identityHashCode, instance.icon);
     }
 
     /**
@@ -66,30 +67,30 @@ public class InstanceIconProvider {
         return iconDrawable;
     }
 
-    private static Drawable fetchStaticIcon(Resources resources, int identityHash, String icon) {
+    private static Drawable fetchStaticIcon(Resources.Theme theme, int identityHash, String icon) {
         Drawable staticIcon = sStaticIconCache.get(icon);
         if(staticIcon == null) {
-            if(icon != null) staticIcon = getStaticIcon(resources, icon);
-            if(staticIcon == null) staticIcon = fetchFallbackIcon(resources);
+            if(icon != null) staticIcon = getStaticIcon(theme, icon);
+            if(staticIcon == null) staticIcon = fetchFallbackIcon(theme);
             sStaticIconCache.put(icon, staticIcon);
         }
         sIconCache.put(identityHash, staticIcon);
         return staticIcon;
     }
 
-    private static @NonNull Drawable fetchFallbackIcon(Resources resources) {
+    private static @NonNull Drawable fetchFallbackIcon(Resources.Theme theme) {
         Drawable fallbackIcon = sStaticIconCache.get(FALLBACK_ICON_NAME);
         if(fallbackIcon == null) {
-            fallbackIcon = Objects.requireNonNull(getStaticIcon(resources, FALLBACK_ICON_NAME));
+            fallbackIcon = Objects.requireNonNull(getStaticIcon(theme, FALLBACK_ICON_NAME));
             sStaticIconCache.put(FALLBACK_ICON_NAME, fallbackIcon);
         }
         return fallbackIcon;
     }
 
-    private static Drawable getStaticIcon(Resources resources, @NonNull String icon) {
+    private static Drawable getStaticIcon(Resources.Theme theme, @NonNull String icon) {
         int staticIconResource = getStaticIconResource(icon);
         if(staticIconResource == -1) return null;
-        return ResourcesCompat.getDrawable(resources, staticIconResource, null);
+        return Tools.getDrawableAttr(theme, staticIconResource);
     }
 
     private static int getStaticIconResource(String icon) {

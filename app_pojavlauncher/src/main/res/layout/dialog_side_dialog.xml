@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
-    android:background="@drawable/background_control_editor">
+    android:background="?attr/drawableBackgroundControlEditor">
     <TextView
         android:id="@+id/side_dialog_title_textview"
         style="@style/TextAppearance.AppCompat.Large"
@@ -36,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        tools:background="@color/background_status_bar">
+        tools:background="?attr/colorBackgroundStatusBar">
         <!-- The content is inflated here -->
     </com.kdt.DefocusableScrollView>
 

@@ -21,6 +21,7 @@ public class ExitActivity extends AppCompatActivity {
     @SuppressLint("StringFormatInvalid") //invalid on some translations but valid on most, cant fix that atm
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        Tools.THEME_MANAGER.applyPrefTheme(this);
         super.onCreate(savedInstanceState);
         int code = -1;
         boolean isSignal = false;

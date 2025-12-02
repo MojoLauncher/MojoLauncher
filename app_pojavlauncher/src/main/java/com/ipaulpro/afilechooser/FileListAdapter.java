@@ -16,12 +16,18 @@
 
 package com.ipaulpro.afilechooser;
 
-import android.content.*;
-import android.view.*;
-import android.widget.*;
-import java.io.*;
-import java.util.*;
-import net.kdt.pojavlaunch.*;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+
+import net.kdt.pojavlaunch.Tools;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import git.artdeell.mojo.R;
 
@@ -36,8 +42,8 @@ import git.artdeell.mojo.R;
  */
 public class FileListAdapter extends BaseAdapter {
 
-    private final static int ICON_FOLDER = R.drawable.ic_px_folder;
-    private final static int ICON_FILE = R.drawable.ic_px_file;
+    private final static int ICON_FOLDER = R.attr.drawableIconFolder;
+    private final static int ICON_FILE = R.attr.drawableIconFile;
 
     private final LayoutInflater mInflater;
 
@@ -113,7 +119,7 @@ public class FileListAdapter extends BaseAdapter {
         view.setText(file.getName());
 
         // If the item is not a directory, use the file icon
-        int icon = file.isDirectory() ? ICON_FOLDER : ICON_FILE;
+        int icon = Tools.getReferenceAttr(parent.getContext().getTheme(), file.isDirectory() ? ICON_FOLDER : ICON_FILE);
         view.setCompoundDrawablesWithIntrinsicBounds(icon, 0, 0, 0);
         view.setCompoundDrawablePadding(20);
         return row;

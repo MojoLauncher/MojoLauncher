@@ -21,16 +21,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.instances.Instance;
+import net.kdt.pojavlaunch.instances.InstanceIconProvider;
 import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.RTSpinnerAdapter;
 import net.kdt.pojavlaunch.multirt.Runtime;
-import net.kdt.pojavlaunch.instances.InstanceIconProvider;
 import net.kdt.pojavlaunch.profiles.VersionSelectorDialog;
 import net.kdt.pojavlaunch.utils.CropperUtils;
 import net.kdt.pojavlaunch.utils.RendererCompatUtil;
@@ -39,6 +38,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import git.artdeell.mojo.R;
 
 public class InstanceEditorFragment extends Fragment implements CropperUtils.CropperReceiver {
     public static final String TAG = "InstanceEditorFragment";
@@ -155,7 +156,7 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
     private void loadValues(@NonNull Instance instance, @NonNull Context context){
         mInstance = instance;
         mInstanceIcon.setImageDrawable(
-                InstanceIconProvider.fetchIcon(getResources(), instance)
+                InstanceIconProvider.fetchIcon(requireContext().getTheme(), instance)
         );
 
         // Runtime spinner

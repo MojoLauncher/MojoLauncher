@@ -6,4 +6,100 @@
         <!-- Redefine to be able to fetch the value -->
         <attr name="android:min" />
     </declare-styleable>
+
+    <attr name="colorControlButton" format="color"/>
+    <attr name="colorControlButtonPressed" format="color"/>
+    <attr name="colorBackgroundApp" format="color"/>
+    <attr name="colorDivider" format="color"/>
+
+    <attr name="colorBackgroundOverlay" format="color"/>
+    <attr name="colorBackgroundStatusBar" format="color"/>
+    <attr name="colorBackgroundBottomBar" format="color"/>
+    <attr name="colorIconOutline" format="color"/>
+
+    <attr name="colorPrimaryText" format="color"/>
+    <attr name="colorSecondaryText" format="color"/>
+
+    <attr name="colorMineButton" format="color"/>
+    <attr name="colorMineButtonAdd" format="color"/> <!-- the color that is going to be added to the mine button -->
+    <attr name="fontMineButton" format="reference" /> <!-- should always reference a font, otherwise a crash is almost guaranteed -->
+    <attr name="fontSizeMineButton" format="dimension" />
+
+    <attr name="colorIcon" format="color" />
+
+    <attr name="drawableNoFocusShown" format="reference" />
+    <attr name="drawableSettingSignInBackground" format="reference" />
+    <attr name="drawableMenuBackground" format="reference" />
+    <attr name="drawableMineButtonBackground" format="reference" />
+    <attr name="drawableIconMousePointer" format="reference" />
+    <attr name="drawableControlButton" format="reference" />
+    <attr name="drawableIconSliders" format="reference" />
+    <attr name="drawableBackgroundControlEditor" format="reference" />
+    <attr name="drawableSpinnerArrowRight" format="reference" />
+    <attr name="drawableBackgroundLine" format="reference" />
+    <attr name="drawableSpinnerArrow" format="reference" />
+    <attr name="drawableIconEdit" format="reference" />
+    <attr name="drawableBackgroundIconEdit" format="reference" />
+    <attr name="drawableIconBook" format="reference" />
+    <attr name="drawableIconSocialMedia" format="reference" />
+    <attr name="drawableIconGamepad" format="reference" />
+    <attr name="drawableIconJavaRun" format="reference" />
+    <attr name="drawableIconShareLog" format="reference" />
+    <attr name="drawableIconFolder" format="reference" />
+    <attr name="drawableBackgroundCard" format="reference" />
+    <attr name="drawableBackgroundOverlay" format="reference" />
+    <attr name="drawableIconFilter" format="reference" />
+    <attr name="drawableIconTrash" format="reference" />
+    <attr name="drawableIconGamepadPointer" format="reference" />
+    <attr name="drawableStorageAlert" format="reference" />
+    <attr name="drawableIconDelete" format="reference" />
+    <attr name="drawableIconFile" format="reference" />
+    <attr name="drawableIconArrowLeft" format="reference" />
+    <attr name="drawableIconAuthMicrosoft" format="reference" />
+    <attr name="drawableIconAuthElyby" format="reference" />
+    <attr name="drawableIconMenuCloseClearCancel" format="reference" />
+    <attr name="drawableNotificationIcon" format="reference" />
+    <attr name="drawableIconMojoFull" format="reference" />
+    <attr name="drawableIconFabric" format="reference" />
+    <attr name="drawableIconQuilt" format="reference" />
+    <attr name="drawableIconForge" format="reference" />
+    <attr name="drawableIconNeoforge" format="reference" />
+    <attr name="drawableIconViewHandle" format="reference" />
+    <attr name="drawableIconSharpSettings24" format="reference" />
+    <attr name="drawableViewTextProgressbar" format="reference" />
+    <attr name="drawableIconAdd" format="reference" />
+    <attr name="drawableIconHome" format="reference" />
+    <attr name="drawableIconCurseforge" format="reference" />
+    <attr name="drawableIconModrinth" format="reference" />
+    <attr name="drawableIconNoGestures" format="reference" />
+    <attr name="drawableIconGestures" format="reference" />
+    <attr name="drawableIconControlSize" format="reference" />
+    <attr name="drawableIconMouse" format="reference" />
+    <attr name="drawableIconSpeed" format="reference" />
+    <attr name="drawableIconImage" format="reference" />
+    <attr name="drawableIconJava" format="reference" />
+    <attr name="drawableIconAltSliders" format="reference" />
+    <attr name="drawableIconHash" format="reference" />
+    <attr name="drawableIconImageRenderer" format="reference" />
+    <attr name="drawableIconViewportExpand" format="reference" />
+    <attr name="drawableIconResolution" format="reference" />
+
+    <attr name="drawableButtonA" format="reference" />
+    <attr name="drawableButtonB" format="reference" />
+    <attr name="drawableButtonX" format="reference" />
+    <attr name="drawableButtonY" format="reference" />
+    <attr name="drawableButtonStart" format="reference" />
+    <attr name="drawableButtonSelect" format="reference" />
+    <attr name="drawableTriggerRight" format="reference" />
+    <attr name="drawableTriggerLeft" format="reference" />
+    <attr name="drawableShoulderRight" format="reference" />
+    <attr name="drawableShoulderLeft" format="reference" />
+    <attr name="drawableStickRight" format="reference" />
+    <attr name="drawableStickLeft" format="reference" />
+    <attr name="drawableStickRightClick" format="reference" />
+    <attr name="drawableStickLeftClick" format="reference" />
+    <attr name="drawableDpadUp" format="reference" />
+    <attr name="drawableDpadDown" format="reference" />
+    <attr name="drawableDpadRight" format="reference" />
+    <attr name="drawableDpadLeft" format="reference" />
 </resources>

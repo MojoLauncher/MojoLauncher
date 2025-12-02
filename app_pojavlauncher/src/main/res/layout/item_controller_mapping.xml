@@ -23,7 +23,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/button_a"
+            app:srcCompat="?attr/drawableButtonA"
             tools:ignore="ContentDescription" />
 
         <ImageView
@@ -37,7 +37,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/spinner_arrow" />
+            app:srcCompat="?attr/drawableSpinnerArrow" />
         <!-- Set in code -->
         <TextView
             android:id="@+id/controller_mapper_keycode_label"
@@ -111,7 +111,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="+"
-            android:textColor="@color/primary_text"
+            android:textColor="?attr/colorPrimaryText"
             app:layout_constraintBottom_toBottomOf="@id/controller_mapper_key_spinner1"
             app:layout_constraintEnd_toEndOf="@id/guideline3"
             app:layout_constraintStart_toStartOf="@id/guideline3"
@@ -123,7 +123,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="+"
-            android:textColor="@color/primary_text"
+            android:textColor="?attr/colorPrimaryText"
             app:layout_constraintBottom_toBottomOf="@id/controller_mapper_key_spinner3"
             app:layout_constraintEnd_toEndOf="@id/guideline3"
             app:layout_constraintStart_toStartOf="@id/guideline3"

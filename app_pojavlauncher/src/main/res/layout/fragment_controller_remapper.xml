@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_app">
+    android:background="?attr/colorBackgroundApp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
             android:layout_height="30sp"
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/controller_button_select"
-            app:srcCompat="@drawable/button_select" />
+            app:srcCompat="?attr/drawableButtonSelect" />
 
         <TextView
             android:layout_width="wrap_content"

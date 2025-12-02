@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MidnightTheme" parent="BaseMidnightTheme">
+        <item name="android:statusBarColor">?attr/colorBackgroundStatusBar</item>
+        <item name="android:navigationBarColor">?attr/colorBackgroundBottomBar</item>
+
+        <item name="colorControlButton">#FF000000</item>
+        <item name="colorControlButtonPressed">#FF000000</item>
+
+        <item name="colorMineButton">@android:color/system_accent1_200</item>
+        <item name="colorBackgroundApp">@android:color/system_neutral1_900</item>
+        <item name="colorDivider">?attr/colorBackgroundOverlay</item>
+        <item name="colorBackgroundOverlay">@android:color/system_neutral1_100</item>
+        <item name="colorBackgroundStatusBar">@android:color/system_neutral1_900</item>
+        <item name="colorBackgroundBottomBar">@android:color/system_neutral1_900</item>
+        <item name="colorIconOutline">@android:color/system_accent1_200</item>
+
+        <item name="colorPrimaryText">@android:color/system_accent1_200</item>
+        <item name="colorSecondaryText">@android:color/system_neutral1_900</item>
+    </style>
+</resources>

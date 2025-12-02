@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.AttrRes;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
@@ -21,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.kdt.SimpleArrayAdapter;
 
 import net.kdt.pojavlaunch.PojavApplication;
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.modloaders.modpacks.api.ModpackApi;
 import net.kdt.pojavlaunch.modloaders.modpacks.imagecache.ImageReceiver;
@@ -38,6 +38,8 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.Future;
+
+import git.artdeell.mojo.R;
 
 public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements TaskCountListener {
     private static final ModItem[] MOD_ITEMS_EMPTY = new ModItem[0];
@@ -258,7 +260,7 @@ public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 mIconView.setImageDrawable(drawable);
             };
             mIconCache.getImage(mImageReceiver, mModItem.getIconCacheTag(), mModItem.imageUrl);
-            mSourceView.setImageResource(getSourceDrawable(item.apiSource));
+            mSourceView.setImageResource(Tools.getReferenceAttr(itemView.getContext().getTheme(), getSourceDrawable(item.apiSource)));
             mTitle.setText(item.title);
             mDescription.setText(item.description);
 
@@ -314,12 +316,13 @@ public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             return hasExtended() && mExtendedLayout.getVisibility() == View.VISIBLE;
         }
 
+        @AttrRes
         private int getSourceDrawable(int apiSource) {
             switch (apiSource) {
                 case Constants.SOURCE_CURSEFORGE:
-                    return R.drawable.ic_curseforge;
+                    return R.attr.drawableIconCurseforge;
                 case Constants.SOURCE_MODRINTH:
-                    return R.drawable.ic_modrinth;
+                    return R.attr.drawableIconModrinth;
                 default:
                     throw new RuntimeException("Unknown API source");
             }

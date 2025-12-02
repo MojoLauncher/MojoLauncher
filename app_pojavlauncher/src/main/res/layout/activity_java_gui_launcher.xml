@@ -44,7 +44,7 @@
 				android:id="@+id/main_mouse_pointer"
 				android:layout_width="18dp"
 				android:layout_height="27dp"
-				android:src="@drawable/ic_mouse_pointer" />
+				android:src="?attr/drawableIconMousePointer" />
 
 		</LinearLayout>
 
@@ -53,7 +53,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_alignParentRight="true"
-			android:background="@drawable/control_button"
+			android:background="?attr/drawableControlButton"
 			android:onClick="forceClose"
 			android:text="@string/control_forceclose"
 			app:layout_constraintRight_toRightOf="parent"
@@ -65,7 +65,7 @@
 			android:layout_height="wrap_content"
 			android:layout_toLeftOf="@id/installmod_btn2"
 			android:layout_marginTop="2dp"
-			android:background="@drawable/control_button"
+			android:background="?attr/drawableControlButton"
 			android:onClick="openLogOutput"
 			android:text="@string/control_viewout"
 			app:layout_constraintEnd_toEndOf="parent"
@@ -78,7 +78,7 @@
 			android:layout_height="wrap_content"
 			android:layout_toLeftOf="@id/installmod_btn3"
 			android:layout_marginTop="2dp"
-			android:background="@drawable/control_button"
+			android:background="?attr/drawableControlButton"
 			android:onClick="toggleVirtualMouse"
 			android:text="@string/control_mouse"
 			app:layout_constraintEnd_toEndOf="parent"
@@ -91,7 +91,7 @@
 			android:layout_height="wrap_content"
 			android:layout_marginStart="2dp"
 			android:layout_marginTop="2dp"
-			android:background="@drawable/control_button"
+			android:background="?attr/drawableControlButton"
 			android:onClick="toggleKeyboard"
 			android:text="Keyboard"
 			app:layout_constraintStart_toStartOf="parent"
@@ -103,7 +103,7 @@
 			android:layout_height="wrap_content"
 			android:layout_marginStart="2dp"
 			android:layout_marginTop="2dp"
-			android:background="@drawable/control_button"
+			android:background="?attr/drawableControlButton"
 			android:onClick="performCopy"
 			android:text="Copy"
 			app:layout_constraintStart_toStartOf="parent"
@@ -114,7 +114,7 @@
 			android:layout_height="wrap_content"
 			android:layout_marginStart="2dp"
 			android:layout_marginTop="2dp"
-			android:background="@drawable/control_button"
+			android:background="?attr/drawableControlButton"
 			android:onClick="performPaste"
 			android:text="Paste"
 			app:layout_constraintStart_toStartOf="parent"
@@ -126,7 +126,7 @@
 			android:layout_height="wrap_content"
 			android:layout_alignParentBottom="true"
 			android:layout_marginBottom="2dp"
-			android:background="@drawable/control_button"
+			android:background="?attr/drawableControlButton"
 			android:text="@string/control_primary"
 			app:layout_constraintBottom_toTopOf="@+id/installmod_mouse_sec"
 			app:layout_constraintStart_toStartOf="parent" />
@@ -137,7 +137,7 @@
 			android:layout_height="wrap_content"
 			android:layout_alignParentBottom="true"
 			android:layout_toRightOf="@id/installmod_mouse_pri"
-			android:background="@drawable/control_button"
+			android:background="?attr/drawableControlButton"
 			android:text="@string/control_secondary"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintLeft_toRightOf="@id/installmod_mouse_pri"
@@ -148,7 +148,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_alignParentBottom="true"
-			android:background="@drawable/control_button"
+			android:background="?attr/drawableControlButton"
 			android:text="◀"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent" />
@@ -159,7 +159,7 @@
 			android:layout_height="wrap_content"
 			android:layout_alignParentBottom="true"
 			android:layout_toRightOf="@id/installmod_mouse_pri"
-			android:background="@drawable/control_button"
+			android:background="?attr/drawableControlButton"
 			android:text="▶"
 			app:layout_constraintBottom_toTopOf="@+id/installmod_window_moveleft"
 			app:layout_constraintEnd_toEndOf="@+id/installmod_window_moveleft" />
@@ -170,7 +170,7 @@
 			android:layout_height="wrap_content"
 			android:layout_alignParentBottom="true"
 			android:layout_toRightOf="@id/installmod_mouse_pri"
-			android:background="@drawable/control_button"
+			android:background="?attr/drawableControlButton"
 			android:text="▲"
 			app:layout_constraintBottom_toTopOf="@+id/installmod_window_moveleft"
 			app:layout_constraintEnd_toStartOf="@+id/installmod_window_moveright" />
@@ -180,7 +180,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_alignParentBottom="true"
-			android:background="@drawable/control_button"
+			android:background="?attr/drawableControlButton"
 			android:text="▼"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toStartOf="@+id/installmod_window_moveleft" />

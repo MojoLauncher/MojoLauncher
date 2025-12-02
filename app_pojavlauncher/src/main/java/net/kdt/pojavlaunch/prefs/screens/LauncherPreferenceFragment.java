@@ -12,8 +12,10 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import net.kdt.pojavlaunch.LauncherActivity;
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+
+import git.artdeell.mojo.R;
 
 /**
  * Preference for the main screen, any sub-screen should inherit this class for consistent behavior,
@@ -23,7 +25,7 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        view.setBackgroundColor(getResources().getColor(R.color.background_app));
+        view.setBackgroundColor(Tools.getColorAttr(view.getContext().getTheme(), R.attr.colorBackgroundApp));
         super.onViewCreated(view, savedInstanceState);
     }
 

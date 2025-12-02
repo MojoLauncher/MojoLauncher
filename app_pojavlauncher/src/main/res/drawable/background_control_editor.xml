@@ -7,5 +7,5 @@
         android:left="@dimen/padding_small"
         android:right="@dimen/padding_small"
         android:top="@dimen/padding_small" />
-    <solid android:color="@color/background_app" />
+    <solid android:color="?attr/colorBackgroundApp" />
 </shape>

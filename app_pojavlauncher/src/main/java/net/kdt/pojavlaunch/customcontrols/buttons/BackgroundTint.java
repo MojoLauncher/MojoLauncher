@@ -4,9 +4,10 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.util.TypedValue;
 
 import androidx.core.graphics.ColorUtils;
+
+import net.kdt.pojavlaunch.Tools;
 
 public class BackgroundTint {
     public static final int BACKGROUND_DEFAULT_TINT_ALPHA = 60;
@@ -35,9 +36,7 @@ public class BackgroundTint {
         Resources.Theme theme = context.getTheme();
         int themeHash = theme.hashCode();
         if(themeHash == lastTheme) return;
-        final TypedValue value = new TypedValue();
-        theme.resolveAttribute(android.R.attr.colorAccent, value, true);
-        sToggleableTint[0] = ColorUtils.setAlphaComponent(value.data, BACKGROUND_TOGGLE_TINT_ALPHA);
+        sToggleableTint[0] = ColorUtils.setAlphaComponent(Tools.getColorAttr(theme, android.R.attr.colorAccent), BACKGROUND_TOGGLE_TINT_ALPHA);
         lastTheme = themeHash;
     }
 }

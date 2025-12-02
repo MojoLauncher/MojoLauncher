@@ -473,4 +473,5 @@
     <string name="gr_err_renderer_load_Failed">Failed to load renderer library</string>
     <string name="ltw_4x_msaa_warning_msg">It appears that you have turned on "Force 4x MSAA" in Developer settings. Please turn it off to avoid rendering issues.</string>
     <string name="no_instance">No instance is selected. Please create an instance or select one.</string>
+    <string name="preference_select_theme">Select theme</string>
 </resources>

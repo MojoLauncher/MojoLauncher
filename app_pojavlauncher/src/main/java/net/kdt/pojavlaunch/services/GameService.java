@@ -14,11 +14,12 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import net.kdt.pojavlaunch.MainActivity;
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.utils.NotificationUtils;
 
 import java.lang.ref.WeakReference;
+
+import git.artdeell.mojo.R;
 
 public class GameService extends Service {
     private static final WeakReference<Service> sGameService = new WeakReference<>(null);
@@ -48,8 +49,8 @@ public class GameService extends Service {
                 .setContentTitle(getString(R.string.lazy_service_default_title))
                 .setContentText(getString(R.string.notification_game_runs))
                 .setContentIntent(contentIntent)
-                .addAction(android.R.drawable.ic_menu_close_clear_cancel,  getString(R.string.notification_terminate), pendingKillIntent)
-                .setSmallIcon(R.drawable.notif_icon)
+                .addAction(Tools.getReferenceAttr(getTheme(), R.attr.drawableIconMenuCloseClearCancel), getString(R.string.notification_terminate), pendingKillIntent)
+                .setSmallIcon(Tools.getReferenceAttr(getTheme(), R.attr.drawableNotificationIcon))
                 .setNotificationSilent();
 
         Notification notification = notificationBuilder.build();

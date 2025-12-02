@@ -8,6 +8,8 @@ import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
+import net.kdt.pojavlaunch.Tools;
+
 import git.artdeell.mojo.R;
 
 public class NotificationUtils {
@@ -34,7 +36,7 @@ public class NotificationUtils {
         if(contentTitle != -1) notificationBuilder.setContentTitle(context.getString(contentTitle));
         if(contentText != -1) notificationBuilder.setContentText(context.getString(contentText));
         if(actionIntent != null) notificationBuilder.setContentIntent(pendingIntent);
-        notificationBuilder.setSmallIcon(R.drawable.notif_icon);
+        notificationBuilder.setSmallIcon(Tools.getReferenceAttr(context.getTheme(), R.attr.drawableNotificationIcon));
 
         notificationManager.notify(notificationId, notificationBuilder.build());
     }

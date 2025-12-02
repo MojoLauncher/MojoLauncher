@@ -1,22 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Light or not? -->
-    <style name="AppTheme" parent="@style/Theme.AppCompat.NoActionBar">
+    <style name="BaseAppTheme" parent="@style/Theme.AppCompat.NoActionBar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:statusBarColor">@color/background_status_bar</item>
-        <item name="android:navigationBarColor">@color/background_app</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="android:statusBarColor">?attr/colorBackgroundStatusBar</item>
+        <item name="android:navigationBarColor">?attr/colorBackgroundApp</item>
 
         <item name="android:textSize">@dimen/_12ssp</item>
 
+        <item name="colorControlButton">@color/control_button_color</item>
+        <item name="colorControlButtonPressed">@color/control_button_pressed_color</item>
+
+        <item name="colorBackgroundApp">@color/background_app</item>
+        <item name="colorDivider">@color/divider</item>
+        <item name="colorBackgroundOverlay">@color/background_overlay</item>
+        <item name="colorBackgroundStatusBar">@color/background_status_bar</item>
+        <item name="colorBackgroundBottomBar">@color/background_bottom_bar</item>
+        <item name="colorIconOutline">@color/icon_outline_color</item>
+
+        <item name="colorPrimaryText">@color/primary_text</item>
+        <item name="colorSecondaryText">@color/secondary_text</item>
+
+        <item name="colorMineButton">@color/minebutton_color</item>
+        <item name="colorMineButtonAdd">#00000000</item>
+        <item name="fontMineButton">@font/noto_sans_bold</item>
+        <item name="fontSizeMineButton">@dimen/_13ssp</item>
+
+        <item name="colorIcon">@android:color/white</item>
+
+        <item name="drawableNoFocusShown">@drawable/no_focus_shown</item>
+        <item name="drawableSettingSignInBackground">@drawable/ic_setting_sign_in_background</item>
+        <item name="drawableMenuBackground">@drawable/menu_background</item>
+        <item name="drawableMineButtonBackground">@drawable/mine_button_background</item>
+        <item name="drawableIconMousePointer">@drawable/ic_mouse_pointer</item>
+        <item name="drawableControlButton">@drawable/control_button</item>
+        <item name="drawableIconSliders">@drawable/ic_px_sliders</item>
+        <item name="drawableBackgroundControlEditor">@drawable/background_control_editor</item>
+        <item name="drawableSpinnerArrowRight">@drawable/spinner_arrow_right</item>
+        <item name="drawableBackgroundLine">@drawable/background_line</item>
+        <item name="drawableSpinnerArrow">@drawable/spinner_arrow</item>
+        <item name="drawableIconEdit">@drawable/ic_px_edit</item>
+        <item name="drawableBackgroundIconEdit">@drawable/background_icon_edit</item>
+        <item name="drawableIconBook">@drawable/ic_px_book</item>
+        <item name="drawableIconSocialMedia">@drawable/ic_social_media</item>
+        <item name="drawableIconGamepad">@drawable/ic_px_gamepad</item>
+        <item name="drawableIconJavaRun">@drawable/ic_px_java_run</item>
+        <item name="drawableIconShareLog">@drawable/ic_px_sharelog</item>
+        <item name="drawableIconFolder">@drawable/ic_px_folder</item>
+        <item name="drawableBackgroundCard">@drawable/background_card</item>
+        <item name="drawableBackgroundOverlay">@drawable/background_overlay</item>
+        <item name="drawableIconFilter">@drawable/ic_filter</item>
+        <item name="drawableIconTrash">@drawable/ic_px_trash</item>
+        <item name="drawableIconGamepadPointer">@drawable/ic_gamepad_pointer</item>
+        <item name="drawableStorageAlert">@drawable/storage_alert</item>
+        <item name="drawableIconDelete">@android:drawable/ic_delete</item>
+        <item name="drawableIconFile">@drawable/ic_px_file</item>
+        <item name="drawableIconArrowLeft">@drawable/ic_px_arrow_left</item>
+        <item name="drawableIconAuthMicrosoft">@drawable/ic_auth_ms</item>
+        <item name="drawableIconAuthElyby">@drawable/ic_auth_elyby</item>
+        <item name="drawableIconMenuCloseClearCancel">@android:drawable/ic_menu_close_clear_cancel</item>
+        <item name="drawableNotificationIcon">@drawable/notif_icon</item>
+        <item name="drawableIconMojoFull">@drawable/ic_mojo_full</item>
+        <item name="drawableIconFabric">@drawable/ic_fabric</item>
+        <item name="drawableIconQuilt">@drawable/ic_quilt</item>
+        <item name="drawableIconForge">@drawable/ic_forge</item>
+        <item name="drawableIconNeoforge">@drawable/ic_neoforge</item>
+        <item name="drawableIconViewHandle">@drawable/ic_view_handle</item>
+        <item name="drawableIconSharpSettings24">@drawable/ic_sharp_settings_24</item>
+        <item name="drawableViewTextProgressbar">@drawable/view_text_progressbar</item>
+        <item name="drawableIconAdd">@drawable/ic_add</item>
+        <item name="drawableIconHome">@drawable/ic_px_home</item>
+        <item name="drawableIconCurseforge">@drawable/ic_curseforge</item>
+        <item name="drawableIconModrinth">@drawable/ic_modrinth</item>
+        <item name="drawableIconNoGestures">@drawable/ic_px_nogestures</item>
+        <item name="drawableIconGestures">@drawable/ic_px_gestures</item>
+        <item name="drawableIconControlSize">@drawable/ic_px_control_size</item>
+        <item name="drawableIconMouse">@drawable/ic_px_mouse</item>
+        <item name="drawableIconSpeed">@drawable/ic_px_speed</item>
+        <item name="drawableIconImage">@drawable/ic_px_image</item>
+        <item name="drawableIconJava">@drawable/ic_px_java</item>
+        <item name="drawableIconAltSliders">@drawable/ic_px_alt_sliders</item>
+        <item name="drawableIconHash">@drawable/ic_px_hash</item>
+        <item name="drawableIconImageRenderer">@drawable/ic_px_image_renderer</item>
+        <item name="drawableIconViewportExpand">@drawable/ic_px_viewport_expand</item>
+        <item name="drawableIconResolution">@drawable/ic_px_resolution</item>
+
+        <item name="drawableButtonA">@drawable/button_a</item>
+        <item name="drawableButtonB">@drawable/button_b</item>
+        <item name="drawableButtonX">@drawable/button_x</item>
+        <item name="drawableButtonY">@drawable/button_y</item>
+        <item name="drawableButtonStart">@drawable/button_start</item>
+        <item name="drawableButtonSelect">@drawable/button_select</item>
+        <item name="drawableTriggerRight">@drawable/trigger_right</item>
+        <item name="drawableTriggerLeft">@drawable/trigger_left</item>
+        <item name="drawableShoulderRight">@drawable/shoulder_right</item>
+        <item name="drawableShoulderLeft">@drawable/shoulder_left</item>
+        <item name="drawableStickRight">@drawable/stick_right</item>
+        <item name="drawableStickLeft">@drawable/stick_left</item>
+        <item name="drawableStickRightClick">@drawable/stick_right_click</item>
+        <item name="drawableStickLeftClick">@drawable/stick_left_click</item>
+        <item name="drawableDpadUp">@drawable/dpad_up</item>
+        <item name="drawableDpadDown">@drawable/dpad_down</item>
+        <item name="drawableDpadRight">@drawable/dpad_right</item>
+        <item name="drawableDpadLeft">@drawable/dpad_left</item>
     </style>
+    <style name="AppTheme" parent="BaseAppTheme" />
+
+    <style name="BaseMidnightTheme" parent="BaseAppTheme">
+        <item name="windowActionBar">true</item>
+
+        <item name="android:textSize">@dimen/_16ssp</item>
+
+        <item name="fontMineButton">@font/minecraft_ten</item>
+        <item name="fontSizeMineButton">@dimen/_17ssp</item>
+    </style>
+    <style name="MidnightTheme" parent="BaseMidnightTheme" />
+
+    <style name="BaseAmethystTheme" parent="BaseAppTheme">
+        <item name="android:statusBarColor">#242424</item>
+        <item name="android:navigationBarColor">#181818</item>
+
+        <item name="android:textSize">@dimen/_12ssp</item>
+
+        <item name="colorControlButton">#4CC4C4C4</item>
+        <item name="colorControlButtonPressed">#4D000000</item>
+
+        <item name="colorMineButton">#9640b8</item>
+        <item name="colorMineButtonAdd">#000B0010</item>
+
+        <item name="colorBackgroundApp">#181818</item>
+        <item name="colorDivider">#464646</item>
+        <item name="colorBackgroundOverlay">#464646</item>
+        <item name="colorBackgroundStatusBar">#232323</item>
+        <item name="colorBackgroundBottomBar">#232323</item>
+        <item name="colorIconOutline">#232323</item>
+
+        <item name="colorPrimaryText">#FFFFFF</item>
+        <item name="colorSecondaryText">#B2B2B2</item>
+    </style>
+
+    <style name="AmethystTheme" parent="BaseAmethystTheme" />
+
+    <style name="BasePojavTheme" parent="BaseAppTheme">
+        <item name="android:textSize">@dimen/_12ssp</item>
+
+        <item name="colorControlButton">#4CC4C4C4</item>
+        <item name="colorControlButtonPressed">#4D000000</item>
+
+        <item name="colorMineButton">#57CC33</item>
+        <item name="colorMineButtonAdd">#00001300</item>
+        <item name="colorBackgroundApp">#181818</item>
+        <item name="colorDivider">#464646</item>
+        <item name="colorBackgroundOverlay">#464646</item>
+        <item name="colorBackgroundStatusBar">#242424</item>
+        <item name="colorBackgroundBottomBar">#242424</item>
+        <item name="colorIconOutline">#232323</item>
+
+        <item name="colorPrimaryText">#FFFFFF</item>
+        <item name="colorSecondaryText">#B2B2B2</item>
+    </style>
+
+    <style name="PojavTheme" parent="BasePojavTheme" />
+
+    <style name="BaseDarkDecayTheme" parent="BaseAppTheme">
+        <item name="android:textSize">@dimen/_12ssp</item>
+
+        <item name="colorControlButton">#4CC4C4C4</item>
+        <item name="colorControlButtonPressed">#4D000000</item>
+
+        <item name="colorMineButton">#78dba9</item>
+        <item name="colorMineButtonAdd">#00000000</item>
+        <item name="colorBackgroundApp">#0a0c0f</item>
+        <item name="colorDivider">#101419</item>
+        <item name="colorBackgroundOverlay">#101419</item>
+        <item name="colorBackgroundStatusBar">#0d1014</item>
+        <item name="colorBackgroundBottomBar">#0d1014</item>
+        <item name="colorIconOutline">#6b7078</item>
+
+        <item name="colorPrimaryText">#FFFFFF</item>
+        <item name="colorSecondaryText">#B2B2B2</item>
+    </style>
+    <style name="DarkDecayTheme" parent="BaseDarkDecayTheme" /> <!-- https://github.com/decaycs/decaycs -->
+
+    <style name="BaseLightDecayTheme" parent="BaseAppTheme">
+        <item name="android:textSize">@dimen/_12ssp</item>
+
+        <item name="colorControlButton">#4CC4C4C4</item>
+        <item name="colorControlButtonPressed">#4D000000</item>
+
+        <item name="colorMineButton">#69b373</item>
+        <item name="colorMineButtonAdd">#00000000</item>
+        <item name="colorBackgroundApp">#dee1e6</item>
+        <item name="colorDivider">#1f2328</item>
+        <item name="colorBackgroundOverlay">#1f2328</item>
+        <item name="colorBackgroundStatusBar">#B1B4BD</item>
+        <item name="colorBackgroundBottomBar">#B1B4BD</item>
+        <item name="colorIconOutline">#6b7078</item>
+
+        <item name="colorPrimaryText">#101419</item>
+        <item name="colorSecondaryText">#1f2328</item>
+
+        <item name="android:textColor">?attr/colorPrimaryText</item>
+        <item name="android:textColorPrimary">?attr/colorPrimaryText</item>
+        <item name="android:textColorSecondary">?attr/colorSecondaryText</item>
+
+        <item name="colorIcon">#101419</item>
+    </style>
+    <style name="LightDecayTheme" parent="BaseLightDecayTheme" /> <!-- https://github.com/decaycs/decaycs -->
 
     <style name="LauncherFragment_Divider">
         <item name="android:layout_width">@dimen/padding_tiny</item>
         <item name="android:layout_height">0dp</item>
-        <item name="android:background">@color/divider</item>
+        <item name="android:background">?attr/colorDivider</item>
     </style>
 
     <style name="LauncherMenuButton" parent="Widget.AppCompat.Button">

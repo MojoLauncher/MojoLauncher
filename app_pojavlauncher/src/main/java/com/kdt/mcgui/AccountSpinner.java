@@ -22,7 +22,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatSpinner;
-import androidx.core.content.res.ResourcesCompat;
 
 import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.Tools;
@@ -61,7 +60,7 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
 
         @Override
         public boolean onValueSet(String key, @NonNull String value) {
-            mLoginBarPaint.setColor(getResources().getColor(R.color.minebutton_color));
+            mLoginBarPaint.setColor(Tools.getColorAttr(getContext().getTheme(), R.attr.colorMineButton));
             BackgroundLogin backgroundLogin = mAuthType.createAuth();
             backgroundLogin.createAccount(AccountSpinner.this, value);
             return false;
@@ -125,8 +124,8 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
         setOnItemSelectedListener(this);
         reload();
 
-        setBackgroundColor(getResources().getColor(R.color.background_status_bar));
-        mLoginBarPaint.setColor(getResources().getColor(R.color.minebutton_color));
+        setBackgroundColor(Tools.getColorAttr(getContext().getTheme(), R.attr.colorBackgroundStatusBar));
+        mLoginBarPaint.setColor(Tools.getColorAttr(getContext().getTheme(), R.attr.colorMineButton));
         mLoginBarPaint.setStrokeWidth(getResources().getDimensionPixelOffset(R.dimen._2sdp));
         mLoginStepAnimator.addUpdateListener(this);
         mLoginStep = mMaxSteps;
@@ -300,7 +299,7 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
 
             if(position == 0) {
                 // "Add account" button
-                Drawable plusDrawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_add, theme);
+                Drawable plusDrawable = Tools.getDrawableAttr(theme, R.attr.drawableIconAdd);
                 textview.setCompoundDrawables(plusDrawable, null, null, null);
                 textview.setText(R.string.main_add_account);
                 deleteButton.setVisibility(View.GONE);
@@ -324,7 +323,7 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
 
             Drawable authType = null;
             if(authTypeResource != 0) {
-                authType = ResourcesCompat.getDrawable(resources, authTypeResource, theme);
+                authType = Tools.getDrawableAttr(theme, authTypeResource);
             }
 
             int headCacheHash = System.identityHashCode(account);

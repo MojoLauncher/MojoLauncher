@@ -3,14 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_app"
+    android:layout_gravity="center"
+    android:background="?attr/colorBackgroundApp"
+    android:gravity="center"
+    android:orientation="vertical"
     android:paddingHorizontal="@dimen/fragment_padding_medium">
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/background_card"
+        android:background="?attr/drawableBackgroundCard"
         android:gravity="center"
         android:orientation="vertical"
         android:paddingVertical="@dimen/padding_extra_extra_large">

@@ -71,6 +71,8 @@ public class LauncherPreferences {
     public static boolean PREF_RAPID_START = false;
     public static boolean PREF_VERIFY_FILES = true;
 
+    public static String PREF_SELECT_THEME = "Default";
+
 
     public static void loadPreferences(Context ctx) {
         //Required for CTRLDEF_FILE and MultiRT
@@ -113,6 +115,7 @@ public class LauncherPreferences {
         PREF_VSYNC_IN_ZINK = DEFAULT_PREF.getBoolean("vsync_in_zink", true);
         PREF_VERIFY_FILES = DEFAULT_PREF.getBoolean("checkGameFiles", true);
         PREF_RAPID_START = DEFAULT_PREF.getBoolean("fastStartupCheck", false);
+        PREF_SELECT_THEME = DEFAULT_PREF.getString("selectTheme", "Default");
 
         String argLwjglLibname = "-Dorg.lwjgl.opengl.libname=";
         for (String arg : JREUtils.parseJavaArguments(PREF_CUSTOM_JAVA_ARGS)) {

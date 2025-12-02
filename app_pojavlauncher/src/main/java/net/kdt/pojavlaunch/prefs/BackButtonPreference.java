@@ -5,9 +5,11 @@ import android.util.AttributeSet;
 
 import androidx.preference.Preference;
 
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
+
+import git.artdeell.mojo.R;
 
 public class BackButtonPreference extends Preference {
     public BackButtonPreference(Context context, AttributeSet attrs) {
@@ -24,7 +26,7 @@ public class BackButtonPreference extends Preference {
             setTitle(R.string.preference_back_title);
         }
         if(getIcon() == null){
-            setIcon(R.drawable.ic_px_arrow_left);
+            setIcon(Tools.getReferenceAttr(getContext().getTheme(), R.attr.drawableIconArrowLeft));
         }
     }
 

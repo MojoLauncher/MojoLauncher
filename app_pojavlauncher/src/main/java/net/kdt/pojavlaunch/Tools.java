@@ -12,9 +12,11 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Insets;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.net.Uri;
@@ -27,6 +29,7 @@ import android.provider.DocumentsContract;
 import android.provider.OpenableColumns;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
@@ -34,11 +37,13 @@ import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.annotation.AttrRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -53,6 +58,7 @@ import net.kdt.pojavlaunch.memory.MemoryHoleFinder;
 import net.kdt.pojavlaunch.memory.SelfMapsParser;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.theme.ThemeManager;
 import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.GLInfoUtils;
 import net.kdt.pojavlaunch.value.DependentLibrary;
@@ -89,6 +95,7 @@ public final class Tools {
     public static String APP_NAME = "PojavLauncher";
 
     public static final Gson GLOBAL_GSON = new GsonBuilder().setPrettyPrinting().create();
+    public static final ThemeManager THEME_MANAGER = new ThemeManager();
 
     public static final String URL_HOME = "https://pojavlauncherteam.github.io";
     public static String NATIVE_LIB_DIR;
@@ -894,5 +901,27 @@ public final class Tools {
                         Log.w(Tools.APP_NAME, "Could not enable System.exit() method!", th);
                     }
                 }).show();
+    }
+
+    public static int getColorAttr(Resources.Theme theme, @AttrRes int attr) {
+        TypedValue tv = new TypedValue();
+        theme.resolveAttribute(attr, tv, true);
+        return tv.data;
+    }
+
+    public static int getReferenceAttr(Resources.Theme theme, @AttrRes int attr) {
+        TypedValue tv = new TypedValue();
+        theme.resolveAttribute(attr, tv, true);
+        return tv.resourceId;
+    }
+
+    public static int getDimensionSizeAttr(Resources.Theme theme, @AttrRes int attr) {
+        TypedValue tv = new TypedValue();
+        theme.resolveAttribute(attr, tv, true);
+        return TypedValue.complexToDimensionPixelSize(tv.data, theme.getResources().getDisplayMetrics());
+    }
+
+    public static Drawable getDrawableAttr(Resources.Theme theme, @AttrRes int attr) {
+        return ResourcesCompat.getDrawable(theme.getResources(), Tools.getReferenceAttr(theme, attr), theme);
     }
 }

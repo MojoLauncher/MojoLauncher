@@ -10,10 +10,11 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
+
+import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.customcontrols.buttons.ControlInterface;
 
 import git.artdeell.mojo.R;
-import net.kdt.pojavlaunch.customcontrols.buttons.ControlInterface;
 
 public class ControlHandleView extends View {
     public ControlHandleView(Context context) {
@@ -26,7 +27,7 @@ public class ControlHandleView extends View {
         init();
     }
 
-    private final Drawable mDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_view_handle, getContext().getTheme());
+    private final Drawable mDrawable = Tools.getDrawableAttr(getContext().getTheme(), R.attr.drawableIconViewHandle);
     private ControlInterface mView;
     private float mXOffset, mYOffset;
     private final ViewTreeObserver.OnPreDrawListener mPositionListener = new ViewTreeObserver.OnPreDrawListener() {

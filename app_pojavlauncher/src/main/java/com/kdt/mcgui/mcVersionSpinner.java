@@ -17,10 +17,7 @@ import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
-
-import git.artdeell.mojo.R;
 
 import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.Tools;
@@ -30,13 +27,14 @@ import net.kdt.pojavlaunch.extra.ExtraListener;
 import net.kdt.pojavlaunch.fragments.InstanceEditorFragment;
 import net.kdt.pojavlaunch.fragments.ProfileTypeSelectFragment;
 import net.kdt.pojavlaunch.instances.DisplayInstance;
-import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.instances.InstanceAdapter;
 import net.kdt.pojavlaunch.instances.InstanceAdapterExtra;
+import net.kdt.pojavlaunch.instances.Instances;
 
 import java.io.IOException;
 
 import fr.spse.extended_view.ExtendedTextView;
+import git.artdeell.mojo.R;
 
 /**
  * A class implementing custom spinner like behavior, notably:
@@ -66,7 +64,7 @@ public class mcVersionSpinner extends ExtendedTextView {
     private final InstanceAdapter mProfileAdapter = new InstanceAdapter(new InstanceAdapterExtra[]{
             new InstanceAdapterExtra(VERSION_SPINNER_PROFILE_CREATE,
                     R.string.create_instance,
-                    ResourcesCompat.getDrawable(getResources(), R.drawable.ic_add, null)),
+                    Tools.getDrawableAttr(getContext().getTheme(), R.attr.drawableIconAdd)),
     });
 
 
