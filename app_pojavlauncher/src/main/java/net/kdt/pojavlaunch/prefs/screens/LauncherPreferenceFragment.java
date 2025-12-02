@@ -4,7 +4,6 @@ package net.kdt.pojavlaunch.prefs.screens;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -13,8 +12,10 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import net.kdt.pojavlaunch.LauncherActivity;
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+
+import git.artdeell.mojo.R;
 
 /**
  * Preference for the main screen, any sub-screen should inherit this class for consistent behavior,
@@ -24,9 +25,7 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        TypedValue tv = new TypedValue();
-        requireContext().getTheme().resolveAttribute(R.attr.colorBackgroundApp, tv, true);
-        view.setBackgroundColor(tv.data);
+        view.setBackgroundColor(Tools.getColorAttr(view.getContext().getTheme(), R.attr.colorBackgroundApp));
         super.onViewCreated(view, savedInstanceState);
     }
 
