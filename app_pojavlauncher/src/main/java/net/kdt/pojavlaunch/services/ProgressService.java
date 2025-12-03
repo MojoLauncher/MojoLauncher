@@ -50,8 +50,8 @@ public class ProgressService extends Service implements TaskCountListener {
                 , killIntent, Build.VERSION.SDK_INT >=23 ? PendingIntent.FLAG_IMMUTABLE : 0);
         mNotificationBuilder = new NotificationCompat.Builder(this, "channel_id")
                 .setContentTitle(getString(R.string.lazy_service_default_title))
-                .addAction(Tools.getReferenceAttr(getTheme(), R.attr.drawableIconMenuCloseClearCancel), getString(R.string.notification_terminate), pendingKillIntent)
-                .setSmallIcon(Tools.getReferenceAttr(getTheme(), R.attr.drawableNotificationIcon))
+                .addAction(android.R.drawable.ic_menu_close_clear_cancel, getString(R.string.notification_terminate), pendingKillIntent)
+                .setSmallIcon(R.drawable.notif_icon)
                 .setNotificationSilent();
     }
 
