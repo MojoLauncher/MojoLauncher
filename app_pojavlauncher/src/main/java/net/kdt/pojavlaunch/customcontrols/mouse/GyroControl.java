@@ -6,11 +6,15 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.WindowManager;
 
 import net.kdt.pojavlaunch.GrabListener;
+import net.kdt.pojavlaunch.memory.SelfMapsParser;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 import org.lwjgl.glfw.CallbackBridge;
@@ -56,6 +60,24 @@ public class GyroControl implements SensorEventListener, GrabListener {
     private float mStoredX = 0;
     private float mStoredY = 0;
 
+    private float mAccelX = 0;
+    private float mAccelY = 0;
+
+    private final Handler mAccelPostHandler = new Handler(Looper.getMainLooper());
+
+    private final Runnable mAccelRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if(!mShouldHandleEvents) return;
+            if(Math.abs(mAccelX) + Math.abs(mAccelY) > 7)  {
+                CallbackBridge.mouseX += mAccelX;
+                CallbackBridge.mouseY += mAccelY;
+                CallbackBridge.sendCursorPos(CallbackBridge.mouseX, CallbackBridge.mouseY);
+            }
+            mAccelPostHandler.postDelayed(this, 16);
+        }
+    };
+
     public GyroControl(Activity activity) {
         mWindowManager = activity.getWindowManager();
         mSurfaceRotation = -10;
@@ -79,6 +101,7 @@ public class GyroControl implements SensorEventListener, GrabListener {
         mSensorManager.unregisterListener(this);
         mCorrectionListener.disable();
         mStoredX = mStoredY = 0;
+        mAccelX = mAccelY = 0;
         resetDamper();
         CallbackBridge.removeGrabListener(this);
     }
@@ -97,35 +120,27 @@ public class GyroControl implements SensorEventListener, GrabListener {
         }
         SensorManager.getAngleChange(mAngleDifference, mCurrentRotation, mPreviousRotation);
         damperValue(mAngleDifference);
-        mStoredX += xAverage * 1000 * LauncherPreferences.PREF_GYRO_SENSITIVITY;
-        mStoredY += yAverage * 1000 * LauncherPreferences.PREF_GYRO_SENSITIVITY;
+        mStoredX += xAverage * 200 * LauncherPreferences.PREF_GYRO_SENSITIVITY;
+        mStoredY += yAverage * 200 * LauncherPreferences.PREF_GYRO_SENSITIVITY;
 
-        boolean updatePosition = false;
         float absX = Math.abs(mStoredX);
         float absY = Math.abs(mStoredY);
 
         if(absX + absY > MULTI_AXIS_LOW_PASS_THRESHOLD) {
-            CallbackBridge.mouseX -= ((mSwapXY ? mStoredY : mStoredX) * xFactor);
-            CallbackBridge.mouseY += ((mSwapXY ? mStoredX : mStoredY) * yFactor);
+            mAccelX -= ((mSwapXY ? mStoredY : mStoredX) * xFactor);
+            mAccelY += ((mSwapXY ? mStoredX : mStoredY) * yFactor);
             mStoredX = 0;
             mStoredY = 0;
-            updatePosition = true;
         } else {
             if(Math.abs(mStoredX) > SINGLE_AXIS_LOW_PASS_THRESHOLD){
-                CallbackBridge.mouseX -= ((mSwapXY ? mStoredY : mStoredX) * xFactor);
+                mAccelX -= ((mSwapXY ? mStoredY : mStoredX) * xFactor);
                 mStoredX = 0;
-                updatePosition = true;
             }
 
             if(Math.abs(mStoredY) > SINGLE_AXIS_LOW_PASS_THRESHOLD) {
-                CallbackBridge.mouseY += ((mSwapXY ? mStoredX : mStoredY) * yFactor);
+                mAccelY += ((mSwapXY ? mStoredX : mStoredY) * yFactor);
                 mStoredY = 0;
-                updatePosition = true;
             }
-        }
-
-        if(updatePosition){
-            CallbackBridge.sendCursorPos(CallbackBridge.mouseX, CallbackBridge.mouseY);
         }
     }
 
@@ -166,7 +181,9 @@ public class GyroControl implements SensorEventListener, GrabListener {
     @Override
     public void onGrabState(boolean isGrabbing) {
         mWarmup = ROTATION_VECTOR_WARMUP_PERIOD;
+        mAccelX = mAccelY = 0;
         mShouldHandleEvents = isGrabbing;
+        if(isGrabbing) mAccelPostHandler.post(mAccelRunnable);
     }
 
 
