@@ -14,7 +14,6 @@ import android.view.Surface;
 import android.view.WindowManager;
 
 import net.kdt.pojavlaunch.GrabListener;
-import net.kdt.pojavlaunch.memory.SelfMapsParser;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 import org.lwjgl.glfw.CallbackBridge;
@@ -69,9 +68,12 @@ public class GyroControl implements SensorEventListener, GrabListener {
         @Override
         public void run() {
             if(!mShouldHandleEvents) return;
-            if(Math.abs(mAccelX) + Math.abs(mAccelY) > 7)  {
-                CallbackBridge.mouseX += mAccelX;
-                CallbackBridge.mouseY += mAccelY;
+            int deadzone = 14;
+            float r = (float) Math.sqrt(mAccelX * mAccelX + mAccelY * mAccelY);
+            if(r > deadzone)  {
+                float fac = (r - deadzone) / r;
+                CallbackBridge.mouseX += (float) (mAccelX * fac);
+                CallbackBridge.mouseY += (float) (mAccelY * fac);
                 CallbackBridge.sendCursorPos(CallbackBridge.mouseX, CallbackBridge.mouseY);
             }
             mAccelPostHandler.postDelayed(this, 16);
