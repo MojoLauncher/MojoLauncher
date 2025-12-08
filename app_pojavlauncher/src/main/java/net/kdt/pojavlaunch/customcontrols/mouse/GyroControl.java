@@ -197,12 +197,12 @@ public class GyroControl implements SensorEventListener, GrabListener {
         mHistoryIndex ++;
         if(mHistoryIndex >= mAngleBuffer.length) mHistoryIndex = 0;
 
-        xTotal -= mAngleBuffer[mHistoryIndex][1];
+        xTotal -= mAngleBuffer[mHistoryIndex][0];
         yTotal -= mAngleBuffer[mHistoryIndex][2];
 
         System.arraycopy(newAngleDifference, 0, mAngleBuffer[mHistoryIndex], 0, 3);
 
-        xTotal += mAngleBuffer[mHistoryIndex][1];
+        xTotal += mAngleBuffer[mHistoryIndex][0];
         yTotal += mAngleBuffer[mHistoryIndex][2];
 
         // compute the moving average
