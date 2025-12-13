@@ -4,24 +4,25 @@
     tools:ignore="MissingTranslation"
 >
     <!-- App name part -->
-    <string
-        name="app_name"
-    >MojoLauncher (Android için Minecraft: Java Edition)</string>
+    <stringname="app_name">MojoLauncher (Android için Minecraft: Java Edition)</string>
     <string name="app_short_name">MojoLauncher</string>
     <!-- Action bar part -->
+
     <!-- Languages list part -->
+
     <!-- Login strings -->
     <string name="login_online_username_hint">Kullanıcı Adı</string>
     <string name="login_online_login_label">Giriş yap</string>
+
     <!-- Hint -->
+    <stringname="hint_control_mapping">"Ortadaki dişli imgesine dokunarak bağlam menüsüne erişebilirsiniz ⚙\nBoyutunu yeniden ayarlamak, silmek, düzenlemek veya kısayolunu yeniden atamak için dokunun"</string>
+
     <!-- Warnings -->
     <string name="warning_remove_account">Bu hesap kaldırılacak!</string>
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Bir mod yükleyicisi seç</string>
     <!-- Error messages -->
-    <string
-        name="error_fatal"
-    >MojoLauncher beklenmedik bir sebepten dolayı çöktü</string>
+    <stringname="error_fatal">MojoLauncher beklenmedik bir sebepten dolayı çöktü</string>
     <string name="error_no_version">Sürüm bulunamadı!</string>
     <string name="error_show_more">Daha fazla göster</string>
     <string name="error_show_less">Daha az göster</string>
