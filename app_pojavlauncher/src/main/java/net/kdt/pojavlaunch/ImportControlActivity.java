@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import net.kdt.pojavlaunch.customcontrols.LayoutBitmaps;
 import net.kdt.pojavlaunch.utils.FileUtils;
 
 import org.apache.commons.io.IOUtils;
@@ -186,13 +188,13 @@ public class ImportControlActivity extends Activity {
      * Verify if the control file is valid
      * @return Whether the control file is valid
      */
-    private static boolean verify(){
-        try{
-            String jsonLayoutData = Tools.read(Tools.CTRLMAP_PATH + "/TMP_IMPORT_FILE.json");
-            JSONObject layoutJobj = new JSONObject(jsonLayoutData);
+    private static boolean verify() {
+        try {
+            LayoutBitmaps.ControlsContainer layout = LayoutBitmaps.load(new File(Tools.CTRLMAP_PATH,"TMP_IMPORT_FILE.json"));
+            JSONObject layoutJobj = new JSONObject(layout.mControlsJson);
             return layoutJobj.has("version") && layoutJobj.has("mControlDataList");
-        }catch (JSONException | IOException e) {
-            e.printStackTrace();
+        }catch (IOException | JSONException e) {
+            Log.w("ImportControlActivity", "Failed to validate layout", e);
             return false;
         }
     }

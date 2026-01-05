@@ -5,11 +5,10 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/fragment_menu_main"
 	android:gravity="top"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
 	android:orientation="vertical"
-	android:background="@color/background_app"
-	>
+	android:background="@color/background_app">
 	<ScrollView
 		android:layout_width="match_parent"
 		android:layout_height="0dp"

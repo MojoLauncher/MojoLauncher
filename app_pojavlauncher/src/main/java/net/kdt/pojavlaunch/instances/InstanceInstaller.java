@@ -87,7 +87,7 @@ public class InstanceInstaller implements ContextExecutorTask {
         if(!sLastInstallInfo.delete()) throw new IOException("Failed to delete mod installer info");
         String targetVersionId = ProfileWatcher.consumePendingVersion(assetManager);
         if(targetVersionId == null) return;
-        for(Instance instance : InstanceManager.getImmutableInstanceList()) {
+        for(Instance instance : Instances.loadAllInstances()) {
             if(!lastInstaller.equals(instance.installer)) continue;
             instance.installer = null;
             instance.versionId = targetVersionId;

@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Change the layout to merge tag once done -->
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-
-
-    >
-
+    xmlns:tools="http://schemas.android.com/tools">
 
     <ProgressBar
         android:id="@+id/progress_generic_progressbar"
@@ -62,4 +54,4 @@
         >
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</merge>

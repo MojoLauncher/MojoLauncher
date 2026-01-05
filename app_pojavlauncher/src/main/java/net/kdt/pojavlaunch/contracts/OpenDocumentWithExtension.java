@@ -10,10 +10,15 @@ import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import net.kdt.pojavlaunch.PojavApplication;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
 // Android's OpenDocument contract is the basicmost crap that doesn't allow
 // you to specify practically anything. So i made this instead.
 public class OpenDocumentWithExtension extends ActivityResultContract<Object, Uri> {
-    private final String mimeType;
+    private final Future<String> extensionMimeTypeFuture;
 
     /**
      * Create a new OpenDocumentWithExtension contract.
@@ -22,9 +27,12 @@ public class OpenDocumentWithExtension extends ActivityResultContract<Object, Ur
      * @param extension the extension to filter by
      */
     public OpenDocumentWithExtension(String extension) {
-        String extensionMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-        if(extensionMimeType == null) extensionMimeType = "*/*";
-        mimeType = extensionMimeType;
+        // Who would have thought that loading the MIME map takes a significant amount of time?
+        extensionMimeTypeFuture = PojavApplication.sExecutorService.submit(()->{
+            String extensionMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+            if(extensionMimeType == null) extensionMimeType = "*/*";
+            return extensionMimeType;
+        });
     }
 
     @NonNull
@@ -32,7 +40,11 @@ public class OpenDocumentWithExtension extends ActivityResultContract<Object, Ur
     public Intent createIntent(@NonNull Context context, @NonNull Object input) {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType(mimeType);
+        try {
+            intent.setType(extensionMimeTypeFuture.get());
+        }catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
         return intent;
     }
 

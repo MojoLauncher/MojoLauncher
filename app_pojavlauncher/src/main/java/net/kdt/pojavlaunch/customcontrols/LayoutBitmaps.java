@@ -48,6 +48,10 @@ public class LayoutBitmaps {
         return newKey;
     }
 
+    public static LayoutBitmaps createEmpty() {
+        return new LayoutBitmaps();
+    }
+
     private static ControlsContainer createEmpty(String controlsJson) {
         return new ControlsContainer(controlsJson, new LayoutBitmaps());
     }
@@ -69,7 +73,7 @@ public class LayoutBitmaps {
         return new ControlsContainer(layoutContent, layoutBitmaps);
     }
 
-    private static ControlsContainer load(FileInputStream fileInputStream) throws IOException{
+    private static ControlsContainer load(FileInputStream fileInputStream, long fileSize) throws IOException{
         try(BufferedInputStream bufferedIn = new BufferedInputStream(fileInputStream)) {
             boolean isZip;
             bufferedIn.mark(4096);
@@ -85,6 +89,8 @@ public class LayoutBitmaps {
                     return loadFromZip(zipIn);
                 }
             } else {
+                long meg = 1024L * 1024L;
+                if(fileSize > (25L * meg)) throw new IOException("Raw JSON control data size too large");
                 return createEmpty(IOUtils.toString(bufferedIn, StandardCharsets.UTF_8));
             }
         }
@@ -118,7 +124,7 @@ public class LayoutBitmaps {
 
     public static @NonNull ControlsContainer load(File jsonLocation) throws IOException {
         try (FileInputStream fileInputStream = new FileInputStream(jsonLocation)) {
-            return load(fileInputStream);
+            return load(fileInputStream, jsonLocation.length());
         }
     }
 

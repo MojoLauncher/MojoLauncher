@@ -2,12 +2,12 @@ package net.kdt.pojavlaunch;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,11 +21,39 @@ import git.artdeell.mojo.R;
 
 public class TestStorageActivity extends Activity {
     private final int REQUEST_STORAGE_REQUEST_CODE = 1;
+    private AlertDialog mPermissionRequestDialog;
+    private boolean mPermsRequired = false;
+    private boolean mPermsDialogShown = false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(Build.VERSION.SDK_INT >= 23 && Build.VERSION.SDK_INT < 29 && !isStorageAllowed(this)) requestStoragePermission();
-        else exit();
+        mPermsDialogShown = false;
+        if(Build.VERSION.SDK_INT >= 23 && Build.VERSION.SDK_INT < 29 && !isStorageAllowed(this)) {
+            mPermsRequired = true;
+        } else exit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(!mPermsRequired) return;
+        if(!mPermsDialogShown) requestStoragePermission();
+        else showRerequestDialog();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mPermissionRequestDialog != null) mPermissionRequestDialog.dismiss();
+    }
+
+    private void showRerequestDialog() {
+        if(mPermissionRequestDialog != null) mPermissionRequestDialog.dismiss();
+        mPermissionRequestDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.global_error)
+                .setMessage(R.string.toast_permission_denied)
+                .setPositiveButton(android.R.string.ok,(d,i)->requestStoragePermission())
+                .show();
     }
 
     @Override
@@ -33,10 +61,11 @@ public class TestStorageActivity extends Activity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode == REQUEST_STORAGE_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                mPermsRequired = false;
                 exit();
             } else {
-                Toast.makeText(this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
-                requestStoragePermission();
+                mPermsDialogShown = true;
+                showRerequestDialog();
             }
         }
     }

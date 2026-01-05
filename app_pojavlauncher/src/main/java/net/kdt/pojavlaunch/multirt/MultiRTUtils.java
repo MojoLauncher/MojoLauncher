@@ -131,6 +131,23 @@ public class MultiRTUtils {
         }
     }
 
+    public static long readLastUpdateTime(String name) {
+        File lastUpdateTimeFile = new File(RUNTIME_FOLDER, name+"/last_check_time");
+        if(!lastUpdateTimeFile.exists()) return -1;
+        try {
+            return Long.parseLong(Tools.read(lastUpdateTimeFile).trim());
+        }catch (IOException | NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    public static void writeLastUpdateTime(String name, long time) {
+        File lastUpdateTimeFile = new File(RUNTIME_FOLDER, name+"/last_check_time");
+        try {
+            Tools.write(lastUpdateTimeFile, Long.toString(time));
+        }catch (IOException ignored) {}
+    }
+
     public static void removeRuntimeNamed(String name) throws IOException {
         File dest = new File(RUNTIME_FOLDER,"/"+name);
         if(dest.exists()) {

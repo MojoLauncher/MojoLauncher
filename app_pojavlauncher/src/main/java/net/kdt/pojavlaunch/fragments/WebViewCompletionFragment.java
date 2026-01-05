@@ -23,6 +23,7 @@ public abstract class WebViewCompletionFragment extends Fragment {
     private WebView mWebview;
     // Technically the client is blank (or there is none) when the fragment is initialized
     private boolean mBlankClient = true;
+    private boolean mIsCompleted = false;
 
     protected WebViewCompletionFragment(String mTrackedUrl, String mAuthUrl) {
         this.mTrackedUrl = mTrackedUrl;
@@ -100,7 +101,7 @@ public abstract class WebViewCompletionFragment extends Fragment {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             if(url.startsWith(mTrackedUrl)) {
-                signalCompletion(url);
+                internalSignalCompletion(url);
                 return true;
             }
 
@@ -111,7 +112,17 @@ public abstract class WebViewCompletionFragment extends Fragment {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {}
 
         @Override
-        public void onPageFinished(WebView view, String url) {}
+        public void onPageFinished(WebView view, String url) {
+            if(url.startsWith(mTrackedUrl)) {
+                internalSignalCompletion(url);
+            }
+        }
+    }
+
+    private void internalSignalCompletion(String fullUrl) {
+        if(mIsCompleted) return;
+        mIsCompleted = true;
+        signalCompletion(fullUrl);
     }
 
     protected abstract void signalCompletion(String fullUrl);

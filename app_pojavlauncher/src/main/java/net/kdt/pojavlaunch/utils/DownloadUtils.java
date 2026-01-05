@@ -113,7 +113,7 @@ public class DownloadUtils {
         }
 
         if(tryWriteCache) try {
-            Tools.write(cacheDestination.getAbsolutePath(), urlContent);
+            Tools.write(cacheDestination, urlContent);
         }catch(IOException e) {
             Log.i("DownloadUtils", "Failed to cache the string", e);
         }

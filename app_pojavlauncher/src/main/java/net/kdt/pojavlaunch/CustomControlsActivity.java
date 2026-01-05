@@ -12,6 +12,8 @@ import android.widget.ListView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.gson.JsonSyntaxException;
+
 import net.kdt.pojavlaunch.customcontrols.ControlData;
 import net.kdt.pojavlaunch.customcontrols.ControlDrawerData;
 import net.kdt.pojavlaunch.customcontrols.ControlJoystickData;
@@ -85,7 +87,7 @@ public class CustomControlsActivity extends BaseActivity implements EditorExitab
 		mControlLayout.post(()->{
 			try {
 				mControlLayout.loadLayout(LauncherPreferences.PREF_DEFAULTCTRL_PATH);
-			}catch (IOException e) {
+			}catch (IOException | JsonSyntaxException e) {
 				Tools.showError(this, e);
 			}
 		});

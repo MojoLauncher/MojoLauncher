@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_menu_main"
     android:gravity="top"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background_app">
 
@@ -49,7 +49,7 @@
                 android:id="@+id/social_media_button"
                 style="@style/LauncherMenuButton.Universal"
                 android:layout_width="0dp"
-                android:drawableStart="@drawable/ic_discord"
+                android:drawableStart="@drawable/ic_social_media"
                 android:text="@string/mcl_button_social_media"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -76,7 +76,7 @@
                 android:id="@+id/share_logs_button"
                 style="@style/LauncherMenuButton.Universal"
                 android:layout_width="match_parent"
-                android:drawableStart="@android:drawable/ic_menu_share"
+                android:drawableStart="@drawable/ic_px_sharelog"
                 android:text="@string/main_share_logs"
                 app:layout_constraintTop_toBottomOf="@id/install_jar_button" />
 

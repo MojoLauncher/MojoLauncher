@@ -79,7 +79,7 @@ android {
         targetSdkVersion 35
         versionCode getDateSeconds()
         versionName getVersionName()
-        multiDexEnabled true //important
+        multiDexEnabled false //important
         resValue 'string', 'curseforge_api_key', getCFApiKey()
     }
 
@@ -288,8 +288,6 @@ afterEvaluate {
 
 		if (variant.getName().toLowerCase().contains("full")) {
             registrar.jreRuntimeDependency 8, "components/jre"
-            registrar.jreRuntimeDependency 17, "components/jre-new"
-            registrar.jreRuntimeDependency 21, "components/jre-21"
         }
         
 		def cacioJarUrl = "https://jitpack.io/com/github/MojoLauncher/%1\$s/%2\$s/%3\$s/%2\$s-%3\$s%4\$s.jar"
@@ -297,7 +295,7 @@ afterEvaluate {
         registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-shared", "-01d2dc1d65-1", "", "components/caciocavallo"
         registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-androidnw", "-01d2dc1d65-1", "", "components/caciocavallo"
 
-        registrar.onlineJarDependency cacioJarUrl, "caciocavallo17", "cacio-tta", "-517c312aef-1", "-jar-with-dependencies", "components/caciocavallo17"
+        registrar.onlineJarDependency cacioJarUrl, "caciocavallo17", "cacio-tta", "72a9ab6323", "-jar-with-dependencies", "components/caciocavallo17"
     }
 }
 

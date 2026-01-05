@@ -5,6 +5,7 @@ import android.util.Log;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.authenticator.AuthType;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.JSONUtils;
 
 import java.io.File;
@@ -14,35 +15,37 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class PojavProfile {
+public class Accounts {
 	private static final String PROFILE_PREF_FILE = "selected_account_file";
 
-	private static final ArrayList<MinecraftAccount> sAccounts = new ArrayList<>();
-	private static MinecraftAccount sSelectedAccount;
+	public final List<MinecraftAccount> accounts;
+	public final int selectionIndex;
 
-	private static void clear() {
-		sAccounts.clear();
-		sSelectedAccount = null;
-	}
+	private Accounts(List<MinecraftAccount> accounts, int selectionIndex) {
+        this.accounts = accounts;
+        this.selectionIndex = selectionIndex;
+    }
 
-	private static void reload()  {
-		File[] accountFiles = new File(Tools.DIR_ACCOUNT_NEW).listFiles();
-		if(accountFiles == null) return;
-		clear();
+	public static Accounts load() throws IOException {
+		File accountsDir = new File(Tools.DIR_ACCOUNT_NEW);
+        synchronized (Accounts.class) {
+            FileUtils.ensureDirectory(accountsDir);
+        }
+		File[] accountFiles = accountsDir.listFiles();
+		if(accountFiles == null) throw new IOException("Failed to create account directory");
 		String selectedAccount = getSelectedAccount();
-		sAccounts.ensureCapacity(accountFiles.length);
+		ArrayList<MinecraftAccount> accounts = new ArrayList<>(accountFiles.length);
+		int selectedAccountIdx = 0;
 		for(File accFile : accountFiles) {
 			MinecraftAccount account = loadAccount(accFile);
 			if(account == null) continue;
-			sAccounts.add(account);
+			accounts.add(account);
 			if(accFile.getName().equals(selectedAccount)) {
-				sSelectedAccount = account;
+				selectedAccountIdx = accounts.size() - 1;
 			}
 		}
-		if(sSelectedAccount == null && !sAccounts.isEmpty()) {
-			sSelectedAccount = sAccounts.get(0);
-		}
-		sAccounts.trimToSize();
+		accounts.trimToSize();
+		return new Accounts(Collections.unmodifiableList(accounts), selectedAccountIdx);
 	}
 
 	private static MinecraftAccount loadAccount(File source) {
@@ -50,9 +53,10 @@ public class PojavProfile {
 		try {
 			acc = JSONUtils.readFromFile(source, MinecraftAccount.class);
 		}catch (Exception e) {
-			Log.w("PojavProfile", "Failed to load account", e);
+			Log.w("Accounts", "Failed to load account", e);
 			return null;
 		}
+        if(acc == null) return null;
 		acc.mSaveLocation = source;
 
 		if (acc.accessToken == null) {
@@ -73,32 +77,16 @@ public class PojavProfile {
 		return acc;
 	}
 
-	public static List<MinecraftAccount> reloadAccounts() {
-		clear();
-		return getAccounts();
-	}
-
-	public static List<MinecraftAccount> getAccounts() {
-		if(sAccounts.isEmpty()) reload();
-		return Collections.unmodifiableList(sAccounts);
-	}
-
 	private static String getSelectedAccount() {
 		return LauncherPreferences.DEFAULT_PREF.getString(PROFILE_PREF_FILE, "");
 	}
 
-    public static MinecraftAccount getCurrentProfileContent(boolean independent) {
-		if(sSelectedAccount != null) return sSelectedAccount;
-		if(independent) {
-			String selectedAccount = getSelectedAccount();
-			return loadAccount(new File(Tools.DIR_ACCOUNT_NEW, selectedAccount));
-		}else {
-			if(sAccounts.isEmpty()) reload();
-			return sSelectedAccount;
-		}
+    public static MinecraftAccount getCurrent() {
+		String selectedAccount = getSelectedAccount();
+		return loadAccount(new File(Tools.DIR_ACCOUNT_NEW, selectedAccount));
     }
 
-	private static File pickProfilePath() {
+	private static File pickAccountPath() {
 		File profilePath;
 		do {
 			String profileName = UUID.randomUUID().toString();
@@ -107,27 +95,21 @@ public class PojavProfile {
 		return profilePath;
 	}
 
-	public static MinecraftAccount createAccount(Setter setter) throws IOException {
+	public static MinecraftAccount create(Setter setter) throws IOException {
 		MinecraftAccount minecraftAccount = new MinecraftAccount();
 		setter.writeAccount(minecraftAccount);
-		minecraftAccount.mSaveLocation = pickProfilePath();
+		minecraftAccount.mSaveLocation = pickAccountPath();
 		minecraftAccount.save();
-		sAccounts.add(minecraftAccount);
 		return minecraftAccount;
 	}
 
-	public static void setCurrentProfile(MinecraftAccount minecraftAccount) {
-		sSelectedAccount = minecraftAccount;
+	public static void setCurrent(MinecraftAccount minecraftAccount) {
 		LauncherPreferences.DEFAULT_PREF
 				.edit().putString(PROFILE_PREF_FILE, minecraftAccount.mSaveLocation.getName())
 				.apply();
 	}
 
-	public static void deleteProfile(MinecraftAccount minecraftAccount) {
-		sAccounts.remove(minecraftAccount);
-		if(sSelectedAccount == minecraftAccount) {
-			sSelectedAccount = null;
-		}
+	public static void delete(MinecraftAccount minecraftAccount) {
 		boolean ignored = minecraftAccount.mSaveLocation.delete();
 	}
 

@@ -9,7 +9,7 @@ import com.kdt.mcgui.ProgressLayout;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.instances.Instance;
-import net.kdt.pojavlaunch.instances.InstanceManager;
+import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
 import net.kdt.pojavlaunch.utils.FileUtils;
 
@@ -53,7 +53,7 @@ public class BTADownloadTask implements Runnable {
         File jsonDir = new File(Tools.DIR_HOME_VERSION, btaVersionId);
         File jsonFile = new File(jsonDir, btaVersionId+".json");
         FileUtils.ensureDirectory(jsonDir);
-        Tools.write(jsonFile.getAbsolutePath(), btaJson);
+        Tools.write(jsonFile, btaJson);
     }
 
     // BTA doesn't have SHA1 checksums in its repositories, so the user may try to reinstall it
@@ -66,7 +66,7 @@ public class BTADownloadTask implements Runnable {
     }
 
     private void createProfile(String btaVersionId) throws IOException {
-        Instance instance = InstanceManager.createInstance(i -> {
+        Instance instance = Instances.createInstance(i -> {
             i.versionId = btaVersionId;
             i.name = "Better than Adventure!";
         }, "BTA-"+btaVersionId);

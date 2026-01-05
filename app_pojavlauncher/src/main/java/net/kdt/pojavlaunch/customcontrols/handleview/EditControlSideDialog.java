@@ -137,7 +137,7 @@ public class EditControlSideDialog extends SideDialogView {
      * Switch the panels position if needed
      */
     public void adaptPanelPosition() {
-        if (mDisplaying) {
+        if (mDisplaying && mCurrentlyEditedButton != null) {
             boolean isAtRight = mCurrentlyEditedButton.getControlView().getX() + mCurrentlyEditedButton.getControlView().getWidth() / 2f < mCurrentlyEditedButton.getControlLayoutParent().getWidth() / 2f;
             appear(isAtRight);
             if (mColorSelector.isDisplaying()) {

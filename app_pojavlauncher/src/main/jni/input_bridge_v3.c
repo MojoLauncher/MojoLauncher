@@ -297,9 +297,7 @@ JNIEXPORT jstring JNICALL Java_org_lwjgl_glfw_CallbackBridge_nativeClipboard(JNI
 #ifdef DEBUG
     LOGD("Debug: Clipboard access is going on\n", pojav_environ->isUseStackQueueCall);
 #endif
-
-    JNIEnv *dalvikEnv;
-    (*pojav_environ->dalvikJavaVMPtr)->AttachCurrentThread(pojav_environ->dalvikJavaVMPtr, &dalvikEnv, NULL);
+    TRY_ATTACH_ENV(dalvikEnv, pojav_environ->dalvikJavaVMPtr, "Failed to attach thread for clipboard", return NULL;);
     assert(dalvikEnv != NULL);
     assert(pojav_environ->bridgeClazz != NULL);
 
@@ -318,7 +316,6 @@ JNIEXPORT jstring JNICALL Java_org_lwjgl_glfw_CallbackBridge_nativeClipboard(JNI
         (*dalvikEnv)->DeleteLocalRef(dalvikEnv, copyDst);
         (*env)->ReleaseByteArrayElements(env, copySrc, (jbyte *)copySrcC, 0);
     }
-    (*pojav_environ->dalvikJavaVMPtr)->DetachCurrentThread(pojav_environ->dalvikJavaVMPtr);
     return pasteDst;
 }
 

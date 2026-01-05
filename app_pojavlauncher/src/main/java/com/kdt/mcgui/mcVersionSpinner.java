@@ -21,16 +21,20 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import git.artdeell.mojo.R;
+
+import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.extra.ExtraListener;
 import net.kdt.pojavlaunch.fragments.InstanceEditorFragment;
 import net.kdt.pojavlaunch.fragments.ProfileTypeSelectFragment;
-import net.kdt.pojavlaunch.instances.Instance;
-import net.kdt.pojavlaunch.instances.InstanceManager;
+import net.kdt.pojavlaunch.instances.DisplayInstance;
+import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.instances.InstanceAdapter;
 import net.kdt.pojavlaunch.instances.InstanceAdapterExtra;
+
+import java.io.IOException;
 
 import fr.spse.extended_view.ExtendedTextView;
 
@@ -69,13 +73,14 @@ public class mcVersionSpinner extends ExtendedTextView {
     /** Set the selection AND saves it as a shared preference */
     public void setProfileSelection(int position){
         setSelection(position);
-        InstanceManager.setSelectedInstance((Instance) mProfileAdapter.getItem(position));
+        Instances.setSelectedInstance((DisplayInstance) mProfileAdapter.getItem(position));
     }
 
     public void setSelection(int position){
         if(mListView != null) mListView.setSelection(position);
-        mProfileAdapter.setView(this, mProfileAdapter.getItem(position), false);
+        mProfileAdapter.setView(this, position, false);
         mSelectedIndex = position;
+        mProfileAdapter.applySelectionIndex(mSelectedIndex);
     }
 
     public void openProfileEditor(FragmentActivity fragmentActivity) {
@@ -87,12 +92,22 @@ public class mcVersionSpinner extends ExtendedTextView {
         }
     }
 
+    private void applyInstances(Instances instances) {
+        mProfileAdapter.applyInstances(instances);
+        setSelection(instances.selectedIndex);
+    }
+
     /** Reload profiles from the file, forcing the spinner to consider the new data */
-    public void reloadProfiles(){
-        mProfileAdapter.reloadProfiles();
-        int selectionIndex = mProfileAdapter.resolveInstanceIndex(InstanceManager.getSelectedListedInstance());
-        if(selectionIndex >= 0) setSelection(selectionIndex);
-        else setProfileSelection(0); // Store new selection on selection failure
+    public void reloadProfiles() {
+        PojavApplication.sExecutorService.execute(()->{
+            final Instances instances;
+            try {
+                instances = Instances.loadDisplay();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            Tools.runOnUiThread(()->applyInstances(instances));
+        });
     }
 
     /** Initialize various behaviors */
@@ -140,7 +155,7 @@ public class mcVersionSpinner extends ExtendedTextView {
         mListView.setAdapter(mProfileAdapter);
         mListView.setOnItemClickListener((parent, view, position, id) -> {
             Object item = mProfileAdapter.getItem(position);
-            if(item instanceof Instance) {
+            if(item instanceof DisplayInstance) {
                 hidePopup(true);
                 setProfileSelection(position);
             }else if(item instanceof InstanceAdapterExtra) {

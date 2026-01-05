@@ -51,15 +51,28 @@ EXTERNAL_API void pojavTerminate() {
     destroyAllCursors();
 }
 
+JNIEXPORT void JNICALL
+Java_net_kdt_pojavlaunch_utils_JREUtils_applyWindowSize(ABI_COMPAT JNIEnv *env, ABI_COMPAT jclass clazz) {
+    if(pojav_environ->pojavWindow == NULL) return;
+    int32_t w = pojav_environ->savedWidth;
+    int32_t h = pojav_environ->savedHeight;
+    int32_t result = ANativeWindow_setBuffersGeometry(pojav_environ->pojavWindow, w, h, AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM);
+    if(result != 0) {
+        printf("Failed to set buffers geometry for the new window: %"PRIi32"\n", result);
+    }
+}
+
 JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_setupBridgeWindow(JNIEnv* env, ABI_COMPAT jclass clazz, jobject surface) {
     pojav_environ->pojavWindow = ANativeWindow_fromSurface(env, surface);
+    ANativeWindow_acquire(pojav_environ->pojavWindow);
+    Java_net_kdt_pojavlaunch_utils_JREUtils_applyWindowSize(env, clazz);
     if(br_setup_window != NULL) br_setup_window();
 }
 
-
 JNIEXPORT void JNICALL
 Java_net_kdt_pojavlaunch_utils_JREUtils_releaseBridgeWindow(ABI_COMPAT JNIEnv *env, ABI_COMPAT jclass clazz) {
-    ANativeWindow_release(pojav_environ->pojavWindow);
+    pojav_environ->pojavWindow = NULL;
+    if(br_setup_window != NULL) br_setup_window();
 }
 
 EXTERNAL_API void* pojavGetCurrentContext() {
@@ -156,10 +169,6 @@ EXTERNAL_API int pojavInit() {
         return 0;
     }
     glfw_main_thread = true;
-    ANativeWindow_acquire(pojav_environ->pojavWindow);
-    pojav_environ->savedWidth = ANativeWindow_getWidth(pojav_environ->pojavWindow);
-    pojav_environ->savedHeight = ANativeWindow_getHeight(pojav_environ->pojavWindow);
-    ANativeWindow_setBuffersGeometry(pojav_environ->pojavWindow,pojav_environ->savedWidth,pojav_environ->savedHeight,AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM);
     updateMonitorSize(pojav_environ->glfwThreadVmEnv, pojav_environ->savedWidth, pojav_environ->savedHeight);
     pojavInitOpenGL();
     return 1;

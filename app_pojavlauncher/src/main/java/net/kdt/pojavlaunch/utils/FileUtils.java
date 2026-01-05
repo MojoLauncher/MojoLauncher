@@ -67,7 +67,10 @@ public class FileUtils {
         if(targetFile.isFile()) throw new IOException("Target directory is a file");
         if(targetFile.exists()) {
             if(!targetFile.canWrite()) throw new IOException("Target directory is not writable");
-        }else if(!targetFile.mkdirs()) throw new IOException("Unable to create target directory");
+        }else if(!targetFile.mkdirs()) {
+            // check again just in case (???)
+            if(!targetFile.isDirectory()) throw new IOException("Unable to create target directory");
+        }
     }
 
     /**

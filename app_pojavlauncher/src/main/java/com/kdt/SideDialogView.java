@@ -38,8 +38,6 @@ public abstract class SideDialogView {
     protected final int mMargin;
     private ObjectAnimator mSideDialogAnimator;
     protected boolean mDisplaying = false;
-    /* Whether the layout is built */
-    private boolean mIsInstantiated = false;
 
     /* UI elements */
     private Button mStartButton, mEndButton;
@@ -59,7 +57,7 @@ public abstract class SideDialogView {
 
     public void setTitle(@StringRes int textId) {
         mTitleStringId = textId;
-        if (mIsInstantiated) {
+        if (mDialogLayout != null) {
             mTitleTextview.setText(textId);
             mTitleTextview.setVisibility(View.VISIBLE);
             mTitleDivider.setVisibility(View.VISIBLE);
@@ -69,13 +67,13 @@ public abstract class SideDialogView {
     public final void setStartButtonListener(@StringRes int textId, @Nullable View.OnClickListener listener) {
         mStartButtonStringId = textId;
         mStartButtonListener = listener;
-        if (mIsInstantiated) setButton(mStartButton, textId, listener);
+        if (mDialogLayout != null) setButton(mStartButton, textId, listener);
     }
 
     public final void setEndButtonListener(@StringRes int textId, @Nullable View.OnClickListener listener) {
         mEndButtonStringId = textId;
         mEndButtonListener = listener;
-        if (mIsInstantiated) setButton(mEndButton, textId, listener);
+        if (mDialogLayout != null) setButton(mEndButton, textId, listener);
     }
 
     private void setButton(@NonNull Button button, @StringRes int textId, @Nullable View.OnClickListener listener) {
@@ -86,7 +84,7 @@ public abstract class SideDialogView {
 
 
     private void inflateLayout() {
-        if(mIsInstantiated) {
+        if(mDialogLayout != null) {
             Log.w("SideDialogView", "Layout already inflated");
             return;
         }
@@ -116,7 +114,6 @@ public abstract class SideDialogView {
 
         //TODO offset better according to view width
         mDialogLayout.setX(-mDialogLayout.getResources().getDimensionPixelOffset(R.dimen._280sdp));
-        mIsInstantiated = true;
 
         // Set up UI elements
         if (mTitleStringId != 0) setTitle(mTitleStringId);
@@ -126,7 +123,7 @@ public abstract class SideDialogView {
 
     /** Destroy the layout, cleanup variables */
     private void deflateLayout() {
-        if(!mIsInstantiated) {
+        if(mDialogLayout == null) {
             Log.w("SideDialogView", "Layout not inflated");
             return;
         }
@@ -135,11 +132,10 @@ public abstract class SideDialogView {
         mSideDialogAnimator.removeAllListeners();
 
         mParent.removeView(mDialogLayout);
-        mIsInstantiated = false;
 
+        mDialogLayout = null;
         mScrollView = null;
         mSideDialogAnimator = null;
-        mDialogLayout = null;
         mDialogContent = null;
         mTitleTextview = null;
         mTitleDivider = null;
@@ -153,7 +149,7 @@ public abstract class SideDialogView {
      */
     @CallSuper
     public final void appear(boolean fromRight) {
-        if (!mIsInstantiated) {
+        if (mDialogLayout == null) {
             inflateLayout();
             onInflate();
         }
@@ -161,7 +157,9 @@ public abstract class SideDialogView {
         // To avoid UI sizing issue when the dialog is not fully inflated
         onAppear();
         ViewGroup parent = getParent();
-        Tools.runOnUiThread(() -> {
+        mScrollView.post(()->{
+            if(mDialogLayout == null) return;
+            if(mSideDialogAnimator == null) throw new RuntimeException("Unexpected side animator state when dialog is inflated");
             if (fromRight) {
                 if (!mDisplaying || !isAtRight()) {
                     mSideDialogAnimator.setFloatValues(parent.getWidth(), parent.getWidth() - mScrollView.getWidth() - mMargin);
@@ -179,6 +177,7 @@ public abstract class SideDialogView {
     }
 
     protected final boolean isAtRight() {
+        if(mDialogLayout == null) throw new RuntimeException("attempted to check dialog position when deflated");
         return mDialogLayout.getX() > getParent().getWidth() / 2f;
     }
 
@@ -189,7 +188,7 @@ public abstract class SideDialogView {
      */
     @CallSuper
     public final void disappear(boolean destroy) {
-        if(!mIsInstantiated) {
+        if(mDialogLayout == null) {
             Log.w("SideDialogView", "Layout not inflated");
             return;
         }

@@ -4,7 +4,8 @@ import com.kdt.mcgui.ProgressLayout;
 
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
-import net.kdt.pojavlaunch.instances.InstanceManager;
+import net.kdt.pojavlaunch.instances.InstanceInstaller;
+import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.modloaders.modpacks.imagecache.ModIconCache;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
@@ -35,7 +36,7 @@ public class ModpackInstaller {
         // Get the modpack file
         File modpackFile = new File(Tools.DIR_CACHE, modpackName + ".cf"); // Cache File
         ModLoader modLoaderInfo;
-        Instance instance = InstanceManager.createInstance(i->{
+        Instance instance = Instances.createInstance(i->{
             i.name = modDetail.title;
         }, modpackName.substring(0, Math.min(16,modpackName.length())));
         try {
@@ -53,7 +54,9 @@ public class ModpackInstaller {
             if(modLoaderInfo == null) throw new IOException("Unknown modpack mod loader information");
 
             if(modLoaderInfo.requiresGuiInstallation()) {
-                instance.installer = modLoaderInfo.createInstaller();
+                InstanceInstaller instanceInstaller = modLoaderInfo.createInstaller();
+                if(instanceInstaller == null) throw new IOException("Failed to prepare data for instance installation");
+                instance.installer = instanceInstaller;
             } else {
                 String versionId = modLoaderInfo.installHeadlessly();
                 if(versionId == null) throw new IOException("Unknown mod loader version");
@@ -62,12 +65,12 @@ public class ModpackInstaller {
             instance.write();
             ModIconCache.writeInstanceImage(instance, modDetail.getIconCacheTag());
 
-            InstanceManager.setSelectedInstance(instance);
+            Instances.setSelectedInstance(instance);
             if(modLoaderInfo.requiresGuiInstallation()) {
                 instance.installer.start();
             }
         } catch (IOException e) {
-            InstanceManager.removeInstance(instance);
+            Instances.removeInstance(instance);
             throw e;
         } finally {
             modpackFile.delete();

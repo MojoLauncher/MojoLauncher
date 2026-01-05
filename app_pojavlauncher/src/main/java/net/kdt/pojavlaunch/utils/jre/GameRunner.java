@@ -19,6 +19,7 @@ import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.DateUtils;
 import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.GLInfoUtils;
+import net.kdt.pojavlaunch.utils.GameOptionsUtils;
 import net.kdt.pojavlaunch.utils.JREUtils;
 import net.kdt.pojavlaunch.utils.JSONUtils;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
@@ -59,14 +60,6 @@ public class GameRunner {
         return false;
     }
 
-    private static int parseIntDefault(String value, int defaultValue) {
-        try {
-            return Integer.parseInt(value);
-        }catch (NumberFormatException e) {
-            return defaultValue;
-        }
-    }
-
     /**
      * Initialize OpenGL and do checks to see if the GPU of the device is affected by the render
      * distance issue.
@@ -91,31 +84,10 @@ public class GameRunner {
         }catch (Exception e) {
             Log.e("Tools", "Failed to load config", e);
         }
-        int renderDistance = parseIntDefault(MCOptionUtils.get("renderDistance"),12);
+        int renderDistance = GameOptionsUtils.parseIntDefault(MCOptionUtils.get("renderDistance"),12);
         // 7 is the render distance "magic number" above which MC creates too many buffers
         // for Adreno's OpenGL ES implementation
         return renderDistance > 7;
-    }
-
-    /**
-     * Decrease clound rendering distance in order to avoid the Mali cloud rendering slowdown bug
-     */
-    private static void fixDeathCloud() {
-        GLInfoUtils.GLInfo info = GLInfoUtils.getGlInfo();
-        if(!info.isArm()) return; // Not an affected GPU
-        try {
-            MCOptionUtils.load();
-        }catch (Exception e) {
-            Log.e("Tools", "Failed to load config", e);
-        }
-        int cloudRange = parseIntDefault(MCOptionUtils.get("cloudRange"), 128);
-        if(cloudRange <= 64) return; // Not affected below 117 (but let's err on the safe side)
-        try {
-            MCOptionUtils.set("cloudRange", "64");
-            MCOptionUtils.save();
-        }catch (Exception e) {
-            Log.e("Tools", "Failed to save config", e);
-        }
     }
 
     private static boolean isGl4esCompatible(JMinecraftVersionList.Version version) throws Exception{
@@ -183,7 +155,9 @@ public class GameRunner {
         }
         RendererCompatUtil.releaseRenderersCache();
 
-        if(rendererName.equals("opengles3_ltw") && checkRenderDistance(gamedir)) {
+        boolean isLtw = rendererName.equals("opengles3_ltw");
+
+        if(isLtw && checkRenderDistance(gamedir)) {
             if(showDialog(activity, R.string.ltw_render_distance_warning_msg)) return;
             // If the code goes here, it means that the user clicked "OK". Fix the render distance.
             try {
@@ -194,7 +168,11 @@ public class GameRunner {
             }
         }
 
-        if(rendererName.equals("opengles3_ltw")) fixDeathCloud();
+        GameOptionsUtils.fixOptions(isLtw);
+
+        if(isLtw && GLInfoUtils.getGlInfo().forcedMsaa) {
+            if(showDialog(activity, R.string.ltw_4x_msaa_warning_msg)) return;
+        }
 
         int requiredJavaVersion = 8;
         if(versionInfo.javaVersion != null) requiredJavaVersion = versionInfo.javaVersion.majorVersion;
@@ -279,7 +257,7 @@ public class GameRunner {
                     forgeSplashContent = Tools.read(forgeSplashFile.getAbsolutePath());
                 }
                 if (forgeSplashContent.contains("enabled=true")) {
-                    Tools.write(forgeSplashFile.getAbsolutePath(),
+                    Tools.write(forgeSplashFile,
                             forgeSplashContent.replace("enabled=true", "enabled=false"));
                 }
             } catch (IOException e) {

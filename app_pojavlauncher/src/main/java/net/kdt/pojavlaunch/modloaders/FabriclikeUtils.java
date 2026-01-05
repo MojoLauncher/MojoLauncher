@@ -93,7 +93,7 @@ public class FabriclikeUtils {
         File versionJsonDir = new File(Tools.DIR_HOME_VERSION, versionId);
         File versionJsonFile = new File(versionJsonDir, versionId+".json");
         FileUtils.ensureDirectory(versionJsonDir);
-        Tools.write(versionJsonFile.getAbsolutePath(), fabricJson);
+        Tools.write(versionJsonFile, fabricJson);
         return versionId;
     }
 
