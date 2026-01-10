@@ -196,7 +196,8 @@ public class MinecraftDownloader extends Downloader {
             throw new IOException("Unable to read Version JSON for version " + versionName);
         }
 
-        NewJREUtil.installNewJreIfNeeded(assetManager, verInfo);
+        if(assetManager != null)
+            NewJREUtil.installNewJreIfNeeded(assetManager, verInfo);
 
         JAssets assets = downloadAssetsIndex(verInfo);
         if(assets != null) scheduleAssetDownloads(assets);
