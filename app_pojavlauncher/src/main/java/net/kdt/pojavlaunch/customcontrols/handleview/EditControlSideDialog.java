@@ -28,6 +28,7 @@ import net.kdt.pojavlaunch.colorselector.ColorSelector;
 import net.kdt.pojavlaunch.customcontrols.ControlData;
 import net.kdt.pojavlaunch.customcontrols.ControlDrawerData;
 import net.kdt.pojavlaunch.customcontrols.ControlJoystickData;
+import net.kdt.pojavlaunch.customcontrols.ControlLayout;
 import net.kdt.pojavlaunch.customcontrols.LayoutBitmaps;
 import net.kdt.pojavlaunch.customcontrols.buttons.ControlDrawer;
 import net.kdt.pojavlaunch.customcontrols.buttons.ControlInterface;
@@ -137,12 +138,15 @@ public class EditControlSideDialog extends SideDialogView {
      * Switch the panels position if needed
      */
     public void adaptPanelPosition() {
-        if (mDisplaying && mCurrentlyEditedButton != null) {
-            boolean isAtRight = mCurrentlyEditedButton.getControlView().getX() + mCurrentlyEditedButton.getControlView().getWidth() / 2f < mCurrentlyEditedButton.getControlLayoutParent().getWidth() / 2f;
-            appear(isAtRight);
-            if (mColorSelector.isDisplaying()) {
-                Tools.runOnUiThread(() -> appearColor(isAtRight, mCurrentlyEditedButton.getProperties().bgColor));
-            }
+        if(!mDisplaying) return;
+        if(mCurrentlyEditedButton == null) return;
+        ControlLayout parent = mCurrentlyEditedButton.getControlLayoutParent();
+        if(parent == null) return;
+
+        boolean isAtRight = mCurrentlyEditedButton.getControlView().getX() + mCurrentlyEditedButton.getControlView().getWidth() / 2f < mCurrentlyEditedButton.getControlLayoutParent().getWidth() / 2f;
+        appear(isAtRight);
+        if (mColorSelector.isDisplaying()) {
+            Tools.runOnUiThread(() -> appearColor(isAtRight, mCurrentlyEditedButton.getProperties().bgColor));
         }
     }
 

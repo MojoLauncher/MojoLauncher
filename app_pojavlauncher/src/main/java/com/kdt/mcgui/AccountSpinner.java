@@ -1,6 +1,7 @@
 package com.kdt.mcgui;
 
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -23,6 +24,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
 
 import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.Tools;
@@ -210,7 +213,16 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
     @Override
     public void onLoginError(Throwable errorMessage) {
         mLoginBarPaint.setColor(Color.RED);
+        invalidate();
+
         Context context = getContext();
+        if(!(context instanceof Activity)) return;
+        if(context instanceof LifecycleOwner) {
+            LifecycleOwner lifecycleOwner = (LifecycleOwner) context;
+            Lifecycle.State state = lifecycleOwner.getLifecycle().getCurrentState();
+            if(state != Lifecycle.State.RESUMED) return;
+        }
+
         if(errorMessage instanceof PresentedException) {
             PresentedException exception = (PresentedException) errorMessage;
             Throwable cause = exception.getCause();
@@ -222,7 +234,6 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
         }else {
             Tools.showError(getContext(), errorMessage);
         }
-        invalidate();
     }
 
     @Override

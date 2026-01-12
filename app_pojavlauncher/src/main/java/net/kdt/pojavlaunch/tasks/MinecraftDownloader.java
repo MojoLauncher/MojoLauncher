@@ -23,6 +23,7 @@ import net.kdt.pojavlaunch.mirrors.MirrorTamperedException;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
 import net.kdt.pojavlaunch.utils.FileUtils;
+import net.kdt.pojavlaunch.utils.JSONUtils;
 import net.kdt.pojavlaunch.utils.jre.RuntimeSelectionException;
 import net.kdt.pojavlaunch.value.DependentLibrary;
 import net.kdt.pojavlaunch.value.MinecraftClientInfo;
@@ -62,7 +63,9 @@ public class MinecraftDownloader extends Downloader {
             try {
                 downloadGame(assetManager, version, realVersion);
                 listener.onDownloadDone();
-            }catch (Exception e) {
+            }catch(RuntimeException e) {
+                throw e; // log fatal errors to Google Play
+            } catch (Exception e) {
                 listener.onDownloadFailed(e);
             }
             ProgressLayout.clearProgress(ProgressLayout.DOWNLOAD_MINECRAFT);
@@ -187,7 +190,8 @@ public class MinecraftDownloader extends Downloader {
         if(verInfo != null) versionJsonFile = downloadGameJson(verInfo);
         else versionJsonFile = createGameJsonPath(versionName);
         if(versionJsonFile.canRead())  {
-            verInfo = Tools.GLOBAL_GSON.fromJson(Tools.read(versionJsonFile), JMinecraftVersionList.Version.class);
+            verInfo = JSONUtils.readFromFile(versionJsonFile, JMinecraftVersionList.Version.class);
+            if(verInfo == null) throw new IOException("Deserialized json is null. Contact developer.");
         } else {
             throw new IOException("Unable to read Version JSON for version " + versionName);
         }
