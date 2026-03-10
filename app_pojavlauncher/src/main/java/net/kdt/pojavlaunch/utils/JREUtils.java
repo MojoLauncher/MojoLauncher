@@ -134,7 +134,11 @@ public class JREUtils {
         envMap.put("allow_higher_compat_version", "true");
         envMap.put("allow_glsl_extension_directive_midshader", "true");
 		// This is currently required for YSM mod to function
-		envMap.put("MOD_ANDROID_RUNTIME", context.getDataDir().getAbsolutePath() + "/app_runtime_mod");
+		File modRuntimeDir = new File(Tools.DIR_CACHE, "app_runtime_mod");
+		if (!modRuntimeDir.exists()) {
+    		modRuntimeDir.mkdirs();
+		}
+		envMap.put("MOD_ANDROID_RUNTIME", modRuntimeDir.getAbsolutePath());
 
         if(!renderer.equals("opengles2")) { // Don't enable ANGLE for GL4ES for now (it's currently broken)
             setupAngleEnv(context, envMap);
