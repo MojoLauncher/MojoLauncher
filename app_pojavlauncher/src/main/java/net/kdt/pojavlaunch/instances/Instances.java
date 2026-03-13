@@ -29,6 +29,7 @@ public class Instances {
     private static <T extends DisplayInstance> T read(File instanceRoot, Class<T> tClass) {
         try {
             T instance = JSONUtils.readFromFile(metadataLocation(instanceRoot), tClass);
+            if(instance == null) return null;
             instance.mInstanceRoot = instanceRoot;
             return instance;
         }catch (IOException | JsonSyntaxException e) {
