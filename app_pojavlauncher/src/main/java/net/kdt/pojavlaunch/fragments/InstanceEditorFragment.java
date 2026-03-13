@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import git.artdeell.mojo.R;
@@ -89,15 +90,20 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
             Tools.backToMainMenu(requireActivity());
         });
 
-        mDeleteButton.setOnClickListener(v -> {
-            InstanceIconProvider.dropIcon(mInstance);
-            Tools.removeCurrentFragment(requireActivity());
-            try {
-                Instances.removeInstance(mInstance);
-            }catch (IOException e) {
-                Tools.showErrorRemote(e);
-            }
-        });
+        mDeleteButton.setOnClickListener(v -> new AlertDialog.Builder(requireContext())
+                .setTitle(R.string.instance_delete)
+                .setMessage(R.string.instance_delete_confirmation)
+                .setPositiveButton(R.string.global_delete, (dialog, which) -> {
+                    InstanceIconProvider.dropIcon(mInstance);
+                    Tools.removeCurrentFragment(requireActivity());
+                    try {
+                        Instances.removeInstance(mInstance);
+                    } catch (IOException e) {
+                        Tools.showErrorRemote(e);
+                    }
+                })
+                .setNegativeButton(R.string.global_no, null)
+                .show());
 
         View.OnClickListener controlSelectListener = getControlSelectListener();
         mControlSelectButton.setOnClickListener(controlSelectListener);

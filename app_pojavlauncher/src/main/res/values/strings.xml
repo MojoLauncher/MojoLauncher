@@ -478,4 +478,6 @@
     <string name="runtime_error_title">Runtime not available</string>
     <string name="runtime_error_missing">Java %d is not yet installed. Please choose another compatible runtime or connect to the Internet to install it automatically.</string>
     <string name="runtime_error_install_failed">Failed to install Java %d. Please check your Internet connection and try again.</string>
+    <string name="instance_delete">Delete instance</string>
+    <string name="instance_delete_confirmation">Are you sure you want to delete the instance? This will permanently delete all worlds, mods, resources and any other data in the instance directory. This action cannot be undone!</string>
 </resources>
