@@ -90,13 +90,8 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         });
 
         mDeleteButton.setOnClickListener(v -> {
-            InstanceIconProvider.dropIcon(mInstance);
-            Tools.removeCurrentFragment(requireActivity());
-            try {
-                Instances.removeInstance(mInstance);
-            }catch (IOException e) {
-                Tools.showErrorRemote(e);
-            }
+            DeleteConfirmDialogFragment dialogFragment = new DeleteConfirmDialogFragment();
+            dialogFragment.show(getChildFragmentManager(), "delete_dialog_confirm");
         });
 
         View.OnClickListener controlSelectListener = getControlSelectListener();
