@@ -79,21 +79,35 @@ EXTERNAL_API void* pojavGetCurrentContext() {
     return br_get_current();
 }
 
-//#define ADRENO_POSSIBLE
+#define ADRENO_POSSIBLE
 #ifdef ADRENO_POSSIBLE
 void* load_turnip_vulkan() {
+    // Let it be TURNIP here for compatibility
     if(getenv("POJAV_LOAD_TURNIP") == NULL) return NULL;
     const char* native_dir = getenv("POJAV_NATIVEDIR");
     const char* cache_dir = getenv("TMPDIR");
     if(!linker_ns_load(native_dir)) return NULL;
     void* linkerhook = linker_ns_dlopen("liblinkerhook.so", RTLD_LOCAL | RTLD_NOW);
     if(linkerhook == NULL) return NULL;
-    void* turnip_driver_handle = linker_ns_dlopen("libvulkan_freedreno.so", RTLD_LOCAL | RTLD_NOW);
+    char* drv_path = getenv("MOJO_VULKAN_OVERRIDE"); // This will work only in sandboxed storage environment
+    void* turnip_driver_handle;
+    if(drv_path) {
+        turnip_driver_handle = linker_ns_dlopen(drv_path, RTLD_LOCAL | RTLD_NOW);
+        if(turnip_driver_handle == NULL) {
+            printf("AdrenoSupp: Failed to load the driver at %s!\n%s\n", drv_path, dlerror());
+            dlclose(linkerhook);
+            return NULL;
+        }
+        goto DRV_LOADED;
+    }
+    turnip_driver_handle = linker_ns_dlopen("libvulkan_freedreno.so", RTLD_LOCAL | RTLD_NOW);
     if(turnip_driver_handle == NULL) {
-        printf("AdrenoSupp: Failed to load Turnip!\n%s\n", dlerror());
+        printf("AdrenoSupp: Failed to load Turnip!\n%s\n", drv_path, dlerror());
+        // Try loading old freedreno just in case
         dlclose(linkerhook);
         return NULL;
     }
+    DRV_LOADED:
     void* dl_android = linker_ns_dlopen("libdl_android.so", RTLD_LOCAL | RTLD_LAZY);
     if(dl_android == NULL) {
         dlclose(linkerhook);
@@ -111,6 +125,10 @@ void* load_turnip_vulkan() {
     linkerhook_pass_handles(turnip_driver_handle, android_dlopen_ext, android_get_exported_namespace);
     void* libvulkan = linker_ns_dlopen_unique(cache_dir, "libvulkan.so", RTLD_LOCAL | RTLD_NOW);
     return libvulkan;
+    LOAD_FAIL:
+    printf("AdrenoSupp: Failed to load the driver at %s!\n%s\n", drv_path, dlerror());
+    dlclose(linkerhook);
+    return NULL;
 }
 #endif
 
