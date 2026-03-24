@@ -397,6 +397,7 @@
     <string name="modloader_dl_install_forge_instance">Установка с Forge</string>
     <string name="social_media_invite" translatable="false">https://t.me/mojolauncher</string>
     <string name="compat_version_not_supported">Ваше устройство не может запустить эту версию поскольку LTW не поддерживается</string>
+    <string name="compat_sodium_not_supported">Ваше устройство не может запустить Sodium на этой версии поскольку LTW не поддерживается</string>
     <string name="oauth_unknown_error">Неизвестная ошибка авторизации</string>
     <string name="oauth_web_complete">Авторизация…</string>
     <string name="auth_select_microsoft">Аккаунт Microsoft</string>

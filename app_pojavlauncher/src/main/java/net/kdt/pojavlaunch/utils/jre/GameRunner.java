@@ -107,6 +107,20 @@ public class GameRunner {
         return LifecycleAwareAlertDialog.haltOnDialog(activity.getLifecycle(), activity, dialogCreator);
     }
 
+    // Autoswitch to LTW if supported, otherwise - crash with resId dialog message. Returns LTW renderer strings if succeeded
+    private static String switchLtw(boolean hasLtw, Instance instance, AppCompatActivity activity, int resId) throws InterruptedException, IOException {
+        if(hasLtw) {
+            String ltwRenderer = "opengles3_ltw";
+            instance.renderer = ltwRenderer;
+            instance.write();
+            return ltwRenderer;
+        }else {
+            showDialog(activity, resId);
+            System.exit(0);
+            return null;
+        }
+    }
+
     public static void launchMinecraft(final AppCompatActivity activity, MinecraftAccount minecraftAccount,
                                        Instance instance, String versionId, String rendererName) throws Throwable {
         int freeDeviceMemory = Tools.getFreeDeviceMemory(activity);
@@ -141,17 +155,16 @@ public class GameRunner {
             instance.write();
         }
 
-        // Switch renderer to LTW when running 1.21.5
+        boolean isGl4es = rendererName.equals("opengles2");
         boolean ltwSupported = RendererCompatUtil.getCompatibleRenderers(activity).rendererIds.contains("opengles3_ltw");
-        if(!isGl4esCompatible(versionInfo) && rendererName.equals("opengles2")) {
-            if(ltwSupported) {
-                instance.renderer = rendererName = "opengles3_ltw";
-                instance.write();
-            }else {
-                showDialog(activity, R.string.compat_version_not_supported);
-                System.exit(0);
-                return;
-            }
+        // Block Sodium from running with GL4ES on 1.17+
+        if(!isCompatContext(versionInfo) && isGl4es && hasSodium(gamedir)) {
+            rendererName = switchLtw(ltwSupported, instance, activity, R.string.compat_sodium_not_supported);
+        }
+
+        // Switch renderer to LTW when running 1.21.5
+        if(!isGl4esCompatible(versionInfo) && isGl4es) {
+            rendererName = switchLtw(ltwSupported, instance, activity, R.string.compat_version_not_supported);
         }
         RendererCompatUtil.releaseRenderersCache();
 

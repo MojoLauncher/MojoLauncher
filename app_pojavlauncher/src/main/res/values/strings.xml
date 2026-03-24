@@ -440,6 +440,7 @@
     <string name="bta_installer_nightly_versions">Nightly BTA versions</string>
     <string name="newdl_extracting_native_libraries">Extracting native libraries (%d/%d)</string>
     <string name="compat_version_not_supported">Your device cannot run this version because LTW is not supported on your device.</string>
+    <string name="compat_sodium_not_supported">Your device cannot run Sodium on this version because LTW is not supported on your device.</string>
     <string name="oauth_unknown_error">Unknown authentication error</string>
     <string name="oauth_web_complete">Authenticating…</string>
     <string name="auth_select_microsoft">Microsoft account</string>
