@@ -22,7 +22,7 @@ public class DeleteConfirmDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        if (mInstance == null) {dismiss();} 
+        if (mInstance == null) dismiss();
         return new AlertDialog.Builder(requireContext())
                 .setTitle(R.string.instance_delete)
                 .setMessage(R.string.instance_delete_confirmation)
