@@ -79,7 +79,7 @@ EXTERNAL_API void* pojavGetCurrentContext() {
     return br_get_current();
 }
 
-#define ADRENO_POSSIBLE
+//#define ADRENO_POSSIBLE
 #ifdef ADRENO_POSSIBLE
 void* load_turnip_vulkan() {
     // Let it be TURNIP here for compatibility
