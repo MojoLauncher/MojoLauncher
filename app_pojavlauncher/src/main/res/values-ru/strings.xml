@@ -430,4 +430,5 @@
     <string name="gr_err_renderer_load_Failed">Ошибка загрузки визуализатора</string>
     <string name="ltw_4x_msaa_warning_msg">Похоже, вы включили настройку \"Включить 4x MSAA\" в разделе \"Для разработчиков\". Пожалуйста отключите её чтобы избежать проблем с визуализацией.</string>
     <string name="no_instance">Не выбрано установки. Пожалуйста создайте установку или выберите существующую.</string>
+    <string name="modloader_dl_install_legacy_fabric_instance">Установка с Legacy Fabric</string>
 </resources>

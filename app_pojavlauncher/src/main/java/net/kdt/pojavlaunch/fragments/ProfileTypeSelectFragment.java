@@ -51,5 +51,7 @@ public class ProfileTypeSelectFragment extends Fragment {
                 Tools.swapFragment(requireActivity(), BTAInstallFragment.class, BTAInstallFragment.TAG, null));
         view.findViewById(R.id.modded_profile_neoforge).setOnClickListener((v)->
                 Tools.swapFragment(requireActivity(), NeoforgeInstallFragment.class, NeoforgeInstallFragment.TAG, null));
+        view.findViewById(R.id.modded_profile_legacy_fabric).setOnClickListener((v) ->
+                Tools.swapFragment(requireActivity(), LegacyFabricInstallFragment.class, LegacyFabricInstallFragment.TAG, null));
     }
 }

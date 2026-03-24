@@ -11,6 +11,7 @@ public class ModLoader {
     public static final int MOD_LOADER_FABRIC = 1;
     public static final int MOD_LOADER_QUILT = 2;
     public static final int MOD_LOADER_NEOFORGE = 3;
+    public static final int MOD_LOADER_LEGACY_FABRIC = 4;
     public final int modLoaderType;
     public final String modLoaderVersion;
     public final String minecraftVersion;
@@ -34,7 +35,9 @@ public class ModLoader {
             case MOD_LOADER_QUILT:
                 return "quilt-loader-"+modLoaderVersion+"-"+minecraftVersion;
             case MOD_LOADER_NEOFORGE:
-                return "neoforge-" + modLoaderVersion;
+                return "neoforge-"+modLoaderVersion;
+            case MOD_LOADER_LEGACY_FABRIC:
+                return "legacy-fabric-loader-"+modLoaderVersion+"-"+minecraftVersion;
             default:
                 return null;
         }
@@ -50,6 +53,8 @@ public class ModLoader {
                 return FabriclikeUtils.FABRIC_UTILS.install(minecraftVersion, modLoaderVersion);
             case MOD_LOADER_QUILT:
                 return FabriclikeUtils.QUILT_UTILS.install(minecraftVersion, modLoaderVersion);
+            case MOD_LOADER_LEGACY_FABRIC:
+                return FabriclikeUtils.LEGACY_FABRIC_UTILS.install(minecraftVersion, modLoaderVersion);
             case MOD_LOADER_FORGE:
             case MOD_LOADER_NEOFORGE:
             default:
@@ -69,6 +74,7 @@ public class ModLoader {
                 return ForgelikeUtils.FORGE_UTILS.createInstaller(minecraftVersion, modLoaderVersion);
             case MOD_LOADER_QUILT:
             case MOD_LOADER_FABRIC:
+            case MOD_LOADER_LEGACY_FABRIC:
             default:
                 return null;
         }
@@ -85,6 +91,7 @@ public class ModLoader {
                 return true;
             case MOD_LOADER_FABRIC:
             case MOD_LOADER_QUILT:
+            case MOD_LOADER_LEGACY_FABRIC:
             default:
                 return false;
         }
