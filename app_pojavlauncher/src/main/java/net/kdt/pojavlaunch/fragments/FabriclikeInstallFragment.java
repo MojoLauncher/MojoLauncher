@@ -115,7 +115,7 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
                 return;
             }
             Instances.createInstance((i)->{
-                i.name = "Fabric";
+                i.name = mFabriclikeUtils.getName();
                 i.icon = mFabriclikeUtils.getIconName();
                 i.versionId = versionId;
             }, versionId);
