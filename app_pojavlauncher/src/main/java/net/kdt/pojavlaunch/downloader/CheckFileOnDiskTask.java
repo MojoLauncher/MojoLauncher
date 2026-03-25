@@ -36,7 +36,7 @@ public class CheckFileOnDiskTask extends DownloaderTask {
         if(!LauncherPreferences.PREF_VERIFY_FILES) return true;
         if(mMetadata.size != -1) {
             if(mMetadata.size != localFile.length()) return false;
-            if(LauncherPreferences.PREF_RAPID_START) return true;
+            if(LauncherPreferences.PREF_RAPID_START && !mAfterDownload) return true;
         }
         return mMetadata.sha1Hash == null || HashUtils.compareSHA1(localFile, mMetadata.sha1Hash);
     }

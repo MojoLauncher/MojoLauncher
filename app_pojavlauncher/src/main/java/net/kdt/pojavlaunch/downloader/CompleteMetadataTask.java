@@ -34,7 +34,9 @@ public class CompleteMetadataTask extends DownloaderTask {
         if(mMetadata.mirrorType != DownloadMirror.DOWNLOAD_CLASS_LIBRARIES) return;
 
         if(!LauncherPreferences.PREF_VERIFY_FILES) return;
-        if(LauncherPreferences.PREF_RAPID_START && mMetadata.size != -1 && mMetadata.path.exists()) return;
+
+        // No need to try and obtain the hash if the file is qualified for rapid start check skip
+        if(LauncherPreferences.PREF_RAPID_START && mMetadata.size != -1 && mMetadata.path.length() == mMetadata.size) return;
 
         try {
             mMetadata.sha1Hash = mDownloader.downloadString(new URL(mMetadata.url + ".sha1"));
