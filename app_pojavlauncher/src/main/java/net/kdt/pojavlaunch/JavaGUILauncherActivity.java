@@ -55,6 +55,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
     private GestureDetector mGestureDetector;
 
     private boolean mIsVirtualMouseEnabled;
+    private boolean mIsTrusted;
     
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -157,6 +158,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
                 finish();
                 return;
             }
+            mIsTrusted = extras.getBoolean("trusted", false);
             final List<String> javaArgs = extras.getStringArrayList("javaArgs");
             final Uri resourceUri = extras.getParcelable("modUri");
             final String jarPath = extras.getString("modPath");
@@ -363,7 +365,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
                 javaArgList.addAll(javaArgs);
             }
             
-            if (LauncherPreferences.PREF_JAVA_SANDBOX) {
+            if (LauncherPreferences.PREF_JAVA_SANDBOX && !mIsTrusted) {
                 Collections.reverse(javaArgList);
                 javaArgList.add("-Xbootclasspath/a:" + Tools.DIR_DATA + "/security/pro-grade.jar");
                 javaArgList.add("-Djava.security.manager=net.sourceforge.prograde.sm.ProGradeJSM");
