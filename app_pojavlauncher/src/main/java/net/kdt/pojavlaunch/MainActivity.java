@@ -30,9 +30,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.os.Handler;
-import android.os.Looper;
-import android.widget.TextView;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
@@ -89,9 +88,6 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     private GyroControl mGyroControl = null;
     private ControlLayout mControlLayout;
     private HotbarView mHotbarView;
-    private TextView fpsCounter;
-    private Handler fpsHandler;
-    private Runnable fpsRunnable;
 
     Instance instance;
     MinecraftAccount minecraftAccount;
@@ -123,16 +119,6 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         initLayout(R.layout.activity_basemain);
         CallbackBridge.addGrabListener(touchpad);
         CallbackBridge.addGrabListener(minecraftGLView);
-
-        if (LauncherPreferences.PREF_SHOW_FPS_COUNTER) {
-            fpsCounter.setVisibility(View.VISIBLE);
-            fpsHandler = new Handler(Looper.getMainLooper());
-            fpsRunnable = () -> {
-                fpsCounter.setText("FPS: " + getCurrentFPS());
-                fpsHandler.postDelayed(fpsRunnable, 1000);
-            };
-            fpsHandler.post(fpsRunnable);
-        }
 
         mGyroControl = new GyroControl(this);
 
@@ -255,9 +241,16 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     }
 
     /** Boilerplate binding */
-    private int getCurrentFPS() {
-        // Placeholder: In a real implementation, get FPS from LWJGL or frame counter
-        return 60;
+    private void bindValues(){
+        mControlLayout = findViewById(R.id.main_control_layout);
+        minecraftGLView = findViewById(R.id.main_game_render_view);
+        touchpad = findViewById(R.id.main_touchpad);
+        drawerLayout = findViewById(R.id.main_drawer_options);
+        navDrawer = findViewById(R.id.main_navigation_view);
+        loggerView = findViewById(R.id.mainLoggerView);
+        touchCharInput = findViewById(R.id.mainTouchCharInput);
+        mDrawerPullButton = findViewById(R.id.drawer_button);
+        mHotbarView = findViewById(R.id.hotbar_view);
     }
 
     @Override
@@ -295,9 +288,6 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (fpsHandler != null) {
-            fpsHandler.removeCallbacks(fpsRunnable);
-        }
         CallbackBridge.removeGrabListener(touchpad);
         CallbackBridge.removeGrabListener(minecraftGLView);
         ContextExecutor.clearActivity();

@@ -149,17 +149,6 @@ public class GameRunner {
         File gamedir = instance.getGameDirectory();
         JMinecraftVersionList.Version versionInfo = Tools.getVersionInfo(versionId);
 
-        // Set render distance from instance
-        try {
-            MCOptionUtils.load();
-            if (instance.renderDistance > 0) {
-                MCOptionUtils.set("renderDistance", String.valueOf(instance.renderDistance));
-                MCOptionUtils.save();
-            }
-        } catch (Exception e) {
-            Log.e("GameRunner", "Failed to set render distance", e);
-        }
-
         // Switch renderer to GL4ES when running a compat context version on LTW
         if(isCompatContext(versionInfo) && rendererName.equals("opengles3_ltw")) {
             instance.renderer = rendererName = "opengles2";

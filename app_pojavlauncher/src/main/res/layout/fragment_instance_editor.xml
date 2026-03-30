@@ -163,35 +163,6 @@
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/preset_title"
-                app:layout_constraintBottom_toTopOf="@+id/vprof_editor_preset_spinner"
-                app:layout_constraintStart_toStartOf="@+id/vprof_editor_preset_spinner" />
-
-            <Spinner
-                android:id="@+id/vprof_editor_preset_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:background="@drawable/background_line"
-                android:dropDownWidth="match_parent"
-                android:paddingVertical="0px"
-                app:layout_constraintTop_toBottomOf="@+id/vprof_editor_data_checkbox_container"
-                tools:paddingVertical="@dimen/_12sdp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/_8sdp"
-                android:paddingHorizontal="@dimen/_8sdp"
-                android:rotation="180"
-                android:src="@drawable/spinner_arrow"
-                app:layout_constraintBottom_toBottomOf="@id/vprof_editor_preset_spinner"
-                app:layout_constraintEnd_toEndOf="@id/vprof_editor_preset_spinner"
-                app:layout_constraintTop_toTopOf="@id/vprof_editor_preset_spinner" />
-
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="@string/pvc_jvmArgs"
                 app:layout_constraintBottom_toTopOf="@+id/vprof_editor_jre_args"
                 app:layout_constraintStart_toStartOf="@+id/vprof_editor_jre_args" />
@@ -208,7 +179,7 @@
                 android:paddingHorizontal="@dimen/padding_heavy"
                 android:textSize="@dimen/_13ssp"
 
-                app:layout_constraintTop_toBottomOf="@+id/vprof_editor_preset_spinner" />
+                app:layout_constraintTop_toBottomOf="@+id/vprof_editor_data_checkbox_container" />
 
             <TextView
                 android:id="@+id/textView2"

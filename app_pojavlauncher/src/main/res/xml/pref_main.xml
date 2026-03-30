@@ -10,30 +10,6 @@
     <net.kdt.pojavlaunch.prefs.BackButtonPreference/>
 
     <PreferenceCategory
-        android:title="Performance Presets"
-        >
-
-        <Preference
-            android:key="preset_potato"
-            android:title="🥔 Potato Mode"
-            android:summary="RAM: 512MB, Render Distance: 4"
-            />
-
-        <Preference
-            android:key="preset_normal"
-            android:title="⚖️ Normal Mode"
-            android:summary="RAM: 35% of device, Render Distance: 8"
-            />
-
-        <Preference
-            android:key="preset_extreme"
-            android:title="🔥 Extreme Mode"
-            android:summary="RAM: 55% of device, Render Distance: 16"
-            />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
         android:title="@string/preference_category_main_categories"
         >
 

@@ -48,35 +48,6 @@
 				tools:ignore="TouchTargetSizeCheck" />
 
 			<net.kdt.pojavlaunch.customcontrols.handleview.DrawerPullButton
-
-			<net.kdt.pojavlaunch.MinecraftGLSurface
-				android:id="@+id/main_game_render_view"
-				android:layout_width="fill_parent"
-				android:layout_height="fill_parent"
-				android:defaultFocusHighlightEnabled="false"
-                tools:ignore="UnusedAttribute" />
-
-			<net.kdt.pojavlaunch.customcontrols.mouse.Touchpad
-				android:layout_height="match_parent"
-				android:layout_width="match_parent"
-				android:orientation="vertical"
-				android:id="@+id/main_touchpad"
-				android:focusable="false"
-				android:translationZ="1dp"
-				android:visibility="gone"/>
-
-
-			<net.kdt.pojavlaunch.customcontrols.keyboard.TouchCharInput
-				android:id="@+id/mainTouchCharInput"
-				android:layout_width="1dp"
-				android:layout_height="1dp"
-				android:background="@android:color/darker_gray"
-				android:ems="10"
-				android:imeOptions="flagNoFullscreen|flagNoExtractUi|flagNoPersonalizedLearning|actionDone"
-				android:inputType="textFilter|textImeMultiLine|textAutoComplete|textAutoCorrect"
-				tools:ignore="TouchTargetSizeCheck" />
-
-			<net.kdt.pojavlaunch.customcontrols.handleview.DrawerPullButton
 				android:id="@+id/drawer_button"
 				android:layout_width="40dp"
 				android:layout_height="20dp"
@@ -94,20 +65,6 @@
 			android:id="@+id/mainLoggerView"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:visibility="gone"
-			/>
-
-		<TextView
-			android:id="@+id/fps_counter"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="top|end"
-			android:layout_margin="16dp"
-			android:background="@drawable/fps_counter_background"
-			android:padding="8dp"
-			android:text="FPS: 60"
-			android:textColor="@android:color/white"
-			android:textSize="14sp"
 			android:visibility="gone"
 			/>
 

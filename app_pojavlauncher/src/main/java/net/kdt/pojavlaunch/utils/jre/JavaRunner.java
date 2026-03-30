@@ -97,12 +97,6 @@ public class JavaRunner {
         userArguments.add(0, "-Xms"+LauncherPreferences.PREF_RAM_ALLOCATION+"M");
         userArguments.add(0, "-Xmx"+LauncherPreferences.PREF_RAM_ALLOCATION+"M");
 
-        // Add G1GC optimized arguments
-        userArguments.add(0, "-XX:+UseG1GC");
-        userArguments.add(0, "-XX:MaxGCPauseMillis=200");
-        userArguments.add(0, "-XX:+UnlockExperimentalVMOptions");
-        userArguments.add(0, "-XX:+UseStringDeduplication");
-
         ArrayList<String> overridableArguments = new ArrayList<>(Arrays.asList(
                 "-Djava.home=" + runtimeHome,
                 "-Djava.io.tmpdir=" + Tools.DIR_CACHE.getAbsolutePath(),

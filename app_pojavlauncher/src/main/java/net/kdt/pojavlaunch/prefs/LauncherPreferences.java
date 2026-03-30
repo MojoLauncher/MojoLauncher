@@ -70,7 +70,6 @@ public class LauncherPreferences {
 
     public static boolean PREF_RAPID_START = true;
     public static boolean PREF_VERIFY_FILES = true;
-    public static boolean PREF_SHOW_FPS_COUNTER = false;
 
 
     public static void loadPreferences(Context ctx) {
@@ -114,7 +113,6 @@ public class LauncherPreferences {
         PREF_VSYNC_IN_ZINK = DEFAULT_PREF.getBoolean("vsync_in_zink", true);
         PREF_VERIFY_FILES = DEFAULT_PREF.getBoolean("checkGameFiles", true);
         PREF_RAPID_START = DEFAULT_PREF.getBoolean("fastStartupCheck", true);
-        PREF_SHOW_FPS_COUNTER = DEFAULT_PREF.getBoolean("show_fps_counter", false);
 
         String argLwjglLibname = "-Dorg.lwjgl.opengl.libname=";
         for (String arg : JREUtils.parseJavaArguments(PREF_CUSTOM_JAVA_ARGS)) {
@@ -150,10 +148,13 @@ public class LauncherPreferences {
         if (deviceRam < 1024) return 296;
         if (deviceRam < 1536) return 448;
         if (deviceRam < 2048) return 656;
+        // Limit the max for 32 bits devices more harshly
+        if (is32BitsDevice()) return 696;
+
         if (deviceRam < 3064) return 936;
         if (deviceRam < 4096) return 1144;
         if (deviceRam < 6144) return 1536;
-        return 2048; //Default RAM allocation for high-end devices
+        return 2048; //Default RAM allocation for 64 bits
     }
 
     /// Find a correct resolution for the device

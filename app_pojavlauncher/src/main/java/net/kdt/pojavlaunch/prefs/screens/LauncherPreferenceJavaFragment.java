@@ -1,5 +1,6 @@
 package net.kdt.pojavlaunch.prefs.screens;
 
+import static net.kdt.pojavlaunch.Architecture.is32BitsDevice;
 import static net.kdt.pojavlaunch.Tools.getTotalDeviceMemory;
 
 import android.os.Bundle;
@@ -34,7 +35,8 @@ public class LauncherPreferenceJavaFragment extends LauncherPreferenceFragment {
         int maxRAM;
         int deviceRam = getTotalDeviceMemory(memorySeekbar.getContext());
 
-        maxRAM = deviceRam - (deviceRam < 2048 ? 256 : 512); // Reserve some memory for the system
+        if(is32BitsDevice() || deviceRam < 2048) maxRAM = Math.min(1024, deviceRam);
+        else maxRAM = deviceRam - (deviceRam < 3064 ? 800 : 1024); //To have a minimum for the device to breathe
 
         memorySeekbar.setMaxKeepIncrement(maxRAM);
         memorySeekbar.setValue(ramAllocation);
