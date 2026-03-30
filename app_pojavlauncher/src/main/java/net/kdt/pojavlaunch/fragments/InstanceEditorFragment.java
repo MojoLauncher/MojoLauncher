@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -46,7 +46,7 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
     private Instance mInstance;
     private String mSelectedControlLayout;
     private Button mSaveButton, mDeleteButton, mControlSelectButton, mVersionSelectButton;
-    private Spinner mDefaultRuntime, mDefaultRenderer;
+    private Spinner mDefaultRuntime, mDefaultRenderer, mPresetSpinner;
     private EditText mDefaultName, mDefaultJvmArgument;
     private TextView mDefaultVersion, mDefaultControl;
     private ImageView mInstanceIcon;
@@ -81,6 +81,19 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         renderList.addAll(Arrays.asList(renderersList.rendererDisplayNames));
         renderList.add(view.getContext().getString(R.string.global_default));
         mDefaultRenderer.setAdapter(new ArrayAdapter<>(view.getContext(), R.layout.item_simple_list_1, renderList));
+
+        // Preset spinner
+        String[] presetNames = getResources().getStringArray(R.array.preset_names);
+        mPresetSpinner.setAdapter(new ArrayAdapter<>(view.getContext(), R.layout.item_simple_list_1, presetNames));
+        mPresetSpinner.setSelection(3); // custom by default
+        mPresetSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                applyPreset(position);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
 
         // Set up behaviors
         mSaveButton.setOnClickListener(v -> {
@@ -142,9 +155,39 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         return v -> VersionSelectorDialog.open(v.getContext(), false, (id, snapshot)-> mDefaultVersion.setText(id));
     }
 
-    private static String nullToEmpty(String in) {
-        if(in == null) return "";
-        return in;
+    private void applyPreset(int position) {
+        if (position == 3 || mInstance == null) return; // custom
+        Context context = getContext();
+        int deviceRam = Tools.getTotalDeviceMemory(context);
+        String jvmArgs = "";
+        String renderer = "";
+        int renderDistance = 12;
+        switch (position) {
+            case 0: // potato
+                jvmArgs = "-Xmx512M -Xms128M -XX:+UseG1GC -XX:MaxGCPauseMillis=100";
+                renderer = "opengles2";
+                renderDistance = 4;
+                break;
+            case 1: // normal
+                int normalRam = (int) (deviceRam * 0.35);
+                jvmArgs = "-Xmx" + normalRam + "M -Xms256M -XX:+UseG1GC -XX:MaxGCPauseMillis=50";
+                renderer = "vulkan_zink";
+                renderDistance = 8;
+                break;
+            case 2: // extreme
+                int extremeRam = (int) (deviceRam * 0.55);
+                jvmArgs = "-Xmx" + extremeRam + "M -Xms512M -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:G1HeapRegionSize=32M";
+                renderer = "opengles3_ltw";
+                renderDistance = 16;
+                break;
+        }
+        mDefaultJvmArgument.setText(jvmArgs);
+        mInstance.renderDistance = renderDistance;
+        // Set renderer
+        int rendererIndex = mRenderNames.indexOf(renderer);
+        if (rendererIndex != -1) {
+            mDefaultRenderer.setSelection(rendererIndex);
+        }
     }
 
     private void loadValues(@NonNull Instance instance, @NonNull Context context){
@@ -181,6 +224,7 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         mDefaultControl = view.findViewById(R.id.vprof_editor_ctrl_spinner);
         mDefaultRuntime = view.findViewById(R.id.vprof_editor_spinner_runtime);
         mDefaultRenderer = view.findViewById(R.id.vprof_editor_instance_renderer);
+        mPresetSpinner = view.findViewById(R.id.vprof_editor_preset_spinner);
         mDefaultVersion = view.findViewById(R.id.vprof_editor_version_spinner);
 
         mDefaultName = view.findViewById(R.id.vprof_editor_instance_name);

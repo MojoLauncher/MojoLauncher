@@ -319,4 +319,12 @@ public class LauncherActivity extends BaseActivity {
         mSettingsButton = findViewById(R.id.setting_button);
         mProgressLayout = findViewById(R.id.progress_layout);
     }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        if (level >= TRIM_MEMORY_RUNNING_CRITICAL) {
+            System.gc(); // Trigger garbage collection to free memory and prevent crashes
+        }
+    }
 }

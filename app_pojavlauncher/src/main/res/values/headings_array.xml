@@ -47,5 +47,17 @@
         <item>default</item>
         <item>bmclapi</item>
     </string-array>
+    <string-array name="preset_values">
+        <item>potato</item>
+        <item>normal</item>
+        <item>extreme</item>
+        <item>custom</item>
+    </string-array>
+    <string-array name="preset_names">
+        <item>@string/preset_potato</item>
+        <item>@string/preset_normal</item>
+        <item>@string/preset_extreme</item>
+        <item>@string/preset_custom</item>
+    </string-array>
 
 </resources>

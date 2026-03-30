@@ -28,6 +28,7 @@ public class Instance extends DisplayInstance {
     public String selectedRuntime;
     public String controlLayout;
     public boolean sharedData;
+    public int renderDistance;
 
     protected Instance() {
     }
@@ -43,6 +44,7 @@ public class Instance extends DisplayInstance {
             argsMode = 0;
             jvmArgs = null;
         }
+        if(renderDistance <= 0) renderDistance = 12;
     }
 
     /**
