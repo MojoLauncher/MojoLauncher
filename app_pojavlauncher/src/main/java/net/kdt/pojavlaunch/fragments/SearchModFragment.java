@@ -1,8 +1,10 @@
 package net.kdt.pojavlaunch.fragments;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +13,8 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -20,12 +24,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import git.artdeell.mojo.R;
+
+import net.kdt.pojavlaunch.PojavApplication;
+import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.modloaders.modpacks.ModItemAdapter;
 import net.kdt.pojavlaunch.modloaders.modpacks.api.CommonApi;
 import net.kdt.pojavlaunch.modloaders.modpacks.api.ModpackApi;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchFilters;
 import net.kdt.pojavlaunch.profiles.VersionSelectorDialog;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
+
+import org.apache.commons.io.IOUtils;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 
 public class SearchModFragment extends Fragment implements ModItemAdapter.SearchResultCallback {
 
@@ -47,10 +63,40 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
     private ProgressBar mSearchProgressBar;
     private TextView mStatusTextView;
     private ColorStateList mDefaultTextColor;
-
     private ModpackApi modpackApi;
 
     private final SearchFilters mSearchFilters;
+
+    private Button mImportButton;
+
+    ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+            uri -> {
+                if (uri == null) return;
+                Context context = getContext();
+                ContentResolver contentResolver = getContext().getContentResolver();
+                PojavApplication.sExecutorService.execute(() -> {
+                    localInstaller(uri, context, contentResolver);
+                });
+            });
+
+    public void localInstaller(Uri uri, Context context, ContentResolver contentResolver) {
+            try (InputStream inputStream = contentResolver.openInputStream(uri);
+                 OutputStream outputStream = new FileOutputStream(new File(Tools.DIR_CACHE, Tools.getFileName(context, uri) + ".cf"))) {
+                if (inputStream == null) return;
+                IOUtils.copy(inputStream, outputStream);
+                outputStream.flush();
+            } catch (IOException e) {
+                return;
+            }
+            File outFile = new File(Tools.DIR_CACHE, Tools.getFileName(context, uri) + ".cf");
+            try {
+                modpackApi.installLocalModpack(Tools.getFileName(context, uri), outFile, null);
+            } catch (IOException e) {
+                Tools.showErrorRemote("Error", e);
+            } finally {
+                outFile.delete();
+            }
+    }
 
     public SearchModFragment(){
         super(R.layout.fragment_mod_search);
@@ -99,6 +145,10 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
                    mRecyclerview.getPaddingBottom());
         });
         mFilterButton.setOnClickListener(v -> displayFilterDialog());
+        mImportButton = view.findViewById(R.id.mineButton_import_local_modpack);
+        mImportButton.setOnClickListener(v -> {
+            mGetContent.launch("*/*");
+        });
 
         searchMods(null);
     }
@@ -166,7 +216,6 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
                 dialogInterface.dismiss();
             });
         });
-
 
         dialog.show();
     }
