@@ -83,7 +83,7 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
 
     public void performLocalInstall(Uri uri, Context context, ContentResolver contentResolver) {
             File outFile = new File(Tools.DIR_CACHE, Tools.getFileName(context, uri) + ".cf");
-            ProgressLayout.setProgress(null, R.string.multirt_progress_caching);
+            ProgressLayout.setProgress(ProgressLayout.INSTALL_MODPACK, R.string.multirt_progress_caching);
             try (InputStream inputStream = contentResolver.openInputStream(uri);
                  OutputStream outputStream = new FileOutputStream(outFile)) {
                 if (inputStream == null) return;
@@ -98,6 +98,7 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
                 Tools.showErrorRemote("Error", e);
             } finally {
                 outFile.delete();
+                ProgressLayout.clearProgress(ProgressLayout.INSTALL_MODPACK);
             }
     }
 
