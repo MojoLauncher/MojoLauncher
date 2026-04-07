@@ -82,7 +82,9 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
             });
 
     public void performLocalInstall(Uri uri, Context context, ContentResolver contentResolver) {
-            File outFile = new File(Tools.DIR_CACHE, Tools.getFileName(context, uri) + ".cf");
+            String fileName = Tools.getFileName(context, uri);
+            if (fileName == null) return;
+            File outFile = new File(Tools.DIR_CACHE, fileName + ".cf");
             ProgressLayout.setProgress(ProgressLayout.INSTALL_MODPACK, R.string.multirt_progress_caching);
             try (InputStream inputStream = contentResolver.openInputStream(uri);
                  OutputStream outputStream = new FileOutputStream(outFile)) {
@@ -93,7 +95,7 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
                 Tools.showErrorRemote("Error", e);
             }
             try {
-                modpackApi.installLocalModpack(Tools.getFileName(context, uri), outFile, null);
+                modpackApi.installLocalModpack(fileName, outFile, null);
             } catch (IOException e) {
                 Tools.showErrorRemote("Error", e);
             } finally {
