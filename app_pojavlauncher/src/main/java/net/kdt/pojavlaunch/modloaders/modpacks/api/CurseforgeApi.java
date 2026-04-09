@@ -141,7 +141,7 @@ public class CurseforgeApi implements ModpackApi{
     }
 
     public ModLoader installLocalModpack(String modpackName, File modpackFile, String icon) throws IOException {
-        return ModpackInstaller.installModpack(modpackName, modpackFile, icon, this::installCurseforgeZip);
+        return ModpackInstaller.installModpack(modpackName, modpackName, modpackFile, icon, this::installCurseforgeZip);
     }
 
     private int getPaginatedDetails(ArrayList<JsonObject> objectList, int index, String modId) {

@@ -19,10 +19,10 @@ import java.util.concurrent.Callable;
 
 public class ModpackInstaller {
 
-    public static ModLoader installModpack(String modpackName, File modpackFile, String icon, InstallFunction installFunction) throws IOException {
+    public static ModLoader installModpack(String modpackName, String title, File modpackFile, String icon, InstallFunction installFunction) throws IOException {
         // Build a new minecraft instance, folder first
         ModLoader modLoaderInfo;
-        Instance instance = Instances.createInstance(i-> i.name = modpackName, modpackName.substring(0, Math.min(16,modpackName.length())));
+        Instance instance = Instances.createInstance(i-> i.name = title, modpackName.substring(0, Math.min(16,modpackName.length())));
         try {
             // Install the modpack
             modLoaderInfo = installFunction.installModpack(modpackFile, instance.getGameDirectory());
@@ -61,6 +61,7 @@ public class ModpackInstaller {
         String versionHash = modDetail.versionHashes[selectedVersion];
         String modpackName = (modDetail.title.toLowerCase(Locale.ROOT) + " " + modDetail.versionNames[selectedVersion])
                 .trim().replaceAll("[\\\\/:*?\"<>| \\t\\n]", "_" );
+        String name = modDetail.title;
         String icon = modDetail.getIconCacheTag();
 
         if (versionHash != null) {
@@ -88,7 +89,7 @@ public class ModpackInstaller {
             throw e;
         }
 
-        return installModpack(modpackName, modpackFile, icon, installFunction);
+        return installModpack(modpackName, name, modpackFile, icon, installFunction);
     }
 
     public interface InstallFunction {

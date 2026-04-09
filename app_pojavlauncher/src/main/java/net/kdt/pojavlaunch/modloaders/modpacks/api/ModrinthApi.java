@@ -122,7 +122,7 @@ public class ModrinthApi implements ModpackApi{
     }
 
     public ModLoader installLocalModpack(String modpackName, File modpackFile, String icon) throws IOException {
-        return ModpackInstaller.installModpack(modpackName, modpackFile, icon, this::installMrpack);
+        return ModpackInstaller.installModpack(modpackName, modpackName, modpackFile, icon, this::installMrpack);
     }
 
     private static ModLoader createInfo(ModrinthIndex modrinthIndex) {
