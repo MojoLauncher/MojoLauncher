@@ -88,8 +88,7 @@ public class MinecraftDownloader extends Downloader {
         sExecutorService.execute(() -> {
             try {
                 downloadGame(assetManager, version, realVersion);
-                mClassPath.toArray(new File[0]);
-                        //listener.onDownloadDone();
+                listener.onDownloadDone(mClassPath.toArray(new File[0]));
             } catch(JsonParseException e) {
                 listener.onDownloadFailed(e); // Handled separately from the general case because it subclasses RuntimeException. Ugh.
             } catch(RuntimeException e) {
