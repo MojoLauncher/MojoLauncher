@@ -277,7 +277,7 @@ public class MinecraftDownloader extends Downloader {
         String path = Tools.mavenNameToAarPath(dependentLibrary.name);
         String downloadUrl = baseRepository + path;
         File targetPath = new File(Tools.DIR_HOME_LIBRARY, path);
-        mDeclaredNatives.add(new NativeLibraryExtractable(new File(path), null));
+        mDeclaredNatives.add(new NativeLibraryExtractable(targetPath, null));
         scheduleDownload(targetPath, DownloadMirror.DOWNLOAD_CLASS_LIBRARIES, downloadUrl, null, -1);
     }
 
