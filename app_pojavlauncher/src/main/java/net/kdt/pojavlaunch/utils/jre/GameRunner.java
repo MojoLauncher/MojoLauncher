@@ -61,6 +61,22 @@ public class GameRunner {
     }
 
     /**
+     * Check if Angelica is currently installed to allow usage of LTW
+     * @param gameDir current game directory
+     * @return whether Angelica is installed
+     */
+    private static boolean hasAngelica(File gameDir) {
+        File modsDir = new File(gameDir, "mods");
+        File[] mods = modsDir.listFiles(file -> file.isFile() && file.getName().endsWith(".jar"));
+        if(mods == null) return false;
+        for(File file : mods) {
+            String name = file.getName();
+            if(name.contains("angelica")) return true;
+        }
+        return false;
+    }
+
+    /**
      * Initialize OpenGL and do checks to see if the GPU of the device is affected by the render
      * distance issue.
 
@@ -150,7 +166,7 @@ public class GameRunner {
         JMinecraftVersionList.Version versionInfo = Tools.getVersionInfo(versionId);
 
         // Switch renderer to GL4ES when running a compat context version on LTW
-        if(isCompatContext(versionInfo) && rendererName.equals("opengles3_ltw")) {
+        if(isCompatContext(versionInfo) && !hasAngelica(gamedir) && rendererName.equals("opengles3_ltw")) {
             instance.renderer = rendererName = "opengles2";
             instance.write();
         }
