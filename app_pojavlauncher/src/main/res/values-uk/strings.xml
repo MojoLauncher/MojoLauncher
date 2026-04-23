@@ -48,7 +48,7 @@
     <string name="mcl_setting_subtitle_mousescale">Змініть розмір віртуального курсору як вам зручно.</string>
     <string name="mcl_setting_title_javaargs">Аргументи запуску JVM</string>
     <string name="mcl_setting_subtitle_javaargs">УВАГА! Якщо у вас немає достатніх знань, не міняйте в цьому полі нічого. Аргументи змінюють поведінку Java</string>
-    <string name="mcl_setting_category_renderer">Рендерер</string>
+    <string name="mcl_setting_category_renderer">Візуалізатор</string>
     <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (всі версії, швидке)</string>
     <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) — (усі версії, повільніше)</string>
     <string name="mcl_setting_veroption_release">Релізи</string>
@@ -76,7 +76,7 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Програма/Гра завершилась з кодом %d, гляньте в latestlog.txt для більш детальної інформації.</string>
     <string name="mcn_exit_confirm">Ви впевнені, що хочете примусово зупинити процесс?</string>
-    <string name="mcn_check_fail_vulkan_support">Рендерер Zink (Vulkan) не підтримується на цьому пристрої!</string>
+    <string name="mcn_check_fail_vulkan_support">Візуалізатор Zink (Vulkan) не підтримується на цьому пристрої!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">Чат</string>
     <string name="control_debug">Налагодження</string>
@@ -163,8 +163,8 @@
     <string name="pvc_jvmArgs">Аргументи JVM</string>
     <string name="preference_mouse_start_title">Запуск разом з віртуальною мишею</string>
     <string name="preference_mouse_start_description">Віртуальна миша з’являється під час запуску, якщо цей параметр увімкнено.</string>
-    <string name="preference_video_title">Відео та рендерер</string>
-    <string name="preference_video_description">Роздільність, рендерер і продуктивність</string>
+    <string name="preference_video_title">Відео та візуалізатор</string>
+    <string name="preference_video_description">Роздільність, візуалізатор і продуктивність</string>
     <string name="preference_control_title">Налаштування керування</string>
     <string name="preference_control_description">Жести, кнопки та масштабування</string>
     <string name="preference_java_title">Оптимізація Java</string>
@@ -248,7 +248,7 @@
     <string name="preference_deadzone_scale_title">Розмір мертвої зони джойстика</string>
     <string name="preference_deadzone_scale_description">Якщо джойтик зміщується, збільште її.</string>
     <string name="preference_force_big_core_title">Змусити візуалізатор працювати на великому ядрі</string>
-    <string name="preference_force_big_core_desc">Змушує потік рендерингу Minecraft працювати на ядрі з найвищою макс. частотою.</string>
+    <string name="preference_force_big_core_desc">Змушує потік візуалізації Minecraft працювати на ядрі з найвищою макс. частотою.</string> <!-- Max reference!?!?!? -->
     <string name="version_select_hint">Оберіть версію</string>
     <string name="forge_dl_progress">Завантаження інсталятора для %s</string>
     <string name="forge_dl_searching">Пошук номера версії Forge</string>
