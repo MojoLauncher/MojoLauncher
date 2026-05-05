@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.22.1)
 
 project("MojoLauncher")
 
-add_library(pojavexec SHARED
+add_library(mojolaunch SHARED
         affinity.c
         jvm_hooks/emui_iterator_fix_hook.c
         jvm_hooks/java_exec_hooks.c
@@ -19,14 +19,14 @@ add_library(pojavexec SHARED
 
 )
 
-target_include_directories(pojavexec PRIVATE .)
-target_link_libraries(pojavexec PRIVATE log)
+target_include_directories(mojolaunch PRIVATE .)
+target_link_libraries(mojolaunch PRIVATE log)
 
 if(CMAKE_ANDROID_ARCH_ABI STREQUAL "arm64-v8a")
-    target_sources(pojavexec PRIVATE
+    target_sources(mojolaunch PRIVATE
             driver_helper/nsbypass.c
     )
-    target_compile_definitions(pojavexec PRIVATE ADRENO_POSSIBLE)
+    target_compile_definitions(mojolaunch PRIVATE ADRENO_POSSIBLE)
 
     add_library(linkerhook SHARED
             driver_helper/hook.c
@@ -34,7 +34,7 @@ if(CMAKE_ANDROID_ARCH_ABI STREQUAL "arm64-v8a")
     target_link_options(linkerhook PRIVATE "-Wl,-z,global")
 endif()
 
-add_library(pojavexec_awt SHARED
+add_library(mojolaunch_awt SHARED
         awt_bridge.c
 )
 
