@@ -422,8 +422,8 @@
     <string name="vml_err_exists">Віртуальне середовище вже завантажено</string>
     <string name="vml_err_inval">Неправильні аргументи</string>
     <string name="gr_err_renderer_load_Failed">Не вдалось завантажити бібліотеку візуалізатора</string>
-    <string name="ltw_4x_msaa_warning_msg">"Виглядає так наче ви вімкнули налаштування \"Увімкнути 4x MSAA\" у налаштуваннях розробника. Будьласка, вимкніть це налаштування "</string>
-    <string name="modloader_dl_install_legacy_fabric_instance">"Створити Legacy Fabric версію "</string>
+    <string name="ltw_4x_msaa_warning_msg">"Виглядає так наче ви вімкнули налаштування \"Увімкнути 4x MSAA\" у налаштуваннях розробника. Будь ласка, вимкніть це налаштування "</string>
+    <string name="modloader_dl_install_legacy_fabric_instance">"Створити версію Legacy Fabric"</string>
     <string name="instance_delete">Видалити версію</string>
     <string name="instance_delete_confirmation">Ви впенені що хочете видалити цю версію? Це НАЗАВЖДИ видалить всі світи, моди, ресурси та інші данні в папці версії. Ця дія НЕ може відмінена в майбутньому</string>
 </resources>
