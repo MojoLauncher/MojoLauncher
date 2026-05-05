@@ -5,17 +5,21 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import net.kdt.pojavlaunch.PojavApplication;
+import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.Constants;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModItem;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchFilters;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchResult;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 /**
  * Group all apis under the same umbrella, as another layer of abstraction
@@ -26,10 +30,19 @@ public class CommonApi implements ModpackApi {
     private final ModpackApi mModrinthApi;
     private final ModpackApi[] mModpackApis;
 
+    public static final byte PACK_MODRINTH = 1;
+    public static final byte PACK_CURSEFORGE = 2;
+    public static final byte PACK_UNDEFINED = 0;
+
     public CommonApi(String curseforgeApiKey) {
-        mCurseforgeApi = new CurseforgeApi(curseforgeApiKey);
         mModrinthApi = new ModrinthApi();
-        mModpackApis = new ModpackApi[]{mModrinthApi, mCurseforgeApi};
+        if ("DUMMY".equals(curseforgeApiKey)) {
+            mCurseforgeApi = null;
+            mModpackApis = new ModpackApi[]{mModrinthApi};
+        } else {
+            mCurseforgeApi = new CurseforgeApi(curseforgeApiKey);
+            mModpackApis = new ModpackApi[]{mModrinthApi, mCurseforgeApi};
+        }
     }
 
     @Override
@@ -112,14 +125,47 @@ public class CommonApi implements ModpackApi {
         return getModpackApi(modDetail.apiSource).installModpack(modDetail, selectedVersion);
     }
 
+    public ModLoader installLocalModpack(String modpackName, File modpackFile, String icon) throws IOException {
+        short s = checkModpack(modpackFile);
+        switch (s) {
+            case PACK_MODRINTH:
+                return mModrinthApi.installLocalModpack(modpackName, modpackFile, icon);
+            case PACK_CURSEFORGE:
+                if (mCurseforgeApi == null) return null;
+                else return mCurseforgeApi.installLocalModpack(modpackName, modpackFile, icon);
+            case PACK_UNDEFINED:
+                modpackFile.delete();
+                return null;
+            default:
+                return null;
+        }
+    }
+
     private @NonNull ModpackApi getModpackApi(int apiSource) {
         switch (apiSource) {
             case Constants.SOURCE_MODRINTH:
                 return mModrinthApi;
             case Constants.SOURCE_CURSEFORGE:
-                return mCurseforgeApi;
+                if (mCurseforgeApi == null) return null;
+                else return mCurseforgeApi;
             default:
                 throw new UnsupportedOperationException("Unknown API source: " + apiSource);
+        }
+    }
+
+    public static short checkModpack(File outFile) {
+        try (ZipFile zipFile = new ZipFile(outFile)) {
+            ZipEntry modrinth = zipFile.getEntry("modrinth.index.json");
+            ZipEntry curseforge = zipFile.getEntry("manifest.json");
+            if (modrinth != null) {
+                return CommonApi.PACK_MODRINTH;
+            }
+            if (curseforge != null) {
+                return CommonApi.PACK_CURSEFORGE;
+            }
+            return CommonApi.PACK_UNDEFINED; // return this if no modpack was detected
+        } catch (Exception e) {
+            return -1;
         }
     }
 
