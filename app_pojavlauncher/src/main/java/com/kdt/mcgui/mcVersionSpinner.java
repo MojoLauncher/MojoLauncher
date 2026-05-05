@@ -100,13 +100,12 @@ public class mcVersionSpinner extends ExtendedTextView {
     /** Reload profiles from the file, forcing the spinner to consider the new data */
     public void reloadProfiles() {
         PojavApplication.sExecutorService.execute(()->{
-            final Instances instances;
             try {
-                instances = Instances.loadDisplay();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                final Instances instances = Instances.loadDisplay();
+                Tools.runOnUiThread(()->applyInstances(instances));
+            } catch (final IOException e) {
+                Tools.runOnUiThread(()->Tools.showError(getContext(), e));
             }
-            Tools.runOnUiThread(()->applyInstances(instances));
         });
     }
 
@@ -120,6 +119,7 @@ public class mcVersionSpinner extends ExtendedTextView {
         setPaddingRelative(startPadding, 0, endPadding, 0);
         setCompoundDrawablePadding(startPadding);
         addOnAttachStateChangeListener(new ExtraAttachListener());
+        setSelection(0);
 
         // Popup window behavior
         setOnClickListener(new OnClickListener() {

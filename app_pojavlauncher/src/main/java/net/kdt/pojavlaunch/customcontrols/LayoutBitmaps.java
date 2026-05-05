@@ -82,6 +82,10 @@ public class LayoutBitmaps {
                 isZip = zipIn.getNextEntry() != null;
             } catch (ZipException e) {
                 isZip = false;
+            } catch (IOException e) {
+                throw e;
+            } catch (Exception e) {
+                isZip = false;
             }
             bufferedIn.reset();
             if(isZip) {

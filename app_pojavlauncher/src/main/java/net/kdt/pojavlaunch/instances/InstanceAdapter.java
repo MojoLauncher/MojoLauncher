@@ -33,7 +33,7 @@ public class InstanceAdapter extends BaseAdapter {
      */
     @Override
     public int getCount() {
-        if(mInstances == null) return 0;
+        if(mInstances == null) return mExtraEntires.length;
         return mInstances.list.size() + mExtraEntires.length;
     }
     /**
@@ -43,7 +43,7 @@ public class InstanceAdapter extends BaseAdapter {
      */
     @Override
     public Object getItem(int position) {
-        if(mInstances == null) throw new RuntimeException("Attempted to get item before adapter is initialized");
+        if(mInstances == null) return mExtraEntires[position];
         int instanceListSize = mInstances.list.size();
         int extraPosition = position - instanceListSize;
         if(position < instanceListSize) {

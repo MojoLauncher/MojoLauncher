@@ -72,6 +72,7 @@ public class MinecraftAccount {
     public MinecraftAccount reload() {
         try {
             MinecraftAccount minecraftAccount = JSONUtils.readFromFile(mSaveLocation, MinecraftAccount.class);
+            if(minecraftAccount == null) return null;
             minecraftAccount.mSaveLocation = mSaveLocation;
             return minecraftAccount;
         }catch (IOException | JsonParseException e) {

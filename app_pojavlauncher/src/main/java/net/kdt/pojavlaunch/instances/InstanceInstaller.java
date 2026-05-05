@@ -34,6 +34,12 @@ import git.artdeell.mojo.R;
 public class InstanceInstaller implements ContextExecutorTask {
     private static final File sLastInstallInfo = new File(Tools.DIR_CACHE, "last_installer.json");
 
+    private static final String[] TRUSTED_URLS = new String[] {
+            "https://maven.neoforged.net/releases/net/neoforged/neoforge/",
+            "https://maven.minecraftforge.net/net/minecraftforge/forge/",
+            "https://optifine.net/adloadx"
+    };
+
     public String installerJar;
     private transient File installerJarFile;
     private transient String mTransformedUrl;
@@ -135,6 +141,13 @@ public class InstanceInstaller implements ContextExecutorTask {
         return Objects.hash(installerJar, commandLineArgs, installerDownloadUrl, installerUrlTransformer, installerSha1);
     }
 
+    private boolean isTrustedInstaller() {
+        for(String frontTrusted : TRUSTED_URLS) {
+            if(installerDownloadUrl.startsWith(frontTrusted)) return true;
+        }
+        return false;
+    }
+
     @Override
     public void executeWithActivity(Activity activity) {
         try {
@@ -148,6 +161,7 @@ public class InstanceInstaller implements ContextExecutorTask {
         Bundle extras = new Bundle();
         extras.putStringArrayList("javaArgs", new ArrayList<>(commandLineArgs));
         extras.putString("modPath", installerJar);
+        extras.putBoolean("trusted", isTrustedInstaller());
         intent.putExtras(extras);
         activity.startActivity(intent);
     }

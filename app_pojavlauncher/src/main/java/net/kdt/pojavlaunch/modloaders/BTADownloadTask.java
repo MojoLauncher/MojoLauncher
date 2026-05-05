@@ -53,7 +53,7 @@ public class BTADownloadTask implements Runnable {
         File jsonDir = new File(Tools.DIR_HOME_VERSION, btaVersionId);
         File jsonFile = new File(jsonDir, btaVersionId+".json");
         FileUtils.ensureDirectory(jsonDir);
-        Tools.write(jsonFile.getAbsolutePath(), btaJson);
+        Tools.write(jsonFile, btaJson);
     }
 
     // BTA doesn't have SHA1 checksums in its repositories, so the user may try to reinstall it

@@ -335,7 +335,8 @@ public class GLFW
     GLFW_STICKY_KEYS          = 0x33002,
     GLFW_STICKY_MOUSE_BUTTONS = 0x33003,
     GLFW_LOCK_KEY_MODS        = 0x33004,
-    GLFW_RAW_MOUSE_MOTION     = 0x33005;
+    GLFW_RAW_MOUSE_MOTION     = 0x33005,
+    GLFW_IME                  = 0x33007;
 
     /** Cursor state. */
     public static final int
@@ -511,6 +512,9 @@ public class GLFW
     /* volatile */ public static GLFWWindowMaximizeCallback mGLFWWindowMaximizeCallback;
     /* volatile */ public static GLFWWindowPosCallback mGLFWWindowPosCallback;
     /* volatile */ public static GLFWWindowRefreshCallback mGLFWWindowRefreshCallback;
+    public static GLFWPreeditCallback mGLFWPreeditCallback;
+    public static GLFWPreeditCandidateCallback mGLFWPreeditCandidateCallback;
+    public static GLFWIMEStatusCallback mGLFWIMEStatusCallback;
 
     // Store callback method references directly to avoid a roundtrip through
     // JNI when calling the default LWJGL callbacks.
@@ -641,6 +645,28 @@ public class GLFW
 
     public static SharedLibrary getLibrary() {
         return GLFW;
+    }
+
+    public static boolean glfwPlatformSupported(int platform) {
+        return false;
+    }
+
+    public static GLFWPreeditCallback glfwSetPreeditCallback(long window, GLFWPreeditCallbackI glfwPreeditCallback) {
+        GLFWPreeditCallback oldCallback = mGLFWPreeditCallback;
+        if(glfwPreeditCallback == null) mGLFWPreeditCallback = null;
+        return oldCallback;
+    }
+
+    public static GLFWPreeditCandidateCallback glfwSetPreeditCandidateCallback(long window, GLFWPreeditCandidateCallbackI cbfun) {
+        GLFWPreeditCandidateCallback oldCallback = mGLFWPreeditCandidateCallback;
+        if(cbfun == null) mGLFWPreeditCandidateCallback = null;
+        return oldCallback;
+    }
+
+    public static GLFWIMEStatusCallback glfwSetIMEStatusCallback(long window, GLFWIMEStatusCallbackI cbfun) {
+        GLFWIMEStatusCallback oldCallback = mGLFWIMEStatusCallback;
+        if(cbfun == null) mGLFWIMEStatusCallback = null;
+        return oldCallback;
     }
 
     @SuppressWarnings("unused") // Used by pojavexec
@@ -1155,7 +1181,12 @@ public class GLFW
     public static void glfwPostEmptyEvent() {}
 
     public static int glfwGetInputMode(@NativeType("GLFWwindow *") long window, int mode) {
-        return internalGetWindow(window).inputModes.get(mode);
+        Integer modeState = internalGetWindow(window).inputModes.get(mode);
+        if(modeState == null) {
+            if(mode == GLFW_CURSOR) return GLFW_CURSOR_NORMAL;
+            else return GLFW_FALSE;
+        }
+        return modeState;
     }
 
     public static void glfwSetInputMode(@NativeType("GLFWwindow *") long window, int mode, int value) {

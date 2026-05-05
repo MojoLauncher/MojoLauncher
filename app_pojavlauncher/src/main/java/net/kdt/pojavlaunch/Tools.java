@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -49,8 +50,8 @@ import com.google.gson.GsonBuilder;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutorTask;
-import net.kdt.pojavlaunch.memory.MemoryHoleFinder;
-import net.kdt.pojavlaunch.memory.SelfMapsParser;
+import net.kdt.pojavlaunch.utils.memory.MemoryHoleFinder;
+import net.kdt.pojavlaunch.utils.memory.SelfMapsParser;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.FileUtils;
@@ -440,8 +441,13 @@ public final class Tools {
     }
 
     public static void openURL(Activity act, String url) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        act.startActivity(browserIntent);
+        try {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            browserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            act.startActivity(browserIntent);
+        }catch (ActivityNotFoundException e) {
+            Tools.showError(act, e);
+        }
     }
 
     public static boolean shouldSkipLibrary(DependentLibrary library) {
@@ -511,12 +517,14 @@ public final class Tools {
         return read(new FileInputStream(path));
     }
 
-    public static void write(String path, String content) throws IOException {
-        File file = new File(path);
-        FileUtils.ensureParentDirectory(file);
-        try(FileOutputStream outStream = new FileOutputStream(file)) {
-            IOUtils.write(content, outStream);
+    public static void write(File path, String content) throws IOException {
+        FileUtils.ensureParentDirectory(path);
+        try (FileOutputStream fileOutputStream = new FileOutputStream(path)){
+            IOUtils.write(content, fileOutputStream);
         }
+    }
+    public static void write(String path, String content) throws IOException {
+        write(new File(path), content);
     }
 
     public static boolean isAndroid8OrHigher() {

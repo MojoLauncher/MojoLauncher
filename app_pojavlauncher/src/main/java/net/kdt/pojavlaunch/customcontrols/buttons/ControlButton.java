@@ -131,8 +131,10 @@ public class ControlButton extends TextView implements ControlInterface {
 
     /** Remove any trace of this button from the layout */
     public void removeButton() {
-        getControlLayoutParent().getLayout().mControlDataList.remove(getProperties());
-        getControlLayoutParent().removeView(this);
+        ControlLayout parent = getControlLayoutParent();
+        if(parent == null) return;
+        parent.getLayout().mControlDataList.remove(getProperties());
+        parent.removeView(this);
     }
 
     @Override

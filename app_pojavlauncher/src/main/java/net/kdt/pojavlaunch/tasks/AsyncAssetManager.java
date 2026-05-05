@@ -144,7 +144,7 @@ public class AsyncAssetManager {
 
         // Always write the version file separately after extracting everything else, to improve
         // reliability.
-        Tools.write(componentTarget.getAbsolutePath()+"/version", builtinVersion);
+        Tools.write(new File(componentTarget, "version"), builtinVersion);
     }
 
     public static void extractDefaultSettings(Context context, File gamedir)  {

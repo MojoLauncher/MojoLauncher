@@ -1,7 +1,5 @@
 package net.kdt.pojavlaunch.downloader;
 
-import android.util.Log;
-
 import com.kdt.mcgui.ProgressLayout;
 
 import net.kdt.pojavlaunch.tasks.SpeedCalculator;
@@ -46,12 +44,7 @@ public class Downloader {
     }
 
     protected void runDownloads(ArrayList<? extends TaskMetadata> downloads) throws IOException, InterruptedException {
-        try {
-            insertMetadata(downloads);
-        }catch (IOException e) {
-            Log.w("Downloader", "Failed to complete the task metadata!", e);
-            disableSizeCounter();
-        }
+        insertMetadata(downloads);
         performDownloads(downloads);
     }
 
@@ -220,6 +213,10 @@ public class Downloader {
 
     protected long getFileContentLength(URL url) throws IOException {
         HttpURLConnection connection = openConnection(url);
+
+        connection.setConnectTimeout(2000);
+        connection.setReadTimeout(2000);
+
         connection.setRequestMethod("HEAD");
         connection.connect();
         int response = connection.getResponseCode();

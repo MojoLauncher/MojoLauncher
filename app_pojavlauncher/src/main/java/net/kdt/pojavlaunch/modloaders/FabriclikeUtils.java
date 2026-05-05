@@ -19,7 +19,7 @@ public class FabriclikeUtils {
 
     public static final FabriclikeUtils FABRIC_UTILS = new FabriclikeUtils("https://meta.fabricmc.net/v2", "fabric", "Fabric", "fabric");
     public static final FabriclikeUtils QUILT_UTILS = new FabriclikeUtils("https://meta.quiltmc.org/v3", "quilt", "Quilt", "quilt");
-
+    public static final FabriclikeUtils LEGACY_FABRIC_UTILS = new FabriclikeUtils("https://meta.legacyfabric.net/v2", "legacy_fabric", "Legacy Fabric", "fabric");
     private static final String LOADER_METADATA_URL = "%s/versions/loader/%s";
     private static final String GAME_METADATA_URL = "%s/versions/game";
 
@@ -93,7 +93,7 @@ public class FabriclikeUtils {
         File versionJsonDir = new File(Tools.DIR_HOME_VERSION, versionId);
         File versionJsonFile = new File(versionJsonDir, versionId+".json");
         FileUtils.ensureDirectory(versionJsonDir);
-        Tools.write(versionJsonFile.getAbsolutePath(), fabricJson);
+        Tools.write(versionJsonFile, fabricJson);
         return versionId;
     }
 

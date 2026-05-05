@@ -68,7 +68,7 @@ public class LauncherPreferences {
     public static boolean PREF_SKIP_NOTIFICATION_PERMISSION_CHECK = false;
     public static boolean PREF_VSYNC_IN_ZINK = true;
 
-    public static boolean PREF_RAPID_START = false;
+    public static boolean PREF_RAPID_START = true;
     public static boolean PREF_VERIFY_FILES = true;
 
 
@@ -112,7 +112,7 @@ public class LauncherPreferences {
         PREF_SKIP_NOTIFICATION_PERMISSION_CHECK = DEFAULT_PREF.getBoolean(PREF_KEY_SKIP_NOTIFICATION_CHECK, false);
         PREF_VSYNC_IN_ZINK = DEFAULT_PREF.getBoolean("vsync_in_zink", true);
         PREF_VERIFY_FILES = DEFAULT_PREF.getBoolean("checkGameFiles", true);
-        PREF_RAPID_START = DEFAULT_PREF.getBoolean("fastStartupCheck", false);
+        PREF_RAPID_START = DEFAULT_PREF.getBoolean("fastStartupCheck", true);
 
         String argLwjglLibname = "-Dorg.lwjgl.opengl.libname=";
         for (String arg : JREUtils.parseJavaArguments(PREF_CUSTOM_JAVA_ARGS)) {

@@ -61,6 +61,22 @@ public class GameRunner {
     }
 
     /**
+     * Check if Angelica is currently installed to allow usage of LTW
+     * @param gameDir current game directory
+     * @return whether Angelica is installed
+     */
+    private static boolean hasAngelica(File gameDir) {
+        File modsDir = new File(gameDir, "mods");
+        File[] mods = modsDir.listFiles(file -> file.isFile() && file.getName().endsWith(".jar"));
+        if(mods == null) return false;
+        for(File file : mods) {
+            String name = file.getName();
+            if(name.contains("angelica")) return true;
+        }
+        return false;
+    }
+
+    /**
      * Initialize OpenGL and do checks to see if the GPU of the device is affected by the render
      * distance issue.
 
@@ -107,6 +123,20 @@ public class GameRunner {
         return LifecycleAwareAlertDialog.haltOnDialog(activity.getLifecycle(), activity, dialogCreator);
     }
 
+    // Autoswitch to LTW if supported, otherwise - crash with resId dialog message. Returns LTW renderer strings if succeeded
+    private static String switchLtw(boolean hasLtw, Instance instance, AppCompatActivity activity, int resId) throws InterruptedException, IOException {
+        if(hasLtw) {
+            String ltwRenderer = "opengles3_ltw";
+            instance.renderer = ltwRenderer;
+            instance.write();
+            return ltwRenderer;
+        }else {
+            showDialog(activity, resId);
+            System.exit(0);
+            return null;
+        }
+    }
+
     public static void launchMinecraft(final AppCompatActivity activity, MinecraftAccount minecraftAccount,
                                        Instance instance, String versionId, String rendererName) throws Throwable {
         int freeDeviceMemory = Tools.getFreeDeviceMemory(activity);
@@ -136,22 +166,21 @@ public class GameRunner {
         JMinecraftVersionList.Version versionInfo = Tools.getVersionInfo(versionId);
 
         // Switch renderer to GL4ES when running a compat context version on LTW
-        if(isCompatContext(versionInfo) && rendererName.equals("opengles3_ltw")) {
+        if(isCompatContext(versionInfo) && !hasAngelica(gamedir) && rendererName.equals("opengles3_ltw")) {
             instance.renderer = rendererName = "opengles2";
             instance.write();
         }
 
-        // Switch renderer to LTW when running 1.21.5
+        boolean isGl4es = rendererName.equals("opengles2");
         boolean ltwSupported = RendererCompatUtil.getCompatibleRenderers(activity).rendererIds.contains("opengles3_ltw");
-        if(!isGl4esCompatible(versionInfo) && rendererName.equals("opengles2")) {
-            if(ltwSupported) {
-                instance.renderer = rendererName = "opengles3_ltw";
-                instance.write();
-            }else {
-                showDialog(activity, R.string.compat_version_not_supported);
-                System.exit(0);
-                return;
-            }
+        // Block Sodium from running with GL4ES on 1.17+
+        if(!isCompatContext(versionInfo) && isGl4es && hasSodium(gamedir)) {
+            rendererName = switchLtw(ltwSupported, instance, activity, R.string.compat_sodium_not_supported);
+        }
+
+        // Switch renderer to LTW when running 1.21.5
+        if(!isGl4esCompatible(versionInfo) && isGl4es) {
+            rendererName = switchLtw(ltwSupported, instance, activity, R.string.compat_version_not_supported);
         }
         RendererCompatUtil.releaseRenderersCache();
 
@@ -257,7 +286,7 @@ public class GameRunner {
                     forgeSplashContent = Tools.read(forgeSplashFile.getAbsolutePath());
                 }
                 if (forgeSplashContent.contains("enabled=true")) {
-                    Tools.write(forgeSplashFile.getAbsolutePath(),
+                    Tools.write(forgeSplashFile,
                             forgeSplashContent.replace("enabled=true", "enabled=false"));
                 }
             } catch (IOException e) {
