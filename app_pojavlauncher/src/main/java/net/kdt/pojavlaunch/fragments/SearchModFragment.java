@@ -71,7 +71,7 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
 
     private Button mImportButton;
 
-    ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+    ActivityResultLauncher<String> mImportLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
             uri -> {
                 if (uri == null) return;
                 Context context = getContext();
@@ -93,6 +93,8 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
                 outputStream.flush();
             } catch (IOException e) {
                 Tools.showErrorRemote("Error", e);
+                ProgressLayout.clearProgress(ProgressLayout.INSTALL_MODPACK);
+                return;
             }
             try {
                 modpackApi.installLocalModpack(fileName, outFile, null);
@@ -153,7 +155,7 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
         mFilterButton.setOnClickListener(v -> displayFilterDialog());
         mImportButton = view.findViewById(R.id.mineButton_import_local_modpack);
         mImportButton.setOnClickListener(v -> {
-            mGetContent.launch("*/*");
+            mImportLauncher.launch("*/*");
         });
 
         searchMods(null);
