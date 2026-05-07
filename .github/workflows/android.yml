@@ -57,7 +57,7 @@ jobs:
         if: github.ref_name == 'v3_openjdk'
         run: |
           gradle :app_pojavlauncher:assembleFullPubRelease
-          mv app_pojavlauncher/build/outputs/apk/full/pubRelease/app_pojavlauncher-noruntime-pubRelease.apk out/MojoLauncher-release.apk
+          mv app_pojavlauncher/build/outputs/apk/full/pubRelease/app_pojavlauncher-full-pubRelease.apk out/MojoLauncher-release.apk
       - name: Gen md5sums
         run: |
           md5sum out/app-debug-full.apk > out/app-debug-full.md5
