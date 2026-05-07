@@ -130,6 +130,13 @@ android {
             initWith release
             signingConfig signingConfigs.googlePlayBuild
         }
+        pubRelease {
+            initWith release
+            signingConfig signingConfigs.customDebug // WIP, changeme
+            applicationIdSuffix '.pub'
+            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mojo.pub.scoped.gamefolder'
+            resValue 'string', 'application_package', 'git.artdeell.mojo.pub'
+        }
     }
 
     ndkVersion = "28.2.13676358"
