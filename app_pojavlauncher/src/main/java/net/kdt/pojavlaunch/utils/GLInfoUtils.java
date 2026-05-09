@@ -47,7 +47,7 @@ public class GLInfoUtils {
     private static EGLContext tryCreateContext(EGLDisplay eglDisplay, EGLConfig config, int majorVersion) {
         int[] egl_context_attributes = new int[] { EGL14.EGL_CONTEXT_CLIENT_VERSION, majorVersion, EGL14.EGL_NONE };
         EGLContext context = EGL14.eglCreateContext(eglDisplay, config, EGL14.EGL_NO_CONTEXT, egl_context_attributes, 0);
-        if(context == EGL14.EGL_NO_CONTEXT || context == null) {
+        if(EGL14.EGL_NO_CONTEXT.equals(context) || context == null) {
             Log.e("GLInfoUtils", "Failed to create a context with major version "+majorVersion);
             return null;
         }
