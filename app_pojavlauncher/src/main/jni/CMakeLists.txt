@@ -21,17 +21,18 @@ add_library(pojavexec SHARED
 
 target_include_directories(pojavexec PRIVATE .)
 target_link_libraries(pojavexec PRIVATE log)
-
+target_sources(pojavexec PRIVATE
+        driver_helper/nsbypass.c
+)
+add_library(linkerhook SHARED
+        driver_helper/hook.c
+)
+target_link_options(linkerhook PRIVATE "-Wl,-z,global")
 if(CMAKE_ANDROID_ARCH_ABI STREQUAL "arm64-v8a")
-    target_sources(pojavexec PRIVATE
-            driver_helper/nsbypass.c
-    )
+
     target_compile_definitions(pojavexec PRIVATE ADRENO_POSSIBLE)
 
-    add_library(linkerhook SHARED
-            driver_helper/hook.c
-    )
-    target_link_options(linkerhook PRIVATE "-Wl,-z,global")
+
 endif()
 
 add_library(pojavexec_awt SHARED

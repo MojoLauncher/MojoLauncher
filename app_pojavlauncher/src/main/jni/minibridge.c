@@ -4,9 +4,11 @@
 
 #include "utils.h"
 #include "pojavexec.h"
+#include "driver_helper/nsbypass.h"
 #include <jni.h>
 #include <stdio.h>
 #include <dlfcn.h>
+#include <stdlib.h>
 
 static JavaVM* dalivk;
 static jclass class_CallbackBridge;
@@ -35,10 +37,28 @@ Java_net_kdt_pojavlaunch_utils_JREUtils_configureRenderspec(JNIEnv *env, jclass 
     void* egl_handle = NULL;
     if(eglPath != NULL) {
         const char* egl_path = (*env)->GetStringUTFChars(env, eglPath, NULL);
-        egl_handle = dlopen(egl_path, RTLD_NOW);
+        if(use_loader_bypass) {
+            const char* native_dir = getenv("POJAV_NATIVEDIR");
+            if(!native_dir) return false;
+            if(!linker_ns_load(native_dir)) return false;
+            egl_handle = linker_ns_dlopen(egl_path, RTLD_LOCAL | RTLD_NOW);
+            if(!egl_handle) {
+                printf("Failed to dlopen EGL: %s\n", dlerror());
+                dlclose(egl_handle);
+                return false;
+            }
+        } else {
+            egl_handle = dlopen(egl_path, RTLD_NOW);
+            char * err = dlerror();
+            if(err) {
+                printf("Failed to load EGL: %s\n", err);
+                return false;
+            }
+        }
         printf("Loaded EGL %s: %p\n", egl_path, egl_handle);
         (*env)->ReleaseStringUTFChars(env, eglPath, egl_path);
         if(egl_handle == NULL) return false;
+        renderspec.egl_path = egl_path;
     }
 
     renderspec.egl_handle = egl_handle;
