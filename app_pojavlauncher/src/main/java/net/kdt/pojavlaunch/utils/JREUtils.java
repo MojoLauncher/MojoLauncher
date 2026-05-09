@@ -155,6 +155,10 @@ public class JREUtils {
         setupFfmpegEnv(context, envMap);
         setupRendererEnv(envMap, renderer);
 
+        // HACK
+        envMap.put("POJAV_NATIVEDIR", Tools.NATIVE_LIB_DIR);
+        envMap.put("EGL_PLATFORM", "android");
+
         if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
 
         if(GLInfoUtils.getGlInfo().isAdreno() && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
@@ -267,7 +271,7 @@ public class JREUtils {
                 break;
         }
 
-        if (!configureRenderspec(renderLibrary, false, useGles, glesVersion)) {
+        if (!configureRenderspec(renderLibrary, true, useGles, glesVersion)) {
             Log.e("RENDER_LIBRARY","Failed to load renderer " + renderLibrary );
             return null;
         }
