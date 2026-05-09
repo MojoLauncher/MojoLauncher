@@ -31,6 +31,10 @@ static jlong ndlopen_bugfix(__attribute__((unused)) JNIEnv *env,
         printf("LWJGL linkerhook: replacing load for libvulkan.so with custom driver\n");
         return (jlong) pojavexec_loadVulkanDriver();
     }
+    if(strstr(filename, pojavexec_getRenderSpec()->egl_path) == filename) {
+        printf("LWJGL linkerhook: replacing EGL load with already loaded EGL");
+        return (jlong) pojavexec_getRenderSpec()->egl_handle;
+    }
 
     // This hook also serves the task of mitigating a bug: the idea is that since, on Android 10 and
     // earlier, the linker doesn't really do namespace nesting.
