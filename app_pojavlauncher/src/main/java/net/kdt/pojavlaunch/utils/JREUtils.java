@@ -99,6 +99,22 @@ public class JREUtils {
         envMap.put("POJAV_FFMPEG_PATH", ffmpeg.resolveAbsolutePath("libffmpeg.so"));
     }
 
+    // Setup environment for mesa-based renderers
+    public static void setupRendererEnv(Map<String, String> envMap, String renderer) {
+        switch(renderer) {
+            case "vulkan_zink":
+                envMap.put("GALLIUM_DRIVER", "zink");
+                envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
+                // HACK: GLSL version override for Mesa-based renderers (i.e. Zink)
+                // Required to run the game properly on some mobile Vulkan drivers (Minecraft fails to compile shaders without)
+                envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
+                break;
+            case "freedreno_kgsl":
+                if(GLInfoUtils.getGlInfo().isAdreno())
+                    envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "kgsl");
+                break;
+        }
+    }
     public static void setEnviroimentForGame(Context context, String renderer) throws Throwable {
         Map<String, String> envMap = new ArrayMap<>();
         envMap.put("LIBGL_MIPMAP", "3");
@@ -120,10 +136,6 @@ public class JREUtils {
         // The OPEN GL version is changed according
         envMap.put("LIBGL_ES", (String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION));
 
-	    // HACK: GLSL version override for Mesa-based renderers (i.e. Zink)
-	    // Required to run the game properly on some mobile Vulkan drivers (Minecraft fails to compile shaders without)
-        envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
-
         envMap.put("FORCE_VSYNC", String.valueOf(LauncherPreferences.PREF_FORCE_VSYNC));
 
         envMap.put("MESA_GLSL_CACHE_DIR", Tools.DIR_CACHE.getAbsolutePath());
@@ -141,6 +153,7 @@ public class JREUtils {
             setupAngleEnv(context, envMap);
         }
         setupFfmpegEnv(context, envMap);
+        setupRendererEnv(envMap, renderer);
 
         if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
 
@@ -233,7 +246,12 @@ public class JREUtils {
         boolean useGles;
         int glesVersion;
         switch (renderer){
-            //case "vulkan_zink": renderLibrary = "libOSMesa.so"; break;
+            case "freedreno_kgsl":
+            case "vulkan_zink":
+                renderLibrary = "libEGL_mesa.so";
+                useGles = false;
+                glesVersion = 3;
+                break;
             case "opengles3_ltw" :
                 renderLibrary = "libltw.so";
                 useGles = true;
