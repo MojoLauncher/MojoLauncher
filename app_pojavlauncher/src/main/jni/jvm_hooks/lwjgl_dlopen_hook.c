@@ -31,8 +31,9 @@ static jlong ndlopen_bugfix(__attribute__((unused)) JNIEnv *env,
         printf("LWJGL linkerhook: replacing load for libvulkan.so with custom driver\n");
         return (jlong) pojavexec_loadVulkanDriver();
     }
-    if(strstr(filename, pojavexec_getRenderSpec()->egl_path) == filename) {
-        printf("LWJGL linkerhook: replacing EGL load with already loaded EGL");
+    // Re-use already loaded libEGL from pojavexec
+    if(strstr(filename, "libEGL_mesa.so") == filename) {
+        printf("LWJGL linkerhook: replacing Mesa EGL load with already loaded EGL");
         return (jlong) pojavexec_getRenderSpec()->egl_handle;
     }
 
