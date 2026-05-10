@@ -44,7 +44,7 @@ typedef void* (*ld_android_link_namespaces_t)(struct android_namespace_t* namesp
                                               const char* shared_libs_sonames);
 
 static ld_android_create_namespace_t android_create_namespace;
-static struct android_namespace_t* driver_namespace;
+static struct android_namespace_t* driver_namespace = NULL;
 
 struct android_namespace_t* local_android_create_namespace(
         const char* name, const char* ld_library_path, const char* default_library_path, uint64_t type,
@@ -74,6 +74,7 @@ bool linker_ns_load(const char* lib_search_path) {
 #ifndef ADRENO_POSSIBLE
     return false;
 #else
+    if(driver_namespace != NULL) return true; // Do not initialize namespaces multiple times, this caused very funny bugs we spent hours debugging
     int pagesize = getpagesize();
     loader_dlopen_t loader_dlopen = find_branch_label(&dlopen);
     // reprotecting the functions removes protection from indirect jumps
