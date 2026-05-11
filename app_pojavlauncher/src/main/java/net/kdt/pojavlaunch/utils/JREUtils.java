@@ -104,14 +104,17 @@ public class JREUtils {
         switch(renderer) {
             case "vulkan_zink":
                 envMap.put("GALLIUM_DRIVER", "zink");
-                envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
+                envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "kgsl");
                 // HACK: GLSL version override for Mesa-based renderers (i.e. Zink)
                 // Required to run the game properly on some mobile Vulkan drivers (Minecraft fails to compile shaders without)
                 envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
                 break;
             case "freedreno_kgsl":
-                if(GLInfoUtils.getGlInfo().isAdreno())
+                if(GLInfoUtils.getGlInfo().isAdreno()) {
                     envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "kgsl");
+                    envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6");
+                    envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
+                }
                 break;
         }
     }
@@ -248,14 +251,16 @@ public class JREUtils {
     public static String loadGraphicsLibrary(String renderer){
         String renderLibrary;
         boolean useGles;
+        boolean preloadVk = true;
         int glesVersion;
         switch (renderer){
             case "freedreno_kgsl":
+                preloadVk = false;
             case "vulkan_zink":
                 renderLibrary = "libEGL_mesa.so";
                 useGles = false;
                 glesVersion = 3;
-                preloadVulkan(); // Zink requires Vulkan library to be preloaded
+                if(preloadVk) preloadVulkan(); // Zink requires Vulkan library to be preloaded
                 break;
             case "opengles3_ltw" :
                 renderLibrary = "libltw.so";

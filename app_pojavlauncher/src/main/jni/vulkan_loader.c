@@ -68,9 +68,8 @@ void* pojavexec_loadVulkanDriver() {
 
 JNIEXPORT void JNICALL
 Java_net_kdt_pojavlaunch_utils_JREUtils_preloadVulkan(JNIEnv *env, jclass clazz) {
-    load_turnip_vulkan();
-    void* h = linker_ns_dlopen("libmjlvlk.so", RTLD_LOCAL | RTLD_NOW); // Second load
-    void* gh = linker_ns_dlopen("libgallium_dri.so", RTLD_LOCAL | RTLD_NOW);
-    if(!h) printf("Second dlopen failed: %s\n", dlerror());
-    printf("Open libmjlvlk at %p, libgallium_dri at %p\n", h, gh);
+    void* handle = pojavexec_loadVulkanDriver();
+    if(!handle) {
+        printf("VulkanLoader: failed to preload Vulkan driver!\n");
+    }
 }
