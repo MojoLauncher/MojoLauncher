@@ -110,8 +110,15 @@ public class JREUtils {
                 envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
                 break;
             case "freedreno_kgsl":
-                if(GLInfoUtils.getGlInfo().isAdreno())
+                if(GLInfoUtils.getGlInfo().isAdreno()) {
                     envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "kgsl");
+                    // On Adreno 5XX and lower only Core 3.1 is exposed by default due to missing hardware extensions.
+                    // 3.3 is required for modern Minecraft so let's force 3.3 if running on such GPU - it's known to be working.
+                    if(GLInfoUtils.getGlInfo().isAdreno500Lower()) {
+                        envMap.put("MESA_GL_VERSION_OVERRIDE", "3.3");
+                        envMap.put("MESA_GLSL_VERSION_OVERRIDE", "330");
+                    }
+                }
                 break;
         }
     }
@@ -160,10 +167,6 @@ public class JREUtils {
         envMap.put("EGL_PLATFORM", "android");
 
         if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
-
-        if(GLInfoUtils.getGlInfo().isAdreno() && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
-            envMap.put("POJAV_LOAD_TURNIP", "1");
-        }
 
         overrideEnvVars(envMap);
 
@@ -248,14 +251,18 @@ public class JREUtils {
     public static String loadGraphicsLibrary(String renderer){
         String renderLibrary;
         boolean useGles;
+        boolean bypassNamespace = false;
+        boolean preloadVk = true;
         int glesVersion;
         switch (renderer){
             case "freedreno_kgsl":
+                preloadVk = false;
             case "vulkan_zink":
                 renderLibrary = "libEGL_mesa.so";
                 useGles = false;
+                bypassNamespace = true; // Mesa is linked to a bunch of libraries not available in the pojavexec namespace
                 glesVersion = 3;
-                preloadVulkan(); // Zink requires Vulkan library to be preloaded
+                if(preloadVk) preloadVulkan(); // Zink requires Vulkan library to be preloaded
                 break;
             case "opengles3_ltw" :
                 renderLibrary = "libltw.so";
@@ -272,7 +279,7 @@ public class JREUtils {
                 break;
         }
 
-        if (!configureRenderspec(renderLibrary, true, useGles, glesVersion)) {
+        if (!configureRenderspec(renderLibrary, bypassNamespace, useGles, glesVersion)) {
             Log.e("RENDER_LIBRARY","Failed to load renderer " + renderLibrary );
             return null;
         }
@@ -287,6 +294,7 @@ public class JREUtils {
     public static native void setLdLibraryPath(String ldLibraryPath);
     public static native boolean configureRenderspec(String eglPath, boolean useLoaderBypass, boolean useGles, int glesVersion);
     public static native void preloadVulkan();
+    public static native void setUseTurnip(boolean enable);
     //public static native void initializeHooks();
     // Obtain AWT screen pixels to render on Android SurfaceView
     public static native boolean renderAWTScreenFrame(ByteBuffer tempBuffer);

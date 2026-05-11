@@ -69,9 +69,12 @@ void* pojavexec_loadVulkanDriver() {
 
 JNIEXPORT void JNICALL
 Java_net_kdt_pojavlaunch_utils_JREUtils_preloadVulkan(JNIEnv *env, jclass clazz) {
+#ifdef ENABLE_TURNIP_LOADER
+    if(!turnip_enabled) return;
     if(!load_turnip_vulkan()) {
         printf("Failed to preload Turnip!\n");
     }
+#endif
 }
 
 JNIEXPORT void JNICALL

@@ -252,6 +252,8 @@ public class GameRunner {
         JREUtils.setEnviroimentForGame(activity, rendererName);
         JREUtils.chdir(instance.getGameDirectory().getAbsolutePath());
 
+        JREUtils.setUseTurnip(GLInfoUtils.getGlInfo().isAdreno() && !LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER);
+
         String rendererLibrary = JREUtils.loadGraphicsLibrary(rendererName);
         if(rendererLibrary == null) {
             Log.i("GameRunner", "Falling back to GL4ES 1.1.4");
