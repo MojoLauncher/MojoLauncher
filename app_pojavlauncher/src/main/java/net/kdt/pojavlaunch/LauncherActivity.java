@@ -177,7 +177,6 @@ public class LauncherActivity extends BaseActivity {
         catch (Exception e) {
             throw new RuntimeException(e);
         }
-        JREUtils.preloadVulkan();
 
         IconCacheJanitor.runJanitor();
         mRequestNotificationPermissionLauncher = registerForActivityResult(

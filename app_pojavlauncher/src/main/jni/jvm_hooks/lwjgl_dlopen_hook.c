@@ -31,10 +31,11 @@ static jlong ndlopen_bugfix(__attribute__((unused)) JNIEnv *env,
         printf("LWJGL linkerhook: replacing load for libvulkan.so with custom driver\n");
         return (jlong) pojavexec_loadVulkanDriver();
     }
-    // Re-use already loaded libEGL from pojavexec
-    if(strstr(filename, "libEGL_mesa.so") == filename) {
-        printf("LWJGL linkerhook: replacing Mesa EGL load with already loaded EGL");
-        return (jlong) pojavexec_getRenderSpec()->egl_handle;
+    // Load renderer using egl_acquire
+    if(strstr(filename, "libGLMojo.so") == filename) {
+        printf("LWJGL linkerhook: replacing OpenGL with renderspec driver\n");
+        const pojavexec_renderspec_t *rspec = pojavexec_getRenderSpec();
+        return (jlong) rspec->egl_acquire(rspec->egl_path);
     }
 
     // This hook also serves the task of mitigating a bug: the idea is that since, on Android 10 and
