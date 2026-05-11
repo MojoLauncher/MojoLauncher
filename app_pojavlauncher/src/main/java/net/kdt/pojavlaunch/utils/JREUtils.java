@@ -251,6 +251,7 @@ public class JREUtils {
     public static String loadGraphicsLibrary(String renderer){
         String renderLibrary;
         boolean useGles;
+        boolean bypassNamespace = false;
         boolean preloadVk = true;
         int glesVersion;
         switch (renderer){
@@ -259,6 +260,7 @@ public class JREUtils {
             case "vulkan_zink":
                 renderLibrary = "libEGL_mesa.so";
                 useGles = false;
+                bypassNamespace = true; // Mesa is linked to a bunch of libraries not available in the pojavexec namespace
                 glesVersion = 3;
                 if(preloadVk) preloadVulkan(); // Zink requires Vulkan library to be preloaded
                 break;
@@ -277,7 +279,7 @@ public class JREUtils {
                 break;
         }
 
-        if (!configureRenderspec(renderLibrary, true, useGles, glesVersion)) {
+        if (!configureRenderspec(renderLibrary, bypassNamespace, useGles, glesVersion)) {
             Log.e("RENDER_LIBRARY","Failed to load renderer " + renderLibrary );
             return null;
         }
