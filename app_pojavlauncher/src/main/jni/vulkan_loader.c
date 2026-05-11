@@ -15,7 +15,7 @@
 #include <android/dlext.h>
 
 void* load_turnip_vulkan() {
-    //if(getenv("POJAV_LOAD_TURNIP") == NULL) return NULL;
+    if(getenv("POJAV_LOAD_TURNIP") == NULL) return NULL;
     const char* native_dir = getenv("POJAV_NATIVEDIR");
     const char* cache_dir = getenv("TMPDIR");
     if(!linker_ns_load(native_dir)) return NULL;
