@@ -112,6 +112,12 @@ public class JREUtils {
             case "freedreno_kgsl":
                 if(GLInfoUtils.getGlInfo().isAdreno()) {
                     envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "kgsl");
+                    // On Adreno 5XX and lower only Core 3.1 is exposed by default due to missing hardware extensions.
+                    // 3.3 is required for modern Minecraft so let's force 3.3 if running on such GPU - it's known to be working.
+                    if(GLInfoUtils.getGlInfo().isAdreno500Lower()) {
+                        envMap.put("MESA_GL_VERSION_OVERRIDE", "3.3");
+                        envMap.put("MESA_GLSL_VERSION_OVERRIDE", "330");
+                    }
                 }
                 break;
         }
