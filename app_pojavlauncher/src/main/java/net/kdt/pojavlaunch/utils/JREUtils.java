@@ -112,8 +112,6 @@ public class JREUtils {
             case "freedreno_kgsl":
                 if(GLInfoUtils.getGlInfo().isAdreno()) {
                     envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "kgsl");
-                    envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6");
-                    envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
                 }
                 break;
         }
