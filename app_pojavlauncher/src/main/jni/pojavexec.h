@@ -9,7 +9,6 @@ typedef struct {
     void* egl_handle; // Set to a dlopen handle in order to force GLFW to load EGL symbols from a particular library
     int force_gles_context;
     int override_major_version;
-    const char* egl_path;
 } pojavexec_renderspec_t;
 
 void* pojavexec_loadVulkanDriver();

@@ -44,23 +44,18 @@ Java_net_kdt_pojavlaunch_utils_JREUtils_configureRenderspec(JNIEnv *env, jclass 
             egl_handle = linker_ns_dlopen(egl_path, RTLD_LOCAL | RTLD_NOW);
             if(!egl_handle) {
                 printf("Failed to dlopen EGL: %s\n", dlerror());
-                dlclose(egl_handle);
                 return false;
             }
         } else {
             egl_handle = dlopen(egl_path, RTLD_NOW);
-            char * err = dlerror();
-            if(err) {
-                printf("Failed to load EGL: %s\n", err);
+            if(!egl_handle) {
+                printf("Failed to load EGL %s: %s\n", egl_path, dlerror());
                 return false;
             }
         }
         printf("Loaded EGL %s: %p\n", egl_path, egl_handle);
         (*env)->ReleaseStringUTFChars(env, eglPath, egl_path);
-        if(egl_handle == NULL) return false;
-        renderspec.egl_path = egl_path;
     }
-
     renderspec.egl_handle = egl_handle;
     renderspec.force_gles_context = use_gles;
     renderspec.override_major_version = gles_version;
