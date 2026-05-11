@@ -207,10 +207,7 @@ Java_net_kdt_pojavlaunch_utils_jre_JavaRunner_nativeLoadJVM(JNIEnv *env, jclass 
         if(!installClassLoaderHooks(env, vm_env)) return JNI_FALSE;
     }
 
-    // Since the classpath is specified in the VM args, we already have it in our JNIEnv and c=an insert the hooks fairly early.
     hookExec(vm_env);
-    installLwjglDlopenHook(vm_env);
-    installEMUIIteratorMititgation(vm_env);
 
     jint numAppArgs = (*env)->GetArrayLength(env, appArgs);
     const char** appArgsChar = convert_to_char_array(env, appArgs);

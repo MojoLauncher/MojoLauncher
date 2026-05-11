@@ -6,6 +6,8 @@
 #include <stdbool.h>
 #include <dlfcn.h>
 #include <stdlib.h>
+#include <string.h>
+#include <jvm_hooks/jvm_hooks.h>
 #include "elf_hinter.h"
 #include "load_stages.h"
 
@@ -30,10 +32,20 @@ union {
     void* generic;
 } original_func;
 
-
+static void library_preload_hook(JNIEnv *env, const char* name) {
+    const char* lib_filename = strrchr(name, '/');
+    if(lib_filename == NULL) lib_filename = name;
+    else lib_filename++;
+    if(strcmp(lib_filename, "liblwjgl.so") == 0) {
+        LOGI("Running LWJGL preload hooks...");
+        installLwjglDlopenHook(env);
+        installEMUIIteratorMititgation(env);
+    }
+}
 
 static jboolean hook_NativeLibraries_load(JNIEnv *env, jclass cls, jobject lib, jstring name, jboolean isBuiltin, jboolean throwExceptionIfFail) {
     const char* name_n = (*env)->GetStringUTFChars(env, name, NULL);
+    library_preload_hook(env, name_n);
     hinter_t hinter;
     hinter_process(&hinter, name_n);
     (*env)->ReleaseStringUTFChars(env, name, name_n);
@@ -44,6 +56,7 @@ static jboolean hook_NativeLibraries_load(JNIEnv *env, jclass cls, jobject lib, 
 
 static jboolean hook_j17_NativeLibraries_load(JNIEnv *env, jclass cls, jobject lib, jstring name, jboolean isBuiltin, jboolean isJNI, jboolean throwExceptionIfFail) {
     const char* name_n = (*env)->GetStringUTFChars(env, name, NULL);
+    library_preload_hook(env, name_n);
     hinter_t hinter;
     hinter_process(&hinter, name_n);
     (*env)->ReleaseStringUTFChars(env, name, name_n);
@@ -54,6 +67,7 @@ static jboolean hook_j17_NativeLibraries_load(JNIEnv *env, jclass cls, jobject l
 
 static void hook_ClassLoader_00024NativeLibrary_load(JNIEnv *env, jobject this, jstring name, jboolean isBuiltin) {
     const char* name_n = (*env)->GetStringUTFChars(env, name, NULL);
+    library_preload_hook(env, name_n);
     hinter_t hinter;
     hinter_process(&hinter, name_n);
     (*env)->ReleaseStringUTFChars(env, name, name_n);
