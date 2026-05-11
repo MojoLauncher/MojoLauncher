@@ -104,7 +104,7 @@ public class JREUtils {
         switch(renderer) {
             case "vulkan_zink":
                 envMap.put("GALLIUM_DRIVER", "zink");
-                envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "kgsl");
+                envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
                 // HACK: GLSL version override for Mesa-based renderers (i.e. Zink)
                 // Required to run the game properly on some mobile Vulkan drivers (Minecraft fails to compile shaders without)
                 envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
