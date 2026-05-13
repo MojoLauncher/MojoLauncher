@@ -120,5 +120,5 @@ public class GLFW {
     public static native void sendScrollEvent(double xoffset, double yoffset);
     public static native void nativeSurfaceCreated(Surface surface);
     public static native void nativeSurfaceDestroyed();
-    public static native void nativeSetWindowSize(int width, int height);
+    public static native void nativeSurfaceUpdated();
 }
