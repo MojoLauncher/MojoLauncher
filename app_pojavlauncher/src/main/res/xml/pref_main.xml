@@ -51,19 +51,20 @@
             android:title="@string/preference_experimental_title"
             android:summary="@string/preference_experimental_description"
             android:fragment="net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceExperimentalFragment"
-            />
+            android:icon="@drawable/ic_px_experiment"/>
     </PreferenceCategory>
 
     <SwitchPreference
         android:title="@string/preference_force_english_title"
         android:key="force_english"
         android:summary="@string/preference_force_english_description"
-        />
+        android:icon="@drawable/ic_px_translate"/>
 
     <Preference
         android:title="@string/preference_ask_for_notification_title"
         android:summary="@string/preference_ask_for_notification_description"
         android:key="notification_permission_request"
+        android:icon="@drawable/ic_px_bell"
         />
 
 
