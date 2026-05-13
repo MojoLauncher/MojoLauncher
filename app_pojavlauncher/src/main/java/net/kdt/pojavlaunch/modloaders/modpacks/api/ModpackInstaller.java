@@ -19,35 +19,11 @@ import java.util.concurrent.Callable;
 
 public class ModpackInstaller {
 
-    public static ModLoader installModpack(ModDetail modDetail, int selectedVersion, InstallFunction installFunction) throws IOException {
-        String versionUrl = modDetail.versionUrls[selectedVersion];
-        String versionHash = modDetail.versionHashes[selectedVersion];
-        String modpackName = (modDetail.title.toLowerCase(Locale.ROOT) + " " + modDetail.versionNames[selectedVersion])
-                .trim().replaceAll("[\\\\/:*?\"<>| \\t\\n]", "_" );
-        if (versionHash != null) {
-            modpackName += "_" + versionHash;
-        }
-        if (modpackName.length() > 255){
-            modpackName = modpackName.substring(0,255);
-        }
-
+    public static ModLoader installModpack(String modpackName, String title, File modpackFile, String icon, InstallFunction installFunction) throws IOException {
         // Build a new minecraft instance, folder first
-
-        // Get the modpack file
-        File modpackFile = new File(Tools.DIR_CACHE, modpackName + ".cf"); // Cache File
         ModLoader modLoaderInfo;
-        Instance instance = Instances.createInstance(i->{
-            i.name = modDetail.title;
-        }, modpackName.substring(0, Math.min(16,modpackName.length())));
+        Instance instance = Instances.createInstance(i-> i.name = title, modpackName.substring(0, Math.min(16,modpackName.length())));
         try {
-            byte[] downloadBuffer = new byte[8192];
-            DownloadUtils.ensureSha1(modpackFile, versionHash, (Callable<Void>) () -> {
-                DownloadUtils.downloadFileMonitored(versionUrl, modpackFile, downloadBuffer,
-                        new DownloaderProgressWrapper(R.string.modpack_download_downloading_metadata,
-                                ProgressLayout.INSTALL_MODPACK));
-                return null;
-            });
-
             // Install the modpack
             modLoaderInfo = installFunction.installModpack(modpackFile, instance.getGameDirectory());
 
@@ -63,7 +39,7 @@ public class ModpackInstaller {
                 instance.versionId = versionId;
             }
             instance.write();
-            ModIconCache.writeInstanceImage(instance, modDetail.getIconCacheTag());
+            ModIconCache.writeInstanceImage(instance, icon);
 
             Instances.setSelectedInstance(instance);
             if(modLoaderInfo.requiresGuiInstallation()) {
@@ -80,7 +56,43 @@ public class ModpackInstaller {
         return modLoaderInfo;
     }
 
-    interface InstallFunction {
+    public static ModLoader downloadModpack(ModDetail modDetail, int selectedVersion, InstallFunction installFunction) throws IOException {
+        String versionUrl = modDetail.versionUrls[selectedVersion];
+        String versionHash = modDetail.versionHashes[selectedVersion];
+        String modpackName = (modDetail.title.toLowerCase(Locale.ROOT) + " " + modDetail.versionNames[selectedVersion])
+                .trim().replaceAll("[\\\\/:*?\"<>| \\t\\n]", "_" );
+        String name = modDetail.title;
+        String icon = modDetail.getIconCacheTag();
+
+        if (versionHash != null) {
+            modpackName += "_" + versionHash;
+        }
+
+        if (modpackName.length() > 255){
+            modpackName = modpackName.substring(0,255);
+        }
+
+        File modpackFile = new File(Tools.DIR_CACHE, modpackName + ".cf");
+
+        byte[] downloadBuffer = new byte[8192];
+        try {
+            DownloadUtils.ensureSha1(modpackFile, versionHash, (Callable<Void>) () -> {
+                DownloadUtils.downloadFileMonitored(versionUrl, modpackFile, downloadBuffer,
+                        new DownloaderProgressWrapper(R.string.modpack_download_downloading_metadata,
+                                ProgressLayout.INSTALL_MODPACK
+                        )
+                );
+                return null;
+            });
+        } catch (IOException e) {
+            modpackFile.delete();
+            throw e;
+        }
+
+        return installModpack(modpackName, name, modpackFile, icon, installFunction);
+    }
+
+    public interface InstallFunction {
         ModLoader installModpack(File modpackFile, File instanceDestination) throws IOException;
     }
 }

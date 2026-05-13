@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
+      MOJOPUB_KEYSTORE_PASSWORD: ${{ secrets.MOJOPUB_KEYSTORE_PASSWORD }}
       CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
     steps:
       - name: Checkout
@@ -53,7 +54,11 @@ jobs:
         run: |
           gradle :app_pojavlauncher:assembleNoruntimeDebug
           mv app_pojavlauncher/build/outputs/apk/noruntime/debug/app_pojavlauncher-noruntime-debug.apk out/app-debug-noruntime.apk
-
+      - name: Build Nightly Release .apk
+        if: github.repository_owner == 'MojoLauncher' && github.ref_name == 'v3_openjdk'
+        run: |
+          gradle :app_pojavlauncher:assembleFullPubRelease
+          mv app_pojavlauncher/build/outputs/apk/full/pubRelease/app_pojavlauncher-full-pubRelease.apk out/MojoLauncher-release.apk
       - name: Gen md5sums
         run: |
           md5sum out/app-debug-full.apk > out/app-debug-full.md5
@@ -70,6 +75,19 @@ jobs:
         with:
           name: app-debug-noruntime
           path: out/app-debug-noruntime.apk
+
+      - name: Release Nightly APK
+        if: github.repository_owner == 'MojoLauncher' && github.ref_name == 'v3_openjdk'
+        uses: softprops/action-gh-release@v3
+        with:
+          name: MojoLauncher Nightly Builds
+          prerelease: true
+          tag_name: nightly
+          body: |
+            MojoLauncher nightly build.
+            Commit hash: ${{ github.sha }}
+          files: |
+            out/MojoLauncher-release.apk
 
       - name: Upload AAB
         uses: actions/upload-artifact@v4

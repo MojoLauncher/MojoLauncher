@@ -434,4 +434,5 @@
     <string name="modloader_dl_install_legacy_fabric_instance">Установка с Legacy Fabric</string>
     <string name="instance_delete">Удалить установку</string>
     <string name="instance_delete_confirmation">Вы уверены что хотите удалить установку? Ваши миры, моды, ресурсы и иные данные находящиеся в папке установки будут удалены. Данное действие не может быть отменено!</string>
+    <string name="import_local_modpack">Импорт локальной сборки</string>
 </resources>
