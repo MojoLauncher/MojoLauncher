@@ -1,19 +1,34 @@
 package net.kdt.pojavlaunch.render;
 
+import static net.kdt.pojavlaunch.CallbackBridge.windowHeight;
+import static net.kdt.pojavlaunch.CallbackBridge.windowWidth;
+
 import android.content.Context;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
-public class SurfaceViewSurfaceProvider implements SurfaceProvider<SurfaceView> {
+import net.kdt.pojavlaunch.CallbackBridge;
+
+public class SurfaceViewSurfaceProvider implements SurfaceProvider {
+    private SurfaceView mSurfaceView;
     @Override
-    public SurfaceView create(Context context, SurfaceCallback callback) {
-        SurfaceView surfaceView = new SurfaceView(context);
-        surfaceView.getHolder().addCallback(new CallbackAdapter(callback));
-        return surfaceView;
+    public View create(Context context, SurfaceCallback callback) {
+        mSurfaceView = new SurfaceView(context);
+        mSurfaceView.getHolder().addCallback(new CallbackAdapter(callback));
+        if(windowWidth != 0 && windowHeight != 0)
+            mSurfaceView.getHolder().setFixedSize(windowWidth, windowHeight);
+        return mSurfaceView;
     }
+
+    @Override
+    public void updateSize() {
+        mSurfaceView.getHolder().setFixedSize(windowWidth, windowHeight);
+    }
+
     private static class CallbackAdapter implements SurfaceHolder.Callback {
         private final SurfaceCallback mCallback;
 
