@@ -2,9 +2,11 @@ package net.kdt.pojavlaunch.prefs.screens;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 import androidx.preference.SwitchPreference;
 import androidx.preference.SwitchPreferenceCompat;
 
@@ -13,6 +15,7 @@ import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.CustomSeekBarPreference;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.utils.GLInfoUtils;
 import net.kdt.pojavlaunch.utils.RendererCompatUtil;
 
 /**
@@ -55,6 +58,11 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         RendererCompatUtil.RenderersList renderersList = RendererCompatUtil.getCompatibleRenderers(getContext());
         rendererListPreference.setEntries(renderersList.rendererDisplayNames);
         rendererListPreference.setEntryValues(renderersList.rendererIds.toArray(new String[0]));
+        // Turnip/System Vulkan switch
+        Preference driverPreference = requirePreference("zinkPreferSystemDriver");
+        PackageManager packageManager = driverPreference.getContext().getPackageManager();
+        boolean supportsTurnip = RendererCompatUtil.checkVulkanSupport(packageManager) && GLInfoUtils.getGlInfo().isAdreno();
+        driverPreference.setVisible(supportsTurnip);
 
         computeVisibility();
     }
