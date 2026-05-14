@@ -59,7 +59,7 @@ Java_net_kdt_pojavlaunch_utils_JREUtils_configureRenderspec(JNIEnv *env, jclass 
             renderspec.egl_acquire = egl_acquire_default;
         }
 
-        void* egl_handle = egl_acquire_ns(renderspec.egl_path);
+        void* egl_handle = renderspec.egl_acquire(renderspec.egl_path);
         if(!egl_handle) {
             printf("Failed to load EGL: %s\n", dlerror());
             return false;
