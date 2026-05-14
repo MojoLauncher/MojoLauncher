@@ -64,7 +64,7 @@ Java_net_kdt_pojavlaunch_utils_JREUtils_configureRenderspec(JNIEnv *env, jclass 
             printf("Failed to load EGL: %s\n", dlerror());
             return false;
         }
-        printf("Loaded EGL %s (in namespace: %i)\n", egl_path, use_loader_bypass);
+        printf("Loaded EGL %s (in namespace: %i)\n", renderspec.egl_path, use_loader_bypass);
     }
 
     renderspec.force_gles_context = use_gles;
