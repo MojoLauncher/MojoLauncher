@@ -67,6 +67,7 @@ void* pojavexec_loadVulkanDriver() {
     return vulkan_ptr;
 }
 
+// Does nothing if Turnip is unsupported - Mesa will load system driver automatically
 JNIEXPORT void JNICALL
 Java_net_kdt_pojavlaunch_utils_JREUtils_preloadVulkan(JNIEnv *env, jclass clazz) {
 #ifdef ENABLE_TURNIP_LOADER
@@ -78,6 +79,6 @@ Java_net_kdt_pojavlaunch_utils_JREUtils_preloadVulkan(JNIEnv *env, jclass clazz)
 }
 
 JNIEXPORT void JNICALL
-Java_net_kdt_pojavlaunch_utils_JREUtils_setUseTurnip(JNIEnv *env, jclass clazz, jboolean enalbe) {
-    turnip_enabled = enalbe;
+Java_net_kdt_pojavlaunch_utils_JREUtils_setUseTurnip(JNIEnv *env, jclass clazz, jboolean enable) {
+    turnip_enabled = enable;
 }
