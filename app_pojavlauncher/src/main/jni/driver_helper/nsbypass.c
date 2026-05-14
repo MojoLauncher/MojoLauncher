@@ -16,6 +16,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <elf.h>
+#include <inttypes.h>
 
 /* upper 6 bits of an ARM64 instruction are the instruction name */
 #define OP_MS 0b11111100000000000000000000000000
@@ -127,17 +128,10 @@ void* linker_ns_dlopen(const char* name, int flag) {
 #endif
 }
 
-bool patch_elf_soname(int patchfd, int realfd, uint16_t patchid) {
-    struct stat realstat;
-    if(fstat(realfd, &realstat)) return false;
-    if(ftruncate64(patchfd, realstat.st_size) == -1) return false;
-    char* target = mmap(NULL, realstat.st_size, PROT_READ | PROT_WRITE, MAP_SHARED, patchfd, 0);
+bool patch_elf_soname(int patchfd, int realfd, size_t size, const char* patchname) {
+    char* target = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, patchfd, 0);
     if(!target) return false;
-    if(read(realfd, target, realstat.st_size) != realstat.st_size) {
-        munmap(target, realstat.st_size);
-        return false;
-    }
-    close(realfd);
+    if(read(realfd, target, size) != size) goto fail;
 
 
     ELF_EHDR *ehdr = (ELF_EHDR*)target;
@@ -152,44 +146,74 @@ bool patch_elf_soname(int patchfd, int realfd, uint16_t patchid) {
                 ELF_DYN* dynEntry = &dynEntries[k];
                 if(dynEntry->d_tag == DT_SONAME) {
                     char* soname = strtab + dynEntry->d_un.d_val;
-                    char sprb[4];
-                    snprintf(sprb, 4, "%03x", patchid);
-                    memcpy(soname, sprb, 3);
-                    munmap(target, realstat.st_size);
+                    size_t soname_len = strlen(soname);
+                    size_t patchname_len = strlen(patchname);
+                    if(patchname_len != soname_len) goto fail;
+
+                    strcpy(soname, patchname);
+                    munmap(target, size);
                     return true;
                 }
             }
         }
     }
+
+    fail:
+    munmap(target, size);
     return false;
 }
 
-void* linker_ns_dlopen_unique(const char* tmpdir, const char* name, int flags) {
+#define PAGE_ALIGN(addr)        (((addr)+pagesize-1)&(~(pagesize-1)))
+
+void* linker_ns_dlopen_unique(const char* tmpdir, const char* name, const char* patch_name, int flags) {
 #ifndef ADRENO_POSSIBLE
     return NULL;
 #else
+    int pagesize = getpagesize();
     char pathbuf[PATH_MAX];
-    static uint16_t patch_id;
+    static uint16_t patchid;
     int patch_fd, real_fd;
-    snprintf(pathbuf,PATH_MAX,"%s/%d_p.so", tmpdir, patch_id);
-    patch_fd = open(pathbuf, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
-    if(patch_fd == -1) return NULL;
-    snprintf(pathbuf,PATH_MAX,"%s/%s", SEARCH_PATH, name);
+    size_t fsize, totalsize;
+
+    snprintf(pathbuf, PATH_MAX, "%s/%s", SEARCH_PATH, name);
     real_fd = open(pathbuf, O_RDONLY);
-    if(real_fd == -1) {
+    if(real_fd == -1) return NULL;
+
+    {
+        struct stat64 real_stat;
+        if (fstat64(real_fd, &real_stat)) goto fail_real;
+        fsize = real_stat.st_size;
+        totalsize = PAGE_ALIGN(fsize);
+    }
+
+    patch_fd = syscall(__NR_memfd_create, patch_name, MFD_CLOEXEC);
+    if(patch_fd == -1) {
+        // TODO: use ASharedMemory as fallback
+        // NOTE: use page-aligned size (totalsize) for ashmem
+        snprintf(pathbuf, PATH_MAX, "%s/%"PRIu16"", tmpdir, patchid++);
+        patch_fd = open(pathbuf, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
+    }
+    if(patch_fd == -1) goto fail_real;
+
+    if(ftruncate64(patch_fd, totalsize) == -1) goto fail_both;
+
+    bool patch_result = patch_elf_soname(patch_fd, real_fd, fsize, patch_name);
+    close(real_fd);
+    if(!patch_result) {
         close(patch_fd);
         return NULL;
     }
-    if(!patch_elf_soname(patch_fd, real_fd, patch_id)) {
-        close(patch_fd);
-        close(real_fd);
-        return NULL;
-    }
+
     android_dlextinfo extinfo;
     extinfo.flags = ANDROID_DLEXT_USE_NAMESPACE | ANDROID_DLEXT_USE_LIBRARY_FD;
     extinfo.library_fd = patch_fd;
     extinfo.library_namespace = driver_namespace;
-    snprintf(pathbuf, PATH_MAX, "/proc/self/fd/%d", patch_fd);
-    return android_dlopen_ext(pathbuf, flags, &extinfo);
+    return android_dlopen_ext(patch_name, flags, &extinfo);
+
+    fail_both:
+    close(patch_fd);
+    fail_real:
+    close(real_fd);
+    return NULL;
 #endif
 }

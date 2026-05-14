@@ -255,6 +255,7 @@ public class JREUtils {
                 renderLibrary = "libEGL_mesa.so";
                 useGles = false;
                 glesVersion = 3;
+                preloadVulkan(); // Zink requires Vulkan library to be preloaded
                 break;
             case "opengles3_ltw" :
                 renderLibrary = "libltw.so";
@@ -285,6 +286,7 @@ public class JREUtils {
 
     public static native void setLdLibraryPath(String ldLibraryPath);
     public static native boolean configureRenderspec(String eglPath, boolean useLoaderBypass, boolean useGles, int glesVersion);
+    public static native void preloadVulkan();
     //public static native void initializeHooks();
     // Obtain AWT screen pixels to render on Android SurfaceView
     public static native boolean renderAWTScreenFrame(ByteBuffer tempBuffer);

@@ -70,3 +70,5 @@ Java_net_kdt_pojavlaunch_utils_JREUtils_configureRenderspec(JNIEnv *env, jclass 
 const pojavexec_renderspec_t* pojavexec_getRenderSpec() {
     return &renderspec;
 }
+
+
