@@ -6,15 +6,16 @@
 #include <stdio.h>
 #include <dlfcn.h>
 #include <stdlib.h>
+#include <jni.h>
 
-#ifdef ADRENO_POSSIBLE
+#define TAG __FILE_NAME__
+#include <log.h>
+
 #include <driver_helper/nsbypass.h>
 #include <android/dlext.h>
-#endif
 
-#ifdef ADRENO_POSSIBLE
 void* load_turnip_vulkan() {
-    if(getenv("POJAV_LOAD_TURNIP") == NULL) return NULL;
+    //if(getenv("POJAV_LOAD_TURNIP") == NULL) return NULL;
     const char* native_dir = getenv("POJAV_NATIVEDIR");
     const char* cache_dir = getenv("TMPDIR");
     if(!linker_ns_load(native_dir)) return NULL;
@@ -41,14 +42,11 @@ void* load_turnip_vulkan() {
         return NULL;
     }
     linkerhook_pass_handles(turnip_driver_handle, android_dlopen_ext, android_get_exported_namespace);
-    void* libvulkan = linker_ns_dlopen_unique(cache_dir, "libvulkan.so", RTLD_LOCAL | RTLD_NOW);
+    void* libvulkan = linker_ns_dlopen_unique(cache_dir, "libvulkan.so", "libmjlvlk.so", RTLD_LOCAL | RTLD_NOW);
     return libvulkan;
 }
-#endif
-
 
 static void* load_vulkan() {
-#ifdef ADRENO_POSSIBLE
     if(android_get_device_api_level() >= 28) { // the loader does not support below that
         void* result = load_turnip_vulkan();
         if(result != NULL) {
@@ -56,7 +54,6 @@ static void* load_vulkan() {
             return result;
         }
     }
-#endif
     void* vulkan_ptr = dlopen("libvulkan.so", RTLD_LAZY | RTLD_LOCAL);
     printf("VulkanLoader: loaded system vulkan, ptr=%p\n", vulkan_ptr);
     return vulkan_ptr;
@@ -67,4 +64,13 @@ void* pojavexec_loadVulkanDriver() {
     if(handle != NULL) return handle;
     handle = load_vulkan();
     return handle;
+}
+
+JNIEXPORT void JNICALL
+Java_net_kdt_pojavlaunch_utils_JREUtils_preloadVulkan(JNIEnv *env, jclass clazz) {
+    load_turnip_vulkan();
+    void* h = linker_ns_dlopen("libmjlvlk.so", RTLD_LOCAL | RTLD_NOW); // Second load
+    void* gh = linker_ns_dlopen("libgallium_dri.so", RTLD_LOCAL | RTLD_NOW);
+    if(!h) printf("Second dlopen failed: %s\n", dlerror());
+    printf("Open libmjlvlk at %p, libgallium_dri at %p\n", h, gh);
 }

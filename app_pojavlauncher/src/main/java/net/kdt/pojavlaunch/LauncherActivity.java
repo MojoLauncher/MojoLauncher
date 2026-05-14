@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.system.Os;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -44,6 +45,7 @@ import net.kdt.pojavlaunch.services.ProgressServiceKeeper;
 import net.kdt.pojavlaunch.tasks.AsyncMinecraftDownloader;
 import net.kdt.pojavlaunch.tasks.AsyncVersionList;
 import net.kdt.pojavlaunch.tasks.MinecraftDownloader;
+import net.kdt.pojavlaunch.utils.JREUtils;
 import net.kdt.pojavlaunch.utils.NotificationUtils;
 
 import java.lang.ref.WeakReference;
@@ -167,6 +169,15 @@ public class LauncherActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pojav_launcher);
+
+        try {
+            Os.setenv("POJAV_NATIVEDIR", Tools.NATIVE_LIB_DIR, true);
+            Os.setenv("TMPDIR", Tools.DIR_CACHE.getAbsolutePath(), true);
+         }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        JREUtils.preloadVulkan();
 
         IconCacheJanitor.runJanitor();
         mRequestNotificationPermissionLauncher = registerForActivityResult(
