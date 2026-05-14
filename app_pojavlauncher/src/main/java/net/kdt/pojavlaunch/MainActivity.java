@@ -413,8 +413,28 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             }
             return super.dispatchKeyEvent(event);
         }
+
+        // --- NEW CODE FOR ISSUE #367 START ---
+        KeyEvent eventToProcess = event;
+
+        // Check if Meta (Search) is pressed along with C or V
+        if (event.isMetaPressed() && (event.getKeyCode() == KeyEvent.KEYCODE_C || event.getKeyCode() == KeyEvent.KEYCODE_V)) {
+            // Create a new event that swaps the Meta state for Ctrl
+            eventToProcess = new KeyEvent(
+                    event.getDownTime(),
+                    event.getEventTime(),
+                    event.getAction(),
+                    event.getKeyCode(),
+                    event.getRepeatCount(),
+                    KeyEvent.META_CTRL_ON | KeyEvent.META_CTRL_LEFT_ON // Force standard Ctrl modifier
+            );
+        }
+        // --- NEW CODE FOR ISSUE #367 END ---
+
         boolean handleEvent;
-        if(!(handleEvent = minecraftGLView.processKeyEvent(event))) {
+
+        // Pass our modified eventToProcess to the game instead of the original event
+        if(!(handleEvent = minecraftGLView.processKeyEvent(eventToProcess))) {
             if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && !touchCharInput.isEnabled()) {
                 if(event.getAction() != KeyEvent.ACTION_UP) return true; // We eat it anyway
                 sendKeyPress(LwjglGlfwKeycode.GLFW_KEY_ESCAPE);
