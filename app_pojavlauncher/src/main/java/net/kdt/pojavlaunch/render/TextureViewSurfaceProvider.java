@@ -11,30 +11,32 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import net.kdt.pojavlaunch.Tools;
+
 public class TextureViewSurfaceProvider implements SurfaceProvider {
     private TextureView mTextureView;
+    private SurfaceCallback mCallback;
 
     @Override
     public View create(Context context, SurfaceCallback callback) {
+        mCallback = callback;
         mTextureView = new TextureView(context);
         mTextureView.setOpaque(true);
         mTextureView.setAlpha(1.0f);
-        mTextureView.setSurfaceTextureListener(new CallbackAdapter(callback));
+        mTextureView.setSurfaceTextureListener(new CallbackAdapter());
         return mTextureView;
     }
 
     @Override
     public void updateSize() {
         SurfaceTexture surfaceTexture = mTextureView.getSurfaceTexture();
-        if(surfaceTexture != null) surfaceTexture.setDefaultBufferSize(windowWidth, windowHeight);
+        if(surfaceTexture != null) {
+            surfaceTexture.setDefaultBufferSize(windowWidth, windowHeight);
+            Tools.runOnUiThread(()->mCallback.onSurfaceResized());
+        }
     }
 
-    private static class CallbackAdapter implements TextureView.SurfaceTextureListener {
-        private final SurfaceCallback mCallback;
-
-        private CallbackAdapter(SurfaceCallback mCallback) {
-            this.mCallback = mCallback;
-        }
+    private class CallbackAdapter implements TextureView.SurfaceTextureListener {
 
         @Override
         public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
