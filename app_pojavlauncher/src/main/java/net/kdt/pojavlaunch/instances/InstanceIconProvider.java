@@ -9,7 +9,7 @@ import android.graphics.drawable.Drawable;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 
 import java.io.File;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ public class InstanceIconProvider {
     private static final Map<String, Integer> sStaticIcons = new HashMap<>();
 
     static {
-        sStaticIcons.put("default", R.drawable.ic_mojo_full);
+        sStaticIcons.put("default", R.drawable.ic_package);
         sStaticIcons.put("fabric", R.drawable.ic_fabric);
         sStaticIcons.put("quilt", R.drawable.ic_quilt);
         sStaticIcons.put("forge", R.drawable.ic_forge);

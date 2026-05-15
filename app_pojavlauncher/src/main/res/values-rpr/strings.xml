@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition для Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_name">Hyper Launcher (Minecraft: Java Edition для Android)</string>
+    <string name="app_short_name">Hyper Launcher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -13,7 +13,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Выберите установщикъ модификаціи</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher былъ остановленъ въ результатѣ курьёза</string>
+    <string name="error_fatal">Hyper Launcher былъ остановленъ въ результатѣ курьёза</string>
     <string name="error_no_version">Нѣтъ версій!</string>
     <string name="error_show_more">Развернуть</string>
     <string name="error_show_less">Свернуть</string>

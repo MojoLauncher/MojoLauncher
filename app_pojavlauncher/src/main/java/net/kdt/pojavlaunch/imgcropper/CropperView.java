@@ -165,13 +165,19 @@ public class CropperView extends View {
         int centerShiftX = (w - lesserDimension) / 2;
         int targetHeight = lesserDimension;
         int centerShiftY = (h - lesserDimension) / 2;
-        if(mAspectRatio < 1) {
-            targetWidth = (int)(lesserDimension * mAspectRatio);
+        
+        float safeAspectRatio = mAspectRatio <= 0 ? 1f : mAspectRatio;
+        
+        if(safeAspectRatio < 1) {
+            targetWidth = (int)(lesserDimension * safeAspectRatio);
             centerShiftX = (w - targetWidth) / 2;
-        }else if(mAspectRatio > 1) {
-            targetHeight = (int)(lesserDimension * (1f / mAspectRatio));
+        }else if(safeAspectRatio > 1) {
+            targetHeight = (int)(lesserDimension * (1f / safeAspectRatio));
             centerShiftY = (h - targetHeight) / 2;
         }
+        
+        targetWidth = Math.max(1, targetWidth);
+        targetHeight = Math.max(1, targetHeight);
 
         mSelectionRect.left = centerShiftX;
         mSelectionRect.top = centerShiftY;
@@ -182,9 +188,9 @@ public class CropperView extends View {
         // by the highlight thickness, to make sure that the entire inside of the selection highlight
         // will fit into the image
         mSelectionHighlight.left = mSelectionRect.left - mHighlightThickness;
-        mSelectionHighlight.top = mSelectionRect.top + mHighlightThickness;
+        mSelectionHighlight.top = mSelectionRect.top - mHighlightThickness; // fixed: was +
         mSelectionHighlight.right = mSelectionRect.right + mHighlightThickness;
-        mSelectionHighlight.bottom = mSelectionRect.bottom - mHighlightThickness;
+        mSelectionHighlight.bottom = mSelectionRect.bottom + mHighlightThickness; // fixed: was -
     }
 
     @Override

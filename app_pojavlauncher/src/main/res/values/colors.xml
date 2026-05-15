@@ -1,16 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="control_button_color">#4CC4C4C4</color>
-    <color name="control_button_pressed_color">#4D000000</color>
 
-    <color name="minebutton_color">#91dffb</color>
-    <color name="background_app">#181818</color>
-    <color name="divider">@color/background_overlay</color>
-    <color name="background_overlay">#464646</color>
-    <color name="background_status_bar">#242424</color>
-    <color name="background_bottom_bar">#232323</color>
-    <color name="icon_outline_color">#FFFFFF</color>
+    <!-- Buttons -->
+    <color name="control_button_color">#26FFFFFF</color>
+    <color name="control_button_pressed_color">#40FFFFFF</color>
 
-    <color name="primary_text">#FFFFFF</color>
-    <color name="secondary_text">#B2B2B2</color>
+    <!-- Main UI -->
+    <color name="minebutton_color">#FFFFFF</color>
+
+    <!-- Theme Colors -->
+    <color name="background_app">#F5F5F5</color>
+    <color name="divider">#E0E0E0</color>
+    <color name="background_overlay">#FFFFFF</color>
+    <color name="background_status_bar">#FFFFFF</color>
+    <color name="background_bottom_bar">#F0F0F0</color>
+
+    <color name="surface">#FFFFFF</color>
+    <color name="on_surface">#000000</color>
+    <color name="primary">#000000</color>
+    <color name="on_primary">#FFFFFF</color>
+
+    <!-- Icons -->
+    <color name="icon_outline_color">#121212</color>
+
+    <!-- Text -->
+    <color name="primary_text">#000000</color>
+    <color name="secondary_text">#666666</color>
+
+    <!-- Compatible version highlighting -->
+    <color name="compatible_version_bg">#E8F5E9</color>
+    <color name="compatible_version_text">#2E7D32</color>
+    <color name="compatible_version_badge">#4CAF50</color>
+
 </resources>

@@ -9,7 +9,7 @@ import android.widget.ExpandableListAdapter;
 import android.widget.TextView;
 
 import net.kdt.pojavlaunch.JMinecraftVersionList;
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.utils.FilteredSubList;
 

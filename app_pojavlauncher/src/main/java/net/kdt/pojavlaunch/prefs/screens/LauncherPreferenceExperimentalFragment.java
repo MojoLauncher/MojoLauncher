@@ -2,7 +2,7 @@ package net.kdt.pojavlaunch.prefs.screens;
 
 import android.os.Bundle;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 
 public class LauncherPreferenceExperimentalFragment extends LauncherPreferenceFragment {
 

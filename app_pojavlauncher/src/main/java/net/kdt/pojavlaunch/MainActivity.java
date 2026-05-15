@@ -8,8 +8,8 @@ import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_USE_ALTERNATE_S
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_VIRTUAL_MOUSE_START;
 import static org.lwjgl.glfw.CallbackBridge.sendKeyPress;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
@@ -24,13 +24,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Keep;
@@ -39,6 +42,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.kdt.LoggerView;
 
 import net.kdt.pojavlaunch.authenticator.accounts.Accounts;
@@ -66,13 +70,15 @@ import net.kdt.pojavlaunch.utils.MCOptionUtils;
 import net.kdt.pojavlaunch.authenticator.accounts.MinecraftAccount;
 import net.kdt.pojavlaunch.utils.RendererCompatUtil;
 import net.kdt.pojavlaunch.utils.jre.GameRunner;
+import net.kdt.pojavlaunch.customcontrols.handleview.DrawerPullButton;
 
 import org.lwjgl.glfw.CallbackBridge;
 
 import java.io.File;
 import java.io.IOException;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
+import net.ashmeet.hyperlauncher.BuildConfig;
 
 public class MainActivity extends BaseActivity implements ControlButtonMenuListener, EditorExitable, ServiceConnection {
     public static volatile ClipboardManager GLOBAL_CLIPBOARD;
@@ -84,10 +90,11 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     private LoggerView loggerView;
     private DrawerLayout drawerLayout;
     private ListView navDrawer;
-    private View mDrawerPullButton;
+    private DrawerPullButton mDrawerPullButton;
     private GyroControl mGyroControl = null;
     private ControlLayout mControlLayout;
     private HotbarView mHotbarView;
+    private View mDrawerContainer;
 
     Instance instance;
     MinecraftAccount minecraftAccount;
@@ -156,13 +163,77 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         bindService(gameServiceIntent, this, 0);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     protected void initLayout(int resId) {
         setContentView(resId);
         bindValues();
         mControlLayout.setMenuListener(this);
 
         mDrawerPullButton.setOnClickListener(v -> onClickedMenu());
+        mDrawerPullButton.setOnTouchListener(new View.OnTouchListener() {
+            private float initialX, initialY;
+            private float initialTouchX, initialTouchY;
+            private boolean isDragging = false;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (!LauncherPreferences.PREF_DRAWER_BUTTON_MOVABLE) return false;
+
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        initialX = v.getX();
+                        initialY = v.getY();
+                        initialTouchX = event.getRawX();
+                        initialTouchY = event.getRawY();
+                        isDragging = false;
+                        return false; // Let ClickListener handle it if no move
+
+                    case MotionEvent.ACTION_MOVE:
+                        float dx = event.getRawX() - initialTouchX;
+                        float dy = event.getRawY() - initialTouchY;
+                        
+                        if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
+                            isDragging = true;
+                        }
+
+                        if (isDragging) {
+                            float nextX = initialX + dx;
+                            float nextY = initialY + dy;
+
+                            // Clamp
+                            nextX = Math.max(0, Math.min(mControlLayout.getWidth() - v.getWidth(), nextX));
+                            nextY = Math.max(0, Math.min(mControlLayout.getHeight() - v.getHeight(), nextY));
+
+                            v.setX(nextX);
+                            v.setY(nextY);
+
+                            // Save as percent
+                            float parentRangeX = mControlLayout.getWidth() - v.getWidth();
+                            float parentRangeY = mControlLayout.getHeight() - v.getHeight();
+                            LauncherPreferences.PREF_DRAWER_BUTTON_X = parentRangeX > 0 ? (nextX / parentRangeX) * 100f : 0;
+                            LauncherPreferences.PREF_DRAWER_BUTTON_Y = parentRangeY > 0 ? (nextY / parentRangeY) * 100f : 0;
+                            
+                            return true;
+                        }
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        if (isDragging) {
+                            LauncherPreferences.DEFAULT_PREF.edit()
+                                    .putInt("drawerButtonX", (int) LauncherPreferences.PREF_DRAWER_BUTTON_X)
+                                    .putInt("drawerButtonY", (int) LauncherPreferences.PREF_DRAWER_BUTTON_Y)
+                                    .putString("drawerButtonPreset", "custom")
+                                    .commit(); // Use commit to ensure it's saved before potential force close
+                            return true;
+                        }
+                        break;
+                }
+                return false;
+            }
+        });
+
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        drawerLayout.setScrimColor(Color.TRANSPARENT);
 
         try {
             File latestLogFile = new File(Tools.DIR_GAME_HOME, "latestlog.txt");
@@ -179,8 +250,19 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             setTitle("Minecraft " + version);
 
             // Menu
-            gameActionArrayAdapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu_ingame));
+            gameActionArrayAdapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu_ingame)) {
+                @NonNull
+                @Override
+                public View getView(int position, View convertView, @NonNull android.view.ViewGroup parent) {
+                    View v = super.getView(position, convertView, parent);
+                    if(v instanceof TextView) {
+                        ((TextView) v).setTextColor(Color.WHITE);
+                        ((TextView) v).setPadding(32, 16, 32, 16);
+                    }
+                    return v;
+                }
+            };
             gameActionClickListener = (parent, view, position, id) -> {
                 switch(position) {
                      case 0: dialogForceClose(MainActivity.this); break;
@@ -227,8 +309,37 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         } catch (Throwable th) {
             Tools.showError(this, th);
         }
-        mDrawerPullButton.setVisibility(mControlLayout.hasMenuButton() ? View.GONE : View.VISIBLE);
+        updateDrawerButton();
         mControlLayout.toggleControlVisible();
+    }
+
+    private void updateDrawerButton() {
+        if(mDrawerPullButton == null) return;
+        mDrawerPullButton.setVisibility(mControlLayout.hasMenuButton() ? View.GONE : View.VISIBLE);
+        mDrawerPullButton.updateCustomImage();
+        
+        mDrawerPullButton.post(() -> {
+            FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mDrawerPullButton.getLayoutParams();
+            int parentWidth = mControlLayout.getWidth();
+            int parentHeight = mControlLayout.getHeight();
+            if (parentWidth == 0 || parentHeight == 0) return;
+
+            int sizePx = (int) (LauncherPreferences.PREF_DRAWER_BUTTON_SIZE * getResources().getDisplayMetrics().density);
+            lp.width = sizePx;
+            lp.height = sizePx;
+
+            float xPercent = LauncherPreferences.PREF_DRAWER_BUTTON_X / 100f;
+            float yPercent = LauncherPreferences.PREF_DRAWER_BUTTON_Y / 100f;
+
+            lp.gravity = android.view.Gravity.TOP | android.view.Gravity.START;
+            lp.leftMargin = (int) (xPercent * (parentWidth - sizePx));
+            lp.topMargin = (int) (yPercent * (parentHeight - sizePx));
+            mDrawerPullButton.setLayoutParams(lp);
+        });
+
+        if (mDrawerContainer != null) {
+            mDrawerContainer.setAlpha(LauncherPreferences.PREF_DRAWER_LIST_OPACITY);
+        }
     }
 
     @Override
@@ -251,6 +362,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         touchCharInput = findViewById(R.id.mainTouchCharInput);
         mDrawerPullButton = findViewById(R.id.drawer_button);
         mHotbarView = findViewById(R.id.hotbar_view);
+        mDrawerContainer = findViewById(R.id.main_drawer_list_container);
     }
 
     @Override
@@ -258,6 +370,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         super.onResume();
         if(PREF_ENABLE_GYRO) mGyroControl.enable();
         CallbackBridge.nativeSetWindowAttrib(LwjglGlfwKeycode.GLFW_HOVERED, 1);
+        updateDrawerButton();
     }
 
     @Override
@@ -307,6 +420,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             // Child of mControlLayout, so refreshing size here is correct
             minecraftGLView.refreshSize();
             mControlLayout.refreshControlButtonPositions();
+            updateDrawerButton();
         });
     }
 
@@ -352,10 +466,11 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     }
 
     private void dialogSendCustomKey() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle(R.string.control_customkey);
-        dialog.setItems(EfficientAndroidLWJGLKeycode.generateKeyName(), (dInterface, position) -> EfficientAndroidLWJGLKeycode.execKeyIndex(position));
-        dialog.show();
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.control_customkey)
+                .setItems(EfficientAndroidLWJGLKeycode.generateKeyName(),
+                        (dInterface, position) -> EfficientAndroidLWJGLKeycode.execKeyIndex(position))
+                .show();
     }
 
     boolean isInEditor;
@@ -393,7 +508,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
                 }
             };
         }
-        mQuickSettingSideDialog.appear(true);
+        mQuickSettingSideDialog.appear(false);
     }
 
     public static void toggleMouse(Context ctx) {
@@ -497,7 +612,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
 
     @Override
     public void onClickedMenu() {
-        drawerLayout.openDrawer(navDrawer);
+        drawerLayout.openDrawer(Gravity.RIGHT);
         navDrawer.requestLayout();
     }
 
@@ -508,7 +623,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             mControlLayout.setModifiable(false);
             System.gc();
             mControlLayout.loadLayout(instance.getLaunchControls());
-            mDrawerPullButton.setVisibility(mControlLayout.hasMenuButton() ? View.GONE : View.VISIBLE);
+            updateDrawerButton();
         } catch (Exception e) {
             Tools.showError(this,e);
         }

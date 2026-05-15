@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Soft OLED Dark -->
+    <color name="background_app">#0F0F0F</color>
+    <color name="divider">#1C1C1C</color>
+    <color name="background_overlay">#1A1A1A</color>
+    <color name="background_status_bar">#121212</color>
+    <color name="background_bottom_bar">#151515</color>
+
+    <color name="surface">#0F0F0F</color>
+    <color name="on_surface">#FFFFFF</color>
+    <color name="primary">#FFFFFF</color>
+    <color name="on_primary">#000000</color>
+
+    <!-- Icons -->
+    <color name="icon_outline_color">#F2F2F2</color>
+
+    <!-- Text -->
+    <color name="primary_text">#FFFFFF</color>
+    <color name="secondary_text">#B8B8B8</color>
+
+    <!-- Compatible version highlighting -->
+    <color name="compatible_version_bg">#1E3A24</color>
+    <color name="compatible_version_text">#B9F6CA</color>
+</resources>

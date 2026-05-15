@@ -1,19 +1,16 @@
 package com.kdt.mcgui;
 
 import android.content.Context;
-import android.graphics.BlendMode;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ProgressBar;
 
 import androidx.annotation.StringRes;
 import androidx.core.content.res.ResourcesCompat;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 
 public class TextProgressBar extends ProgressBar {
 
@@ -45,11 +42,30 @@ public class TextProgressBar extends ProgressBar {
     @Override
     protected synchronized void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        mTextPaint.setTextSize((float) ((getHeight()- getPaddingBottom() - getPaddingTop()) * 0.55));
-        int xPos = (int) Math.max(Math.min((getProgress() * getWidth() / getMax()) + mTextPadding, getWidth() - mTextPaint.measureText(mText) - mTextPadding) , mTextPadding);
+        float textSize = (float) ((getHeight() - getPaddingBottom() - getPaddingTop()) * 0.55);
+        mTextPaint.setTextSize(textSize);
+
+        float progressRatio = (float) getProgress() / getMax();
+        int progressWidth = (int) (progressRatio * getWidth());
+
+        float textWidth = mTextPaint.measureText(mText);
+        int xPos = (int) Math.max(Math.min((progressWidth) + mTextPadding, getWidth() - textWidth - mTextPadding) , mTextPadding);
         int yPos = (int) ((getHeight() / 2) - ((mTextPaint.descent() + mTextPaint.ascent()) / 2)) ;
 
+        // Draw text on the empty part of the bar (Dark Gray/Black depending on contrast)
+        canvas.save();
+        canvas.clipRect(progressWidth, 0, getWidth(), getHeight());
+        mTextPaint.setColor(Color.GRAY);
         canvas.drawText(mText, xPos, yPos, mTextPaint);
+        canvas.restore();
+
+        // Draw text on the filled part of the bar (White/Inverted)
+        // Since minebutton_color is #FFFFFF, text on it should be black
+        canvas.save();
+        canvas.clipRect(0, 0, progressWidth, getHeight());
+        mTextPaint.setColor(Color.BLACK);
+        canvas.drawText(mText, xPos, yPos, mTextPaint);
+        canvas.restore();
     }
 
 

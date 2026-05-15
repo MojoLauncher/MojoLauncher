@@ -9,6 +9,8 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleEventObserver;
 import androidx.lifecycle.LifecycleOwner;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import net.kdt.pojavlaunch.Tools;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -38,7 +40,7 @@ public abstract class LifecycleAwareAlertDialog implements LifecycleEventObserve
             dialogHidden(mLifecycleEnded);
             return;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context);
         // Install the default cancel/dismiss handling
         builder.setOnDismissListener(wrapDismissListener(null));
         dialogCreator.createDialog(this, builder);

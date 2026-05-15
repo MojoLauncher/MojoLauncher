@@ -7,21 +7,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.ScrollView;
 
 import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
+import java.io.File;
+import java.io.IOException;
 
 @Keep
 public class ExitActivity extends AppCompatActivity {
 
-    @SuppressLint("StringFormatInvalid") //invalid on some translations but valid on most, cant fix that atm
+    @SuppressLint("StringFormatInvalid")
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.setInsetsMode(this, true, true);
+        setContentView(R.layout.activity_exit);
+
         int code = -1;
         boolean isSignal = false;
         Bundle extras = getIntent().getExtras();
@@ -32,11 +39,40 @@ public class ExitActivity extends AppCompatActivity {
 
         String message = isSignal ? getString(R.string.mcn_abort_title) : getString(R.string.mcn_exit_title, code);
 
-        new AlertDialog.Builder(this)
-                .setMessage(message)
-                .setPositiveButton(R.string.main_share_logs, (dialog, which) -> shareLog(this))
-                .setOnDismissListener(dialog -> ExitActivity.this.finish())
-                .show();
+        TextView titleView = findViewById(R.id.exit_title);
+        titleView.setText(message);
+
+        TextView logTextView = findViewById(R.id.exit_log_text);
+        ScrollView scrollView = findViewById(R.id.exit_scroll_view);
+
+        try {
+            File logFile = new File(Tools.DIR_GAME_HOME, "latestlog.txt");
+            if (logFile.exists()) {
+                String logs = Tools.read(logFile);
+                logTextView.setText(logs);
+                // Scroll to bottom
+                scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN));
+            } else {
+                logTextView.setText("No log file found at " + logFile.getAbsolutePath());
+            }
+        } catch (IOException e) {
+            logTextView.setText("Failed to read logs: " + e.getMessage());
+        }
+
+        Button shareButton = findViewById(R.id.exit_share_button);
+        if (shareButton != null) {
+            shareButton.setOnClickListener(v -> shareLog(this));
+        }
+
+        Button restartButton = findViewById(R.id.exit_restart_button);
+        if (restartButton != null) {
+            restartButton.setOnClickListener(v -> {
+                Intent intent = new Intent(this, LauncherActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            });
+        }
     }
 
     @SuppressWarnings("unused") //used by native jre_launcher_new
@@ -67,5 +103,4 @@ public class ExitActivity extends AppCompatActivity {
         }
         System.exit(0);
     }
-
 }

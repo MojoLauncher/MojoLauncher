@@ -5,14 +5,14 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.preference.ListPreference;
-import androidx.preference.SwitchPreference;
-import androidx.preference.SwitchPreferenceCompat;
+import androidx.preference.TwoStatePreference;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.CustomSeekBarPreference;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.utils.MCOptionUtils;
 import net.kdt.pojavlaunch.utils.RendererCompatUtil;
 
 /**
@@ -36,17 +36,17 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         }
 
         // Sustained performance is only available since Nougat
-        SwitchPreference sustainedPerfSwitch = requirePreference("sustainedPerformance",
-                SwitchPreference.class);
+        TwoStatePreference sustainedPerfSwitch = requirePreference("sustainedPerformance",
+                TwoStatePreference.class);
         sustainedPerfSwitch.setVisible(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N);
         sustainedPerfSwitch.setChecked(LauncherPreferences.PREF_SUSTAINED_PERFORMANCE);
 
-        requirePreference("alternate_surface", SwitchPreferenceCompat.class).setChecked(LauncherPreferences.PREF_USE_ALTERNATE_SURFACE);
-        requirePreference("force_vsync", SwitchPreferenceCompat.class).setChecked(LauncherPreferences.PREF_FORCE_VSYNC);
+        requirePreference("alternate_surface", TwoStatePreference.class).setChecked(LauncherPreferences.PREF_USE_ALTERNATE_SURFACE);
+        requirePreference("force_vsync", TwoStatePreference.class).setChecked(LauncherPreferences.PREF_FORCE_VSYNC);
 
         // Show ANGLE switch only if AnglePlugin is available
         LibraryPlugin angle = LibraryPlugin.discoverPlugin(getContext(), LibraryPlugin.ID_ANGLE_PLUGIN);
-        SwitchPreferenceCompat angleSwitch = requirePreference("use_angle", SwitchPreferenceCompat.class);
+        TwoStatePreference angleSwitch = requirePreference("use_angle", TwoStatePreference.class);
         angleSwitch.setVisible(angle != null);
         angleSwitch.setChecked(LauncherPreferences.PREF_USE_ANGLE);
 
@@ -55,6 +55,19 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         RendererCompatUtil.RenderersList renderersList = RendererCompatUtil.getCompatibleRenderers(getContext());
         rendererListPreference.setEntries(renderersList.rendererDisplayNames);
         rendererListPreference.setEntryValues(renderersList.rendererIds.toArray(new String[0]));
+
+        // Preferred Graphics Backend (sync with options.txt)
+        ListPreference backendPref = requirePreference("preferredGraphicsBackend", ListPreference.class);
+        MCOptionUtils.load();
+        String currentBackend = MCOptionUtils.get("preferredGraphicsBackend");
+        if (currentBackend != null) {
+            backendPref.setValue(currentBackend.replace("\"", ""));
+        }
+        backendPref.setOnPreferenceChangeListener((preference, newValue) -> {
+            MCOptionUtils.set("preferredGraphicsBackend", "\"" + newValue + "\"");
+            MCOptionUtils.save();
+            return true;
+        });
 
         computeVisibility();
     }
@@ -75,7 +88,7 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
     }
 
     private void computeVisibility(){
-        requirePreference("force_vsync", SwitchPreferenceCompat.class)
+        requirePreference("force_vsync", TwoStatePreference.class)
                 .setVisible(LauncherPreferences.PREF_USE_ALTERNATE_SURFACE);
     }
 }

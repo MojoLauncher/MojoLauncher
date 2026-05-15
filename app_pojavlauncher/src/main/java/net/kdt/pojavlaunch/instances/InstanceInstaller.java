@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 
 public class InstanceInstaller implements ContextExecutorTask {
     private static final File sLastInstallInfo = new File(Tools.DIR_CACHE, "last_installer.json");

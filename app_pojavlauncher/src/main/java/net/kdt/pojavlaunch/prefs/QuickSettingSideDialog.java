@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.kdt.CustomSeekbar;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.utils.interfaces.SimpleSeekBarListener;
 
@@ -215,6 +215,7 @@ public abstract class QuickSettingSideDialog extends com.kdt.SideDialogView {
             mEditor.apply();
             disappear(true);
         });
+        setCloseButtonListener(v -> cancel());
     }
 
     /** Resets all settings to their original values */

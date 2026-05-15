@@ -1,6 +1,5 @@
 package net.kdt.pojavlaunch.fragments;
 
-import android.app.AlertDialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,10 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.kdt.pickafile.FileListView;
 import com.kdt.pickafile.FileSelectedListener;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
@@ -61,7 +61,7 @@ public class FileSelectorFragment extends Fragment {
 
         mCreateFolderButton.setOnClickListener(v -> {
             final EditText editText = new EditText(getContext());
-            new AlertDialog.Builder(getContext())
+            new MaterialAlertDialogBuilder(getContext())
                     .setTitle(R.string.folder_dialog_insert_name)
                     .setView(editText)
                     .setNegativeButton(android.R.string.cancel, null)

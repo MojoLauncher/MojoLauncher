@@ -4,6 +4,7 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.transition.Slide;
 import android.transition.Transition;
@@ -12,6 +13,8 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 
@@ -20,7 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 
 import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.Tools;
@@ -59,6 +62,7 @@ public class mcVersionSpinner extends ExtendedTextView {
 
     /* The class is in charge of displaying its own list with adapter content being known in advance */
     private ListView mListView = null;
+    private AdapterView<?> mSelectorView = null;
     private PopupWindow mPopupWindow = null;
     private Object mPopupAnimation;
     private int mSelectedIndex;
@@ -77,7 +81,7 @@ public class mcVersionSpinner extends ExtendedTextView {
     }
 
     public void setSelection(int position){
-        if(mListView != null) mListView.setSelection(position);
+        if(mSelectorView != null) mSelectorView.setSelection(position);
         mProfileAdapter.setView(this, position, false);
         mSelectedIndex = position;
         mProfileAdapter.applySelectionIndex(mSelectedIndex);
@@ -134,7 +138,9 @@ public class mcVersionSpinner extends ExtendedTextView {
                 }
                 mPopupWindow.showAsDropDown(mcVersionSpinner.this, 0, offset);
                 // Post() is required for the layout inflation phase
-                post(() -> mListView.setSelection(mSelectedIndex));
+                post(() -> {
+                    if(mSelectorView != null) mSelectorView.setSelection(mSelectedIndex);
+                });
             }
         });
     }
@@ -151,9 +157,19 @@ public class mcVersionSpinner extends ExtendedTextView {
     /** Create the listView and popup window for the interface, and set up the click behavior */
     @SuppressLint("ClickableViewAccessibility")
     private void getPopupWindow(){
-        mListView = (ListView) inflate(getContext(), R.layout.spinner_mc_version, null);
-        mListView.setAdapter(mProfileAdapter);
-        mListView.setOnItemClickListener((parent, view, position, id) -> {
+        boolean isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        if(isLandscape) {
+            GridView gridView = (GridView) inflate(getContext(), R.layout.spinner_mc_version_grid, null);
+            gridView.setAdapter(mProfileAdapter);
+            mSelectorView = gridView;
+            mListView = null;
+        }else {
+            mListView = (ListView) inflate(getContext(), R.layout.spinner_mc_version, null);
+            mListView.setAdapter(mProfileAdapter);
+            mSelectorView = mListView;
+        }
+
+        mSelectorView.setOnItemClickListener((parent, view, position, id) -> {
             Object item = mProfileAdapter.getItem(position);
             if(item instanceof DisplayInstance) {
                 hidePopup(true);
@@ -164,7 +180,7 @@ public class mcVersionSpinner extends ExtendedTextView {
             }
         });
 
-        mPopupWindow = new PopupWindow(mListView, MATCH_PARENT, getContext().getResources().getDimensionPixelOffset(R.dimen._184sdp));
+        mPopupWindow = new PopupWindow(mSelectorView, MATCH_PARENT, getContext().getResources().getDimensionPixelOffset(R.dimen._184sdp));
         mPopupWindow.setElevation(5);
         mPopupWindow.setClippingEnabled(false);
 

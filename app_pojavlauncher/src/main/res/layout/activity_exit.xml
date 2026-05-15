@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="#000000">
+
+    <ScrollView
+        android:id="@+id/exit_scroll_view"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.7"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/exit_log_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#00FF00"
+            android:fontFamily="monospace"
+            android:textSize="10sp" />
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.3"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp"
+        android:background="#1A1A1A">
+
+        <TextView
+            android:id="@+id/exit_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="32dp" />
+
+        <com.kdt.mcgui.MineButton
+            android:id="@+id/exit_share_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/main_share_logs"
+            android:layout_marginBottom="16dp" />
+
+        <com.kdt.mcgui.MineButton
+        android:id="@+id/exit_restart_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/global_restart" />
+
+    </LinearLayout>
+</LinearLayout>

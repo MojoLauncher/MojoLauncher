@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.CallSuper;
@@ -20,7 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.core.content.res.ResourcesCompat;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 import net.kdt.pojavlaunch.Tools;
 
 /**
@@ -41,12 +42,13 @@ public abstract class SideDialogView {
 
     /* UI elements */
     private Button mStartButton, mEndButton;
+    private ImageButton mCloseButton;
     private TextView mTitleTextview;
     private View mTitleDivider;
 
     /* Data to store when the UI element has yet to be inflated */
     private @StringRes int mStartButtonStringId, mEndButtonStringId, mTitleStringId;
-    private View.OnClickListener mStartButtonListener, mEndButtonListener;
+    private View.OnClickListener mStartButtonListener, mEndButtonListener, mCloseButtonListener;
 
 
     public SideDialogView(Context context, ViewGroup parent, @LayoutRes int layoutId) {
@@ -76,6 +78,13 @@ public abstract class SideDialogView {
         if (mDialogLayout != null) setButton(mEndButton, textId, listener);
     }
 
+    public final void setCloseButtonListener(@Nullable View.OnClickListener listener) {
+        mCloseButtonListener = listener;
+        if (mDialogLayout != null) {
+            mCloseButton.setOnClickListener(listener != null ? listener : v -> disappear(true));
+        }
+    }
+
     private void setButton(@NonNull Button button, @StringRes int textId, @Nullable View.OnClickListener listener) {
         button.setText(textId);
         button.setOnClickListener(listener);
@@ -94,8 +103,11 @@ public abstract class SideDialogView {
         mScrollView = mDialogLayout.findViewById(R.id.side_dialog_scrollview);
         mStartButton = mDialogLayout.findViewById(R.id.side_dialog_start_button);
         mEndButton = mDialogLayout.findViewById(R.id.side_dialog_end_button);
+        mCloseButton = mDialogLayout.findViewById(R.id.side_dialog_close_button);
         mTitleTextview = mDialogLayout.findViewById(R.id.side_dialog_title_textview);
         mTitleDivider = mDialogLayout.findViewById(R.id.side_dialog_title_divider);
+
+        mCloseButton.setOnClickListener(mCloseButtonListener != null ? mCloseButtonListener : v -> disappear(true));
 
         LayoutInflater.from(mParent.getContext()).inflate(mLayoutId, mScrollView, true);
         mDialogContent = mScrollView.getChildAt(0);
@@ -141,6 +153,7 @@ public abstract class SideDialogView {
         mTitleDivider = null;
         mStartButton = null;
         mEndButton = null;
+        mCloseButton = null;
     }
 
 

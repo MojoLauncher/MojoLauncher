@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<net.kdt.pojavlaunch.prefs.ToggleView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/switch_widget"
+    android:layout_width="62dp"
+    android:layout_height="62dp"
+    android:clickable="true"
+    android:focusable="true" />

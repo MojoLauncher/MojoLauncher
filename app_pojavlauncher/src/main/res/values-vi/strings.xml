@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition cho Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_name">Hyper Launcher (Minecraft: Java Edition cho Android)</string>
+    <string name="app_short_name">Hyper Launcher</string>
 
     <!-- Action bar part -->
 
@@ -22,7 +22,7 @@
     <string name="alerttitle_installmod">Chọn một trình cài đặt mod</string>
 
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher đã bất ngờ bị sập</string>
+    <string name="error_fatal">Hyper Launcher đã bất ngờ bị sập</string>
     <string name="error_no_version">Không có phiên bản nào!</string>
     <string name="error_show_more">Hiển thị thêm</string>
     <string name="error_show_less">Hiển thị ít hơn</string>
@@ -263,7 +263,7 @@
     <string name="preference_gyro_sample_rate_title">Tốc độ lấy mẫu con quay hồi chuyển</string>
     <string name="preference_gyro_sample_rate_description">..</string>
     <string name="microsoft_login_retry_later">Có quá nhiều yêu cầu, vui lòng thử lại sau.</string>
-    <string name="storage_required">MojoLauncher cần kho dữ liệu bên ngoài để gắn vào. Vui lòng kết nối lại và khởi động lại ứng dụng.</string>
+    <string name="storage_required">Hyper Launcher cần kho dữ liệu bên ngoài để gắn vào. Vui lòng kết nối lại và khởi động lại ứng dụng.</string>
     <string name="mcl_setting_title_buttonallcaps">Chỉ được dùng những chữ cái in hoa trong các nhãn nút</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Tắt đi nếu bạn muốn sử dụng chữ cái thường trong mục điều khiển.</string>
     <string name="preference_shader_dump_title">Kích hoạt đổ bóng</string>
@@ -360,7 +360,7 @@
     <string name="preference_category_miscellaneous">Các cài đặt khác</string>
     <string name="preference_category_video">Cài Đặt Đồ Họa</string>
     <string name="notification_permission_dialog_title">Yêu Cầu Quyền Truy Cập</string>
-    <string name="notification_permission_dialog_text">MojoLauncher yêu cầu quyền để gửi thông báo để ngăn chặn việc tải xuống trò chơi/modpacks dừng lại khi bạn rời khỏi ứng dụng. Nếu không cấp quyền, Android có thể ngắt quá trình tải khi bạn để MojoLauncher ở chế độ nền.</string>
+    <string name="notification_permission_dialog_text">Hyper Launcher yêu cầu quyền để gửi thông báo để ngăn chặn việc tải xuống trò chơi/modpacks dừng lại khi bạn rời khỏi ứng dụng. Nếu không cấp quyền, Android có thể ngắt quá trình tải khi bạn để Hyper Launcher ở chế độ nền.</string>
     <string name="notification_permission_toast">Bạn luôn có thể thay đổi ý định của mình bằng cách vào Cài đặt</string>
     <string name="preference_ask_for_notification_title">Cho phép Gửi thông báo</string>
     <string name="preference_ask_for_notification_description">Nhấp để yêu cầu lại quyền thông báo, điều này là cần thiết để trò chơi/gói tích hợp tải xuống bình thường ở chế độ nền.</string>

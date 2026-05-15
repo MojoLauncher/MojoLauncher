@@ -8,7 +8,8 @@
 	android:layout_alignParentRight="true"
 	android:id="@+id/main_drawer_options"
 	android:background="@drawable/no_focus_shown"
-	android:keepScreenOn="true">
+	android:keepScreenOn="true"
+	tools:ignore="RtlHardcoded">
 
 	<FrameLayout
 		android:id="@+id/content_frame"
@@ -50,10 +51,11 @@
 			<net.kdt.pojavlaunch.customcontrols.handleview.DrawerPullButton
 				android:id="@+id/drawer_button"
 				android:layout_width="40dp"
-				android:layout_height="20dp"
+				android:layout_height="40dp"
 				android:padding="8dp"
 				android:elevation="10dp"
-				android:layout_gravity="center_horizontal"/>
+				android:visibility="gone" />
+
 			<net.kdt.pojavlaunch.customcontrols.mouse.HotbarView
 				android:id="@+id/hotbar_view"
 				android:layout_width="0px"
@@ -70,13 +72,28 @@
 
 	</FrameLayout>
 
-	<ListView
-		android:layout_width="200dp"
+	<!-- Modernized Drawer UI (In-game Menu) -->
+	<LinearLayout
+		android:id="@+id/main_drawer_list_container"
+		android:layout_width="240dp"
 		android:layout_height="match_parent"
 		android:layout_gravity="right"
-		android:background="?attr/colorBackgroundFloating"
-		android:fitsSystemWindows="false"
-		android:id="@+id/main_navigation_view"/>
+		android:background="@drawable/preference_item_background"
+		android:orientation="vertical"
+		android:clickable="true"
+		android:focusable="true"
+		android:elevation="16dp">
+
+		<ListView
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_weight="1"
+			android:divider="@null"
+			android:dividerHeight="0dp"
+			android:padding="8dp"
+			android:id="@+id/main_navigation_view"
+			tools:listitem="@android:layout/simple_list_item_1" />
+
+	</LinearLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>
-

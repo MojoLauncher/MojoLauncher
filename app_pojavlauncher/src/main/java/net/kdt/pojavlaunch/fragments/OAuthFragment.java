@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentActivity;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 
 public class OAuthFragment extends WebViewCompletionFragment {
 

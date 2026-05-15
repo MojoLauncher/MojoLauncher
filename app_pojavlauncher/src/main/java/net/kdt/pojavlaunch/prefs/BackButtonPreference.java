@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 
 import androidx.preference.Preference;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 
@@ -28,6 +28,12 @@ public class BackButtonPreference extends Preference {
         }
     }
 
+
+    @Override
+    public void onBindViewHolder(androidx.preference.PreferenceViewHolder holder) {
+        super.onBindViewHolder(holder);
+        // Custom logic to ensure it stands out if needed
+    }
 
     @Override
     protected void onClick() {

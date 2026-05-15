@@ -1,11 +1,14 @@
 package net.kdt.pojavlaunch.mirrors;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.text.Html;
 
-import git.artdeell.mojo.R;
+import androidx.appcompat.app.AlertDialog;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import net.ashmeet.hyperlauncher.R;
 import net.kdt.pojavlaunch.ShowErrorActivity;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutorTask;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
@@ -15,7 +18,7 @@ public class MirrorTamperedException extends Exception implements ContextExecuto
     private static final long serialVersionUID = -7482301619612640658L;
     @Override
     public void executeWithActivity(Activity activity) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        AlertDialog.Builder builder = new MaterialAlertDialogBuilder(activity);
         builder.setTitle(R.string.dl_tampered_manifest_title);
         builder.setMessage(Html.fromHtml(activity.getString(R.string.dl_tampered_manifest)));
         addButtons(builder);

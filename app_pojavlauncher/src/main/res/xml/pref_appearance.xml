@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <net.kdt.pojavlaunch.prefs.BackButtonPreference />
+
+    <androidx.preference.PreferenceCategory app:title="Theme">
+        <net.kdt.pojavlaunch.prefs.MaterialListPreference
+            android:defaultValue="dark"
+            app:entries="@array/theme_names"
+            app:entryValues="@array/theme_values"
+            app:key="appTheme"
+            app:summary="@string/preference_theme_description"
+            app:title="@string/preference_theme_title" />
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory app:title="Animations">
+        <net.kdt.pojavlaunch.prefs.MaterialListPreference
+            android:defaultValue="jelly"
+            app:entries="@array/animation_type_names"
+            app:entryValues="@array/animation_type_values"
+            app:key="animationType"
+            app:summary="@string/preference_animation_type_description"
+            app:title="@string/preference_animation_type_title" />
+
+        <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
+            android:defaultValue="70"
+            android:max="100"
+            app:key="animationIntensity"
+            app:min="0"
+            app:seekBarIncrement="10"
+            app:showSeekBarValue="true"
+            app:summary="@string/preference_animation_intensity_description"
+            app:title="@string/preference_animation_intensity_title" />
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory app:title="Mouse Pointer">
+        <net.kdt.pojavlaunch.prefs.MaterialPreference
+            app:key="mouse_cursor_picker"
+            app:summary="@string/preference_mouse_cursor_description"
+            app:title="@string/preference_mouse_cursor_title" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialPreference
+            app:key="mouse_hotspot_picker"
+            app:summary="@string/preference_mouse_hotspot_description"
+            app:title="@string/preference_mouse_hotspot_title" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialPreference
+            app:key="mouse_cursor_reset"
+            app:summary="@string/preference_mouse_reset_description"
+            app:title="@string/preference_mouse_reset_title" />
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory app:title="Drawer Button">
+        <net.kdt.pojavlaunch.prefs.MaterialListPreference
+            android:defaultValue="custom"
+            app:entries="@array/drawer_button_preset_names"
+            app:entryValues="@array/drawer_button_preset_values"
+            app:key="drawerButtonPreset"
+            app:title="Position Preset" />
+
+        <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
+            android:defaultValue="50"
+            android:max="100"
+            app:key="drawerButtonX"
+            app:min="0"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:title="Horizontal Position (%)" />
+
+        <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
+            android:defaultValue="0"
+            android:max="100"
+            app:key="drawerButtonY"
+            app:min="0"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:title="Vertical Position (%)" />
+
+        <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
+            android:defaultValue="40"
+            android:max="100"
+            app:key="drawerButtonSize"
+            app:min="20"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:title="Button Size (dp)" />
+
+        <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
+            android:defaultValue="8"
+            android:max="50"
+            app:key="drawerButtonCornerRadius"
+            app:min="0"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:title="Button Corner Radius (dp)" />
+
+        <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
+            android:defaultValue="33"
+            android:max="100"
+            app:key="drawerButtonBgOpacity"
+            app:min="0"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:title="Background Opacity (%)" />
+
+        <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
+            android:defaultValue="100"
+            android:max="100"
+            app:key="drawerButtonIconOpacity"
+            app:min="0"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:title="Icon Opacity (%)" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialSwitchPreference
+            android:defaultValue="false"
+            app:key="drawerButtonMovable"
+            app:title="Allow Dragging Button"
+            app:summary="When enabled, you can drag the button freely on the screen" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialPreference
+            app:key="drawer_button_image_picker"
+            app:summary="Select a custom image for the drawer button"
+            app:title="Custom Button Image" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialPreference
+            app:key="drawer_button_reset"
+            app:summary="Reset drawer button to default"
+            app:title="Reset Drawer Button" />
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory app:title="Drawer List">
+        <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
+            android:defaultValue="100"
+            android:max="100"
+            app:key="drawerListOpacity"
+            app:min="10"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:title="Drawer Background Opacity (%)" />
+    </androidx.preference.PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

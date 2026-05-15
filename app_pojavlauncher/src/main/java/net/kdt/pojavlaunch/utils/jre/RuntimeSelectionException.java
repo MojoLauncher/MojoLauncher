@@ -1,14 +1,17 @@
 package net.kdt.pojavlaunch.utils.jre;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
+
+import androidx.appcompat.app.AlertDialog;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import net.kdt.pojavlaunch.ShowErrorActivity;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutorTask;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 
 public class RuntimeSelectionException extends Exception implements ContextExecutorTask {
     // Do not change. Android really hates when this value changes for some reason.
@@ -26,7 +29,7 @@ public class RuntimeSelectionException extends Exception implements ContextExecu
 
     @Override
     public void executeWithActivity(Activity activity) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        AlertDialog.Builder builder = new MaterialAlertDialogBuilder(activity);
         builder.setTitle(R.string.runtime_error_title);
         int msgString;
         switch (mRuntimeState) {

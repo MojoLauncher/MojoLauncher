@@ -23,7 +23,7 @@ import java.io.*;
 import java.util.*;
 import net.kdt.pojavlaunch.*;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 
 /**
  * List adapter for Files.

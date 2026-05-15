@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application' version '8.11.1'
     id 'de.undercouch.download' version '5.6.0'
     id 'org.ajoberstar.grgit' version '5.3.2'
+    id 'com.google.gms.google-services' version '4.4.2'
 }
 
 apply from: rootProject.file('gradle/prefab_bypass.gradle')
@@ -50,7 +51,7 @@ configurations {
 }
 
 android {
-    namespace 'git.artdeell.mojo'
+    namespace 'net.ashmeet.hyperlauncher'
 
     compileSdk = 36
 
@@ -80,7 +81,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "git.artdeell.mojo"
+        applicationId 'net.ashmeet.hyperlauncher'
         minSdkVersion 21
         targetSdkVersion 36
         versionCode getDateSeconds()
@@ -109,8 +110,8 @@ android {
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.customDebug
-            resValue 'string', 'application_package', 'git.artdeell.mojo.debug'
-            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mojo.scoped.gamefolder.debug'
+            resValue 'string', 'application_package', 'net.ashmeet.hyperlauncher.debug'
+            resValue 'string', 'storageProviderAuthorities', 'net.ashmeet.hyperlauncher.scoped.gamefolder.debug'
         }
         proguard {
             initWith debug
@@ -129,8 +130,8 @@ android {
             // defaultConfig already set
             // multiDexEnabled = true
             // debuggable = true
-            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mojo.scoped.gamefolder'
-            resValue 'string', 'application_package', 'git.artdeell.mojo'
+            resValue 'string', 'storageProviderAuthorities', 'net.ashmeet.hyperlauncher.scoped.gamefolder'
+            resValue 'string', 'application_package', 'net.ashmeet.hyperlauncher'
         }
         gplay {
             initWith release
@@ -140,8 +141,8 @@ android {
             initWith release
             signingConfig signingConfigs.customDebug // WIP, changeme
             applicationIdSuffix '.pub'
-            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mojo.pub.scoped.gamefolder'
-            resValue 'string', 'application_package', 'git.artdeell.mojo.pub'
+            resValue 'string', 'storageProviderAuthorities', 'net.ashmeet.hyperlauncher.pub.scoped.gamefolder'
+            resValue 'string', 'application_package', 'net.ashmeet.hyperlauncher.pub'
         }
     }
 
@@ -323,6 +324,7 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.9.1'
 
     implementation "androidx.constraintlayout:constraintlayout:2.2.1"
+    implementation 'com.google.android.material:material:1.12.0'
 
     implementation 'com.github.duanhong169:checkerboarddrawable:1.0.2'
     implementation 'com.github.PojavLauncherTeam:portrait-sdp:ed33e89cbc'
@@ -345,4 +347,9 @@ dependencies {
     // implementation 'net.sourceforge.streamsupport:streamsupport-cfuture:1.7.0'
 
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+
+    // Firebase Player Analytics
+    implementation platform('com.google.firebase:firebase-bom:33.7.0')
+    implementation 'com.google.firebase:firebase-database'
+    implementation 'androidx.lifecycle:lifecycle-process:2.8.7'
 }

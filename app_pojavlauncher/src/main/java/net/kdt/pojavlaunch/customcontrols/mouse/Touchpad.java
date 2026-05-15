@@ -1,7 +1,10 @@
 package net.kdt.pojavlaunch.customcontrols.mouse;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -17,7 +20,7 @@ import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 import org.lwjgl.glfw.CallbackBridge;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 
 /**
  * Class dealing with the virtual mouse
@@ -29,6 +32,7 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
     private float mMouseX, mMouseY;
     private boolean mMoveOnLayout;
     private Drawable mMouseCursorDrawable;
+    private float mCustomCursorScale = 1.0f;
     private final Consumer<CursorContainer> onCursorChange = cursor->invalidate();
     public Touchpad(@NonNull Context context) {
         this(context, null);
@@ -80,21 +84,41 @@ public class Touchpad extends View implements GrabListener, AbstractTouchpad {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        canvas.save();
         canvas.translate(mMouseX, mMouseY);
         canvas.scale(LauncherPreferences.PREF_MOUSESCALE, LauncherPreferences.PREF_MOUSESCALE);
         if(CallbackBridge.getCursor() != null) {
             CallbackBridge.getCursor().draw(canvas);
         } else {
+            if (LauncherPreferences.PREF_MOUSE_CURSOR_PATH != null) {
+                canvas.scale(mCustomCursorScale, mCustomCursorScale);
+                canvas.translate(-LauncherPreferences.PREF_MOUSE_HOTSPOT_X, -LauncherPreferences.PREF_MOUSE_HOTSPOT_Y);
+            }
             mMouseCursorDrawable.draw(canvas);
         }
+        canvas.restore();
     }
 
     private void init() {
-        mMouseCursorDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_mouse_pointer, getContext().getTheme());
-        // For some reason it's annotated as Nullable even though it doesn't seem to actually
-        // ever return null
-        assert mMouseCursorDrawable != null;
-        mMouseCursorDrawable.setBounds(0, 0, 36, 54);
+        if (LauncherPreferences.PREF_MOUSE_CURSOR_PATH != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(LauncherPreferences.PREF_MOUSE_CURSOR_PATH);
+            if (bitmap != null) {
+                mMouseCursorDrawable = new BitmapDrawable(getResources(), bitmap);
+                mMouseCursorDrawable.setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
+                // Normalize custom cursor size (base height 48px)
+                mCustomCursorScale = 48f / bitmap.getHeight();
+            }
+        }
+
+        if (mMouseCursorDrawable == null) {
+            mMouseCursorDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_mouse_pointer, getContext().getTheme());
+            // For some reason it's annotated as Nullable even though it doesn't seem to actually
+            // ever return null
+            assert mMouseCursorDrawable != null;
+            mMouseCursorDrawable.setBounds(0, 0, 36, 54);
+            mCustomCursorScale = 1.0f;
+        }
+
         CallbackBridge.addCursorChangeListener(onCursorChange);
 
         setFocusable(false);

@@ -1,15 +1,17 @@
 package net.kdt.pojavlaunch.multirt;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.widget.Button;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import git.artdeell.mojo.R;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import net.ashmeet.hyperlauncher.R;
 
 public class MultiRTConfigDialog {
     private AlertDialog mDialog;
@@ -34,7 +36,7 @@ public class MultiRTConfigDialog {
         RTRecyclerViewAdapter adapter = new RTRecyclerViewAdapter();
         mDialogView.setAdapter(adapter);
 
-        mDialog = new AlertDialog.Builder(activity)
+        mDialog = new MaterialAlertDialogBuilder(activity)
                 .setTitle(R.string.multirt_config_title)
                 .setView(mDialogView)
                 .setPositiveButton(R.string.multirt_config_add, (dialog, which) -> installJvmLauncher.launch(null))

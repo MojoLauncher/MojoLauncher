@@ -4,15 +4,24 @@ package net.kdt.pojavlaunch.prefs.screens;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.EditTextPreference;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputLayout;
 
 import net.kdt.pojavlaunch.LauncherActivity;
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 /**
@@ -23,8 +32,20 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        view.setBackgroundColor(getResources().getColor(R.color.background_app));
+        TypedValue typedValue = new TypedValue();
+        if (getContext().getTheme().resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)) {
+            view.setBackgroundColor(typedValue.data);
+        } else {
+            view.setBackgroundColor(getResources().getColor(R.color.background_app));
+        }
         super.onViewCreated(view, savedInstanceState);
+        
+        RecyclerView listView = getListView();
+        if (listView != null) {
+            listView.setPadding(0, 0, 0, 80); // Bottom padding for navigation bar
+            listView.setClipToPadding(false);
+        }
+        setDivider(null);
     }
 
     @Override
@@ -34,7 +55,9 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
     }
 
     private void setupNotificationRequestPreference() {
-        Preference mRequestNotificationPermissionPreference = requirePreference("notification_permission_request");
+        Preference mRequestNotificationPermissionPreference = findPreference("notification_permission_request");
+        if (mRequestNotificationPermissionPreference == null) return;
+
         Activity activity = getActivity();
         if(activity instanceof LauncherActivity) {
             LauncherActivity launcherActivity = (LauncherActivity)activity;
@@ -65,6 +88,72 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
     @Override
     public void onSharedPreferenceChanged(SharedPreferences p, String s) {
         LauncherPreferences.loadPreferences(getContext());
+    }
+
+    @Override
+    public void onDisplayPreferenceDialog(@NonNull Preference preference) {
+        if (preference instanceof ListPreference) {
+            showMaterialListPreferenceDialog((ListPreference) preference);
+            return;
+        }
+        if (preference instanceof EditTextPreference) {
+            showMaterialEditTextPreferenceDialog((EditTextPreference) preference);
+            return;
+        }
+        super.onDisplayPreferenceDialog(preference);
+    }
+
+    private void showMaterialListPreferenceDialog(@NonNull ListPreference preference) {
+        CharSequence[] entries = preference.getEntries();
+        CharSequence[] entryValues = preference.getEntryValues();
+        if (entries == null || entryValues == null) {
+            super.onDisplayPreferenceDialog(preference);
+            return;
+        }
+
+        String currentValue = preference.getValue();
+        int checkedItem = -1;
+        if (currentValue != null) {
+            for (int i = 0; i < entryValues.length; i++) {
+                if (currentValue.contentEquals(entryValues[i])) {
+                    checkedItem = i;
+                    break;
+                }
+            }
+        }
+
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle(preference.getTitle())
+                .setSingleChoiceItems(entries, checkedItem, (dialog, which) -> {
+                    String newValue = entryValues[which].toString();
+                    if (preference.callChangeListener(newValue)) {
+                        preference.setValue(newValue);
+                    }
+                    dialog.dismiss();
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+    }
+
+    private void showMaterialEditTextPreferenceDialog(@NonNull EditTextPreference preference) {
+        View view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_material_edit_text, null);
+        EditText editText = view.findViewById(R.id.edit_text);
+        TextInputLayout textInputLayout = view.findViewById(R.id.edit_text_layout);
+
+        editText.setText(preference.getText());
+        textInputLayout.setHint(preference.getTitle());
+
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle(preference.getTitle())
+                .setView(view)
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    String newValue = editText.getText().toString();
+                    if (preference.callChangeListener(newValue)) {
+                        preference.setText(newValue);
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
     }
 
     protected Preference requirePreference(CharSequence key) {

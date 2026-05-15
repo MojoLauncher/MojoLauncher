@@ -1,0 +1,106 @@
+{
+  "project_info": {
+    "project_number": "981071558548",
+    "firebase_url": "https://hollow-launcher-api-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "hollow-launcher-api",
+    "storage_bucket": "hollow-launcher-api.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981071558548:android:a55b0d8fa827373eb80181",
+        "android_client_info": {
+          "package_name": "git.ashmeet.hyper"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDv8olLHhxGoPwnAbw534no7cWRVCRs760"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981071558548:android:ec23e1d3363352ebb80181",
+        "android_client_info": {
+          "package_name": "git.ashmeet.hyper.debug"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDv8olLHhxGoPwnAbw534no7cWRVCRs760"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981071558548:android:aae1aff53eb74e80b80181",
+        "android_client_info": {
+          "package_name": "net.ashmeet.hyperlauncher"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDv8olLHhxGoPwnAbw534no7cWRVCRs760"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981071558548:android:f75d73fd28f9c217b80181",
+        "android_client_info": {
+          "package_name": "net.ashmeet.hyperlauncher.debug"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDv8olLHhxGoPwnAbw534no7cWRVCRs760"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981071558548:android:24d985c58503c472b80181",
+        "android_client_info": {
+          "package_name": "net.kdt.pojavlaunch.PojavApplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDv8olLHhxGoPwnAbw534no7cWRVCRs760"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

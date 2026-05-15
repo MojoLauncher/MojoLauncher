@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/title"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="24dp"
+    android:paddingTop="16dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="4dp"
+    android:textAppearance="?attr/textAppearanceTitleSmall"
+    android:textColor="@android:color/white"
+    android:textAllCaps="true"
+    android:alpha="0.7"
+    android:letterSpacing="0.1"
+    android:textSize="12sp" />

@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 
 import com.kdt.mcgui.ProgressLayout;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.authenticator.AuthType;
 import net.kdt.pojavlaunch.authenticator.BackgroundLogin;
@@ -108,7 +108,7 @@ public class MicrosoftBackgroundLogin implements BackgroundLogin{
     @Override
     public void createAccount(@NonNull LoginListener loginListener, String code) {
         acquireAccountDetails(loginListener, ()->{
-            MinecraftAccount account = Accounts.create(this::fillAccount);
+            MinecraftAccount account = Accounts.upsertByProfileId(this::fillAccount);
             Tools.runOnUiThread(() -> loginListener.onLoginDone(account));
             return null;
         }, code, false);

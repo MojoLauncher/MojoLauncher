@@ -2,9 +2,11 @@ package com.kdt.mcgui;
 
 
 import android.content.Context;
+import android.transition.TransitionManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,7 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
 import net.kdt.pojavlaunch.progresskeeper.ProgressListener;
@@ -37,6 +39,7 @@ public class ProgressLayout extends ConstraintLayout implements View.OnClickList
     public static final String EXTRACT_COMPONENTS = "extract_components";
     public static final String EXTRACT_SINGLE_FILES = "extract_single_files";
     public static final String INSTANCE_INSTALL = "instance_install";
+    public static final String CONTENT_INSTALL = "content_install";
 
     public ProgressLayout(@NonNull Context context) {
         super(context);
@@ -99,7 +102,7 @@ public class ProgressLayout extends ConstraintLayout implements View.OnClickList
 
     /** Update the text and progress content */
     public static void setProgress(String progressKey, int progress, String message){
-        setProgress(progressKey,progress, -1, message);
+        setProgress(progressKey,progress, -1, (Object) message);
     }
 
     /** Update the text and progress content */
@@ -109,6 +112,7 @@ public class ProgressLayout extends ConstraintLayout implements View.OnClickList
 
     @Override
     public void onClick(View v) {
+        TransitionManager.beginDelayedTransition(this);
         mLinearLayout.setVisibility(mLinearLayout.getVisibility() == GONE ? VISIBLE : GONE);
         mFlipArrow.setRotation(mLinearLayout.getVisibility() == GONE? 0 : 180);
     }
@@ -116,6 +120,9 @@ public class ProgressLayout extends ConstraintLayout implements View.OnClickList
     @Override
     public boolean onUpdateTaskCount(int tc) {
         post(()->{
+            if (getParent() instanceof ViewGroup) {
+                TransitionManager.beginDelayedTransition((ViewGroup) getParent());
+            }
             if(tc > 0) {
                 mTaskNumberDisplayer.setText(getContext().getString(R.string.progresslayout_tasks_in_progress, tc));
                 setVisibility(VISIBLE);
@@ -142,7 +149,10 @@ public class ProgressLayout extends ConstraintLayout implements View.OnClickList
         public void onProgressStarted() {
             post(()-> {
                 Log.i("ProgressLayout", "onProgressStarted");
-                if(!isAttached) mLinearLayout.addView(textView, params);
+                if(!isAttached) {
+                    TransitionManager.beginDelayedTransition(ProgressLayout.this);
+                    mLinearLayout.addView(textView, params);
+                }
                 isAttached = true;
             });
         }
@@ -160,6 +170,7 @@ public class ProgressLayout extends ConstraintLayout implements View.OnClickList
         @Override
         public void onProgressEnded() {
             post(()-> {
+                TransitionManager.beginDelayedTransition(ProgressLayout.this);
                 mLinearLayout.removeView(textView);
                 isAttached = false;
             });

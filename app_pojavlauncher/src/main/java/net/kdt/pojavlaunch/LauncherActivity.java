@@ -8,12 +8,14 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -21,12 +23,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.kdt.mcgui.ProgressLayout;
 
 import net.kdt.pojavlaunch.authenticator.accounts.Accounts;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.extra.ExtraListener;
+import net.kdt.pojavlaunch.fragments.ContentInstallerFragment;
+import net.kdt.pojavlaunch.fragments.DirectoryManagerFragment;
 import net.kdt.pojavlaunch.fragments.MainMenuFragment;
 import net.kdt.pojavlaunch.fragments.MicrosoftLoginFragment;
 import net.kdt.pojavlaunch.fragments.SelectAuthFragment;
@@ -48,13 +53,15 @@ import net.kdt.pojavlaunch.utils.NotificationUtils;
 
 import java.lang.ref.WeakReference;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 
 public class LauncherActivity extends BaseActivity {
     public static final String SETTING_FRAGMENT_TAG = "SETTINGS_FRAGMENT";
 
     private FragmentContainerView mFragmentView;
     private ImageButton mSettingsButton;
+    private ImageButton mContentInstallerButton;
+    private ImageButton mContentFilesButton;
     private ProgressLayout mProgressLayout;
     private ProgressServiceKeeper mProgressServiceKeeper;
     private NotificationManager mNotificationManager;
@@ -64,7 +71,33 @@ public class LauncherActivity extends BaseActivity {
         @Override
         public void onFragmentResumed(@NonNull FragmentManager fm, @NonNull Fragment f) {
             mSettingsButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), f instanceof MainMenuFragment
-                    ? R.drawable.ic_px_sliders : R.drawable.ic_px_home));
+                    ? R.drawable.ic_px_alt_sliders : R.drawable.ic_px_home));
+        }
+
+        @Override
+        public void onFragmentViewCreated(@NonNull FragmentManager fm, @NonNull Fragment f, @NonNull View v, @Nullable Bundle savedInstanceState) {
+            super.onFragmentViewCreated(fm, f, v, savedInstanceState);
+            String animationType = LauncherPreferences.PREF_ANIMATION_TYPE;
+            float intensity = LauncherPreferences.PREF_ANIMATION_INTENSITY;
+
+            if ("jelly".equals(animationType)) {
+                v.setScaleX(1f - (0.4f * intensity));
+                v.setScaleY(1f - (0.4f * intensity));
+                v.setAlpha(0f);
+                v.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .alpha(1f)
+                        .setDuration((long) (600 * intensity))
+                        .setInterpolator(new OvershootInterpolator(1.5f * intensity))
+                        .start();
+            } else if ("default".equals(animationType) || "fade".equals(animationType)) {
+                v.setAlpha(0f);
+                v.animate()
+                        .alpha(1f)
+                        .setDuration((long) (400 * intensity))
+                        .start();
+            }
         }
     };
 
@@ -179,14 +212,37 @@ public class LauncherActivity extends BaseActivity {
                     }
                 }
         );
-        getWindow().setBackgroundDrawable(null);
+
         bindViews();
         checkNotificationPermission();
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         ProgressKeeper.addTaskCountListener(mDoubleLaunchPreventionListener);
         ProgressKeeper.addTaskCountListener((mProgressServiceKeeper = new ProgressServiceKeeper(this)));
 
-        mSettingsButton.setOnClickListener(mSettingButtonListener);
+        if (mSettingsButton != null) {
+            mSettingsButton.setOnClickListener(mSettingButtonListener);
+        }
+        
+        if (mContentInstallerButton != null) {
+            mContentInstallerButton.setOnClickListener(v -> {
+                if(getSupportFragmentManager().isStateSaved()) return;
+                Tools.swapFragment(this, ContentInstallerFragment.class, ContentInstallerFragment.TAG, null);
+            });
+        }
+        
+        if (mContentFilesButton != null) {
+            mContentFilesButton.setOnClickListener(v -> {
+                if(getSupportFragmentManager().isStateSaved()) return;
+                Instance selectedInstance = Instances.loadSelectedInstance();
+                if (selectedInstance != null) {
+                    Tools.swapFragment(this, DirectoryManagerFragment.class, DirectoryManagerFragment.TAG,
+                            DirectoryManagerFragment.argsForRoot(selectedInstance.getGameDirectory(), "Files"));
+                } else {
+                    Toast.makeText(this, R.string.no_instance, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
         ProgressKeeper.addTaskCountListener(mProgressLayout);
         ExtraCore.addExtraListener(ExtraConstants.BACK_PREFERENCE, mBackPreferenceListener);
         ExtraCore.addExtraListener(ExtraConstants.SELECT_AUTH_METHOD, mSelectAuthMethod);
@@ -201,6 +257,7 @@ public class LauncherActivity extends BaseActivity {
         mProgressLayout.observe(ProgressLayout.AUTHENTICATE);
         mProgressLayout.observe(ProgressLayout.DOWNLOAD_VERSION_LIST);
         mProgressLayout.observe(ProgressLayout.INSTANCE_INSTALL);
+        mProgressLayout.observe(ProgressLayout.CONTENT_INSTALL);
     }
 
     @Override
@@ -283,7 +340,7 @@ public class LauncherActivity extends BaseActivity {
     }
 
     private void showNotificationPermissionReasoning() {
-        new AlertDialog.Builder(this)
+        new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.notification_permission_dialog_title)
                 .setMessage(R.string.notification_permission_dialog_text)
                 .setPositiveButton(android.R.string.ok, (d, w) -> askForNotificationPermission(null))
@@ -317,6 +374,8 @@ public class LauncherActivity extends BaseActivity {
     private void bindViews(){
         mFragmentView = findViewById(R.id.container_fragment);
         mSettingsButton = findViewById(R.id.setting_button);
+        mContentInstallerButton = findViewById(R.id.content_installer_button);
+        mContentFilesButton = findViewById(R.id.content_files_button);
         mProgressLayout = findViewById(R.id.progress_layout);
     }
 }

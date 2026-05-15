@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Android için Minecraft: Java Edition)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_name">Hyper Launcher (Android için Minecraft: Java Edition)</string>
+    <string name="app_short_name">Hyper Launcher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -14,7 +14,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Bir mod yükleyicisi seç</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher beklenmedik bir sebepten dolayı çöktü</string>
+    <string name="error_fatal">Hyper Launcher beklenmedik bir sebepten dolayı çöktü</string>
     <string name="error_no_version">Sürüm yok!</string>
     <string name="error_show_more">Daha fazla göster</string>
     <string name="error_show_less">Daha az göster</string>
@@ -229,7 +229,7 @@
     <string name="preference_gyro_sample_rate_title">Jiroskop örnekleme oranı</string>
     <string name="preference_gyro_sample_rate_description">Eğer jiroskop kontrolleriyle performans probleminiz varsa bunu arttırın.</string>
     <string name="microsoft_login_retry_later">Çok fazla istek, Lütfen daha sonra tekrar deneyin.</string>
-    <string name="storage_required">MojoLauncher harici depolama biriminin bağlı olmasını gerektirir. Lütfen yeniden bağlayın ve uygulamayı yeniden başlatın.</string>
+    <string name="storage_required">Hyper Launcher harici depolama biriminin bağlı olmasını gerektirir. Lütfen yeniden bağlayın ve uygulamayı yeniden başlatın.</string>
     <string name="mcl_setting_title_buttonallcaps">Düğme etiketlerinde yalnızca büyük harfler kullanın</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Kontrollerinizde küçük harfler kullanmak istiyorsanız bunu devre dışı bırakın.</string>
     <string name="preference_shader_dump_title">Gölgelendirici bilgi göstergesini etkinleştir</string>
@@ -308,7 +308,7 @@
     <string name="preference_category_miscellaneous">Çeşitli ayarlar</string>
     <string name="preference_category_video">Video ayarları</string>
     <string name="notification_permission_dialog_title">İzin isteği</string>
-    <string name="notification_permission_dialog_text">MojoLauncher, uygulamadan ayrıldığınızda oyun/mod paketi indirmelerinin durmasını önlemek için bildirim gönderme izni gerektirir. Bu izin olmadan, Android MojoLauncher\'ı arka plan moduna aldığınızda indirmelerinizi kapatabilir.</string>
+    <string name="notification_permission_dialog_text">Hyper Launcher, uygulamadan ayrıldığınızda oyun/mod paketi indirmelerinin durmasını önlemek için bildirim gönderme izni gerektirir. Bu izin olmadan, Android Hyper Launcher\'ı arka plan moduna aldığınızda indirmelerinizi kapatabilir.</string>
     <string name="notification_permission_toast">Fikrinizi daha sonra Ayarlar\'a girerek her zaman değiştirebilirsiniz</string>
     <string name="preference_ask_for_notification_title">Bildirimlere izin ver</string>
     <string name="preference_ask_for_notification_description">Oyun/mod paketi arka plan indirmelerinin düzgün çalışması için gerekli olan bildirim iznini yeniden istemek için tıklayın.</string>

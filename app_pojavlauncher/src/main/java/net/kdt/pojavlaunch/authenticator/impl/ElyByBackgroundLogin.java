@@ -69,7 +69,7 @@ public class ElyByBackgroundLogin implements BackgroundLogin {
     @Override
     public void createAccount(@NonNull LoginListener loginListener, String code) {
         acquireAccountDetails(loginListener, ()->{
-            MinecraftAccount account = Accounts.create(this::fillAccount);
+            MinecraftAccount account = Accounts.upsertByProfileId(this::fillAccount);
             Tools.runOnUiThread(() -> loginListener.onLoginDone(account));
             return null;
         }, code, false);

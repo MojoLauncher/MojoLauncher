@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent">
+    android:background="@color/background_app">
 
     <com.kdt.mcgui.AccountSpinner
         android:id="@+id/account_spinner"
@@ -13,11 +13,35 @@
 
         android:dropDownWidth="@dimen/_250sdp"
         android:dropDownVerticalOffset="@dimen/_52sdp"
-        android:paddingEnd="@dimen/_52sdp"
+        android:paddingEnd="@dimen/_156sdp"
 
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="RtlSymmetry" />
     <!-- Ignore because it's  done to fit the ImageButton within spinner background -->
+
+    <ImageButton
+        android:id="@+id/content_files_button"
+        android:layout_width="@dimen/_52sdp"
+        android:layout_height="@dimen/_52sdp"
+        android:background="?attr/selectableItemBackground"
+        android:src="@drawable/ic_px_folder"
+        android:scaleType="fitCenter"
+        android:paddingVertical="@dimen/_8sdp"
+        app:tint="@android:color/white"
+        app:layout_constraintEnd_toStartOf="@+id/content_installer_button"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/content_installer_button"
+        android:layout_width="@dimen/_52sdp"
+        android:layout_height="@dimen/_52sdp"
+        android:background="?attr/selectableItemBackground"
+        android:src="@drawable/ic_px_download"
+        android:scaleType="fitCenter"
+        android:paddingVertical="@dimen/_8sdp"
+        app:tint="@android:color/white"
+        app:layout_constraintEnd_toStartOf="@+id/setting_button"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/setting_button"
@@ -47,8 +71,5 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent" />
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

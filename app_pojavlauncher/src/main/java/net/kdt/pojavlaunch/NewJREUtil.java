@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 
 public class NewJREUtil {
     private static final String DOWNLOAD_URL = "https://mojolauncher.github.io/jre-download/";

@@ -12,13 +12,15 @@ import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import androidx.appcompat.app.AppCompatDelegate;
+
 import net.kdt.pojavlaunch.*;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.utils.JREUtils;
 
 import java.io.IOException;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 
 public class LauncherPreferences {
     public static final String PREF_KEY_CURRENT_INSTANCE = "currentInstance";
@@ -71,6 +73,28 @@ public class LauncherPreferences {
     public static boolean PREF_RAPID_START = true;
     public static boolean PREF_VERIFY_FILES = true;
 
+    public static String PREF_ANIMATION_TYPE = "jelly";
+    public static float PREF_ANIMATION_INTENSITY = 0.70f;
+
+    public static String PREF_MOUSE_CURSOR_PATH = null;
+    public static int PREF_MOUSE_HOTSPOT_X = 0;
+    public static int PREF_MOUSE_HOTSPOT_Y = 0;
+
+    public static float PREF_DRAWER_BUTTON_X = 50f;
+    public static float PREF_DRAWER_BUTTON_Y = 0f;
+    public static float PREF_DRAWER_BUTTON_OPACITY = 0.33f;
+    public static float PREF_DRAWER_BUTTON_BG_OPACITY = 0.33f;
+    public static float PREF_DRAWER_BUTTON_ICON_OPACITY = 1f;
+    public static int PREF_DRAWER_BUTTON_SIZE = 40;
+    public static int PREF_DRAWER_BUTTON_CORNER_RADIUS = 8;
+    public static boolean PREF_DRAWER_BUTTON_MOVABLE = false;
+    public static String PREF_DRAWER_BUTTON_IMAGE_PATH = null;
+    public static String PREF_DRAWER_BUTTON_PRESET = "custom";
+
+    public static float PREF_DRAWER_LIST_OPACITY = 1f;
+
+    public static String PREF_APP_THEME = "dark";
+
 
     public static void loadPreferences(Context ctx) {
         //Required for CTRLDEF_FILE and MultiRT
@@ -114,6 +138,29 @@ public class LauncherPreferences {
         PREF_VERIFY_FILES = DEFAULT_PREF.getBoolean("checkGameFiles", true);
         PREF_RAPID_START = DEFAULT_PREF.getBoolean("fastStartupCheck", true);
 
+        PREF_ANIMATION_TYPE = DEFAULT_PREF.getString("animationType", "jelly");
+        PREF_ANIMATION_INTENSITY = DEFAULT_PREF.getInt("animationIntensity", 70) / 100f;
+
+        PREF_MOUSE_CURSOR_PATH = DEFAULT_PREF.getString("mouseCursorPath", null);
+        PREF_MOUSE_HOTSPOT_X = DEFAULT_PREF.getInt("mouseHotspotX", 0);
+        PREF_MOUSE_HOTSPOT_Y = DEFAULT_PREF.getInt("mouseHotspotY", 0);
+
+        PREF_DRAWER_BUTTON_X = DEFAULT_PREF.getInt("drawerButtonX", 50);
+        PREF_DRAWER_BUTTON_Y = DEFAULT_PREF.getInt("drawerButtonY", 0);
+        PREF_DRAWER_BUTTON_OPACITY = DEFAULT_PREF.getInt("drawerButtonOpacity", 33) / 100f;
+        PREF_DRAWER_BUTTON_BG_OPACITY = DEFAULT_PREF.getInt("drawerButtonBgOpacity", 33) / 100f;
+        PREF_DRAWER_BUTTON_ICON_OPACITY = DEFAULT_PREF.getInt("drawerButtonIconOpacity", 100) / 100f;
+        PREF_DRAWER_BUTTON_SIZE = DEFAULT_PREF.getInt("drawerButtonSize", 40);
+        PREF_DRAWER_BUTTON_CORNER_RADIUS = DEFAULT_PREF.getInt("drawerButtonCornerRadius", 8);
+        PREF_DRAWER_BUTTON_MOVABLE = DEFAULT_PREF.getBoolean("drawerButtonMovable", false);
+        PREF_DRAWER_BUTTON_IMAGE_PATH = DEFAULT_PREF.getString("drawerButtonImagePath", null);
+        PREF_DRAWER_BUTTON_PRESET = DEFAULT_PREF.getString("drawerButtonPreset", "custom");
+
+        PREF_DRAWER_LIST_OPACITY = DEFAULT_PREF.getInt("drawerListOpacity", 100) / 100f;
+
+        PREF_APP_THEME = DEFAULT_PREF.getString("appTheme", "dark");
+        applyTheme();
+
         String argLwjglLibname = "-Dorg.lwjgl.opengl.libname=";
         for (String arg : JREUtils.parseJavaArguments(PREF_CUSTOM_JAVA_ARGS)) {
             if (arg.startsWith(argLwjglLibname)) {
@@ -131,6 +178,20 @@ public class LauncherPreferences {
             }
             PREF_DEFAULT_RUNTIME = MultiRTUtils.getRuntimes().get(0).name;
             LauncherPreferences.DEFAULT_PREF.edit().putString("defaultRuntime",LauncherPreferences.PREF_DEFAULT_RUNTIME).apply();
+        }
+    }
+
+    public static void applyTheme() {
+        switch (PREF_APP_THEME) {
+            case "light":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+            case "dark":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+            case "system":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                break;
         }
     }
 

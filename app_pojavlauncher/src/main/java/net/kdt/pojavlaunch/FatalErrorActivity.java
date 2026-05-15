@@ -9,7 +9,9 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import git.artdeell.mojo.R;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import net.ashmeet.hyperlauncher.R;
 
 public class FatalErrorActivity extends AppCompatActivity {
 
@@ -30,7 +32,7 @@ public class FatalErrorActivity extends AppCompatActivity {
 			"Crash stack trace saved to " + strSavePath + "." :
 			"Storage permission is required to save crash stack trace!";
 		
-		new AlertDialog.Builder(this)
+		new MaterialAlertDialogBuilder(this)
 			.setTitle(R.string.error_fatal)
 			.setMessage(errHeader + "\n\n" + stackTrace)
 			.setPositiveButton(android.R.string.ok, (p1, p2) -> finish())

@@ -6,7 +6,7 @@ import android.util.*;
 
 import androidx.core.content.res.ResourcesCompat;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 
 public class MineButton extends androidx.appcompat.widget.AppCompatButton {
 	
@@ -23,6 +23,7 @@ public class MineButton extends androidx.appcompat.widget.AppCompatButton {
 		setTypeface(ResourcesCompat.getFont(getContext(), R.font.noto_sans_bold));
 		setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.mine_button_background, null));
 		setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen._13ssp));
+	    setTextColor(Color.BLACK);
 	}
 
 }

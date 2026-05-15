@@ -27,6 +27,8 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.authenticator.AuthType;
@@ -45,7 +47,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import fr.spse.extended_view.ExtendedTextView;
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 
 public class AccountSpinner extends AppCompatSpinner implements LoginListener, AdapterView.OnItemSelectedListener, ValueAnimator.AnimatorUpdateListener {
     private Adapter mAdapter;
@@ -76,7 +78,13 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
     private final ExtraListener<String> mElyByLoginListener = new LoginExtraListener(AuthType.ELY_BY);
     private final ExtraListener<String[]> mMojangLoginListener = (key, value) -> {
         try {
-            MinecraftAccount minecraftAccount = Accounts.create(acc-> acc.username = value[0]);
+            MinecraftAccount minecraftAccount = Accounts.upsertByUsername(acc -> {
+                acc.username = value[0];
+                acc.authType = AuthType.LOCAL;
+                acc.profileId = "00000000-0000-0000-0000-000000000000";
+                acc.accessToken = "0";
+                acc.refreshToken = "0";
+            });
             onLoginDone(minecraftAccount);
         }catch (IOException e) {
             onLoginError(e);
@@ -351,7 +359,7 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
         }
 
         private void showDeleteDialog(Context context, int position) {
-            new AlertDialog.Builder(context)
+            new MaterialAlertDialogBuilder(context)
                     .setMessage(R.string.warning_remove_account)
                     .setPositiveButton(android.R.string.cancel, null)
                     .setNeutralButton(R.string.global_delete, (dialog, which) -> {

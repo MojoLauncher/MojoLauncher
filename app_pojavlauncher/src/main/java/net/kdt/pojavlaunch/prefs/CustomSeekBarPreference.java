@@ -3,29 +3,24 @@ package net.kdt.pojavlaunch.prefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.util.AttributeSet;
-import android.view.View;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceViewHolder;
 import androidx.preference.SeekBarPreference;
 
-import git.artdeell.mojo.R;
+import com.google.android.material.slider.Slider;
+
+import net.ashmeet.hyperlauncher.R;
 
 public class CustomSeekBarPreference extends SeekBarPreference {
 
-    /** The suffix displayed */
     private String mSuffix = "";
-    /** Custom minimum value to provide the same behavior as the usual setMin */
     private int mMin;
-    /** The textview associated by default to the preference */
     private TextView mTextView;
-    /** Seekbar increment in case the max gets set */
-    private final int mIncrement;
-
+    private int mIncrement;
+    private int mMax = 100;
 
     @SuppressLint("PrivateResource")
     public CustomSeekBarPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
@@ -33,8 +28,13 @@ public class CustomSeekBarPreference extends SeekBarPreference {
         try (TypedArray a = context.obtainStyledAttributes(
                 attrs, R.styleable.SeekBarPreference, defStyleAttr, defStyleRes)) {
             mMin = a.getInt(R.styleable.SeekBarPreference_min, 0);
-            mIncrement = a.getInt(R.styleable.SeekBarPreference_seekBarIncrement, 0);
+            mIncrement = a.getInt(R.styleable.SeekBarPreference_seekBarIncrement, 1);
         }
+        TypedArray sa = context.obtainStyledAttributes(attrs, new int[]{android.R.attr.max});
+        mMax = sa.getInt(0, 100);
+        sa.recycle();
+        
+        setLayoutResource(R.layout.app_preference_seekbar_layout);
     }
 
     public CustomSeekBarPreference(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -42,90 +42,98 @@ public class CustomSeekBarPreference extends SeekBarPreference {
     }
 
     public CustomSeekBarPreference(Context context, AttributeSet attrs) {
-        this(context, attrs, R.attr.seekBarPreferenceStyle);
+        this(context, attrs, androidx.preference.R.attr.seekBarPreferenceStyle);
     }
 
-    @SuppressWarnings("unused") public CustomSeekBarPreference(Context context) {
+    public CustomSeekBarPreference(Context context) {
         this(context, null);
     }
 
     @Override
     public void setMin(int min) {
-        //Note: since the max (setMax is a final function) is not taken into account properly, setting the min over the max may produce funky results
         super.setMin(min);
-        if (min != mMin) mMin = min;
+        this.mMin = min;
     }
 
+    public void setSliderMax(int max) {
+        super.setMax(max);
+        this.mMax = max;
+    }
 
     @Override
     public void onBindViewHolder(@NonNull PreferenceViewHolder view) {
         super.onBindViewHolder(view);
-        TextView titleTextView = (TextView) view.findViewById(android.R.id.title);
-        titleTextView.setTextColor(Color.WHITE);
-
+        
         mTextView = (TextView) view.findViewById(R.id.seekbar_value);
-        mTextView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-        SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekbar);
+        Slider slider = (Slider) view.findViewById(R.id.material_slider);
 
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        if (slider != null) {
+            float step = Math.max(1f, (float) mIncrement);
+            slider.setValueFrom(mMin);
+            
+            // Definitively fix IllegalStateException by adjusting range
+            int range = mMax - mMin;
+            float adjustedMax = mMin + (float) (Math.floor(range / step) * step);
+            if (adjustedMax <= mMin) adjustedMax = mMin + step;
+            
+            slider.setValueTo(adjustedMax);
+            slider.setStepSize(step);
+            
+            int currentValue = getValue();
+            if (currentValue < mMin) currentValue = mMin;
+            if (currentValue > adjustedMax) currentValue = (int) adjustedMax;
 
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                progress += mMin;
-                progress = progress / getSeekBarIncrement();
-                progress = progress * getSeekBarIncrement();
-                progress -= mMin;
-
-                mTextView.setText(String.valueOf(progress + mMin));
-                updateTextViewWithSuffix();
+            // Align currentValue with stepSize to avoid IllegalStateException
+            float remainder = (currentValue - mMin) % step;
+            if (remainder != 0) {
+                currentValue = Math.round(mMin + Math.round((currentValue - mMin) / step) * step);
+                // Ensure we don't exceed adjustedMax after rounding
+                if (currentValue > adjustedMax) {
+                    currentValue = (int) adjustedMax;
+                }
             }
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            slider.setValue(currentValue);
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+            slider.clearOnChangeListeners();
+            slider.addOnChangeListener((s, value, fromUser) -> {
+                if (fromUser) {
+                    int intValue = (int) value;
+                    if (mTextView != null) {
+                        mTextView.setText(intValue + mSuffix);
+                    }
+                }
+            });
 
-                int progress = seekBar.getProgress() + mMin;
-                progress /= getSeekBarIncrement();
-                progress *= getSeekBarIncrement();
-                progress -= mMin;
+            slider.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
+                @Override
+                public void onStartTrackingTouch(@NonNull Slider slider) {}
 
-                setValue(progress + mMin);
-                updateTextViewWithSuffix();
-            }
-        });
+                @Override
+                public void onStopTrackingTouch(@NonNull Slider slider) {
+                    int value = (int) slider.getValue();
+                    if (callChangeListener(value)) {
+                        setValue(value);
+                    }
+                }
+            });
+        }
 
-        updateTextViewWithSuffix();
+        if (mTextView != null) {
+            mTextView.setText(getValue() + mSuffix);
+        }
     }
 
-    /**
-     * Set a suffix to be appended on the TextView associated to the value
-     * @param suffix The suffix to append as a String
-     */
     public void setSuffix(String suffix) {
         this.mSuffix = suffix;
     }
 
-    /**
-     * Convenience function to set both min and max at the same time.
-     * @param min The minimum value
-     * @param max The maximum value
-     */
     public void setRange(int min, int max){
         setMin(min);
-        setMaxKeepIncrement(max);
+        setSliderMax(max);
     }
 
     public void setMaxKeepIncrement(int max) {
-        super.setMax(max);
-        setSeekBarIncrement(mIncrement);
-    }
-
-
-    private void updateTextViewWithSuffix(){
-        if(!mTextView.getText().toString().endsWith(mSuffix)){
-            mTextView.setText(String.format("%s%s", mTextView.getText(), mSuffix));
-        }
+        setSliderMax(max);
     }
 }

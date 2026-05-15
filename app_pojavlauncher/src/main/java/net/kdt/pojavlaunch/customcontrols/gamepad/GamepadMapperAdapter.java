@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.kdt.pojavlaunch.EfficientAndroidLWJGLKeycode;
 import net.kdt.pojavlaunch.GrabListener;
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 import net.kdt.pojavlaunch.Tools;
 
 import android.widget.TextView;
@@ -66,10 +66,6 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
         mSimulatedGamepadMap.DIRECTION_BACKWARD = mRebinderButtons[index++] = new RebinderButton(R.drawable.stick_right, R.string.controller_direction_backward);
         mSimulatedGamepadMap.THUMBSTICK_RIGHT = mRebinderButtons[index++] = new RebinderButton(R.drawable.stick_right_click, R.string.controller_stick_press_r);
         mSimulatedGamepadMap.THUMBSTICK_LEFT = mRebinderButtons[index++] = new RebinderButton(R.drawable.stick_left_click, R.string.controller_stick_press_l);
-        mSimulatedGamepadMap.DPAD_UP = mRebinderButtons[index++] = new RebinderButton(R.drawable.dpad_up, R.string.controller_dpad_up);
-        mSimulatedGamepadMap.DPAD_DOWN = mRebinderButtons[index++] = new RebinderButton(R.drawable.dpad_down, R.string.controller_dpad_down);
-        mSimulatedGamepadMap.DPAD_RIGHT = mRebinderButtons[index++] = new RebinderButton(R.drawable.dpad_right, R.string.controller_dpad_right);
-        mSimulatedGamepadMap.DPAD_LEFT = mRebinderButtons[index] = new RebinderButton(R.drawable.dpad_left, R.string.controller_dpad_left);
     }
 
     private void updateRealButtons() {

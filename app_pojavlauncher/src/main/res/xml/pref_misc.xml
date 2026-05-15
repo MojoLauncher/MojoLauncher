@@ -1,42 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app2="http://schemas.android.com/apk/res-auto">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <net.kdt.pojavlaunch.prefs.BackButtonPreference/>
+    <net.kdt.pojavlaunch.prefs.BackButtonPreference />
 
-    <PreferenceCategory android:title="@string/preference_category_miscellaneous">
-        <SwitchPreference
+    <androidx.preference.PreferenceCategory app:title="@string/preference_category_miscellaneous">
+        <net.kdt.pojavlaunch.prefs.MaterialSwitchPreference
             android:defaultValue="true"
             android:icon="@drawable/ic_px_hash"
-            android:key="checkGameFiles"
-            android:summary="@string/preference_verify_game_files_description"
-            android:title="@string/preference_verify_game_files_title" />
+            app:key="checkGameFiles"
+            app:summary="@string/mcl_setting_check_libraries_subtitle"
+            app:title="@string/mcl_setting_check_libraries" />
 
-        <SwitchPreference
+        <net.kdt.pojavlaunch.prefs.MaterialSwitchPreference
             android:defaultValue="true"
-            android:key="fastStartupCheck"
-            android:summary="@string/preference_go_vroom_description"
-            android:title="@string/preference_go_vroom_title" />
-        <androidx.preference.ListPreference
+            app:key="fastStartupCheck"
+            app:summary="@string/preference_go_vroom_description"
+            app:title="@string/preference_go_vroom_title" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialListPreference
             android:defaultValue="default"
-            android:key="downloadSource"
-            android:entries="@array/download_source_names"
-            android:entryValues="@array/download_source_values"
-            android:title="@string/preference_download_source_title"
-            android:summary="@string/preference_download_source_description"
-            app2:useSimpleSummaryProvider="true"/>
-        <SwitchPreference
+            app:entries="@array/download_source_names"
+            app:entryValues="@array/download_source_values"
+            app:key="downloadSource"
+            app:summary="@string/preference_download_source_description"
+            app:title="@string/preference_download_source_title" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialSwitchPreference
             android:defaultValue="true"
-            android:key="verifyManifest"
-            android:title="@string/preference_verify_manifest_title"
-            android:summary="@string/preference_verify_manifest_description"/>
+            app:key="verifyManifest"
+            app:summary="@string/preference_verify_manifest_description"
+            app:title="@string/preference_verify_manifest_title" />
 
-        <SwitchPreference
+        <net.kdt.pojavlaunch.prefs.MaterialSwitchPreference
             android:defaultValue="false"
-            android:key="zinkPreferSystemDriver"
-            android:summary="@string/preference_vulkan_driver_system_description"
-            android:title="@string/preference_vulkan_driver_system_title"/>
+            app:key="zinkPreferSystemDriver"
+            app:summary="@string/preference_vulkan_driver_system_description"
+            app:title="@string/preference_vulkan_driver_system_title" />
 
-    </PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-</PreferenceScreen>
+</androidx.preference.PreferenceScreen>

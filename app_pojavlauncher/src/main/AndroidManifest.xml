@@ -7,6 +7,7 @@
         android:name="android.hardware.type.pc"
         android:required="false" />
 
+    <!-- Permissions -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -18,58 +19,73 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
     <application
         android:name="net.kdt.pojavlaunch.PojavApplication"
         android:allowBackup="true"
         android:allowNativeHeapPointerTagging="false"
         android:appCategory="game"
+        android:enableOnBackInvokedCallback="false"
         android:hasFragileUserData="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon"
         android:isGame="true"
-        android:label="@string/app_name"
+        android:label="Hyper Launcher"
+        android:networkSecurityConfig="@xml/netconfig"
         android:process=":launcher"
         android:resizeableActivity="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/icon"
+        android:supportsRtl="false"
         android:theme="@style/AppTheme"
-        android:networkSecurityConfig="@xml/netconfig"
-        android:enableOnBackInvokedCallback="false"
         tools:ignore="UnusedAttribute">
-        <activity
-            android:name="net.kdt.pojavlaunch.MissingStorageActivity"
-            android:exported="false" />
 
+        <!-- Force landscape globally -->
         <meta-data
             android:name="android.max_aspect"
-            android:value="ratio_float" />
+            android:value="2.4" />
 
+        <!-- Storage -->
+        <activity
+            android:name="net.kdt.pojavlaunch.MissingStorageActivity"
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
+
+        <!-- Launcher -->
         <activity
             android:name="net.kdt.pojavlaunch.TestStorageActivity"
             android:exported="true"
             android:label="@string/app_short_name"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:screenOrientation="sensorLandscape">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Main launcher screen -->
         <activity
             android:name="net.kdt.pojavlaunch.LauncherActivity"
             android:label="@string/app_short_name"
-            android:windowSoftInputMode="adjustResize"/>
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Import controls -->
         <activity
             android:name="net.kdt.pojavlaunch.ImportControlActivity"
             android:configChanges="keyboard|keyboardHidden"
             android:exported="true"
             android:launchMode="singleInstance"
+            android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="stateVisible">
+
             <intent-filter
                 android:label="@string/import_control_label"
                 android:scheme="content"
                 tools:ignore="AppLinkUrlError">
+
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.SEND" />
 
@@ -80,33 +96,46 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+
+        <!-- Error screens -->
         <activity
             android:name="net.kdt.pojavlaunch.FatalErrorActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|keyboard|navigation"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
-        <activity android:name="net.kdt.pojavlaunch.ShowErrorActivity"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/AppDialogActivityTheme" />
+
+        <activity
+            android:name="net.kdt.pojavlaunch.ShowErrorActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|keyboard|navigation"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/AppDialogActivityTheme" />
+
         <activity
             android:name="net.kdt.pojavlaunch.ExitActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|keyboard|navigation"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
+            android:screenOrientation="sensorLandscape" />
+
+        <!-- Java GUI -->
         <activity
-            android:process=":gui_installer"
             android:name="net.kdt.pojavlaunch.JavaGUILauncherActivity"
+            android:process=":gui_installer"
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout|keyboard|navigation|uiMode"
             android:screenOrientation="sensorLandscape" />
+
+        <!-- Controls editor -->
         <activity
             android:name="net.kdt.pojavlaunch.CustomControlsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|keyboard|navigation"
             android:exported="false"
             android:screenOrientation="sensorLandscape">
+
             <intent-filter>
                 <action android:name=".CustomControlsActivity" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <!-- Minecraft -->
         <activity
             android:name="net.kdt.pojavlaunch.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout|keyboard|navigation|uiMode"
@@ -114,27 +143,40 @@
             android:process=":game"
             android:screenOrientation="sensorLandscape" />
 
+        <!-- Storage provider -->
         <provider
             android:name="net.kdt.pojavlaunch.scoped.FolderProvider"
             android:authorities="@string/storageProviderAuthorities"
             android:exported="true"
             android:grantUriPermissions="true"
             android:permission="android.permission.MANAGE_DOCUMENTS">
+
             <intent-filter>
                 <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
             </intent-filter>
         </provider>
 
-        <service android:name="net.kdt.pojavlaunch.services.ProgressService"
-            android:foregroundServiceType="dataSync"/>
-        <service android:name="net.kdt.pojavlaunch.services.GameService" android:process=":game"
-            android:foregroundServiceType="specialUse">
-            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="This application is intended to run a 3rd-party piece of software which cannot be managed using the activity's saved instance state. This service is used for background persistence of this piece of software."/>
+        <!-- Services -->
+        <service
+            android:name="net.kdt.pojavlaunch.services.ProgressService"
+            android:foregroundServiceType="dataSync" />
+
+        <service
+            android:name="net.kdt.pojavlaunch.services.GameService"
+            android:foregroundServiceType="specialUse"
+            android:process=":game">
+
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="This application is intended to run a 3rd-party piece of software which cannot be managed using the activity's saved instance state. This service is used for background persistence of this piece of software." />
         </service>
+
     </application>
+
+    <!-- Package queries -->
     <queries>
-        <package android:name="git.mojo.ffmpeg"/>
-        <package android:name="git.mojo.angle"/>
+        <package android:name="git.mojo.ffmpeg" />
+        <package android:name="git.mojo.angle" />
     </queries>
+
 </manifest>

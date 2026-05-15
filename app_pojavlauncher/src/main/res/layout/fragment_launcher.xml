@@ -28,6 +28,7 @@
 				style="@style/LauncherMenuButton.Universal"
 				android:layout_width="0dp"
 				android:text="@string/mcl_tab_wiki"
+				android:textColor="@android:color/white"
 				android:drawableStart="@drawable/ic_px_book"
 				app:layout_constraintTop_toTopOf="parent"
 				app:layout_constraintStart_toStartOf="parent"
@@ -45,6 +46,7 @@
 				style="@style/LauncherMenuButton.Universal"
 				android:layout_width="0dp"
 				android:text="@string/mcl_button_social_media"
+				android:textColor="@android:color/white"
 				android:drawableStart="@drawable/ic_social_media"
 				app:layout_constraintTop_toTopOf="parent"
 				app:layout_constraintStart_toEndOf="@id/social_divider"
@@ -56,6 +58,7 @@
 				style="@style/LauncherMenuButton.Universal"
 				android:layout_width="match_parent"
 				android:drawableStart="@drawable/ic_px_gamepad"
+				android:textColor="@android:color/white"
 				android:text="@string/mcl_option_customcontrol"
 				app:layout_constraintTop_toBottomOf="@id/news_button" />
 
@@ -64,6 +67,7 @@
 				style="@style/LauncherMenuButton.Universal"
 				android:layout_width="match_parent"
 				android:drawableStart="@drawable/ic_px_java_run"
+				android:textColor="@android:color/white"
 				android:text="@string/main_install_jar_file"
 				app:layout_constraintTop_toBottomOf="@id/custom_control_button" />
 
@@ -72,6 +76,7 @@
 				style="@style/LauncherMenuButton.Universal"
 				android:layout_width="match_parent"
 				android:drawableStart="@drawable/ic_px_sharelog"
+				android:textColor="@android:color/white"
 				android:text="@string/main_share_logs"
 				app:layout_constraintTop_toBottomOf="@id/install_jar_button" />
 
@@ -80,6 +85,7 @@
 				style="@style/LauncherMenuButton.Universal"
 				android:layout_width="match_parent"
 				android:drawableStart="@drawable/ic_px_folder"
+				android:textColor="@android:color/white"
 				android:text="@string/mcl_button_open_directory"
 				app:layout_constraintTop_toBottomOf="@id/share_logs_button" />
 		</androidx.constraintlayout.widget.ConstraintLayout>
@@ -108,6 +114,7 @@
 		android:background="?android:attr/selectableItemBackground"
 
 		android:src="@drawable/ic_px_edit"
+		android:tint="@android:color/white"
 		app:layout_constraintBottom_toBottomOf="@+id/mc_version_spinner"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintTop_toTopOf="@+id/mc_version_spinner" />
@@ -134,8 +141,8 @@
 
 		android:textAllCaps="true"
 		android:text="@string/main_play"
+		android:textColor="@android:color/black"
 		app:layout_constraintBottom_toBottomOf="parent"
 		/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

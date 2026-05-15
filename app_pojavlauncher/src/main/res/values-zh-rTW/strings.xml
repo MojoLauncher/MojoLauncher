@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher（適用於 Android 的 Minecraft Java 版）</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_name">Hyper Launcher（適用於 Android 的 Minecraft Java 版）</string>
+    <string name="app_short_name">Hyper Launcher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -15,7 +15,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">選擇模組安裝程式</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher 非預期的崩潰</string>
+    <string name="error_fatal">Hyper Launcher 非預期的崩潰</string>
     <string name="error_no_version">沒有版本！</string>
     <string name="error_show_more">顯示更多</string>
     <string name="error_show_less">顯示較少</string>
@@ -233,7 +233,7 @@
     <string name="preference_gyro_sample_rate_title">陀螺儀取樣率</string>
     <string name="preference_gyro_sample_rate_description">如果你在陀螺儀控制上遇到效能問題，請增加此值。</string>
     <string name="microsoft_login_retry_later">你的操作過於頻繁，請稍後再試！</string>
-    <string name="storage_required">MojoLauncher 需要連接外部儲存空間，請重新連接並重新啟動應用程式。</string>
+    <string name="storage_required">Hyper Launcher 需要連接外部儲存空間，請重新連接並重新啟動應用程式。</string>
     <string name="mcl_setting_title_buttonallcaps">在按鈕標籤中僅使用大寫字母</string>
     <string name="mcl_setting_subtitle_buttonallcaps">如果你想在控制鍵中使用並顯示小寫字母，請關閉此設定。</string>
     <string name="preference_shader_dump_title">啟用著色器傾印</string>
@@ -313,7 +313,7 @@
     <string name="preference_category_miscellaneous">其他設定</string>
     <string name="preference_category_video">顯示設定</string>
     <string name="notification_permission_dialog_title">權限要求</string>
-    <string name="notification_permission_dialog_text">MojoLauncher 需要通知權限，以防止你離開應用程式時，遊戲/模組包的下載停止。如果沒有這個權限，當你將 MojoLauncher 置於背景模式時，Android 可能會停止你的下載內容。</string>
+    <string name="notification_permission_dialog_text">Hyper Launcher 需要通知權限，以防止你離開應用程式時，遊戲/模組包的下載停止。如果沒有這個權限，當你將 Hyper Launcher 置於背景模式時，Android 可能會停止你的下載內容。</string>
     <string name="notification_permission_toast">你隨時可以進入設定變更你的決定。</string>
     <string name="preference_ask_for_notification_title">允許通知</string>
     <string name="preference_ask_for_notification_description">按一下重新請求通知權限，這是遊戲/模組包背景下載正常運作所必需的。</string>

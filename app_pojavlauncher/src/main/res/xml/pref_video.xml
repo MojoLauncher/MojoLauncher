@@ -1,66 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app2="http://schemas.android.com/apk/res-auto">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <net.kdt.pojavlaunch.prefs.BackButtonPreference/>
+    <net.kdt.pojavlaunch.prefs.BackButtonPreference />
 
-    <PreferenceCategory android:title="@string/preference_category_video" >
-        <androidx.preference.ListPreference
-            android:title="@string/mcl_setting_category_renderer"
-            android:key="renderer"
+    <androidx.preference.PreferenceCategory app:title="@string/preference_category_video">
+        <net.kdt.pojavlaunch.prefs.MaterialListPreference
             android:defaultValue="opengles2"
             android:icon="@drawable/ic_px_image_renderer"
-            app2:useSimpleSummaryProvider="true"/>
+            app:key="renderer"
+            app:title="@string/mcl_setting_category_renderer"
+            app:summary="%s" />
 
-        <androidx.preference.SwitchPreferenceCompat
+        <net.kdt.pojavlaunch.prefs.MaterialListPreference
+            android:defaultValue="opengl"
+            app:entries="@array/graphics_backend_names"
+            android:icon="@drawable/ic_px_image"
+            app:entryValues="@array/graphics_backend_values"
+            app:key="preferredGraphicsBackend"
+            app:title="@string/mcl_setting_title_preferred_graphics_backend"
+            app:summary="@string/mcl_setting_subtitle_preferred_graphics_backend" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialSwitchPreference
             android:defaultValue="false"
-            android:key="ignoreNotch"
-            android:summary="@string/mcl_setting_subtitle_ignore_notch"
-            android:title="@string/mcl_setting_title_ignore_notch"
             android:icon="@drawable/ic_px_viewport_expand"
-            />
+            app:key="ignoreNotch"
+            app:summary="@string/mcl_setting_subtitle_ignore_notch"
+            app:title="@string/mcl_setting_title_ignore_notch" />
 
         <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
-            android:key="resolutionRatio"
-            android:summary="@string/mcl_setting_subtitle_resolution_scaler"
-            android:title="@string/mcl_setting_title_resolution_scaler"
-            app2:showSeekBarValue="true"
-            app2:selectable="false"
-            app2:min="@integer/resolution_seekbar_min"
-            app2:seekBarIncrement="@integer/resolution_seekbar_increment"
             android:icon="@drawable/ic_px_resolution"
-            />
+            app:key="resolutionRatio"
+            app:min="@integer/resolution_seekbar_min"
+            app:seekBarIncrement="@integer/resolution_seekbar_increment"
+            app:selectable="false"
+            app:showSeekBarValue="true"
+            app:summary="@string/mcl_setting_subtitle_resolution_scaler"
+            app:title="@string/mcl_setting_title_resolution_scaler" />
 
-        <SwitchPreference
-            android:title="@string/preference_sustained_performance_title"
-            android:summary="@string/preference_sustained_performance_description"
-            android:key="sustainedPerformance"
+        <net.kdt.pojavlaunch.prefs.MaterialSwitchPreference
             android:defaultValue="false"
-            />
+            app:key="sustainedPerformance"
+            app:summary="@string/preference_sustained_performance_description"
+            app:title="@string/preference_sustained_performance_title" />
 
-        <androidx.preference.SwitchPreferenceCompat
+        <net.kdt.pojavlaunch.prefs.MaterialSwitchPreference
             android:defaultValue="false"
-            android:key="alternate_surface"
-            android:summary="@string/mcl_setting_subtitle_use_surface_view"
-            android:title="@string/mcl_setting_title_use_surface_view"
-            />
-        <androidx.preference.SwitchPreferenceCompat
+            app:key="alternate_surface"
+            app:summary="@string/mcl_setting_subtitle_use_surface_view"
+            app:title="@string/mcl_setting_title_use_surface_view" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialSwitchPreference
             android:defaultValue="false"
-            android:key="force_vsync"
-            android:summary="@string/preference_force_vsync_description"
-            android:title="@string/preference_force_vsync_title"
-            />
-        <androidx.preference.SwitchPreferenceCompat
+            app:key="force_vsync"
+            app:summary="@string/preference_force_vsync_description"
+            app:title="@string/preference_force_vsync_title" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialSwitchPreference
             android:defaultValue="false"
-            android:key="use_angle"
-            android:summary="@string/preference_use_angle_description"
-            android:title="@string/preference_use_angle_title"
-            />
-        <androidx.preference.SwitchPreferenceCompat
+            app:key="use_angle"
+            app:summary="@string/preference_use_angle_description"
+            app:title="@string/preference_use_angle_title" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialSwitchPreference
             android:defaultValue="true"
-            android:key="vsync_in_zink"
-            android:summary="@string/preference_vsync_in_zink_description"
-            android:title="@string/preference_vsync_in_zink_title"
-            />
-    </PreferenceCategory>
-</PreferenceScreen>
+            app:key="vsync_in_zink"
+            app:summary="@string/preference_vsync_in_zink_description"
+            app:title="@string/preference_vsync_in_zink_title" />
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

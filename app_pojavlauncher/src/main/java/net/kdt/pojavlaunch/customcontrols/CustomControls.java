@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.*;
 import net.kdt.pojavlaunch.*;
 
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 
 @Keep
 public class CustomControls {

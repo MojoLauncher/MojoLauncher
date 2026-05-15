@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition για Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_name">Hyper Launcher (Minecraft: Java Edition για Android)</string>
+    <string name="app_short_name">Hyper Launcher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -14,7 +14,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Επιλέξτε ένα πρόγραμμα εγκατάστασης mod</string>
     <!-- Error messages -->
-    <string name="error_fatal">Ο MojoLauncher κατέρρευσε απροσδόκητα</string>
+    <string name="error_fatal">Ο Hyper Launcher κατέρρευσε απροσδόκητα</string>
     <string name="error_no_version">Καμία έκδοση!</string>
     <string name="error_show_more">Εμφάνιση περισσότερων</string>
     <string name="error_show_less">Εμφάνιση λιγότερων</string>
@@ -229,7 +229,7 @@
     <string name="preference_gyro_sample_rate_title">Ρυθμός δειγματοληψίας γυροσκοπίου</string>
     <string name="preference_gyro_sample_rate_description">Εάν έχετε προβλήματα απόδοσης με τους ελέγχους γυροσκοπίου, αυξήστε αυτό.</string>
     <string name="microsoft_login_retry_later">Πάρα πολλά αιτήματα, παρακαλώ προσπαθήστε ξανά αργότερα.</string>
-    <string name="storage_required">Το MojoLauncher απαιτεί την προσάρτηση εξωτερικού χώρου. Παρακαλώ επανασυνδέστε το και επανεκκινήστε την εφαρμογή.</string>
+    <string name="storage_required">Το Hyper Launcher απαιτεί την προσάρτηση εξωτερικού χώρου. Παρακαλώ επανασυνδέστε το και επανεκκινήστε την εφαρμογή.</string>
     <string name="mcl_setting_title_buttonallcaps">Χρησιμοποιήστε μόνο κεφαλαία γράμματα σε ετικέτες κουμπιών</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Απενεργοποιήστε το αν θέλετε να χρησιμοποιήσετε πεζά γράμματα στα χειριστήριά σας.</string>
     <string name="preference_shader_dump_title">Ενεργοποίηση shader dumping</string>
@@ -308,7 +308,7 @@
     <string name="preference_category_miscellaneous">Διάφορες ρυθμίσεις</string>
     <string name="preference_category_video">Ρυθμίσεις βίντεο</string>
     <string name="notification_permission_dialog_title">Αίτημα άδειας</string>
-    <string name="notification_permission_dialog_text">Το MojoLauncher απαιτεί την άδεια να δημοσιεύει ειδοποιήσεις για να αποτρέψει τη διακοπή λήψεων παιχνιδιού/modpacks όταν φεύγετε από την εφαρμογή. Χωρίς αυτήν την άδεια, το Android μπορεί να τερματίσει τις λήψεις σας όταν βάζετε το MojoLauncher στη λειτουργία παρασκηνίου.</string>
+    <string name="notification_permission_dialog_text">Το Hyper Launcher απαιτεί την άδεια να δημοσιεύει ειδοποιήσεις για να αποτρέψει τη διακοπή λήψεων παιχνιδιού/modpacks όταν φεύγετε από την εφαρμογή. Χωρίς αυτήν την άδεια, το Android μπορεί να τερματίσει τις λήψεις σας όταν βάζετε το Hyper Launcher στη λειτουργία παρασκηνίου.</string>
     <string name="notification_permission_toast">Μπορείτε πάντα να αλλάξετε γνώμη αργότερα πηγαίνοντας στις Ρυθμίσεις</string>
     <string name="preference_ask_for_notification_title">Επιτροπή ειδοποιήσεων</string>
     <string name="preference_ask_for_notification_description">Κάντε κλικ για να ζητήσετε ξανά την άδεια ειδοποίησης, που απαιτείται για να λειτουργούν σωστά οι λήψεις παιχνιδιού/modpack.</string>

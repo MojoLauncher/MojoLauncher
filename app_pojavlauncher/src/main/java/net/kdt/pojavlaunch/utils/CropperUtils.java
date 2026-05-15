@@ -20,8 +20,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import net.kdt.pojavlaunch.PojavApplication;
-import git.artdeell.mojo.R;
+import net.ashmeet.hyperlauncher.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.imgcropper.BitmapCropBehaviour;
 import net.kdt.pojavlaunch.imgcropper.CropperBehaviour;
@@ -55,7 +57,7 @@ public class CropperUtils {
     private static void openCropperDialog(Context context, Uri selectedUri,
                                           final CropperReceiver cropperReceiver) {
         ContentResolver contentResolver = context.getContentResolver();
-        AlertDialog dialog = new AlertDialog.Builder(context)
+        AlertDialog dialog = new MaterialAlertDialogBuilder(context)
                 .setTitle(R.string.cropper_title)
                 .setView(R.layout.dialog_cropper)
                 .setPositiveButton(android.R.string.ok, null)

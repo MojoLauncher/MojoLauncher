@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_app"
+    android:padding="8dp">
+
+    <FrameLayout
+        android:id="@+id/content_header_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/content_list_container"
+        app:layout_constraintHorizontal_weight="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ScrollView
+            android:id="@+id/content_main_ui"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RadioGroup
+                    android:id="@+id/content_type_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="4dp">
+
+                    <RadioButton
+                        android:id="@+id/content_type_mods"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="4dp"
+                        android:text="@string/installer_mods"
+                        android:textColor="@color/primary_text"
+                        android:textSize="11sp" />
+
+                    <RadioButton
+                        android:id="@+id/content_type_shaders"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="4dp"
+                        android:text="@string/installer_shaders"
+                        android:textColor="@color/primary_text"
+                        android:textSize="11sp" />
+
+                    <RadioButton
+                        android:id="@+id/content_type_resources"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="4dp"
+                        android:text="@string/installer_packs"
+                        android:textColor="@color/primary_text"
+                        android:textSize="11sp" />
+
+                </RadioGroup>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal">
+                    <ImageButton android:id="@+id/content_open_downloads" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:background="@drawable/preference_item_background" android:src="@drawable/ic_px_folder"
+                        android:contentDescription="Downloads"
+                        android:padding="@dimen/_7ssp"
+                        android:scaleType="centerInside"
+                        app:tint="@color/icon_outline_color" />
+                    <ImageButton android:id="@+id/content_install_local" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:layout_marginStart="6dp" android:background="@drawable/preference_item_background"
+                        android:src="@drawable/ic_px_file"
+                        android:scaleType="centerInside"
+                        android:padding="@dimen/_7ssp"
+                        android:contentDescription="Install local"
+                        app:tint="@color/icon_outline_color" />
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/content_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="6dp"
+                    android:hint="@string/installer_search_hint"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:textSize="13sp"
+                    android:paddingHorizontal="12dp"
+                    android:background="@drawable/preference_item_background"
+                    android:textColor="@color/primary_text"
+                    android:textColorHint="@color/secondary_text" />
+
+                <LinearLayout
+                    android:id="@+id/content_filters"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="vertical">
+                    <com.kdt.mcgui.MineButton android:id="@+id/content_filter_version" android:layout_width="match_parent" android:layout_height="40dp" android:text="Version: Any" android:textSize="11sp" app:cornerRadius="16dp" />
+                    <com.kdt.mcgui.MineButton android:id="@+id/content_filter_loader" android:layout_width="match_parent" android:layout_height="40dp" android:layout_marginTop="6dp" android:text="Loader: Any" android:textSize="11sp" app:cornerRadius="16dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/content_versions_ui"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:scrollbars="none"
+                android:fillViewport="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="start">
+
+                    <ImageView
+                        android:id="@+id/content_versions_icon"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="4dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_px_download"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/content_versions_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:textColor="@color/primary_text"
+                        android:textSize="16sp"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
+
+                    <TextView
+                        android:id="@+id/content_versions_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="start"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="11sp"
+                        android:ellipsize="end"
+                        android:maxLines="4"
+                        tools:text="Mod description goes here..." />
+
+                    <EditText
+                        android:id="@+id/content_versions_filter"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="8dp"
+                        android:hint="@string/installer_filter_hint"
+                        android:inputType="text"
+                        android:singleLine="true"
+                        android:textSize="12sp"
+                        android:paddingHorizontal="12dp"
+                        android:background="@drawable/preference_item_background"
+                        android:textColor="@color/primary_text"
+                        android:textColorHint="@color/secondary_text" />
+
+                </LinearLayout>
+            </ScrollView>
+
+            <com.kdt.mcgui.MineButton
+                android:id="@+id/content_versions_back"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="6dp"
+                android:text="Back"
+                app:cornerRadius="16dp" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/content_status"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/secondary_text"
+        android:textSize="10sp"
+        android:paddingEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/content_list_container"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/content_list_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1.2"
+        app:layout_constraintStart_toEndOf="@+id/content_header_container"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:id="@+id/content_loading"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:indeterminateTint="@color/primary" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/content_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="4dp" />
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
