@@ -24,7 +24,7 @@
 #include <log.h>
 
 /* Library search path */
-#define SEARCH_PATH "/system/lib64"
+#define SEARCH_PATH "/system/lib64:/vendor/lib64"
 
 static struct android_namespace_t* driver_namespace = NULL;
 
