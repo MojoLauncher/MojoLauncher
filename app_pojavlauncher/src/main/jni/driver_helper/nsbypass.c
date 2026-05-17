@@ -38,7 +38,7 @@ bool linker_ns_load(const char* lib_search_path) {
 
     // assemble the full path search path
     char full_path[strlen(SEARCH_PATH) + strlen(VENDOR_SEARCH_PATH) + strlen(lib_search_path) + 3 + 1];
-    sprintf(full_path, "%s:%s:%s", SEARCH_PATH, VENDOR_SEARCH_PATH, lib_search_path);
+    sprintf(full_path, "%s:%s:%s", lib_search_path, SEARCH_PATH, VENDOR_SEARCH_PATH);
     driver_namespace = ldfuncs.create_namespace("pojav-driver",
                                                       full_path,
                                                       full_path,
