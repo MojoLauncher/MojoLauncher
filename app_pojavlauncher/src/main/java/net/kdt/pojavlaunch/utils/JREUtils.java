@@ -14,6 +14,7 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.*;
 import net.kdt.pojavlaunch.*;
+import net.kdt.pojavlaunch.adrenotools.AdrenoManager;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.multirt.Runtime;
@@ -162,14 +163,10 @@ public class JREUtils {
         setupFfmpegEnv(context, envMap);
         setupRendererEnv(envMap, renderer);
 
-        // Temporary Hack
-        File vkPath = new File(Tools.DIR_DATA, "vulkan/libvulkan_freedreno.so");
-        if(vkPath.exists()) {
-            Logger.appendToLog("Custom Vulkan library exists, will use " + vkPath.getAbsolutePath());
-            setCustomVkPath(vkPath.getAbsolutePath());
-        }
+        String vkLib = AdrenoManager.getPreferredDriverLibraryPath();
+        setCustomVkPath(vkLib);
 
-        Log.i("VK_LOADER", "Custom VK Lib: " + vkPath.getAbsolutePath());
+        Log.i("VK_LOADER", "Custom VK Lib: " + vkLib);
         // HACK
         envMap.put("POJAV_NATIVEDIR", Tools.NATIVE_LIB_DIR);
         envMap.put("EGL_PLATFORM", "android");
