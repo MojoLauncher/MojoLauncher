@@ -162,6 +162,14 @@ public class JREUtils {
         setupFfmpegEnv(context, envMap);
         setupRendererEnv(envMap, renderer);
 
+        // Temporary Hack
+        File vkPath = new File(Tools.DIR_DATA, "vulkan/libvulkan_freedreno.so");
+        if(vkPath.exists()) {
+            Logger.appendToLog("Custom Vulkan library exists, will use " + vkPath.getAbsolutePath());
+            setCustomVkPath(vkPath.getAbsolutePath());
+        }
+
+        Log.i("VK_LOADER", "Custom VK Lib: " + vkPath.getAbsolutePath());
         // HACK
         envMap.put("POJAV_NATIVEDIR", Tools.NATIVE_LIB_DIR);
         envMap.put("EGL_PLATFORM", "android");
@@ -299,6 +307,7 @@ public class JREUtils {
     public static native boolean configureRenderspec(String eglPath, boolean useLoaderBypass, boolean useGles, int glesVersion);
     public static native void preloadVulkan();
     public static native void setUseTurnip(boolean enable);
+    public static native void setCustomVkPath(String absolutePath);
     //public static native void initializeHooks();
     // Obtain AWT screen pixels to render on Android SurfaceView
     public static native boolean renderAWTScreenFrame(ByteBuffer tempBuffer);
