@@ -44,6 +44,12 @@
             android:fragment="net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceMiscellaneousFragment"
             android:icon="@drawable/ic_px_alt_sliders"
             />
+        <Preference
+            android:key="vulkan_screen_setting"
+            android:title="@string/preference_category_vulkan_title"
+            android:summary="@string/preference_category_vulkan_description"
+            android:fragment="net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceVulkanFragment"
+            />
 
 
         <Preference

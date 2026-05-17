@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_60sdp"
+    android:paddingHorizontal="@dimen/padding_medium"
+    >
+
+    <!-- Reusing MultiRT button text here as it has the same meaning -->
+
+    <TextView
+        android:id="@+id/driver_view_ext_name"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+
+        android:textSize="@dimen/_10ssp"
+
+        app:layout_constraintStart_toStartOf="@+id/driver_view_name"
+        app:layout_constraintTop_toBottomOf="@+id/driver_view_name"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        tools:text="MojoLauncher - 1.4.x.x" />
+
+    <TextView
+        android:id="@+id/driver_view_name"
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="wrap_content"
+
+
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:textSize="@dimen/_12ssp"
+
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        tools:text="Built-in driver" />
+
+    <ImageButton
+        android:id="@+id/driver_view_removebtn"
+        android:layout_width="@dimen/_35sdp"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackground"
+        android:paddingVertical="@dimen/padding_heavy"
+        android:scaleType="fitCenter"
+
+        android:src="@drawable/ic_px_trash"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.654"
+        app:layout_constraintStart_toEndOf="@+id/driver_view_name"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/driver_view_setdefaultbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+
+        android:background="?attr/selectableItemBackground"
+        android:text="@string/multirt_config_setdefault"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.65"
+        app:layout_constraintStart_toEndOf="@+id/driver_view_name"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:visibility="visible" />
+</androidx.constraintlayout.widget.ConstraintLayout>

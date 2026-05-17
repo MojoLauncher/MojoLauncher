@@ -14,6 +14,8 @@ import androidx.preference.PreferenceFragmentCompat;
 import net.kdt.pojavlaunch.LauncherActivity;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.utils.GLInfoUtils;
+import net.kdt.pojavlaunch.utils.RendererCompatUtil;
 
 /**
  * Preference for the main screen, any sub-screen should inherit this class for consistent behavior,
@@ -30,6 +32,7 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
     @Override
     public void onCreatePreferences(Bundle b, String str) {
         addPreferencesFromResource(R.xml.pref_main);
+        requirePreference("vulkan_screen_setting").setVisible(RendererCompatUtil.checkVulkanSupport(getContext().getPackageManager()) && GLInfoUtils.getGlInfo().isAdreno());
         setupNotificationRequestPreference();
     }
 

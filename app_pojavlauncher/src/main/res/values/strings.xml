@@ -484,4 +484,13 @@
     <string name="instance_delete">Delete instance</string>
     <string name="instance_delete_confirmation">Are you sure you want to delete the instance? This will permanently delete all worlds, mods, resources and any other data in the instance directory. This action cannot be undone!</string>
     <string name="import_local_modpack">Import local modpack</string>
+
+    <string name="driver_default_name">Built-in driver</string>
+    <string name="driver_default_extra_name">MojoLauncher</string>
+    <string name="driver_config_title">AdrenoTools Drivers</string>
+    <string name="driver_config_subtitle">Manage installed AdrenoTools Vulkan drivers and install new</string>
+    <string name="driver_config_import">Import driver</string>
+    <string name="driver_config_delete">Remove driver</string>
+    <string name="preference_category_vulkan_title">Vulkan Driver Settings</string>
+    <string name="preference_category_vulkan_description">Manage custom Vulkan driver settings</string>
 </resources>

@@ -1,6 +1,5 @@
 package net.kdt.pojavlaunch.adrenotools;
 
-
 import android.util.Log;
 
 import net.kdt.pojavlaunch.Tools;
@@ -8,7 +7,10 @@ import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.GLInfoUtils;
 import net.kdt.pojavlaunch.utils.ZipUtils;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipFile;
@@ -17,17 +19,32 @@ import java.util.zip.ZipFile;
 public class AdrenoManager {
     public static final String METADATA_FILENAME = "meta.json";
     public static final String TAG = "AdrenoTools";
-    private static BaseDriver preferredDriver = null;
+    private static final DefaultDriver DEFAULT_DRIVER = new DefaultDriver();
     private static File packagesPath = new File(Tools.DIR_DATA, "vulkan");
 
     private AdrenoManager() {}
 
-    private static void initDefaultDriver(){
-        AdrenoManager.preferredDriver = new DefaultDriver();
-    }
-
     public static BaseDriver getPreferredDriver() {
-        return preferredDriver;
+        BaseDriver driver = LauncherPreferences.PREF_VULKAN_PACKAGE == null ? DEFAULT_DRIVER : loadPackage(LauncherPreferences.PREF_VULKAN_PACKAGE);
+        if(driver == null) {
+            Log.e(TAG, "Failed to load preferred driver package " + LauncherPreferences.PREF_VULKAN_PACKAGE);
+            return DEFAULT_DRIVER;
+        }
+        return driver;
+    }
+    public static boolean isPreferredDriver(BaseDriver driver){
+        if(getPreferredDriverPackage() == null && driver == DEFAULT_DRIVER)
+            return true;
+        if(getPreferredDriverPackage() != null && driver instanceof AdrenoDriver)
+            return true;
+        return false;
+    }
+    public static String getPreferredDriverPackage() {
+        return LauncherPreferences.PREF_VULKAN_PACKAGE;
+    }
+    public static void setPreferredDriver(BaseDriver driver){
+        LauncherPreferences.PREF_VULKAN_PACKAGE = !driver.isDefault() ? ((AdrenoDriver) driver).toHash() : null;
+        LauncherPreferences.DEFAULT_PREF.edit().putString("vulkanPackage", LauncherPreferences.PREF_VULKAN_PACKAGE).apply();
     }
 
     public static void init(){
@@ -36,14 +53,12 @@ public class AdrenoManager {
             return;
         if(!packagesPath.exists())
             packagesPath.mkdirs();
-
         String selectedDriver = LauncherPreferences.PREF_VULKAN_PACKAGE;
         if(selectedDriver == null || selectedDriver.isEmpty())
-            initDefaultDriver();
-
+            setPreferredDriver(DEFAULT_DRIVER);
     }
 
-    public static List<String> getDrivers(){
+    public static List<String> getDriverPaths(){
         if(!packagesPath.exists())
             return null;
         List<String> packages = new ArrayList<>();
@@ -54,10 +69,11 @@ public class AdrenoManager {
         }
         return packages;
     }
-    public static List<AdrenoDriver> getDriverPaths(){
+    public static List<BaseDriver> getDrivers(){
         if(!packagesPath.exists())
             return null;
-        List<AdrenoDriver> drivers = new ArrayList<>();
+        List<BaseDriver> drivers = new ArrayList<>();
+        drivers.add(DEFAULT_DRIVER);
         for(File dir : packagesPath.listFiles(File::isDirectory)) {
             File metadata = new File(dir, METADATA_FILENAME);
             if(!metadata.exists())
@@ -81,9 +97,8 @@ public class AdrenoManager {
     }
 
     public static AdrenoDriver installPackage(File path, boolean overwrite){
-        if(!path.isFile())
-            return null;
         try(ZipFile zf = new ZipFile(path)){
+
             AdrenoDriver driver = AdrenoDriver.fromJson(ZipUtils.getEntryStream(zf, METADATA_FILENAME));
             String hash = driver.toHash();
             if(packageExists(hash)){
@@ -108,6 +123,12 @@ public class AdrenoManager {
         File path = new File(packagesPath, name);
         if (!path.isDirectory())
             return false;
-        return path.delete();
+        try {
+            FileUtils.deleteDirectory(path);
+            return true;
+        } catch (IOException e) {
+            Log.e(TAG, "Unable to remove driver package " + name);
+            return false;
+        }
     }
 }

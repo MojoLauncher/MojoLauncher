@@ -47,6 +47,7 @@ import androidx.fragment.app.FragmentManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import net.kdt.pojavlaunch.adrenotools.AdrenoManager;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutorTask;
@@ -794,6 +795,32 @@ public final class Tools {
                 MultiRTUtils.postPrepare(name);
             } catch (IOException e) {
                 Tools.showError(context, e);
+            }
+        });
+    }
+    public static void installDriverFromUri(Context context, Uri uri) {
+        sExecutorService.execute(() -> {
+            FileOutputStream fos = null;
+            try {
+                File f = File.createTempFile("at-extract", ".tmp", context.getCacheDir());
+                InputStream is = context.getContentResolver().openInputStream(uri);
+                fos = new FileOutputStream(f);
+                f.deleteOnExit();
+                byte[] buffer = new byte[4096];
+                int read;
+                while((read = is.read(buffer)) != -1){
+                    fos.write(buffer, 0, read);
+                }
+                fos.close();
+                AdrenoManager.installPackage(f, true);
+            } catch (IOException e){
+                Tools.showError(context, e);
+            } finally {
+                if(fos != null) {
+                    try {
+                        fos.close();
+                    } catch (IOException e) {}
+                }
             }
         });
     }

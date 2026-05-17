@@ -24,6 +24,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.kdt.mcgui.ProgressLayout;
 
+import net.kdt.pojavlaunch.adrenotools.AdrenoManager;
 import net.kdt.pojavlaunch.authenticator.accounts.Accounts;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
@@ -211,6 +212,8 @@ public class LauncherActivity extends BaseActivity {
         mProgressLayout.observe(ProgressLayout.AUTHENTICATE);
         mProgressLayout.observe(ProgressLayout.DOWNLOAD_VERSION_LIST);
         mProgressLayout.observe(ProgressLayout.INSTANCE_INSTALL);
+
+        AdrenoManager.init();
     }
 
     @Override

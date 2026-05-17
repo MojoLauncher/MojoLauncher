@@ -54,11 +54,35 @@ public class AdrenoDriver implements BaseDriver {
 
     @Override
     public boolean isDefault() {
-        return true;
+        return false;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getDriverVersion() {
+        return driverVersion;
+    }
+
+    public String getLibraryName() {
+        return libraryName;
+    }
+
+    public int getSchemaVersion() {
+        return schemaVersion;
+    }
+
+    public int getMinApi() {
+        return minApi;
     }
 
     public String toHash(){
