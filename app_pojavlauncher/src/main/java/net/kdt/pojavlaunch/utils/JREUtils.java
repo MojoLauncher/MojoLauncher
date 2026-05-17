@@ -164,11 +164,12 @@ public class JREUtils {
         setupRendererEnv(envMap, renderer);
 
         String vkLib = AdrenoManager.getPreferredDriverLibraryPath();
+        String vkPath = AdrenoManager.getPreferredDriverRootPath();
         setCustomVkPath(vkLib);
 
         Log.i("VK_LOADER", "Custom VK Lib: " + vkLib);
         // HACK
-        envMap.put("POJAV_NATIVEDIR", Tools.NATIVE_LIB_DIR);
+        envMap.put("POJAV_NATIVEDIR", vkPath == null ? Tools.NATIVE_LIB_DIR : vkPath);
         envMap.put("EGL_PLATFORM", "android");
 
         if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
