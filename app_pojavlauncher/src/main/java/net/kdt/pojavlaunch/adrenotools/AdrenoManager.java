@@ -33,10 +33,13 @@ public class AdrenoManager {
         return driver;
     }
     public static boolean isPreferredDriver(BaseDriver driver){
-        if(getPreferredDriverPackage() == null && driver == DEFAULT_DRIVER)
+        String pkg = getPreferredDriverPackage();
+        // selected default package
+        if(pkg == null && driver == DEFAULT_DRIVER)
             return true;
-        if(getPreferredDriverPackage() != null && driver instanceof AdrenoDriver)
-            return true;
+        if(pkg != null && driver instanceof AdrenoDriver) {
+            return pkg.equals(((AdrenoDriver) driver).toHash());
+        }
         return false;
     }
     public static String getPreferredDriverPackage() {
@@ -51,6 +54,14 @@ public class AdrenoManager {
         // Invalid driver
         Log.e(TAG, "Unable to resolve Vulkan library: path " + path.getAbsolutePath() + " is not a file or does not exist");
         return DEFAULT_DRIVER.getMainLibrary();
+    }
+    public static String getPreferredDriverRootPath(){
+        BaseDriver driver = getPreferredDriver();
+        if(driver.isDefault()) return null; // Already in the library path
+        File path = new File(packagesPath,  ((AdrenoDriver) driver).toHash());
+        if(path.exists())
+            return path.getAbsolutePath();
+        else return null;
     }
     public static void setPreferredDriver(BaseDriver driver){
         LauncherPreferences.PREF_VULKAN_PACKAGE = !driver.isDefault() ? ((AdrenoDriver) driver).toHash() : null;
