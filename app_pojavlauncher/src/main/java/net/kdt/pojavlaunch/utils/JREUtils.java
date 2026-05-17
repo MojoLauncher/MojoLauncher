@@ -168,6 +168,7 @@ public class JREUtils {
         setCustomVkPath(vkLib);
 
         Log.i("VK_LOADER", "Custom VK Lib: " + vkLib);
+        Logger.appendToLog("Will use driver at " + vkLib + " at path " + vkPath);
         // HACK
         envMap.put("POJAV_NATIVEDIR", vkPath == null ? Tools.NATIVE_LIB_DIR : vkPath);
         envMap.put("EGL_PLATFORM", "android");
