@@ -24,7 +24,8 @@
 #include <log.h>
 
 /* Library search path */
-#define SEARCH_PATH "/system/lib64:/vendor/lib64"
+#define SEARCH_PATH "/system/lib64"
+#define VENDOR_SEARCH_PATH "/vendor/lib64"
 
 static struct android_namespace_t* driver_namespace = NULL;
 
@@ -36,8 +37,8 @@ bool linker_ns_load(const char* lib_search_path) {
     }
 
     // assemble the full path search path
-    char full_path[strlen(SEARCH_PATH) + strlen(lib_search_path) + 2 + 1];
-    sprintf(full_path, "%s:%s", SEARCH_PATH, lib_search_path);
+    char full_path[strlen(SEARCH_PATH) + strlen(VENDOR_SEARCH_PATH) + strlen(lib_search_path) + 3 + 1];
+    sprintf(full_path, "%s:%s:%s", SEARCH_PATH, VENDOR_SEARCH_PATH, lib_search_path);
     driver_namespace = ldfuncs.create_namespace("pojav-driver",
                                                       full_path,
                                                       full_path,
