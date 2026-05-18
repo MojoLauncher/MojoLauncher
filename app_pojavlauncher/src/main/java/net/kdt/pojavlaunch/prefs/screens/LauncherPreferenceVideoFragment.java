@@ -4,21 +4,33 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.preference.ListPreference;
 import androidx.preference.SwitchPreference;
 import androidx.preference.SwitchPreferenceCompat;
 
 import git.artdeell.mojo.R;
 
+import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.adrenotools.ui.DriverConfigDialog;
+import net.kdt.pojavlaunch.contracts.OpenDocumentWithExtension;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.CustomSeekBarPreference;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.utils.GLInfoUtils;
 import net.kdt.pojavlaunch.utils.RendererCompatUtil;
 
 /**
  * Fragment for any settings video related
  */
 public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment {
+
+    private DriverConfigDialog mDialogScreen;
+    private final ActivityResultLauncher<Object> mInstallDriver =
+            registerForActivityResult(new OpenDocumentWithExtension("zip"), data -> {
+                if(data != null) Tools.installDriverFromUri(getContext(), data);
+            });
     @Override
     public void onCreatePreferences(Bundle b, String str) {
         addPreferencesFromResource(R.xml.pref_video);
@@ -56,6 +68,14 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         rendererListPreference.setEntries(renderersList.rendererDisplayNames);
         rendererListPreference.setEntryValues(renderersList.rendererIds.toArray(new String[0]));
 
+        boolean supportsTurnip = RendererCompatUtil.checkVulkanSupport(getContext().getPackageManager()) && GLInfoUtils.getGlInfo().isAdreno();
+        ListPreference drivers = requirePreference("manageDrivers", ListPreference.class);
+        drivers.setVisible(supportsTurnip);
+        drivers.setOnPreferenceClickListener(pref -> {
+            openDriverDialog();
+            return true;
+        });
+
         computeVisibility();
     }
 
@@ -77,5 +97,13 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
     private void computeVisibility(){
         requirePreference("force_vsync", SwitchPreferenceCompat.class)
                 .setVisible(LauncherPreferences.PREF_USE_ALTERNATE_SURFACE);
+    }
+
+    private void openDriverDialog(){
+        if(mDialogScreen == null) {
+            mDialogScreen = new DriverConfigDialog();
+            mDialogScreen.prepare(getContext(), mInstallDriver);
+        }
+        mDialogScreen.show();
     }
 }
