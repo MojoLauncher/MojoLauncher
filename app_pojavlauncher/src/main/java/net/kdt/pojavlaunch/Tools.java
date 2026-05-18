@@ -815,7 +815,7 @@ public final class Tools {
                 fos.close();
                 Driver driver = DriverManager.installDriver(f, true);
                 if(driver == null) {
-                    Toast.makeText(context, R.string.driver_config_import_failed, Toast.LENGTH_SHORT).show();
+                    runOnUiThread(() -> Toast.makeText(context, R.string.driver_config_import_failed, Toast.LENGTH_SHORT).show());
                 }
             } catch (IOException e){
                 Tools.showError(context, e);
