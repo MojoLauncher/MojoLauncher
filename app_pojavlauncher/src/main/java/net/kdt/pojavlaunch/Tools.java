@@ -805,8 +805,12 @@ public final class Tools {
             FileOutputStream fos = null;
             InputStream is = null;
             try {
-                File f = File.createTempFile("at-extract", ".tmp", context.getCacheDir());
                 is = context.getContentResolver().openInputStream(uri);
+                if(!DriverManager.validateDriver(is)){
+                    runOnUiThread(() -> Toast.makeText(context, R.string.driver_config_import_invalid, Toast.LENGTH_LONG).show());
+                    return;
+                }
+                File f = File.createTempFile("at-extract", ".tmp", context.getCacheDir());
                 fos = new FileOutputStream(f);
                 f.deleteOnExit();
                 byte[] buffer = new byte[4096];
@@ -815,12 +819,6 @@ public final class Tools {
                     fos.write(buffer, 0, read);
                 }
                 fos.close();
-                // TODO: Add input stream prevalidation for the cases when user throws a huge non-adrenotools file
-                // This might save write cycles (of course if the buffer copier actually writes bytes on the flash here)
-                if(!DriverManager.validateDriver(f)){
-                    runOnUiThread(() -> Toast.makeText(context, R.string.driver_config_import_invalid, Toast.LENGTH_LONG).show());
-                    return;
-                }
                 Driver driver = DriverManager.installDriver(f, true);
                 if(driver == null) {
                     runOnUiThread(() -> Toast.makeText(context, R.string.driver_config_import_failed, Toast.LENGTH_SHORT).show());

@@ -11,10 +11,13 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 // AdrenoTools package manager
 public class DriverManager {
@@ -123,6 +126,18 @@ public class DriverManager {
             return driver != null;
         } catch (Exception e) {
             return false;
+        }
+    }
+    public static boolean validateDriver(InputStream stream){
+        try(ZipInputStream zip = new ZipInputStream(stream)){
+            ZipEntry entry;
+            do {
+                entry = zip.getNextEntry();
+                if(entry == null) break;
+            } while(!entry.getName().equals("meta.json"));
+            return entry != null;
+        } catch (IOException e) {
+           return false;
         }
     }
 
