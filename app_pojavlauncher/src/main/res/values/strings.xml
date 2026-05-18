@@ -491,6 +491,7 @@
     <string name="driver_config_subtitle">Manage installed AdrenoTools Vulkan drivers and install new</string>
     <string name="driver_config_import">Import driver</string>
     <string name="driver_config_delete">Remove driver</string>
+    <string name="driver_config_import_failed">Failed to add the selected driver!</string>
     <string name="preference_category_vulkan_title">Vulkan Driver Settings</string>
     <string name="preference_category_vulkan_description">Manage custom Vulkan driver settings</string>
 </resources>

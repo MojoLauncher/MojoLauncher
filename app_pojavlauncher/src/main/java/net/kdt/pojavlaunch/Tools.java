@@ -34,6 +34,7 @@ import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,6 +48,7 @@ import androidx.fragment.app.FragmentManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import net.kdt.pojavlaunch.adrenotools.Driver;
 import net.kdt.pojavlaunch.adrenotools.DriverManager;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
@@ -811,7 +813,10 @@ public final class Tools {
                     fos.write(buffer, 0, read);
                 }
                 fos.close();
-                DriverManager.installDriver(f, true);
+                Driver driver = DriverManager.installDriver(f, true);
+                if(driver == null) {
+                    Toast.makeText(context, R.string.driver_config_import_failed, Toast.LENGTH_SHORT).show();
+                }
             } catch (IOException e){
                 Tools.showError(context, e);
             } finally {
