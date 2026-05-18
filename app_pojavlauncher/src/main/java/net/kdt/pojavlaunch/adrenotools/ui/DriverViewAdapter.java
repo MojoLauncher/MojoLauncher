@@ -104,10 +104,11 @@ public class DriverViewAdapter extends RecyclerView.Adapter<DriverViewAdapter.Dr
 
 
                 sExecutorService.execute(() -> {
-                    boolean state = DriverManager.removePackage(mCurrentDriver.getHash());
+                    boolean state = DriverManager.removeDriver(mCurrentDriver.getHash());
                     mDeleteButton.post(() -> {
                         if(!state) {
                             Log.e(DriverManager.TAG, "Unable to remove the package");
+                            return;
                         }
                         if(getBindingAdapter() != null)
                             getBindingAdapter().notifyDataSetChanged();

@@ -811,7 +811,7 @@ public final class Tools {
                     fos.write(buffer, 0, read);
                 }
                 fos.close();
-                DriverManager.installPackage(f, true);
+                DriverManager.installDriver(f, true);
             } catch (IOException e){
                 Tools.showError(context, e);
             } finally {

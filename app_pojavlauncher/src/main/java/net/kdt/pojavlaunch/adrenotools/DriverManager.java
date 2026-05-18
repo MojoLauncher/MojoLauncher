@@ -20,12 +20,13 @@ public class DriverManager {
     public static final String METADATA_FILENAME = "meta.json";
     public static final String TAG = "AdrenoTools";
     private static final DefaultDriver DEFAULT_DRIVER = new DefaultDriver();
+    // Must be in the exec place, /sdcard/... is noexec
     private static File packagesPath = new File(Tools.DIR_DATA, "vulkan");
 
     private DriverManager() {}
 
     public static Driver getPreferredDriver() {
-        Driver driver = LauncherPreferences.PREF_VULKAN_PACKAGE == null ? DEFAULT_DRIVER : loadPackage(LauncherPreferences.PREF_VULKAN_PACKAGE);
+        Driver driver = LauncherPreferences.PREF_VULKAN_PACKAGE == null ? DEFAULT_DRIVER : loadDriver(LauncherPreferences.PREF_VULKAN_PACKAGE);
         if(driver == null) {
             Log.e(TAG, "Failed to load preferred driver package " + LauncherPreferences.PREF_VULKAN_PACKAGE);
             return DEFAULT_DRIVER;
@@ -33,7 +34,7 @@ public class DriverManager {
         return driver;
     }
     public static boolean isPreferredDriver(Driver driver){
-        String pkg = getPreferredDriverPackage();
+        String pkg = getPreferredDriverHash();
         // selected default package
         if(pkg == null && driver == DEFAULT_DRIVER)
             return true;
@@ -42,7 +43,7 @@ public class DriverManager {
         }
         return false;
     }
-    public static String getPreferredDriverPackage() {
+    public static String getPreferredDriverHash() {
         return LauncherPreferences.PREF_VULKAN_PACKAGE;
     }
     public static String getPreferredDriverLibraryPath(){
@@ -95,6 +96,7 @@ public class DriverManager {
             return null;
         List<Driver> drivers = new ArrayList<>();
         drivers.add(DEFAULT_DRIVER);
+        // I'm not sure how heavy is this crap
         for(File dir : packagesPath.listFiles(File::isDirectory)) {
             File metadata = new File(dir, METADATA_FILENAME);
             if(!metadata.exists())
@@ -106,29 +108,29 @@ public class DriverManager {
         return drivers;
     }
 
-    public static boolean packageExists(String hash){
+    public static boolean driverExists(String hash){
         return packagesPath.exists() && new File(packagesPath, hash + "/" + METADATA_FILENAME).exists();
     }
 
-    public static AdrenoDriver loadPackage(String hash) {
+    public static AdrenoDriver loadDriver(String hash) {
         File metadata = new File(packagesPath, hash + "/" + METADATA_FILENAME);
         if (!metadata.exists())
             return null;
         return AdrenoDriver.fromJson(metadata);
     }
 
-    public static AdrenoDriver installPackage(File path, boolean overwrite){
+    public static AdrenoDriver installDriver(File path, boolean overwrite){
         try(ZipFile zf = new ZipFile(path)){
 
             AdrenoDriver driver = AdrenoDriver.fromJson(ZipUtils.getEntryStream(zf, METADATA_FILENAME));
             String hash = driver.getHash();
-            if(packageExists(hash)){
+            if(driverExists(hash)){
                 if(!overwrite) {
                     Log.w(TAG, "Driver package already installed and overwrite is not requested");
                     return null;
                 }
                 else {
-                    removePackage(hash);
+                    removeDriver(hash);
                 }
             }
             File installPath = new File(packagesPath, hash);
@@ -140,7 +142,7 @@ public class DriverManager {
             return null;
         }
     }
-    public static boolean removePackage(String name) {
+    public static boolean removeDriver(String name) {
         File path = new File(packagesPath, name);
         if (!path.isDirectory())
             return false;
