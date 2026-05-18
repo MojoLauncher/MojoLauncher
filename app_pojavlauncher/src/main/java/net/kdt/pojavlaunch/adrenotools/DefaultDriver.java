@@ -1,6 +1,6 @@
 package net.kdt.pojavlaunch.adrenotools;
 
-public final class DefaultDriver implements BaseDriver {
+public final class DefaultDriver implements Driver {
     @Override
     public String getName() {
         return "default";

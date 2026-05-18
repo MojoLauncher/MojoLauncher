@@ -16,23 +16,23 @@ import java.util.List;
 import java.util.zip.ZipFile;
 
 // AdrenoTools package manager
-public class AdrenoManager {
+public class DriverManager {
     public static final String METADATA_FILENAME = "meta.json";
     public static final String TAG = "AdrenoTools";
     private static final DefaultDriver DEFAULT_DRIVER = new DefaultDriver();
     private static File packagesPath = new File(Tools.DIR_DATA, "vulkan");
 
-    private AdrenoManager() {}
+    private DriverManager() {}
 
-    public static BaseDriver getPreferredDriver() {
-        BaseDriver driver = LauncherPreferences.PREF_VULKAN_PACKAGE == null ? DEFAULT_DRIVER : loadPackage(LauncherPreferences.PREF_VULKAN_PACKAGE);
+    public static Driver getPreferredDriver() {
+        Driver driver = LauncherPreferences.PREF_VULKAN_PACKAGE == null ? DEFAULT_DRIVER : loadPackage(LauncherPreferences.PREF_VULKAN_PACKAGE);
         if(driver == null) {
             Log.e(TAG, "Failed to load preferred driver package " + LauncherPreferences.PREF_VULKAN_PACKAGE);
             return DEFAULT_DRIVER;
         }
         return driver;
     }
-    public static boolean isPreferredDriver(BaseDriver driver){
+    public static boolean isPreferredDriver(Driver driver){
         String pkg = getPreferredDriverPackage();
         // selected default package
         if(pkg == null && driver == DEFAULT_DRIVER)
@@ -46,7 +46,7 @@ public class AdrenoManager {
         return LauncherPreferences.PREF_VULKAN_PACKAGE;
     }
     public static String getPreferredDriverLibraryPath(){
-        BaseDriver driver = getPreferredDriver();
+        Driver driver = getPreferredDriver();
         if(driver.isDefault()) return driver.getMainLibrary(); // Default driver should be in the library path already
         File path = new File(packagesPath,  ((AdrenoDriver) driver).getHash() + "/" + driver.getMainLibrary());
         if(path.exists()) return path.getAbsolutePath();
@@ -56,14 +56,14 @@ public class AdrenoManager {
         return DEFAULT_DRIVER.getMainLibrary();
     }
     public static String getPreferredDriverRootPath(){
-        BaseDriver driver = getPreferredDriver();
+        Driver driver = getPreferredDriver();
         if(driver.isDefault()) return null; // Already in the library path
         File path = new File(packagesPath,  ((AdrenoDriver) driver).getHash());
         if(path.exists())
             return path.getAbsolutePath();
         else return null;
     }
-    public static void setPreferredDriver(BaseDriver driver){
+    public static void setPreferredDriver(Driver driver){
         LauncherPreferences.PREF_VULKAN_PACKAGE = !driver.isDefault() ? ((AdrenoDriver) driver).getHash() : null;
         LauncherPreferences.DEFAULT_PREF.edit().putString("vulkanPackage", LauncherPreferences.PREF_VULKAN_PACKAGE).apply();
     }
@@ -90,10 +90,10 @@ public class AdrenoManager {
         }
         return packages;
     }
-    public static List<BaseDriver> getDrivers(){
+    public static List<Driver> getDrivers(){
         if(!packagesPath.exists())
             return null;
-        List<BaseDriver> drivers = new ArrayList<>();
+        List<Driver> drivers = new ArrayList<>();
         drivers.add(DEFAULT_DRIVER);
         for(File dir : packagesPath.listFiles(File::isDirectory)) {
             File metadata = new File(dir, METADATA_FILENAME);

@@ -17,8 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.kdt.pojavlaunch.adrenotools.AdrenoDriver;
-import net.kdt.pojavlaunch.adrenotools.AdrenoManager;
-import net.kdt.pojavlaunch.adrenotools.BaseDriver;
+import net.kdt.pojavlaunch.adrenotools.DriverManager;
+import net.kdt.pojavlaunch.adrenotools.Driver;
 
 import git.artdeell.mojo.R;
 
@@ -37,22 +37,22 @@ public class DriverViewAdapter extends RecyclerView.Adapter<DriverViewAdapter.Dr
 
     @Override
     public void onBindViewHolder(@NonNull DriverViewHolder holder, int position) {
-        final List<BaseDriver> drivers = AdrenoManager.getDrivers();
+        final List<Driver> drivers = DriverManager.getDrivers();
         holder.bindDriver(drivers.get(position), position);
     }
 
     @Override
     public int getItemCount() {
-        return AdrenoManager.getDriverPaths().size() + 1; // this may!! throw null if not adreno, but we init this view only if adreno anyway
+        return DriverManager.getDriverPaths().size() + 1; // this may!! throw null if not adreno, but we init this view only if adreno anyway
     }
 
-    public boolean isDefault(BaseDriver driver) {
-        return AdrenoManager.isPreferredDriver(driver);
+    public boolean isDefault(Driver driver) {
+        return DriverManager.isPreferredDriver(driver);
     }
 
     @SuppressLint("NotifyDataSetChanged") //not a problem, given the typical size of the list
-    public void setDefault(BaseDriver driver){
-        AdrenoManager.setPreferredDriver(driver);
+    public void setDefault(Driver driver){
+        DriverManager.setPreferredDriver(driver);
         notifyDataSetChanged();
     }
 
@@ -74,7 +74,7 @@ public class DriverViewAdapter extends RecyclerView.Adapter<DriverViewAdapter.Dr
         final Button mSetDefaultButton;
         final ImageButton mDeleteButton;
         final Context mContext;
-        BaseDriver mCurrentDriver;
+        Driver mCurrentDriver;
         int mCurrentPosition;
 
         public DriverViewHolder(View itemView) {
@@ -104,10 +104,10 @@ public class DriverViewAdapter extends RecyclerView.Adapter<DriverViewAdapter.Dr
 
 
                 sExecutorService.execute(() -> {
-                    boolean state = AdrenoManager.removePackage(((AdrenoDriver) mCurrentDriver).toHash());
+                    boolean state = DriverManager.removePackage(mCurrentDriver.getHash());
                     mDeleteButton.post(() -> {
-                        if(state) {
-                            Log.e(AdrenoManager.TAG, "Unable to remove the package");
+                        if(!state) {
+                            Log.e(DriverManager.TAG, "Unable to remove the package");
                         }
                         if(getBindingAdapter() != null)
                             getBindingAdapter().notifyDataSetChanged();
@@ -118,8 +118,8 @@ public class DriverViewAdapter extends RecyclerView.Adapter<DriverViewAdapter.Dr
         }
 
         @SuppressLint("SetTextI18n")
-        public void bindDriver(BaseDriver driver, int pos) {
-            Log.i(AdrenoManager.TAG, "Binding driver " + driver.getName());
+        public void bindDriver(Driver driver, int pos) {
+            Log.i(DriverManager.TAG, "Binding driver " + driver.getName());
             mCurrentDriver = driver;
             mCurrentPosition = pos;
             if(driver.isDefault()){

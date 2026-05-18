@@ -14,7 +14,7 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.*;
 import net.kdt.pojavlaunch.*;
-import net.kdt.pojavlaunch.adrenotools.AdrenoManager;
+import net.kdt.pojavlaunch.adrenotools.DriverManager;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.multirt.Runtime;
@@ -171,8 +171,8 @@ public class JREUtils {
         // TODO: move custom driver setup somewhere else
         if(GLInfoUtils.getGlInfo().isAdreno() && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
             setUseTurnip(true);
-            String vkLib = AdrenoManager.getPreferredDriverLibraryPath();
-            String vkPath = AdrenoManager.getPreferredDriverRootPath();
+            String vkLib = DriverManager.getPreferredDriverLibraryPath();
+            String vkPath = DriverManager.getPreferredDriverRootPath();
             setCustomVkPath(vkLib);
 
             Log.i("VK_LOADER", "Custom VK Lib: " + vkLib);

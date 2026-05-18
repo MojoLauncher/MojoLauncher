@@ -10,9 +10,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
-import kotlin.jvm.Transient;
-
-public class AdrenoDriver implements BaseDriver {
+public class AdrenoDriver implements Driver {
     private final String name;
     private final String description;
     private final String author;
@@ -38,7 +36,7 @@ public class AdrenoDriver implements BaseDriver {
         try {
             adrenoDriver = JSONUtils.readFromFile(metadata, AdrenoDriver.class);
         } catch (IOException e) {
-            Log.i(AdrenoManager.TAG, "Failed to read metadata from " + metadata.getAbsolutePath() + "!");
+            Log.i(DriverManager.TAG, "Failed to read metadata from " + metadata.getAbsolutePath() + "!");
             return null;
         }
         return adrenoDriver;

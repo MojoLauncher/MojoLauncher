@@ -47,7 +47,7 @@ import androidx.fragment.app.FragmentManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import net.kdt.pojavlaunch.adrenotools.AdrenoManager;
+import net.kdt.pojavlaunch.adrenotools.DriverManager;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutorTask;
@@ -77,7 +77,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import git.artdeell.mojo.BuildConfig;
@@ -812,7 +811,7 @@ public final class Tools {
                     fos.write(buffer, 0, read);
                 }
                 fos.close();
-                AdrenoManager.installPackage(f, true);
+                DriverManager.installPackage(f, true);
             } catch (IOException e){
                 Tools.showError(context, e);
             } finally {
