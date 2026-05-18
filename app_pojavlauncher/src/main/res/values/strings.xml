@@ -496,4 +496,5 @@
     <string name="driver_config_already_used">In use</string>
     <string name="driver_config_select">Select</string>
     <string name="driver_config_import_failed">Failed to add the selected driver!</string>
+    <string name="driver_config_import_notify">Select a valid AdrenoTools driver package</string>
 </resources>

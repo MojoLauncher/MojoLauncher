@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -45,7 +46,10 @@ public class DriverConfigDialog {
         mDialog = new AlertDialog.Builder(activity)
                 .setTitle(R.string.driver_config_title)
                 .setView(mDialogView)
-                .setPositiveButton(R.string.driver_config_import, (dialog, which) -> installDriver.launch(null))
+                .setPositiveButton(R.string.driver_config_import, (dialog, which) -> {
+                    Toast.makeText(activity, R.string.driver_config_import_notify, Toast.LENGTH_LONG).show();
+                    installDriver.launch(null);
+                })
                 .setNeutralButton(R.string.driver_config_delete, null)
                 .create();
 
