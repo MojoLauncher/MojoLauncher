@@ -799,7 +799,8 @@ public final class Tools {
             }
         });
     }
-    public static void installDriverFromUri(Context context, Uri uri) {
+    // Install AdrenoTools driver. Callback will be executed on the main ui thread after driver installation
+    public static void installDriverFromUri(Context context, Uri uri, Runnable callback) {
         sExecutorService.execute(() -> {
             FileOutputStream fos = null;
             try {
@@ -817,6 +818,7 @@ public final class Tools {
                 if(driver == null) {
                     runOnUiThread(() -> Toast.makeText(context, R.string.driver_config_import_failed, Toast.LENGTH_SHORT).show());
                 }
+                runOnUiThread(callback);
             } catch (IOException e){
                 Tools.showError(context, e);
             } finally {

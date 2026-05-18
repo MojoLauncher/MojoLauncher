@@ -31,7 +31,7 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
     private DriverConfigDialog mDialogScreen;
     private final ActivityResultLauncher<Object> mInstallDriver =
             registerForActivityResult(new OpenDocumentWithExtension("zip"), data -> {
-                if(data != null) Tools.installDriverFromUri(getContext(), data);
+                if(data != null) Tools.installDriverFromUri(getContext(), data, this::openDriverDialog);
             });
     @Override
     public void onCreatePreferences(Bundle b, String str) {
