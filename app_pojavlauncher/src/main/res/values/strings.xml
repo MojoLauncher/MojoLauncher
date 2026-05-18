@@ -488,7 +488,7 @@
     <string name="driver_default_name">Built-in driver</string>
     <string name="driver_default_extra_name">MojoLauncher</string>
     <string name="driver_config_title">Installed Drivers</string>
-    <string name="driver_config_pref_title">AdrenoTools Driver Manager</string>
+    <string name="driver_config_pref_title">Vulkan Driver</string>
     <string name="driver_config_pref_subtitle">Manage installed AdrenoTools Vulkan drivers and install new</string>
     <string name="driver_config_import">Add</string>
     <string name="driver_config_delete">Remove</string>

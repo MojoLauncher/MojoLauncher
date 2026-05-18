@@ -14,6 +14,7 @@ import androidx.preference.SwitchPreferenceCompat;
 import git.artdeell.mojo.R;
 
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.adrenotools.Driver;
 import net.kdt.pojavlaunch.adrenotools.DriverManager;
 import net.kdt.pojavlaunch.adrenotools.ui.DriverConfigDialog;
 import net.kdt.pojavlaunch.contracts.OpenDocumentWithExtension;
@@ -74,6 +75,7 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         SwitchPreference customVk = requirePreference("zinkPreferSystemDriver", SwitchPreference.class);
         if(DriverManager.isSupportedByDevice()) {
             drivers.setVisible(true);
+            updateDriversPref();
             drivers.setOnPreferenceClickListener(pref -> {
                 openDriverDialog();
                 return true;
@@ -112,7 +114,16 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         if(mDialogScreen == null) {
             mDialogScreen = new DriverConfigDialog();
             mDialogScreen.prepare(getContext(), mInstallDriver);
+            mDialogScreen.onDismiss(this::updateDriversPref);
         }
         mDialogScreen.show();
+    }
+    private void updateDriversPref(){
+        Preference preference = requirePreference("manageDrivers");
+        Driver driver = DriverManager.getPreferredDriver();
+        if(driver.isDefault())
+            preference.setSummary(R.string.driver_default_name);
+        else
+            preference.setSummary(driver.getName());
     }
 }

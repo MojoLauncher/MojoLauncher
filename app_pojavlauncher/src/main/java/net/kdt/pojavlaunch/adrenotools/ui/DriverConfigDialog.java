@@ -24,6 +24,11 @@ public class DriverConfigDialog {
     public void close(){
         mDialog.cancel();
     }
+    public void onDismiss(Runnable runnable){
+        mDialog.setOnDismissListener(dialog -> {
+            runnable.run();
+        });
+    }
 
     @SuppressLint("NotifyDataSetChanged") //only used to completely refresh the list, it is necessary
     public void refresh() {
