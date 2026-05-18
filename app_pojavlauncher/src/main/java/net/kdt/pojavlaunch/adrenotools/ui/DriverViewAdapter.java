@@ -1,4 +1,4 @@
-package net.kdt.pojavlaunch.adrenotools;
+package net.kdt.pojavlaunch.adrenotools.ui;
 
 import static net.kdt.pojavlaunch.PojavApplication.sExecutorService;
 
@@ -16,7 +16,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.adrenotools.AdrenoDriver;
+import net.kdt.pojavlaunch.adrenotools.AdrenoManager;
+import net.kdt.pojavlaunch.adrenotools.BaseDriver;
 
 import git.artdeell.mojo.R;
 

@@ -3,10 +3,9 @@ package net.kdt.pojavlaunch.prefs.screens;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.appcompat.app.AlertDialog;
 
 import net.kdt.pojavlaunch.Tools;
-import net.kdt.pojavlaunch.adrenotools.DriverConfigDialog;
+import net.kdt.pojavlaunch.adrenotools.ui.DriverConfigDialog;
 import net.kdt.pojavlaunch.contracts.OpenDocumentWithExtension;
 import net.kdt.pojavlaunch.utils.GLInfoUtils;
 import net.kdt.pojavlaunch.utils.RendererCompatUtil;

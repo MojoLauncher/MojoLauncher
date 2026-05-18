@@ -1,4 +1,4 @@
-package net.kdt.pojavlaunch.adrenotools;
+package net.kdt.pojavlaunch.adrenotools.ui;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
