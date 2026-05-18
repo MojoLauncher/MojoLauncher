@@ -1,5 +1,7 @@
 package net.kdt.pojavlaunch.utils.jre;
 
+import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER;
+
 import android.util.ArrayMap;
 import android.util.Log;
 import android.widget.Toast;
@@ -10,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import net.kdt.pojavlaunch.Architecture;
 import net.kdt.pojavlaunch.JMinecraftVersionList;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.adrenotools.DriverManager;
 import net.kdt.pojavlaunch.authenticator.accounts.MinecraftAccount;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.LifecycleAwareAlertDialog;
@@ -261,6 +264,12 @@ public class GameRunner {
         if(rendererLibrary == null) {
             if(showDialog(activity, R.string.gr_err_renderer_load_Failed)) return;
             System.exit(0);
+        }
+        // Initialize cusotm Vulkan driver if present
+        if(GLInfoUtils.getGlInfo().isAdreno() && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
+            String vkLib = DriverManager.getPreferredDriverLibraryPath();
+            String vkPath = DriverManager.getPreferredDriverRootPath();
+            JREUtils.setCustomVkPath(vkLib + ":" + (vkPath == null ? Tools.NATIVE_LIB_DIR : vkPath));
         }
         javaArgList.add("-Dorg.lwjgl.opengl.libname=libGLMojo.so");
         javaArgList.add("-Dorg.lwjgl.freetype.libname="+ Tools.NATIVE_LIB_DIR+"/libfreetype.so");

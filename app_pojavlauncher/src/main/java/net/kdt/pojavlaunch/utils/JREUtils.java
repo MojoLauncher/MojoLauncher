@@ -164,22 +164,11 @@ public class JREUtils {
         setupRendererEnv(envMap, renderer);
 
 
+        // HACK
+        envMap.put("POJAV_NATIVEDIR", Tools.NATIVE_LIB_DIR);
         envMap.put("EGL_PLATFORM", "android");
 
         if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
-
-        // TODO: move custom driver setup somewhere else
-        if(GLInfoUtils.getGlInfo().isAdreno() && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
-            setUseTurnip(true);
-            String vkLib = DriverManager.getPreferredDriverLibraryPath();
-            String vkPath = DriverManager.getPreferredDriverRootPath();
-            setCustomVkPath(vkLib);
-
-            Log.i("VK_LOADER", "Custom VK Lib: " + vkLib);
-            Logger.appendToLog("Will use driver at " + vkLib + " at path " + vkPath);
-            // HACK
-            envMap.put("POJAV_NATIVEDIR", vkPath == null ? Tools.NATIVE_LIB_DIR : vkPath);
-        }
 
         overrideEnvVars(envMap);
 
@@ -308,8 +297,7 @@ public class JREUtils {
     public static native void setLdLibraryPath(String ldLibraryPath);
     public static native boolean configureRenderspec(String eglPath, boolean useLoaderBypass, boolean useGles, int glesVersion);
     public static native void preloadVulkan();
-    public static native void setUseTurnip(boolean enable);
-    public static native void setCustomVkPath(String absolutePath);
+    public static native void setCustomVkPath(String vulkanPaths);
     //public static native void initializeHooks();
     // Obtain AWT screen pixels to render on Android SurfaceView
     public static native boolean renderAWTScreenFrame(ByteBuffer tempBuffer);

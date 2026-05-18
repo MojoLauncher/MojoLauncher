@@ -15,26 +15,26 @@
 #include <android/dlext.h>
 #include <string.h>
 
-static bool turnip_enabled = false;
+#define ENABLE_TURNIP_LOADER
+
 static char* vk_path;
+static char* vk_ld_path;
 
 #ifdef ENABLE_TURNIP_LOADER
 bool load_turnip_vulkan() {
     static bool driver_loaded = false;
     if(driver_loaded) return true;
-
-    const char* native_dir = getenv("POJAV_NATIVEDIR");
+    if(!vk_path || !vk_ld_path) return false;
     const char* cache_dir = getenv("TMPDIR");
-    if(!linker_ns_load(native_dir)) return NULL;
+    if(!linker_ns_load(vk_ld_path)) return NULL;
     void* linkerhook = linker_ns_dlopen("liblinkerhook.so", RTLD_LOCAL | RTLD_NOW);
     if(linkerhook == NULL) return NULL;
-    char* vkp = !vk_path ? "libvulkan_freedreno.so" : vk_path;
-    void* turnip_driver_handle = linker_ns_dlopen(vkp, RTLD_LOCAL | RTLD_NOW);
+    void* turnip_driver_handle = linker_ns_dlopen(vk_path, RTLD_LOCAL | RTLD_NOW);
     if(turnip_driver_handle == NULL) {
         printf("DriverHook: Failed to load the custom driver!\n%s\n", dlerror());
         goto fail_l;
     }
-    printf("DriverHook: loaded custom Vulkan library: %s\n", vkp);
+    printf("DriverHook: loaded custom Vulkan library: %s\n", vk_path);
 
     void* dl_android = linker_ns_dlopen("libdl_android.so", RTLD_LOCAL | RTLD_LAZY);
     if(dl_android == NULL) goto fail_t;
@@ -61,7 +61,7 @@ bool load_turnip_vulkan() {
 void* pojavexec_loadVulkanDriver() {
 #ifdef ENABLE_TURNIP_LOADER
     if(android_get_device_api_level() >= 28) { // the loader does not support below that
-        if(turnip_enabled && load_turnip_vulkan())
+        if(vk_path && load_turnip_vulkan())
             // Reference the vulkan driver separately to avoid weirdness from libraries calling dlclose
             return linker_ns_dlopen("libmjlvlk.so", RTLD_LOCAL);
     }
@@ -75,24 +75,20 @@ void* pojavexec_loadVulkanDriver() {
 JNIEXPORT void JNICALL
 Java_net_kdt_pojavlaunch_utils_JREUtils_preloadVulkan(JNIEnv *env, jclass clazz) {
 #ifdef ENABLE_TURNIP_LOADER
-    if(!turnip_enabled) return;
+    if(!vk_path) return;
     if(!load_turnip_vulkan()) {
         printf("Failed to preload Turnip!\n");
     }
 #endif
 }
 
-JNIEXPORT void JNICALL
-Java_net_kdt_pojavlaunch_utils_JREUtils_setUseTurnip(JNIEnv *env, jclass clazz, jboolean enable) {
-    turnip_enabled = enable;
-}
-
+// Call this with path to the Vulkan library to use it instead of the system one
 JNIEXPORT void JNICALL
 Java_net_kdt_pojavlaunch_utils_JREUtils_setCustomVkPath(JNIEnv *env, jclass clazz,
-                                                        jstring absolute_path) {
+                                                        jstring vulkan_paths) {
 #ifdef ENABLE_TURNIP_LOADER
-    const char* path = (*env)->GetStringUTFChars(env, absolute_path, NULL);
-    vk_path = strdup(path);
-    (*env)->ReleaseStringUTFChars(env, absolute_path, path);
+    const char* path = (*env)->GetStringUTFChars(env, vulkan_paths, NULL);
+    sscanf(vulkan_paths, "%s:%s", vk_path, vk_ld_path);
+    (*env)->ReleaseStringUTFChars(env, vulkan_paths, path);
 #endif
 }
