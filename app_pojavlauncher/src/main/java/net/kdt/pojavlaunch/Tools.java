@@ -803,9 +803,10 @@ public final class Tools {
     public static void installDriverFromUri(Context context, Uri uri, Runnable callback) {
         sExecutorService.execute(() -> {
             FileOutputStream fos = null;
+            InputStream is = null;
             try {
                 File f = File.createTempFile("at-extract", ".tmp", context.getCacheDir());
-                InputStream is = context.getContentResolver().openInputStream(uri);
+                is = context.getContentResolver().openInputStream(uri);
                 fos = new FileOutputStream(f);
                 f.deleteOnExit();
                 byte[] buffer = new byte[4096];
@@ -814,18 +815,25 @@ public final class Tools {
                     fos.write(buffer, 0, read);
                 }
                 fos.close();
+                // TODO: Add input stream prevalidation for the cases when user throws a huge non-adrenotools file
+                // This might save write cycles (of course if the buffer copier actually writes bytes on the flash here)
+                if(!DriverManager.validateDriver(f)){
+                    runOnUiThread(() -> Toast.makeText(context, R.string.driver_config_import_invalid, Toast.LENGTH_LONG).show());
+                    return;
+                }
                 Driver driver = DriverManager.installDriver(f, true);
                 if(driver == null) {
                     runOnUiThread(() -> Toast.makeText(context, R.string.driver_config_import_failed, Toast.LENGTH_SHORT).show());
                 }
-                runOnUiThread(callback);
             } catch (IOException e){
                 Tools.showError(context, e);
             } finally {
-                if(fos != null) {
-                    try {
-                        fos.close();
-                    } catch (IOException e) {}
+                try {
+                    if(fos != null) fos.close();
+                    if(is != null) is.close();
+                    runOnUiThread(callback);
+                } catch (IOException e) {
+                    Tools.showError(context, e);
                 }
             }
         });

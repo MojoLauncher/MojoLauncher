@@ -117,6 +117,14 @@ public class DriverManager {
             return null;
         return AdrenoDriver.fromJson(metadata);
     }
+    public static boolean validateDriver(File path){
+        try(ZipFile zf = new ZipFile(path)){
+            AdrenoDriver driver = AdrenoDriver.fromJson(ZipUtils.getEntryStream(zf, METADATA_FILENAME));
+            return driver != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     public static AdrenoDriver installDriver(File path, boolean overwrite){
         ensureRootExists();
