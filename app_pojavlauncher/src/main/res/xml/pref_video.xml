@@ -15,8 +15,8 @@
         <Preference
             android:key="manageDrivers"
             android:persistent="false"
-            android:summary="@string/driver_config_subtitle"
-            android:title="@string/driver_config_title"/>
+            android:summary="@string/driver_config_pref_subtitle"
+            android:title="@string/driver_config_pref_title"/>
 
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
