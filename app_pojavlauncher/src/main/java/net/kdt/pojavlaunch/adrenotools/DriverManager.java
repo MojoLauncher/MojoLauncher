@@ -129,7 +129,8 @@ public class DriverManager {
         }
     }
     public static boolean validateDriver(InputStream stream){
-        try(ZipInputStream zip = new ZipInputStream(stream)){
+        ZipInputStream zip = new ZipInputStream(stream);
+        try{
             ZipEntry entry;
             do {
                 entry = zip.getNextEntry();

@@ -810,6 +810,9 @@ public final class Tools {
                     runOnUiThread(() -> Toast.makeText(context, R.string.driver_config_import_invalid, Toast.LENGTH_LONG).show());
                     return;
                 }
+                // I hate InputStream
+                is.close();
+                is = context.getContentResolver().openInputStream(uri);
                 File f = File.createTempFile("at-extract", ".tmp", context.getCacheDir());
                 fos = new FileOutputStream(f);
                 f.deleteOnExit();
