@@ -61,7 +61,7 @@ bool load_turnip_vulkan() {
 void* pojavexec_loadVulkanDriver() {
 #ifdef ENABLE_TURNIP_LOADER
     if(android_get_device_api_level() >= 28) { // the loader does not support below that
-        if(vk_path && load_turnip_vulkan())
+        if(load_turnip_vulkan())
             // Reference the vulkan driver separately to avoid weirdness from libraries calling dlclose
             return linker_ns_dlopen("libmjlvlk.so", RTLD_LOCAL);
     }
@@ -84,11 +84,15 @@ Java_net_kdt_pojavlaunch_utils_JREUtils_preloadVulkan(JNIEnv *env, jclass clazz)
 
 // Call this with path to the Vulkan library to use it instead of the system one
 JNIEXPORT void JNICALL
-Java_net_kdt_pojavlaunch_utils_JREUtils_setCustomVkPath(JNIEnv *env, jclass clazz,
-                                                        jstring vulkan_paths) {
+Java_net_kdt_pojavlaunch_utils_JREUtils_setVulkanPath(JNIEnv *env, jclass clazz,
+                                                        jstring vulkan_library, jstring library_path) {
 #ifdef ENABLE_TURNIP_LOADER
-    const char* path = (*env)->GetStringUTFChars(env, vulkan_paths, NULL);
-    sscanf(vulkan_paths, "%s:%s", vk_path, vk_ld_path);
-    (*env)->ReleaseStringUTFChars(env, vulkan_paths, path);
+    const char* tmp1 = (*env)->GetStringUTFChars(env, vulkan_library, NULL);
+    const char* tmp2 = (*env)->GetStringUTFChars(env, library_path, NULL);
+    vk_path = strdup(tmp1);
+    vk_ld_path = strdup(tmp2);
+    (*env)->ReleaseStringUTFChars(env, vulkan_library, tmp1);
+    (*env)->ReleaseStringUTFChars(env, library_path, tmp2);
+
 #endif
 }

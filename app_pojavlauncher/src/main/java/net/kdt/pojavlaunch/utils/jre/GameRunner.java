@@ -269,7 +269,7 @@ public class GameRunner {
         if(GLInfoUtils.getGlInfo().isAdreno() && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
             String vkLib = DriverManager.getPreferredDriverLibraryPath();
             String vkPath = DriverManager.getPreferredDriverRootPath();
-            JREUtils.setCustomVkPath(vkLib + ":" + (vkPath == null ? Tools.NATIVE_LIB_DIR : vkPath));
+            JREUtils.setVulkanPath(vkLib, vkPath == null ? Tools.NATIVE_LIB_DIR : vkPath);
         }
         javaArgList.add("-Dorg.lwjgl.opengl.libname=libGLMojo.so");
         javaArgList.add("-Dorg.lwjgl.freetype.libname="+ Tools.NATIVE_LIB_DIR+"/libfreetype.so");
