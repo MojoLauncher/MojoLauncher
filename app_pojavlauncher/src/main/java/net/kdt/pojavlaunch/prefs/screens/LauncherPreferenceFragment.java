@@ -32,7 +32,6 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
     @Override
     public void onCreatePreferences(Bundle b, String str) {
         addPreferencesFromResource(R.xml.pref_main);
-        requirePreference("vulkan_screen_setting").setVisible(RendererCompatUtil.checkVulkanSupport(getContext().getPackageManager()) && GLInfoUtils.getGlInfo().isAdreno());
         setupNotificationRequestPreference();
     }
 
