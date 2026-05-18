@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 import androidx.preference.SwitchPreference;
 import androidx.preference.SwitchPreferenceCompat;
 
@@ -69,7 +70,7 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         rendererListPreference.setEntryValues(renderersList.rendererIds.toArray(new String[0]));
 
         boolean supportsTurnip = RendererCompatUtil.checkVulkanSupport(getContext().getPackageManager()) && GLInfoUtils.getGlInfo().isAdreno();
-        ListPreference drivers = requirePreference("manageDrivers", ListPreference.class);
+        Preference drivers = requirePreference("manageDrivers");
         drivers.setVisible(supportsTurnip);
         drivers.setOnPreferenceClickListener(pref -> {
             openDriverDialog();
