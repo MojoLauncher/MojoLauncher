@@ -14,6 +14,7 @@ import androidx.preference.SwitchPreferenceCompat;
 import git.artdeell.mojo.R;
 
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.adrenotools.DriverManager;
 import net.kdt.pojavlaunch.adrenotools.ui.DriverConfigDialog;
 import net.kdt.pojavlaunch.contracts.OpenDocumentWithExtension;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
@@ -69,13 +70,20 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         rendererListPreference.setEntries(renderersList.rendererDisplayNames);
         rendererListPreference.setEntryValues(renderersList.rendererIds.toArray(new String[0]));
 
-        boolean supportsTurnip = RendererCompatUtil.checkVulkanSupport(getContext().getPackageManager()) && GLInfoUtils.getGlInfo().isAdreno();
         Preference drivers = requirePreference("manageDrivers");
-        drivers.setVisible(supportsTurnip);
-        drivers.setOnPreferenceClickListener(pref -> {
-            openDriverDialog();
-            return true;
-        });
+        SwitchPreference customVk = requirePreference("zinkPreferSystemDriver", SwitchPreference.class);
+        if(DriverManager.isSupportedByDevice()) {
+            drivers.setVisible(true);
+            drivers.setOnPreferenceClickListener(pref -> {
+                openDriverDialog();
+                return true;
+            });
+            customVk.setVisible(true);
+            customVk.setChecked(LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER);
+        } else {
+            drivers.setVisible(false);
+            customVk.setVisible(false);
+        }
 
         computeVisibility();
     }

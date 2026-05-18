@@ -115,7 +115,7 @@ public class LauncherPreferences {
         PREF_VSYNC_IN_ZINK = DEFAULT_PREF.getBoolean("vsync_in_zink", true);
         PREF_VERIFY_FILES = DEFAULT_PREF.getBoolean("checkGameFiles", true);
         PREF_RAPID_START = DEFAULT_PREF.getBoolean("fastStartupCheck", true);
-        PREF_VULKAN_PACKAGE = DEFAULT_PREF.getString("vulkanPackage", "");
+        PREF_VULKAN_PACKAGE = DEFAULT_PREF.getString("vulkanPackage", null);
 
         String argLwjglLibname = "-Dorg.lwjgl.opengl.libname=";
         for (String arg : JREUtils.parseJavaArguments(PREF_CUSTOM_JAVA_ARGS)) {
