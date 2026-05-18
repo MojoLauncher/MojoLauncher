@@ -39,7 +39,7 @@ public class DriverManager {
         if(pkg == null && driver == DEFAULT_DRIVER)
             return true;
         if(pkg != null && driver instanceof AdrenoDriver) {
-            return pkg.equals(((AdrenoDriver) driver).getHash());
+            return pkg.equals(driver.getHash());
         }
         return false;
     }
@@ -49,7 +49,7 @@ public class DriverManager {
     public static String getPreferredDriverLibraryPath(){
         Driver driver = getPreferredDriver();
         if(driver.isDefault()) return driver.getMainLibrary(); // Default driver should be in the library path already
-        File path = new File(packagesPath,  ((AdrenoDriver) driver).getHash() + "/" + driver.getMainLibrary());
+        File path = new File(packagesPath,  (driver.getHash() + "/" + driver.getMainLibrary()));
         if(path.exists()) return path.getAbsolutePath();
 
         // Invalid driver
@@ -59,13 +59,13 @@ public class DriverManager {
     public static String getPreferredDriverRootPath(){
         Driver driver = getPreferredDriver();
         if(driver.isDefault()) return null; // Already in the library path
-        File path = new File(packagesPath,  ((AdrenoDriver) driver).getHash());
+        File path = new File(packagesPath,  driver.getHash());
         if(path.exists())
             return path.getAbsolutePath();
         else return null;
     }
     public static void setPreferredDriver(Driver driver){
-        LauncherPreferences.PREF_VULKAN_PACKAGE = !driver.isDefault() ? ((AdrenoDriver) driver).getHash() : null;
+        LauncherPreferences.PREF_VULKAN_PACKAGE = !driver.isDefault() ? driver.getHash() : null;
         LauncherPreferences.DEFAULT_PREF.edit().putString("vulkanPackage", LauncherPreferences.PREF_VULKAN_PACKAGE).apply();
     }
 
