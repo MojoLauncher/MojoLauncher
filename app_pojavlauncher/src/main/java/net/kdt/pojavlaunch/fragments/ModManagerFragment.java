@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.contracts.OpenDocumentWithExtension;
-import net.kdt.pojavlaunch.instances.InstanceManager;
+import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.modloaders.modmanager.ModAdapter;
 import net.kdt.pojavlaunch.modloaders.modmanager.ModInfo;
 import net.kdt.pojavlaunch.modloaders.modmanager.ModScanner;
@@ -86,7 +86,7 @@ public class ModManagerFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        mModsFolder = new File(InstanceManager.getSelectedListedInstance().getGameDirectory(), "mods");
+        mModsFolder = new File(Instances.loadSelectedInstance().getGameDirectory(), "mods");
         mModRecyclerView = view.findViewById(R.id.mod_manager_recyclerview);
         mProgressBar = view.findViewById(R.id.search_mod_progressbar);
         View mOverlay = view.findViewById(R.id.search_mod_overlay);
