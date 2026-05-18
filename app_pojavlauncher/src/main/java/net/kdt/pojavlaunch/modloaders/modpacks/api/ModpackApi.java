@@ -15,6 +15,7 @@ import net.kdt.pojavlaunch.modloaders.modpacks.models.ModSource;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchFilters;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchResult;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -65,6 +66,8 @@ public interface ModpackApi {
             }
         });
     }
+
+    ModLoader installLocalModpack(String modpackName, File modpackFile, String icon) throws IOException;
 
     /**
      * Install the mod(pack).

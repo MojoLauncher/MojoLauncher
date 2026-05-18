@@ -36,7 +36,7 @@ public class InstanceIconProvider {
      * @param instance the instance
      * @return an icon drawable
      */
-    public static @NonNull Drawable fetchIcon(Resources resources, @NonNull Instance instance) {
+    public static @NonNull Drawable fetchIcon(Resources resources, @NonNull DisplayInstance instance) {
         int identityHashCode = System.identityHashCode(instance);
 
         Drawable cachedIcon = sIconCache.get(identityHashCode);

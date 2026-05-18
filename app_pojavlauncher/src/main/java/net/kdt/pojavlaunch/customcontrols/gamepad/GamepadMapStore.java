@@ -45,7 +45,7 @@ public class GamepadMapStore {
         if(sMapStore == null) throw new RuntimeException("Must load map store first!");
         FileUtils.ensureParentDirectory(STORE_FILE);
         String jsonData = Tools.GLOBAL_GSON.toJson(sMapStore);
-        Tools.write(STORE_FILE.getAbsolutePath(), jsonData);
+        Tools.write(STORE_FILE, jsonData);
     }
 
     public static GamepadMap getGameMap() {

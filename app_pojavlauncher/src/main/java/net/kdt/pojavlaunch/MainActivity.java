@@ -41,7 +41,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.kdt.LoggerView;
 
-import net.kdt.pojavlaunch.authenticator.accounts.PojavProfile;
+import net.kdt.pojavlaunch.authenticator.accounts.Accounts;
 import net.kdt.pojavlaunch.customcontrols.ControlButtonMenuListener;
 import net.kdt.pojavlaunch.customcontrols.ControlData;
 import net.kdt.pojavlaunch.customcontrols.ControlDrawerData;
@@ -55,7 +55,7 @@ import net.kdt.pojavlaunch.customcontrols.mouse.GyroControl;
 import net.kdt.pojavlaunch.customcontrols.mouse.HotbarView;
 import net.kdt.pojavlaunch.customcontrols.mouse.Touchpad;
 import net.kdt.pojavlaunch.instances.Instance;
-import net.kdt.pojavlaunch.instances.InstanceManager;
+import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.prefs.QuickSettingSideDialog;
@@ -77,8 +77,6 @@ import git.artdeell.mojo.R;
 public class MainActivity extends BaseActivity implements ControlButtonMenuListener, EditorExitable, ServiceConnection {
     public static volatile ClipboardManager GLOBAL_CLIPBOARD;
     public static final String INTENT_MINECRAFT_VERSION = "intent_version";
-
-    volatile public static boolean isInputStackCall;
 
     public static TouchCharInput touchCharInput;
     private MinecraftGLSurface minecraftGLView;
@@ -105,8 +103,8 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        instance = InstanceManager.loadSelectedInstance();
-        minecraftAccount = PojavProfile.getCurrentProfileContent(true);
+        instance = Instances.loadSelectedInstance();
+        minecraftAccount = Accounts.getCurrent();
         if(instance == null) {
             Toast.makeText(this, R.string.instance_dir_missing, Toast.LENGTH_LONG).show();
             finish();
@@ -250,7 +248,6 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         drawerLayout = findViewById(R.id.main_drawer_options);
         navDrawer = findViewById(R.id.main_navigation_view);
         loggerView = findViewById(R.id.mainLoggerView);
-        mControlLayout = findViewById(R.id.main_control_layout);
         touchCharInput = findViewById(R.id.mainTouchCharInput);
         mDrawerPullButton = findViewById(R.id.drawer_button);
         mHotbarView = findViewById(R.id.hotbar_view);
@@ -304,6 +301,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         // Layout resize is practically guaranteed on a configuration change, and `onConfigurationChanged`
         // does not implicitly start a layout. So, request a layout and expect the screen dimensions to be valid after the]
         // post.
+        if(mControlLayout == null) return;
         mControlLayout.requestLayout();
         mControlLayout.post(()->{
             // Child of mControlLayout, so refreshing size here is correct
@@ -511,7 +509,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             System.gc();
             mControlLayout.loadLayout(instance.getLaunchControls());
             mDrawerPullButton.setVisibility(mControlLayout.hasMenuButton() ? View.GONE : View.VISIBLE);
-        } catch (IOException e) {
+        } catch (Exception e) {
             Tools.showError(this,e);
         }
 

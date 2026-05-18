@@ -8,7 +8,6 @@ import android.widget.ExpandableListAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ForgelikeVersionListAdapter extends BaseExpandableListAdapter implements ExpandableListAdapter {
@@ -36,9 +35,10 @@ public class ForgelikeVersionListAdapter extends BaseExpandableListAdapter imple
         }
         if(utils.isVersionOrderInversed()) {
             for (List<String> versionList : mLoaderVersions) {
-                Collections.sort(versionList, Collections.reverseOrder());
+                reverseList(versionList);
             }
-            Collections.sort(mGameVersions, Collections.reverseOrder());
+            reverseList(mLoaderVersions);
+            reverseList(mGameVersions);
         }
     }
 
@@ -106,5 +106,13 @@ public class ForgelikeVersionListAdapter extends BaseExpandableListAdapter imple
     @Override
     public boolean isChildSelectable(int i, int i1) {
         return true;
+    }
+
+    private static <T> void reverseList(List<T> list) {
+        for (int i = 0, j = list.size() - 1; i < j; i++, j--) {
+            T temp = list.get(i);
+            list.set(i, list.get(j));
+            list.set(j, temp);
+        }
     }
 }

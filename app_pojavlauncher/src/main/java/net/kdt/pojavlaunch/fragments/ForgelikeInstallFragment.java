@@ -7,7 +7,7 @@ import android.widget.ExpandableListAdapter;
 import com.kdt.mcgui.ProgressLayout;
 
 import net.kdt.pojavlaunch.instances.InstanceInstaller;
-import net.kdt.pojavlaunch.instances.InstanceManager;
+import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.modloaders.ForgelikeUtils;
 import net.kdt.pojavlaunch.modloaders.ForgelikeVersionListAdapter;
 import net.kdt.pojavlaunch.modloaders.ModloaderListenerProxy;
@@ -46,7 +46,7 @@ public abstract class ForgelikeInstallFragment extends ModVersionListFragment<Li
         try {
             ProgressLayout.setProgress(ProgressLayout.INSTALL_MODPACK, 0);
             InstanceInstaller instanceInstaller = mUtils.createInstaller(selectedVersion);
-            InstanceManager.createInstance(instance -> {
+            Instances.createInstance(instance -> {
                 instance.name = mUtils.getName();
                 instance.icon = mUtils.getIconName();
                 instance.installer = instanceInstaller;

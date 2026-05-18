@@ -157,7 +157,7 @@ public abstract class ForgelikeUtils {
         public NeoforgeUtils() {
             super(
                     "NeoForge", "neoforge", "neoforge", "%2$s",
-                    "https://maven.neoforged.net/net/neoforged/neoforge/maven-metadata.xml",
+                    "https://maven.neoforged.net/releases/net/neoforged/neoforge/maven-metadata.xml",
                     "https://maven.neoforged.net/releases/net/neoforged/neoforge/%1$s/neoforge-%1$s-installer.jar",
                     true
             );

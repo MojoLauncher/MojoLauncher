@@ -9,7 +9,6 @@ import static org.lwjgl.glfw.CallbackBridge.windowWidth;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.SurfaceTexture;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -17,13 +16,9 @@ import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Surface;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import net.kdt.pojavlaunch.customcontrols.ControlLayout;
@@ -37,6 +32,9 @@ import net.kdt.pojavlaunch.customcontrols.mouse.InGUIEventProcessor;
 import net.kdt.pojavlaunch.customcontrols.mouse.InGameEventProcessor;
 import net.kdt.pojavlaunch.customcontrols.mouse.TouchEventProcessor;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.render.SurfaceProvider;
+import net.kdt.pojavlaunch.render.SurfaceViewSurfaceProvider;
+import net.kdt.pojavlaunch.render.TextureViewSurfaceProvider;
 import net.kdt.pojavlaunch.utils.JREUtils;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
 
@@ -49,7 +47,7 @@ import fr.spse.gamepad_remapper.RemapperView;
 /**
  * Class dealing with showing minecraft surface and taking inputs to dispatch them to minecraft
  */
-public class MinecraftGLSurface extends View implements GrabListener, DirectGamepadEnableHandler {
+public class MinecraftGLSurface extends View implements GrabListener, DirectGamepadEnableHandler, SurfaceProvider.SurfaceCallback {
     /* Gamepad object for gamepad inputs, instantiated on need */
     private GamepadHandler mGamepadHandler;
     /* The RemapperView.Builder object allows you to set which buttons to remap */
@@ -72,6 +70,8 @@ public class MinecraftGLSurface extends View implements GrabListener, DirectGame
     /* Sensitivity, adjusted according to screen size */
     private final double mSensitivityFactor = (1.4 * (1080f/ Tools.getDisplayMetrics((Activity) getContext()).heightPixels));
 
+    private final SurfaceProvider<?> mSurfaceProvider = LauncherPreferences.PREF_USE_ALTERNATE_SURFACE ? new SurfaceViewSurfaceProvider() : new TextureViewSurfaceProvider();
+    private boolean mRefreshOnly = true;
     /* Surface ready listener, used by the activity to launch minecraft */
     SurfaceReadyListener mSurfaceReadyListener = null;
     final Object mSurfaceReadyListenerLock = new Object();
@@ -106,74 +106,12 @@ public class MinecraftGLSurface extends View implements GrabListener, DirectGame
      * @param touchpad the optional cursor-emulating touchpad, used for touch event processing
      *                 when the cursor is not grabbed
      */
-    public void start(boolean isAlreadyRunning, AbstractTouchpad touchpad){
-        if(Tools.isAndroid8OrHigher()) setUpPointerCapture(touchpad);
+    public void start(boolean isAlreadyRunning, AbstractTouchpad touchpad) {
+        if (Tools.isAndroid8OrHigher()) setUpPointerCapture(touchpad);
         mInGUIProcessor.setAbstractTouchpad(touchpad);
-        if(LauncherPreferences.PREF_USE_ALTERNATE_SURFACE){
-            SurfaceView surfaceView = new SurfaceView(getContext());
-            mSurface = surfaceView;
-
-            surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
-                private boolean isCalled = isAlreadyRunning;
-                @Override
-                public void surfaceCreated(@NonNull SurfaceHolder holder) {
-                    if(isCalled) {
-                        JREUtils.setupBridgeWindow(surfaceView.getHolder().getSurface());
-                        return;
-                    }
-                    isCalled = true;
-
-                    realStart(surfaceView.getHolder().getSurface());
-                }
-
-                @Override
-                public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
-                    refreshSize();
-                }
-
-                @Override
-                public void surfaceDestroyed(@NonNull SurfaceHolder holder) {}
-            });
-
-            ((ViewGroup)getParent()).addView(surfaceView);
-        }else{
-            TextureView textureView = new TextureView(getContext());
-            textureView.setOpaque(true);
-            textureView.setAlpha(1.0f);
-            mSurface = textureView;
-
-            textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
-                private boolean isCalled = isAlreadyRunning;
-                @Override
-                public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surface, int width, int height) {
-                    Surface tSurface = new Surface(surface);
-                    if(isCalled) {
-                        JREUtils.setupBridgeWindow(tSurface);
-                        return;
-                    }
-                    isCalled = true;
-
-                    realStart(tSurface);
-                }
-
-                @Override
-                public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surface, int width, int height) {
-                    refreshSize();
-                }
-
-                @Override
-                public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surface) {
-                    return true;
-                }
-
-                @Override
-                public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surface) {}
-            });
-
-            ((ViewGroup)getParent()).addView(textureView);
-        }
-
-
+        mRefreshOnly = isAlreadyRunning;
+        mSurface = mSurfaceProvider.create(getContext(), this);
+        ((ViewGroup) getParent()).addView(mSurface);
     }
 
     /**
@@ -358,23 +296,11 @@ public class MinecraftGLSurface extends View implements GrabListener, DirectGame
             Log.w("MGLSurface", "Attempt to refresh size on null surface");
             return;
         }
-        if(LauncherPreferences.PREF_USE_ALTERNATE_SURFACE){
-            SurfaceView view = (SurfaceView) mSurface;
-            if(view.getHolder() != null){
-                view.getHolder().setFixedSize(windowWidth, windowHeight);
-            }
-        }else{
-            TextureView view = (TextureView)mSurface;
-            if(view.getSurfaceTexture() != null){
-                view.getSurfaceTexture().setDefaultBufferSize(windowWidth, windowHeight);
-            }
-        }
-
         CallbackBridge.sendUpdateWindowSize(windowWidth, windowHeight);
-
+        JREUtils.applyWindowSize();
     }
 
-    private void realStart(Surface surface){
+    private void realStart(){
         // Initial size set. Request immedate refresh, otherwise the initial width and height for the game
         // may be broken/unknown.
         refreshSize(true);
@@ -385,8 +311,6 @@ public class MinecraftGLSurface extends View implements GrabListener, DirectGame
         MCOptionUtils.set("overrideHeight", String.valueOf(windowHeight));
         MCOptionUtils.save();
         getMcScale();
-
-        JREUtils.setupBridgeWindow(surface);
 
         new Thread(() -> {
             try {
@@ -428,6 +352,24 @@ public class MinecraftGLSurface extends View implements GrabListener, DirectGame
             // Force gamepad recreation on next event
             mGamepadHandler = null;
         });
+    }
+
+    @Override
+    public void onSurfaceAvailable(Surface surface) {
+        JREUtils.setupBridgeWindow(surface);
+        if(mRefreshOnly) return;
+        realStart();
+        mRefreshOnly = true;
+    }
+
+    @Override
+    public void onSurfaceResized() {
+
+    }
+
+    @Override
+    public void onSurfaceDestroyed() {
+        JREUtils.releaseBridgeWindow();
     }
 
     /** A small interface called when the listener is ready for the first time */

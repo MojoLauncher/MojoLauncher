@@ -6,6 +6,7 @@ import android.util.Log;
 
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.instances.Instance;
+import net.kdt.pojavlaunch.utils.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,8 +28,7 @@ public class ModIconCache {
     private final List<WeakReference<ImageReceiver>> mCancelledReceivers = new ArrayList<>();
     public ModIconCache() {
         cachePath = getImageCachePath();
-        if(!cachePath.exists() && !cachePath.isFile() && Tools.DIR_CACHE.canWrite()) {
-            if(!cachePath.mkdirs())
+        if(!FileUtils.ensureDirectorySilently(cachePath)) {
                 throw new RuntimeException("Failed to create icon cache directory");
         }
 

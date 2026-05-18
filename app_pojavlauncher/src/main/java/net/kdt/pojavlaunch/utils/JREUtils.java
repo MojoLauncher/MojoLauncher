@@ -133,6 +133,12 @@ public class JREUtils {
         envMap.put("force_glsl_extensions_warn", "true");
         envMap.put("allow_higher_compat_version", "true");
         envMap.put("allow_glsl_extension_directive_midshader", "true");
+		// This is currently required for YSM mod to function
+		File modRuntimeDir = new File(Tools.DIR_CACHE, "app_runtime_mod");
+		if (!modRuntimeDir.exists()) {
+    		modRuntimeDir.mkdirs();
+		}
+		envMap.put("MOD_ANDROID_RUNTIME", modRuntimeDir.getAbsolutePath());
 
         if(!renderer.equals("opengles2")) { // Don't enable ANGLE for GL4ES for now (it's currently broken)
             setupAngleEnv(context, envMap);
@@ -261,6 +267,7 @@ public class JREUtils {
     public static native void setLdLibraryPath(String ldLibraryPath);
     public static native void setupBridgeWindow(Object surface);
     public static native void releaseBridgeWindow();
+    public static native void applyWindowSize();
     public static native void initializeHooks();
     // Obtain AWT screen pixels to render on Android SurfaceView
     public static native boolean renderAWTScreenFrame(ByteBuffer tempBuffer);

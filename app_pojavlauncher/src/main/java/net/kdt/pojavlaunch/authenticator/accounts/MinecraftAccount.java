@@ -16,6 +16,8 @@ import android.graphics.Bitmap;
 
 import androidx.annotation.Keep;
 
+import com.google.gson.JsonParseException;
+
 import org.apache.commons.io.IOUtils;
 
 @Keep
@@ -66,6 +68,17 @@ public class MinecraftAccount {
         FileUtils.ensureParentDirectory(mSaveLocation);
         JSONUtils.writeToFile(mSaveLocation, this);
     }
+
+    public MinecraftAccount reload() {
+        try {
+            MinecraftAccount minecraftAccount = JSONUtils.readFromFile(mSaveLocation, MinecraftAccount.class);
+            if(minecraftAccount == null) return null;
+            minecraftAccount.mSaveLocation = mSaveLocation;
+            return minecraftAccount;
+        }catch (IOException | JsonParseException e) {
+            return null;
+        }
+     }
 
     public Bitmap getSkinFace(){
         if(isLocal()) return null;

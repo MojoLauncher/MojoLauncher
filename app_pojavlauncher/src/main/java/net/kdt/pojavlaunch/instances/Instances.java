@@ -14,16 +14,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class InstanceManager {
-    private static boolean sIsLoaded;
+public class Instances {
     private static final File sInstancePath = new File(Tools.DIR_GAME_HOME, "instances");
     public static final File SHARED_DATA_DIRECTORY = new File(Tools.DIR_GAME_HOME, "shared_dir");
-    private static Instance sSelectedInstance;
-    private static ArrayList<Instance> sInstanceList;
 
-    private static Instance read(File instanceRoot) {
+    public final List<DisplayInstance> list;
+    public final int selectedIndex;
+
+    private Instances(List<DisplayInstance> instances, int selectedIndex) {
+        this.list = instances;
+        this.selectedIndex = selectedIndex;
+    }
+
+    private static <T extends DisplayInstance> T read(File instanceRoot, Class<T> tClass) {
         try {
-            Instance instance = JSONUtils.readFromFile(metadataLocation(instanceRoot), Instance.class);
+            T instance = JSONUtils.readFromFile(metadataLocation(instanceRoot), tClass);
+            if(instance == null) return null;
             instance.mInstanceRoot = instanceRoot;
             return instance;
         }catch (IOException | JsonSyntaxException e) {
@@ -50,44 +56,45 @@ public class InstanceManager {
         return instanceMetadata.canRead();
     }
 
-    private static void loadInstances() throws IOException {
-        FileUtils.ensureDirectory(sInstancePath);
-        File[] instanceDirectories = sInstancePath.listFiles(InstanceManager::filterInstanceDirectories);
+    private static <T extends DisplayInstance> List<T> loadInstances(Class<T> tClass, int[] selectionDst) throws IOException {
+        synchronized (sInstancePath) {
+            FileUtils.ensureDirectory(sInstancePath);
+        }
+        File[] instanceDirectories = sInstancePath.listFiles(Instances::filterInstanceDirectories);
         if(instanceDirectories == null) throw new IOException("Failed to enumerate instances");
+        File selectedInstanceLocation = selectionDst != null ? selectedInstanceLocation() : null;
+        ArrayList<T> instances = new ArrayList<>(instanceDirectories.length);
 
-        File selectedInstanceLocation = selectedInstanceLocation();
-        sSelectedInstance = null;
-        sInstanceList = new ArrayList<>(instanceDirectories.length);
         for(File instanceDir : instanceDirectories) {
-            Instance instance = read(instanceDir);
+            T instance = read(instanceDir, tClass);
 
-            if(instanceDir.equals(selectedInstanceLocation)) {
-                sSelectedInstance = instance;
+            if(instance == null) continue;
+            instance.sanitize();
+            instances.add(instance);
+
+            if(selectionDst != null && instanceDir.equals(selectedInstanceLocation)) {
+                selectionDst[0] = instances.size() - 1;
             }
-
-            if(instance != null) {
-                instance.sanitize();
-                sInstanceList.add(instance);
-            }
         }
-
-        if(sInstanceList.isEmpty()) {
-            createFirstTimeInstance();
-        }
-
-        if(sSelectedInstance == null) {
-            setSelectedInstance(sInstanceList.get(0));
-        }
+        instances.trimToSize();
+        return instances;
     }
 
-    private static void load(){
-        if(sIsLoaded) return;
-        try {
-            loadInstances();
-        }catch (IOException e) {
-            throw new RuntimeException(e);
+    public static Instances loadDisplay() throws IOException {
+        int[] selectionIndex = new int[] { -1 };
+        List<DisplayInstance> instances = loadInstances(DisplayInstance.class, selectionIndex);
+        if(instances.isEmpty()) {
+            createFirstTimeInstance();
+            return loadDisplay();
+        }else if(selectionIndex[0] == -1) {
+            setSelectedInstance(instances.get(0));
+            selectionIndex[0] = 0;
         }
-        sIsLoaded = true;
+        return new Instances(Collections.unmodifiableList(instances), selectionIndex[0]);
+    }
+
+    public static List<Instance> loadAllInstances() throws IOException {
+        return loadInstances(Instance.class, null);
     }
 
     private static File findNewInstanceRoot(String prefix) {
@@ -103,35 +110,15 @@ public class InstanceManager {
     }
 
     /**
-     * Get an unmodifiable list of instances. To add an instance, call createDefaultInstance()
-     * @return the unmodifiable list of instances
-     */
-    public static List<Instance> getImmutableInstanceList() {
-        load();
-        return Collections.unmodifiableList(sInstanceList);
-    }
-
-    /**
-     * @return selected instance that is guaranteed to be a member of the instance list.
-     * Note that this method will load the full instance list. If this is undesirable, consider
-     * using loadSelectedInstance()
-     */
-    public static Instance getSelectedListedInstance() {
-        load();
-        return sSelectedInstance;
-    }
-
-    /**
      * Set the currently selected instance and save it in user preferences
      * @param instance new selected instance
      */
-    public static void setSelectedInstance(Instance instance) {
+    public static void setSelectedInstance(DisplayInstance instance) {
         LauncherPreferences.DEFAULT_PREF.edit()
                 .putString(
                         LauncherPreferences.PREF_KEY_CURRENT_INSTANCE,
                         instance.mInstanceRoot.getName()
                 ).apply();
-        sSelectedInstance = instance;
     }
 
     /**
@@ -142,10 +129,6 @@ public class InstanceManager {
     public static void removeInstance(Instance instance) throws IOException {
         File instanceDirectory = instance.mInstanceRoot;
         if(instanceDirectory == null) return;
-        sInstanceList.remove(instance);
-        if(instance.isSelected()) {
-            setSelectedInstance(sInstanceList.get(0));
-        }
         org.apache.commons.io.FileUtils.deleteDirectory(instanceDirectory);
     }
 
@@ -181,7 +164,6 @@ public class InstanceManager {
         instance.mInstanceRoot = root;
         instanceSetter.setInstanceProperties(instance);
         instance.write();
-        sInstanceList.add(instance);
         return instance;
     }
 
@@ -193,8 +175,6 @@ public class InstanceManager {
      * @throws IOException if directory creation/instance writing fails
      */
     public static Instance createInstance(InstanceSetter instanceSetter, String namePrefix) throws IOException {
-        // Make sure the instance list is loaded before creating a new instance.
-        load();
         return internalCreateInstance(instanceSetter, namePrefix);
     }
 
@@ -204,8 +184,10 @@ public class InstanceManager {
      * @return currently selected instance
      */
     public static Instance loadSelectedInstance() {
-        if(sIsLoaded) return sSelectedInstance;
         File selectedInstanceLocation = selectedInstanceLocation();
-        return read(selectedInstanceLocation);
+        Instance instance = read(selectedInstanceLocation, Instance.class);
+        if(instance == null) return null;
+        instance.sanitize();
+        return instance;
     }
 }

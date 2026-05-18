@@ -118,7 +118,11 @@ public class ModrinthApi implements ModpackApi{
     @Override
     public ModLoader installModpack(ModDetail modDetail, int selectedVersion) throws IOException{
         //TODO considering only modpacks for now
-        return ModpackInstaller.installModpack(modDetail, selectedVersion, this::installMrpack);
+        return ModpackInstaller.downloadModpack(modDetail, selectedVersion, this::installMrpack);
+    }
+
+    public ModLoader installLocalModpack(String modpackName, File modpackFile, String icon) throws IOException {
+        return ModpackInstaller.installModpack(modpackName, modpackName, modpackFile, icon, this::installMrpack);
     }
 
     private static ModLoader createInfo(ModrinthIndex modrinthIndex) {

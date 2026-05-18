@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.instances.Instance;
-import net.kdt.pojavlaunch.instances.InstanceManager;
+import net.kdt.pojavlaunch.instances.Instances;
 
 import java.io.IOException;
 
@@ -25,8 +25,8 @@ public class ProfileTypeSelectFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         view.findViewById(R.id.vanilla_profile).setOnClickListener(v -> {
             try {
-                Instance instance = InstanceManager.createDefaultInstance();
-                InstanceManager.setSelectedInstance(instance);
+                Instance instance = Instances.createDefaultInstance();
+                Instances.setSelectedInstance(instance);
                 Tools.swapFragment(requireActivity(), InstanceEditorFragment.class,
                         InstanceEditorFragment.TAG, new Bundle(1));
             }catch (IOException e) {
@@ -51,5 +51,7 @@ public class ProfileTypeSelectFragment extends Fragment {
                 Tools.swapFragment(requireActivity(), BTAInstallFragment.class, BTAInstallFragment.TAG, null));
         view.findViewById(R.id.modded_profile_neoforge).setOnClickListener((v)->
                 Tools.swapFragment(requireActivity(), NeoforgeInstallFragment.class, NeoforgeInstallFragment.TAG, null));
+        view.findViewById(R.id.modded_profile_legacy_fabric).setOnClickListener((v) ->
+                Tools.swapFragment(requireActivity(), LegacyFabricInstallFragment.class, LegacyFabricInstallFragment.TAG, null));
     }
 }

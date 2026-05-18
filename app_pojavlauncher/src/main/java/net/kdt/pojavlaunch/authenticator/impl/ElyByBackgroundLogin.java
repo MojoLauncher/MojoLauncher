@@ -11,8 +11,8 @@ import com.kdt.mcgui.ProgressLayout;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.authenticator.AuthType;
 import net.kdt.pojavlaunch.authenticator.BackgroundLogin;
+import net.kdt.pojavlaunch.authenticator.accounts.Accounts;
 import net.kdt.pojavlaunch.authenticator.accounts.MinecraftAccount;
-import net.kdt.pojavlaunch.authenticator.accounts.PojavProfile;
 import net.kdt.pojavlaunch.authenticator.listener.LoginListener;
 import net.kdt.pojavlaunch.authenticator.model.OAuthTokenResponse;
 
@@ -49,7 +49,7 @@ public class ElyByBackgroundLogin implements BackgroundLogin {
                 continuation.call();
             }catch (Exception e){
                 Log.e("MicroAuth", "Exception thrown during authentication", e);
-                loginListener.onLoginError(e);
+                Tools.runOnUiThread(()->loginListener.onLoginError(e));
             }
             ProgressLayout.clearProgress(ProgressLayout.AUTHENTICATE);
         });
@@ -69,7 +69,7 @@ public class ElyByBackgroundLogin implements BackgroundLogin {
     @Override
     public void createAccount(@NonNull LoginListener loginListener, String code) {
         acquireAccountDetails(loginListener, ()->{
-            MinecraftAccount account = PojavProfile.createAccount(this::fillAccount);
+            MinecraftAccount account = Accounts.create(this::fillAccount);
             Tools.runOnUiThread(() -> loginListener.onLoginDone(account));
             return null;
         }, code, false);

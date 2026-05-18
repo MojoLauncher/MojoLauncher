@@ -46,6 +46,19 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
         }
     }
 
+    private void accumulateHistoricalValues(MotionEvent motionEvent, int axisX, int axisY) {
+        float relX = motionEvent.getAxisValue(axisX),
+                relY = motionEvent.getAxisValue(axisY);
+
+        if(motionEvent.getHistorySize() > 1) for(int i = 0; i < motionEvent.getHistorySize(); i++) {
+            relX += motionEvent.getHistoricalAxisValue(axisX, i);
+            relY += motionEvent.getHistoricalAxisValue(axisY, i);
+        }
+
+        mVector[0] = relX;
+        mVector[1] = relY;
+    }
+
     @Override
     public boolean onCapturedPointer(View view, MotionEvent event) {
         checkSameDevice(event.getDevice());
@@ -58,12 +71,10 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
             if(mDeviceSupportsRelativeAxis) {
                 // If some OEM decides to do a funny and make an absolute touchpad report itself as
                 // a trackball, we will at least have semi-valid relative positions
-                mVector[0] = event.getAxisValue(MotionEvent.AXIS_RELATIVE_X);
-                mVector[1] = event.getAxisValue(MotionEvent.AXIS_RELATIVE_Y);
+                accumulateHistoricalValues(event, MotionEvent.AXIS_RELATIVE_X, MotionEvent.AXIS_RELATIVE_Y);
             }else {
                 // Otherwise trust the OS, i guess??
-                mVector[0] = event.getX();
-                mVector[1] = event.getY();
+                accumulateHistoricalValues(event, MotionEvent.AXIS_X, MotionEvent.AXIS_Y);
             }
         }else {
             // If it's not a trackball, it's likely a touchpad and needs tracking like a touchscreen.
@@ -112,7 +123,9 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
     }
 
     private void checkSameDevice(InputDevice inputDevice) {
-        int newIdentifier = inputDevice.getId();
+        int newIdentifier;
+        if(inputDevice != null) newIdentifier = inputDevice.getId();
+        else newIdentifier = Integer.MAX_VALUE;
         if(mInputDeviceIdentifier != newIdentifier) {
             reinitializeDeviceSpecificProperties(inputDevice);
             mInputDeviceIdentifier = newIdentifier;
@@ -121,6 +134,10 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
 
     private void reinitializeDeviceSpecificProperties(InputDevice inputDevice) {
         mPointerTracker.cancelTracking();
+        if(inputDevice == null) {
+            mDeviceSupportsRelativeAxis = false;
+            return;
+        }
         boolean relativeXSupported = inputDevice.getMotionRange(MotionEvent.AXIS_RELATIVE_X) != null;
         boolean relativeYSupported = inputDevice.getMotionRange(MotionEvent.AXIS_RELATIVE_Y) != null;
         mDeviceSupportsRelativeAxis = relativeXSupported && relativeYSupported;

@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
@@ -25,7 +26,7 @@ import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.instances.Instance;
-import net.kdt.pojavlaunch.instances.InstanceManager;
+import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.RTSpinnerAdapter;
 import net.kdt.pojavlaunch.multirt.Runtime;
@@ -89,15 +90,8 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         });
 
         mDeleteButton.setOnClickListener(v -> {
-            if(InstanceManager.getImmutableInstanceList().size() > 1){
-                InstanceIconProvider.dropIcon(mInstance);
-                Tools.removeCurrentFragment(requireActivity());
-                try {
-                    InstanceManager.removeInstance(mInstance);
-                }catch (IOException e) {
-                    Tools.showErrorRemote(e);
-                }
-            }
+            DeleteConfirmDialogFragment dialogFragment = new DeleteConfirmDialogFragment();
+            dialogFragment.show(getChildFragmentManager(), "delete_dialog_confirm");
         });
 
         View.OnClickListener controlSelectListener = getControlSelectListener();
@@ -127,7 +121,14 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
             Tools.swapFragment(requireActivity(), ModManagerFragment.class, ModManagerFragment.TAG, null);
         });
 
-        loadValues(InstanceManager.getSelectedListedInstance(), view.getContext());
+        Instance selectedInstance = Instances.loadSelectedInstance();
+        Context context = view.getContext();
+        if(selectedInstance == null) {
+            Toast.makeText(context, R.string.no_instance, Toast.LENGTH_LONG).show();
+            getParentFragmentManager().popBackStack();
+        }else {
+            loadValues(selectedInstance, context);
+        }
     }
 
     private View.OnClickListener getControlSelectListener() {

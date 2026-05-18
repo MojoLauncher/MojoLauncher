@@ -130,6 +130,7 @@ public class CropperUtils {
         try (InputStream inputStream = contentResolver.openInputStream(selectedUri)) {
             if(inputStream == null) return null;
             Bitmap originalBitmap = BitmapFactory.decodeStream(inputStream);
+            if(originalBitmap == null) throw new IOException("Image format not supported");
             BitmapCropBehaviour cropBehaviour = new BitmapCropBehaviour(cropImageView);
             cropBehaviour.setBitmap(originalBitmap);
             return cropBehaviour;

@@ -71,15 +71,21 @@ android {
             keyAlias "key0"
             keyPassword System.getenv("UPLOAD_KEYSTORE_PASSWORD")
         }
+        publicBuild {
+            storeFile file("mojo_pub.jks")
+            storePassword System.getenv("MOJOPUB_KEYSTORE_PASSWORD")
+            keyAlias "key0"
+            keyPassword System.getenv("MOJOPUB_KEYSTORE_PASSWORD")
+        }
     }
 
     defaultConfig {
         applicationId "git.artdeell.mojo"
         minSdkVersion 21
-        targetSdkVersion 35
+        targetSdkVersion 36
         versionCode getDateSeconds()
         versionName getVersionName()
-        multiDexEnabled true //important
+        multiDexEnabled false //important
         resValue 'string', 'curseforge_api_key', getCFApiKey()
     }
 
@@ -129,6 +135,13 @@ android {
         gplay {
             initWith release
             signingConfig signingConfigs.googlePlayBuild
+        }
+        pubRelease {
+            initWith release
+            signingConfig signingConfigs.customDebug // WIP, changeme
+            applicationIdSuffix '.pub'
+            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mojo.pub.scoped.gamefolder'
+            resValue 'string', 'application_package', 'git.artdeell.mojo.pub'
         }
     }
 
@@ -288,8 +301,6 @@ afterEvaluate {
 
 		if (variant.getName().toLowerCase().contains("full")) {
             registrar.jreRuntimeDependency 8, "components/jre"
-            registrar.jreRuntimeDependency 17, "components/jre-new"
-            registrar.jreRuntimeDependency 21, "components/jre-21"
         }
         
 		def cacioJarUrl = "https://jitpack.io/com/github/MojoLauncher/%1\$s/%2\$s/%3\$s/%2\$s-%3\$s%4\$s.jar"
@@ -297,7 +308,7 @@ afterEvaluate {
         registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-shared", "-01d2dc1d65-1", "", "components/caciocavallo"
         registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-androidnw", "-01d2dc1d65-1", "", "components/caciocavallo"
 
-        registrar.onlineJarDependency cacioJarUrl, "caciocavallo17", "cacio-tta", "-517c312aef-1", "-jar-with-dependencies", "components/caciocavallo17"
+        registrar.onlineJarDependency cacioJarUrl, "caciocavallo17", "cacio-tta", "72a9ab6323", "-jar-with-dependencies", "components/caciocavallo17"
     }
 }
 

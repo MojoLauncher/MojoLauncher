@@ -22,6 +22,7 @@ public class LayoutConverter {
         LayoutBitmaps.ControlsContainer container = LayoutBitmaps.load(jsonFile);
         LayoutBitmaps layoutBitmaps = container.mLayoutZip;
         CustomControls controls = internalLoad(size, container.mControlsJson);
+        if(controls == null) throw new IOException("Unsupported control layout version");
         controls.mLayoutBitmaps = layoutBitmaps;
         return controls;
     }

@@ -83,12 +83,13 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_mod_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:paddingTop="@dimen/_15sdp"
         android:clipToPadding="false"
 
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/mineButton_import_local_modpack"
         app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="@dimen/padding_moderate"
         />
 
     <TextView
@@ -101,5 +102,18 @@
         app:layout_constraintEnd_toEndOf="@+id/search_mod_list"
         app:layout_constraintStart_toStartOf="@+id/search_mod_list"
         app:layout_constraintTop_toTopOf="@+id/search_mod_list" />
+
+    <com.kdt.mcgui.MineButton
+        android:id="@+id/mineButton_import_local_modpack"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_moderate"
+        android:layout_marginBottom="@dimen/padding_moderate"
+        android:text="@string/import_local_modpack"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

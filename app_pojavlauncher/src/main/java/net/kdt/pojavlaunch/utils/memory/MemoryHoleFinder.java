@@ -1,4 +1,4 @@
-package net.kdt.pojavlaunch.memory;
+package net.kdt.pojavlaunch.utils.memory;
 
 import net.kdt.pojavlaunch.Architecture;
 

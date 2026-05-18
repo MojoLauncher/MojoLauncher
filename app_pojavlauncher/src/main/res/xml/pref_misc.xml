@@ -13,7 +13,7 @@
             android:title="@string/preference_verify_game_files_title" />
 
         <SwitchPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="fastStartupCheck"
             android:summary="@string/preference_go_vroom_description"
             android:title="@string/preference_go_vroom_title" />

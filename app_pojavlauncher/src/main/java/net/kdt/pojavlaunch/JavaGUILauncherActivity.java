@@ -55,6 +55,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
     private GestureDetector mGestureDetector;
 
     private boolean mIsVirtualMouseEnabled;
+    private boolean mIsTrusted;
     
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -157,6 +158,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
                 finish();
                 return;
             }
+            mIsTrusted = extras.getBoolean("trusted", false);
             final List<String> javaArgs = extras.getStringArrayList("javaArgs");
             final Uri resourceUri = extras.getParcelable("modUri");
             final String jarPath = extras.getString("modPath");
@@ -209,14 +211,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
             finalErrorDialog(getString(R.string.multirt_nocompatiblert, javaVersion));
             return null;
         }
-        Runtime selectedRuntime = MultiRTUtils.forceReread(nearestRuntime);
-        int selectedJavaVersion = Math.max(javaVersion, selectedRuntime.javaVersion);
-        // Don't allow versions higher than Java 17 because our caciocavallo implementation does not allow for it
-        if(selectedJavaVersion > 17) {
-            finalErrorDialog(getString(R.string.execute_jar_incompatible_runtime, selectedJavaVersion));
-            return null;
-        }
-        return selectedRuntime;
+        return MultiRTUtils.forceReread(nearestRuntime);
     }
 
     private static class JarFileProperties {
@@ -231,9 +226,11 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         public static JarFileProperties read(File file) throws IOException {
             try (JarFile jarFile = new JarFile(file)) {
                 Manifest manifest = jarFile.getManifest();
-
+                if(manifest == null) return null;
                 Attributes mainAttrs = manifest.getMainAttributes();
+                if(mainAttrs == null) return null;
                 String mainClass = mainAttrs.getValue("Main-Class");
+                if(mainClass == null) return null;
                 int javaVersion = getJavaVersion(jarFile, mainClass);
                 return new JarFileProperties(mainClass, javaVersion);
             }
@@ -368,7 +365,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
                 javaArgList.addAll(javaArgs);
             }
             
-            if (LauncherPreferences.PREF_JAVA_SANDBOX) {
+            if (LauncherPreferences.PREF_JAVA_SANDBOX && !mIsTrusted) {
                 Collections.reverse(javaArgList);
                 javaArgList.add("-Xbootclasspath/a:" + Tools.DIR_DATA + "/security/pro-grade.jar");
                 javaArgList.add("-Djava.security.manager=net.sourceforge.prograde.sm.ProGradeJSM");

@@ -22,7 +22,7 @@ import net.kdt.pojavlaunch.PojavApplication;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraCore;
-import net.kdt.pojavlaunch.instances.InstanceManager;
+import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.modloaders.FabriclikeUtils;
 import net.kdt.pojavlaunch.modloaders.FabricVersion;
 import net.kdt.pojavlaunch.modloaders.ModloaderDownloadListener;
@@ -114,8 +114,8 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
                 getListenerProxy().onDataNotAvailable();
                 return;
             }
-            InstanceManager.createInstance((i)->{
-                i.name = "Fabric";
+            Instances.createInstance((i)->{
+                i.name = mFabriclikeUtils.getName();
                 i.icon = mFabriclikeUtils.getIconName();
                 i.versionId = versionId;
                 i.modded = true;
@@ -213,7 +213,7 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+    public void onCheckedChanged(@NonNull CompoundButton compoundButton, boolean b) {
         updateGameSpinner();
         updateLoaderSpinner();
     }
@@ -260,7 +260,7 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
     }
 
     private void updateLoaderSpinner() {
-        if(mLoaderVersionArray == null) return;
+        if(mLoaderVersionArray == null || isDetached()) return;
         mLoaderVersionSpinner.setAdapter(createAdapter(mLoaderVersionArray, mOnlyStableCheckbox.isChecked()));
     }
 
@@ -307,7 +307,7 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
     }
 
     private void updateGameSpinner() {
-        if(mGameVersionArray == null) return;
+        if(mGameVersionArray == null || isDetached()) return;
         mGameVersionSpinner.setAdapter(createAdapter(mGameVersionArray, mOnlyStableCheckbox.isChecked()));
     }
 

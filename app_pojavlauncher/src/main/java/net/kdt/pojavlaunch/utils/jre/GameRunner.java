@@ -19,6 +19,7 @@ import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.DateUtils;
 import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.GLInfoUtils;
+import net.kdt.pojavlaunch.utils.GameOptionsUtils;
 import net.kdt.pojavlaunch.utils.JREUtils;
 import net.kdt.pojavlaunch.utils.JSONUtils;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
@@ -59,12 +60,20 @@ public class GameRunner {
         return false;
     }
 
-    private static int parseIntDefault(String value, int defaultValue) {
-        try {
-            return Integer.parseInt(value);
-        }catch (NumberFormatException e) {
-            return defaultValue;
+    /**
+     * Check if Angelica is currently installed to allow usage of LTW
+     * @param gameDir current game directory
+     * @return whether Angelica is installed
+     */
+    private static boolean hasAngelica(File gameDir) {
+        File modsDir = new File(gameDir, "mods");
+        File[] mods = modsDir.listFiles(file -> file.isFile() && file.getName().endsWith(".jar"));
+        if(mods == null) return false;
+        for(File file : mods) {
+            String name = file.getName();
+            if(name.contains("angelica")) return true;
         }
+        return false;
     }
 
     /**
@@ -91,31 +100,10 @@ public class GameRunner {
         }catch (Exception e) {
             Log.e("Tools", "Failed to load config", e);
         }
-        int renderDistance = parseIntDefault(MCOptionUtils.get("renderDistance"),12);
+        int renderDistance = GameOptionsUtils.parseIntDefault(MCOptionUtils.get("renderDistance"),12);
         // 7 is the render distance "magic number" above which MC creates too many buffers
         // for Adreno's OpenGL ES implementation
         return renderDistance > 7;
-    }
-
-    /**
-     * Decrease clound rendering distance in order to avoid the Mali cloud rendering slowdown bug
-     */
-    private static void fixDeathCloud() {
-        GLInfoUtils.GLInfo info = GLInfoUtils.getGlInfo();
-        if(!info.isArm()) return; // Not an affected GPU
-        try {
-            MCOptionUtils.load();
-        }catch (Exception e) {
-            Log.e("Tools", "Failed to load config", e);
-        }
-        int cloudRange = parseIntDefault(MCOptionUtils.get("cloudRange"), 128);
-        if(cloudRange <= 64) return; // Not affected below 117 (but let's err on the safe side)
-        try {
-            MCOptionUtils.set("cloudRange", "64");
-            MCOptionUtils.save();
-        }catch (Exception e) {
-            Log.e("Tools", "Failed to save config", e);
-        }
     }
 
     private static boolean isGl4esCompatible(JMinecraftVersionList.Version version) throws Exception{
@@ -133,6 +121,20 @@ public class GameRunner {
                         .setCancelable(false)
                         .setPositiveButton(android.R.string.ok, (d, w)->{}));
         return LifecycleAwareAlertDialog.haltOnDialog(activity.getLifecycle(), activity, dialogCreator);
+    }
+
+    // Autoswitch to LTW if supported, otherwise - crash with resId dialog message. Returns LTW renderer strings if succeeded
+    private static String switchLtw(boolean hasLtw, Instance instance, AppCompatActivity activity, int resId) throws InterruptedException, IOException {
+        if(hasLtw) {
+            String ltwRenderer = "opengles3_ltw";
+            instance.renderer = ltwRenderer;
+            instance.write();
+            return ltwRenderer;
+        }else {
+            showDialog(activity, resId);
+            System.exit(0);
+            return null;
+        }
     }
 
     public static void launchMinecraft(final AppCompatActivity activity, MinecraftAccount minecraftAccount,
@@ -164,26 +166,27 @@ public class GameRunner {
         JMinecraftVersionList.Version versionInfo = Tools.getVersionInfo(versionId);
 
         // Switch renderer to GL4ES when running a compat context version on LTW
-        if(isCompatContext(versionInfo) && rendererName.equals("opengles3_ltw")) {
+        if(isCompatContext(versionInfo) && !hasAngelica(gamedir) && rendererName.equals("opengles3_ltw")) {
             instance.renderer = rendererName = "opengles2";
             instance.write();
         }
 
-        // Switch renderer to LTW when running 1.21.5
+        boolean isGl4es = rendererName.equals("opengles2");
         boolean ltwSupported = RendererCompatUtil.getCompatibleRenderers(activity).rendererIds.contains("opengles3_ltw");
-        if(!isGl4esCompatible(versionInfo) && rendererName.equals("opengles2")) {
-            if(ltwSupported) {
-                instance.renderer = rendererName = "opengles3_ltw";
-                instance.write();
-            }else {
-                showDialog(activity, R.string.compat_version_not_supported);
-                System.exit(0);
-                return;
-            }
+        // Block Sodium from running with GL4ES on 1.17+
+        if(!isCompatContext(versionInfo) && isGl4es && hasSodium(gamedir)) {
+            rendererName = switchLtw(ltwSupported, instance, activity, R.string.compat_sodium_not_supported);
+        }
+
+        // Switch renderer to LTW when running 1.21.5
+        if(!isGl4esCompatible(versionInfo) && isGl4es) {
+            rendererName = switchLtw(ltwSupported, instance, activity, R.string.compat_version_not_supported);
         }
         RendererCompatUtil.releaseRenderersCache();
 
-        if(rendererName.equals("opengles3_ltw") && checkRenderDistance(gamedir)) {
+        boolean isLtw = rendererName.equals("opengles3_ltw");
+
+        if(isLtw && checkRenderDistance(gamedir)) {
             if(showDialog(activity, R.string.ltw_render_distance_warning_msg)) return;
             // If the code goes here, it means that the user clicked "OK". Fix the render distance.
             try {
@@ -194,7 +197,11 @@ public class GameRunner {
             }
         }
 
-        if(rendererName.equals("opengles3_ltw")) fixDeathCloud();
+        GameOptionsUtils.fixOptions(isLtw);
+
+        if(isLtw && GLInfoUtils.getGlInfo().forcedMsaa) {
+            if(showDialog(activity, R.string.ltw_4x_msaa_warning_msg)) return;
+        }
 
         int requiredJavaVersion = 8;
         if(versionInfo.javaVersion != null) requiredJavaVersion = versionInfo.javaVersion.majorVersion;
@@ -279,7 +286,7 @@ public class GameRunner {
                     forgeSplashContent = Tools.read(forgeSplashFile.getAbsolutePath());
                 }
                 if (forgeSplashContent.contains("enabled=true")) {
-                    Tools.write(forgeSplashFile.getAbsolutePath(),
+                    Tools.write(forgeSplashFile,
                             forgeSplashContent.replace("enabled=true", "enabled=false"));
                 }
             } catch (IOException e) {

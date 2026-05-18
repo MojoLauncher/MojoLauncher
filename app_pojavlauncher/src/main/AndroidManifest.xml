@@ -35,6 +35,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme"
         android:networkSecurityConfig="@xml/netconfig"
+        android:enableOnBackInvokedCallback="false"
         tools:ignore="UnusedAttribute">
         <activity
             android:name="net.kdt.pojavlaunch.MissingStorageActivity"
@@ -133,7 +134,7 @@
         </service>
     </application>
     <queries>
-        <package android:name="net.kdt.pojavlaunch.ffmpeg"/>
+        <package android:name="git.mojo.ffmpeg"/>
         <package android:name="git.mojo.angle"/>
     </queries>
 </manifest>
