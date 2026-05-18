@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.adrenotools.AdrenoDriver;
 import net.kdt.pojavlaunch.adrenotools.DriverManager;
 import net.kdt.pojavlaunch.adrenotools.Driver;
@@ -25,6 +26,10 @@ import git.artdeell.mojo.R;
 import java.util.List;
 
 public class DriverViewAdapter extends RecyclerView.Adapter<DriverViewAdapter.DriverViewHolder> {
+    private final DriverConfigDialog dialog;
+    DriverViewAdapter(DriverConfigDialog dialog){
+        this.dialog = dialog;
+    }
 
     private boolean mIsDeleting = false;
 
@@ -95,7 +100,7 @@ public class DriverViewAdapter extends RecyclerView.Adapter<DriverViewAdapter.Dr
             mSetDefaultButton.setOnClickListener(v -> {
                 if(mCurrentDriver != null) {
                     setDefault(mCurrentDriver);
-                    DriverViewAdapter.this.notifyDataSetChanged();
+                    DriverViewAdapter.this.dialog.close();
                 }
             });
 

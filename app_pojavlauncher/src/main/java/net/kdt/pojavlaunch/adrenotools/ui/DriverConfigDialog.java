@@ -21,6 +21,9 @@ public class DriverConfigDialog {
         refresh();
         mDialog.show();
     }
+    public void close(){
+        mDialog.cancel();
+    }
 
     @SuppressLint("NotifyDataSetChanged") //only used to completely refresh the list, it is necessary
     public void refresh() {
@@ -31,7 +34,7 @@ public class DriverConfigDialog {
     public void prepare(Context activity, ActivityResultLauncher<Object> installDriver) {
         mDialogView = new RecyclerView(activity);
         mDialogView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
-        DriverViewAdapter driverViewAdapter = new DriverViewAdapter();
+        DriverViewAdapter driverViewAdapter = new DriverViewAdapter(this);
         mDialogView.setAdapter(driverViewAdapter);
 
         mDialog = new AlertDialog.Builder(activity)
