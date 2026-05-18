@@ -267,10 +267,9 @@ public class JREUtils {
                 renderLibrary = "libltw.so";
                 useGles = true;
                 glesVersion = 3;
-                // Ugly hack, very ugly
+                // Allow ANGLE to use custom Vulkan library by running LTW (and thus ANGLE too) in the same namespace as the driver
                 if(LauncherPreferences.PREF_USE_ANGLE && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
                     bypassNamespace = true;
-                    preloadVulkan();
                 }
                 break;
             case "opengles2":
@@ -297,7 +296,7 @@ public class JREUtils {
     public static native void setLdLibraryPath(String ldLibraryPath);
     public static native boolean configureRenderspec(String eglPath, boolean useLoaderBypass, boolean useGles, int glesVersion);
     public static native void preloadVulkan();
-    public static native void setCustomVkPath(String vulkanPaths);
+    public static native void setVulkanPath(String vulkanLibrary, String libraryPath);
     //public static native void initializeHooks();
     // Obtain AWT screen pixels to render on Android SurfaceView
     public static native boolean renderAWTScreenFrame(ByteBuffer tempBuffer);

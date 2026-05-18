@@ -255,6 +255,14 @@ public class GameRunner {
         JREUtils.setEnviroimentForGame(activity, rendererName);
         JREUtils.chdir(instance.getGameDirectory().getAbsolutePath());
 
+        // Initialize cusotm Vulkan driver if present
+        if(DriverManager.isSupportedByDevice() && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
+            String vkLib = DriverManager.getPreferredDriverLibraryPath();
+            String vkPath = DriverManager.getPreferredDriverRootPath();
+            JREUtils.setVulkanPath(vkLib, vkPath == null ? Tools.NATIVE_LIB_DIR : vkPath);
+            // We need to preload the Vulkan library to properly initialize mjlvlk so all the stuff uses it correctly
+            JREUtils.preloadVulkan();
+        }
         String rendererLibrary = JREUtils.loadGraphicsLibrary(rendererName);
         if(rendererLibrary == null) {
             Log.i("GameRunner", "Falling back to GL4ES 1.1.4");
@@ -264,12 +272,6 @@ public class GameRunner {
         if(rendererLibrary == null) {
             if(showDialog(activity, R.string.gr_err_renderer_load_Failed)) return;
             System.exit(0);
-        }
-        // Initialize cusotm Vulkan driver if present
-        if(GLInfoUtils.getGlInfo().isAdreno() && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
-            String vkLib = DriverManager.getPreferredDriverLibraryPath();
-            String vkPath = DriverManager.getPreferredDriverRootPath();
-            JREUtils.setVulkanPath(vkLib, vkPath == null ? Tools.NATIVE_LIB_DIR : vkPath);
         }
         javaArgList.add("-Dorg.lwjgl.opengl.libname=libGLMojo.so");
         javaArgList.add("-Dorg.lwjgl.freetype.libname="+ Tools.NATIVE_LIB_DIR+"/libfreetype.so");
