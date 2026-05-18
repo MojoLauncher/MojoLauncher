@@ -47,7 +47,7 @@ public class DriverConfigDialog {
             button.setOnClickListener(view -> {
                 boolean isEditing = !driverViewAdapter.getIsEditing();
                 driverViewAdapter.setIsEditing(isEditing);
-                button.setText(isEditing ? R.string.multirt_config_setdefault : R.string.driver_config_delete);
+                button.setText(isEditing ? R.string.driver_config_select : R.string.driver_config_delete);
             });
         });
     }

@@ -134,7 +134,7 @@ public class DriverViewAdapter extends RecyclerView.Adapter<DriverViewAdapter.Dr
             boolean isPreferred = isDefault(driver);
             mSetDefaultButton.setEnabled(!isPreferred);
             // TODO: Abstract this
-            mSetDefaultButton.setText(isPreferred ? R.string.multirt_config_setdefault_already : R.string.multirt_config_setdefault);
+            mSetDefaultButton.setText(isPreferred ? R.string.driver_config_already_used : R.string.driver_config_use);
             updateButtonsVisibility();
             if(driver.isDefault()){
                 mDeleteButton.setVisibility(View.GONE);
