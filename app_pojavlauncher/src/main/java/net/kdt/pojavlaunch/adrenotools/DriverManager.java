@@ -12,6 +12,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.zip.ZipFile;
 
@@ -22,8 +23,12 @@ public class DriverManager {
     private static final DefaultDriver DEFAULT_DRIVER = new DefaultDriver();
     // Must be in the exec place, /sdcard/... is noexec
     private static File packagesPath = new File(Tools.DIR_DATA, "vulkan");
-
+    private static Boolean supported = null;
     private DriverManager() {}
+
+    public static boolean isSupportedByDevice(){
+        return supported == null ? (supported = GLInfoUtils.getGlInfo().isAdreno()) : supported;
+    }
 
     public static Driver getPreferredDriver() {
         Driver driver = LauncherPreferences.PREF_VULKAN_PACKAGE == null ? DEFAULT_DRIVER : loadDriver(LauncherPreferences.PREF_VULKAN_PACKAGE);
@@ -68,21 +73,15 @@ public class DriverManager {
         LauncherPreferences.PREF_VULKAN_PACKAGE = !driver.isDefault() ? driver.getHash() : null;
         LauncherPreferences.DEFAULT_PREF.edit().putString("vulkanPackage", LauncherPreferences.PREF_VULKAN_PACKAGE).apply();
     }
-
-    public static void init(){
-        Log.i(TAG, "Initializing");
-        if(!GLInfoUtils.getGlInfo().isAdreno())
-            return;
+    private static boolean ensureRootExists(){
         if(!packagesPath.exists())
-            packagesPath.mkdirs();
-        String selectedDriver = LauncherPreferences.PREF_VULKAN_PACKAGE;
-        if(selectedDriver == null || selectedDriver.isEmpty())
-            setPreferredDriver(DEFAULT_DRIVER);
+            return packagesPath.mkdirs();
+        return true;
     }
 
     public static List<String> getDriverPaths(){
         if(!packagesPath.exists())
-            return null;
+            return Collections.emptyList();
         List<String> packages = new ArrayList<>();
         for(File dir : packagesPath.listFiles(File::isDirectory)) {
             if(!new File(dir, METADATA_FILENAME).exists())
@@ -92,10 +91,10 @@ public class DriverManager {
         return packages;
     }
     public static List<Driver> getDrivers(){
-        if(!packagesPath.exists())
-            return null;
         List<Driver> drivers = new ArrayList<>();
         drivers.add(DEFAULT_DRIVER);
+        if(!packagesPath.exists())
+            return drivers;
         // I'm not sure how heavy is this crap
         for(File dir : packagesPath.listFiles(File::isDirectory)) {
             File metadata = new File(dir, METADATA_FILENAME);
@@ -120,6 +119,7 @@ public class DriverManager {
     }
 
     public static AdrenoDriver installDriver(File path, boolean overwrite){
+        ensureRootExists();
         try(ZipFile zf = new ZipFile(path)){
 
             AdrenoDriver driver = AdrenoDriver.fromJson(ZipUtils.getEntryStream(zf, METADATA_FILENAME));
@@ -143,6 +143,8 @@ public class DriverManager {
         }
     }
     public static boolean removeDriver(String name) {
+        if(!packagesPath.exists())
+            return false;
         File path = new File(packagesPath, name);
         if (!path.isDirectory())
             return false;
