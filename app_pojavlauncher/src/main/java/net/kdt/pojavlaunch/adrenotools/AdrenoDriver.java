@@ -57,6 +57,12 @@ public class AdrenoDriver implements BaseDriver {
         return false;
     }
 
+    @Override
+    public String getHash() {
+        String to = name + author;
+        return UUID.nameUUIDFromBytes(to.getBytes(StandardCharsets.UTF_8)).toString();
+    }
+
     public String getName() {
         return name;
     }
@@ -83,10 +89,5 @@ public class AdrenoDriver implements BaseDriver {
 
     public int getMinApi() {
         return minApi;
-    }
-
-    public String toHash(){
-        String to = name + author;
-        return UUID.nameUUIDFromBytes(to.getBytes(StandardCharsets.UTF_8)).toString();
     }
 }

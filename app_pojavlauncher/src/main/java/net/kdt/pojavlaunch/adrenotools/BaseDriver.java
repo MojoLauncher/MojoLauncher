@@ -4,4 +4,5 @@ public interface BaseDriver {
     String getName();
     String getMainLibrary();
     boolean isDefault();
+    String getHash();
 }

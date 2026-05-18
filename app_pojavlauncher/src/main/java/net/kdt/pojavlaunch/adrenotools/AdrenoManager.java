@@ -38,7 +38,7 @@ public class AdrenoManager {
         if(pkg == null && driver == DEFAULT_DRIVER)
             return true;
         if(pkg != null && driver instanceof AdrenoDriver) {
-            return pkg.equals(((AdrenoDriver) driver).toHash());
+            return pkg.equals(((AdrenoDriver) driver).getHash());
         }
         return false;
     }
@@ -48,7 +48,7 @@ public class AdrenoManager {
     public static String getPreferredDriverLibraryPath(){
         BaseDriver driver = getPreferredDriver();
         if(driver.isDefault()) return driver.getMainLibrary(); // Default driver should be in the library path already
-        File path = new File(packagesPath,  ((AdrenoDriver) driver).toHash() + "/" + driver.getMainLibrary());
+        File path = new File(packagesPath,  ((AdrenoDriver) driver).getHash() + "/" + driver.getMainLibrary());
         if(path.exists()) return path.getAbsolutePath();
 
         // Invalid driver
@@ -58,13 +58,13 @@ public class AdrenoManager {
     public static String getPreferredDriverRootPath(){
         BaseDriver driver = getPreferredDriver();
         if(driver.isDefault()) return null; // Already in the library path
-        File path = new File(packagesPath,  ((AdrenoDriver) driver).toHash());
+        File path = new File(packagesPath,  ((AdrenoDriver) driver).getHash());
         if(path.exists())
             return path.getAbsolutePath();
         else return null;
     }
     public static void setPreferredDriver(BaseDriver driver){
-        LauncherPreferences.PREF_VULKAN_PACKAGE = !driver.isDefault() ? ((AdrenoDriver) driver).toHash() : null;
+        LauncherPreferences.PREF_VULKAN_PACKAGE = !driver.isDefault() ? ((AdrenoDriver) driver).getHash() : null;
         LauncherPreferences.DEFAULT_PREF.edit().putString("vulkanPackage", LauncherPreferences.PREF_VULKAN_PACKAGE).apply();
     }
 
@@ -121,7 +121,7 @@ public class AdrenoManager {
         try(ZipFile zf = new ZipFile(path)){
 
             AdrenoDriver driver = AdrenoDriver.fromJson(ZipUtils.getEntryStream(zf, METADATA_FILENAME));
-            String hash = driver.toHash();
+            String hash = driver.getHash();
             if(packageExists(hash)){
                 if(!overwrite) {
                     Log.w(TAG, "Driver package already installed and overwrite is not requested");

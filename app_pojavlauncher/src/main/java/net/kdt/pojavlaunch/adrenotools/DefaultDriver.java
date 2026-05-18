@@ -15,4 +15,9 @@ public final class DefaultDriver implements BaseDriver {
     public boolean isDefault() {
         return true;
     }
+
+    @Override
+    public String getHash() {
+        return null;
+    }
 }
