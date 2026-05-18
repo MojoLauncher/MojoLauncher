@@ -163,20 +163,22 @@ public class JREUtils {
         setupFfmpegEnv(context, envMap);
         setupRendererEnv(envMap, renderer);
 
-        String vkLib = AdrenoManager.getPreferredDriverLibraryPath();
-        String vkPath = AdrenoManager.getPreferredDriverRootPath();
-        setCustomVkPath(vkLib);
 
-        Log.i("VK_LOADER", "Custom VK Lib: " + vkLib);
-        Logger.appendToLog("Will use driver at " + vkLib + " at path " + vkPath);
-        // HACK
-        envMap.put("POJAV_NATIVEDIR", vkPath == null ? Tools.NATIVE_LIB_DIR : vkPath);
         envMap.put("EGL_PLATFORM", "android");
 
         if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
 
+        // TODO: move custom driver setup somewhere else
         if(GLInfoUtils.getGlInfo().isAdreno() && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
             setUseTurnip(true);
+            String vkLib = AdrenoManager.getPreferredDriverLibraryPath();
+            String vkPath = AdrenoManager.getPreferredDriverRootPath();
+            setCustomVkPath(vkLib);
+
+            Log.i("VK_LOADER", "Custom VK Lib: " + vkLib);
+            Logger.appendToLog("Will use driver at " + vkLib + " at path " + vkPath);
+            // HACK
+            envMap.put("POJAV_NATIVEDIR", vkPath == null ? Tools.NATIVE_LIB_DIR : vkPath);
         }
 
         overrideEnvVars(envMap);
@@ -263,22 +265,24 @@ public class JREUtils {
         String renderLibrary;
         boolean useGles;
         boolean bypassNamespace = false;
-        boolean preloadVk = true;
         int glesVersion;
         switch (renderer){
             case "freedreno_kgsl":
-                preloadVk = false;
             case "vulkan_zink":
                 renderLibrary = "libEGL_mesa.so";
                 useGles = false;
                 bypassNamespace = true; // Mesa is linked to a bunch of libraries not available in the pojavexec namespace
                 glesVersion = 3;
-                if(preloadVk) preloadVulkan(); // Zink requires Vulkan library to be preloaded
                 break;
             case "opengles3_ltw" :
                 renderLibrary = "libltw.so";
                 useGles = true;
                 glesVersion = 3;
+                // Ugly hack, very ugly
+                if(LauncherPreferences.PREF_USE_ANGLE && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
+                    bypassNamespace = true;
+                    preloadVulkan();
+                }
                 break;
             case "opengles2":
             case "opengles2_5":
@@ -289,7 +293,6 @@ public class JREUtils {
                 glesVersion = Integer.parseInt((String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION));
                 break;
         }
-
         if (!configureRenderspec(renderLibrary, bypassNamespace, useGles, glesVersion)) {
             Log.e("RENDER_LIBRARY","Failed to load renderer " + renderLibrary );
             return null;
