@@ -19,7 +19,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-// AdrenoTools package manager
+/**
+ * AdrenoTools driver package manager
+ */
 public class DriverManager {
     public static final String METADATA_FILENAME = "meta.json";
     public static final String TAG = "AdrenoTools";
@@ -29,10 +31,18 @@ public class DriverManager {
     private static Boolean supported = null;
     private DriverManager() {}
 
+    /**
+     * Checks if DriverManager i.e. custom drivers are supported on the current device
+     * @return True if requirements are met, false otherwise
+     */
     public static boolean isSupportedByDevice(){
         return supported == null ? (supported = GLInfoUtils.getGlInfo().isAdreno()) : supported;
     }
 
+    /**
+     * Loads and returns a preferred driver. Returns a default driver if there is no preferred driver or it has failed loading
+     * @return A driver
+     */
     public static Driver getPreferredDriver() {
         Driver driver = LauncherPreferences.PREF_VULKAN_PACKAGE == null ? DEFAULT_DRIVER : loadDriver(LauncherPreferences.PREF_VULKAN_PACKAGE);
         if(driver == null) {
@@ -41,6 +51,12 @@ public class DriverManager {
         }
         return driver;
     }
+
+    /**
+     * Checks if the provided driver is selected as the default/preferred
+     * @param driver A driver to check
+     * @return True if the provided driver is used
+     */
     public static boolean isPreferredDriver(Driver driver){
         String pkg = getPreferredDriverHash();
         // selected default package
@@ -51,9 +67,19 @@ public class DriverManager {
         }
         return false;
     }
+
+    /**
+     * Gets the hash string of a preferred driver
+     * @return A hash
+     */
     public static String getPreferredDriverHash() {
         return LauncherPreferences.PREF_VULKAN_PACKAGE;
     }
+
+    /**
+     * Gets an absolute path to the Vulkan library of the preferred driver
+     * @return A path
+     */
     public static String getPreferredDriverLibraryPath(){
         Driver driver = getPreferredDriver();
         if(driver.isDefault()) return driver.getMainLibrary(); // Default driver should be in the library path already
@@ -64,6 +90,11 @@ public class DriverManager {
         Log.e(TAG, "Unable to resolve Vulkan library: path " + path.getAbsolutePath() + " is not a file or does not exist");
         return DEFAULT_DRIVER.getMainLibrary();
     }
+
+    /**
+     * Gets an absolute path to the root directory of the preferred driver
+     * @return A path
+     */
     public static String getPreferredDriverRootPath(){
         Driver driver = getPreferredDriver();
         if(driver.isDefault()) return null; // Already in the library path
@@ -72,6 +103,11 @@ public class DriverManager {
             return path.getAbsolutePath();
         else return null;
     }
+
+    /**
+     * Sets the preferred driver
+     * @param driver A driver to set
+     */
     public static void setPreferredDriver(Driver driver){
         LauncherPreferences.PREF_VULKAN_PACKAGE = !driver.isDefault() ? driver.getHash() : null;
         LauncherPreferences.DEFAULT_PREF.edit().putString("vulkanPackage", LauncherPreferences.PREF_VULKAN_PACKAGE).apply();
@@ -82,6 +118,10 @@ public class DriverManager {
         return true;
     }
 
+    /**
+     * Gets a list of hashes of the drivers that are installed in the driver path
+     * @return A list of hashes
+     */
     public static List<String> getDriverPaths(){
         if(!packagesPath.exists())
             return Collections.emptyList();
@@ -93,6 +133,11 @@ public class DriverManager {
         }
         return packages;
     }
+
+    /**
+     * Gets a list of the installed drivers + the default (built-in) driver
+     * @return A list of drivers
+     */
     public static List<Driver> getDrivers(){
         List<Driver> drivers = new ArrayList<>();
         drivers.add(DEFAULT_DRIVER);
@@ -110,16 +155,32 @@ public class DriverManager {
         return drivers;
     }
 
+    /**
+     * Checks if the driver installed
+     * @param hash A hash of the driver
+     * @return True if the driver is installed
+     */
     public static boolean driverExists(String hash){
         return packagesPath.exists() && new File(packagesPath, hash + "/" + METADATA_FILENAME).exists();
     }
 
+    /**
+     * Loads a driver from the installed path
+     * @param hash A driver hash
+     * @return Driver if the load succeeded, null otherwise
+     */
     public static AdrenoDriver loadDriver(String hash) {
         File metadata = new File(packagesPath, hash + "/" + METADATA_FILENAME);
         if (!metadata.exists())
             return null;
         return AdrenoDriver.fromJson(metadata);
     }
+
+    /**
+     * Checks if the driver package is valid by path. The only things checked are zip file consistency and metadata file presence.
+     * @param path A path to a driver package
+     * @return true if the provided zip file is a valid package
+     */
     public static boolean validateDriver(File path){
         try(ZipFile zf = new ZipFile(path)){
             AdrenoDriver driver = AdrenoDriver.fromJson(ZipUtils.getEntryStream(zf, METADATA_FILENAME));
@@ -128,6 +189,13 @@ public class DriverManager {
             return false;
         }
     }
+
+    /**
+     * Checks if the driver package is valid in the provided input stream. The only things checked are zip file consistency and metadata file presence.
+     * Might be slow because it searches the whole stream for metadata
+     * @param stream An input stream containing a zip data
+     * @return if the provided stream contains a valid package
+     */
     public static boolean validateDriver(InputStream stream){
         ZipInputStream zip = new ZipInputStream(stream);
         try{
@@ -142,6 +210,12 @@ public class DriverManager {
         }
     }
 
+    /**
+     * Install a driver from the provided path
+     * @param path A path to a driver package
+     * @param overwrite Whether the driver should be overwritten if it has the same hash. Will return null if the driver exists and overwrite is not requested
+     * @return A driver if the install succeeded, null otherwise
+     */
     public static AdrenoDriver installDriver(File path, boolean overwrite){
         ensureRootExists();
         try(ZipFile zf = new ZipFile(path)){
@@ -166,6 +240,12 @@ public class DriverManager {
             return null;
         }
     }
+
+    /**
+     * Removes a driver by its name (hash)
+     * @param name A driver hash
+     * @return true if the remove succeeded, false otherwise
+     */
     public static boolean removeDriver(String name) {
         if(!packagesPath.exists())
             return false;
