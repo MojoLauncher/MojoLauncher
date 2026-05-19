@@ -76,7 +76,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import git.artdeell.mojo.BuildConfig;
@@ -192,26 +191,6 @@ public final class Tools {
                 context.getString(R.string.notif_channel_name), NotificationManager.IMPORTANCE_DEFAULT);
         NotificationManagerCompat manager = NotificationManagerCompat.from(context);
         manager.createNotificationChannel(channel);
-    }
-
-    public static StringBuilder mavenNameToPathBuilder(String libName) {
-        String[] libInfos = libName.split(":");
-        return new StringBuilder()
-                .append(libInfos[0].replaceAll("\\.", "/"))
-                .append('/')
-                .append(libInfos[1])
-                .append('/')
-                .append(libInfos[2])
-                .append('/')
-                .append(libInfos[1]).append('-').append(libInfos[2]);
-    }
-
-    public static String mavenNameToAarPath(String libName) {
-        return mavenNameToPathBuilder(libName).append(".aar").toString();
-    }
-
-    public static String mavenNameToPath(String libName) {
-        return mavenNameToPathBuilder(libName).append(".jar").toString();
     }
 
 
