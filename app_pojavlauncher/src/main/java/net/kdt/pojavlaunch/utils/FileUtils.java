@@ -20,7 +20,7 @@ public class FileUtils {
      */
     public static String getFileName(String pathOrUrl) {
         int lastSlashIndex = pathOrUrl.lastIndexOf('/');
-        if(lastSlashIndex == -1) return null;
+        if(lastSlashIndex == -1) return pathOrUrl;
         return pathOrUrl.substring(lastSlashIndex);
     }
 
