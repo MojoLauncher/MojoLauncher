@@ -172,6 +172,13 @@ public class JREUtils {
             setUseTurnip(true);
         }
 
+        if(LauncherPreferences.PREF_FREEDRENO_SYSMEM) {
+            // We could also apply the FD_MESA_DEBUG only if freedreno is active but why making things complicated?
+            Logger.appendToLog("Will use sysmem rendering for Turnip/Freedreno");
+            envMap.put("FD_MESA_DEBUG", "sysmem");
+            envMap.put("TU_DEBUG", "sysmem");
+        }
+
         overrideEnvVars(envMap);
 
         for (Map.Entry<String, String> env : envMap.entrySet()) {
