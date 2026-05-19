@@ -27,6 +27,7 @@ import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
 import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.JSONUtils;
+import net.kdt.pojavlaunch.utils.MavenNameUtils;
 import net.kdt.pojavlaunch.utils.jre.RuntimeSelectionException;
 import net.kdt.pojavlaunch.value.DependentLibrary;
 import net.kdt.pojavlaunch.value.LibrarySubstitution;
@@ -41,6 +42,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -56,6 +58,7 @@ public class MinecraftDownloader extends Downloader {
 
     private ArrayList<TaskMetadata> mScheduledDownloadTasks;
     private ArrayList<NativeLibraryExtractable> mDeclaredNatives;
+    private LinkedHashMap<String, DependentLibrary> mAllLibraries;
     private LinkedHashSet<File> mClassPath;
     private SubstitutionMap mSubstitutionMap;
 
@@ -115,7 +118,7 @@ public class MinecraftDownloader extends Downloader {
         mTargetJarFile = createGameJarPath(versionName);
         mScheduledDownloadTasks = new ArrayList<>();
         mDeclaredNatives = new ArrayList<>();
-        mClassPath = new LinkedHashSet<>();
+        mAllLibraries = new LinkedHashMap<>();
 
         if(sSubstitutionMapFuture == null) throw new RuntimeException("SubstitutionMap not prepared");
         mSubstitutionMap = sSubstitutionMapFuture.get();
@@ -124,6 +127,20 @@ public class MinecraftDownloader extends Downloader {
 
         downloadAndProcessMetadata(assetManager, verInfo, versionName);
 
+        int downloadLibCount = mAllLibraries.size();
+        mClassPath = new LinkedHashSet<>(downloadLibCount);
+        growDownloadList(downloadLibCount);
+        for(DependentLibrary dependentLibrary : mAllLibraries.values()) {
+            // Special handling for JNA Android natives
+            if(dependentLibrary.name.startsWith("net.java.dev.jna:jna:") && !dependentLibrary.replaced) {
+                scheduleAarDownload(Tools.MAVEN_CENTRAL, dependentLibrary);
+            }
+
+            if(dependentLibrary.downloads != null) processLibraryWithDownloads(dependentLibrary);
+            else processRawLibrary(dependentLibrary);
+        }
+
+        mAllLibraries.clear();
         mClassPath.add(mTargetJarFile);
 
         runDownloads(mScheduledDownloadTasks);
@@ -274,7 +291,7 @@ public class MinecraftDownloader extends Downloader {
      * @throws IOException in case if download scheduling fails.
      */
     private void scheduleAarDownload(String baseRepository, DependentLibrary dependentLibrary) throws IOException {
-        String path = Tools.mavenNameToAarPath(dependentLibrary.name);
+        String path = MavenNameUtils.mavenNameToAarPath(dependentLibrary.name);
         String downloadUrl = baseRepository + path;
         File targetPath = new File(Tools.DIR_HOME_LIBRARY, path);
         mDeclaredNatives.add(new NativeLibraryExtractable(targetPath, null));
@@ -336,7 +353,7 @@ public class MinecraftDownloader extends Downloader {
     }
 
     private void processRawLibrary(DependentLibrary library) throws IOException{
-        String path = Tools.mavenNameToPath(library.name);
+        String path = MavenNameUtils.mavenNameToPath(library.name);
         String baseUrl = library.url;
         if(baseUrl != null) baseUrl = baseUrl.replace("http://","https://");
         else baseUrl = "https://libraries.minecraft.net/";
@@ -345,7 +362,6 @@ public class MinecraftDownloader extends Downloader {
 
     private void scheduleLibraryDownloads(DependentLibrary[] dependentLibraries) throws IOException {
         Tools.preProcessLibraries(dependentLibraries);
-        growDownloadList(dependentLibraries.length);
         for(DependentLibrary dependentLibrary : dependentLibraries) {
             if(dependentLibrary.rules != null) {
                 String ruleSetAction = MoJsonRule.ruleSetCheck(dependentLibrary.rules);
@@ -358,13 +374,12 @@ public class MinecraftDownloader extends Downloader {
                 dependentLibrary = substitution;
             }
 
-            // Special handling for JNA Android natives
-            if(dependentLibrary.name.startsWith("net.java.dev.jna:jna:") && !dependentLibrary.replaced) {
-                scheduleAarDownload(Tools.MAVEN_CENTRAL, dependentLibrary);
+            String libraryTrimmedName = MavenNameUtils.mavenBaseName(dependentLibrary.name);
+            // Move the more recent library to the front of the list
+            if (mAllLibraries.containsKey(libraryTrimmedName)) {
+                mAllLibraries.remove(libraryTrimmedName);
             }
-
-            if(dependentLibrary.downloads != null) processLibraryWithDownloads(dependentLibrary);
-            else processRawLibrary(dependentLibrary);
+            mAllLibraries.put(libraryTrimmedName, dependentLibrary);
         }
     }
     

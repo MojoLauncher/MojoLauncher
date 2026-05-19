@@ -196,26 +196,6 @@ public final class Tools {
         manager.createNotificationChannel(channel);
     }
 
-    public static StringBuilder mavenNameToPathBuilder(String libName) {
-        String[] libInfos = libName.split(":");
-        return new StringBuilder()
-                .append(libInfos[0].replaceAll("\\.", "/"))
-                .append('/')
-                .append(libInfos[1])
-                .append('/')
-                .append(libInfos[2])
-                .append('/')
-                .append(libInfos[1]).append('-').append(libInfos[2]);
-    }
-
-    public static String mavenNameToAarPath(String libName) {
-        return mavenNameToPathBuilder(libName).append(".aar").toString();
-    }
-
-    public static String mavenNameToPath(String libName) {
-        return mavenNameToPathBuilder(libName).append(".jar").toString();
-    }
-
 
     public static DisplayMetrics getDisplayMetrics(Activity activity) {
         DisplayMetrics displayMetrics = new DisplayMetrics();

@@ -6,6 +6,8 @@ import android.view.Surface;
 
 import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 import java.util.Collections;
 import java.util.Set;
 import java.util.WeakHashMap;
@@ -16,9 +18,12 @@ public class GLFW {
     private static final Set<GrabListener> grabListeners = Collections.newSetFromMap(new WeakHashMap<>());
     private static WeakReference<CursorImplementor> cursorImpl;
     private static WeakReference<ClipboardProvider> clipboardImpl;
+    private static WeakReference<GamepadEnableHandler> gamepadEnable;
     private static boolean grabbing = false;
     private static GLFWCursor cursor;
     public static double cursorX, cursorY;
+    public static ByteBuffer gamepadButtonBuffer;
+    public static FloatBuffer gamepadAxisBuffer;
 
     static {
         System.loadLibrary("glfw");
@@ -32,6 +37,10 @@ public class GLFW {
 
     public static void setClipboardImpl(ClipboardProvider clipboardImpl) {
         GLFW.clipboardImpl = new WeakReference<>(clipboardImpl);
+    }
+
+    public static void setGamepadEnableHandler(GamepadEnableHandler handler) {
+        GLFW.gamepadEnable = new WeakReference<>(handler);
     }
 
     public static void addGrabListener(GrabListener grabListener) {
@@ -107,6 +116,20 @@ public class GLFW {
         clipboardProvider.setClipboardString(str);
     }
 
+    @SuppressWarnings("unused") // Used from native
+    private static void enableDirectGamepad(ByteBuffer buttonBuffer, ByteBuffer axisBuffer) {
+        buttonBuffer = buttonBuffer.order(ByteOrder.nativeOrder());
+        FloatBuffer axisFloatBuffer = axisBuffer.order(ByteOrder.nativeOrder()).asFloatBuffer();
+        if(buttonBuffer.capacity() != 14 || axisFloatBuffer.capacity() != 6) {
+            Log.i("GLFW", "Not enabling direct gamepad: unexpected buffer capacities ("+buttonBuffer.capacity()+" " + axisFloatBuffer.capacity()+")");
+            return;
+        }
+        gamepadAxisBuffer = axisFloatBuffer;
+        gamepadButtonBuffer = buttonBuffer;
+        GamepadEnableHandler enableHandler = Utils.getWeakReference(gamepadEnable);
+        if(enableHandler != null) enableHandler.onEnableGamepad();
+    }
+
     public static void sendKeyEvent(int glfwCode, boolean state, int mods) {
         sendKeyEvent(glfwCode, state ? 1 : 0, mods);
     }
@@ -121,4 +144,5 @@ public class GLFW {
     public static native void nativeSurfaceCreated(Surface surface);
     public static native void nativeSurfaceDestroyed();
     public static native void nativeSurfaceUpdated();
+    public static native void nativeNotifyGamepadConnected();
 }

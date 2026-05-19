@@ -2,36 +2,23 @@ package net.kdt.pojavlaunch;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.view.Choreographer;
 import android.view.KeyEvent;
 
 import androidx.annotation.Keep;
-import androidx.annotation.Nullable;
 
-import net.kdt.pojavlaunch.customcontrols.gamepad.direct.DirectGamepadEnableHandler;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 
 import java.io.File;
-import java.lang.ref.WeakReference;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
 
 import git.artdeell.dnbootstrap.glfw.GLFW;
 
 public class CallbackBridge {
     public static final Choreographer sChoreographer = Choreographer.getInstance();
-    // Use a weak reference here to avoid possibly statically referencing a Context.
-    private static @Nullable WeakReference<DirectGamepadEnableHandler> sDirectGamepadEnableHandler;
 
     public static volatile int windowWidth, windowHeight;
     public volatile static boolean holdingAlt, holdingCapslock, holdingCtrl,
             holdingNumlock, holdingShift;
-
-    public static final ByteBuffer sGamepadButtonBuffer;
-    public static final FloatBuffer sGamepadAxisBuffer;
-    public static boolean sGamepadDirectInput = false;
 
     public static void performClick(int button) {
         double ox = GLFW.cursorX, oy = GLFW.cursorY;
@@ -139,31 +126,11 @@ public class CallbackBridge {
         });
     }
 
-    @Keep
-    private static void onDirectInputEnable() {
-        Log.i("CallbackBridge", "onDirectInputEnable()");
-        DirectGamepadEnableHandler enableHandler = Tools.getWeakReference(sDirectGamepadEnableHandler);
-        if(enableHandler != null) enableHandler.onDirectGamepadEnabled();
-        sGamepadDirectInput = true;
-    }
-
-    public static FloatBuffer createGamepadAxisBuffer() {
-        ByteBuffer axisByteBuffer = ByteBuffer.allocate(50); // TODO;
-        // NOTE: hardcoded order (also in jre_lwjgl3glfw CallbackBridge)
-        return axisByteBuffer.order(ByteOrder.LITTLE_ENDIAN).asFloatBuffer();
-    }
-
-    public static void setDirectGamepadEnableHandler(DirectGamepadEnableHandler h) {
-        sDirectGamepadEnableHandler = new WeakReference<>(h);
-    }
-
     public static native void minibridgeInit();
 
     static {
         System.loadLibrary("pojavexec");
         minibridgeInit();
-        sGamepadButtonBuffer = ByteBuffer.allocate(50); // TODO
-        sGamepadAxisBuffer = createGamepadAxisBuffer();
     }
 }
 

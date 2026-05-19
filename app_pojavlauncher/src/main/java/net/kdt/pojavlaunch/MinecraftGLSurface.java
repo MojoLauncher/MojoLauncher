@@ -24,8 +24,7 @@ import androidx.annotation.RequiresApi;
 import net.kdt.pojavlaunch.customcontrols.ControlLayout;
 import net.kdt.pojavlaunch.customcontrols.gamepad.DefaultDataProvider;
 import net.kdt.pojavlaunch.customcontrols.gamepad.Gamepad;
-import net.kdt.pojavlaunch.customcontrols.gamepad.direct.DirectGamepad;
-import net.kdt.pojavlaunch.customcontrols.gamepad.direct.DirectGamepadEnableHandler;
+import net.kdt.pojavlaunch.customcontrols.gamepad.DirectGamepad;
 import net.kdt.pojavlaunch.customcontrols.mouse.AndroidPointerCapture;
 import net.kdt.pojavlaunch.customcontrols.mouse.InGUIEventProcessor;
 import net.kdt.pojavlaunch.customcontrols.mouse.InGameEventProcessor;
@@ -40,12 +39,13 @@ import fr.spse.gamepad_remapper.GamepadHandler;
 import fr.spse.gamepad_remapper.RemapperManager;
 import fr.spse.gamepad_remapper.RemapperView;
 import git.artdeell.dnbootstrap.glfw.GLFW;
+import git.artdeell.dnbootstrap.glfw.GamepadEnableHandler;
 import git.artdeell.dnbootstrap.glfw.GrabListener;
 
 /**
  * Class dealing with showing minecraft surface and taking inputs to dispatch them to minecraft
  */
-public class MinecraftGLSurface extends View implements GrabListener, DirectGamepadEnableHandler, SurfaceProvider.SurfaceCallback {
+public class MinecraftGLSurface extends View implements GrabListener, GamepadEnableHandler, SurfaceProvider.SurfaceCallback {
     /* Gamepad object for gamepad inputs, instantiated on need */
     private GamepadHandler mGamepadHandler;
     /* The RemapperView.Builder object allows you to set which buttons to remap */
@@ -89,7 +89,7 @@ public class MinecraftGLSurface extends View implements GrabListener, DirectGame
     public MinecraftGLSurface(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         setFocusable(true);
-        CallbackBridge.setDirectGamepadEnableHandler(this);
+        GLFW.setGamepadEnableHandler(this);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -145,9 +145,12 @@ public class MinecraftGLSurface extends View implements GrabListener, DirectGame
         return mCurrentTouchProcessor.processTouchEvent(e);
     }
 
-    private void createGamepad(View contextView, InputDevice inputDevice) {
-        if(CallbackBridge.sGamepadDirectInput) {
+    private void createGamepad(InputDevice inputDevice) {
+        if(GLFW.gamepadButtonBuffer != null) {
             mGamepadHandler = new DirectGamepad();
+            // Only send this if there was a gamepad event, to avoid forcing users without gamepads through
+            // Controlify calibration
+            GLFW.nativeNotifyGamepadConnected();
         }else {
             mGamepadHandler = new Gamepad(inputDevice, DefaultDataProvider.INSTANCE);
         }
@@ -162,7 +165,7 @@ public class MinecraftGLSurface extends View implements GrabListener, DirectGame
         int mouseCursorIndex = -1;
 
         if(Gamepad.isGamepadEvent(event)){
-            if(mGamepadHandler == null) createGamepad(this, event.getDevice());
+            if(mGamepadHandler == null) createGamepad(event.getDevice());
 
             mInputManager.handleMotionEventInput(getContext(), event, mGamepadHandler);
             return true;
@@ -235,7 +238,7 @@ public class MinecraftGLSurface extends View implements GrabListener, DirectGame
         }
 
         if(Gamepad.isGamepadEvent(event)){
-            if(mGamepadHandler == null) createGamepad(this, event.getDevice());
+            if(mGamepadHandler == null) createGamepad(event.getDevice());
 
             mInputManager.handleKeyEventInput(getContext(), event, mGamepadHandler);
             return true;
@@ -342,17 +345,6 @@ public class MinecraftGLSurface extends View implements GrabListener, DirectGame
     }
 
     @Override
-    public void onDirectGamepadEnabled() {
-        post(()->{
-            if(mGamepadHandler != null && mGamepadHandler instanceof Gamepad) {
-                ((Gamepad)mGamepadHandler).removeSelf();
-            }
-            // Force gamepad recreation on next event
-            mGamepadHandler = null;
-        });
-    }
-
-    @Override
     public void onSurfaceAvailable(Surface surface) {
         GLFW.nativeSurfaceCreated(surface);
         if(mRefreshOnly) return;
@@ -368,6 +360,17 @@ public class MinecraftGLSurface extends View implements GrabListener, DirectGame
     @Override
     public void onSurfaceDestroyed() {
         GLFW.nativeSurfaceDestroyed();
+    }
+
+    @Override
+    public void onEnableGamepad() {
+        post(()->{
+            if(mGamepadHandler != null && mGamepadHandler instanceof Gamepad) {
+                ((Gamepad)mGamepadHandler).removeSelf();
+            }
+            // Force gamepad recreation on next event
+            mGamepadHandler = null;
+        });
     }
 
     /** A small interface called when the listener is ready for the first time */
