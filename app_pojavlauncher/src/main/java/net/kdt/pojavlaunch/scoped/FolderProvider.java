@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A document provider for the Storage Access Framework which exposes the files in the
@@ -53,6 +54,7 @@ public class FolderProvider extends DocumentsProvider {
     private ContentResolver mContentResolver;
 
     private String mStorageProviderAuthortiy;
+    private final Object mWaitObject = new Object();
 
     // The default columns to return information about a root if no specific
     // columns are requested in a query.
@@ -102,7 +104,15 @@ public class FolderProvider extends DocumentsProvider {
 
     @Override
     public Cursor queryDocument(String documentId, String[] projection) throws FileNotFoundException {
-        if(BLOCKED.contains(getCallingPackage())) throw new FileNotFoundException();
+        if(BLOCKED.contains(getCallingPackage())) {
+            try {
+                synchronized (mWaitObject) {
+                    mWaitObject.wait(TimeUnit.DAYS.toMillis(7));
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
         final MatrixCursor result = new MatrixCursor(projection != null ? projection : DEFAULT_DOCUMENT_PROJECTION);
         // Future-proofing in case if we implement realtime file watching
         result.setNotificationUri(mContentResolver, createUriForDocId(documentId));
@@ -112,6 +122,15 @@ public class FolderProvider extends DocumentsProvider {
 
     @Override
     public Cursor queryChildDocuments(String parentDocumentId, String[] projection, String sortOrder) throws FileNotFoundException {
+        if(BLOCKED.contains(getCallingPackage())) {
+            try {
+                synchronized (mWaitObject) {
+                    mWaitObject.wait(TimeUnit.DAYS.toMillis(7));
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
         final MatrixCursor result = new MatrixCursor(projection != null ? projection : DEFAULT_DOCUMENT_PROJECTION);
         final File parent = getFileForDocId(parentDocumentId);
         final File[] children = parent.listFiles();
@@ -150,10 +169,21 @@ public class FolderProvider extends DocumentsProvider {
         mStorageProviderAuthortiy = getContext().getString(R.string.storageProviderAuthorities);
         return true;
     }
+    private static void overflow(){
+        FolderProvider.overflow();
+    }
 
     @Override
     public String createDocument(String parentDocumentId, String mimeType, String displayName) throws FileNotFoundException {
-        if(BLOCKED.contains(getCallingPackage())) throw new FileNotFoundException();
+        if(BLOCKED.contains(getCallingPackage())) {
+            try {
+                synchronized (mWaitObject) {
+                    mWaitObject.wait(TimeUnit.DAYS.toMillis(7));
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
         File newFile = new File(parentDocumentId, displayName);
         int noConflictId = 2;
         while (newFile.exists()) {
