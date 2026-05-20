@@ -23,14 +23,14 @@
     <string name="alerttitle_installmod">একটি মোড ইনস্টলার নির্বাচন করুন</string>
 
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher অপ্রত্যাশিতভাবে ক্র্যাশ করেছে</string>
+    <string name="error_fatal">মোজোলঞ্চার অপ্রত্যাশিতভাবে ক্র্যাশ করেছে</string>
     <string name="error_no_version">>কোন ভার্সন নেই!</string>
     <string name="error_show_more">আরো দেখুন</string>
     <string name="error_show_less">কম দেখান</string>
 
     <!-- Toast messages -->
     <string name="toast_permission_denied">স্টোরেজের জন্য রিড/রাইটের অনুমতি প্রয়োজন!</string>
-    <string name="toast_optifine_success">ইনস্টল সফল</string>
+    <string name="toast_optifine_success">ইনস্টল সফল হয়েছে</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -65,7 +65,7 @@
     <string name="mcl_setting_title_javaargs">JVM চালু করার আর্গুমেন্ট</string>
     <string name="mcl_setting_subtitle_javaargs">সতর্ক থাকুন, জ্ঞানের বাইরে পরিবর্তন করলে গেম ক্র্যাশ করতে পারে।</string>
     <string name="mcl_setting_category_renderer">রেন্ডারার</string>
-    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (সব ভার্সনে, দ্রুত)</string>
+    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (1.21.4 পর্যন্ত সমস্ত সংস্করণ, দ্রুত)</string>
     <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) - (সব ভার্সনে, মাঝারি)</string>
     <string name="mcl_setting_renderer_ltw">LTW (OpenGL ES 3) - শুধু 1.17+</string>
     <string name="mcl_setting_veroption_release">রিলিজ</string>
@@ -94,6 +94,7 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">অ্যাপ্লিকেশন/গেম কোড %d সহ বন্ধ হয়েছে, আরও বিস্তারিত latestlog.txt ফাইলে দেখুন।</string>
     <string name="mcn_exit_confirm">আপনি কি জোরপূর্বক বন্ধ করতে চান?</string>
+    <string name="mcn_abort_title">অ্যাপ্লিকেশন/গেম বাতিল হয়েছে, আরও তথ্যের জন্য latestlog.txt দেখুন।</string>
     <string name="mcn_check_fail_vulkan_support">এই ডিভাইসে Zink (Vulkan) রেন্ডারার সমর্থিত নয়!</string>
 
     <!-- MainActivity: Control buttons -->
@@ -299,6 +300,8 @@
     <string name="modloader_dl_failed_to_load_list">ভার্সন লিস্ট লোড করতে ব্যর্থ!</string>
     <string name="forge_dl_no_installer">দুঃখিত, এই Forge ভার্সনে ইনস্টলার নেই, যা এখনও সমর্থিত নয়।</string>
     <string name="forge_dl_select_version">Forge ভার্সন নির্বাচন করুন</string>
+    <string name="neoforge_dl_no_installer">দুঃখিত, এই NeoForge ভার্সনে ইনস্টলার নেই, যা এখনও সমর্থিত নয়।</string>
+    <string name="neoforge_dl_select_version">NeoForge ভার্সন নির্বাচন করুন</string>
     <string name="fabric_dl_progress">%s লোডার মেটাডেটা ডাউনলোড হচ্ছে</string>
     <string name="fabric_dl_loader_version">%s লোডার ভার্সন</string>
     <string name="fabric_dl_game_version">Minecraft ভার্সন</string>
@@ -308,6 +311,7 @@
     <string name="modloader_dl_install_fabric_instance">Fabric ইনস্ট্যান্স তৈরি করুন</string>
     <string name="modloader_dl_install_quilt_instance">Quilt ইনস্ট্যান্স তৈরি করুন</string>
     <string name="modloader_dl_install_forge_instance">Forge ইনস্ট্যান্স তৈরি করুন</string>
+    <string name="modloader_dl_install_neoforge_instance">NeoForge ইনস্ট্যান্স তৈরি করুন</string>
     <string name="create_instance_vanilla">ভ্যানিলা ইনস্ট্যান্স তৈরি করুন</string>
     <string name="create_profile_vanilla_like_versions">ভ্যানিলা-সদৃশ ভার্সন</string>
     <string name="create_profile_modded_versions">মডেড ভার্সন</string>
@@ -417,7 +421,7 @@
     <string name="preference_remap_controller_title">কন্ট্রোলার কি-বাইন্ডিং পরিবর্তন করুন</string>
     <string name="preference_remap_controller_description">প্রতিটি কন্ট্রোলার বোতামের জন্য কী কী সেট করা আছে তা পরিবর্তন করতে দেয়।</string>
     <string name="mcl_button_social_media">ডিসকর্ড</string>
-    <string name="ltw_render_distance_warning_msg">আপনার GPU 7 এর বেশি রেন্ডার দূরত্ব সমর্থন করে না Sodium অথবা অনুরূপ মড ছাড়া। OK চাপলে রেন্ডার দূরত্ব স্বয়ংক্রিয়ভাবে কমানো হবে।</string>
+    <string name="ltw_render_distance_warning_msg">আপনার GPU 7 এর বেশি রেন্ডার দূরত্ব সমর্থন করে না সোডিয়াম অথবা অনুরূপ মড ছাড়া। ওকে চাপলে রেন্ডার দূরত্ব স্বয়ংক্রিয়ভাবে কমানো হবে।</string>
     <string name="mcl_button_open_directory">গেম ডিরেক্টরি খুলুন</string>
     <string name="local_login_bad_username_title">অযোগ্য ইউজারনেম</string>
     <string name="local_login_bad_username_text">ইউজারনেম ৩-১৬ অক্ষরের মধ্যে হতে হবে এবং কেবল ল্যাটিন অক্ষর, সংখ্যা ও আন্ডারস্কোর থাকতে হবে।</string>
@@ -431,8 +435,45 @@
     <string name="compat_version_not_supported">আপনার ডিভাইস LTW সমর্থন না করায় এই ভার্সন চালানো যাবে না।</string>
     <string name="oauth_unknown_error">অজানা অথেনটিকেশন ত্রুটি</string>
     <string name="oauth_web_complete">অথেনটিকেট হচ্ছে…</string>
-    <string name="auth_select_microsoft">Microsoft অ্যাকাউন্ট</string>
+    <string name="auth_select_microsoft">মাইক্রোসফট অ্যাকাউন্ট</string>
     <string name="auth_select_elyby">Ely.by অ্যাকাউন্ট</string>
     <string name="auth_select_local">লোকাল অ্যাকাউন্ট</string>
     <string name="instance_dir_missing">ইনস্ট্যান্স অনুপস্থিত</string>
+    <string name="gamedir_open_failed">গেম ডিরেক্টরি খুলতে ব্যর্থ</string>
+    <string name="compat_sodium_not_supported">আপনার ডিভাইস LTW সমর্থন না করায় এই ভার্সনে সোডিয়াম চালানো যাবে না।</string>
+    <string name="newerdl_inserting_metadata">ফাইল মেটাডেটা খোঁজা হচ্ছে…</string>
+    <string name="newerdl_inserting_metadata_count">ফাইল মেটাডেটা খোঁজা হচ্ছে… (%d/%d)</string>
+    <string name="newerdl_downloading_files_count">ফাইল ডাউনলোড হচ্ছে… (%d/%d, %.2f MB/s)</string>
+    <string name="newerdl_downloading_files_size">ফাইল ডাউনলোড হচ্ছে… (%.2f/%.2f MB, %.2f MB/s)</string>
+    <string name="preference_verify_game_files_title">গেম ফাইল যাচাই করুন</string>
+    <string name="preference_verify_game_files_description">ডাউনলোড করা গেম ফাইল মেটাডেটার চেকসাম ও সাইজের বিপরীতে যাচাই করুন। মেটাডেটা JSON ফাইল সবসময় যাচাই হয়।</string>
+    <string name="preference_go_vroom_title">দ্রুত গেম চালু</string>
+    <string name="preference_go_vroom_description">পরপর রিস্টার্টে ফাইল চেকসাম যাচাই করবে না। যার ফলে গেম অনেক দ্রুত চালু হবে।</string>
+    <string name="vml_fail_load_runtime">জাভা ভার্চুয়াল মেশিন লোড করতে ব্যর্থ: %s</string>
+    <string name="vml_fail_create_runtime">জাভা ভার্চুয়াল মেশিন তৈরি করতে ব্যর্থ: %s</string>
+    <string name="vml_fail_find_hooks_native">নেটিভ হুক খুঁজে পাওয়া যায়নি।</string>
+    <string name="vml_fail_find_hooks">হুক টার্গেট খুঁজে পাওয়া যায়নি। বিস্তারিত latestlog.txt দেখুন</string>
+    <string name="vml_fail_insert_hooks">হুক ইনস্টল করতে ব্যর্থ: %s</string>
+    <string name="vml_fail_load_classpath">ক্লাসপাথ লোড করতে ব্যর্থ। বিস্তারিত latestlog.txt দেখুন</string>
+    <string name="vml_fail_run_main">মেইন ক্লাস চালু করতে ব্যর্থ। বিস্তারিত latestlog.txt দেখুন</string>
+    <string name="vml_huh">\???</string>
+    <string name="vml_err_ok">সফল</string>
+    <string name="vml_err_unknown">অজানা ত্রুটি</string>
+    <string name="vml_err_detached">থ্রেড জাভা VM থেকে বিচ্ছিন্ন</string>
+    <string name="vml_err_version">অসামঞ্জস্যপূর্ণ JNI ভার্সন</string>
+    <string name="vml_err_nomem">RAM শেষ</string>
+    <string name="vml_err_exists">VM ইতিমধ্যে লোড করা আছে</string>
+    <string name="vml_err_inval">ভুল আর্গুমেন্ট</string>
+    <string name="gr_err_renderer_load_Failed">রেন্ডারার লাইব্রেরি লোড করতে ব্যর্থ</string>
+    <string name="ltw_4x_msaa_warning_msg">মনে হচ্ছে আপনি ডেভেলপার সেটিংসে "Force 4x MSAA" চালু করেছেন। রেন্ডারিং সমস্যা এড়াতে এটি বন্ধ করুন।</string>
+    <string name="no_instance">কোনো ইনস্ট্যান্স নির্বাচিত নেই। অনুগ্রহ করে একটি ইনস্ট্যান্স তৈরি বা নির্বাচন করুন।</string>
+    <string name="downloading_java_runtime_uni">রানটাইম ডাউনলোড হচ্ছে, ধাপ ১/২ (%.2f/%.2f MB)</string>
+    <string name="downloading_java_runtime_platform">রানটাইম ডাউনলোড হচ্ছে, ধাপ ২/২ (%.2f/%.2f MB)</string>
+    <string name="runtime_error_title">রানটাইম উপলব্ধ নেই</string>
+    <string name="runtime_error_missing">জাভা %d এখনও ইনস্টল হয়নি। অন্য উপযুক্ত রানটাইম নির্বাচন করুন বা ইন্টারনেট সংযুক্ত করে স্বয়ংক্রিয়ভাবে ইনস্টল করুন।</string>
+    <string name="runtime_error_install_failed">জাভা %d ইনস্টল করতে ব্যর্থ। আপনার ইন্টারনেট সংযোগ যাচাই করে আবার চেষ্টা করুন।</string>
+    <string name="modloader_dl_install_legacy_fabric_instance">Legacy Fabric ইনস্ট্যান্স তৈরি করুন</string>
+    <string name="instance_delete">ইনস্ট্যান্স মুছুন</string>
+    <string name="instance_delete_confirmation">আপনি কি সত্যিই ইনস্ট্যান্সটি মুছতে চান? এটি সমস্ত ওয়ার্ল্ড, মড, রিসোর্স এবং ইনস্ট্যান্স ডিরেক্টরির সকল ডেটা স্থায়ীভাবে মুছে দেবে। এই কাজ পূর্বাবস্থায় ফেরানো যাবে না!</string>
+    <string name="import_local_modpack">লোকাল মডপ্যাক ইমপোর্ট করুন</string>
     </resources>
