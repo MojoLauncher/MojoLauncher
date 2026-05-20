@@ -44,6 +44,7 @@ import java.util.List;
  * - <a href="http://developer.android.com/guide/topics/providers/document-provider.html#43">...</a>
  */
 public class FolderProvider extends DocumentsProvider {
+    private static final List<String> BLOCKED = List.of("com.dnamobile.modlymodmanager");
 
     private static final String ALL_MIME_TYPES = "*/*";
 
@@ -101,6 +102,7 @@ public class FolderProvider extends DocumentsProvider {
 
     @Override
     public Cursor queryDocument(String documentId, String[] projection) throws FileNotFoundException {
+        if(BLOCKED.contains(getCallingPackage())) throw new FileNotFoundException();
         final MatrixCursor result = new MatrixCursor(projection != null ? projection : DEFAULT_DOCUMENT_PROJECTION);
         // Future-proofing in case if we implement realtime file watching
         result.setNotificationUri(mContentResolver, createUriForDocId(documentId));
@@ -151,6 +153,7 @@ public class FolderProvider extends DocumentsProvider {
 
     @Override
     public String createDocument(String parentDocumentId, String mimeType, String displayName) throws FileNotFoundException {
+        if(BLOCKED.contains(getCallingPackage())) throw new FileNotFoundException();
         File newFile = new File(parentDocumentId, displayName);
         int noConflictId = 2;
         while (newFile.exists()) {
