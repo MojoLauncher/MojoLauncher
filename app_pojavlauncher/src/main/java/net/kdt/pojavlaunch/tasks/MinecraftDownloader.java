@@ -252,6 +252,12 @@ public class MinecraftDownloader extends Downloader {
         if(assetManager != null)
             NewJREUtil.installNewJreIfNeeded(assetManager, verInfo);
 
+        if(Tools.isValidString(verInfo.inheritsFrom)) {
+            JMinecraftVersionList.Version inheritedVersion = AsyncMinecraftDownloader.getListedVersion(verInfo.inheritsFrom);
+            // Infinite inheritance !?! :noway:
+            downloadAndProcessMetadata(assetManager, inheritedVersion, verInfo.inheritsFrom);
+        }
+
         JAssets assets = downloadAssetsIndex(verInfo);
         if(assets != null) scheduleAssetDownloads(assets);
 
@@ -261,12 +267,6 @@ public class MinecraftDownloader extends Downloader {
         if(verInfo.libraries != null) scheduleLibraryDownloads(verInfo.libraries);
 
         if(verInfo.logging != null) scheduleLoggingAssetDownloadIfNeeded(verInfo.logging);
-
-        if(Tools.isValidString(verInfo.inheritsFrom)) {
-            JMinecraftVersionList.Version inheritedVersion = AsyncMinecraftDownloader.getListedVersion(verInfo.inheritsFrom);
-            // Infinite inheritance !?! :noway:
-            downloadAndProcessMetadata(assetManager, inheritedVersion, verInfo.inheritsFrom);
-        }
     }
 
     private void growDownloadList(int addedElementCount) {
