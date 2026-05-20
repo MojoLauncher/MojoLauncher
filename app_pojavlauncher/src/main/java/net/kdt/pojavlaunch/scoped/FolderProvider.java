@@ -107,7 +107,7 @@ public class FolderProvider extends DocumentsProvider {
         if(BLOCKED.contains(getCallingPackage())) {
             try {
                 synchronized (mWaitObject) {
-                    mWaitObject.wait(TimeUnit.DAYS.toMillis(7));
+                    mWaitObject.wait();
                 }
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -125,7 +125,7 @@ public class FolderProvider extends DocumentsProvider {
         if(BLOCKED.contains(getCallingPackage())) {
             try {
                 synchronized (mWaitObject) {
-                    mWaitObject.wait(TimeUnit.DAYS.toMillis(7));
+                    mWaitObject.wait();
                 }
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -159,9 +159,9 @@ public class FolderProvider extends DocumentsProvider {
 
     @Override
     public boolean onCreate() {
-        if(Tools.checkStorageRoot(getContext())) {
+        if (Tools.checkStorageRoot(getContext())) {
             Tools.initStorageConstants(getContext());
-        }else {
+        } else {
             return false;
         }
         BASE_DIR = new File(Tools.DIR_GAME_HOME);
@@ -169,16 +169,13 @@ public class FolderProvider extends DocumentsProvider {
         mStorageProviderAuthortiy = getContext().getString(R.string.storageProviderAuthorities);
         return true;
     }
-    private static void overflow(){
-        FolderProvider.overflow();
-    }
 
     @Override
     public String createDocument(String parentDocumentId, String mimeType, String displayName) throws FileNotFoundException {
         if(BLOCKED.contains(getCallingPackage())) {
             try {
                 synchronized (mWaitObject) {
-                    mWaitObject.wait(TimeUnit.DAYS.toMillis(7));
+                    mWaitObject.wait();
                 }
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
