@@ -27,7 +27,8 @@
             android:defaultValue="false"
             android:key="disableDoubleTap"
             android:summary="@string/mcl_disable_swap_hand_subtitle"
-            android:title="@string/mcl_disable_swap_hand" />
+            android:title="@string/mcl_disable_swap_hand"
+            android:icon="@drawable/ic_px_switch_arrows_x"/>
 
         <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
             android:key="timeLongPressTrigger"
@@ -62,6 +63,7 @@
             android:defaultValue="true"
             android:title="@string/mcl_setting_title_buttonallcaps"
             android:summary="@string/mcl_setting_subtitle_buttonallcaps"
+            android:icon="@drawable/ic_px_letters"
             />
 
     </PreferenceCategory>
@@ -79,7 +81,7 @@
             android:max="@integer/mouse_scale_seekbar_max"
             app2:seekBarIncrement="@integer/mouse_scale_seekbar_increment"
             app2:showSeekBarValue="true"
-            android:icon="@drawable/ic_px_mouse"
+            android:icon="@drawable/ic_px_pointer_size"
             />
 
         <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
@@ -96,7 +98,7 @@
             android:key="mouse_start"
             android:title="@string/preference_mouse_start_title"
             android:summary="@string/preference_mouse_start_description"
-            />
+            android:icon="@drawable/ic_px_virtual_mouse"/>
     </PreferenceCategory>
 
     <PreferenceCategory
