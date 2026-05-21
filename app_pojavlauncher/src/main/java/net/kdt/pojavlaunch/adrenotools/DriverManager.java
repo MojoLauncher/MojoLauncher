@@ -1,7 +1,9 @@
 package net.kdt.pojavlaunch.adrenotools;
 
+import android.os.Build;
 import android.util.Log;
 
+import net.kdt.pojavlaunch.Architecture;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.GLInfoUtils;
@@ -36,7 +38,10 @@ public class DriverManager {
      * @return True if requirements are met, false otherwise
      */
     public static boolean isSupportedByDevice(){
-        return supported == null ? (supported = GLInfoUtils.getGlInfo().isAdreno()) : supported;
+        return supported == null ?
+                // Custom drivers are viable only on API 28+ ARM64. Not sure if A5XX supports anything.
+                (supported = GLInfoUtils.getGlInfo().isAdreno() && Build.VERSION.SDK_INT >= 28 && Architecture.getDeviceArchitecture() == Architecture.ARCH_ARM64)
+                : supported;
     }
 
     /**
