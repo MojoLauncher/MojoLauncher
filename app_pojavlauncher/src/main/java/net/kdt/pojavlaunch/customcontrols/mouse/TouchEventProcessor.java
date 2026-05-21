@@ -3,6 +3,8 @@ package net.kdt.pojavlaunch.customcontrols.mouse;
 import android.view.MotionEvent;
 import android.view.View;
 
+import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+
 import git.artdeell.dnbootstrap.glfw.GLFW;
 
 public abstract class TouchEventProcessor {
@@ -22,8 +24,8 @@ public abstract class TouchEventProcessor {
     }
 
     protected void applyMoveVector(float x, float y) {
-        GLFW.cursorX += x / mHostView.getWidth();
-        GLFW.cursorY += y / mHostView.getHeight();
+        GLFW.cursorX += x * LauncherPreferences.PREF_MOUSESPEED / mHostView.getWidth();
+        GLFW.cursorY += y * LauncherPreferences.PREF_MOUSESPEED / mHostView.getHeight();
         GLFW.sendMousePos();
     }
 

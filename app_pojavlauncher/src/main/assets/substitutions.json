@@ -59,9 +59,9 @@
       "downloads": {
         "artifact": {
           "path": "org/lwjgl/lwjgl/lwjgl/2.9.4-glfw/lwjgl-2.9.4-glfw.jar",
-          "sha1": "0308fbe48704dd49b58c31d57375a60033fba242",
-          "size": 1051977,
-          "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/v2/lwjgl.jar"
+          "sha1": "4c8863a9a93c61856ce4822e8e43a83b802b6835",
+          "size": 1050953,
+          "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/vv5m/lwjgl.jar"
         }
       }
     },
@@ -1346,27 +1346,27 @@
         "classifiers": {
           "natives-linux-arm32": {
             "path": "org/lwjgl/lwjgl/lwjgl-platform/2.9.4-glfw/lwjgl-platform-2.9.4-glfw-natives-armeabi-v7a.jar",
-            "sha1": "4bc8841c72f1c9e559370d5261035b5de089921c",
-            "size": 77144,
-            "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/v2/lwjgl-native-armeabi-v7a.jar"
+            "sha1": "aa16ef8697f94502ae80d77c9d28a2a3c7221f7e",
+            "size": 77218,
+            "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/vv5m/lwjgl-native-armeabi-v7a.jar"
           },
           "natives-linux-arm64": {
             "path": "org/lwjgl/lwjgl/lwjgl-platform/2.9.4-glfw/lwjgl-platform-2.9.4-glfw-natives-arm64-v8a.jar",
-            "sha1": "42997938e390eeeb159ac7309286cdc01af8a73c",
-            "size": 99112,
-            "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/v2/lwjgl-native-arm64-v8a.jar"
+            "sha1": "a01ca821ca3f54b067b8d0d2ecf2358f4f3f488b",
+            "size": 99181,
+            "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/vv5m/lwjgl-native-arm64-v8a.jar"
           },
           "natives-linux-x86": {
             "path": "org/lwjgl/lwjgl/lwjgl-platform/2.9.4-glfw/lwjgl-platform-2.9.4-glfw-natives-x86.jar",
-            "sha1": "4e7da7e1eda1888a96cd938622e0daceb905abec",
-            "size": 107463,
-            "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/v2/lwjgl-native-x86.jar"
+            "sha1": "bb3130abc1504a9ccc157c9bc97ad476b0ab3435",
+            "size": 107468,
+            "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/vv5m/lwjgl-native-x86.jar"
           },
           "natives-linux": {
             "path": "org/lwjgl/lwjgl/lwjgl-platform/2.9.4-glfw/lwjgl-platform-2.9.4-glfw-natives-x86_64.jar",
-            "sha1": "1fabd948f3f9476f4627edc452f3600d0b426431",
-            "size": 100932,
-            "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/v2/lwjgl-native-x86_64.jar"
+            "sha1": "e163cdd2cd74d9a9298bd8a34abb6a7192e158e4",
+            "size": 100953,
+            "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/vv5m/lwjgl-native-x86_64.jar"
           }
         }
       },
@@ -1503,9 +1503,9 @@
       "downloads": {
         "artifact": {
           "path": "org/lwjgl/lwjgl/lwjgl_util/2.9.4-glfw/lwjgl_util-2.9.4-glfw.jar",
-          "sha1": "20a5975e4bc82d098d10c7d92e12a11f00dfbc60",
+          "sha1": "11272613d0c2cb278c0d60046168de3f057f8df4",
           "size": 180578,
-          "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/v2/lwjgl_util.jar"
+          "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/vv5m/lwjgl_util.jar"
         }
       }
     },

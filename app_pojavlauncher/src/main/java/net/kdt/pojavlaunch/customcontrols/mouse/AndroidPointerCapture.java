@@ -12,6 +12,7 @@ import net.kdt.pojavlaunch.MinecraftGLSurface;
 import net.kdt.pojavlaunch.Tools;
 
 import net.kdt.pojavlaunch.CallbackBridge;
+import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 import git.artdeell.dnbootstrap.glfw.GLFW;
 
@@ -91,15 +92,14 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
             mVector[0] *= mMousePrescale;
             mVector[1] *= mMousePrescale;
             if(event.getPointerCount() < 2) {
+                applyMotionVector(view, LauncherPreferences.PREF_MOUSESPEED);
                 mScroller.resetScrollOvershoot();
             } else {
                 mScroller.performScroll(mVector);
             }
         } else {
             // Position is updated by many events, hence it is send regardless of the event value
-            GLFW.cursorX += mVector[0] / view.getWidth();
-            GLFW.cursorY += mVector[1] / view.getHeight();
-            GLFW.sendMousePos();
+            applyMotionVector(view, 1);
         }
 
         switch (event.getActionMasked()) {
@@ -121,6 +121,12 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
             default:
                 return false;
         }
+    }
+
+    private void applyMotionVector(View view, float speed) {
+        GLFW.cursorX += mVector[0] * speed / view.getWidth();
+        GLFW.cursorY += mVector[1] * speed / view.getHeight();
+        GLFW.sendMousePos();
     }
 
     private void checkSameDevice(InputDevice inputDevice) {
