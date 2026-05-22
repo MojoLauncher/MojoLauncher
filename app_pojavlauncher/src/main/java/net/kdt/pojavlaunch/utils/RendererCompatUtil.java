@@ -75,4 +75,6 @@ public class RendererCompatUtil {
             this.rendererDisplayNames = rendererDisplayNames;
         }
     }
+
+    public static boolean appHasAngleEGL = new File(Tools.NATIVE_LIB_DIR,"libEGL_angle.so").exists();
 }

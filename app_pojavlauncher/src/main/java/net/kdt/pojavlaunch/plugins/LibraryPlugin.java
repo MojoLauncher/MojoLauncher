@@ -6,14 +6,11 @@ import android.content.pm.PackageManager;
 import android.util.Log;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 public class LibraryPlugin {
     private static final String TAG = "LibraryPlugin";
 
     // Known plugins constants
-    public static final String ID_ANGLE_PLUGIN = "git.mojo.angle";
     public static final String ID_FFMPEG_PLUGIN = "git.mojo.ffmpeg";
 
     private String appId;
