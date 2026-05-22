@@ -220,6 +220,7 @@
     <string name="xerr_child">Hesabınız uşaq hesabıdır və daxil olmaq üçün Ailəyə əlavə edilməlidir.</string>
     <string name="minecraft_not_owned">Deyəsən bu hesabda Minecraft profili yoxdur. Əgər sizdə Xbox Game Pass varsa, lütfən, https://minecraft.net/ saytında daxil olun və onu quraşdırın.</string>
     <string name="xerr_not_available">Xbox Live ölkənizdə mövcud deyil</string>
+    <string name="error_no_account_selected">Keçǝrli hesab seçilməyib. Zəhmət olmasa, əvvəlcə daxil olun.</string>
     <string name="preference_enable_gyro_title">Gyroskop nəzarətlərini aktivləşdirin</string>
     <string name="preference_enable_gyro_description">Bunu aktivləşdirmək sizə telefonunuzu çevirərək oyundaxili dönmə eməyə imkan verəcək.</string>
     <string name="preference_gyro_sensitivity_title">Gyroskop həssaslığını idarə edin</string>
