@@ -77,10 +77,7 @@ public class MainMenuFragment extends Fragment {
             return true;
         ImageButton modBtn = view.findViewById(R.id.btn_modrinth);
 
-       modBtn.setOnClickListener(v -> {
-       Intent intent = new Intent(getActivity(), ModrinthActivity.class);
-       startActivity(intent);
-});
+   
         });
     }
 
