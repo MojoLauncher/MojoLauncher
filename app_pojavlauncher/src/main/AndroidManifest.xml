@@ -112,7 +112,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout|keyboard|navigation|uiMode"
             android:launchMode="singleTop"
             android:process=":game"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="landscape" />
 
         <provider
             android:name="net.kdt.pojavlaunch.scoped.FolderProvider"
