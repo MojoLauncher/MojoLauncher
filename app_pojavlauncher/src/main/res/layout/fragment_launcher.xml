@@ -110,8 +110,7 @@
 		android:src="@drawable/ic_px_edit"
 		app:layout_constraintBottom_toBottomOf="@+id/mc_version_spinner"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toTopOf="@+id/mc_version_spinner" /
-
+		app:layout_constraintTop_toTopOf="@+id/mc_version_spinner" />
 
 
 	<!-- This view is for cosmetic purpose only -->
@@ -139,4 +138,3 @@
 		/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
