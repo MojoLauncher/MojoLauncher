@@ -233,6 +233,7 @@
     <string name="xerr_child">Для входа в игру учётная запись ребёнка должна быть добавлена в семью.</string>
     <string name="minecraft_not_owned">Похоже, к вашей учётной записи не привязан профиль Minecraft с лицензией. Если у вас есть подписка Xbox Game Pass, войдите на https://minecraft.net и настройте её.</string>
     <string name="xerr_not_available">Xbox Live недоступен в вашей стране</string>
+    <string name="error_no_account_selected">Не выбрана ни одна действительная учётная запись. Пожалуйста, сначала войдите в аккаунт.</string>
     <string name="preference_enable_gyro_title">Управление наклоном</string>
     <string name="preference_enable_gyro_description">Позволяет управлять положением камеры в игре путём вращения устройства.</string>
     <string name="preference_gyro_sensitivity_title">Чувствительность гироскопа</string>
