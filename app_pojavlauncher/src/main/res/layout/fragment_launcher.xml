@@ -110,7 +110,14 @@
 		android:src="@drawable/ic_px_edit"
 		app:layout_constraintBottom_toBottomOf="@+id/mc_version_spinner"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toTopOf="@+id/mc_version_spinner" />
+		app:layout_constraintTop_toTopOf="@+id/mc_version_spinner" /
+
+   <ImageButton
+        android:id="@+id/btn_modrinth"
+        android:src="@drawable/ic_download"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:contentDescription="Mods"/>
 
 
 	<!-- This view is for cosmetic purpose only -->
