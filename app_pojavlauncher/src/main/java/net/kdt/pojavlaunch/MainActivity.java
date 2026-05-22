@@ -336,6 +336,13 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     }
 
     private void runCraft(String versionId) throws Throwable {
+        if (minecraftAccount == null) {
+            Tools.runOnUiThread(() -> {
+                Toast.makeText(MainActivity.this, R.string.error_no_account_selected, Toast.LENGTH_LONG).show();
+                finish(); 
+            });
+            return;
+        }
         String renderer = instance.getLaunchRenderer();
         if(!RendererCompatUtil.checkRendererCompatible(this, renderer)) {
             RendererCompatUtil.RenderersList renderersList = RendererCompatUtil.getCompatibleRenderers(this);
