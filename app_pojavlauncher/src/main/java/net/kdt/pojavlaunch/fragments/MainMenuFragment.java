@@ -75,6 +75,12 @@ public class MainMenuFragment extends Fragment {
         mNewsButton.setOnLongClickListener((v)->{
             Tools.swapFragment(requireActivity(), GamepadMapperFragment.class, GamepadMapperFragment.TAG, null);
             return true;
+        ImageButton modBtn = view.findViewById(R.id.btn_modrinth);
+
+       modBtn.setOnClickListener(v -> {
+       Intent intent = new Intent(getActivity(), ModrinthActivity.class);
+       startActivity(intent);
+});
         });
     }
 
