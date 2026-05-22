@@ -40,6 +40,7 @@ static void* egl_acquire_default(const char* name) {
 JNIEXPORT jboolean JNICALL
 Java_net_kdt_pojavlaunch_utils_JREUtils_configureRenderspec(JNIEnv *env, jclass clazz,
                                                             jstring eglPath, jboolean use_loader_bypass,
+                                                            jboolean use_glapi,
                                                             jboolean use_gles,
                                                             jint gles_version) {
     if(eglPath != NULL) {
@@ -58,7 +59,9 @@ Java_net_kdt_pojavlaunch_utils_JREUtils_configureRenderspec(JNIEnv *env, jclass 
         } else {
             renderspec.egl_acquire = egl_acquire_default;
         }
-
+        // Old Mesa versions used glapi and didn't support building without it with EGL enabled
+        // Yet for some reason they can't find it so let's load it ourselves
+        if(use_glapi) renderspec.egl_acquire("libglapi.so");
         void* egl_handle = renderspec.egl_acquire(renderspec.egl_path);
         if(!egl_handle) {
             printf("Failed to load EGL: %s\n", dlerror());

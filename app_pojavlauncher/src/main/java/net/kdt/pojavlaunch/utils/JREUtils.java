@@ -108,6 +108,9 @@ public class JREUtils {
                 // HACK: GLSL version override for Mesa-based renderers (i.e. Zink)
                 // Required to run the game properly on some mobile Vulkan drivers (Minecraft fails to compile shaders without)
                 envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
+                // Mali additionally wants this
+                if(GLInfoUtils.getGlInfo().isArm())
+                    envMap.put("MESA_GL_VERSION_OVERRIDE", "3.3");
                 break;
             case "freedreno_kgsl":
                 if(GLInfoUtils.getGlInfo().isAdreno()) {
@@ -161,6 +164,7 @@ public class JREUtils {
         }
         setupFfmpegEnv(context, envMap);
         setupRendererEnv(envMap, renderer);
+
 
         // HACK
         envMap.put("POJAV_NATIVEDIR", Tools.NATIVE_LIB_DIR);
@@ -254,24 +258,29 @@ public class JREUtils {
      */
     public static String loadGraphicsLibrary(String renderer){
         String renderLibrary;
-        boolean useGles;
+        boolean useGles, useGlapi = false;
         boolean bypassNamespace = false;
-        boolean preloadVk = true;
         int glesVersion;
         switch (renderer){
             case "freedreno_kgsl":
-                preloadVk = false;
             case "vulkan_zink":
-                renderLibrary = "libEGL_mesa.so";
+                // On Mali Mesa performs better with legacy zink
+                if(GLInfoUtils.getGlInfo().isArm()){
+                    useGlapi = true;
+                    renderLibrary = "libEGL_legacy.so";
+                } else renderLibrary = "libEGL_mesa.so";
                 useGles = false;
                 bypassNamespace = true; // Mesa is linked to a bunch of libraries not available in the pojavexec namespace
                 glesVersion = 3;
-                if(preloadVk) preloadVulkan(); // Zink requires Vulkan library to be preloaded
                 break;
             case "opengles3_ltw" :
                 renderLibrary = "libltw.so";
                 useGles = true;
                 glesVersion = 3;
+                // Allow ANGLE to use custom Vulkan library by running LTW (and thus ANGLE too) in the same namespace as the driver
+                if(LauncherPreferences.PREF_USE_ANGLE && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
+                    bypassNamespace = true;
+                }
                 break;
             case "opengles2":
             case "opengles2_5":
@@ -282,8 +291,7 @@ public class JREUtils {
                 glesVersion = Integer.parseInt((String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION));
                 break;
         }
-
-        if (!configureRenderspec(renderLibrary, bypassNamespace, useGles, glesVersion)) {
+        if (!configureRenderspec(renderLibrary, bypassNamespace, useGlapi, useGles, glesVersion)) {
             Log.e("RENDER_LIBRARY","Failed to load renderer " + renderLibrary );
             return null;
         }
@@ -296,7 +304,7 @@ public class JREUtils {
     public static native int chdir(String path);
 
     public static native void setLdLibraryPath(String ldLibraryPath);
-    public static native boolean configureRenderspec(String eglPath, boolean useLoaderBypass, boolean useGles, int glesVersion);
+    public static native boolean configureRenderspec(String eglPath, boolean useLoaderBypass, boolean useGlapi, boolean useGles, int glesVersion);
     public static native void preloadVulkan();
     public static native void setUseTurnip(boolean enable);
     //public static native void initializeHooks();
