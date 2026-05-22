@@ -109,7 +109,7 @@ public class JREUtils {
                 // Required to run the game properly on some mobile Vulkan drivers (Minecraft fails to compile shaders without)
                 envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
                 // Mali additionally wants this
-                if(GLInfoUtils.getGlInfo().isArm())
+                if(LauncherPreferences.PREF_ZINK_FORCE_LEGACY || GLInfoUtils.getGlInfo().isArm())
                     envMap.put("MESA_GL_VERSION_OVERRIDE", "3.3");
                 break;
             case "freedreno_kgsl":
@@ -265,7 +265,7 @@ public class JREUtils {
             case "freedreno_kgsl":
             case "vulkan_zink":
                 // On Mali Mesa performs better with legacy zink
-                if(GLInfoUtils.getGlInfo().isArm()){
+                if(LauncherPreferences.PREF_ZINK_FORCE_LEGACY || GLInfoUtils.getGlInfo().isArm()){
                     useGlapi = true;
                     renderLibrary = "libEGL_legacy.so";
                 } else renderLibrary = "libEGL_mesa.so";
