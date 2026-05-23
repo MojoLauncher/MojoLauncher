@@ -88,6 +88,7 @@ public class GameRunner {
      * @return whether the GPU is affected by the Large Thin Wrapper render distance issue on vanilla
      */
     private static boolean affectedByRenderDistanceIssue() {
+        if(LauncherPreferences.PREF_USE_ANGLE) return false;
         GLInfoUtils.GLInfo info = GLInfoUtils.getGlInfo();
         return info.isAdreno() && info.glesMajorVersion >= 3;
     }
