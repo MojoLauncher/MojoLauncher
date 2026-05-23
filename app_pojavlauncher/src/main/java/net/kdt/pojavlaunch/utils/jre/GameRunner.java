@@ -87,13 +87,16 @@ public class GameRunner {
 
      * @return whether the GPU is affected by the Large Thin Wrapper render distance issue on vanilla
      */
-    private static boolean affectedByRenderDistanceIssue() {
+    private static boolean affectedByRenderDistanceIssue(JMinecraftVersionList.Version version) throws ParseException {
         GLInfoUtils.GLInfo info = GLInfoUtils.getGlInfo();
-        return info.isAdreno() && info.glesMajorVersion >= 3;
+        return info.isAdreno() &&
+                info.glesMajorVersion >= 3 &&
+                // 1.21.5 fixes the RD issue, released on march 25 2025
+                DateUtils.dateBefore(DateUtils.getOriginalReleaseDate(version), 2025, 2, 25);
     }
 
-    private static boolean checkRenderDistance(File gamedir) {
-        if(!affectedByRenderDistanceIssue()) return false;
+    private static boolean checkRenderDistance(JMinecraftVersionList.Version version, File gamedir) throws ParseException {
+        if(!affectedByRenderDistanceIssue(version)) return false;
         if(hasSodium(gamedir)) return false;
         try {
             MCOptionUtils.load();
@@ -186,7 +189,7 @@ public class GameRunner {
 
         boolean isLtw = rendererName.equals("opengles3_ltw");
 
-        if(isLtw && checkRenderDistance(gamedir)) {
+        if(isLtw && checkRenderDistance(versionInfo, gamedir)) {
             if(showDialog(activity, R.string.ltw_render_distance_warning_msg)) return;
             // If the code goes here, it means that the user clicked "OK". Fix the render distance.
             try {
