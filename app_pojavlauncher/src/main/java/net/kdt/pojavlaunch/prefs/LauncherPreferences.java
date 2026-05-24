@@ -71,7 +71,7 @@ public class LauncherPreferences {
     public static boolean PREF_RAPID_START = true;
     public static boolean PREF_VERIFY_FILES = true;
 
-    public static boolean PREF_FREEDRENO_SYSMEM = true;
+    public static boolean PREF_FREEDRENO_SYSMEM = false;
 
 
     public static void loadPreferences(Context ctx) {
