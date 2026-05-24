@@ -485,5 +485,5 @@
     <string name="instance_delete_confirmation">Are you sure you want to delete the instance? This will permanently delete all worlds, mods, resources and any other data in the instance directory. This action cannot be undone!</string>
     <string name="import_local_modpack">Import local modpack</string>
     <string name="preference_sysmem_title">Force rendering into the system memory</string>
-    <string name="preference_sysmem_summary">Forces Freedreno to render directly into the system memory to fix some graphical issues. Disable if the game became slow.</string>
+    <string name="preference_sysmem_summary">Forces Freedreno to render directly into the system memory to fix some graphical issues. Enable if the game is running slow on the freedreno renderer.</string>
 </resources>
