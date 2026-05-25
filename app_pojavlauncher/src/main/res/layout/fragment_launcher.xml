@@ -86,7 +86,7 @@
                 android:id="@+id/mod_manager_button"
                 style="@style/LauncherMenuButton.Universal"
                 android:layout_width="match_parent"
-                android:drawableStart="@drawable/ic_px_mod"
+                android:drawableStart="@drawable/ic_px_folder"
                 android:text="Mods"
                 app:layout_constraintTop_toBottomOf="@id/open_files_button" />
 		</androidx.constraintlayout.widget.ConstraintLayout>
