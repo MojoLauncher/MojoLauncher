@@ -207,7 +207,6 @@ public class JREUtils {
 
         envMap.put("MOJO_RENDERER", renderer);
 
-// REPLACE THIS BLOCK HERE
 if (renderer.equals("mobileglues")) {
     envMap.put("LIBGL_GLES", "libmobileglues.so");
     envMap.put("MOBILEGLUES_INFO_GETTER",
@@ -215,7 +214,7 @@ if (renderer.equals("mobileglues")) {
 
     envMap.put("LIBGL_ES", "3");
 
-    // real MG settings
+    // Correct MobileGlues values
     envMap.put("MG_multidrawMode", "None");
     envMap.put("MG_enableNoError", "1");
     envMap.put("MG_enableExtComputeShader", "0");
