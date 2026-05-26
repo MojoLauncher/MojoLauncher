@@ -17,15 +17,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Get LTW
-        uses: dawidd6/action-download-artifact@v6
-        continue-on-error: true
-        with:
-          repo: MojoLauncher/LTW
-          workflow: android.yml
-          workflow_conclusion: success
-          name: output-aar
-          path: app_pojavlauncher/libs
 
       - uses: gradle/actions/setup-gradle@v4
         with:
