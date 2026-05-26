@@ -73,6 +73,8 @@ public class LauncherPreferences {
 
     public static String PREF_VULKAN_PACKAGE;
 
+    public static boolean PREF_FREEDRENO_SYSMEM = false;
+
 
     public static void loadPreferences(Context ctx) {
         //Required for CTRLDEF_FILE and MultiRT
@@ -116,6 +118,7 @@ public class LauncherPreferences {
         PREF_VERIFY_FILES = DEFAULT_PREF.getBoolean("checkGameFiles", true);
         PREF_RAPID_START = DEFAULT_PREF.getBoolean("fastStartupCheck", true);
         PREF_VULKAN_PACKAGE = DEFAULT_PREF.getString("vulkanPackage", null);
+        PREF_FREEDRENO_SYSMEM = DEFAULT_PREF.getBoolean("freedrenoSysmem", false);
 
         String argLwjglLibname = "-Dorg.lwjgl.opengl.libname=";
         for (String arg : JREUtils.parseJavaArguments(PREF_CUSTOM_JAVA_ARGS)) {

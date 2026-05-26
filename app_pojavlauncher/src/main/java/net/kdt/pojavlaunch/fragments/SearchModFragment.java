@@ -1,5 +1,7 @@
 package net.kdt.pojavlaunch.fragments;
 
+import static net.kdt.pojavlaunch.Tools.runOnUiThread;
+
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -35,6 +37,7 @@ import net.kdt.pojavlaunch.modloaders.modpacks.api.ModpackApi;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchFilters;
 import net.kdt.pojavlaunch.profiles.VersionSelectorDialog;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
+import net.kdt.pojavlaunch.progresskeeper.TaskCountListener;
 
 import org.apache.commons.io.IOUtils;
 
@@ -70,6 +73,7 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
     private final SearchFilters mSearchFilters;
 
     private Button mImportButton;
+    private TaskCountListener mTaskCountListener;
 
     ActivityResultLauncher<String> mImportLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
             uri -> {
@@ -157,6 +161,11 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
         mImportButton.setOnClickListener(v -> {
             mImportLauncher.launch("*/*");
         });
+        mTaskCountListener = taskCount -> {
+            runOnUiThread(() -> mImportButton.setEnabled(taskCount == 0));
+            return false;
+        };
+        ProgressKeeper.addTaskCountListener(mTaskCountListener);
 
         searchMods(null);
     }
@@ -166,6 +175,7 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
         super.onDestroyView();
         ProgressKeeper.removeTaskCountListener(mModItemAdapter);
         mRecyclerview.removeOnScrollListener(mOverlayPositionListener);
+        if (mTaskCountListener != null) { ProgressKeeper.removeTaskCountListener(mTaskCountListener); }
     }
 
     @Override

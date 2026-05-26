@@ -114,6 +114,6 @@ public class InGUIEventProcessor extends TouchEventProcessor {
     @Override
     public void cancelPendingActions() {
         mScroller.resetScrollOvershoot();
-        disableMouse();
+        if(mIsMouseDown) disableMouse();
     }
 }

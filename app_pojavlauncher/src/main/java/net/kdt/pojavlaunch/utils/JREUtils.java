@@ -163,12 +163,19 @@ public class JREUtils {
         setupFfmpegEnv(context, envMap);
         setupRendererEnv(envMap, renderer);
 
-
         // HACK
         envMap.put("POJAV_NATIVEDIR", Tools.NATIVE_LIB_DIR);
         envMap.put("EGL_PLATFORM", "android");
 
         if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
+
+
+        if(LauncherPreferences.PREF_FREEDRENO_SYSMEM) {
+            // We could also apply the FD_MESA_DEBUG only if freedreno is active but why making things complicated?
+            Logger.appendToLog("Will use sysmem rendering for Turnip/Freedreno");
+            envMap.put("FD_MESA_DEBUG", "sysmem");
+            envMap.put("TU_DEBUG", "sysmem");
+        }
 
         overrideEnvVars(envMap);
 

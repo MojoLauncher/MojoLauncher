@@ -107,6 +107,7 @@
         android:id="@+id/mineButton_import_local_modpack"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:enabled="false"
         android:layout_marginTop="@dimen/padding_moderate"
         android:layout_marginBottom="@dimen/padding_moderate"
         android:text="@string/import_local_modpack"

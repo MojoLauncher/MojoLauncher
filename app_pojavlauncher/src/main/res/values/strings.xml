@@ -295,6 +295,8 @@
     <string name="preference_deadzone_scale_title">Joystick deadzone scale</string>
     <string name="preference_deadzone_scale_description">Increase it if the joystick drifts.</string>
 
+    <string name="preference_microphone_access_title">Request microphone access permission</string>
+    <string name="preference_microphone_access_description">Requests system to give access to device microphone for the game</string>
 
     <string name="preference_force_big_core_title">Force the renderer to run on the big core</string>
     <string name="preference_force_big_core_desc">Forces the Minecraft render thread to run on the core with the highest maximum frequency.</string>
@@ -498,4 +500,6 @@
     <string name="driver_config_import_failed">Failed to add the selected driver!</string>
     <string name="driver_config_import_invalid">Incorrect or corrupted driver package, try another</string>
     <string name="driver_config_import_notify">Select a valid AdrenoTools driver package</string>
+    <string name="preference_sysmem_title">Force rendering into the system memory</string>
+    <string name="preference_sysmem_summary">Forces Freedreno to render directly into the system memory. Enable if performance is low or you experience rendering issues</string>
 </resources>

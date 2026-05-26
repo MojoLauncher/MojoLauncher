@@ -21,7 +21,7 @@ public class GLFW {
     private static WeakReference<GamepadEnableHandler> gamepadEnable;
     private static boolean grabbing = false;
     private static GLFWCursor cursor;
-    public static double cursorX, cursorY;
+    public static double cursorX = 0.5, cursorY = 0.5;
     public static ByteBuffer gamepadButtonBuffer;
     public static FloatBuffer gamepadAxisBuffer;
 
@@ -69,10 +69,14 @@ public class GLFW {
 
     @SuppressWarnings("unused") // Used from native
     private static void receiveGrabState(boolean isGrabbing) {
+        boolean wasGrabbing = GLFW.grabbing;
         GLFW.grabbing = isGrabbing;
         for(GrabListener grabListener : grabListeners) grabListener.onGrabState(isGrabbing);
-        cursorX = cursorY = 0.5;
-        sendMousePos();
+        if(!isGrabbing && wasGrabbing) {
+            cursorX = cursorY = 0.5;
+            sendMousePos();
+        }
+
     }
 
     @SuppressWarnings("unused") // Used from native
