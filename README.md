@@ -58,8 +58,13 @@ Based on open-source projects:
 ---
 
 ## 📌 Status
-
 🟢 Active Development
+## Current Feature Status 
+- [ ] One Click Mod Installer
+- [x] Simple Dark Ui
+- [x] Smooth Performance (Mojoluncher Default)
+- [ ] More render (Adding Soon)
+- [x] Updated Controller(added some basic buttons)
 
 ---
 
