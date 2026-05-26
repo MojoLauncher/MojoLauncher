@@ -1,16 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="control_button_color">#66FFFFFF</color>
-    <color name="control_button_pressed_color">#3300FFB3</color>
+    <!-- Buttons -->
+    <color name="control_button_color">#1F2937</color>
+    <color name="control_button_pressed_color">#FF4D4D</color>
 
-    <color name="minebutton_color">#00E5A8</color>
-    <color name="background_app">#0D1117</color>
-    <color name="divider">#2A2F36</color>
-    <color name="background_overlay">#1C2128</color>
-    <color name="background_status_bar">#090C10</color>
-    <color name="background_bottom_bar">#11161C</color>
-    <color name="icon_outline_color">#E6E6E6</color>
+    <!-- Main Accent -->
+    <color name="minebutton_color">#FF4D4D</color>
 
+    <!-- Backgrounds -->
+    <color name="background_app">#0A0A0A</color>
+    <color name="divider">#1E1E1E</color>
+    <color name="background_overlay">#121212</color>
+    <color name="background_status_bar">#000000</color>
+    <color name="background_bottom_bar">#0D0D0D</color>
+
+    <!-- Icons -->
+    <color name="icon_outline_color">#F5F5F5</color>
+
+    <!-- Text -->
     <color name="primary_text">#FFFFFF</color>
-    <color name="secondary_text">#9AA4B2</color>
+    <color name="secondary_text">#A1A1AA</color>
+
+    <!-- Extra premium -->
+    <color name="card_background">#111111</color>
+    <color name="card_border">#222222</color>
+    <color name="play_button">#FFFFFF</color>
+    <color name="stop_button">#FF4D4D</color>
 </resources>
