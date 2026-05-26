@@ -207,15 +207,14 @@ public class JREUtils {
 
         envMap.put("MOJO_RENDERER", renderer);
 
-        // MobileGlues fixed
+        // MobileGlues FIXED
         if (renderer.equals("mobileglues")) {
-            envMap.put("POJAVEXEC_EGL", "libmobileglues.so");
             envMap.put("MOBILEGLUES_INFO_GETTER",
                     "libmobileglues_info_getter.so");
 
             envMap.put("LIBGL_ES", "3");
 
-            // remove fake overrides
+            envMap.remove("POJAVEXEC_EGL");
             envMap.remove("MESA_GL_VERSION_OVERRIDE");
             envMap.remove("MESA_GLSL_VERSION_OVERRIDE");
         }
