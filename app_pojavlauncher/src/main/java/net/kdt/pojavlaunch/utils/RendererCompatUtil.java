@@ -39,13 +39,20 @@ public class RendererCompatUtil {
         boolean deviceHasOpenGLES3 = JREUtils.getDetectedVersion() >= 3;
         // LTW is an optional proprietary dependency
         boolean appHasLtw = new File(Tools.NATIVE_LIB_DIR, "libltw.so").exists();
+        
         List<String> rendererIds = new ArrayList<>(defaultRenderers.length);
         List<String> rendererNames = new ArrayList<>(defaultRendererNames.length);
+        
         for(int i = 0; i < defaultRenderers.length; i++) {
             String rendererId = defaultRenderers[i];
+            
             if(rendererId.contains("vulkan") && !deviceHasVulkan) continue;
             if(rendererId.contains("zink") && !deviceHasZinkBinary) continue;
             if(rendererId.contains("ltw") && (!deviceHasOpenGLES3 || !appHasLtw)) continue;
+            
+            // FIX: Ensure mobileglues is validated and supported if GLES3 is present
+            if(rendererId.contains("mobileglues") && !deviceHasOpenGLES3) continue;
+            
             rendererIds.add(rendererId);
             rendererNames.add(defaultRendererNames[i]);
         }
