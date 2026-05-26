@@ -13,7 +13,7 @@
 
 ## ✨ Features
 
-- 🎮 Premium dark gaming UI
+- 🎮 simple dark gaming UI
 - ⚡ Fast launcher performance
 - 📦 One-click mod installer
 - 🔧 Custom controls editor
