@@ -290,7 +290,7 @@ envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
                 break;
 
             case "mobileglues":
-                renderLibrary = "libmobileglues.so";
+                renderLibrary = "libgl4es_114.so";
                 break;
 
             default:
