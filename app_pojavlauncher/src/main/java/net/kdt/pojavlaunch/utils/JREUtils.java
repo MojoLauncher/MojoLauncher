@@ -207,18 +207,29 @@ public class JREUtils {
 
         envMap.put("MOJO_RENDERER", renderer);
 
-        // MobileGlues FIXED
-        if (renderer.equals("mobileglues")) {
-            envMap.put("MOBILEGLUES_INFO_GETTER",
-                    "libmobileglues_info_getter.so");
+// REPLACE THIS BLOCK HERE
+if (renderer.equals("mobileglues")) {
+    envMap.put("MOBILEGLUES_INFO_GETTER",
+            "libmobileglues_info_getter.so");
 
-            envMap.put("LIBGL_ES", "3");
+    envMap.put("LIBGL_ES", "3");
 
-            envMap.remove("POJAVEXEC_EGL");
-            envMap.remove("MESA_GL_VERSION_OVERRIDE");
-            envMap.remove("MESA_GLSL_VERSION_OVERRIDE");
-        }
+    // MobileGlues safe mode
+    envMap.put("MG_multidrawMode", "0");
+    envMap.put("MG_enableNoError", "1");
+    envMap.put("MG_enableExtComputeShader", "0");
+    envMap.put("MG_enableExtTimerQuery", "0");
+    envMap.put("MG_enableExtDirectStateAccess", "0");
 
+    envMap.remove("POJAVEXEC_EGL");
+    envMap.remove("MESA_GL_VERSION_OVERRIDE");
+    envMap.remove("MESA_GLSL_VERSION_OVERRIDE");
+}
+
+// keep this below
+if (renderer.equals("opengles3_ltw")) {
+    envMap.put("POJAVEXEC_EGL", "libltw.so");
+}
         if (renderer.equals("opengles3_ltw")) {
             envMap.put("POJAVEXEC_EGL", "libltw.so");
         }
