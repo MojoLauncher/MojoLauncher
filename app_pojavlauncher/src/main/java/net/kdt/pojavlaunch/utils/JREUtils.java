@@ -207,28 +207,30 @@ public class JREUtils {
 
         envMap.put("MOJO_RENDERER", renderer);
 
-if (renderer.equals("mobileglues")) {
-    envMap.put("LIBGL_GLES", "libmobileglues.so");
-    envMap.put("MOBILEGLUES_INFO_GETTER",
-            "libmobileglues_info_getter.so");
+        if (renderer.equals("mobileglues")) {
+            envMap.put("LIBGL_GLES", "libmobileglues.so");
+            envMap.put("MOBILEGLUES_INFO_GETTER",
+                    "libmobileglues_info_getter.so");
 
-    envMap.put("LIBGL_ES", "3");
+            envMap.put("LIBGL_ES", "3");
 
-    // Correct MobileGlues values
-    envMap.put("MG_multidrawMode", "None");
-    envMap.put("MG_enableNoError", "1");
-    envMap.put("MG_enableExtComputeShader", "0");
-    envMap.put("MG_enableExtTimerQuery", "0");
-    envMap.put("MG_enableExtDirectStateAccess", "0");
+            // Correct MobileGlues values to fix Mali multi_draw crash
+            envMap.put("MG_multidrawMode", "1"); 
+            envMap.put("MG_enableNoError", "1");
+            envMap.put("MG_enableExtComputeShader", "0");
+            envMap.put("MG_enableExtTimerQuery", "0");
+            envMap.put("MG_enableExtDirectStateAccess", "0");
 
-    envMap.remove("POJAVEXEC_EGL");
-    envMap.remove("MESA_GL_VERSION_OVERRIDE");
-    envMap.remove("MESA_GLSL_VERSION_OVERRIDE");
-}
-if (renderer.equals("opengles3_ltw")) {
-    envMap.put("POJAVEXEC_EGL", "libltw.so");
-}
-if (LauncherPreferences.PREF_BIG_CORE_AFFINITY)
+            envMap.remove("POJAVEXEC_EGL");
+            envMap.remove("MESA_GL_VERSION_OVERRIDE");
+            envMap.remove("MESA_GLSL_VERSION_OVERRIDE");
+        }
+        
+        if (renderer.equals("opengles3_ltw")) {
+            envMap.put("POJAVEXEC_EGL", "libltw.so");
+        }
+        
+        if (LauncherPreferences.PREF_BIG_CORE_AFFINITY)
             envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
 
         if (GLInfoUtils.getGlInfo().isAdreno()
