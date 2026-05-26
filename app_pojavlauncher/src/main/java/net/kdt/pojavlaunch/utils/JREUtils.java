@@ -149,7 +149,7 @@ public class JREUtils {
         );
     }
 
-    public static void setEnviroimentForGame(Context context,
+    public static void setEnvironmentForGame(Context context,
                                              String renderer)
             throws Throwable {
 
@@ -176,10 +176,9 @@ public class JREUtils {
                 )
         );
 
-        envMap.put("FORCE_VSYNC",
-                String.valueOf(
-                        LauncherPreferences.PREF_FORCE_VSYNC
-                ));
+        @SuppressWarnings("deprecation")
+        String forceVsyncVal = String.valueOf(LauncherPreferences.PREF_FORCE_VSYNC);
+        envMap.put("FORCE_VSYNC", forceVsyncVal);
 
         envMap.put("MESA_GLSL_CACHE_DIR",
                 Tools.DIR_CACHE.getAbsolutePath());
@@ -221,7 +220,8 @@ public class JREUtils {
             envMap.put("MG_enableExtTimerQuery", "0");
             envMap.put("MG_enableExtDirectStateAccess", "0");
 
-            envMap.remove("POJAVEXEC_EGL");
+            // FIX: Point explicitly to system EGL framework so pojavInitOpenGL binds cleanly
+            envMap.put("POJAVEXEC_EGL", "libEGL.so");
             envMap.remove("MESA_GL_VERSION_OVERRIDE");
             envMap.remove("MESA_GLSL_VERSION_OVERRIDE");
         }
