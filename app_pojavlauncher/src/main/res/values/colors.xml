@@ -20,9 +20,14 @@
     <color name="primary_text">#FFFFFF</color>
     <color name="secondary_text">#A1A1AA</color>
 
-    <!-- Extra premium -->
+    <!-- Premium Cards -->
     <color name="card_background">#111111</color>
     <color name="card_border">#222222</color>
+
+    <!-- Play Button -->
     <color name="play_button">#FFFFFF</color>
+    <color name="play_button_pressed">#E5E5E5</color>
+
+    <!-- Stop / Accent -->
     <color name="stop_button">#FF4D4D</color>
 </resources>
