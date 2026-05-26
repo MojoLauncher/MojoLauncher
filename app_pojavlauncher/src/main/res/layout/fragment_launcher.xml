@@ -101,6 +101,7 @@
                 </RelativeLayout>
 			</LinearLayout>
             </androidx.cardview.widget.CardView>
+		    <LinearLayout
 
             <!-- Menu Buttons -->
             <com.kdt.mcgui.LauncherMenuButton
