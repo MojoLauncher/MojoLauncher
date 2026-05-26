@@ -40,6 +40,11 @@
             android:key="zinkPreferSystemDriver"
             android:summary="@string/preference_vulkan_driver_system_description"
             android:title="@string/preference_vulkan_driver_system_title"/>
+        <Preference
+            android:key="microphoneAccessRequest"
+            android:icon="@drawable/ic_microphone"
+            android:title="@string/preference_microphone_access_title"
+            android:summary="@string/preference_microphone_access_description" />
 
     </PreferenceCategory>
 

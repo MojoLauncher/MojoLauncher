@@ -294,6 +294,8 @@
     <string name="preference_deadzone_scale_title">Joystick deadzone scale</string>
     <string name="preference_deadzone_scale_description">Increase it if the joystick drifts.</string>
 
+    <string name="preference_microphone_access_title">Request microphone access permission</string>
+    <string name="preference_microphone_access_description">Requests system to give access to device microphone for the game</string>
 
     <string name="preference_force_big_core_title">Force the renderer to run on the big core</string>
     <string name="preference_force_big_core_desc">Forces the Minecraft render thread to run on the core with the highest maximum frequency.</string>
