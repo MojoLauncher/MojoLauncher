@@ -8,7 +8,6 @@
     android:layout_height="match_parent"
     android:background="@color/background_app">
 
-    <!-- Main Scroll -->
     <ScrollView
         android:id="@+id/main_scroll"
         android:layout_width="match_parent"
@@ -23,7 +22,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Top Cards -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -55,7 +53,6 @@
                     android:textColor="@color/primary_text"/>
             </LinearLayout>
 
-            <!-- Premium Game Panel -->
             <LinearLayout
                    android:id="@+id/game_panel"
                    android:layout_width="match_parent"
@@ -64,6 +61,7 @@
                    android:orientation="vertical"
                    android:background="@drawable/card_background"
                    android:padding="20dp">
+                
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -100,10 +98,7 @@
 
                 </RelativeLayout>
 			</LinearLayout>
-            </androidx.cardview.widget.CardView>
-		    <LinearLayout
 
-            <!-- Menu Buttons -->
             <com.kdt.mcgui.LauncherMenuButton
                 android:id="@+id/custom_control_button"
                 style="@style/LauncherMenuButton.Universal"
@@ -136,6 +131,7 @@
                 android:text="@string/main_share_logs"
                 android:background="@drawable/card_background"
                 android:textColor="@color/primary_text"/>
+            
 			<com.kdt.mcgui.LauncherMenuButton
                 android:id="@+id/open_files_button"
                 style="@style/LauncherMenuButton.Universal"
@@ -161,7 +157,6 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- Bottom Premium Section -->
     <LinearLayout
         android:id="@+id/bottom_section"
         android:layout_width="match_parent"
@@ -171,7 +166,6 @@
         android:background="@color/background_bottom_bar"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <!-- Version + Edit -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -196,7 +190,6 @@
                 android:src="@drawable/ic_px_edit"/>
         </LinearLayout>
 
-        <!-- Premium Play Button -->
         <com.kdt.mcgui.MineButton
             android:id="@+id/play_button"
             android:layout_width="match_parent"
@@ -211,4 +204,3 @@
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-        
