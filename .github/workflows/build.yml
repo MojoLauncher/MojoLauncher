@@ -76,13 +76,13 @@ jobs:
           name: app-debug-noruntime
           path: out/app-debug-noruntime.apk
 
-      - name: Release Nightly APK
-        if: github.repository_owner == 'MojoLauncher' && github.ref_name == 'v3_openjdk'
+      - name: Beta Vanila 
+        if: github.repository_owner == 'CrazeLuncher' && github.ref_name == 'v3_openjdk'
         uses: softprops/action-gh-release@v3
         with:
-          name: MojoLauncher Nightly Builds
+          name: CrazeLauncher Vanila Builds
           prerelease: true
-          tag_name: nightly
+          tag_name: Vanilla Beta
           body: |
             MojoLauncher nightly build.
             Commit hash: ${{ github.sha }}
@@ -94,14 +94,3 @@ jobs:
         with:
           name: app-release-aab
           path: out/app-gplay.aab
-
-      - name: Upload onto the Google Play testing track
-        continue-on-error: true
-        if: github.repository_owner == 'MojoLauncher' && github.ref_name == 'v3_openjdk'
-        uses: r0adkll/upload-google-play@v1.1.2
-        with:
-          serviceAccountJsonPlainText: ${{ secrets.SERVICE_JSON }}
-          packageName: git.artdeell.mojo
-          releaseFiles: out/app-gplay.aab
-          track: internal
-          inAppUpdatePriority: 5
