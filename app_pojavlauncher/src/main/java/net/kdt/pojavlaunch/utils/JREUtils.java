@@ -209,13 +209,14 @@ public class JREUtils {
 
 // REPLACE THIS BLOCK HERE
 if (renderer.equals("mobileglues")) {
+    envMap.put("LIBGL_GLES", "libmobileglues.so");
     envMap.put("MOBILEGLUES_INFO_GETTER",
             "libmobileglues_info_getter.so");
 
     envMap.put("LIBGL_ES", "3");
 
-    // MobileGlues safe mode
-    envMap.put("MG_multidrawMode", "0");
+    // real MG settings
+    envMap.put("MG_multidrawMode", "None");
     envMap.put("MG_enableNoError", "1");
     envMap.put("MG_enableExtComputeShader", "0");
     envMap.put("MG_enableExtTimerQuery", "0");
@@ -225,14 +226,9 @@ if (renderer.equals("mobileglues")) {
     envMap.remove("MESA_GL_VERSION_OVERRIDE");
     envMap.remove("MESA_GLSL_VERSION_OVERRIDE");
 }
-
-// keep this below
 if (renderer.equals("opengles3_ltw")) {
     envMap.put("POJAVEXEC_EGL", "libltw.so");
 }
-        if (renderer.equals("opengles3_ltw")) {
-            envMap.put("POJAVEXEC_EGL", "libltw.so");
-        }
 if (LauncherPreferences.PREF_BIG_CORE_AFFINITY)
             envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
 
