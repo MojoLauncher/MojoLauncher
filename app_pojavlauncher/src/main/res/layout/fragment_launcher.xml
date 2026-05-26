@@ -55,7 +55,7 @@
                     android:textColor="@color/primary_text"/>
             </LinearLayout>
 
-            <!-- Big Game Panel -->
+            <!-- Premium Game Panel -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/game_panel"
                 android:layout_width="match_parent"
@@ -82,7 +82,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toEndOf="@id/game_icon"
                         android:layout_marginStart="16dp"
-                        android:text="Minecraft Java Edition"
+                        android:text="@string/game_title"
                         android:textColor="@color/primary_text"
                         android:textSize="22sp"
                         android:textStyle="bold"/>
@@ -95,7 +95,7 @@
                         android:layout_toEndOf="@id/game_icon"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
-                        android:text="Launch and manage your game"
+                        android:text="@string/game_desc"
                         android:textColor="@color/secondary_text"
                         android:textSize="14sp"/>
 
@@ -205,7 +205,9 @@
             android:textAllCaps="true"
             android:textSize="20sp"
             android:textColor="#000000"
-            android:background="@drawable/play_button"/>
+            android:background="@drawable/play_button"
+            app:backgroundTint="@null"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+        
