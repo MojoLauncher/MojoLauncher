@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Pressed -->
+    <item android:state_pressed="true">
+        <shape android:shape="oval">
+            <solid android:color="#1E1E1E"/>
+        </shape>
+    </item>
+
+    <!-- Default -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/card_background"/>
+
+            <stroke
+                android:width="1dp"
+                android:color="@color/card_border"/>
+        </shape>
+    </item>
+
+</selector>
