@@ -64,6 +64,7 @@
                    android:orientation="vertical"
                    android:background="@drawable/card_background"
                    android:padding="20dp">
+			</LinearLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
