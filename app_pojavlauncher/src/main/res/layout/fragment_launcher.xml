@@ -56,15 +56,14 @@
             </LinearLayout>
 
             <!-- Premium Game Panel -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/game_panel"
-                android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:layout_marginTop="18dp"
-                app:cardCornerRadius="24dp"
-                app:cardBackgroundColor="@color/card_background"
-                app:cardElevation="4dp">
-
+            <LinearLayout
+                   android:id="@+id/game_panel"
+                   android:layout_width="match_parent"
+                   android:layout_height="220dp"
+                   android:layout_marginTop="18dp"
+                   android:orientation="vertical"
+                   android:background="@drawable/card_background"
+                   android:padding="20dp">
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
