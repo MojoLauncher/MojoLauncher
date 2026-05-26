@@ -97,6 +97,7 @@ public class JREUtils {
         String line;
         while ((line = reader.readLine()) != null) {
             int index = line.indexOf("=");
+            if (index == -1) continue;
 
             envMap.put(
                     line.substring(0, index),
@@ -252,6 +253,19 @@ public class JREUtils {
                 Log.e("JREUtils", exception.toString());
             }
         }
+
+        // ====================================================================
+        // CRITICAL FIX: Native libraries are dynamically loaded ONLY after
+        // the environment hooks are systematically exported into the shell system layer.
+        // ====================================================================
+        try {
+            System.loadLibrary("exithook");
+            System.loadLibrary("pojavexec");
+            System.loadLibrary("pojavexec_awt");
+            Log.i("JREUtils", "Native hook modules bound successfully with system properties.");
+        } catch (UnsatisfiedLinkError linkError) {
+            Log.e("JREUtils", "Failed loading platform runtime libraries: " + linkError.getMessage());
+        }
     }
 
     public static void launchJavaVM(
@@ -266,7 +280,10 @@ public class JREUtils {
 
     public static ArrayList<String> parseJavaArguments(String args) {
         ArrayList<String> parsedArguments = new ArrayList<>(0);
-        args = args.trim().replace(" ", "");
+        if (args == null || args.trim().isEmpty()) return parsedArguments;
+
+        // FIX: Removed global blank replacement execution to preserve parameters containing spaces
+        args = args.trim();
 
         String[] separators = new String[]{
                 "-XX:-", "-XX:+", "-XX:", "--",
@@ -304,7 +321,7 @@ public class JREUtils {
 
                 if (parsedSubString.indexOf('=')
                         == parsedSubString.lastIndexOf('=')) {
-                    parsedArguments.add(parsedSubString);
+                    parsedArguments.add(parsedSubString.trim());
                 }
             }
         }
@@ -365,10 +382,4 @@ public class JREUtils {
     public static native boolean renderAWTScreenFrame(
             ByteBuffer tempBuffer
     );
-
-    static {
-        System.loadLibrary("exithook");
-        System.loadLibrary("pojavexec");
-        System.loadLibrary("pojavexec_awt");
-    }
 }
