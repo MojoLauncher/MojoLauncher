@@ -248,7 +248,7 @@ public class GameRunner {
 
         javaArgList.addAll(JREUtils.parseJavaArguments(instance.getLaunchArgs()));
 
-        JREUtils.setEnviroimentForGame(activity, rendererName);
+        JREUtils.setEnvironmentForGame(activity, rendererName);
         JREUtils.chdir(instance.getGameDirectory().getAbsolutePath());
 
         String rendererLibrary = JREUtils.loadGraphicsLibrary(rendererName);
