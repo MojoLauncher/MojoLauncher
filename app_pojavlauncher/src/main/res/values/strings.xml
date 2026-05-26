@@ -485,4 +485,6 @@
     <string name="instance_delete">Delete instance</string>
     <string name="instance_delete_confirmation">Are you sure you want to delete the instance? This will permanently delete all worlds, mods, resources and any other data in the instance directory. This action cannot be undone!</string>
     <string name="import_local_modpack">Import local modpack</string>
+    <string name="game_title">Minecraft Java Edition</string>
+    <string name="game_desc">Launch and manage your game</string>
 </resources>
