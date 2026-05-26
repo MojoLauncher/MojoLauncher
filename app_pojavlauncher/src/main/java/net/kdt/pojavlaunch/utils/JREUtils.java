@@ -187,10 +187,11 @@ envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
         setupFfmpegEnv(context, envMap);
 
         envMap.put("MOJO_RENDERER", renderer);
-
-        if(renderer.equals("mobileglues")) {
-            envMap.put("LIBGL_ES", "3");
-            envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6");
+           if(renderer.equals("mobileglues")) {
+           envMap.put("POJAVEXEC_EGL", "libmobileglues.so");
+           envMap.put("MOBILEGLUES_INFO_GETTER", "libmobileglues_info_getter.so");
+           envMap.put("LIBGL_ES", "3");
+           envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6");
         }
 
         if(renderer.equals("opengles3_ltw")) {
@@ -290,7 +291,7 @@ envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
                 break;
 
             case "mobileglues":
-                renderLibrary = "libgl4es_114.so";
+                renderLibrary = "libmobileglues.so";
                 break;
 
             default:
