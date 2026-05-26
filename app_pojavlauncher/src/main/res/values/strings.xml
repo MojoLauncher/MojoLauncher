@@ -41,8 +41,7 @@
 
     <!-- MCLauncherActivity: Strings -->
     <string name="mcl_launch_cleancache">Cleaning cache files</string>
-    <string name="mcl_launch_downloading">Downloading %s</string>
-    <string name="mcl_launch_downloading_progress">"Downloading %s (%.2f MB / %.2f MB)"</string>
+    <string name="mcl_launch_downloading">Downloading %s</string><string name="mcl_launch_downloading_progress">Downloading %1$s (%2$.2f MB / %3$.2f MB)</string>
     <string name="mcl_launch_download_assets">Preparing to download resources</string>
 
     <string name="mcl_options">Options</string>
@@ -174,8 +173,8 @@
     <string name="customctrl_swipeable">Swipeable</string>
     <string name="customctrl_forward_lock">Forward lock</string>
     <string name="customctrl_absolute_tracking">Absolute finger tracking</string>
-    <string name="memory_warning_msg">The current amount of free RAM (%d) is lower than allocated RAM (%d), which may lead to crashes. Change the allocation if the game crashes.</string>
-    <string name="address_memory_warning_msg">The current amount of free addressable RAM space (%d) is lower than the allocated RAM (%d), which will lead to crashes. Change the allocation if the game crashes.</string>
+    <string name="memory_warning_msg">The current amount of free RAM (%1$d) is lower than allocated RAM (%2$d), which may lead to crashes. Change the allocation if the game crashes.</string>
+    <string name="address_memory_warning_msg">The current amount of free addressable RAM space (%1$d) is lower than the allocated RAM (%2$d), which will lead to crashes. Change the allocation if the game crashes.</string>
     <string name="mcl_memory_allocation">Memory allocation</string>
     <string name="mcl_memory_allocation_subtitle">Controls how much memory is given to Minecraft.</string>
     <string name="multirt_runtime_corrupt">Corrupted Java Runtime</string>
