@@ -1,33 +1,53 @@
 <resources>
-    <!-- Buttons -->
-    <color name="control_button_color">#1F2937</color>
-    <color name="control_button_pressed_color">#FF4D4D</color>
 
-    <!-- Main Accent -->
-    <color name="minebutton_color">#FF4D4D</color>
+    <!-- MAIN BACKGROUND -->
 
-    <!-- Backgrounds -->
-    <color name="background_app">#0A0A0A</color>
-    <color name="divider">#1E1E1E</color>
-    <color name="background_overlay">#121212</color>
-    <color name="background_status_bar">#000000</color>
-    <color name="background_bottom_bar">#0D0D0D</color>
+    <color name="background_app">#050816</color>
+    <color name="background_overlay">#0B1220</color>
+    <color name="background_status_bar">#050816</color>
+    <color name="background_bottom_bar">#0F172A</color>
 
-    <!-- Icons -->
-    <color name="icon_outline_color">#F5F5F5</color>
+    <!-- PRIMARY ACCENT -->
 
-    <!-- Text -->
+    <color name="minebutton_color">#00E5FF</color>
+    <color name="minebutton_glow">#3300E5FF</color>
+
+    <!-- PLAY BUTTON -->
+
+    <color name="play_button">#00E5FF</color>
+    <color name="play_button_pressed">#4F8CFF</color>
+
+    <!-- BUTTONS -->
+
+    <color name="control_button_color">#162033</color>
+    <color name="control_button_pressed_color">#223047</color>
+
+    <!-- CARDS -->
+
+    <color name="card_background">#162033</color>
+    <color name="card_border">#223047</color>
+
+    <!-- TEXT -->
+
     <color name="primary_text">#FFFFFF</color>
-    <color name="secondary_text">#A1A1AA</color>
+    <color name="secondary_text">#9FB0CC</color>
 
-    <!-- Premium Cards -->
-    <color name="card_background">#111111</color>
-    <color name="card_border">#222222</color>
+    <!-- ICONS -->
 
-    <!-- Play Button -->
-    <color name="play_button">#FFFFFF</color>
-    <color name="play_button_pressed">#E5E5E5</color>
+    <color name="icon_outline_color">#FFFFFF</color>
 
-    <!-- Stop / Accent -->
+    <!-- DIVIDERS -->
+
+    <color name="divider">#1E293B</color>
+
+    <!-- SPECIAL -->
+
     <color name="stop_button">#FF4D4D</color>
+
+    <!-- OPTIONAL PREMIUM COLORS -->
+
+    <color name="premium_blue">#4F8CFF</color>
+    <color name="premium_cyan">#00E5FF</color>
+    <color name="glass_overlay">#AA111827</color>
+
 </resources>
