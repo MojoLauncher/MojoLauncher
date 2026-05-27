@@ -208,11 +208,9 @@ public class JREUtils {
         envMap.put("MOJO_RENDERER", renderer);
 
         if (renderer.equals("mobileglues")) {
-            envMap.put("LIBGL_GLES", "libmobileglues.so");
+            envMap.put("POJAVEXEC_EGL", "libmobileglues.so");
             envMap.put("MOBILEGLUES_INFO_GETTER",
-                    "libmobileglues_info_getter.so");
-
-            envMap.put("LIBGL_ES", "3");
+                    "libmobileglues_info_getter.so")
 
             // Correct MobileGlues values to fix Mali multi_draw crash
             envMap.put("MG_multidrawMode", "1"); 
