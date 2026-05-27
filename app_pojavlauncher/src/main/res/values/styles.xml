@@ -1,42 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Light or not? -->
-    <style name="AppTheme" parent="@style/Theme.AppCompat.NoActionBar">
+
+    <!-- ===================================================== -->
+    <!-- MAIN APP THEME -->
+    <!-- ===================================================== -->
+
+    <style name="AppTheme" parent="Theme.Material3.Dark.NoActionBar">
+
+        <!-- Window -->
+
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:statusBarColor">@color/background_status_bar</item>
-        <item name="android:navigationBarColor">@color/background_app</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+
+        <!-- Background -->
+
+        <item name="android:windowBackground">@color/background_app</item>
+
+        <!-- Status Bar -->
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
+
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+
+        <item name="android:windowLightStatusBar">false</item>
+
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <!-- Material Colors -->
+
+        <item name="colorPrimary">@color/minebutton_color</item>
+
+        <item name="colorSecondary">@color/premium_blue</item>
+
+        <item name="android:textColorPrimary">@color/primary_text</item>
+
+        <!-- Preferences -->
+
+        <item name="preferenceTheme">
+            @style/PreferenceThemeOverlay.v14.Material
+        </item>
+
+        <!-- Text -->
 
         <item name="android:textSize">@dimen/_12ssp</item>
 
+        <!-- Edge To Edge -->
+
+        <item name="android:windowLayoutInDisplayCutoutMode">
+            shortEdges
+        </item>
+
     </style>
+
+    <!-- ===================================================== -->
+    <!-- LAUNCHER BUTTON -->
+    <!-- ===================================================== -->
+
+    <style name="LauncherMenuButton"
+        parent="Widget.Material3.Button">
+
+        <item name="android:background">
+            ?android:attr/selectableItemBackgroundBorderless
+        </item>
+
+        <item name="android:textColor">@color/primary_text</item>
+
+        <item name="android:textAllCaps">false</item>
+
+        <item name="android:padding">14dp</item>
+
+        <item name="android:gravity">center_vertical</item>
+
+    </style>
+
+    <!-- ===================================================== -->
+    <!-- UNIVERSAL BUTTON -->
+    <!-- ===================================================== -->
+
+    <style name="LauncherMenuButton.Universal"
+        parent="LauncherMenuButton">
+
+        <item name="android:layout_height">@dimen/_66sdp</item>
+
+        <item name="android:textSize">15sp</item>
+
+    </style>
+
+    <!-- ===================================================== -->
+    <!-- DIVIDER -->
+    <!-- ===================================================== -->
 
     <style name="LauncherFragment_Divider">
+
         <item name="android:layout_width">@dimen/padding_tiny</item>
+
         <item name="android:layout_height">0dp</item>
+
         <item name="android:background">@color/divider</item>
+
     </style>
 
-    <style name="LauncherMenuButton" parent="Widget.AppCompat.Button">
-        <item name="android:background">?android:attr/selectableItemBackground</item>
-    </style>
-
-    <style name="LauncherMenuButton.Universal" parent="LauncherMenuButton">
-        <item name="android:layout_height">@dimen/_66sdp</item>
-    </style>
+    <!-- ===================================================== -->
+    <!-- THICK DIVIDER -->
+    <!-- ===================================================== -->
 
     <style name="ThickDivider">
+
         <item name="android:layout_width">match_parent</item>
+
         <item name="android:layout_height">@dimen/_1sdp</item>
-        <item name="android:background">?android:attr/listDivider</item>
+
+        <item name="android:background">@color/divider</item>
+
     </style>
 
+    <!-- ===================================================== -->
+    <!-- DIMENSION TRACKER -->
+    <!-- ===================================================== -->
+
     <item name="dimension_tracker" type="id" />
+
     <style name="DimensionTracker">
+
         <item name="android:id">@id/dimension_tracker</item>
+
         <item name="android:layout_width">match_parent</item>
+
         <item name="android:layout_height">match_parent</item>
+
     </style>
+
+    <!-- ===================================================== -->
+    <!-- PREMIUM CARD STYLE -->
+    <!-- ===================================================== -->
+
+    <style name="PremiumCard">
+
+        <item name="cardBackgroundColor">@color/card_background</item>
+
+        <item name="strokeColor">@color/card_border</item>
+
+        <item name="strokeWidth">1dp</item>
+
+        <item name="cardCornerRadius">22dp</item>
+
+        <item name="cardElevation">8dp</item>
+
+    </style>
+
 </resources>
