@@ -1,328 +1,417 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_menu_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#050816">
 
-    <view
+    <!-- BACKGROUND -->
+
+    <ImageView
+        android:id="@+id/bg_wallpaper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        class="android.view.View">
-        <background>
-            <shape android:shape="rectangle">
-                <gradient
-                    android:startColor="#02040A"
-                    android:centerColor="#050A1A"
-                    android:endColor="#0B0F19"
-                    android:angle="135"/>
-            </shape>
-        </background>
-    </view>
+        android:scaleType="centerCrop"
+        android:src="@drawable/banner_bg"
+        android:alpha="0.35"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#AA050816"/>
+
+    <!-- LEFT SIDEBAR -->
+
+    <LinearLayout
+        android:id="@+id/sidebar"
+        android:layout_width="72dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="top|center"
+        android:paddingTop="28dp"
+        android:background="#880B1220"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginBottom="36dp"
+            android:src="@mipmap/ic_launcher"/>
+
+        <ImageButton
+            android:id="@+id/nav_home"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/ic_home"
+            android:background="@drawable/sidebar_button_bg"
+            app:tint="#00E5FF"/>
+
+        <ImageButton
+            android:id="@+id/nav_mods"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="18dp"
+            android:src="@drawable/ic_px_gamepad"
+            android:background="@drawable/sidebar_button_bg"
+            app:tint="#FFFFFF"/>
+
+        <ImageButton
+            android:id="@+id/nav_java"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="18dp"
+            android:src="@drawable/ic_px_java_run"
+            android:background="@drawable/sidebar_button_bg"
+            app:tint="#FFFFFF"/>
+
+        <ImageButton
+            android:id="@+id/nav_files"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="18dp"
+            android:src="@drawable/ic_px_folder"
+            android:background="@drawable/sidebar_button_bg"
+            app:tint="#FFFFFF"/>
+
+        <ImageButton
+            android:id="@+id/nav_settings"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="18dp"
+            android:src="@drawable/ic_settings"
+            android:background="@drawable/sidebar_button_bg"
+            app:tint="#FFFFFF"/>
+
+    </LinearLayout>
+
+    <!-- TOP BAR -->
+
+    <LinearLayout
+        android:id="@+id/top_bar"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="24dp"
+        android:background="#660B1220"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/sidebar"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CRAZE LAUNCHER"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.03"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:id="@+id/download_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_download"
+            android:background="@drawable/top_button_bg"
+            app:tint="#FFFFFF"/>
+
+        <ImageButton
+            android:id="@+id/settings_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="12dp"
+            android:src="@drawable/ic_settings"
+            android:background="@drawable/top_button_bg"
+            app:tint="#FFFFFF"/>
+
+    </LinearLayout>
+
+    <!-- MAIN CONTENT -->
 
     <ScrollView
-        android:id="@+id/main_scroll"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
         android:scrollbars="none"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottom_section">
+        app:layout_constraintTop_toBottomOf="@id/top_bar"
+        app:layout_constraintBottom_toTopOf="@id/bottom_panel"
+        app:layout_constraintStart_toEndOf="@id/sidebar"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="24dp">
+
+            <!-- HERO CARD -->
+
+            <RelativeLayout
+                android:id="@+id/hero_card"
+                android:layout_width="match_parent"
+                android:layout_height="260dp"
+                android:background="@drawable/hero_card_bg"
+                android:elevation="12dp"
+                android:padding="26dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/banner_bg"
+                    android:alpha="0.22"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#66000000"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_centerVertical="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Minecraft Java Edition"
+                        android:textColor="#FFFFFF"
+                        android:textSize="30sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Ultra smooth experience with Zink renderer"
+                        android:textColor="#B6C2D9"
+                        android:textSize="15sp"/>
+
+                    <com.kdt.mcgui.MineButton
+                        android:id="@+id/play_button"
+                        android:layout_width="220dp"
+                        android:layout_height="64dp"
+                        android:layout_marginTop="28dp"
+                        android:text="PLAY NOW"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="#050816"
+                        android:elevation="12dp">
+
+                        <background>
+                            <ripple android:color="#3300E5FF">
+                                <item>
+                                    <shape android:shape="rectangle">
+                                        <gradient
+                                            android:startColor="#00E5FF"
+                                            android:endColor="#4F8CFF"
+                                            android:angle="0"/>
+                                        <corners android:radius="22dp"/>
+                                    </shape>
+                                </item>
+                            </ripple>
+                        </background>
+
+                    </com.kdt.mcgui.MineButton>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <!-- SECTION TITLE -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:text="Dashboard"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                android:textStyle="bold"/>
+
+            <!-- DASHBOARD GRID -->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
                 android:orientation="horizontal"
                 android:weightSum="2">
 
-                <com.kdt.mcgui.LauncherMenuButton
-                    android:id="@+id/news_button"
-                    style="@style/LauncherMenuButton.Universal"
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="76dp"
+                    android:layout_height="140dp"
                     android:layout_weight="1"
                     android:layout_marginEnd="10dp"
-                    android:text="@string/mcl_tab_wiki"
-                    android:drawableStart="@drawable/ic_px_book"
-                    android:textColor="#FFFFFF"
-                    android:paddingStart="16dp"
-                    android:gravity="center_vertical|start">
-                    <background>
-                        <shape android:shape="rectangle">
-                            <solid android:color="#0F172A"/> 
-                            <corners android:radius="14dp"/>
-                            <stroke android:width="1.5dp" android:color="#1E293B"/>
-                        </shape>
-                    </background>
-                </com.kdt.mcgui.LauncherMenuButton>
-
-                <com.kdt.mcgui.LauncherMenuButton
-                    android:id="@+id/social_media_button"
-                    style="@style/LauncherMenuButton.Universal"
-                    android:layout_width="0dp"
-                    android:layout_height="76dp"
-                    android:layout_weight="1"
-                    android:layout_marginStart="10dp"
-                    android:text="@string/mcl_button_social_media"
-                    android:drawableStart="@drawable/ic_social_media"
-                    android:textColor="#FFFFFF"
-                    android:paddingStart="16dp"
-                    android:gravity="center_vertical|start">
-                    <background>
-                        <shape android:shape="rectangle">
-                            <solid android:color="#0F172A"/> 
-                            <corners android:radius="14dp"/>
-                            <stroke android:width="1.5dp" android:color="#1E293B"/>
-                        </shape>
-                    </background>
-                </com.kdt.mcgui.LauncherMenuButton>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/game_panel"
-                android:layout_width="match_parent"
-                android:layout_height="240dp"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical"
-                android:padding="4dp">
-                <background>
-                    <shape android:shape="rectangle">
-                        <solid android:color="#0F172A"/> 
-                        <corners android:radius="14dp"/>
-                        <stroke android:width="1.5dp" android:color="#1E293B"/>
-                    </shape>
-                </background>
-                
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="24dp">
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/dashboard_card_bg">
 
                     <ImageView
-                        android:id="@+id/game_icon"
-                        android:layout_width="76dp"
-                        android:layout_height="76dp"
-                        android:src="@mipmap/ic_launcher"
-                        android:layout_centerVertical="true"
-                        android:elevation="4dp"/>
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:src="@drawable/ic_px_gamepad"
+                        app:tint="#00E5FF"/>
 
                     <TextView
-                        android:id="@+id/game_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toEndOf="@id/game_icon"
-                        android:layout_marginStart="20dp"
-                        android:layout_alignTop="@id/game_icon"
-                        android:layout_marginTop="6dp"
-                        android:text="@string/game_title"
+                        android:layout_marginTop="14dp"
+                        android:text="Controls"
                         android:textColor="#FFFFFF"
-                        android:textSize="24sp"
                         android:textStyle="bold"
-                        android:letterSpacing="0.02"/>
+                        android:textSize="16sp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="140dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/dashboard_card_bg">
+
+                    <ImageView
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:src="@drawable/ic_px_folder"
+                        app:tint="#00E5FF"/>
 
                     <TextView
-                        android:id="@+id/game_desc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/game_title"
-                        android:layout_toEndOf="@id/game_icon"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/game_desc"
-                        android:textColor="#566A94"
-                        android:textSize="14sp"
-                        android:letterSpacing="0.01"/>
+                        android:layout_marginTop="14dp"
+                        android:text="Mods"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:textSize="16sp"/>
 
-                </RelativeLayout>
-			</LinearLayout>
+                </LinearLayout>
 
-            <com.kdt.mcgui.LauncherMenuButton
-                android:id="@+id/custom_control_button"
-                style="@style/LauncherMenuButton.Universal"
+            </LinearLayout>
+
+            <!-- SECOND ROW -->
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="72dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:drawableStart="@drawable/ic_px_gamepad"
-                android:text="@string/mcl_option_customcontrol"
-                android:textColor="#FFFFFF"
-                android:paddingStart="20dp">
-                <background>
-                    <shape android:shape="rectangle">
-                        <solid android:color="#0F172A"/> 
-                        <corners android:radius="14dp"/>
-                        <stroke android:width="1.5dp" android:color="#1E293B"/>
-                    </shape>
-                </background>
-            </com.kdt.mcgui.LauncherMenuButton>
+                android:orientation="horizontal"
+                android:weightSum="2">
 
-            <com.kdt.mcgui.LauncherMenuButton
-                android:id="@+id/install_jar_button"
-                style="@style/LauncherMenuButton.Universal"
-                android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:layout_marginTop="12dp"
-                android:drawableStart="@drawable/ic_px_java_run"
-                android:text="@string/main_install_jar_file"
-                android:textColor="#FFFFFF"
-                android:paddingStart="20dp">
-                <background>
-                    <shape android:shape="rectangle">
-                        <solid android:color="#0F172A"/> 
-                        <corners android:radius="14dp"/>
-                        <stroke android:width="1.5dp" android:color="#1E293B"/>
-                    </shape>
-                </background>
-            </com.kdt.mcgui.LauncherMenuButton>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="140dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="10dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/dashboard_card_bg">
 
-            <com.kdt.mcgui.LauncherMenuButton
-                android:id="@+id/share_logs_button"
-                style="@style/LauncherMenuButton.Universal"
-                android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:layout_marginTop="12dp"
-                android:drawableStart="@drawable/ic_px_sharelog"
-                android:text="@string/main_share_logs"
-                android:textColor="#FFFFFF"
-                android:paddingStart="20dp">
-                <background>
-                    <shape android:shape="rectangle">
-                        <solid android:color="#0F172A"/> 
-                        <corners android:radius="14dp"/>
-                        <stroke android:width="1.5dp" android:color="#1E293B"/>
-                    </shape>
-                </background>
-            </com.kdt.mcgui.LauncherMenuButton>
-            
-			<com.kdt.mcgui.LauncherMenuButton
-                android:id="@+id/open_files_button"
-                style="@style/LauncherMenuButton.Universal"
-                android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:layout_marginTop="12dp"
-                android:drawableStart="@drawable/ic_px_folder"
-                android:text="@string/mcl_button_open_directory"
-                android:textColor="#FFFFFF"
-                android:paddingStart="20dp">
-                <background>
-                    <shape android:shape="rectangle">
-                        <solid android:color="#0F172A"/> 
-                        <corners android:radius="14dp"/>
-                        <stroke android:width="1.5dp" android:color="#1E293B"/>
-                    </shape>
-                </background>
-            </com.kdt.mcgui.LauncherMenuButton>
+                    <ImageView
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:src="@drawable/ic_px_java_run"
+                        app:tint="#00E5FF"/>
 
-            <com.kdt.mcgui.LauncherMenuButton
-                android:id="@+id/mod_manager_button"
-                style="@style/LauncherMenuButton.Universal"
-                android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:layout_marginTop="12dp"
-                android:drawableStart="@drawable/ic_px_folder"
-                android:text="Mods"
-                android:textColor="#FFFFFF"
-                android:paddingStart="20dp">
-                <background>
-                    <shape android:shape="rectangle">
-                        <solid android:color="#0F172A"/> 
-                        <corners android:radius="14dp"/>
-                        <stroke android:width="1.5dp" android:color="#1E293B"/>
-                    </shape>
-                </background>
-            </com.kdt.mcgui.LauncherMenuButton>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="Java"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:textSize="16sp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="140dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/dashboard_card_bg">
+
+                    <ImageView
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:src="@drawable/ic_px_sharelog"
+                        app:tint="#00E5FF"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="Logs"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:textSize="16sp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
+
     </ScrollView>
 
+    <!-- BOTTOM PANEL -->
+
     <LinearLayout
-        android:id="@+id/bottom_section"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp"
-        android:background="#050914"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:id="@+id/bottom_panel"
+        android:layout_width="0dp"
+        android:layout_height="88dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="24dp"
+        android:background="#CC0B1220"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/sidebar"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+        <com.kdt.mcgui.mcVersionSpinner
+            android:id="@+id/mc_version_spinner"
+            android:layout_width="0dp"
+            android:layout_height="58dp"
+            android:layout_weight="1"
+            android:paddingHorizontal="18dp">
 
-            <com.kdt.mcgui.mcVersionSpinner
-                android:id="@+id/mc_version_spinner"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:drawableEnd="@drawable/spinner_arrow"
-                app:drawableEndSize="20dp"
-                app:drawableStartSize="32dp"
-                android:paddingHorizontal="16dp">
-                <background>
-                    <shape android:shape="rectangle">
-                        <solid android:color="#0F172A"/> 
-                        <corners android:radius="14dp"/>
-                        <stroke android:width="1.5dp" android:color="#1E293B"/>
-                    </shape>
-                </background>
-            </com.kdt.mcgui.mcVersionSpinner>
-
-            <ImageButton
-                android:id="@+id/edit_profile_button"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="12dp"
-                android:src="@drawable/ic_px_edit"
-                app:tint="#00F2FE"
-                android:contentDescription="Edit Profile">
-                <background>
-                    <ripple android:color="#2000F2FE">
-                        <item>
-                            <shape android:shape="oval">
-                                <solid android:color="#0F172A"/>
-                                <stroke android:width="1.5dp" android:color="#00F2FE"/>
-                            </shape>
-                        </item>
-                    </ripple>
-                </background>
-            </ImageButton>
-        </LinearLayout>
-
-        <com.kdt.mcgui.MineButton
-            android:id="@+id/play_button"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/main_play"
-            android:textAllCaps="true"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#050A1A"
-            android:letterSpacing="0.08"
-            app:backgroundTint="@null"
-            android:elevation="6dp">
             <background>
-                <ripple android:color="#4000D2FF">
-                    <item>
-                        <shape android:shape="rectangle">
-                            <gradient
-                                android:startColor="#00F2FE"
-                                android:endColor="#4FACFE"
-                                android:angle="0"/>
-                            <corners android:radius="14dp"/>
-                        </shape>
-                    </item>
-                </ripple>
+                <shape android:shape="rectangle">
+                    <solid android:color="#AA111827"/>
+                    <corners android:radius="18dp"/>
+                    <stroke
+                        android:width="1.5dp"
+                        android:color="#223047"/>
+                </shape>
             </background>
-        </com.kdt.mcgui.MineButton>
+
+        </com.kdt.mcgui.mcVersionSpinner>
+
+        <ImageButton
+            android:id="@+id/edit_profile_button"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:layout_marginStart="14dp"
+            android:src="@drawable/ic_px_edit"
+            android:background="@drawable/top_button_bg"
+            app:tint="#00E5FF"/>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
