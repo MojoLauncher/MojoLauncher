@@ -208,7 +208,15 @@ public class JREUtils {
         envMap.put("MOJO_RENDERER", renderer);
 
         if (renderer.equals("mobileglues")) {
-            envMap.put("POJAVEXEC_EGL", "libmobileglues.so");
+            // FIX: Sequentially export the custom wrapper layer ahead of time 
+            // so background native hooks can intercept it before the map override.
+            try {
+                Os.setenv("POJAVEXEC_EGL", "libmobileglues.so", true);
+                Logger.appendToLog("Added custom env (immediate): POJAVEXEC_EGL=libmobileglues.so");
+            } catch (Exception exception) {
+                Log.e("JREUtils", "Failed sequential mobileglues export: " + exception.toString());
+            }
+
             envMap.put("MOBILEGLUES_INFO_GETTER", "libmobileglues_info_getter.so");
 
             // Correct MobileGlues values to fix Mali multi_draw crash
