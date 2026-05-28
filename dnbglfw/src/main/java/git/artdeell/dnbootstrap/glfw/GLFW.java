@@ -71,7 +71,9 @@ public class GLFW {
     private static void receiveGrabState(boolean isGrabbing) {
         boolean wasGrabbing = GLFW.grabbing;
         GLFW.grabbing = isGrabbing;
-        for(GrabListener grabListener : grabListeners) grabListener.onGrabState(isGrabbing);
+        Utils.runOnUiThread(() -> {
+            for(GrabListener grabListener : grabListeners) grabListener.onGrabState(isGrabbing);
+        });
         if(!isGrabbing && wasGrabbing) {
             cursorX = cursorY = 0.5;
             sendMousePos();

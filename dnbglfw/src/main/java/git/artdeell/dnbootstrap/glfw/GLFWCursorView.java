@@ -67,6 +67,6 @@ public class GLFWCursorView extends View implements CursorImplementor {
     @Override
     public void onGrabState(boolean isGrabbing) {
         noDraw = isGrabbing;
-        post(this::invalidate);
+        invalidate();
     }
 }
