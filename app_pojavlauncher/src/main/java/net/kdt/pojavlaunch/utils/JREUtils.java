@@ -135,6 +135,9 @@ public class JREUtils {
         // Fix white color on banner and sheep, since GL4ES 1.1.5
         envMap.put("LIBGL_NORMALIZE", "1");
 
+        // Fix Minecraft 1.17+ from crashing with unbound context errors
+        envMap.put("LIBGL_VERSION", "3.3");
+
         if(PREF_DUMP_SHADERS)
             envMap.put("LIBGL_VGPU_DUMP", "1");
         if(PREF_VSYNC_IN_ZINK)
