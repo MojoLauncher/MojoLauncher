@@ -80,6 +80,7 @@ public class MinecraftGLSurface extends View implements GrabListener, GamepadEna
     private final InGUIEventProcessor mInGUIProcessor = new InGUIEventProcessor(this);
     private TouchEventProcessor mCurrentTouchProcessor = mInGUIProcessor;
     private AndroidPointerCapture mPointerCapture;
+    private View mTouchpad;
     private boolean mLastGrabState = false;
 
     public MinecraftGLSurface(Context context) {
@@ -93,9 +94,9 @@ public class MinecraftGLSurface extends View implements GrabListener, GamepadEna
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void setUpPointerCapture(View touchpad) {
+    private void setUpPointerCapture() {
         if(mPointerCapture != null) mPointerCapture.detach();
-        mPointerCapture = new AndroidPointerCapture(touchpad, this);
+        mPointerCapture = new AndroidPointerCapture(mTouchpad, this);
     }
 
     /** Initialize the view and all its settings
@@ -105,7 +106,8 @@ public class MinecraftGLSurface extends View implements GrabListener, GamepadEna
      *                 when the cursor is not grabbed
      */
     public void start(boolean isAlreadyRunning, View touchpad) {
-        if (Tools.isAndroid8OrHigher()) setUpPointerCapture(touchpad);
+        mTouchpad = touchpad;
+        if (Tools.isAndroid8OrHigher()) setUpPointerCapture();
         mInGUIProcessor.setAbstractTouchpad(touchpad);
         mRefreshOnly = isAlreadyRunning;
         mSurface = mSurfaceProvider.create(getContext(), this);
@@ -152,7 +154,7 @@ public class MinecraftGLSurface extends View implements GrabListener, GamepadEna
             // Controlify calibration
             GLFW.nativeNotifyGamepadConnected();
         }else {
-            mGamepadHandler = new Gamepad(inputDevice, DefaultDataProvider.INSTANCE);
+            mGamepadHandler = new Gamepad(inputDevice, DefaultDataProvider.INSTANCE, mTouchpad);
         }
     }
 

@@ -17,6 +17,7 @@ public abstract class DistanceGesture extends ValidatorGesture {
         if(submit()) {
             mGestureTravelX = 0;
             mGestureTravelY = 0;
+            onGestureSubmitted();
         }
     }
 
