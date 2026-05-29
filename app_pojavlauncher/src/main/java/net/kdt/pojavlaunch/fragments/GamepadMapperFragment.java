@@ -74,8 +74,8 @@ public class GamepadMapperFragment extends Fragment implements
         grabStateSpinner.setOnItemSelectedListener(this);
     }
 
-    private void createGamepad(View mainView, InputDevice inputDevice) {
-        mGamepad = new Gamepad(inputDevice, mMapperAdapter) {
+    private void createGamepad(InputDevice inputDevice) {
+        mGamepad = new Gamepad(inputDevice, mMapperAdapter, null) {
             @Override
             public void handleGamepadInput(int keycode, float value) {
                 if(keycode == KeyEvent.KEYCODE_BUTTON_SELECT) {
@@ -95,7 +95,7 @@ public class GamepadMapperFragment extends Fragment implements
     public boolean onKey(View view, int i, KeyEvent keyEvent) {
         View mainView = getView();
         if(!Gamepad.isGamepadEvent(keyEvent) || mainView == null) return false;
-        if(mGamepad == null) createGamepad(mainView, keyEvent.getDevice());
+        if(mGamepad == null) createGamepad(keyEvent.getDevice());
         mInputManager.handleKeyEventInput(mainView.getContext(), keyEvent, mGamepad);
         return true;
     }
@@ -104,7 +104,7 @@ public class GamepadMapperFragment extends Fragment implements
     public boolean onGenericMotion(View view, MotionEvent motionEvent) {
         View mainView = getView();
         if(!Gamepad.isGamepadEvent(motionEvent) || mainView == null) return false;
-        if(mGamepad == null) createGamepad(mainView, motionEvent.getDevice());
+        if(mGamepad == null) createGamepad(motionEvent.getDevice());
         mInputManager.handleMotionEventInput(mainView.getContext(), motionEvent, mGamepad);
         return true;
     }

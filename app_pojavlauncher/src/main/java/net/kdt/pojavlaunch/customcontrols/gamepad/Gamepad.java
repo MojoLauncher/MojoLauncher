@@ -14,6 +14,7 @@ import android.view.Choreographer;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
 
 import net.kdt.pojavlaunch.LwjglGlfwKeycode;
 
@@ -72,9 +73,11 @@ public class Gamepad implements GrabListener, GamepadHandler {
 
     private final GamepadDataProvider mMapProvider;
 
+    private final View mTouchpadView;
+
     private boolean mRemoved = false;
 
-    public Gamepad(InputDevice inputDevice, GamepadDataProvider mapProvider){
+    public Gamepad(InputDevice inputDevice, GamepadDataProvider mapProvider, View touchpadView){
         Settings.setDeadzoneScale(PREF_DEADZONE_SCALE);
 
         mScreenChoreographer = Choreographer.getInstance();
@@ -92,9 +95,12 @@ public class Gamepad implements GrabListener, GamepadHandler {
         mRightJoystick = new GamepadJoystick(AXIS_Z, AXIS_RZ, inputDevice);
 
         mMapProvider = mapProvider;
+        mTouchpadView = touchpadView;
 
         GLFW.cursorX = GLFW.cursorY = 0.5;
         GLFW.sendMousePos();
+
+        enableTouchpadIfNecessary();
 
         reloadGamepadMaps();
         mMapProvider.attachGrabListener(this);
@@ -120,6 +126,10 @@ public class Gamepad implements GrabListener, GamepadHandler {
         updateMouseJoystick();
     }
 
+    private void enableTouchpadIfNecessary() {
+        if(mTouchpadView == null) return;
+        if(mTouchpadView.getVisibility() != View.VISIBLE) mTouchpadView.setVisibility(View.VISIBLE);
+    }
 
     public static void sendInput(short[] keycodes, boolean isDown){
         for(short keycode : keycodes){
@@ -289,6 +299,7 @@ public class Gamepad implements GrabListener, GamepadHandler {
 
     @Override
     public void handleGamepadInput(int keycode, float value) {
+        enableTouchpadIfNecessary();
         boolean isKeyEventDown = value == 1f;
         switch (keycode){
             case KeyEvent.KEYCODE_BUTTON_A:
