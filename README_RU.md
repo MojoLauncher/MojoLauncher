@@ -28,14 +28,16 @@
 
 ## Как получить MojoLauncher
 
-Получить копию MojoLauncher можно тремя способами:
+Получить копию MojoLauncher можно четырьмя способами:
 
-1. Можно скачать готовый билд с раздела [автоматических сборок](https://github.com/MojoLauncher/MojoLauncher/actions).
+1. Можно скачать готовый билд с раздела [релизов](http://github.com/mojolauncher/mojolauncher/releases).
 
 2. Можно скачать с Google Play нажав на кнопку ниже:
 [![Google Play](https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=git.artdeell.mojo)
 
-3. Можно [собрать](#building) с исходного кода.
+3. Можно скачать с ранние билды с [Github Actions](http://github.com/mojolauncher/mojolauncher/actions).
+
+4. Можно [собрать](#building) с исходного кода.
 ## Сборка  
 * Скомпилируйте лаунчер (все необходимые компоненты скачаются автоматически)
 ```
