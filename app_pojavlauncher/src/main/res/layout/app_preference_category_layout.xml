@@ -8,7 +8,7 @@
     android:paddingEnd="16dp"
     android:paddingBottom="4dp"
     android:textAppearance="?attr/textAppearanceTitleSmall"
-    android:textColor="@android:color/white"
+    android:textColor="@color/primary_text"
     android:textAllCaps="true"
     android:alpha="0.7"
     android:letterSpacing="0.1"

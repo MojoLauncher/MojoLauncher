@@ -403,10 +403,7 @@
     <string name="controller_direction_right">स्टिक दाएँ</string>
     <string name="controller_stick_press_l">लेफ्ट थंबस्टिक (क्लिक)</string>
     <string name="controller_stick_press_r">राइट थंबस्टिक (क्लिक)</string>
-    <string name="controller_dpad_up">डी-पैड ऊपर</string>
-    <string name="controller_dpad_down">डी-पैड नीचे</string>
-    <string name="controller_dpad_left">डी-पैड बाएँ</string>
-    <string name="controller_dpad_right">डी-पैड दाएँ</string>
+
     <string name="controller_remapper_exit_part1">पकड़े</string>
     <string name="controller_remapper_exit_part2">बाहर निकलने के लिए</string>
     <string name="controller_remapper_operating_mode">वर्तमान मोड</string>

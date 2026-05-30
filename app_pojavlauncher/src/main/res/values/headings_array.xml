@@ -1,29 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="renderer">
-        <item name="1">@string/mcl_setting_renderer_gles2_4</item>
-        <item name="2">@string/mcl_setting_renderer_vulkan_zink</item>
-        <item name="3">@string/mcl_setting_renderer_ltw</item>
+        <item>@string/mcl_setting_renderer_gles2_4</item>
+        <item>@string/mcl_setting_renderer_vulkan_zink</item>
+        <item>@string/mcl_setting_renderer_ltw</item>
+        <item>@string/mcl_setting_renderer_holy_gl4es</item>
+        <item>@string/mcl_setting_renderer_holy_virgl</item>
+        <item>@string/mcl_setting_renderer_mobile_glues</item>
+        <item>Krypton Wrapper (OpenGL ES 3)</item>
+        <item>Gallium Generic (Mesa)</item>
     </string-array>
 
     <string-array name="menu_customcontrol">
-        <item name="0">@string/customctrl_addbutton</item>
-        <item name="1">@string/customctrl_addbutton_drawer</item>
-        <item name="2">@string/customctrl_addbutton_joystick</item>
-        <item name="2">@string/global_load</item>
-        <item name="3">@string/global_save</item>
-        <item name="4">@string/customctrl_selectdefault</item>
-        <item name="5">@string/customctrl_editor_exit</item>
+        <item>@string/customctrl_addbutton</item>
+        <item>@string/customctrl_addbutton_drawer</item>
+        <item>@string/customctrl_addbutton_joystick</item>
+        <item>@string/global_load</item>
+        <item>@string/global_save</item>
+        <item>@string/customctrl_selectdefault</item>
+        <item>@string/customctrl_editor_exit</item>
     </string-array>
 
     <string-array name="menu_customcontrol_customactivity">
-        <item name="0">@string/customctrl_addbutton</item>
-        <item name="1">@string/customctrl_addbutton_drawer</item>
-        <item name="2">@string/customctrl_addbutton_joystick</item>
-        <item name="3">@string/global_load</item>
-        <item name="4">@string/global_save</item>
-        <item name="5">@string/customctrl_selectdefault</item>
-        <item name="6">@string/customctrl_export</item>
+        <item>@string/customctrl_addbutton</item>
+        <item>@string/customctrl_addbutton_drawer</item>
+        <item>@string/customctrl_addbutton_joystick</item>
+        <item>@string/global_load</item>
+        <item>@string/global_save</item>
+        <item>@string/customctrl_selectdefault</item>
+        <item>@string/customctrl_export</item>
     </string-array>
 
     <string-array name="menu_ingame">
@@ -35,10 +40,16 @@
     </string-array>
     
     <string-array name="renderer_values">
-        <item>opengles2</item> <!-- gl4es_extra 1.1.4 with OpenGL ES 2/"3" -->
-        <item>vulkan_zink</item> <!-- virglrenderer with OpenGL ES 3 -->
+        <item>opengles2</item>
+        <item>vulkan_zink</item>
         <item>opengles3_ltw</item>
+        <item>holy-gl4es</item>
+        <item>holy-virgl</item>
+        <item>mobile-glues</item>
+        <item>krypton</item>
+        <item>gallium</item>
     </string-array>
+
     <string-array name="download_source_names">
         <item>@string/global_default</item>
         <item>BMCLAPI</item>
@@ -53,12 +64,14 @@
         <item>Default</item>
         <item>Jelly</item>
         <item>Fade</item>
+        <item>Slide</item>
     </string-array>
     <string-array name="animation_type_values">
         <item>none</item>
         <item>default</item>
         <item>jelly</item>
         <item>fade</item>
+        <item>slide</item>
     </string-array>
 
     <string-array name="theme_names">
@@ -106,4 +119,31 @@
         <item>center</item>
     </string-array>
 
+    <string-array name="appearance_preset_names">
+        <item>Default</item>
+        <item>Custom</item>
+        <item>Modern</item>
+        <item>Classic</item>
+    </string-array>
+    <string-array name="appearance_preset_values">
+        <item>default</item>
+        <item>custom</item>
+        <item>modern</item>
+        <item>classic</item>
+    </string-array>
+
+    <string-array name="icon_preset_names">
+        <item>Default</item>
+        <item>Custom</item>
+        <item>White</item>
+        <item>Black</item>
+        <item>Accent</item>
+    </string-array>
+    <string-array name="icon_preset_values">
+        <item>default</item>
+        <item>custom</item>
+        <item>white</item>
+        <item>black</item>
+        <item>accent</item>
+    </string-array>
 </resources>

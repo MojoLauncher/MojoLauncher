@@ -16,7 +16,7 @@
             android:id="@+id/exit_log_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#00FF00"
+            android:textColor="#787878"
             android:fontFamily="monospace"
             android:textSize="10sp" />
     </ScrollView>
@@ -45,10 +45,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/main_share_logs"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="8dp" />
 
         <com.kdt.mcgui.MineButton
-        android:id="@+id/exit_restart_button"
+            android:id="@+id/exit_copy_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Copy logs"
+            android:layout_marginBottom="8dp" />
+
+        <com.kdt.mcgui.MineButton
+            android:id="@+id/exit_restart_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/global_restart" />

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -16,11 +17,12 @@
         android:gravity="center_vertical"
         android:drawablePadding="@dimen/_6sdp"
         android:paddingStart="@dimen/_8sdp"
+        android:textColor="@color/primary_text"
         app:drawableStartSize="@dimen/_30sdp"
         app:drawableEndSize="@dimen/_30sdp"
 
         tools:text="HELLO THERE"
-        tools:drawableStart="@mipmap/ic_launcher"
+        tools:drawableStart="@drawable/ic_package"
 
 
         tools:ignore="RtlSymmetry" />
@@ -32,9 +34,8 @@
         android:layout_height="match_parent"
         android:background="?attr/selectableItemBackground"
         android:src="@drawable/ic_px_trash"
-
+        app:tint="@color/primary_text"
         android:padding="@dimen/padding_moderate"
         />
 
 </LinearLayout>
-

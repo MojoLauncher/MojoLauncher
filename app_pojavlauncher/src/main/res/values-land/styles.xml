@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Light or not? -->
     <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="windowNoTitle">true</item>
@@ -11,6 +11,18 @@
 
         <item name="android:textSize">@dimen/_14ssp</item>
 
+        <!-- Material 3 Expressive properties -->
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.App.LargeComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent</item>
+
+        <!-- Alert Dialog Customization -->
+        <item name="alertDialogTheme">@style/AppAlertDialogTheme</item>
+        <item name="materialAlertDialogTheme">@style/AppAlertDialogTheme</item>
+        <item name="android:dialogTheme">@style/AppAlertDialogTheme</item>
+
+        <!-- Spinner and Popup Customization -->
+        <item name="android:spinnerStyle">@style/AppSpinnerStyle</item>
+        <item name="android:listPopupWindowStyle">@style/AppListPopupWindowStyle</item>
     </style>
 
     <style name="LauncherMenuButton.Universal" parent="LauncherMenuButton">

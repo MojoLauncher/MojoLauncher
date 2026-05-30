@@ -211,14 +211,27 @@ Java_net_kdt_pojavlaunch_utils_jre_JavaRunner_nativeLoadJVM(JNIEnv *env, jclass 
     jobjectArray vm_appArgs = convert_from_char_array(vm_env, appArgsChar, numAppArgs);
     free_char_array(env, appArgs, appArgsChar);
 
+    if(mainClass == NULL) {
+        throwException(env, STAGE_RUN_MAIN, JNI_ERR, "Main class is NULL");
+        return JNI_FALSE;
+    }
     const char* mainClassNameBuf = (*env)->GetStringUTFChars(env, mainClass, NULL);
-    size_t mainClassLen = strlen(mainClassNameBuf) + 1;
+    if(mainClassNameBuf == NULL) {
+        throwException(env, STAGE_RUN_MAIN, JNI_ERR, "Failed to decode main class");
+        return JNI_FALSE;
+    }
+    size_t mainClassLen = strlen(mainClassNameBuf);
     char mainClassName[mainClassLen + 1];
-    strncpy(mainClassName, mainClassNameBuf, mainClassLen + 1);
+    strncpy(mainClassName, mainClassNameBuf, mainClassLen);
+    mainClassName[mainClassLen] = '\0';
     (*env)->ReleaseStringUTFChars(env, mainClass, mainClassNameBuf);
 
+    if(mainClassLen == 0) {
+        throwException(env, STAGE_RUN_MAIN, JNI_ERR, "Main class is empty");
+        return JNI_FALSE;
+    }
+
     bool main_result = executeMain(vm_env, mainClassName, vm_appArgs);
-    (*java_vm.vm)->DestroyJavaVM(java_vm.vm);
     unloadJavaVM(&java_vm);
     if(!main_result) {
         throwException(env, STAGE_RUN_MAIN, JNI_ERR, "Failed to start the main class. Check latestlog.txt");

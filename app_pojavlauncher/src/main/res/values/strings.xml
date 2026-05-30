@@ -33,7 +33,7 @@
     <!-- MCLauncherActivity: Strings -->
     <string name="mcl_launch_cleancache">Cleaning cache files</string>
     <string name="mcl_launch_downloading">Downloading %s</string>
-    <string name="mcl_launch_downloading_progress">"Downloading %s (%.2f MB / %.2f MB)"</string>
+    <string name="mcl_launch_downloading_progress">"Downloading %1$s (%2$.2f MB / %3$.2f MB)"</string>
     <string name="mcl_launch_download_assets">Preparing to download resources</string>
     <string name="mcl_options">Options</string>
     <string name="mcl_option_customcontrol">Custom controls</string>
@@ -58,6 +58,9 @@
     <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (all versions, fast)</string>
     <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) - (all versions, mid)</string>
     <string name="mcl_setting_renderer_ltw">LTW (OpenGL ES 3) - 1.17+ only</string>
+    <string name="mcl_setting_renderer_holy_gl4es">Holy GL4ES (FCL Plugin)</string>
+    <string name="mcl_setting_renderer_holy_virgl">Holy VirGL (FCL Plugin)</string>
+    <string name="mcl_setting_renderer_mobile_glues">MobileGlues (OpenGL ES 3)</string>
     <string name="mcl_setting_veroption_release">Release</string>
     <string name="mcl_setting_veroption_snapshot">Snapshot</string>
     <string name="mcl_setting_veroption_oldalpha">Old-alpha</string>
@@ -143,7 +146,8 @@
     <string name="customctrl_editor_exit">Leave editor</string>
     <string name="customctrl_editor_exit_title">Leaving?</string>
     <string name="customctrl_editor_exit_msg">Are you sure you want to exit?</string>
-    <string name="customctrl_passthru">Mouse pass-thru</string>
+    <string name="customctrl_passthru">Mouse pass-through</string>
+    <string name="customctrl_passthrough">Mouse pass-through</string>
     <string name="customctrl_swipeable">Swipeable</string>
     <string name="customctrl_forward_lock">Forward lock</string>
     <string name="customctrl_absolute_tracking">Absolute finger tracking</string>
@@ -169,8 +173,8 @@
     <string name="mcl_button_social_media">Discord</string>
     <string name="mcl_button_open_directory">Open game directory</string>
 
-    <string name="memory_warning_msg">The current amount of free RAM (%d) is lower than allocated RAM (%d), which may lead to crashes. Change the allocation if the game crashes.</string>
-    <string name="address_memory_warning_msg">The current amount of free addressable RAM space (%d) is lower than the allocated RAM (%d), which will lead to crashes. Change the allocation if the game crashes.</string>
+    <string name="memory_warning_msg">The current amount of free RAM (%1$d) is lower than allocated RAM (%2$d), which may lead to crashes. Change the allocation if the game crashes.</string>
+    <string name="address_memory_warning_msg">The current amount of free addressable RAM space (%1$d) is lower than the allocated RAM (%2$d), which will lead to crashes. Change the allocation if the game crashes.</string>
     <string name="mcl_memory_allocation">Memory allocation</string>
     <string name="mcl_memory_allocation_subtitle">Controls how much memory is given to Minecraft.</string>
     <string name="multirt_runtime_corrupt">Corrupted Java Runtime</string>
@@ -179,7 +183,7 @@
     <string name="multirt_config_add">Add new</string>
     <string name="multirt_title">Runtime Manager</string>
     <string name="multirt_subtitle">Manage installed Java Runtimes.</string>
-    <string name="multirt_progress_caching">Caching...</string>
+    <string name="multirt_progress_caching">Caching…</string>
     <string name="multirt_delete_runtime">Delete runtime</string>
     <string name="multirt_config_setdefault">Set default</string>
 
@@ -327,10 +331,10 @@
     <string name="search_modpack_no_result">No modpacks found</string>
     <string name="search_modpack_error">Failed to find modpacks</string>
     <string name="search_modpack_download_error">Failed to download modpack metadata</string>
-    <string name="modpack_download_downloading_metadata">Downloading modpack metadata (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods">Downloading mods (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods_fc">Downloading mods (File %d out of %d)</string>
-    <string name="modpack_download_applying_overrides">Applying overrides (%d/%d)</string>
+    <string name="modpack_download_downloading_metadata">Downloading modpack metadata (%1$.2f MB / %2$.2f MB)</string>
+    <string name="modpack_download_downloading_mods">Downloading mods (%1$.2f MB / %2$.2f MB)</string>
+    <string name="modpack_download_downloading_mods_fc">Downloading mods (File %1$d out of %2$d)</string>
+    <string name="modpack_download_applying_overrides">Applying overrides (%1$d/%2$d)</string>
     <string name="modpack_install_notification_title">Hyper Modpack Installer</string>
     <string name="modpack_install_notification_success">Click here to finish modpack installation</string>
     <string name="modpack_install_notification_data_not_available">Failed to download mod loader information</string>
@@ -349,8 +353,8 @@
     <string name="exception_failed_to_unpack_jre17">Failed to install JRE 17</string>
     <string name="newdl_starting">Reading game metadata…</string>
     <string name="newdl_downloading_metadata">Downloading game metadata (%s)</string>
-    <string name="newdl_downloading_game_files">Downloading game… (%d/%d, %.2f MB/s)</string>
-    <string name="newdl_downloading_game_files_size">Downloading game… (%.2f/%.2f MB, %.2f MB/s)</string>
+    <string name="newdl_downloading_game_files">Downloading game… (%1$d/%2$d, %3$.2f MB/s)</string>
+    <string name="newdl_downloading_game_files_size">Downloading game… (%1$.2f/%2$.2f MB, %3$.2f MB/s)</string>
     <string name="cropper_title">Select image region</string>
     <string name="cropper_lock_vertical">V. lock</string>
     <string name="cropper_lock_horizontal">H. lock</string>
@@ -425,11 +429,13 @@
     <string name="global_save_and_exit">Save and exit</string>
     <string name="notif_channel_id" translatable="false">channel_id</string>
     <string name="instance_dir_missing">Instance directory is missing</string>
-    <string name="newerdl_downloading_files_count">Downloading files (%d/%d)</string>
-    <string name="newerdl_inserting_metadata_count">Inserting metadata (%d/%d)</string>
-    <string name="newerdl_downloading_files_size">Downloading files (%.2f MB / %.2f MB)</string>
+    <string name="newerdl_downloading_files_count">Downloading files (%1$d/%2$d)</string>
+    <string name="newerdl_inserting_metadata_count">Inserting metadata (%1$d/%2$d)</string>
+    <string name="newerdl_downloading_files_size">Downloading files (%1$.2f MB / %2$.2f MB)</string>
     <string name="select_bta_version">Select BTA version</string>
     <string name="no_instance">No instance selected</string>
+    <string name="main_select_instance_directory">Select instance directory</string>
+    <string name="profile_selection_title">Select Profile</string>
     <string name="oauth_unknown_error">Unknown OAuth error</string>
     <string name="oauth_web_complete">OAuth complete</string>
     <string name="social_media_invite" translatable="false">https://discord.gg/pojavlauncher</string>
@@ -448,7 +454,7 @@
     <string name="runtime_error_title">Java Runtime Error</string>
     <string name="runtime_error_install_failed">Failed to install Java %d</string>
     <string name="runtime_error_missing">Java %d is missing</string>
-    <string name="newdl_extracting_native_libraries">Extracting native libraries (%d/%d)</string>
+    <string name="newdl_extracting_native_libraries">Extracting native libraries (%1$d/%2$d)</string>
     <string name="compat_sodium_not_supported">Sodium is not supported on this version</string>
     <string name="compat_version_not_supported">This version is not supported on your device</string>
     <string name="ltw_render_distance_warning_msg">LTW render distance warning</string>
@@ -475,5 +481,35 @@
     <string name="preference_animation_type_description">Select the screen switching animation type.</string>
     <string name="preference_animation_intensity_title">Animation intensity</string>
     <string name="preference_animation_intensity_description">Adjust the intensity (duration/bounce) of the animation.</string>
+
+    <string name="preference_experimental_mipmap_title">Enable GL4ES mipmap optimization</string>
+    <string name="preference_experimental_mipmap_desc">Improves performance by enabling mipmaps in the GL4ES translator.</string>
+    <string name="preference_experimental_no_error_title">Disable graphics error checking</string>
+    <string name="preference_experimental_no_error_desc">May improve performance by skipping expensive glGetError calls.</string>
+    <string name="preference_experimental_network_optimization_title">Enable networking optimization</string>
+    <string name="preference_experimental_network_optimization_desc">Adds experimental Java properties to optimize networking.</string>
+
+    <string name="skin_title">Change Skin</string>
+    <string name="skin_button_pick">Select Skin File (PNG)</string>
+    <string name="skin_button_reset">Reset to Default</string>
+    <string name="skin_info">Skin will be saved to games/PojavLauncher/skins/ folder.\nSome mods like SkinPort can read it in-game.</string>
+    <string name="skin_update_success">Skin updated successfully!</string>
+    <string name="skin_reset_success">Skin reset to default</string>
+
+    <!-- LauncherActivity Strings -->
+    <string name="launcher_quit_title">Quit Application</string>
+    <string name="launcher_quit_message">Do you want to exit or restart the launcher?</string>
+    <string name="launcher_quit_exit">Exit</string>
+    <string name="launcher_quit_restart">Restart</string>
+    <string name="launcher_files_title">Files</string>
+
+    <!-- MainActivity Strings -->
+    <string name="main_version_prefix">Version: %s</string>
+    <string name="main_minecraft_title">Minecraft %s</string>
+    <string name="main_new_control">New</string>
+
+    <string name="mouse_hotspot_instructions">Tap on the point that should act as the \'click\' point.</string>
+    <string name="mouse_hotspot_done">Done</string>
+    <string name="mouse_hotspot_set">Hotspot set to: %1$d, %2$d</string>
 
 </resources>

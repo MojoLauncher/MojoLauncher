@@ -4,10 +4,10 @@
 A modern Minecraft: Java Edition launcher for Android based on MojoLauncher.
 </p>
 
-<img src="https://github.com/HyperLauncher/HyperLauncher/blob/main/app_pojavlauncher/src/main/assets/hyperlauncher.png"
+<img src="https://raw.githubusercontent.com/HyperLauncher/HyperLauncher/main/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png"
 align="left"
 width="150"
-height="150"
+height="150"    
 alt="Hyper Launcher logo">
 
 [![Android CI](https://github.com/HyperLauncher/HyperLauncher/workflows/Android%20CI/badge.svg)](https://github.com/HyperLauncher/HyperLauncher/actions)
@@ -59,11 +59,7 @@ It is designed for:
 ## Planned Features
 
 - Modern Material 3 expressive interface
-- HyperHUD overlay integration
-- Advanced performance presets
 - Mod manager
-- Instance cloud backup
-- Shader optimization layer
 - Better controller support
 - Enhanced renderer compatibility
 - Download manager improvements

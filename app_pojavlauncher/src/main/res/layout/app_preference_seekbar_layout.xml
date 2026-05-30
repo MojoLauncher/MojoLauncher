@@ -80,9 +80,9 @@
         android:paddingEnd="0dp"
         app:labelBehavior="gone"
         app:tickVisible="false"
-        app:thumbColor="?attr/colorPrimary"
-        app:trackColorActive="?attr/colorPrimary"
-        app:trackColorInactive="?attr/colorSurfaceVariant"
-        app:haloColor="?attr/colorPrimary" />
+        app:thumbColor="@color/primary_text"
+        app:trackColorActive="@color/primary_text"
+        app:trackColorInactive="@color/divider"
+        app:haloColor="@color/primary_text" />
 
 </LinearLayout>

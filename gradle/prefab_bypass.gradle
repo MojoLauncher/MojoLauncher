@@ -18,60 +18,240 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-
 // Created by Da Xi (xida@bytedance.com) on 2024-11-4.
 
-project.afterEvaluate {
-    def archList = ["x86", "x86_64"]
+// ─────────────────────────────────────────────────────────────────────────────
+// AGP 8 NOTE
+// The original used  abi.variant.prefabPackages.files  inside the doFirst
+// block, which reached into a BaseVariant-backed internal API that was removed
+// in AGP 8.  The replacement below resolves prefab package directories two
+// ways, in priority order:
+//
+//   1. build/intermediates/prefab_package/**  (where AGP 8 writes them)
+//   2. The task's own declared input files, filtered to directories that
+//      contain a prefab.json  (covers edge cases / Gradle cache layouts)
+//
+// Task matching is also widened from exact names to a prefix/suffix pattern so
+// it works across all flavor × buildType variants (e.g. fullDebug, noruntimeRelease).
+// ─────────────────────────────────────────────────────────────────────────────
 
-    // Helper function to configure prefab for a specific task
-    def configurePrefabForTask = { taskName, arch, dirName, abiName ->
-        def task = tasks.findByName("${taskName}[$arch]")
-        if (task != null) {
-            task.doFirst {
-                def prefabPackageFiles = abi.variant.prefabPackages.files
-                for (File file : prefabPackageFiles) {
-                    def libsDir = findFirstLibsSubdirectory(file)
-                    def libsArchDir = new File(libsDir, dirName)
-                    if (!libsArchDir.exists()) {
-                        libsArchDir.mkdirs()
-                        def abiJsonFile = new File(libsArchDir, "abi.json")
-                        def abiContent = """
-                            {
-                              "abi": "$abiName",
-                              "api": 16,
-                              "ndk": 23,
-                              "stl": "none",
-                              "static": false
-                            }""".stripIndent()
-                        abiJsonFile.write(abiContent)
-                        def dummySoFile = new File(libsArchDir, "libshadowhook.so")
-                        dummySoFile.createNewFile()
+project.plugins.withId("com.android.application") {
+
+    logger.lifecycle("prefab_bypass: enabled for ${project.path}")
+
+    def archList = ["x86", "x86_64"]
+    def shadowhookVersion = "shadowhook-1.1.1"
+
+    // Patch one ShadowHook prefab package root with synthetic x86/x86_64 entries.
+    def patchShadowhookPrefabRoot = { File pkgRoot, String dirName, String abiName, String reason ->
+        if (pkgRoot == null || !pkgRoot.exists()) return
+
+        // Only patch ShadowHook's Prefab package. It is missing x86/x86_64
+        // binaries, but ByteHook itself ships those ABIs and should not be
+        // modified.
+        def shadowhookModuleDir = new File(pkgRoot, "modules/shadowhook")
+        if (!shadowhookModuleDir.exists()) return
+
+        def libsDir = findFirstLibsSubdirectory(pkgRoot)
+        if (libsDir == null) {
+            logger.warn("prefab_bypass: no 'libs' subdir found in ${pkgRoot} (${reason})")
+            return
+        }
+
+        def libsArchDir = new File(libsDir, dirName)
+        if (libsArchDir.exists()) return
+
+        logger.lifecycle("prefab_bypass: adding ${dirName} to shadowhook prefab (${reason}) in ${pkgRoot}")
+        libsArchDir.mkdirs()
+
+        // Keep values aligned with ShadowHook's real arm/arm64 metadata.
+        def abiJsonFile = new File(libsArchDir, "abi.json")
+        abiJsonFile.text = """\
+            {
+              "abi": "${abiName}",
+              "api": 21,
+              "ndk": 23,
+              "stl": "none",
+              "static": false
+            }""".stripIndent()
+
+        // Dummy .so so the prefab manifest validation passes.
+        new File(libsArchDir, "libshadowhook.so").createNewFile()
+    }
+
+    def patchRootsForAllSyntheticArchs = { Set<File> prefabPackageDirs, String reason ->
+        for (File pkgRoot : prefabPackageDirs) {
+            patchShadowhookPrefabRoot(pkgRoot, "android.x86", "x86", reason)
+            patchShadowhookPrefabRoot(pkgRoot, "android.x86_64", "x86_64", reason)
+        }
+    }
+
+    // ── Collect prefab package root dirs at task-execution time ──────────────
+    // A "package root" is any directory that directly contains prefab.json.
+    // AGP 8 writes these under build/intermediates/prefab_package/<variant>/prefab/<pkg>/.
+    def collectPrefabPackageDirs = { Task task ->
+        def result = [] as Set
+
+        // Strategy 1 – build intermediates (primary for AGP 8)
+        def prefabIntermediates = new File(project.buildDir, "intermediates/prefab_package")
+        if (prefabIntermediates.exists()) {
+            prefabIntermediates.eachFileRecurse(groovy.io.FileType.FILES) { f ->
+                if (f.name == "prefab.json") result << f.parentFile
+            }
+        }
+
+        // Strategy 2 – task declared inputs (covers Gradle transform-cache layouts
+        // and any future AGP internal reorganisation)
+        if (result.isEmpty()) {
+            task.inputs.files.each { f ->
+                if (f.isDirectory() && new File(f, "prefab.json").exists()) result << f
+            }
+        }
+
+        // Strategy 3 – AAR/JAR inputs that *contain* prefab metadata.
+        //
+        // Some AGP/Gradle setups provide the raw dependency artifact (.aar) as an
+        // input to the configure task without first extracting Prefab packages
+        // into build/intermediates. In that case, Strategy 1+2 find nothing and
+        // the bypass never runs. As a fallback, detect prefab/prefab.json inside
+        // input archives, extract their prefab directory under build/, and use
+        // that extracted prefab dir as the package root.
+        if (result.isEmpty()) {
+            def extractRoot = new File(project.buildDir, "intermediates/prefab_bypass_extracted")
+            task.inputs.files.each { f ->
+                if (!f.isFile()) return
+                def name = f.name?.toLowerCase()
+                if (!(name?.endsWith(".aar") || name?.endsWith(".jar"))) return
+
+                boolean hasPrefab = false
+                try {
+                    def zip = new java.util.zip.ZipFile(f)
+                    try {
+                        hasPrefab = (zip.getEntry("prefab/prefab.json") != null)
+                    } finally {
+                        zip.close()
+                    }
+                } catch (Throwable ignored) {
+                    // ignore unreadable archives
+                    return
+                }
+
+                if (!hasPrefab) return
+
+                def key = Integer.toHexString(f.absolutePath.hashCode())
+                def dest = new File(extractRoot, key)
+                def prefabDir = new File(dest, "prefab")
+
+                if (!new File(prefabDir, "prefab.json").exists()) {
+                    dest.mkdirs()
+                    project.copy {
+                        from project.zipTree(f)
+                        include "prefab/**"
+                        into dest
                     }
                 }
+
+                if (prefabDir.isDirectory() && new File(prefabDir, "prefab.json").exists()) {
+                    result << prefabDir
+                }
+            }
+        }
+
+        // Strategy 4 – Gradle transforms cache (common with AGP/Prefab CLI).
+        //
+        // Prefab is often invoked with inputs that live in Gradle's transforms
+        // cache (…/.gradle/caches/<gradleVersion>/transforms/*/transformed/<name>/prefab).
+        // These directories are not always declared as task inputs, so Strategy
+        // 1–3 can still miss them. As a last resort, locate ShadowHook's prefab
+        // directory directly in the transforms cache so we can patch it.
+        if (result.isEmpty()) {
+            def transformsRoot = new File(gradle.gradleUserHomeDir, "caches/${gradle.gradleVersion}/transforms")
+            if (transformsRoot.exists()) {
+                def target = shadowhookVersion
+                try {
+                    transformsRoot.eachFileRecurse(groovy.io.FileType.FILES) { f ->
+                        if (f.name != "prefab.json") return
+                        def prefabDir = f.parentFile
+                        if (prefabDir == null || prefabDir.name != "prefab") return
+                        def transformedDir = prefabDir.parentFile
+                        if (transformedDir == null || transformedDir.name != target) return
+
+                        // Prefer the first match; patching one copy is usually enough for the
+                        // current build, and avoids iterating a large cache tree.
+                        result << prefabDir
+                        throw new RuntimeException("__prefab_bypass_done__")
+                    }
+                } catch (RuntimeException e) {
+                    if (e.message != "__prefab_bypass_done__") throw e
+                }
+            }
+        }
+
+        return result
+    }
+
+    // ── Configure one NDK configure task for one arch ─────────────────────────
+    def configurePrefabForTask = { Task task, String dirName, String abiName ->
+        task.doFirst {
+            def prefabPackageDirs = collectPrefabPackageDirs(task)
+
+            if (prefabPackageDirs.isEmpty()) {
+                logger.warn("prefab_bypass: no prefab package dirs found for task ${task.name} — skipping bypass")
+                return
+            }
+
+            for (File pkgRoot : prefabPackageDirs) {
+                patchShadowhookPrefabRoot(pkgRoot, dirName, abiName, "task ${task.name}")
             }
         }
     }
 
-    // Configure tasks for each architecture
-    for(arch in archList) {
-        def abiName = "$arch"
-        def dirName = "android.$arch"
-        configurePrefabForTask("configureNdkBuildDebug", arch, dirName, abiName)
-        configurePrefabForTask("configureNdkBuildRelease", arch, dirName, abiName)
+    // Eager fallback for AGP flows where prefab resolution happens before our
+    // configure task hook gets a chance to mutate package roots.
+    def eagerShadowhookPrefabRoots = [] as Set
+    def transformsRoot = new File(gradle.gradleUserHomeDir, "caches/${gradle.gradleVersion}/transforms")
+    if (transformsRoot.exists()) {
+        transformsRoot.eachFileRecurse(groovy.io.FileType.FILES) { f ->
+            if (f.name != "prefab.json") return
+            def prefabDir = f.parentFile
+            if (prefabDir == null || prefabDir.name != "prefab") return
+            def transformedDir = prefabDir.parentFile
+            if (transformedDir == null || transformedDir.name != shadowhookVersion) return
+            eagerShadowhookPrefabRoots << prefabDir
+        }
+    }
+    if (!eagerShadowhookPrefabRoots.isEmpty()) {
+        patchRootsForAllSyntheticArchs(eagerShadowhookPrefabRoots, "eager transforms scan")
+    }
+
+    // ── Wire up every configure task that matches any known arch ─────────────
+    //
+    // Use tasks.configureEach (not tasks.matching(...).configureEach) because
+    // some AGP versions register these tasks late and the filtered collection
+    // may not observe them reliably.
+    project.tasks.configureEach { Task task ->
+        if (!task.name.startsWith("configureNdkBuild")) return
+
+        for (String arch in archList) {
+            if (!task.name.endsWith("[${arch}]")) continue
+
+            def abiName = arch                   // e.g. "x86"
+            def dirName = "android.${arch}"      // e.g. "android.x86"
+
+            configurePrefabForTask(task, dirName, abiName)
+        }
     }
 }
 
+// ── Helper: depth-first search for the first directory named 'libs' ──────────
 def findFirstLibsSubdirectory(File baseDir) {
-    // make sure the baseDir exists
     if (!baseDir.exists() || !baseDir.isDirectory()) {
-        throw new IllegalArgumentException("baseDir not exists: $baseDir")
+        throw new IllegalArgumentException("baseDir does not exist or is not a directory: ${baseDir}")
     }
     def result = null
     baseDir.eachFileRecurse(groovy.io.FileType.DIRECTORIES) { dir ->
-        if (dir.name == 'libs') {
+        if (dir.name == 'libs' && result == null) {
             result = dir
-            return true
         }
     }
     return result

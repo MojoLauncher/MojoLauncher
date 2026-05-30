@@ -21,6 +21,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/padding_moderate"
             android:visibility="gone"
+            android:textColor="?android:attr/textColorPrimary"
             android:layout_toStartOf="@+id/side_dialog_close_button"
             tools:text="Quick settings"
             tools:visibility="visible" />
@@ -35,7 +36,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/pref_toggle_cross"
             android:contentDescription="@android:string/cancel"
-            app:tint="@android:color/white" />
+            app:tint="?attr/colorControlNormal" />
     </RelativeLayout>
 
     <View
@@ -66,6 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
+            android:textColor="?android:attr/textColorPrimary"
             android:visibility="gone"
             tools:visibility="visible"
             tools:text="Cancel"
@@ -77,6 +79,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:textColor="?android:attr/textColorPrimary"
             android:visibility="gone"
             tools:text="Confirm"
             tools:visibility="visible"

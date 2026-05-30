@@ -17,5 +17,29 @@
             app:summary="@string/preference_force_big_core_desc"
             app:title="@string/preference_force_big_core_title" />
 
+        <net.kdt.pojavlaunch.prefs.MaterialSwitchPreference
+            android:defaultValue="true"
+            app:key="enableMipmap"
+            app:summary="@string/preference_experimental_mipmap_desc"
+            app:title="@string/preference_experimental_mipmap_title" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialSwitchPreference
+            android:defaultValue="true"
+            app:key="disableErrorCheck"
+            app:summary="@string/preference_experimental_no_error_desc"
+            app:title="@string/preference_experimental_no_error_title" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialSwitchPreference
+            android:defaultValue="false"
+            app:key="optimizeNetwork"
+            app:summary="@string/preference_experimental_network_optimization_desc"
+            app:title="@string/preference_experimental_network_optimization_title" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialSwitchPreference
+            android:defaultValue="false"
+            app:key="zinkPreferSystemDriver"
+            app:summary="@string/preference_vulkan_driver_system_description"
+            app:title="@string/preference_vulkan_driver_system_title" />
+
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>

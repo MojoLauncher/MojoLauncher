@@ -2,6 +2,7 @@
 <androidx.drawerlayout.widget.DrawerLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_height="match_parent"
 	android:layout_width="match_parent"
 	android:layout_alignParentRight="true"
@@ -10,8 +11,8 @@
 
 
 	<androidx.constraintlayout.widget.ConstraintLayout
-		android:layout_height="wrap_content"
-		android:layout_width="wrap_content">
+		android:layout_height="match_parent"
+		android:layout_width="match_parent">
 
 
 		<net.kdt.pojavlaunch.customcontrols.handleview.DrawerPullButton
@@ -41,13 +42,28 @@
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 
-	<ListView
-		android:id="@+id/customctrl_navigation_view"
-		android:layout_width="200dp"
+	<!-- Modernized Drawer UI (Controls Editor) -->
+	<LinearLayout
+		android:id="@+id/customctrl_drawer_container"
+		android:layout_width="240dp"
 		android:layout_height="match_parent"
 		android:layout_gravity="right"
-		android:background="?attr/colorBackgroundFloating"
-		android:fitsSystemWindows="false" />
+		android:background="@drawable/preference_item_background"
+		android:orientation="vertical"
+		android:clickable="true"
+		android:focusable="true"
+		android:elevation="16dp">
+
+		<ListView
+			android:id="@+id/customctrl_navigation_view"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_weight="1"
+			android:divider="@null"
+			android:dividerHeight="0dp"
+			android:padding="8dp"
+			tools:listitem="@android:layout/simple_list_item_1" />
+
+	</LinearLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>
-

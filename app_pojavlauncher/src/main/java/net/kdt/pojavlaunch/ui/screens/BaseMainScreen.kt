@@ -1,0 +1,319 @@
+package net.kdt.pojavlaunch.ui.screens
+
+import android.view.View
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.FrameLayout
+import android.widget.ListView
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import com.kdt.LoggerView
+import net.ashmeet.hyperlauncher.R
+import net.kdt.pojavlaunch.BaseActivity
+import net.kdt.pojavlaunch.MinecraftGLSurface
+import net.kdt.pojavlaunch.customcontrols.ControlLayout
+import net.kdt.pojavlaunch.customcontrols.handleview.DrawerPullButton
+import net.kdt.pojavlaunch.customcontrols.keyboard.TouchCharInput
+import net.kdt.pojavlaunch.customcontrols.mouse.HotbarView
+import net.kdt.pojavlaunch.customcontrols.mouse.Touchpad
+import net.kdt.pojavlaunch.ui.theme.PojavTheme
+
+@Composable
+fun BaseMainScreen(
+    drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
+    onControlLayoutBound: (ControlLayout) -> Unit = {},
+    onGlSurfaceBound: (MinecraftGLSurface) -> Unit = {},
+    onTouchpadBound: (Touchpad) -> Unit = {},
+    onCharInputBound: (TouchCharInput) -> Unit = {},
+    onPullButtonBound: (DrawerPullButton) -> Unit = {},
+    onHotbarBound: (HotbarView) -> Unit = {},
+    onLoggerBound: (LoggerView) -> Unit = {},
+    onNavListBound: (ListView) -> Unit = {},
+    drawerContent: @Composable (isExpanded: Boolean) -> Unit = {},
+    loadingVisible: Boolean = true,
+    onLoadingClick: () -> Unit = {},
+    onDismissMenu: () -> Unit = {}
+) {
+    val isPreview = LocalInspectionMode.current
+    val backgroundBitmap = if (isPreview) null else BaseActivity.getBackgroundBitmap()
+
+    // All colors pulled from MaterialTheme so they follow dynamic/wallpaper scheme
+    val primaryContainerColor = MaterialTheme.colorScheme.primaryContainer
+    val scrimColor = MaterialTheme.colorScheme.scrim
+    val surfaceContainerHighColor = MaterialTheme.colorScheme.surfaceContainerHigh
+    val primaryColor = MaterialTheme.colorScheme.primary
+    val onSurfaceVariantColor = MaterialTheme.colorScheme.onSurfaceVariant
+
+    // Expand state for the Navigation Rail
+    var isRailExpanded by remember { mutableStateOf(false) }
+    val railWidth by animateDpAsState(
+        targetValue = if (isRailExpanded) 200.dp else 80.dp,
+        label = "railWidth"
+    )
+
+    Box(modifier = Modifier.fillMaxSize()) {
+
+        // 1. Activity Background (wallpaper bitmap)
+        if (backgroundBitmap != null) {
+            androidx.compose.foundation.Image(
+                bitmap = backgroundBitmap.asImageBitmap(),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+        } else {
+            // Fallback when no wallpaper bitmap: use dynamic surface color
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.surface)
+            )
+        }
+
+        // 2. Background Overlay — tinted from dynamic primaryContainer instead of hardcoded XML color
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(primaryContainerColor.copy(alpha = 0.18f))
+        )
+
+        // 3. Main Content Layer (GL surface, controls, logger, etc.)
+        AndroidView(
+            factory = { ctx ->
+                val contentFrame = FrameLayout(ctx).apply { id = R.id.content_frame }
+
+                val controlLayout = ControlLayout(ctx).apply {
+                    id = R.id.main_control_layout
+                    layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+                }
+
+                val glSurface = MinecraftGLSurface(ctx).apply {
+                    id = R.id.main_game_render_view
+                    layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+                }
+
+                val touchpad = Touchpad(ctx).apply {
+                    id = R.id.main_touchpad
+                    layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+                    visibility = View.GONE
+                    translationZ = resources.displayMetrics.density * 1f
+                }
+
+                val charInput = TouchCharInput(ctx).apply {
+                    id = R.id.mainTouchCharInput
+                    layoutParams = FrameLayout.LayoutParams(1, 1)
+                }
+
+                val pullButton = DrawerPullButton(ctx).apply {
+                    id = R.id.drawer_button
+                    val size = (2 * ctx.resources.displayMetrics.density).toInt()
+                    layoutParams = FrameLayout.LayoutParams(size, size)
+                    visibility = View.GONE
+                    elevation = resources.displayMetrics.density * 10f
+                }
+
+                val hotbarView = HotbarView(ctx).apply {
+                    id = R.id.hotbar_view
+                    layoutParams = FrameLayout.LayoutParams(0, 0)
+                }
+
+                controlLayout.addView(glSurface)
+                controlLayout.addView(touchpad)
+                controlLayout.addView(charInput)
+                controlLayout.addView(pullButton)
+                controlLayout.addView(hotbarView)
+
+                contentFrame.addView(controlLayout)
+
+                val loggerView = LoggerView(ctx).apply {
+                    id = R.id.mainLoggerView
+                    layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+                    visibility = View.GONE
+                }
+                contentFrame.addView(loggerView)
+
+                onControlLayoutBound(controlLayout)
+                onGlSurfaceBound(glSurface)
+                onTouchpadBound(touchpad)
+                onCharInputBound(charInput)
+                onPullButtonBound(pullButton)
+                onHotbarBound(hotbarView)
+                onLoggerBound(loggerView)
+
+                contentFrame
+            },
+            modifier = Modifier.fillMaxSize()
+        )
+
+        // 4. Navigation Rail Overlay
+        if (drawerState.isOpen) {
+            // Scrim — uses MaterialTheme.colorScheme.scrim instead of hardcoded Color.Black
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(scrimColor.copy(alpha = 0.32f))
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = {
+                            isRailExpanded = false
+                            onDismissMenu()
+                        }
+                    )
+            )
+        }
+
+        AnimatedVisibility(
+            visible = drawerState.isOpen,
+            enter = slideInHorizontally(initialOffsetX = { -it }) + fadeIn(),
+            exit = slideOutHorizontally(targetOffsetX = { -it }) + fadeOut(),
+            modifier = Modifier.align(Alignment.CenterStart)
+        ) {
+            NavigationRail(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(railWidth),
+                // FIX: use surfaceContainer so the rail matches dynamic color scheme
+                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                header = {
+                    IconButton(onClick = { isRailExpanded = !isRailExpanded }) {
+                        Icon(
+                            imageVector = if (isRailExpanded)
+                                Icons.AutoMirrored.Filled.KeyboardArrowLeft
+                            else
+                                Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                            contentDescription = "Expand menu",
+                            // FIX: icon color from dynamic scheme instead of hardcoded
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    drawerContent(isRailExpanded)
+                }
+            }
+        }
+
+        // 5. Loading / Launch Progress Overlay
+        AnimatedVisibility(
+            visible = loadingVisible,
+            enter = fadeIn(),
+            exit = fadeOut(animationSpec = tween(durationMillis = 800))
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    // FIX: scrim color instead of hardcoded Color.Black
+                    .background(scrimColor.copy(alpha = 0.5f))
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = onLoadingClick
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Surface(
+                    shape = RoundedCornerShape(16.dp),
+                    // FIX: surfaceContainerHigh adapts to dynamic/wallpaper color scheme
+                    color = surfaceContainerHighColor,
+                    tonalElevation = 8.dp,
+                    modifier = Modifier.padding(24.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(48.dp),
+                            // FIX: primary color matches wallpaper accent — was hardcoded Color.White
+                            color = primaryColor,
+                            trackColor = primaryColor.copy(alpha = 0.2f),
+                            strokeWidth = 4.dp
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = "Launching game...",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            // FIX: onSurface instead of hardcoded Color.White
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            text = "Please wait",
+                            style = MaterialTheme.typography.bodySmall,
+                            // FIX: onSurfaceVariant for secondary text — was Color.White with alpha
+                            color = onSurfaceVariantColor,
+                            modifier = Modifier.padding(top = 4.dp)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+// ─── Previews ────────────────────────────────────────────────────────────────
+
+@Preview(showBackground = true, device = "spec:width=1280dp,height=800dp,orientation=landscape")
+@Composable
+fun BaseMainScreenPreview() {
+    PojavTheme(dynamicColor = false) {
+        BaseMainScreen(
+            loadingVisible = true
+        )
+    }
+}
+
+@Preview(showBackground = true, device = "spec:width=1280dp,height=800dp,orientation=landscape")
+@Composable
+fun BaseMainScreenRailPreview() {
+    PojavTheme(dynamicColor = false) {
+        BaseMainScreen(
+            drawerState = rememberDrawerState(initialValue = DrawerValue.Open),
+            loadingVisible = false,
+            drawerContent = { expanded ->
+                NavigationRailItem(
+                    selected = false,
+                    onClick = {},
+                    icon = { Icon(Icons.Default.Settings, null) },
+                    label = { Text("Settings") },
+                    alwaysShowLabel = expanded
+                )
+            }
+        )
+    }
+}

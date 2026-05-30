@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- This API level enables the edge-to-edge functionality of the launcher, and requires these to be set for the launcher to look good -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
@@ -28,5 +28,14 @@
         <item name="android:enforceNavigationBarContrast">false</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:enforceStatusBarContrast">false</item>
+
+        <!-- Alert Dialog Customization -->
+        <item name="alertDialogTheme">@style/AppAlertDialogTheme</item>
+        <item name="materialAlertDialogTheme">@style/AppAlertDialogTheme</item>
+        <item name="android:dialogTheme">@style/AppAlertDialogTheme</item>
+
+        <!-- Spinner and Popup Customization -->
+        <item name="android:spinnerStyle">@style/AppSpinnerStyle</item>
+        <item name="android:listPopupWindowStyle">@style/AppListPopupWindowStyle</item>
     </style>
 </resources>

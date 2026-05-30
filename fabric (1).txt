@@ -1,0 +1,285 @@
+--------- Starting game with Launcher Debug!
+Info: Launcher version: 2.5.1
+Info: Architecture: arm64
+Info: Device model: OnePlus CPH2767
+Info: API version: 36
+Info: Selected Minecraft version: fabric-loader-0.19.2-1.21.5
+Info: Custom Java arguments: ""
+Info: RAM allocated: 2048 Mb
+Info: Graphics device: Qualcomm Adreno (TM) 829 (OpenGL ES 3)
+Added custom env: MOJO_RENDERER=opengles3_ltw
+Added custom env: FORCE_VSYNC=false
+Added custom env: allow_higher_compat_version=true
+Added custom env: MESA_GLSL_CACHE_DIR=/data/user/0/net.ashmeet.hyperlauncher.debug/cache
+Added custom env: LIBGL_NOINTOVLHACK=1
+Added custom env: POJAV_LOAD_TURNIP=1
+Added custom env: MOD_ANDROID_RUNTIME=/data/user/0/net.ashmeet.hyperlauncher.debug/cache/app_runtime_mod
+Added custom env: force_glsl_extensions_warn=true
+Added custom env: LIBGL_NORMALIZE=1
+Added custom env: LIBGL_ES=3
+Added custom env: POJAVEXEC_EGL=/data/app/~~Sw9n_bpQY1mEFUsOL2mAJQ==/com.mio.plugin.renderer.ltw-JPdIrLzfiktm5vck7nWqlg==/lib/arm64/libltw.so
+Added custom env: MESA_GLSL_VERSION_OVERRIDE=460
+Added custom env: allow_glsl_extension_directive_midshader=true
+--------- beginning of main
+I/jrelog  (19925): updateLdLibPath: 0x6fd5df8a88
+
+D/jrelog  (19925): dlopen /data/app/~~3zzYgtJ5gWKslWbhTT9zGA==/com.mio.plugin.renderer.gl4esplus-wfcFVUy9wg6UPyA_nfjwNA==/lib/arm64/libc++_shared.so success
+
+LTW will NOT ignore GL errors. This may break mods, consider yourself warned.
+LTW will force dynamic storage buffers to be coherent.
+LTW will prevent all explicit buffer flushes.
+D/jrelog  (19925): dlopen /data/app/~~Sw9n_bpQY1mEFUsOL2mAJQ==/com.mio.plugin.renderer.ltw-JPdIrLzfiktm5vck7nWqlg==/lib/arm64/libltw.so success
+
+I/jrelog  (19925): updateLdLibPath: 0x6fd5df8a88
+
+[0.052s][warning][jni,resolve] Re-registering of platform native method: jdk.internal.loader.NativeLibraries.load(Ljdk/internal/loader/NativeLibraries$NativeLibraryImpl;Ljava/lang/String;ZZ)Z from code in a different classloader
+2026-05-28T04:31:03.921503706Z main ERROR appender Console has no parameter that matches element Policies
+[10:01:04] [main/WARN]: Did not find udev library in operating system. Some features may not work.
+[10:01:04] [main/WARN]: File not found or not readable: /proc/stat
+[10:01:05] [Datafixer Bootstrap/INFO]: 263 Datafixer optimizations took 1387 milliseconds
+[10:01:08] [Render thread/INFO]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[10:01:08] [Render thread/INFO]: Setting user: sfseafse
+Registered forkAndExec
+[LWJGL] Failed to load a library. Possible solutions:
+	a) Add the directory that contains the shared library to -Djava.library.path or -Dorg.lwjgl.librarypath.
+	b) Add the JAR that contains the shared library to the classpath.
+[LWJGL] Enable debug mode with -Dorg.lwjgl.util.Debug=true for better diagnostics.
+[LWJGL] Enable the SharedLibraryLoader debug mode with -Dorg.lwjgl.util.DebugLoader=true for better diagnostics.
+[10:01:08] [Render thread/ERROR]: Error parsing option value off for option Fullscreen: Not a boolean: "off"
+[10:01:08] [Render thread/INFO]: Backend library: LWJGL version 3.3.6-snapshot
+EGLBridge: Binding to OpenGL ES
+LTW: Running on OpenGL ES 3.2 with ESSL 320
+LTW: BaseVertex render calls will use the host driver implementation
+LTW: Overridden glGetError
+LTW: Overridden glGetString
+LTW: Overridden glGetIntegerv
+LTW: Overridden glGetStringi
+LTW: Overridden glEnable
+LTW: Overridden glClearDepth
+LTW: Overridden glDepthRange
+LTW: Overridden glDrawBuffer
+LTW: Overridden glGetIntegerv
+LTW: Overridden glGetError
+LTW: Overridden glGetString
+LTW: Overridden glGetTexImage
+LTW: Overridden glGetTexLevelParameteriv
+LTW: Overridden glGetTexLevelParameterfv
+LTW: Overridden glReadPixels
+LTW: Overridden glTexImage2D
+LTW: Overridden glCopyTexSubImage2D
+LTW: Overridden glTexParameteri
+LTW: Overridden glTexParameteriv
+LTW: Overridden glTexParameterf
+LTW: Overridden glTexParameterfv
+LTW: Overridden glTexSubImage2D
+LTW: Overridden glMultiDrawArrays
+LTW: Overridden glMultiDrawElements
+LTW: Overridden glBindBuffer
+LTW: Overridden glMapBuffer
+LTW: Overridden glGetQueryObjectiv
+LTW: Overridden glCreateProgram
+LTW: Overridden glDeleteProgram
+LTW: Overridden glCreateShader
+LTW: Overridden glDeleteShader
+LTW: Overridden glAttachShader
+LTW: Overridden glShaderSource
+LTW: Overridden glLinkProgram
+LTW: Overridden glUseProgram
+LTW: Overridden glGetShaderiv
+LTW: Overridden glVertexAttrib1s
+LTW: Overridden glVertexAttrib1d
+LTW: Overridden glVertexAttrib2s
+LTW: Overridden glVertexAttrib2d
+LTW: Overridden glVertexAttrib3s
+LTW: Overridden glVertexAttrib3d
+LTW: Overridden glVertexAttrib4s
+LTW: Overridden glVertexAttrib4d
+LTW: Overridden glVertexAttrib4Nub
+LTW: Overridden glVertexAttrib1sv
+LTW: Overridden glVertexAttrib1dv
+LTW: Overridden glVertexAttrib2sv
+LTW: Overridden glVertexAttrib2dv
+LTW: Overridden glVertexAttrib3sv
+LTW: Overridden glVertexAttrib3dv
+LTW: Overridden glVertexAttrib4sv
+LTW: Overridden glVertexAttrib4dv
+LTW: Overridden glVertexAttrib4Nbv
+LTW: Overridden glVertexAttrib4Nsv
+LTW: Overridden glVertexAttrib4Niv
+LTW: Overridden glVertexAttrib4Nubv
+LTW: Overridden glVertexAttrib4Nusv
+LTW: Overridden glVertexAttrib4Nuiv
+LTW: Overridden glDrawBuffers
+LTW: Overridden glGetStringi
+LTW: Overridden glClearBufferiv
+LTW: Overridden glClearBufferuiv
+LTW: Overridden glClearBufferfv
+LTW: Overridden glVertexAttribI1i
+LTW: Overridden glVertexAttribI2i
+LTW: Overridden glVertexAttribI3i
+LTW: Overridden glVertexAttribI1ui
+LTW: Overridden glVertexAttribI2ui
+LTW: Overridden glVertexAttribI3ui
+LTW: Overridden glVertexAttribI1iv
+LTW: Overridden glVertexAttribI2iv
+LTW: Overridden glVertexAttribI3iv
+LTW: Overridden glVertexAttribI1uiv
+LTW: Overridden glVertexAttribI2uiv
+LTW: Overridden glVertexAttribI3uiv
+LTW: Overridden glVertexAttribI4bv
+LTW: Overridden glVertexAttribI4sv
+LTW: Overridden glVertexAttribI4ubv
+LTW: Overridden glVertexAttribI4usv
+LTW: Overridden glBindFragDataLocation
+LTW: Overridden glMapBufferRange
+LTW: Overridden glFlushMappedBufferRange
+LTW: Overridden glRenderbufferStorage
+LTW: Overridden glBindFramebuffer
+LTW: Overridden glDeleteFramebuffers
+LTW: Overridden glGenFramebuffers
+LTW: Overridden glCheckFramebufferStatus
+LTW: Overridden glFramebufferTexture2D
+LTW: Overridden glFramebufferTextureLayer
+LTW: Overridden glFramebufferRenderbuffer
+LTW: Overridden glGetFramebufferAttachmentParameteriv
+LTW: Overridden glTexParameterIiv
+LTW: Overridden glTexParameterIuiv
+LTW: Overridden glBindBufferRange
+LTW: Overridden glBindBufferBase
+LTW: Overridden glTexBuffer
+LTW: Overridden glMultiDrawElementsBaseVertex
+LTW: Overridden glBufferStorage
+LTW: Overridden glDebugMessageControl
+[10:01:08] [Render thread/INFO]: Using optional rendering extensions: GL_KHR_debug
+[10:01:08] [Render thread/INFO]: [STDERR]: [LWJGL] [ERROR] Incompatible Java and native library versions detected.
+Possible reasons:
+	a) -Djava.library.path is set to a folder containing shared libraries of an older LWJGL version.
+	b) The classpath contains jar files of an older LWJGL version.
+Possible solutions:
+	a) Make sure to not set -Djava.library.path (it is not needed for developing with LWJGL 3) or make
+	   sure the folder it points to contains the shared libraries of the correct LWJGL version.
+	b) Check the classpath and make sure to only have jar files of the same LWJGL version in it.
+[10:01:08] [Render thread/ERROR]: Error while loading the narrator
+com.mojang.text2speech.Narrator$InitializeException: Failed to load library flite
+	at com.mojang.text2speech.NarratorLinux$FliteLibrary.loadNative(NarratorLinux.java:81) ~[text2speech-1.18.11.jar:?]
+	at com.mojang.text2speech.NarratorLinux.<init>(NarratorLinux.java:18) ~[text2speech-1.18.11.jar:?]
+	at com.mojang.text2speech.Narrator.getNarrator(Narrator.java:41) [text2speech-1.18.11.jar:?]
+	at fqh.<init>(SourceFile:20) [fabric-loader-0.19.2-1.21.5.jar:?]
+	at fqq.<init>(SourceFile:696) [fabric-loader-0.19.2-1.21.5.jar:?]
+	at net.minecraft.client.main.Main.main(SourceFile:249) [fabric-loader-0.19.2-1.21.5.jar:?]
+Caused by: java.lang.UnsatisfiedLinkError: Unable to load library 'flite':
+dlopen failed: library "libflite.so" not found
+dlopen failed: library "libflite.so" not found
+Native library (linux-aarch64/libflite.so) not found in resource path (/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/lwjgl3/lwjgl-glfw-classes.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/commons-codec/commons-codec/1.17.1/commons-codec-1.17.1.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/mojang/brigadier/1.3.10/brigadier-1.3.10.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/it/unimi/dsi/fastutil/8.5.15/fastutil-8.5.15.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/io/netty/netty-codec/4.1.118.Final/netty-codec-4.1.118.Final.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/nimbusds/nimbus-jose-jwt/9.40/nimbus-jose-jwt-9.40.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/net/minidev/accessors-smart/2.5.1/accessors-smart-2.5.1.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/net/fabricmc/sponge-mixin/0.17.2+mixin.0.8.7/sponge-mixin-0.17.2+mixin.0.8.7.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/github/stephenc/jcip/jcip-annotations/1.0-1/jcip-annotations-1.0-1.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/nimbusds/oauth2-oidc-sdk/11.18/oauth2-oidc-sdk-11.18.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/commons-logging/commons-logging/1.3.4/commons-logging-1.3.4.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/apache/httpcomponents/httpcore/4.4.16/httpcore-4.4.16.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/io/netty/netty-buffer/4.1.118.Final/netty-buffer-4.1.118.Final.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/github/oshi/oshi-core/6.6.5/oshi-core-6.6.5.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/apache/commons/commons-lang3/3.17.0/commons-lang3-3.17.0.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/net/fabricmc/intermediary/1.21.5/intermediary-1.21.5.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/google/guava/guava/33.3.1-jre/guava-33.3.1-jre.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/mojang/authlib/6.0.58/authlib-6.0.58.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/mojang/blocklist/1.0.10/blocklist-1.0.10.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/io/netty/netty-transport-classes-epoll/4.1.118.Final/netty-transport-classes-epoll-4.1.118.Final.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/io/netty/netty-transport-native-epoll/4.1.118.Final/netty-transport-native-epoll-4.1.118.Final-linux-x86_64.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/io/netty/netty-common/4.1.118.Final/netty-common-4.1.118.Final.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/mojang/logging/1.5.10/logging-1.5.10.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/net/fabricmc/fabric-loader/0.19.2/fabric-loader-0.19.2.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/google/guava/failureaccess/1.0.2/failureaccess-1.0.2.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/ibm/icu/icu4j/76.1/icu4j-76.1.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/ow2/asm/asm-tree/9.9/asm-tree-9.9.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/ow2/asm/asm-util/9.9/asm-util-9.9.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/io/netty/netty-handler/4.1.118.Final/netty-handler-4.1.118.Final.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/mojang/text2speech/1.18.11/text2speech-1.18.11.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/net/minidev/json-smart/2.5.1/json-smart-2.5.1.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/io/netty/netty-transport-native-unix-common/4.1.118.Final/netty-transport-native-unix-common-4.1.118.Final.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/apache/commons/commons-compress/1.27.1/commons-compress-1.27.1.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/nimbusds/lang-tag/1.7/lang-tag-1.7.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/apache/logging/log4j/log4j-core/2.24.1/log4j-core-2.24.1.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/commons-io/commons-io/2.17.0/commons-io-2.17.0.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/io/netty/netty-transport/4.1.118.Final/netty-transport-4.1.118.Final.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/io/netty/netty-resolver/4.1.118.Final/netty-resolver-4.1.118.Final.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/mojang/jtracy/1.0.29/jtracy-1.0.29-natives-windows.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/microsoft/azure/msal4j/1.17.2/msal4j-1.17.2.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/lz4/lz4-java/1.8.0/lz4-java-1.8.0.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/net/java/dev/jna/jna-platform/5.15.0/jna-platform-5.15.0.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/mojang/jtracy/1.0.29/jtracy-1.0.29.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/fasterxml/jackson/core/jackson-databind/2.13.4.2/jackson-databind-2.13.4.2.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/fasterxml/jackson/core/jackson-core/2.13.4/jackson-core-2.13.4.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/ow2/asm/asm-analysis/9.9/asm-analysis-9.9.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/apache/logging/log4j/log4j-api/2.24.1/log4j-api-2.24.1.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/mojang/datafixerupper/8.0.16/datafixerupper-8.0.16.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/apache/logging/log4j/log4j-slf4j2-impl/2.24.1/log4j-slf4j2-impl-2.24.1.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/ow2/asm/asm/9.9/asm-9.9.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/apache/httpcomponents/httpclient/4.5.14/httpclient-4.5.14.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/slf4j/slf4j-api/2.0.16/slf4j-api-2.0.16.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/mojang/patchy/2.2.10/patchy-2.2.10.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/mojang/jtracy/1.0.29/jtracy-1.0.29-natives-linux.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/jcraft/jorbis/0.0.17/jorbis-0.0.17.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/nimbusds/content-type/2.3/content-type-2.3.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/joml/joml/1.10.8/joml-1.10.8.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/ow2/asm/asm-commons/9.9/asm-commons-9.9.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/google/code/gson/gson/2.11.0/gson-2.11.0.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/fasterxml/jackson/core/jackson-annotations/2.13.4/jackson-annotations-2.13.4.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/io/netty/netty-transport-native-epoll/4.1.118.Final/netty-transport-native-epoll-4.1.118.Final-linux-aarch_64.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/versions/fabric-loader-0.19.2-1.21.5/fabric-loader-0.19.2-1.21.5.jar)
+	at com.sun.jna.NativeLibrary.loadLibrary(NativeLibrary.java:323) ~[jna-5.13.0.jar:5.13.0 (b0)]
+	at com.sun.jna.NativeLibrary.getInstance(NativeLibrary.java:483) ~[jna-5.13.0.jar:5.13.0 (b0)]
+	at com.sun.jna.NativeLibrary.getInstance(NativeLibrary.java:425) ~[jna-5.13.0.jar:5.13.0 (b0)]
+	at com.mojang.text2speech.NarratorLinux$FliteLibrary.loadNative(NarratorLinux.java:79) ~[text2speech-1.18.11.jar:?]
+	... 5 more
+	Suppressed: java.lang.UnsatisfiedLinkError: dlopen failed: library "libflite.so" not found
+		at com.sun.jna.Native.open(Native Method) ~[jna-5.13.0.jar:5.13.0 (b0)]
+		at com.sun.jna.NativeLibrary.loadLibrary(NativeLibrary.java:211) ~[jna-5.13.0.jar:5.13.0 (b0)]
+		at com.sun.jna.NativeLibrary.getInstance(NativeLibrary.java:483) ~[jna-5.13.0.jar:5.13.0 (b0)]
+		at com.sun.jna.NativeLibrary.getInstance(NativeLibrary.java:425) ~[jna-5.13.0.jar:5.13.0 (b0)]
+		at com.mojang.text2speech.NarratorLinux$FliteLibrary.loadNative(NarratorLinux.java:79) ~[text2speech-1.18.11.jar:?]
+		at com.mojang.text2speech.NarratorLinux.<init>(NarratorLinux.java:18) ~[text2speech-1.18.11.jar:?]
+		at com.mojang.text2speech.Narrator.getNarrator(Narrator.java:41) [text2speech-1.18.11.jar:?]
+		at fqh.<init>(SourceFile:20) [fabric-loader-0.19.2-1.21.5.jar:?]
+		at fqq.<init>(SourceFile:696) [fabric-loader-0.19.2-1.21.5.jar:?]
+		at net.minecraft.client.main.Main.main(SourceFile:249) [fabric-loader-0.19.2-1.21.5.jar:?]
+	Suppressed: java.lang.UnsatisfiedLinkError: dlopen failed: library "libflite.so" not found
+		at com.sun.jna.Native.open(Native Method) ~[jna-5.13.0.jar:5.13.0 (b0)]
+		at com.sun.jna.NativeLibrary.loadLibrary(NativeLibrary.java:224) ~[jna-5.13.0.jar:5.13.0 (b0)]
+		at com.sun.jna.NativeLibrary.getInstance(NativeLibrary.java:483) ~[jna-5.13.0.jar:5.13.0 (b0)]
+		at com.sun.jna.NativeLibrary.getInstance(NativeLibrary.java:425) ~[jna-5.13.0.jar:5.13.0 (b0)]
+		at com.mojang.text2speech.NarratorLinux$FliteLibrary.loadNative(NarratorLinux.java:79) ~[text2speech-1.18.11.jar:?]
+		at com.mojang.text2speech.NarratorLinux.<init>(NarratorLinux.java:18) ~[text2speech-1.18.11.jar:?]
+		at com.mojang.text2speech.Narrator.getNarrator(Narrator.java:41) [text2speech-1.18.11.jar:?]
+		at fqh.<init>(SourceFile:20) [fabric-loader-0.19.2-1.21.5.jar:?]
+		at fqq.<init>(SourceFile:696) [fabric-loader-0.19.2-1.21.5.jar:?]
+		at net.minecraft.client.main.Main.main(SourceFile:249) [fabric-loader-0.19.2-1.21.5.jar:?]
+	Suppressed: java.io.IOException: Native library (linux-aarch64/libflite.so) not found in resource path (/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/lwjgl3/lwjgl-glfw-classes.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/commons-codec/commons-codec/1.17.1/commons-codec-1.17.1.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/mojang/brigadier/1.3.10/brigadier-1.3.10.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/it/unimi/dsi/fastutil/8.5.15/fastutil-8.5.15.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/io/netty/netty-codec/4.1.118.Final/netty-codec-4.1.118.Final.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/nimbusds/nimbus-jose-jwt/9.40/nimbus-jose-jwt-9.40.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/net/minidev/accessors-smart/2.5.1/accessors-smart-2.5.1.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/net/fabricmc/sponge-mixin/0.17.2+mixin.0.8.7/sponge-mixin-0.17.2+mixin.0.8.7.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/github/stephenc/jcip/jcip-annotations/1.0-1/jcip-annotations-1.0-1.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/nimbusds/oauth2-oidc-sdk/11.18/oauth2-oidc-sdk-11.18.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/commons-logging/commons-logging/1.3.4/commons-logging-1.3.4.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/apache/httpcomponents/httpcore/4.4.16/httpcore-4.4.16.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/io/netty/netty-buffer/4.1.118.Final/netty-buffer-4.1.118.Final.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/github/oshi/oshi-core/6.6.5/oshi-core-6.6.5.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/apache/commons/commons-lang3/3.17.0/commons-lang3-3.17.0.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/net/fabricmc/intermediary/1.21.5/intermediary-1.21.5.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/google/guava/guava/33.3.1-jre/guava-33.3.1-jre.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/mojang/authlib/6.0.58/authlib-6.0.58.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/mojang/blocklist/1.0.10/blocklist-1.0.10.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/io/netty/netty-transport-classes-epoll/4.1.118.Final/netty-transport-classes-epoll-4.1.118.Final.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/io/netty/netty-transport-native-epoll/4.1.118.Final/netty-transport-native-epoll-4.1.118.Final-linux-x86_64.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/io/netty/netty-common/4.1.118.Final/netty-common-4.1.118.Final.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/mojang/logging/1.5.10/logging-1.5.10.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/net/fabricmc/fabric-loader/0.19.2/fabric-loader-0.19.2.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/google/guava/failureaccess/1.0.2/failureaccess-1.0.2.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/ibm/icu/icu4j/76.1/icu4j-76.1.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/ow2/asm/asm-tree/9.9/asm-tree-9.9.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/ow2/asm/asm-util/9.9/asm-util-9.9.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/io/netty/netty-handler/4.1.118.Final/netty-handler-4.1.118.Final.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/mojang/text2speech/1.18.11/text2speech-1.18.11.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/net/minidev/json-smart/2.5.1/json-smart-2.5.1.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/io/netty/netty-transport-native-unix-common/4.1.118.Final/netty-transport-native-unix-common-4.1.118.Final.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/apache/commons/commons-compress/1.27.1/commons-compress-1.27.1.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/nimbusds/lang-tag/1.7/lang-tag-1.7.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/apache/logging/log4j/log4j-core/2.24.1/log4j-core-2.24.1.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/commons-io/commons-io/2.17.0/commons-io-2.17.0.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/io/netty/netty-transport/4.1.118.Final/netty-transport-4.1.118.Final.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/io/netty/netty-resolver/4.1.118.Final/netty-resolver-4.1.118.Final.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/mojang/jtracy/1.0.29/jtracy-1.0.29-natives-windows.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/microsoft/azure/msal4j/1.17.2/msal4j-1.17.2.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/lz4/lz4-java/1.8.0/lz4-java-1.8.0.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/net/java/dev/jna/jna-platform/5.15.0/jna-platform-5.15.0.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/mojang/jtracy/1.0.29/jtracy-1.0.29.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/fasterxml/jackson/core/jackson-databind/2.13.4.2/jackson-databind-2.13.4.2.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/fasterxml/jackson/core/jackson-core/2.13.4/jackson-core-2.13.4.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/ow2/asm/asm-analysis/9.9/asm-analysis-9.9.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/apache/logging/log4j/log4j-api/2.24.1/log4j-api-2.24.1.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/mojang/datafixerupper/8.0.16/datafixerupper-8.0.16.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/apache/logging/log4j/log4j-slf4j2-impl/2.24.1/log4j-slf4j2-impl-2.24.1.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/ow2/asm/asm/9.9/asm-9.9.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/apache/httpcomponents/httpclient/4.5.14/httpclient-4.5.14.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/slf4j/slf4j-api/2.0.16/slf4j-api-2.0.16.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/mojang/patchy/2.2.10/patchy-2.2.10.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/mojang/jtracy/1.0.29/jtracy-1.0.29-natives-linux.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/jcraft/jorbis/0.0.17/jorbis-0.0.17.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/nimbusds/content-type/2.3/content-type-2.3.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/joml/joml/1.10.8/joml-1.10.8.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/org/ow2/asm/asm-commons/9.9/asm-commons-9.9.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/google/code/gson/gson/2.11.0/gson-2.11.0.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/com/fasterxml/jackson/core/jackson-annotations/2.13.4/jackson-annotations-2.13.4.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/libraries/io/netty/netty-transport-native-epoll/4.1.118.Final/netty-transport-native-epoll-4.1.118.Final-linux-aarch_64.jar:/storage/emulated/0/Android/data/net.ashmeet.hyperlauncher.debug/files/.minecraft/versions/fabric-loader-0.19.2-1.21.5/fabric-loader-0.19.2-1.21.5.jar)
+		at com.sun.jna.Native.extractFromResourcePath(Native.java:1145) ~[jna-5.13.0.jar:5.13.0 (b0)]
+		at com.sun.jna.NativeLibrary.loadLibrary(NativeLibrary.java:295) ~[jna-5.13.0.jar:5.13.0 (b0)]
+		at com.sun.jna.NativeLibrary.getInstance(NativeLibrary.java:483) ~[jna-5.13.0.jar:5.13.0 (b0)]
+		at com.sun.jna.NativeLibrary.getInstance(NativeLibrary.java:425) ~[jna-5.13.0.jar:5.13.0 (b0)]
+		at com.mojang.text2speech.NarratorLinux$FliteLibrary.loadNative(NarratorLinux.java:79) ~[text2speech-1.18.11.jar:?]
+		at com.mojang.text2speech.NarratorLinux.<init>(NarratorLinux.java:18) ~[text2speech-1.18.11.jar:?]
+		at com.mojang.text2speech.Narrator.getNarrator(Narrator.java:41) [text2speech-1.18.11.jar:?]
+		at fqh.<init>(SourceFile:20) [fabric-loader-0.19.2-1.21.5.jar:?]
+		at fqq.<init>(SourceFile:696) [fabric-loader-0.19.2-1.21.5.jar:?]
+		at net.minecraft.client.main.Main.main(SourceFile:249) [fabric-loader-0.19.2-1.21.5.jar:?]
+[10:01:09] [Render thread/INFO]: Reloading ResourceManager: vanilla
+Thread[#1,Render thread,10,main]: No context is current or a function that is not available in the current context was called. Are you running essential and/or <1.13?
+Thread[#1,Render thread,10,main]: No context is current or a function that is not available in the current context was called. Are you running essential and/or <1.13?
+[10:01:09] [Render thread/INFO]: [STDOUT]: GLFW: Set size for window 470212814976, width=2800, height=1272
+[10:01:09] [Worker-Main-5/INFO]: Found unifont_all_no_pua-16.0.01.hex, loading
+Thread[#1,Render thread,10,main]: No context is current or a function that is not available in the current context was called. Are you running essential and/or <1.13?
+Thread[#1,Render thread,10,main]: No context is current or a function that is not available in the current context was called. Are you running essential and/or <1.13?
+Thread[#1,Render thread,10,main]: No context is current or a function that is not available in the current context was called. Are you running essential and/or <1.13?
+Thread[#1,Render thread,10,main]: No context is current or a function that is not available in the current context was called. Are you running essential and/or <1.13?
+Thread[#1,Render thread,10,main]: No context is current or a function that is not available in the current context was called. Are you running essential and/or <1.13?
+Thread[#1,Render thread,10,main]: No context is current or a function that is not available in the current context was called. Are you running essential and/or <1.13?
+[10:01:09] [Download-2/ERROR]: Failed to fetch user properties
+com.mojang.authlib.exceptions.InvalidCredentialsException: Status: 401
+	at com.mojang.authlib.exceptions.MinecraftClientHttpException.toAuthenticationException(MinecraftClientHttpException.java:59) ~[authlib-6.0.58.jar:?]
+	at com.mojang.authlib.yggdrasil.YggdrasilUserApiService.fetchProperties(YggdrasilUserApiService.java:150) ~[authlib-6.0.58.jar:?]
+	at fqq.bN(SourceFile:454) ~[fabric-loader-0.19.2-1.21.5.jar:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) ~[?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[?:?]
+	at java.base/java.lang.Thread.run(Thread.java:1583) [?:?]
+Caused by: com.mojang.authlib.exceptions.MinecraftClientHttpException: Status: 401
+	at com.mojang.authlib.minecraft.client.MinecraftClient.readInputStream(MinecraftClient.java:103) ~[authlib-6.0.58.jar:?]
+	at com.mojang.authlib.minecraft.client.MinecraftClient.get(MinecraftClient.java:56) ~[authlib-6.0.58.jar:?]
+	at com.mojang.authlib.yggdrasil.YggdrasilUserApiService.fetchProperties(YggdrasilUserApiService.java:121) ~[authlib-6.0.58.jar:?]
+	... 5 more
+Thread[#1,Render thread,10,main]: No context is current or a function that is not available in the current context was called. Are you running essential and/or <1.13?
+Thread[#1,Render thread,10,main]: No context is current or a function that is not available in the current context was called. Are you running essential and/or <1.13?
+[10:01:09] [Worker-Main-1/INFO]: Found unifont_jp_patch-16.0.01.hex, loading
+[10:01:10] [Download-3/INFO]: Could not authorize you against Realms server: java.lang.RuntimeException: Failed to parse into SignedJWT: 0
+[10:01:10] [Download-3/ERROR]: Failed to fetch Realms feature flags
+fnm: Realms authentication error with message 'java.lang.RuntimeException: Failed to parse into SignedJWT: 0'
+	at flq.a(SourceFile:495) ~[fabric-loader-0.19.2-1.21.5.jar:?]
+	at flq.n(SourceFile:177) ~[fabric-loader-0.19.2-1.21.5.jar:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) ~[?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[?:?]
+	at java.base/java.lang.Thread.run(Thread.java:1583) [?:?]
+[10:01:10] [Render thread/WARN]: Found unknown and unsupported uniform Sampler2 in minecraft:pipeline/energy_swirl
+[10:01:10] [Render thread/WARN]: Found unknown and unsupported uniform Sampler1 in minecraft:pipeline/energy_swirl
+[10:01:10] [Render thread/WARN]: Found unknown and unsupported uniform Sampler1 in minecraft:pipeline/breeze_wind
+[10:01:10] [Render thread/WARN]: Found unknown and unsupported uniform Sampler1 in minecraft:pipeline/armor_decal_cutout_no_cull
+[10:01:10] [Render thread/WARN]: Found unknown and unsupported uniform Sampler1 in minecraft:pipeline/entity_no_outline
+[10:01:10] [Render thread/WARN]: Found unknown and unsupported uniform Sampler1 in minecraft:pipeline/armor_translucent
+[10:01:10] [Render thread/WARN]: Found unknown and unsupported uniform Sampler2 in minecraft:pipeline/eyes
+[10:01:10] [Render thread/WARN]: Found unknown and unsupported uniform Sampler1 in minecraft:pipeline/eyes
+[10:01:10] [Render thread/WARN]: Found unknown and unsupported uniform Sampler1 in minecraft:pipeline/armor_cutout_no_cull
+[10:01:10] [Render thread/INFO]: OpenAL initialized on device Oboe Default
+[10:01:10] [Render thread/INFO]: Sound engine started
+[10:01:11] [Render thread/INFO]: Created: 1024x512x0 minecraft:textures/atlas/blocks.png-atlas
+[10:01:11] [Render thread/INFO]: Created: 256x256x0 minecraft:textures/atlas/signs.png-atlas
+[10:01:11] [Render thread/INFO]: Created: 512x512x0 minecraft:textures/atlas/shield_patterns.png-atlas
+[10:01:11] [Render thread/INFO]: Created: 512x512x0 minecraft:textures/atlas/banner_patterns.png-atlas
+[10:01:11] [Render thread/INFO]: Created: 2048x1024x0 minecraft:textures/atlas/armor_trims.png-atlas
+[10:01:11] [Render thread/INFO]: Created: 128x64x0 minecraft:textures/atlas/decorated_pot.png-atlas
+[10:01:11] [Render thread/INFO]: Created: 256x256x0 minecraft:textures/atlas/chest.png-atlas
+[10:01:11] [Render thread/INFO]: Created: 512x256x0 minecraft:textures/atlas/shulker_boxes.png-atlas
+[10:01:11] [Render thread/INFO]: Created: 512x256x0 minecraft:textures/atlas/beds.png-atlas
+[10:01:11] [Render thread/INFO]: Created: 64x64x0 minecraft:textures/atlas/map_decorations.png-atlas
+[10:01:11] [Render thread/INFO]: Created: 512x256x0 minecraft:textures/atlas/particles.png-atlas
+[10:01:11] [Render thread/INFO]: Created: 512x256x0 minecraft:textures/atlas/paintings.png-atlas
+[10:01:11] [Render thread/INFO]: Created: 256x128x0 minecraft:textures/atlas/mob_effects.png-atlas
+[10:01:11] [Render thread/INFO]: Created: 1024x512x0 minecraft:textures/atlas/gui.png-atlas
+[10:01:11] [IO-Worker-1/INFO]: Could not authorize you against Realms server: java.lang.RuntimeException: Failed to parse into SignedJWT: 0
+[10:01:11] [IO-Worker-1/ERROR]: Couldn't connect to realms
+fnm: Realms authentication error with message 'java.lang.RuntimeException: Failed to parse into SignedJWT: 0'
+	at flq.a(SourceFile:495) ~[fabric-loader-0.19.2-1.21.5.jar:?]
+	at flq.h(SourceFile:278) ~[fabric-loader-0.19.2-1.21.5.jar:?]
+	at flk.c(SourceFile:51) ~[fabric-loader-0.19.2-1.21.5.jar:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) ~[?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[?:?]
+	at java.base/java.lang.Thread.run(Thread.java:1583) [?:?]
+[10:01:25] [Render thread/INFO]: Stopping!
+EGLBridge: Terminating

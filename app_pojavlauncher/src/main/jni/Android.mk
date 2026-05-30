@@ -5,6 +5,7 @@ HERE_PATH := $(LOCAL_PATH)
 LOCAL_PATH := $(HERE_PATH)
 
 $(call import-module,prefab/bytehook)
+$(call import-module,prefab/shadowhook)
 LOCAL_PATH := $(HERE_PATH)
 
 include $(CLEAR_VARS)
@@ -84,4 +85,3 @@ include $(BUILD_SHARED_LIBRARY)
 
 # delete fake libs after linked
 $(info $(shell (rm $(HERE_PATH)/../jniLibs/*/libawt_headless.so)))
-

@@ -34,6 +34,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginBottom="5dp"
             android:text="File name:"
+            android:textColor="@color/primary_text"
             app:layout_constraintBottom_toTopOf="@+id/editText_import_control_file_name"
             app:layout_constraintStart_toStartOf="@+id/editText_import_control_file_name" />
 
@@ -58,7 +59,7 @@
             android:onClick="startImport"
 
             android:text="@string/import_control_import_button"
-            android:textColor="@android:color/white"
+            android:textColor="@color/minebutton_text_color"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/editText_import_control_file_name"
 
@@ -68,5 +69,3 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-

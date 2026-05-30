@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@android:color/white"
+        android:textColor="@color/primary_text"
         android:textSize="14sp" />
 
 </LinearLayout>

@@ -6,7 +6,8 @@
     <color name="control_button_pressed_color">#40FFFFFF</color>
 
     <!-- Main UI -->
-    <color name="minebutton_color">#FFFFFF</color>
+    <color name="minebutton_color">#000000</color>
+    <color name="minebutton_text_color">#FFFFFF</color>
 
     <!-- Theme Colors -->
     <color name="background_app">#F5F5F5</color>
@@ -14,6 +15,8 @@
     <color name="background_overlay">#FFFFFF</color>
     <color name="background_status_bar">#FFFFFF</color>
     <color name="background_bottom_bar">#F0F0F0</color>
+    <!-- Opaque base overlay color; actual transparency is controlled at runtime -->
+    <color name="background_image_overlay">#FFFFFF</color>
 
     <color name="surface">#FFFFFF</color>
     <color name="on_surface">#000000</color>
@@ -27,9 +30,16 @@
     <color name="primary_text">#000000</color>
     <color name="secondary_text">#666666</color>
 
-    <!-- Compatible version highlighting -->
-    <color name="compatible_version_bg">#E8F5E9</color>
-    <color name="compatible_version_text">#2E7D32</color>
-    <color name="compatible_version_badge">#4CAF50</color>
+    <!-- Custom Toggle Colors (Light Mode: Black BG, White Knob) -->
+    <color name="switch_track_on">#000000</color>
+    <color name="switch_track_off">#E0E0E0</color>
+    <color name="switch_knob_on">#FFFFFF</color>
+    <color name="switch_knob_off">#666666</color>
+    <color name="switch_icon_on">#000000</color>
+    <color name="switch_icon_off">#FFFFFF</color>
+
+    <color name="compatible_version_bg">#EEF2EC</color>
+    <color name="compatible_version_text">#3A5C38</color>
+    <color name="compatible_version_badge">#6A9B66</color>
 
 </resources>

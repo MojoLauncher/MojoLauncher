@@ -13,6 +13,7 @@
 
         <net.kdt.pojavlaunch.prefs.MaterialEditTextPreference
             app:dialogTitle="@string/mcl_setting_title_javaargs"
+            android:icon="@drawable/ic_px_java"
             app:key="javaArgs"
             app:summary="@string/mcl_setting_subtitle_javaargs"
             app:title="@string/mcl_setting_title_javaargs" />

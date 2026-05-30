@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_app"
+    android:padding="24dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <TextView
+        android:id="@+id/skin_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/skin_title"
+        android:textColor="@color/primary_text"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/skin_preview"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/background_card"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_px_home"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.App.LargeComponent"
+        app:layout_constraintTop_toBottomOf="@id/skin_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.kdt.mcgui.MineButton
+        android:id="@+id/button_pick_skin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/skin_button_pick"
+        app:layout_constraintTop_toBottomOf="@id/skin_preview" />
+
+    <com.kdt.mcgui.MineButton
+        android:id="@+id/button_reset_skin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/skin_button_reset"
+        app:layout_constraintTop_toBottomOf="@id/button_pick_skin" />
+
+    <TextView
+        android:id="@+id/skin_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/skin_info"
+        android:textColor="@color/secondary_text"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/button_reset_skin" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

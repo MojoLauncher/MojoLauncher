@@ -22,7 +22,7 @@
             app:summary="@string/mcl_setting_subtitle_preferred_graphics_backend" />
 
         <net.kdt.pojavlaunch.prefs.MaterialSwitchPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:icon="@drawable/ic_px_viewport_expand"
             app:key="ignoreNotch"
             app:summary="@string/mcl_setting_subtitle_ignore_notch"
@@ -45,7 +45,7 @@
             app:title="@string/preference_sustained_performance_title" />
 
         <net.kdt.pojavlaunch.prefs.MaterialSwitchPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             app:key="alternate_surface"
             app:summary="@string/mcl_setting_subtitle_use_surface_view"
             app:title="@string/mcl_setting_title_use_surface_view" />

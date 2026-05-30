@@ -1,9 +1,25 @@
-plugins {
-    id 'com.android.application' version '8.11.1'
-    id 'de.undercouch.download' version '5.6.0'
-    id 'org.ajoberstar.grgit' version '5.3.2'
-    id 'com.google.gms.google-services' version '4.4.2'
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:8.9.1"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.0"
+        classpath "org.jetbrains.kotlin:compose-compiler-gradle-plugin:2.1.0"
+        classpath "de.undercouch:gradle-download-task:5.6.0"
+        classpath "org.ajoberstar.grgit:grgit-gradle:5.3.2"
+        classpath "com.google.gms:google-services:4.4.2"
+    }
 }
+
+apply plugin: 'com.android.application'
+apply plugin: 'de.undercouch.download'
+apply plugin: 'org.ajoberstar.grgit'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 
 apply from: rootProject.file('gradle/prefab_bypass.gradle')
 
@@ -33,7 +49,7 @@ def getVersionName = {
 }
 
 def getCFApiKey = {
-    String key = System.getenv("CURSEFORGE_API_KEY")
+    String key = System.getenv('$2a$10$gh97kqzcB/TKSYpqqacaE.N0SJGN121gGUF.6xsxiEu1ZmfaOYmcy')
     if(key != null) return key
     File curseforgeKeyFile = new File("./curseforge_key.txt")
     if(curseforgeKeyFile.canRead() && curseforgeKeyFile.isFile()) {
@@ -50,10 +66,44 @@ configurations {
     }
 }
 
+configurations.configureEach {
+    resolutionStrategy.force('androidx.core:core:1.13.1', 'androidx.core:core-ktx:1.13.1')
+}
+
+// Task to download missing AARs from MojoLauncher repository
+tasks.register("downloadExtraAars") {
+    doLast {
+        def libsDir = file("libs")
+        if (!libsDir.exists()) libsDir.mkdirs()
+        
+        def baseUrl = "https://github.com/MojoLauncher/MojoLauncher/raw/v3_openjdk/app_pojavlauncher/libs/"
+        def files = ["mesa.aar", "shaderc.aar", "spvc.aar"]
+        
+        files.each { fileName ->
+            def targetFile = new File(libsDir, fileName)
+            if (!targetFile.exists()) {
+                println "Downloading ${fileName}..."
+                download.run {
+                    src baseUrl + fileName
+                    dest targetFile
+                    overwrite false
+                }
+            }
+        }
+    }
+}
+
+// Make sure AARs are downloaded before building
+afterEvaluate {
+    tasks.named("preBuild").configure {
+        dependsOn "downloadExtraAars"
+    }
+}
+
 android {
     namespace 'net.ashmeet.hyperlauncher'
+    compileSdk 35
 
-    compileSdk = 36
 
     lintOptions {
         abortOnError false
@@ -82,21 +132,24 @@ android {
 
     defaultConfig {
         applicationId 'net.ashmeet.hyperlauncher'
-        minSdkVersion 21
-        targetSdkVersion 36
+        minSdkVersion 29
+        targetSdkVersion 34
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86_64'
+        }
         versionCode getDateSeconds()
-        versionName getVersionName()
+        versionName "2.5.1"
         multiDexEnabled false //important
         resValue 'string', 'curseforge_api_key', getCFApiKey()
     }
 
     flavorDimensions  = ["runtime"]
-    
+
     productFlavors {
         full {
             dimension "runtime"
         }
-        
+
         noruntime {
             dimension "runtime"
             versionNameSuffix "-noruntime"
@@ -127,6 +180,7 @@ android {
             // Don't set to true or java.awt will be a.a or something similar.
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.customDebug
             // defaultConfig already set
             // multiDexEnabled = true
             // debuggable = true
@@ -139,10 +193,7 @@ android {
         }
         pubRelease {
             initWith release
-            signingConfig signingConfigs.customDebug // WIP, changeme
-            applicationIdSuffix '.pub'
-            resValue 'string', 'storageProviderAuthorities', 'net.ashmeet.hyperlauncher.pub.scoped.gamefolder'
-            resValue 'string', 'application_package', 'net.ashmeet.hyperlauncher.pub'
+            signingConfig signingConfigs.customDebug
         }
     }
 
@@ -175,42 +226,65 @@ android {
     buildFeatures {
         prefab true
         buildConfig true
+        compose true
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// AssetTaskRegistrar — no BaseVariant dependency.
+// Constructed once per variant via setVariantByName(name, task).
+// ─────────────────────────────────────────────────────────────────────────────
 class AssetTaskRegistrar {
     private Project project
-    private Task mergeAssetsTask
-    private File targetAssetsDir
-    private String variantName
-    private File targetDownloadDir
-    private File projectJarDir
+    private Task    mergeAssetsTask   // the pre<Variant>Build task
+    private File    targetAssetsDir
+    private String  variantName       // capitalized, e.g. "FullDebug"
+    private File    targetDownloadDir
+    private File    projectJarDir
 
     AssetTaskRegistrar(Project project) {
         this.project = project
 
         targetDownloadDir = new File(project.projectDir, "build/intermediates/download_deps")
-        projectJarDir = new File(project.projectDir, "build/intermediates/package_jar_deps")
+        projectJarDir     = new File(project.projectDir, "build/intermediates/package_jar_deps")
         createDirectories targetDownloadDir
         createDirectories projectJarDir
     }
 
-    def setVariant(variant) {
-        variantName = variant.getName().capitalize()
-        mergeAssetsTask = variant.getPreBuildProvider().get()
+    // ── AGP 8 compatible: takes a plain name + the already-resolved task ──
+    def setVariantByName(String name, Task preBuildTask) {
+        variantName     = name.capitalize()
+        mergeAssetsTask = preBuildTask
 
-        targetAssetsDir = new File(project.projectDir, "build/intermediates/remote_asset_set/${variantName.toLowerCase()}/")
+        targetAssetsDir = new File(project.projectDir, "build/intermediates/remote_asset_set/${name}/")
         createDirectories(targetAssetsDir)
 
-        project.android.sourceSets[variant.getName()].assets.srcDirs += targetAssetsDir.absolutePath
+        // android.sourceSets[name] still works in AGP 8 — only applicationVariants was removed.
+        def sourceSet = project.android.sourceSets.findByName(name)
+        if (sourceSet != null) {
+            sourceSet.assets.srcDirs += targetAssetsDir.absolutePath
+        }
     }
 
     static def createDirectories(File location) {
-        if(!location.isDirectory() && !location.mkdirs())
-            throw new RuntimeException("Failed to create directory "+location.getAbsolutePath())
+        if (location.exists() && !location.isDirectory()) {
+            if (!location.delete()) {
+                throw new RuntimeException("Failed to delete file blocking directory creation " + location.getAbsolutePath())
+            }
+        }
+        if (!location.isDirectory() && !location.mkdirs())
+            throw new RuntimeException("Failed to create directory " + location.getAbsolutePath())
     }
 
-    static def writeVersion(File dir) {
+    static def writeVersion(File location) {
+        File dir = location.isDirectory() ? location : location.getParentFile()
+        if (dir == null) {
+            throw new RuntimeException("Failed to resolve version directory for " + location)
+        }
+        createDirectories(dir)
         File versionFile = new File(dir, "version")
         versionFile.write(String.valueOf(new Date().getTime()))
     }
@@ -222,11 +296,11 @@ class AssetTaskRegistrar {
     private def onlineUnzipTask(String downloadUrl, String name, File targetExtractionDir) {
         createDirectories targetExtractionDir
 
-        def downloadTarget = new File(targetDownloadDir, name)
+        def dependencySuffix  = "${name}${variantName}"
+        def downloadTarget    = new File(targetDownloadDir, "${dependencySuffix}.zip")
 
-        def dependencySuffix = "${name}${variantName}"
         def downloadTask = project.tasks.register("download${dependencySuffix}", Download) {
-            src downloadUrl
+            src  downloadUrl
             dest downloadTarget
             overwrite false
         }
@@ -240,12 +314,12 @@ class AssetTaskRegistrar {
     }
 
     def onlineZipDependency(String downloadUrl, String name, String relativePath) {
-	    mergeAssetsTask.dependsOn(onlineUnzipTask downloadUrl, name, assetDestination(relativePath))
+        mergeAssetsTask.dependsOn(onlineUnzipTask(downloadUrl, name, assetDestination(relativePath)))
     }
 
     def projectJarDependency(Project project, String relativePath) {
         def assetTargetDir = assetDestination(relativePath)
-        def jarTargetDir = new File(projectJarDir, relativePath)
+        def jarTargetDir   = new File(projectJarDir, relativePath)
         createDirectories assetTargetDir
         createDirectories jarTargetDir
 
@@ -263,22 +337,23 @@ class AssetTaskRegistrar {
         project.tasks.withType(org.gradle.jvm.tasks.Jar.class).configureEach {
             it.destinationDirectory = jarTargetDir
             doLast {
-                if(!it.didWork) return
+                if (!it.didWork) return
                 writeVersion jarTargetDir
             }
         }
     }
 
-    def onlineJarDependency(String jarUrl, String jarProject, String dependency, String version, String suffix,  String relativePath) {
+    def onlineJarDependency(String jarUrl, String jarProject, String dependency, String version, String suffix, String relativePath) {
         File targetDir = assetDestination(relativePath)
         createDirectories targetDir
+        File targetJar = new File(targetDir, "${dependency}${suffix}.jar")
         def dependencySuffix = "${jarProject}${dependency}${variantName}"
         def downloadTask = project.tasks.register("download${dependencySuffix}", Download) {
-            src String.format(jarUrl, jarProject, dependency, version, suffix)
-            dest targetDir
+            src  String.format(jarUrl, jarProject, dependency, version, suffix)
+            dest targetJar
             overwrite false
             doLast {
-                if(!it.didWork) return
+                if (!it.didWork) return
                 writeVersion targetDir
             }
         }
@@ -291,25 +366,43 @@ class AssetTaskRegistrar {
     }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Variant wiring — AGP 8 compatible.
+//
+// WHAT CHANGED: replaced android.applicationVariants.configureEach (which loads
+// the removed BaseVariant class) with a manual cross-product of productFlavors ×
+// buildTypes.  android.sourceSets and tasks.findByName are fully supported in
+// AGP 8 and don't touch BaseVariant at all.
+// ─────────────────────────────────────────────────────────────────────────────
 afterEvaluate {
     def registrar = new AssetTaskRegistrar(project)
 
-    android.applicationVariants.configureEach { variant ->
-        registrar.setVariant(variant)
+    android.productFlavors.each { flavor ->
+        android.buildTypes.each { buildType ->
+            // Variant name matches AGP's own convention: e.g. "fullDebug", "noruntimeRelease"
+            def variantName    = "${flavor.name}${buildType.name.capitalize()}"
+            def preBuildTask   = tasks.findByName("pre${variantName.capitalize()}Build")
 
-        registrar.projectJarDependency project(":forge_installer"), "components/forge_installer"
-        registrar.projectJarDependency project(":jre_lwjgl3glfw"), "components/lwjgl3"
+            // Some flavor/buildType combos may not produce a real variant task — skip them.
+            if (preBuildTask == null) return
 
-		if (variant.getName().toLowerCase().contains("full")) {
-            registrar.jreRuntimeDependency 8, "components/jre"
+            registrar.setVariantByName(variantName, preBuildTask)
+
+            registrar.projectJarDependency project(":forge_installer"), "components/forge_installer"
+            registrar.projectJarDependency project(":jre_lwjgl3glfw"), "components/lwjgl3"
+
+            if (variantName.toLowerCase().contains("full")) {
+                registrar.jreRuntimeDependency 8, "components/jre"
+            }
+
+            def cacioJarUrl = "https://jitpack.io/com/github/MojoLauncher/%1\$s/%2\$s/%3\$s/%2\$s-%3\$s%4\$s.jar"
+
+            registrar.onlineJarDependency(cacioJarUrl, "caciocavallo", "cacio-shared", "-01d2dc1d65-1", "", "components/caciocavallo")
+            registrar.onlineJarDependency(cacioJarUrl, "caciocavallo", "cacio-androidnw", "-01d2dc1d65-1", "", "components/caciocavallo")
+
+            // Use the thin jar to avoid LWJGL conflicts. We will fix its manifest on the fly in JavaRunner.
+            registrar.onlineJarDependency(cacioJarUrl, "caciocavallo17", "cacio-tta", "72a9ab6323", "", "components/caciocavallo17")
         }
-        
-		def cacioJarUrl = "https://jitpack.io/com/github/MojoLauncher/%1\$s/%2\$s/%3\$s/%2\$s-%3\$s%4\$s.jar"
-
-        registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-shared", "-01d2dc1d65-1", "", "components/caciocavallo"
-        registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-androidnw", "-01d2dc1d65-1", "", "components/caciocavallo"
-
-        registrar.onlineJarDependency cacioJarUrl, "caciocavallo17", "cacio-tta", "72a9ab6323", "-jar-with-dependencies", "components/caciocavallo17"
     }
 }
 
@@ -336,6 +429,10 @@ dependencies {
     // implementation 'com.intuit.sdp:sdp-android:1.0.5'
     // implementation 'com.intuit.ssp:ssp-android:1.0.5'
 
+    // Force recent core libraries to match modern Compose requirements
+    implementation 'androidx.core:core:1.13.1'
+    implementation 'androidx.core:core-ktx:1.13.1'
+
     implementation 'org.tukaani:xz:1.10'
     // Our version of exp4j can be built from source at
     // https://github.com/PojavLauncherTeam/exp4j
@@ -343,6 +440,23 @@ dependencies {
     implementation 'com.bytedance:bytehook:1.1.1'
 
     implementation 'com.github.MojoLauncher:alsoft-android-aar:f369161d5f'
+    implementation 'androidx.palette:palette-ktx:1.0.0'
+    
+    // ✅ Fix: Use standard managed version for foundation to avoid NoSuchMethodError
+    implementation 'androidx.compose.foundation:foundation'
+
+    // Jetpack Compose
+    def composeBom = platform('androidx.compose:compose-bom:2024.12.01')
+    implementation composeBom
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.ui:ui-graphics'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.activity:activity-compose:1.9.3'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7'
+    implementation 'androidx.compose.runtime:runtime-livedata'
+    // Changed to implementation to ensure it's available for all build variants in Preview
+    implementation 'androidx.compose.ui:ui-tooling'
 
     // implementation 'net.sourceforge.streamsupport:streamsupport-cfuture:1.7.0'
 
@@ -352,4 +466,5 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:33.7.0')
     implementation 'com.google.firebase:firebase-database'
     implementation 'androidx.lifecycle:lifecycle-process:2.8.7'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
 }

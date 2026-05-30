@@ -4,20 +4,115 @@
 
     <net.kdt.pojavlaunch.prefs.BackButtonPreference />
 
-    <androidx.preference.PreferenceCategory app:title="Theme">
+    <androidx.preference.PreferenceCategory app:title="General">
         <net.kdt.pojavlaunch.prefs.MaterialListPreference
             android:defaultValue="dark"
             app:entries="@array/theme_names"
             app:entryValues="@array/theme_values"
+            android:icon="@drawable/ic_px_theme"
             app:key="appTheme"
             app:summary="@string/preference_theme_description"
             app:title="@string/preference_theme_title" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialPreference
+            android:icon="@drawable/ic_px_drawer_button"
+            app:fragment="net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceDrawerButtonFragment"
+            app:key="drawer_button_screen"
+            app:summary="Customise the drawer button and list appearance"
+            app:title="Drawer Button Settings" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialPreference
+            android:icon="@drawable/ic_px_image"
+            app:key="app_background_picker"
+            app:summary="Change the launcher background image"
+            app:title="Launcher Background" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialSwitchPreference
+            android:defaultValue="false"
+            app:key="appBackgroundBlur"
+            app:summary="Apply a blur effect to the background image"
+            app:title="Background Blur" />
+
+        <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
+            android:defaultValue="10"
+            android:max="100"
+            app:dependency="appBackgroundBlur"
+            app:key="appBackgroundBlurIntensity"
+            app:min="1"
+            app:seekBarIncrement="5"
+            app:showSeekBarValue="true"
+            app:summary="Adjust the blur intensity"
+            app:title="Blur Intensity" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialSwitchPreference
+            android:defaultValue="true"
+            android:icon="@drawable/ic_px_image"
+            app:key="backgroundImageOverlayEnabled"
+            app:summary="Add a transparent overlay on the background image for better readability"
+            app:title="Background Overlay" />
+
+        <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
+            android:defaultValue="25"
+            android:max="100"
+            android:icon="@drawable/ic_px_color"
+            app:dependency="backgroundImageOverlayEnabled"
+            app:key="backgroundImageOverlayOpacity"
+            app:min="0"
+            app:seekBarIncrement="5"
+            app:showSeekBarValue="true"
+            app:summary="Adjust overlay transparency"
+            app:title="Overlay Transparency (%)" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialPreference
+            app:key="app_background_reset"
+            app:summary="Reset the launcher background to default"
+            app:title="Reset Background" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialListPreference
+            android:defaultValue="default"
+            app:entries="@array/icon_preset_names"
+            app:entryValues="@array/icon_preset_values"
+            android:icon="@drawable/ic_px_preset"
+            app:key="iconPreset"
+            app:title="Icon Color Preset" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialPreference
+            android:icon="@drawable/ic_px_color"
+            app:key="global_icon_color_picker"
+            app:summary="Change the color of various launcher icons"
+            app:title="Global Icon Color" />
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory app:title="Minecraft Button Style">
+        <net.kdt.pojavlaunch.prefs.MaterialListPreference
+            android:defaultValue="default"
+            app:entries="@array/appearance_preset_names"
+            app:entryValues="@array/appearance_preset_values"
+            android:icon="@drawable/ic_px_preset"
+            app:key="appearancePreset"
+            app:title="Appearance Preset" />
+
+        <net.kdt.pojavlaunch.prefs.MaterialPreference
+            android:icon="@drawable/ic_px_color"
+            app:key="minebutton_color_picker"
+            app:summary="Change the background color of main buttons"
+            app:title="Button Color" />
+
+        <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
+            android:defaultValue="28"
+            android:max="50"
+            app:key="minebutton_corner_radius"
+            app:min="0"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:title="Button Corner Radius (dp)" />
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory app:title="Animations">
         <net.kdt.pojavlaunch.prefs.MaterialListPreference
             android:defaultValue="jelly"
             app:entries="@array/animation_type_names"
+            android:icon="@drawable/ic_px_animation"
             app:entryValues="@array/animation_type_values"
             app:key="animationType"
             app:summary="@string/preference_animation_type_description"
@@ -51,94 +146,11 @@
             app:title="@string/preference_mouse_reset_title" />
     </androidx.preference.PreferenceCategory>
 
-    <androidx.preference.PreferenceCategory app:title="Drawer Button">
-        <net.kdt.pojavlaunch.prefs.MaterialListPreference
-            android:defaultValue="custom"
-            app:entries="@array/drawer_button_preset_names"
-            app:entryValues="@array/drawer_button_preset_values"
-            app:key="drawerButtonPreset"
-            app:title="Position Preset" />
-
-        <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
-            android:defaultValue="50"
-            android:max="100"
-            app:key="drawerButtonX"
-            app:min="0"
-            app:seekBarIncrement="1"
-            app:showSeekBarValue="true"
-            app:title="Horizontal Position (%)" />
-
-        <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
-            android:defaultValue="0"
-            android:max="100"
-            app:key="drawerButtonY"
-            app:min="0"
-            app:seekBarIncrement="1"
-            app:showSeekBarValue="true"
-            app:title="Vertical Position (%)" />
-
-        <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
-            android:defaultValue="40"
-            android:max="100"
-            app:key="drawerButtonSize"
-            app:min="20"
-            app:seekBarIncrement="1"
-            app:showSeekBarValue="true"
-            app:title="Button Size (dp)" />
-
-        <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
-            android:defaultValue="8"
-            android:max="50"
-            app:key="drawerButtonCornerRadius"
-            app:min="0"
-            app:seekBarIncrement="1"
-            app:showSeekBarValue="true"
-            app:title="Button Corner Radius (dp)" />
-
-        <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
-            android:defaultValue="33"
-            android:max="100"
-            app:key="drawerButtonBgOpacity"
-            app:min="0"
-            app:seekBarIncrement="1"
-            app:showSeekBarValue="true"
-            app:title="Background Opacity (%)" />
-
-        <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
-            android:defaultValue="100"
-            android:max="100"
-            app:key="drawerButtonIconOpacity"
-            app:min="0"
-            app:seekBarIncrement="1"
-            app:showSeekBarValue="true"
-            app:title="Icon Opacity (%)" />
-
-        <net.kdt.pojavlaunch.prefs.MaterialSwitchPreference
-            android:defaultValue="false"
-            app:key="drawerButtonMovable"
-            app:title="Allow Dragging Button"
-            app:summary="When enabled, you can drag the button freely on the screen" />
-
+    <androidx.preference.PreferenceCategory app:title="Reset All Appearance Settings">
         <net.kdt.pojavlaunch.prefs.MaterialPreference
-            app:key="drawer_button_image_picker"
-            app:summary="Select a custom image for the drawer button"
-            app:title="Custom Button Image" />
-
-        <net.kdt.pojavlaunch.prefs.MaterialPreference
-            app:key="drawer_button_reset"
-            app:summary="Reset drawer button to default"
-            app:title="Reset Drawer Button" />
-    </androidx.preference.PreferenceCategory>
-
-    <androidx.preference.PreferenceCategory app:title="Drawer List">
-        <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
-            android:defaultValue="100"
-            android:max="100"
-            app:key="drawerListOpacity"
-            app:min="10"
-            app:seekBarIncrement="1"
-            app:showSeekBarValue="true"
-            app:title="Drawer Background Opacity (%)" />
+            app:key="appearance_reset_all"
+            app:summary="Reset all appearance and theme settings to default"
+            app:title="Reset Appearance" />
     </androidx.preference.PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

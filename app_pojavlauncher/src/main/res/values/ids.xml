@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ID for the FragmentContainerView used in LauncherScreen.kt -->
+    <item name="container_fragment" type="id" />
+</resources>

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:app="http://schemas.android.com/apk/res-auto">
+<resources xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
     <!-- Light or not? -->
     <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:statusBarColor">@color/background_status_bar</item>
-        <item name="android:navigationBarColor">@color/background_app</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">@color/background_app</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.App</item>
 
         <item name="android:textSize">@dimen/_13ssp</item>
@@ -31,23 +32,27 @@
         <item name="alertDialogTheme">@style/AppAlertDialogTheme</item>
         <item name="materialAlertDialogTheme">@style/AppAlertDialogTheme</item>
         <item name="android:dialogTheme">@style/AppAlertDialogTheme</item>
+
+        <!-- Spinner and Popup Customization -->
+        <item name="android:spinnerStyle">@style/AppSpinnerStyle</item>
+        <item name="android:listPopupWindowStyle">@style/AppListPopupWindowStyle</item>
+
+        <!-- Fullscreen / Notch support -->
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
     </style>
 
     <style name="AppAlertDialogTheme" parent="Theme.Material3.DayNight.Dialog.Alert">
-        <item name="android:windowFrame">@null</item>
+        <!-- Use the rounded drawable as the window background to ensure it shows up -->
+        <item name="android:windowBackground">@drawable/dialog_background_rounded</item>
         <item name="android:windowIsFloating">true</item>
-        <item name="android:windowContentOverlay">@null</item>
         <item name="android:backgroundDimEnabled">true</item>
 
-        <!-- Fix overlap: use rounded drawable as window background and make main background transparent -->
-        <item name="android:windowBackground">@drawable/dialog_background_rounded</item>
+        <!-- Set internal background to transparent to avoid "two bg" glitch -->
+        <item name="android:background">@drawable/dialog_background_rounded</item>
+        <item name="backgroundTint">@android:color/transparent</item>
 
         <item name="colorSurface">@color/surface</item>
         <item name="colorOnSurface">@color/on_surface</item>
-        <item name="backgroundTint">@android:color/transparent</item>
-
-        <!-- This sets the actual rounded background in Material3 dialogs -->
-        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.App.LargeComponent</item>
 
         <item name="buttonBarPositiveButtonStyle">@style/App.Button.Dialog</item>
         <item name="buttonBarNegativeButtonStyle">@style/App.Button.Dialog</item>
@@ -55,8 +60,9 @@
     </style>
 
     <style name="AppDialogActivityTheme" parent="Theme.Material3.DayNight.Dialog">
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:background">@drawable/dialog_background_rounded</item>
+        <item name="android:windowBackground">@drawable/dialog_background_rounded</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:background">@android:color/transparent</item>
         <item name="colorSurface">@color/surface</item>
         <item name="colorOnSurface">@color/on_surface</item>
         <item name="android:windowNoTitle">true</item>
@@ -67,33 +73,41 @@
         <item name="android:dialogTheme">@style/AppAlertDialogTheme</item>
     </style>
 
+    <style name="AppSpinnerStyle" parent="Widget.AppCompat.Spinner">
+        <item name="android:popupBackground">@drawable/dialog_background_rounded</item>
+    </style>
+
+    <style name="AppListPopupWindowStyle" parent="Widget.Material3.PopupMenu.ListPopupWindow">
+        <item name="android:popupBackground">@drawable/dialog_background_rounded</item>
+    </style>
+
     <style name="App.Button.Dialog" parent="Widget.Material3.Button.TextButton">
         <item name="android:textColor">@color/primary_text</item>
     </style>
 
-    <style name="PreferenceThemeOverlay.App" parent="@style/PreferenceThemeOverlay.v14.Material">
+    <style name="PreferenceThemeOverlay.App" parent="PreferenceThemeOverlay.v14.Material">
         <item name="preferenceStyle">@style/AppPreference</item>
         <item name="preferenceCategoryStyle">@style/AppPreferenceCategory</item>
         <item name="switchPreferenceCompatStyle">@style/AppPreference.Switch</item>
         <item name="seekBarPreferenceStyle">@style/AppPreference.SeekBar</item>
     </style>
 
-    <style name="AppPreference" parent="@style/Preference">
+    <style name="AppPreference" parent="Preference">
         <item name="android:background">@drawable/preference_item_background</item>
         <item name="android:layout">@layout/app_preference_layout</item>
     </style>
 
-    <style name="AppPreference.Switch" parent="@style/Preference.SwitchPreferenceCompat">
+    <style name="AppPreference.Switch" parent="Preference.SwitchPreferenceCompat">
         <item name="android:background">@drawable/preference_item_background</item>
         <item name="android:layout">@layout/app_preference_layout</item>
     </style>
 
-    <style name="AppPreference.SeekBar" parent="@style/Preference.SeekBarPreference">
+    <style name="AppPreference.SeekBar" parent="Preference.SeekBarPreference">
         <item name="android:background">@drawable/preference_item_background</item>
-        <item name="android:layout">@layout/app_preference_seekbar_layout</item>
+        <item name="android:layout">@layout/app_preference_layout</item>
     </style>
 
-    <style name="AppPreferenceCategory" parent="@style/Preference.Category">
+    <style name="AppPreferenceCategory" parent="Preference.Category">
         <item name="android:layout">@layout/app_preference_category_layout</item>
         <item name="allowDividerAbove">false</item>
         <item name="allowDividerBelow">false</item>
@@ -121,7 +135,7 @@
     </style>
 
     <style name="LauncherMenuButton.Universal" parent="LauncherMenuButton">
-        <item name="android:layout_height">@dimen/_66sdp</item>
+        <item name="android:layout_height">@dimen/_76sdp</item>
     </style>
 
     <style name="ThickDivider">

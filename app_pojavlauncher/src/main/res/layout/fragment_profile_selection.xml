@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_app"
+    android:clickable="true"
+    android:focusable="true">
+
+    <!-- Top Bar -->
+    <LinearLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:gravity="center_vertical"
+        android:background="@color/background_bottom_bar"
+        android:elevation="4dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profile_selection_title"
+            android:textColor="@color/primary_text"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"/>
+
+        <EditText
+            android:id="@+id/profile_search_bar"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:hint="@string/installer_search_hint"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:background="@drawable/background_card"
+            android:textColor="@color/primary_text"
+            android:textColorHint="@color/secondary_text"
+            android:singleLine="true"
+            android:inputType="text"
+            android:autofillHints="name" />
+
+        <ImageButton
+            android:id="@+id/profile_add_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_add"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            app:tint="@color/primary_text"
+            android:contentDescription="@string/create_instance" />
+
+        <ImageButton
+            android:id="@+id/profile_filter_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_filter"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            app:tint="@color/primary_text"
+            android:contentDescription="@string/mcl_options" />
+    </LinearLayout>
+
+    <com.kdt.mcgui.LauncherMenuButton
+        android:id="@+id/select_directory_button"
+        style="@style/LauncherMenuButton.Universal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/main_select_instance_directory"
+        android:drawableStart="@drawable/ic_px_folder"
+        app:layout_constraintTop_toBottomOf="@id/top_bar"/>
+
+    <!-- Profile List - Added layoutAnimation and background_app -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/profile_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:padding="8dp"
+        android:background="@color/background_app"
+        android:layoutAnimation="@anim/layout_animation_fall_down"
+        app:layout_constraintTop_toBottomOf="@id/select_directory_button"
+        app:layout_constraintBottom_toTopOf="@id/profile_import_button" />
+
+    <com.kdt.mcgui.MineButton
+        android:id="@+id/profile_import_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="4dp"
+        android:text="@string/import_local_modpack"
+        android:textAllCaps="true"
+        android:textColor="@color/minebutton_text_color"
+        app:layout_constraintBottom_toTopOf="@id/profile_create_button"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.kdt.mcgui.MineButton
+        android:id="@+id/profile_create_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="12dp"
+        android:text="@string/create_instance"
+        android:textAllCaps="true"
+        android:textColor="@color/minebutton_text_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

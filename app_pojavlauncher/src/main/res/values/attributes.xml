@@ -6,4 +6,8 @@
         <!-- Redefine to be able to fetch the value -->
         <attr name="android:min" />
     </declare-styleable>
+
+    <declare-styleable name="MineButton">
+        <attr name="cornerRadius" format="dimension" />
+    </declare-styleable>
 </resources>

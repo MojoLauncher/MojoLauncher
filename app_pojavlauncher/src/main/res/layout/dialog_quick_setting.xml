@@ -18,7 +18,7 @@
         android:gravity="center"
         android:paddingEnd="5dp"
         android:text="@string/mcl_setting_title_resolution_scaler"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,6 +39,7 @@
         android:layout_width="150dp"
         android:layout_height="0dp"
         android:gravity="end"
+        android:textColor="?android:attr/textColorPrimary"
         tools:text="50%"
 
         app:layout_constraintBottom_toBottomOf="@id/editResolution_textView"
@@ -51,7 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
         android:text="@string/preference_enable_gyro_title"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editResolution_seekbar"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
@@ -61,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
         android:text="@string/preference_gyro_invert_x_axis"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/checkboxGyro"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
@@ -71,7 +72,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
         android:text="@string/preference_gyro_invert_y_axis"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/checkboxGyroX"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
@@ -85,7 +86,7 @@
         android:gravity="center"
         android:paddingEnd="5dp"
         android:text="@string/preference_gyro_sensitivity_title"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/checkboxGyroY" />
 
@@ -108,6 +109,7 @@
         android:layout_width="150dp"
         android:layout_height="0dp"
         android:gravity="end"
+        android:textColor="?android:attr/textColorPrimary"
         tools:text="100%"
 
         app:layout_constraintBottom_toBottomOf="@id/editGyro_textView"
@@ -124,7 +126,7 @@
         android:gravity="center"
         android:paddingEnd="5dp"
         android:text="@string/mcl_setting_title_mousespeed"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editGyro_seekbar" />
 
@@ -147,6 +149,7 @@
         android:layout_width="150dp"
         android:layout_height="0dp"
         android:gravity="end"
+        android:textColor="?android:attr/textColorPrimary"
         tools:text="100%"
 
         app:layout_constraintBottom_toBottomOf="@id/editMouseSpeed_textView"
@@ -159,7 +162,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
         android:text="@string/mcl_disable_gestures"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editMouseSpeed_seekbar"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
@@ -173,7 +176,7 @@
         android:gravity="center"
         android:paddingEnd="5dp"
         android:text="@string/mcl_setting_title_longpresstrigger"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/checkboxGesture" />
 
@@ -196,6 +199,7 @@
         android:layout_width="150dp"
         android:layout_height="0dp"
         android:gravity="end"
+        android:textColor="?android:attr/textColorPrimary"
         tools:text="270 ms"
 
         app:layout_constraintBottom_toBottomOf="@id/editGestureDelay_textView"

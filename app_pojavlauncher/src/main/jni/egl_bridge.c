@@ -140,23 +140,37 @@ void load_vulkan() {
 int pojavInitOpenGL() {
     // Only affects GL4ES as of now
     const char *forceVsync = getenv("FORCE_VSYNC");
-    if (strcmp(forceVsync, "true") == 0)
+    if (forceVsync != NULL && strcmp(forceVsync, "true") == 0)
         pojav_environ->force_vsync = true;
 
     // NOTE: Override for now.
     const char *renderer = getenv("MOJO_RENDERER");
-    if (strncmp("opengles", renderer, 8) == 0) {
+    if (renderer == NULL) {
+        printf("EGLBridge: MOJO_RENDERER not set, defaulting to opengles\n");
+        renderer = "opengles";
+    }
+
+    if (strncmp("opengles", renderer, 8) == 0 ||
+        strncmp("holy-", renderer, 5) == 0 ||
+        strcmp(renderer, "mobile-glues") == 0 ||
+        strcmp(renderer, "krypton") == 0) {
         pojav_environ->config_renderer = RENDERER_GL4ES;
         set_gl_bridge_tbl();
-    } else if (strcmp(renderer, "vulkan_zink") == 0) {
+    } else if (strcmp(renderer, "vulkan_zink") == 0 || strcmp(renderer, "gallium") == 0) {
         pojav_environ->config_renderer = RENDERER_VK_ZINK;
-        load_vulkan();
-        setenv("GALLIUM_DRIVER","zink",1);
+        if (strcmp(renderer, "vulkan_zink") == 0) {
+            load_vulkan();
+            setenv("GALLIUM_DRIVER","zink",1);
+        }
         set_osm_bridge_tbl();
     }
-    if(br_init()) {
+
+    if(br_init != NULL && br_init()) {
         br_setup_window();
+    } else if (br_init == NULL) {
+        printf("EGLBridge: No bridge initialized for renderer: %s\n", renderer);
     }
+
     return 0;
 }
 

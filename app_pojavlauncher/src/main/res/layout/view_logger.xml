@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <View
         android:id="@+id/top_log_view"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="#555555"
+        android:layout_height="60dp"
+        android:background="#CC222222"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/log_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="25dp"
+        android:paddingHorizontal="20dp"
         android:text="@string/log_view_label_log_output"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
         android:textAppearance="?android:attr/textAppearanceMedium"
         app:layout_constraintBottom_toBottomOf="@+id/top_log_view"
         app:layout_constraintStart_toStartOf="@+id/top_log_view"
@@ -23,8 +26,11 @@
     <ToggleButton
         android:id="@+id/content_log_toggle_autoscroll"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginHorizontal="10dp"
+        android:layout_height="40dp"
+        android:layout_marginHorizontal="8dp"
+        android:background="@drawable/preference_item_background"
+        android:textColor="@android:color/white"
+        android:textAllCaps="false"
         android:textOff="@string/log_view_button_scroll_off"
         android:textOn="@string/log_view_button_scroll_on"
         app:layout_constraintBottom_toBottomOf="@+id/top_log_view"
@@ -34,8 +40,11 @@
     <ToggleButton
         android:id="@+id/content_log_toggle_log"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginHorizontal="10dp"
+        android:layout_height="40dp"
+        android:layout_marginHorizontal="8dp"
+        android:background="@drawable/preference_item_background"
+        android:textColor="@android:color/white"
+        android:textAllCaps="false"
         android:textOff="@string/log_view_button_output_off"
         android:textOn="@string/log_view_button_output_on"
         app:layout_constraintBottom_toBottomOf="@+id/top_log_view"
@@ -44,10 +53,12 @@
 
     <ImageButton
         android:id="@+id/log_view_cancel"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:scaleType="centerCrop"
-        android:src="@android:drawable/ic_delete"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="10dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/pref_toggle_cross"
+        app:tint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@+id/top_log_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -56,8 +67,7 @@
         android:id="@+id/content_log_scroll"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:alpha="0.8"
-        android:background="#000000"
+        android:background="#AA111111"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/top_log_view">
 
@@ -65,7 +75,11 @@
             android:id="@+id/content_log_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textIsSelectable="true"/>
+            android:padding="12dp"
+            android:textColor="#CCCCCC"
+            android:textSize="12sp"
+            android:textIsSelectable="true"
+            tools:ignore="SmallSp" />
 
     </com.kdt.DefocusableScrollView>
 

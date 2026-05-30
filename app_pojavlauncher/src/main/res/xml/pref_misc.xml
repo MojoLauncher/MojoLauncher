@@ -21,6 +21,7 @@
         <net.kdt.pojavlaunch.prefs.MaterialListPreference
             android:defaultValue="default"
             app:entries="@array/download_source_names"
+           android:icon="@drawable/ic_px_download"
             app:entryValues="@array/download_source_values"
             app:key="downloadSource"
             app:summary="@string/preference_download_source_description"

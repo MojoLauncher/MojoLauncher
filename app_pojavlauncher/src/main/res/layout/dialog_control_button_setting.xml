@@ -20,7 +20,7 @@
         android:gravity="center"
         android:paddingEnd="5dp"
         android:text="@string/global_name"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,6 +30,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:hint="Button Name"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textColorHint="?android:attr/textColorSecondary"
         android:imeOptions="flagNoExtractUi"
         android:maxLines="1"
 
@@ -45,7 +47,7 @@
         android:gravity="center"
         android:paddingEnd="5dp"
         android:text="@string/customctrl_size"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editName_editText"
         tools:visibility="visible" />
@@ -57,7 +59,7 @@
         android:gravity="center"
         android:imeOptions="flagNoExtractUi"
         android:inputType="numberDecimal"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editSize_textView" />
 
@@ -68,7 +70,7 @@
         android:gravity="center"
         android:imeOptions="flagNoExtractUi"
         android:inputType="numberDecimal"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/editSize_editTextX"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/editSize_editTextX"
@@ -80,7 +82,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:text="x"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/editSize_editTextX"
         app:layout_constraintEnd_toStartOf="@id/editSize_editTextY"
         app:layout_constraintStart_toEndOf="@id/editSize_editTextX"
@@ -91,18 +93,13 @@
         android:id="@+id/editMapping_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        android:textColor="?android:attr/textColorPrimary"
         android:paddingEnd="5dp"
         android:text="@string/customctrl_mapping"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editSize_editTextX" />
 
-    <!--
-        Spinners are hidden to handle to workaround the horizontal offset.
-        The horizontal offset was needed to display the spinner list at the same place.
-        Sadly it is broken since Android Jelly Bean and never scheduled to be fixed
-    -->
     <Spinner
         android:id="@+id/editMapping_spinner_1"
         android:layout_width="0dp"
@@ -161,11 +158,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Clickable textview linked to the spinners
-        Spinners are hidden at the same place because the dropdown offset doesn't work
-        Do those textview acts as the spinner idle state
-    -->
-
     <TextView
         android:id="@+id/mapping_1_textview"
         style="?android:attr/spinnerItemStyle"
@@ -175,7 +167,7 @@
         android:gravity="center"
         android:singleLine="true"
         android:textAlignment="inherit"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintEnd_toStartOf="@id/mapping_2_textview"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editMapping_textView"
@@ -188,7 +180,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:text="+"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/mapping_1_textview"
         app:layout_constraintEnd_toEndOf="@+id/mapping_1_textview"
         app:layout_constraintStart_toEndOf="@id/mapping_1_textview"
@@ -203,7 +195,7 @@
         android:gravity="center"
         android:singleLine="true"
         android:textAlignment="inherit"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/mapping_1_textview"
 
@@ -219,7 +211,7 @@
         android:gravity="center"
         android:singleLine="true"
         android:textAlignment="inherit"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintEnd_toStartOf="@id/mapping_4_textview"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/mapping_1_textview"
@@ -232,7 +224,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:text="+"
-
+        android:textColor="?android:attr/textColorPrimary"
 
         app:layout_constraintBottom_toBottomOf="@+id/mapping_3_textview"
         app:layout_constraintEnd_toEndOf="@+id/mapping_3_textview"
@@ -248,7 +240,7 @@
         android:gravity="center"
         android:singleLine="true"
         android:textAlignment="inherit"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/mapping_3_textview"
         app:layout_constraintTop_toTopOf="@id/mapping_3_textview"
@@ -265,7 +257,7 @@
         android:gravity="center"
         android:paddingEnd="5dp"
         android:text="@string/customctrl_orientation"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mapping_3_textview" />
 
@@ -286,7 +278,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
         android:text="@string/customctrl_toggle"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editOrientation_spinner"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
@@ -297,7 +289,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
         android:text="@string/customctrl_passthru"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/checkboxToggle"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
@@ -308,7 +300,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
         android:text="@string/customctrl_swipeable"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/checkboxPassThrough"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
@@ -319,7 +311,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
         android:text="@string/customctrl_forward_lock"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/checkboxSwipeable"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
@@ -329,6 +321,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
         android:text="@string/customctrl_absolute_tracking"
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/checkboxForwardLock"
         tools:ignore="UseSwitchCompatOrMaterialXml"/>
@@ -343,6 +336,7 @@
         android:gravity="center_vertical"
         android:paddingEnd="5dp"
         android:text="@string/customctrl_background_bitmap"
+        android:textColor="?android:attr/textColorPrimary"
         app:drawableEndIntegerScaling="true"
         app:drawableEndSize="20dp"
 
@@ -361,6 +355,7 @@
         android:gravity="center_vertical"
         android:paddingEnd="5dp"
         android:text="@string/customctrl_background_color"
+        android:textColor="?android:attr/textColorPrimary"
         app:drawableEndIntegerScaling="true"
         app:drawableEndSize="20dp"
 
@@ -379,6 +374,7 @@
         android:padding="5dp"
         android:drawablePadding="5dp"
         android:text="@string/customctrl_background_color_warning"
+        android:textColor="?android:attr/textColorSecondary"
         app:drawableStartSize="20dp"
 
 
@@ -395,7 +391,7 @@
         android:gravity="center"
         android:paddingEnd="5dp"
         android:text="@string/customctrl_stroke_width"
-
+        android:textColor="?android:attr/textColorPrimary"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editStrokeColor_textView" />
@@ -416,7 +412,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:text="100%"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintBottom_toBottomOf="@id/editStrokeWidth_textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/editStrokeWidth_textView" />
@@ -431,6 +427,7 @@
         android:gravity="center_vertical"
         android:paddingEnd="5dp"
         android:text="@string/customctrl_stroke_color"
+        android:textColor="?android:attr/textColorPrimary"
         app:drawableEndIntegerScaling="true"
         app:drawableEndSize="20dp"
 
@@ -447,7 +444,7 @@
         android:gravity="center"
         android:paddingEnd="5dp"
         android:text="@string/customctrl_corner_radius"
-
+        android:textColor="?android:attr/textColorPrimary"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editStrokeWidth_seekbar" />
@@ -468,7 +465,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:text="100%"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintBottom_toBottomOf="@id/editCornerRadius_textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/editCornerRadius_textView" />
@@ -481,7 +478,7 @@
         android:gravity="center"
         android:paddingEnd="5dp"
         android:text="@string/customctrl_button_opacity"
-
+        android:textColor="?android:attr/textColorPrimary"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editCornerRadius_seekbar" />
@@ -501,7 +498,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:text="100%"
-
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintBottom_toBottomOf="@id/editButtonOpacity_textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/editButtonOpacity_textView" />
@@ -512,6 +509,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/customctrl_visibility_title"
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintTop_toBottomOf="@+id/editButtonOpacity_seekbar"
         tools:layout_editor_absoluteX="6dp" />
 
@@ -520,6 +518,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/customctrl_visibility_ingame"
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintTop_toBottomOf="@+id/visibility_textview" />
 
     <CheckBox
@@ -527,6 +526,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/customctrl_visibility_in_menus"
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintTop_toBottomOf="@+id/visibility_game_checkbox" />
 
 

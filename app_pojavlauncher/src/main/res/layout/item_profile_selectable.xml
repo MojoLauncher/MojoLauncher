@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="4dp"
+    android:background="@drawable/menu_background"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardCornerRadius="@dimen/_8sdp"
+    app:cardElevation="0dp"
+    app:strokeWidth="0dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="10dp">
+
+        <RadioButton
+            android:id="@+id/profile_radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:duplicateParentState="true" />
+
+        <ImageView
+            android:id="@+id/profile_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            android:scaleType="centerInside"
+            android:contentDescription="@string/global_name" />
+
+        <TextView
+            android:id="@+id/profile_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:textColor="@color/primary_text"
+            android:textSize="15sp"
+            android:ellipsize="end"
+            android:singleLine="true" />
+
+        <ImageButton
+            android:id="@+id/profile_edit_button"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="6dp"
+            android:scaleType="centerInside"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_px_settings"
+            app:tint="@color/primary_text"
+            android:contentDescription="@string/global_edit" />
+
+        <ImageButton
+            android:id="@+id/profile_delete_button"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="4dp"
+            android:padding="6dp"
+            android:scaleType="centerInside"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_px_trash"
+            app:tint="@android:color/holo_red_light"
+            android:contentDescription="@string/global_delete" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

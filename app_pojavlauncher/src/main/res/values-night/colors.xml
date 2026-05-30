@@ -5,7 +5,13 @@
     <color name="divider">#1C1C1C</color>
     <color name="background_overlay">#1A1A1A</color>
     <color name="background_status_bar">#121212</color>
-    <color name="background_bottom_bar">#151515</color>
+    <color name="background_bottom_bar">@color/background_app</color>
+    <!-- Opaque base overlay color; actual transparency is controlled at runtime -->
+    <color name="background_image_overlay">#000000</color>
+
+    <!-- Main UI -->
+    <color name="minebutton_color">#FFFFFF</color>
+    <color name="minebutton_text_color">#000000</color>
 
     <color name="surface">#0F0F0F</color>
     <color name="on_surface">#FFFFFF</color>
@@ -18,6 +24,14 @@
     <!-- Text -->
     <color name="primary_text">#FFFFFF</color>
     <color name="secondary_text">#B8B8B8</color>
+
+    <!-- Custom Toggle Colors (Dark Mode: White BG, Black Knob) -->
+    <color name="switch_track_on">#FFFFFF</color>
+    <color name="switch_track_off">#333333</color>
+    <color name="switch_knob_on">#000000</color>
+    <color name="switch_knob_off">#000000</color>
+    <color name="switch_icon_on">#FFFFFF</color>
+    <color name="switch_icon_off">#FFFFFF</color>
 
     <!-- Compatible version highlighting -->
     <color name="compatible_version_bg">#1E3A24</color>

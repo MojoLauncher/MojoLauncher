@@ -13,7 +13,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:scaleType="fitCenter"
-        app:tint="@android:color/white" />
+        app:tint="@color/primary_text" />
 
     <TextView
         android:id="@+id/entry_name"
@@ -23,7 +23,7 @@
         android:layout_marginStart="16dp"
         android:ellipsize="marquee"
         android:singleLine="true"
-        android:textColor="@android:color/white"
+        android:textColor="@color/primary_text"
         android:textSize="14sp" />
 
     <View
