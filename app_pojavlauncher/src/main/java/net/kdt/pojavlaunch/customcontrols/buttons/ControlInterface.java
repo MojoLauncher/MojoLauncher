@@ -73,9 +73,9 @@ public interface ControlInterface extends View.OnLongClickListener, GrabListener
 
     @Override
     default void onGrabState(boolean isGrabbing) {
-        if (getControlLayoutParent() != null && getControlLayoutParent().getModifiable()) return; // Disable when edited
-        setVisible(((getProperties().displayInGame && isGrabbing) || (getProperties().displayInMenu && !isGrabbing)) &&
-                getControlLayoutParent() != null && getControlLayoutParent().areControlVisible());
+        if (getControlLayoutParent() == null || getControlLayoutParent().getModifiable()) return; // Disable when edited
+        setVisible(((getProperties().displayInGame && isGrabbing) || (getProperties().displayInMenu && !isGrabbing))
+                && getControlLayoutParent().areControlVisible());
     }
 
     default ControlLayout getControlLayoutParent() {
