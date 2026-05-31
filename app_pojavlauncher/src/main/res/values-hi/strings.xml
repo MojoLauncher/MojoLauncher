@@ -64,7 +64,7 @@
     <string name="mcl_setting_title_javaargs">JVM लॉन्च आर्ग्यूमेंट्स</string>
     <string name="mcl_setting_subtitle_javaargs">सावधान रहें, ज्ञान के बिना संशोधित करने पर गेम क्रैश हो सकता है।</string>
     <string name="mcl_setting_category_renderer">रेंडरर</string>
-    <string name="mcl_setting_renderer_gles2_4">होली GL4ES - (सभी संस्करण, तेज़)</string>
+    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (सभी संस्करण, तेज़)</string>
     <string name="mcl_setting_renderer_vulkan_zink">ज़िंक (वल्कन) - (सभी संस्करण, मध्यम)</string>
     <string name="mcl_setting_renderer_ltw">LTW (ओपनजीएल ईएस 3) - केवल 1.17+</string>
     <string name="mcl_setting_veroption_release">रीलीज़</string>
@@ -295,25 +295,25 @@
     <string name="preference_force_big_core_desc">Minecraft रेंडर थ्रेड को सबसे ज़्यादा अधिकतम फ़्रीक्वेंसी वाले कोर पर चलने के लिए बाध्य करता है।</string>
     <string name="version_select_hint">एक संस्करण चुनें</string>
     <string name="forge_dl_progress">%s के लिए इंस्टॉलर डाउनलोड हो रहा है</string>
-    <string name="forge_dl_searching">फोर्ज संस्करण नंबर खोजा जा रहा है</string>
+    <string name="forge_dl_searching">Forge संस्करण नंबर खोजा जा रहा है</string>
     <string name="modloader_dl_failed_to_load_list">संस्करण सूची लोड करने में विफल!</string>
-    <string name="forge_dl_no_installer">माफ़ करें, लेकिन फोर्ज के इस संस्करण में इंस्टॉलर नहीं है, जो अभी तक समर्थित नहीं है।</string>
-    <string name="forge_dl_select_version">फोर्ज संस्करण चुनें</string>
+    <string name="forge_dl_no_installer">माफ़ करें, लेकिन Forge के इस संस्करण में इंस्टॉलर नहीं है, जो अभी तक समर्थित नहीं है।</string>
+    <string name="forge_dl_select_version">Forge संस्करण चुनें</string>
     <string name="fabric_dl_progress">%s लोडर मेटाडेटा डाउनलोड हो रहा है</string>
     <string name="fabric_dl_loader_version">%s लोडर संस्करण</string>
     <string name="fabric_dl_game_version">Minecraft संस्करण</string>
     <string name="fabric_dl_install">इंस्टॉल करें</string>
     <string name="fabric_dl_cant_read_meta">%s लोडर मेटाडेटा पढ़ने में विफल। कृपया बाद में फिर से प्रयास करें।</string>
-    <string name="fabric_dl_cant_read_meta2">फैब्रिक लोडर मेटाडेटा पढ़ने में विफल। कृपया बाद में फिर से प्रयास करें।</string>
-    <string name="modloader_dl_install_fabric_instance">फैब्रिक इंस्टेंस बनाएँ</string>
-    <string name="modloader_dl_install_quilt_instance">क्विल्ट इंस्टेंस बनाएँ</string>
-    <string name="modloader_dl_install_forge_instance">फोर्ज इंस्टेंस बनाएँ</string>
+    <string name="fabric_dl_cant_read_meta2">Fabric लोडर मेटाडेटा पढ़ने में विफल। कृपया बाद में फिर से प्रयास करें।</string>
+    <string name="modloader_dl_install_fabric_instance">Fabric इंस्टेंस बनाएँ</string>
+    <string name="modloader_dl_install_quilt_instance">Quilt इंस्टेंस बनाएँ</string>
+    <string name="modloader_dl_install_forge_instance">Forge इंस्टेंस बनाएँ</string>
     <string name="create_instance_vanilla">वैनिला इंस्टेंस बनाएँ</string>
     <string name="create_profile_vanilla_like_versions">वैनिला जैसी संस्करण</string>
     <string name="create_profile_modded_versions">मॉड की गई संस्करण</string>
     <string name="fabric_dl_loader_title">संस्करण चुनें</string>
-    <string name="of_dl_select_version">ऑप्टिफाइन संस्करण चुनें</string>
-    <string name="of_dl_failed_to_scrape">ऑप्टिफाइन इंस्टॉलेशन के लिए डेटा एकत्र करने में विफल।</string>
+    <string name="of_dl_select_version">OptiFine संस्करण चुनें</string>
+    <string name="of_dl_failed_to_scrape">OptiFine इंस्टॉलेशन के लिए डेटा एकत्र करने में विफल।</string>
     <string name="of_dl_progress">%s डाउनलोड हो रहा है</string>
     <string name="mod_dl_install_optifine">OptiFine इंस्टॉल करें</string>
 
@@ -346,7 +346,7 @@
     <string name="notif_error_occured_desc">अधिक जानकारी देखने के लिए क्लिक करें</string>
     <string name="fabric_dl_only_stable">केवल स्थिर संस्करण दिखाएँ</string>
     <string name="dl_tampered_manifest_title">फ़ाइल सत्यापन चेतावनी</string>
-    <string name="dl_tampered_manifest"><![CDATA[मिरर पर गेम संस्करण मैनिफेस्ट आधिकारिक मोजांग संस्करण मैनिफेस्ट से मेल नहीं खाता है, जिसका अर्थ है कि इसमें छेड़छाड़ की गई हो सकती है।<br/><b>यह सुरक्षित नहीं है। यदि आप जारी रखते हैं तो आपकी व्यक्तिगत जानकारी खतरे में पड़ सकती है।</b><br/>यदि आप अभी भी मिरर का उपयोग करना चाहते हैं, तो "मैनिफेस्ट जांच बंद करें" दबाएं और डाउनलोड फिर से शुरू करें।<br/>यदि आप आधिकारिक डाउनलोड स्रोत का उपयोग करना चाहते हैं, तो "आधिकारिक साइट पर स्विच करें" दबाएं और डाउनलोड फिर से शुरू करें।<br/>]]>
+    <string name="dl_tampered_manifest"><![CDATA[मिरर पर गेम संस्करण मैनिफेस्ट आधिकारिक Mojang संस्करण मैनिफेस्ट से मेल नहीं खाता है, जिसका अर्थ है कि इसमें छेड़छाड़ की गई हो सकती है।<br/><b>यह सुरक्षित नहीं है। यदि आप जारी रखते हैं तो आपकी व्यक्तिगत जानकारी खतरे में पड़ सकती है।</b><br/>यदि आप अभी भी मिरर का उपयोग करना चाहते हैं, तो "मैनिफेस्ट जांच बंद करें" दबाएं और डाउनलोड फिर से शुरू करें।<br/>यदि आप आधिकारिक डाउनलोड स्रोत का उपयोग करना चाहते हैं, तो "आधिकारिक साइट पर स्विच करें" दबाएं और डाउनलोड फिर से शुरू करें।<br/>]]>
     </string>
     <string name="dl_turn_off_manifest_checks">मैनिफेस्ट जांच बंद करें</string>
     <string name="dl_switch_to_official_site">आधिकारिक साइट पर स्विच करें</string>
