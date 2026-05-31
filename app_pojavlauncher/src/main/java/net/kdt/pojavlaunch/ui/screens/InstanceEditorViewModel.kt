@@ -12,6 +12,7 @@ import net.kdt.pojavlaunch.instances.InstanceIconProvider
 import net.kdt.pojavlaunch.instances.Instances.Companion.loadSelectedInstance
 import net.kdt.pojavlaunch.multirt.MultiRTUtils
 import net.kdt.pojavlaunch.multirt.Runtime
+import net.kdt.pojavlaunch.utils.RendererCompatUtil
 import java.io.IOException
 
 class InstanceEditorViewModel : ViewModel() {
@@ -47,12 +48,10 @@ class InstanceEditorViewModel : ViewModel() {
         availableRuntimes = runtimes
         selectedRuntime = runtimes.find { it.name == selectedInstance.selectedRuntime } ?: runtimes.lastOrNull()
 
-        // Renderers: Use the full list from resources to match SettingsScreen
-        val allRendererIds = context.resources.getStringArray(R.array.renderer_values).toList()
-        val allRendererNames = context.resources.getStringArray(R.array.renderer).toList()
-        
-        rendererIds = allRendererIds
-        rendererDisplayNames = allRendererNames + context.getString(R.string.global_default)
+        // Renderers: Filtered by device compatibility, matching SettingsScreen logic
+        val compatibleRenderers = RendererCompatUtil.getCompatibleRenderers(context)
+        rendererIds = compatibleRenderers.rendererIds
+        rendererDisplayNames = (compatibleRenderers.rendererDisplayNames?.filterNotNull() ?: emptyList()) + context.getString(R.string.global_default)
         
         val rIndex = rendererIds.indexOf(selectedInstance.launchRenderer)
         selectedRendererIndex = if (rIndex == -1) rendererDisplayNames.size - 1 else rIndex

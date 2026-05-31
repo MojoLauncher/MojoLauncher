@@ -43,7 +43,6 @@ class DirectoryManagerFragment : Fragment() {
 
         return ComposeView(requireContext()).apply {
             setContent {
-                // ✅ Enabled dynamic color
                 PojavTheme(dynamicColor = true) {
                     DirectoryManagerScreen(
                         onBack = { Tools.backToMainMenu(requireActivity()) },

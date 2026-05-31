@@ -29,11 +29,11 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Apply insets mode before super.onCreate to ensure cutout mode is applied early
+        super.onCreate(savedInstanceState)
+        
+        // Apply insets mode AFTER super.onCreate to ensure android.R.id.content is available
         setLocale(this)
         Tools.setInsetsMode(this, setFullscreen(), ignoreNotch = shouldIgnoreNotch())
-        
-        super.onCreate(savedInstanceState)
 
         Tools.getDisplayMetrics(this)
     }

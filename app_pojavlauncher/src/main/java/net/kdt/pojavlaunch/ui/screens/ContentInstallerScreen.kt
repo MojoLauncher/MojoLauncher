@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -20,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,10 +46,10 @@ import net.ashmeet.hyperlauncher.R
 import net.kdt.pojavlaunch.BaseActivity
 import net.kdt.pojavlaunch.ui.theme.PojavTheme
 
-enum class ContentInstallerType(val projectType: String, val labelRes: Int) {
-    MODS("mod", R.string.installer_mods),
-    SHADERS("shader", R.string.installer_shaders),
-    RESOURCES("resourcepack", R.string.installer_packs)
+enum class ContentInstallerType(val projectType: String, val labelRes: Int, val iconRes: Int) {
+    MODS("mod", R.string.installer_mods, R.drawable.add_row_below_40px),
+    SHADERS("shader", R.string.installer_shaders, R.drawable.lightbulb_2_40px),
+    RESOURCES("resourcepack", R.string.installer_packs, R.drawable.box_edit_40px)
 }
 
 data class ModrinthProject(
@@ -131,88 +133,51 @@ fun ContentInstallerScreen(
                     .padding(end = 8.dp),
                 color = Color.Transparent
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(leftScrollState)
-                        .padding(4.dp)
-                ) {
-                    if (viewingProject == null) {
-                        // Back button and title
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            IconButton(onClick = onBack, modifier = Modifier.size(36.dp)) {
-                                Icon(
-                                    Icons.AutoMirrored.Filled.ArrowBack, 
-                                    contentDescription = "Back", 
-                                    tint = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = "Content Installer",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        // Type Selection
-                        Row(
+                if (viewingProject == null) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(leftScrollState)
+                            .padding(4.dp)
+                    ) {
+                        // Type Selection - Using Stable TabRow with icons only
+                        val selectedTabIndex = ContentInstallerType.entries.indexOf(selectedType)
+                        TabRow(
+                            selectedTabIndex = selectedTabIndex,
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
+                            contentColor = MaterialTheme.colorScheme.primary,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
-                                .padding(4.dp),
-                            horizontalArrangement = Arrangement.SpaceEvenly
+                                .clip(RoundedCornerShape(12.dp)),
+                            indicator = { tabPositions ->
+                                if (selectedTabIndex < tabPositions.size) {
+                                    TabRowDefaults.SecondaryIndicator(
+                                        Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                }
+                            },
+                            divider = {}
                         ) {
                             ContentInstallerType.entries.forEach { type ->
                                 val isSelected = selectedType == type
-                                Surface(
+                                Tab(
+                                    selected = isSelected,
                                     onClick = { 
                                         selectedType = type
                                         onSearch(searchQuery, selectedType, selectedVersion, selectedLoader)
                                     },
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .height(36.dp)
-                                        .padding(2.dp),
-                                    shape = RoundedCornerShape(10.dp),
-                                    color = if (isSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f) else Color.Transparent,
-                                    contentColor = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
-                                ) {
-                                    Box(contentAlignment = Alignment.Center) {
-                                        Text(
-                                            text = stringResource(id = type.labelRes),
-                                            fontSize = 11.sp,
-                                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
+                                    icon = {
+                                        Icon(
+                                            painter = painterResource(id = type.iconRes),
+                                            contentDescription = stringResource(id = type.labelRes),
+                                            modifier = Modifier.size(20.dp)
                                         )
-                                    }
-                                }
+                                    },
+                                    selectedContentColor = MaterialTheme.colorScheme.primary,
+                                    unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
                             }
-                        }
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        // Quick Actions
-                        Row(modifier = Modifier.fillMaxWidth()) {
-                            InstallerImageButton(
-                                onClick = onOpenDownloads,
-                                icon = R.drawable.ic_px_folder,
-                                contentDescription = "Downloads",
-                                modifier = Modifier.weight(1f)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            InstallerImageButton(
-                                onClick = onInstallLocal,
-                                icon = R.drawable.ic_px_file,
-                                contentDescription = "Install local",
-                                modifier = Modifier.weight(1f)
-                            )
                         }
 
                         Spacer(modifier = Modifier.height(8.dp))
@@ -273,10 +238,15 @@ fun ContentInstallerScreen(
                                 }
                             )
                         }
-                    } else {
-                        // Viewing Project Detail (Left Panel)
+                    }
+                } else {
+                    // Viewing Project Detail (Left Panel) - Fixed positioning
+                    Box(modifier = Modifier.fillMaxSize().padding(4.dp)) {
                         Column(
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .verticalScroll(leftScrollState)
+                                .padding(bottom = 60.dp), // Ensure scrolling doesn't overlap button
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             val iconBitmap = viewingProject.iconBitmap
@@ -300,6 +270,7 @@ fun ContentInstallerScreen(
 
                             Spacer(modifier = Modifier.height(12.dp))
 
+                            @Suppress("DEPRECATION")
                             Text(
                                 text = viewingProject.title,
                                 style = MaterialTheme.typography.titleLarge,
@@ -311,43 +282,34 @@ fun ContentInstallerScreen(
 
                             Spacer(modifier = Modifier.height(8.dp))
 
+                            @Suppress("DEPRECATION")
                             Text(
                                 text = viewingProject.description,
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                maxLines = 4,
-                                overflow = TextOverflow.Ellipsis
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
                             )
+                        }
 
-                            Spacer(modifier = Modifier.weight(1f))
-
-                            Button(
-                                onClick = onBackToProjects,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(48.dp),
-                                shape = RoundedCornerShape(16.dp),
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f),
-                                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                                )
-                            ) {
-                                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, modifier = Modifier.size(18.dp))
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text("Back")
-                            }
+                        // High Emphasis Pill Shape Back Button - Centered at the bottom
+                        Button(
+                            onClick = onBackToProjects,
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .height(40.dp)
+                                .fillMaxWidth(0.9f),
+                            shape = CircleShape,
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                contentColor = MaterialTheme.colorScheme.onPrimary
+                            ),
+                            elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
+                        ) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text("Back", fontWeight = FontWeight.Bold, fontSize = 13.sp)
                         }
                     }
-
-                    Spacer(modifier = Modifier.height(12.dp))
-                    
-                    // Status Text
-                    Text(
-                        text = statusText,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontSize = 11.sp,
-                        modifier = Modifier.padding(horizontal = 4.dp)
-                    )
                 }
             }
 
@@ -563,7 +525,7 @@ fun ProjectItemView(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.05f))
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.1f))
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
@@ -622,7 +584,7 @@ fun VersionItemView(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         color = if (isCompatible) MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
-        border = BorderStroke(1.dp, if (isCompatible) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.05f))
+        border = BorderStroke(1.dp, if (isCompatible) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.1f))
     ) {
         Row(
             modifier = Modifier.padding(12.dp),

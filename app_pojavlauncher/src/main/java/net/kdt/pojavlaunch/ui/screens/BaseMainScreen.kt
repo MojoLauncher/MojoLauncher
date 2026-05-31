@@ -42,6 +42,7 @@ import net.kdt.pojavlaunch.customcontrols.handleview.DrawerPullButton
 import net.kdt.pojavlaunch.customcontrols.keyboard.TouchCharInput
 import net.kdt.pojavlaunch.customcontrols.mouse.HotbarView
 import net.kdt.pojavlaunch.customcontrols.mouse.Touchpad
+import net.kdt.pojavlaunch.prefs.LauncherPreferences
 import net.kdt.pojavlaunch.ui.theme.PojavTheme
 
 @Composable
@@ -62,24 +63,29 @@ fun BaseMainScreen(
 ) {
     val isPreview = LocalInspectionMode.current
     val backgroundBitmap = if (isPreview) null else BaseActivity.getBackgroundBitmap()
+    val ignoreNotch = if (isPreview) true else LauncherPreferences.PREF_IGNORE_NOTCH
 
-    // All colors pulled from MaterialTheme so they follow dynamic/wallpaper scheme
     val primaryContainerColor = MaterialTheme.colorScheme.primaryContainer
     val scrimColor = MaterialTheme.colorScheme.scrim
     val surfaceContainerHighColor = MaterialTheme.colorScheme.surfaceContainerHigh
     val primaryColor = MaterialTheme.colorScheme.primary
     val onSurfaceVariantColor = MaterialTheme.colorScheme.onSurfaceVariant
 
-    // Expand state for the Navigation Rail
     var isRailExpanded by remember { mutableStateOf(false) }
     val railWidth by animateDpAsState(
         targetValue = if (isRailExpanded) 200.dp else 80.dp,
         label = "railWidth"
     )
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    val layoutModifier = if (ignoreNotch) {
+        Modifier.fillMaxSize()
+    } else {
+        Modifier.fillMaxSize()
+            .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal))
+    }
 
-        // 1. Activity Background (wallpaper bitmap)
+    Box(modifier = layoutModifier) {
+
         if (backgroundBitmap != null) {
             androidx.compose.foundation.Image(
                 bitmap = backgroundBitmap.asImageBitmap(),
@@ -88,7 +94,6 @@ fun BaseMainScreen(
                 contentScale = ContentScale.Crop
             )
         } else {
-            // Fallback when no wallpaper bitmap: use dynamic surface color
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -96,14 +101,12 @@ fun BaseMainScreen(
             )
         }
 
-        // 2. Background Overlay — tinted from dynamic primaryContainer instead of hardcoded XML color
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(primaryContainerColor.copy(alpha = 0.18f))
         )
 
-        // 3. Main Content Layer (GL surface, controls, logger, etc.)
         AndroidView(
             factory = { ctx ->
                 val contentFrame = FrameLayout(ctx).apply { id = R.id.content_frame }
@@ -171,9 +174,7 @@ fun BaseMainScreen(
             modifier = Modifier.fillMaxSize()
         )
 
-        // 4. Navigation Rail Overlay
         if (drawerState.isOpen) {
-            // Scrim — uses MaterialTheme.colorScheme.scrim instead of hardcoded Color.Black
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -199,7 +200,6 @@ fun BaseMainScreen(
                 modifier = Modifier
                     .fillMaxHeight()
                     .width(railWidth),
-                // FIX: use surfaceContainer so the rail matches dynamic color scheme
                 containerColor = MaterialTheme.colorScheme.surfaceContainer,
                 header = {
                     IconButton(onClick = { isRailExpanded = !isRailExpanded }) {
@@ -209,7 +209,6 @@ fun BaseMainScreen(
                             else
                                 Icons.AutoMirrored.Filled.KeyboardArrowRight,
                             contentDescription = "Expand menu",
-                            // FIX: icon color from dynamic scheme instead of hardcoded
                             tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
@@ -227,7 +226,6 @@ fun BaseMainScreen(
             }
         }
 
-        // 5. Loading / Launch Progress Overlay
         AnimatedVisibility(
             visible = loadingVisible,
             enter = fadeIn(),
@@ -236,7 +234,6 @@ fun BaseMainScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    // FIX: scrim color instead of hardcoded Color.Black
                     .background(scrimColor.copy(alpha = 0.5f))
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
@@ -247,7 +244,6 @@ fun BaseMainScreen(
             ) {
                 Surface(
                     shape = RoundedCornerShape(16.dp),
-                    // FIX: surfaceContainerHigh adapts to dynamic/wallpaper color scheme
                     color = surfaceContainerHighColor,
                     tonalElevation = 8.dp,
                     modifier = Modifier.padding(24.dp)
@@ -259,7 +255,6 @@ fun BaseMainScreen(
                     ) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(48.dp),
-                            // FIX: primary color matches wallpaper accent — was hardcoded Color.White
                             color = primaryColor,
                             trackColor = primaryColor.copy(alpha = 0.2f),
                             strokeWidth = 4.dp
@@ -269,13 +264,11 @@ fun BaseMainScreen(
                             text = "Launching game...",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
-                            // FIX: onSurface instead of hardcoded Color.White
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
                             text = "Please wait",
                             style = MaterialTheme.typography.bodySmall,
-                            // FIX: onSurfaceVariant for secondary text — was Color.White with alpha
                             color = onSurfaceVariantColor,
                             modifier = Modifier.padding(top = 4.dp)
                         )
@@ -285,8 +278,6 @@ fun BaseMainScreen(
         }
     }
 }
-
-// ─── Previews ────────────────────────────────────────────────────────────────
 
 @Preview(showBackground = true, device = "spec:width=1280dp,height=800dp,orientation=landscape")
 @Composable

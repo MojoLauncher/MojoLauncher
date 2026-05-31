@@ -44,10 +44,14 @@ class AlphaView(ctx: Context?, attrs: AttributeSet?) : View(ctx, attrs) {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_MOVE) {
+            parent.requestDisallowInterceptTouchEvent(true)
+        }
+
         mSelectedAlpha = MathUtils.clamp(
-            mAlphaDiv * event.getY(),
+            mAlphaDiv * event.y,
             0f,
-            TODO("Could not convert float literal '0xff' to Kotlin")
+            255f
         ).toInt()
         if (mAlphaSelectionListener != null) mAlphaSelectionListener!!.onAlphaSelected(
             mSelectedAlpha
@@ -73,6 +77,8 @@ class AlphaView(ctx: Context?, attrs: AttributeSet?) : View(ctx, attrs) {
         mAlphaDiv = 255f / mViewSize.bottom
         mScreenDiv = mViewSize.bottom / 255f
         mWidthThird = mViewSize.right / 3f
+        
+        mCheckerboardDrawable.setBounds(0, 0, w, h)
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -80,6 +86,6 @@ class AlphaView(ctx: Context?, attrs: AttributeSet?) : View(ctx, attrs) {
         canvas.drawRect(mViewSize, mShaderPaint)
         val linePos = mSelectedAlpha * mScreenDiv
         canvas.drawLine(0f, linePos, mWidthThird, linePos, mBlackPaint)
-        canvas.drawLine(mWidthThird * 2, linePos, getRight().toFloat(), linePos, mBlackPaint)
+        canvas.drawLine(mWidthThird * 2, linePos, right.toFloat(), linePos, mBlackPaint)
     }
 }

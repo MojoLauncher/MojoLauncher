@@ -1,6 +1,5 @@
 package net.kdt.pojavlaunch.downloader
 
-import android.util.Log
 import java.io.IOException
 
 abstract class DownloaderTask protected constructor(
@@ -12,9 +11,6 @@ abstract class DownloaderTask protected constructor(
             performTask()
         } catch (e: IOException) {
             mDownloader.taskException(e)
-        } catch (t: Throwable) {
-            Log.e("DownloaderTask", "Unexpected error during task execution", t)
-            mDownloader.taskException(IOException("Unexpected error: " + t.message, t))
         }
     }
 

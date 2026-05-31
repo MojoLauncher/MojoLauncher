@@ -60,14 +60,15 @@ class LauncherActivity : BaseActivity() {
     private var mNotificationManager: NotificationManager? = null
 
     // Compose State
-    private var isTaskRunningState = mutableStateOf(false)
+    private var taskCountState = mutableIntStateOf(0)
     private var isProgressVisibleState = mutableStateOf(false)
+    private var isFragmentOpenState = mutableStateOf(false)
 
     /* Allows to switch from one button "type" to another */
     private val mFragmentCallbackListener: FragmentManager.FragmentLifecycleCallbacks =
         object : FragmentManager.FragmentLifecycleCallbacks() {
             override fun onFragmentResumed(fm: FragmentManager, f: Fragment) {
-                // Update icons or state if needed
+                isFragmentOpenState.value = f !is MainMenuFragment
             }
         }
 
@@ -89,7 +90,7 @@ class LauncherActivity : BaseActivity() {
     }
 
     private val mLaunchGameListener = ExtraListener { _: String?, _: Boolean? ->
-        // Check if tasks are ongoing (could use isTaskRunningState.value)
+        // Check if tasks are ongoing (could use taskCountState.intValue)
         val selectedInstance = loadSelectedInstance()
 
         if (selectedInstance == null) {
@@ -158,7 +159,7 @@ class LauncherActivity : BaseActivity() {
     private val mTopProgressBarListener: TaskCountListener = object : TaskCountListener {
         override fun onUpdateTaskCount(taskCount: Int): Boolean {
             runOnUiThread {
-                isTaskRunningState.value = taskCount > 0
+                taskCountState.intValue = taskCount
                 if (taskCount == 0) isProgressVisibleState.value = false
             }
             return false
@@ -169,11 +170,6 @@ class LauncherActivity : BaseActivity() {
     private var mRequestNotificationPermissionRunnable: WeakReference<Runnable?>? = null
 
     override fun setFullscreen(): Boolean {
-        return true
-    }
-
-    override fun shouldIgnoreNotch(): Boolean {
-        // ✅ Fix: Force ignore notch padding to fill the cutout area in the launcher
         return true
     }
 
@@ -212,6 +208,8 @@ class LauncherActivity : BaseActivity() {
             }
         })
 
+        supportFragmentManager.registerFragmentLifecycleCallbacks(mFragmentCallbackListener, true)
+
         setContent {
             PojavTheme(dynamicColor = true) {
                 LauncherScreen(
@@ -222,15 +220,15 @@ class LauncherActivity : BaseActivity() {
                         val manager = supportFragmentManager
                         if (!manager.isStateSaved) {
                             val fragment = manager.findFragmentById(R.id.container_fragment)
-                            if (fragment is MainMenuFragment) {
+                            if (fragment is SettingsFragment) {
+                                Tools.backToMainMenu(this)
+                            } else {
                                 Tools.swapFragment(
                                     this,
                                     SettingsFragment::class.java,
                                     SettingsFragment.TAG,
                                     null
                                 )
-                            } else {
-                                Tools.backToMainMenu(this)
                             }
                         }
                     },
@@ -276,7 +274,7 @@ class LauncherActivity : BaseActivity() {
                         }
                     },
                     onProgressClick = {
-                        if (isTaskRunningState.value) {
+                        if (taskCountState.intValue > 0) {
                             isProgressVisibleState.value = !isProgressVisibleState.value
                         } else {
                             Toast.makeText(this, "No tasks running", Toast.LENGTH_SHORT).show()
@@ -284,7 +282,8 @@ class LauncherActivity : BaseActivity() {
                     },
                     fragmentManager = supportFragmentManager,
                     isProgressVisible = isProgressVisibleState.value,
-                    isTaskRunning = isTaskRunningState.value
+                    taskCount = taskCountState.intValue,
+                    isFragmentOpen = isFragmentOpenState.value
                 )
             }
         }
@@ -303,7 +302,6 @@ class LauncherActivity : BaseActivity() {
 
     override fun onStart() {
         super.onStart()
-        supportFragmentManager.registerFragmentLifecycleCallbacks(mFragmentCallbackListener, true)
     }
 
     override fun onDestroy() {

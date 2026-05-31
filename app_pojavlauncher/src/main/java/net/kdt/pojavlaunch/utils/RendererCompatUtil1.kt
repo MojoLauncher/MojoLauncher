@@ -102,6 +102,12 @@ object RendererCompatUtil {
             Log.d(TAG, "Found bundled libOSMesa_8.so")
             detectedRendererIds.add("gallium")
         }
+        
+        // Check for bundled Zink (Mesa)
+        if (File(Tools.NATIVE_LIB_DIR, "libGL.so").exists() || File(Tools.NATIVE_LIB_DIR, "libzink.so").exists()) {
+            Log.d(TAG, "Found bundled Zink/Mesa binary")
+            detectedRendererIds.add("vulkan_zink")
+        }
 
 
         // Dynamic plugin discovery
@@ -131,6 +137,7 @@ object RendererCompatUtil {
             if (plugin.checkLibraries("libmobileglues.so")) detectedRendererIds.add("mobile-glues")
             if (plugin.checkLibraries("libng_gl4es.so")) detectedRendererIds.add("krypton")
             if (plugin.checkLibraries("libOSMesa_8.so")) detectedRendererIds.add("gallium")
+            if (plugin.checkLibraries("libGL.so") || plugin.checkLibraries("libzink.so")) detectedRendererIds.add("vulkan_zink")
         }
 
         val rendererIds: MutableList<String?> = ArrayList<String?>()
@@ -166,9 +173,16 @@ object RendererCompatUtil {
                 if (rendererId == "mobile-glues" && !deviceHasOpenGLES3) continue
 
 
-                // If not in detected list and not a basic renderer, skip it
-                if (rendererId != "vulkan_zink") {
-                    Log.v(TAG, "Skipping " + rendererId + " (Not detected and not Vulkan/Zink)")
+                // If not in detected list, check if it's a built-in Adreno-specific case or skip
+                if (rendererId == "vulkan_zink") {
+                     // Adreno devices usually have Turnip support via detection or built-in logic
+                     // If we haven't detected it via plugin/bundled, and it's not a known Adreno, skip
+                     if (!Build.HARDWARE.lowercase().contains("adreno") && !Build.BOARD.lowercase().contains("qcom")) {
+                         Log.v(TAG, "Skipping vulkan_zink on non-Adreno device without plugin")
+                         continue
+                     }
+                } else {
+                    Log.v(TAG, "Skipping " + rendererId + " (Not detected)")
                     continue
                 }
             }

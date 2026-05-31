@@ -25,7 +25,6 @@ class LocalLoginFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                // ✅ Enabled dynamic color
                 PojavTheme(dynamicColor = true) {
                     LocalLoginScreen(
                         onBack = { parentFragmentManager.popBackStack() },

@@ -44,7 +44,6 @@ class ProfileSelectionFragment : Fragment() {
 
         return ComposeView(requireContext()).apply {
             setContent {
-                // ✅ Enabled dynamic color
                 PojavTheme(dynamicColor = true) {
                     ProfileSelectionScreen(
                         onAddClick = { openTypeSelect() },

@@ -9,10 +9,12 @@ import net.kdt.pojavlaunch.Tools
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper
 import net.kdt.pojavlaunch.tasks.AsyncMinecraftDownloader.DoneListener
 import net.kdt.pojavlaunch.utils.NotificationUtils
+import java.io.File
 
 class ContextAwareDoneListener(baseContext: Context, private val mNormalizedVersionid: String?) :
     DoneListener, ContextExecutorTask {
     private val mErrorString: String
+    private var mClassPath: Array<File> = emptyArray()
 
     init {
         this.mErrorString = baseContext.getString(R.string.mc_download_failed)
@@ -21,11 +23,14 @@ class ContextAwareDoneListener(baseContext: Context, private val mNormalizedVers
     private fun createGameStartIntent(context: Context?): Intent {
         val mainIntent = Intent(context, MainActivity::class.java)
         mainIntent.putExtra(MainActivity.INTENT_MINECRAFT_VERSION, mNormalizedVersionid)
+        // Optionally pass classpath if needed by MainActivity
+        // mainIntent.putExtra("classPath", mClassPath.map { it.absolutePath }.toTypedArray())
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         return mainIntent
     }
 
-    override fun onDownloadDone() {
+    override fun onDownloadDone(classPath: Array<File>) {
+        this.mClassPath = classPath
         ProgressKeeper.waitUntilDone(Runnable { ContextExecutor.execute(this) })
     }
 

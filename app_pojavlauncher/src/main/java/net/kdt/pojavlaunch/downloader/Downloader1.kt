@@ -1,156 +1,149 @@
 package net.kdt.pojavlaunch.downloader
 
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
+import com.kdt.mcgui.ProgressLayout
+import net.ashmeet.hyperlauncher.R
+import net.kdt.pojavlaunch.tasks.SpeedCalculator
+import net.kdt.pojavlaunch.utils.DownloadUtils
+import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.concurrent.ConcurrentLinkedQueue
+import java.nio.charset.StandardCharsets
+import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
+import java.util.concurrent.atomic.AtomicReference
 
-open class Downloader {
-    private val mVerifyService: ExecutorService
-    private val mDownloadService: ExecutorService
-    private val mTaskQueue = ConcurrentLinkedQueue<TaskMetadata>()
-    private val mDownloadedSizeCounter = AtomicLong(0)
-    private val mInternetUsageCounter = AtomicLong(0)
-    private val mDownloadedFileCounter = AtomicInteger(0)
-    private val mTotalFileCount = AtomicInteger(0)
-    private val mAborted = AtomicBoolean(false)
-    private var mOnCompletedListener: Runnable? = null
-    private var mActiveDownloadCount = 0
-    private var mSizeCounterDisabled = false
-    private var mProgressKey: String? = null
+open class Downloader(private val mProgressKey: String) {
+    private val mThreadException = AtomicReference<IOException?>()
+    private val mDownloadedFileCounter = AtomicInteger()
+    private val mDownloadedSizeCounter = AtomicLong()
+    private val mInternetUsageCounter = AtomicLong()
+    private val mUseSizeProgress = AtomicBoolean(true)
+    private val mSpeedCalculator = SpeedCalculator()
+    private var mDownloadService: ExecutorService? = null
+    private var mVerifyService: ExecutorService? = null
 
-    constructor(threadCount: Int) {
-        mDownloadService = Executors.newFixedThreadPool(threadCount)
-        mVerifyService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
-    }
-
-    constructor(progressKey: String?) : this(Runtime.getRuntime().availableProcessors()) {
-        mProgressKey = progressKey
-    }
-
-    @Synchronized
-    fun submitFileForDownload(metadata: TaskMetadata?) {
-        if (!mAborted.get() && metadata != null) {
-            mActiveDownloadCount++
-            mDownloadService.submit(DownloadFileTask(metadata, this))
+    protected open fun runDownloads(downloads: ArrayList<out TaskMetadata>) {
+        try {
+            insertMetadata(downloads)
+            performDownloads(downloads)
+        } catch (e: InterruptedException) {
+            taskException(IOException("Interrupted", e))
         }
     }
 
-    fun abort() {
-        mAborted.set(true)
-        mVerifyService.shutdownNow()
-        mDownloadService.shutdownNow()
-        synchronized(this) {
-            (this as java.lang.Object).notifyAll()
-        }
-    }
-
-    fun taskException(e: IOException) {
-        abort()
-    }
-
-    val progress: Int
-        get() {
-            val total = mTotalFileCount.get()
-            return if (total == 0) 0 else mDownloadedFileCounter.get() * 100 / total
-        }
-
-    fun addSize(size: Long) {
-        if (!mSizeCounterDisabled) {
-            mDownloadedSizeCounter.addAndGet(size)
-        }
-    }
-
-    @get:Throws(IOException::class)
-    protected val buffer: ByteArray
-        get() = ByteArray(8192)
-
-    @Throws(IOException::class)
-    protected fun openConnection(url: URL): HttpURLConnection {
-        val connection = url.openConnection() as HttpURLConnection
-        connection.connectTimeout = 10000
-        connection.readTimeout = 10000
-        connection.instanceFollowRedirects = true
-        connection.setRequestProperty(
-            "User-Agent",
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
-        )
-        return connection
-    }
-
-    fun runDownloads(metadataList: List<TaskMetadata?>?) {
-        if (metadataList == null) return
-        
-        val validMetadata = metadataList.filterNotNull()
-        if (validMetadata.isEmpty()) return
-        
-        mTotalFileCount.set(validMetadata.size)
+    @Throws(IOException::class, InterruptedException::class)
+    private fun performDownloads(metadata: ArrayList<out TaskMetadata>) {
+        mThreadException.set(null)
         mDownloadedFileCounter.set(0)
-        
-        for (metadata in validMetadata) {
-            mVerifyService.submit(CheckFileOnDiskTask(metadata, this))
+        mDownloadedSizeCounter.set(0)
+        mDownloadService = Executors.newFixedThreadPool(3)
+        val verifyThreads = (Runtime.getRuntime().availableProcessors() - 2).coerceAtLeast(2)
+        mVerifyService = Executors.newFixedThreadPool(verifyThreads) { r: Runnable? ->
+            val thread = Thread(r)
+            thread.priority = 10
+            thread.name = "verify thread"
+            thread
         }
+        var totalSize: Long = 0
+        val totalCount = metadata.size
+        val sizeCounter = mUseSizeProgress.get()
+        for (element in metadata) {
+            totalSize += element.size
+            mVerifyService!!.submit(CheckFileOnDiskTask(element, this))
+        }
+        val totalMegabytes = totalSize / ONE_MEGABYTE
+        while (mDownloadedFileCounter.get() < totalCount) {
+            val exception = mThreadException.get()
+            if (exception != null) throw exception
+            if (sizeCounter) reportSizeProgress(totalMegabytes) else reportCountProgress(
+                R.string.newerdl_downloading_files_count,
+                totalCount
+            )
+            Thread.sleep(33)
+        }
+        mDownloadService!!.shutdown()
+        mVerifyService!!.shutdown()
+        
+        mDownloadService!!.awaitTermination(100, TimeUnit.MILLISECONDS)
+        mVerifyService!!.awaitTermination(100, TimeUnit.MILLISECONDS)
+    }
 
-        synchronized(this) {
-            while (mDownloadedFileCounter.get() < mTotalFileCount.get() && !mAborted.get()) {
-                try {
-                    (this as java.lang.Object).wait(500)
-                } catch (e: InterruptedException) {
-                    abort()
-                    throw IOException("Interrupted", e)
-                }
+    @Throws(IOException::class, InterruptedException::class)
+    private fun insertMetadata(metadata: ArrayList<out TaskMetadata>) {
+        mThreadException.set(null)
+        mDownloadedFileCounter.set(0)
+        val reducedList = ArrayList<TaskMetadata>()
+        for (element in metadata) {
+            if (!CompleteMetadataTask.shouldCompleteMetadata(element)) continue
+            reducedList.add(element)
+        }
+        if (reducedList.isEmpty()) return
+        val executorService = Executors.newFixedThreadPool(4)
+        try {
+            for (element in reducedList) executorService.submit(CompleteMetadataTask(element, this))
+            executorService.shutdown()
+            while (!executorService.awaitTermination(33, TimeUnit.MILLISECONDS)) {
+                val exception = mThreadException.get()
+                if (exception != null) throw exception
+                reportCountProgress(R.string.newerdl_inserting_metadata_count, reducedList.size)
             }
+        } finally {
+            executorService.shutdownNow()
         }
+    }
 
-        if (mAborted.get()) {
-            throw IOException("Download aborted or failed")
+    private val speed: Double
+        get() = mSpeedCalculator.feed(mInternetUsageCounter.get()) / ONE_MEGABYTE
+
+    private fun reportCountProgress(resource: Int, total: Int) {
+        val downloadedCount = mDownloadedFileCounter.get()
+        val progress = if (total > 0) (downloadedCount / total.toFloat() * 100f).toInt() else 0
+        ProgressLayout.setProgress(
+            mProgressKey, progress, resource,
+            downloadedCount, total, speed
+        )
+    }
+
+    private fun reportSizeProgress(totalMegabytes: Double) {
+        val downloadedMegabytes = mDownloadedSizeCounter.get() / ONE_MEGABYTE
+        val progress = if (totalMegabytes > 0) (downloadedMegabytes / totalMegabytes * 100.0).toInt() else 0
+        ProgressLayout.setProgress(
+            mProgressKey, progress, R.string.newerdl_downloading_files_size,
+            downloadedMegabytes, totalMegabytes, speed
+        )
+    }
+
+    fun taskException(e: IOException?) {
+        mThreadException.set(e)
+    }
+
+    fun disableSizeCounter() {
+        mUseSizeProgress.lazySet(false)
+    }
+
+    fun submitFileForDownload(taskMetadata: TaskMetadata?) {
+        if (taskMetadata != null) {
+            mDownloadService!!.submit(DownloadFileTask(taskMetadata, this))
         }
-        
-        if (mOnCompletedListener != null) mOnCompletedListener!!.run()
     }
 
     fun submitFileForRecheck(taskMetadata: TaskMetadata?) {
-        if (!mAborted.get() && taskMetadata != null) mVerifyService.submit(CheckFileOnDiskTask(taskMetadata, this, true))
+        if (taskMetadata != null) {
+            mVerifyService!!.submit(CheckFileOnDiskTask(taskMetadata, this, true))
+        }
     }
 
     fun fileComplete() {
         mDownloadedFileCounter.getAndIncrement()
-        synchronized(this) {
-            (this as java.lang.Object).notifyAll()
-        }
     }
 
-    @Throws(IOException::class)
-    fun downloadFile(path: File, url: URL, listener: BytesCopiedListener?) {
-        val connection = openConnection(url)
-        FileOutputStream(path).use { outputStream ->
-            downloadToStream(connection, outputStream, listener)
-        }
-    }
-
-    @Throws(IOException::class)
-    fun tryContinueDownload(path: File, totalSize: Long, url: URL, listener: BytesCopiedListener?): Boolean {
-        val currentSize = path.length()
-        if (currentSize >= totalSize) return true
-        
-        val connection = openConnection(url)
-        connection.setRequestProperty("Range", "bytes=$currentSize-")
-        val responseCode = connection.responseCode
-        if (responseCode != HttpURLConnection.HTTP_PARTIAL) return false
-        
-        FileOutputStream(path, true).use { outputStream ->
-            downloadToStream(connection, outputStream, listener)
-        }
-        return true
+    fun addSize(bytes: Long) {
+        mDownloadedSizeCounter.getAndAdd(bytes)
     }
 
     @Throws(IOException::class)
@@ -159,27 +152,120 @@ open class Downloader {
         outputStream: OutputStream,
         listener: BytesCopiedListener?
     ) {
-        val buffer: ByteArray = buffer
-        var readLen: Int = 0
-        while (!mAborted.get() && (inputStream.read(buffer).also { readLen = it }) != -1) {
+        val buffer = buffer
+        var readLen: Int
+        while (inputStream.read(buffer).also { readLen = it } != -1) {
             outputStream.write(buffer, 0, readLen)
-            if (listener != null) listener.onBytesCopied(readLen)
+            listener?.onBytesCopied(readLen)
             mInternetUsageCounter.getAndAdd(readLen.toLong())
         }
-        if (mAborted.get()) throw IOException("Aborted")
     }
 
     @Throws(IOException::class)
-    protected fun downloadToStream(
+    protected open fun downloadToStream(
         connection: HttpURLConnection,
         outputStream: OutputStream,
         listener: BytesCopiedListener?
     ) {
-        val inputStream = connection.inputStream
-        copy(inputStream, outputStream, listener)
+        connection.inputStream.use { inputStream ->
+            copy(inputStream, outputStream, listener)
+        }
+    }
+
+    @Throws(IOException::class)
+    protected open fun downloadString(url: URL): String {
+        val connection = openConnection(url)
+        val length = connection.contentLength
+        val effectiveLength = if (length < 0) 32 else length
+        ByteArrayOutputStream(effectiveLength).use { outputStream ->
+            downloadToStream(connection, outputStream, null)
+            return String(outputStream.toByteArray(), StandardCharsets.UTF_8)
+        }
+    }
+
+    @Throws(IOException::class)
+    fun downloadFile(file: File, url: URL, listener: BytesCopiedListener?) {
+        val connection = openConnection(url)
+        try {
+            FileOutputStream(file).use { outputStream ->
+                downloadToStream(connection, outputStream, listener)
+            }
+        } finally {
+            connection.disconnect()
+        }
+    }
+
+    @Throws(IOException::class)
+    fun tryContinueDownload(
+        file: File,
+        wantedLength: Long,
+        url: URL,
+        listener: BytesCopiedListener?
+    ): Boolean {
+        val connection = openConnection(url)
+        val range = String.format(Locale.ENGLISH, "bytes=%d-%d", file.length(), wantedLength - 1)
+        connection.setRequestProperty("Range", range)
+        return try {
+            connection.connect()
+            val responseCode = connection.responseCode
+            if (responseCode != 206) {
+                return false
+            }
+            FileOutputStream(file, true).use { outputStream ->
+                downloadToStream(connection, outputStream, listener)
+                true
+            }
+        } finally {
+            connection.disconnect()
+        }
+    }
+
+    @Throws(IOException::class)
+    fun getFileContentLength(url: URL): Long {
+        val connection = openConnection(url)
+        connection.connectTimeout = 2000
+        connection.readTimeout = 2000
+        connection.requestMethod = "HEAD"
+        return try {
+            connection.connect()
+            val response = connection.responseCode
+            if (response >= 400) {
+                -1
+            } else {
+                connection.contentLength.toLong()
+            }
+        } finally {
+            connection.disconnect()
+        }
     }
 
     interface BytesCopiedListener {
         fun onBytesCopied(bytes: Int)
+    }
+
+    companion object {
+        private const val ONE_MEGABYTE = (1024.0 * 1024.0)
+        private val sThreadLocalBuffer = ThreadLocal<ByteArray>()
+
+        @get:Throws(IOException::class)
+        val buffer: ByteArray
+            get() {
+                var buffer = sThreadLocalBuffer.get()
+                if (buffer == null) {
+                    buffer = ByteArray(8192)
+                    sThreadLocalBuffer.set(buffer)
+                }
+                return buffer
+            }
+
+        @Throws(IOException::class)
+        private fun openConnection(url: URL): HttpURLConnection {
+            val connection = url.openConnection() as HttpURLConnection
+            connection.readTimeout = 10000
+            connection.setRequestProperty("User-Agent", DownloadUtils.USER_AGENT)
+            connection.doInput = true
+            connection.doOutput = false
+            return connection
+        }
     }
 }

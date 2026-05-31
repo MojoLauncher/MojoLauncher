@@ -1,7 +1,6 @@
 package net.kdt.pojavlaunch.ui.screens
 
 import android.graphics.drawable.Drawable
-import android.provider.CalendarContract
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -9,6 +8,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
@@ -37,20 +37,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.firebase.annotations.concurrent.Background
 import net.ashmeet.hyperlauncher.R
 import net.kdt.pojavlaunch.authenticator.accounts.Accounts
+import net.kdt.pojavlaunch.instances.Instance
 import net.kdt.pojavlaunch.instances.InstanceIconProvider
 import net.kdt.pojavlaunch.instances.Instances
 import net.kdt.pojavlaunch.ui.theme.PojavTheme
-
-/**
- * FIX: surfaceVariant is deprecated in Material3.
- * Use surfaceContainerHighest which properly follows dynamic/wallpaper color scheme.
- */
 
 @Composable
 fun rememberDrawablePainter(drawable: Drawable?): Painter {
@@ -95,12 +89,24 @@ fun MainMenuRevamp(
     val context = LocalContext.current
     val isPreview = LocalInspectionMode.current
 
+    // ✅ Refresh instance name correctly using side effect
     var selectedInstance by remember {
-        mutableStateOf(
+        mutableStateOf<Instance?>(
             if (isPreview) null
             else try { Instances.loadSelectedInstance() } catch (e: Exception) { null }
         )
     }
+
+    // Refresh every time the screen is composed/entered
+    SideEffect {
+        if (!isPreview) {
+            val instance = try { Instances.loadSelectedInstance() } catch (e: Exception) { null }
+            if (selectedInstance != instance) {
+                selectedInstance = instance
+            }
+        }
+    }
+
     val currentAccount = remember {
         mutableStateOf(if (isPreview) null else Accounts.current)
     }
@@ -111,7 +117,6 @@ fun MainMenuRevamp(
         else null
     }
 
-    // Interaction source for head press animation
     val headInteractionSource = remember { MutableInteractionSource() }
     val isHeadPressed by headInteractionSource.collectIsPressedAsState()
     val headScale by animateFloatAsState(
@@ -123,7 +128,6 @@ fun MainMenuRevamp(
         label = "headScale"
     )
 
-    // Root is transparent to show wallpaper behind
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -136,9 +140,6 @@ fun MainMenuRevamp(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
 
-            // ──────────────────────────────────────────
-            // LEFT PANEL — Quick Actions
-            // ──────────────────────────────────────────
             Column(
                 modifier = Modifier
                     .weight(0.66f)
@@ -146,7 +147,6 @@ fun MainMenuRevamp(
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                // Top row: Wiki + Social
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -208,15 +208,11 @@ fun MainMenuRevamp(
                 )
             }
 
-            // ──────────────────────────────────────────
-            // RIGHT PANEL — Launcher Sidebar
-            // ──────────────────────────────────────────
             Surface(
                 modifier = Modifier
                     .weight(0.34f)
                     .fillMaxHeight(),
                 shape = RoundedCornerShape(16.dp),
-                // FIX: surfaceVariant → surfaceContainer (non-deprecated, adapts to wallpaper)
                 color = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.1f),
                 border = BorderStroke(
                     1.dp,
@@ -232,13 +228,11 @@ fun MainMenuRevamp(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
 
-                    // ── Profile Section ──
                     Column(
                         modifier = Modifier.weight(1f),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        // Avatar
                         Box(
                             modifier = Modifier
                                 .size(64.dp)
@@ -291,15 +285,15 @@ fun MainMenuRevamp(
 
                         Spacer(modifier = Modifier.height(4.dp))
 
-                        // Edit profile chip
-                        FilledTonalButton(
+                        // Edit Profile - Low emphasis
+                        OutlinedButton(
                             onClick = onEditProfileClick,
-                            shape = RoundedCornerShape(50.dp),
-                            colors = ButtonDefaults.filledTonalButtonColors(
-                                containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
-                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                            ),
+                            shape = CircleShape,
                             modifier = Modifier.height(32.dp),
+                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                contentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                            ),
                             contentPadding = PaddingValues(horizontal = 12.dp)
                         ) {
                             Row(
@@ -324,14 +318,13 @@ fun MainMenuRevamp(
                         color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
                     )
 
-                    // ── Instance Selector ──
-                    // FIX: surfaceColorAtElevation() is deprecated → use surfaceContainerHigh
-                    FilledTonalButton(
+                    // ✅ Correctly display the selected instance name or "No Instance"
+                    OutlinedButton(
                         onClick = onInstanceSelect,
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.filledTonalButtonColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 1f),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)),
+                        colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = MaterialTheme.colorScheme.onSurface
                         ),
                         contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp)
@@ -340,23 +333,44 @@ fun MainMenuRevamp(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            Image(
-                                painter = rememberDrawablePainter(instanceIcon),
-                                contentDescription = null,
-                                modifier = Modifier.size(24.dp),
-                                contentScale = ContentScale.Fit
-                            )
+                            if (instanceIcon != null) {
+                                Image(
+                                    painter = rememberDrawablePainter(instanceIcon),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(24.dp),
+                                    contentScale = ContentScale.Fit
+                                )
+                            } else {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_px_home),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(20.dp),
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                                )
+                            }
+                            
                             Column(modifier = Modifier.weight(1f)) {
+                                // ✅ Fix: Handle empty/null name by showing "UNNAMED" as requested
+                                val name = selectedInstance?.name
+                                val instanceDisplayName = if (selectedInstance == null) {
+                                    stringResource(id = R.string.no_instance)
+                                } else if (name.isNullOrBlank()) {
+                                    "UNNAMED"
+                                } else {
+                                    name
+                                }
+
                                 Text(
-                                    text = selectedInstance?.name ?: "No Instance",
+                                    text = instanceDisplayName,
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.SemiBold,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
-                                    fontSize = 11.sp
+                                    fontSize = 11.sp,
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
                                 Text(
-                                    text = selectedInstance?.versionId ?: "Select a version",
+                                    text = selectedInstance?.versionId ?: stringResource(id = R.string.version_select_hint),
                                     style = MaterialTheme.typography.bodySmall.copy(fontSize = 9.sp),
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -365,28 +379,23 @@ fun MainMenuRevamp(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                                 contentDescription = null,
                                 modifier = Modifier.size(14.dp),
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                             )
                         }
                     }
 
-                    // ── Launch Controls ──
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // Play button — primary color = wallpaper accent
+                        // High Emphasis Pill Shape PLAY Button - Dynamic Primary
                         Button(
                             onClick = onPlayClick,
                             modifier = Modifier
                                 .weight(1f)
-                                .height(48.dp),
-                            shape = RoundedCornerShape(24.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.primary,
-                                contentColor = MaterialTheme.colorScheme.onPrimary
-                            ),
+                                .height(44.dp),
+                            shape = CircleShape,
                             elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
                         ) {
                             Row(
@@ -396,7 +405,7 @@ fun MainMenuRevamp(
                                 Icon(
                                     imageVector = Icons.Rounded.PlayArrow,
                                     contentDescription = null,
-                                    modifier = Modifier.size(22.dp)
+                                    modifier = Modifier.size(20.dp)
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(
@@ -408,27 +417,22 @@ fun MainMenuRevamp(
                             }
                         }
 
-                        // FIX: Button doesn't support border param — use OutlinedButton instead
-                        // This correctly shows the error-colored border without a crash
-                        OutlinedButton(
+                        // Terminate button - High emphasis (Filled) Pill Shape
+                        Button(
                             onClick = onTerminateClick,
-                            modifier = Modifier.size(48.dp),
-                            shape = RoundedCornerShape(24.dp),
-                            colors = ButtonDefaults.outlinedButtonColors(
-                                containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.2f),
-                                contentColor = MaterialTheme.colorScheme.error
+                            modifier = Modifier.size(44.dp),
+                            shape = CircleShape,
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.error,
+                                contentColor = MaterialTheme.colorScheme.onError
                             ),
-                            border = BorderStroke(
-                                1.dp,
-                                MaterialTheme.colorScheme.error.copy(alpha = 0.5f)
-                            ),
-                            contentPadding = PaddingValues(0.dp)
+                            contentPadding = PaddingValues(0.dp),
+                            elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
                         ) {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_px_terminate),
-                                tint = MaterialTheme.colorScheme.error,
+                                Icons.Rounded.Clear,
                                 contentDescription = "Terminate",
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(22.dp)
                             )
                         }
                     }
@@ -445,27 +449,29 @@ fun ActionCard(
     icon: ImageVector,
     onClick: () -> Unit
 ) {
-    FilledTonalButton(
+    // Action buttons - Low emphasis (Outlined)
+    OutlinedButton(
         onClick = onClick,
         modifier = modifier,
+        shape = CircleShape,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)),
+        colors = ButtonDefaults.outlinedButtonColors(
+            contentColor = MaterialTheme.colorScheme.onSurface
+        ),
         contentPadding = PaddingValues(horizontal = 14.dp),
-
     )
     {
-
-
         Row(
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         )
         {
-
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 modifier = Modifier.size(24.dp),
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
                 text = title,

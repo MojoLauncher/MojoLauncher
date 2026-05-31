@@ -5,12 +5,7 @@ import android.util.Log
 import com.google.gson.JsonParseException
 import com.kdt.mcgui.ProgressLayout
 import net.ashmeet.hyperlauncher.R
-import net.kdt.pojavlaunch.JAssets
-import net.kdt.pojavlaunch.JMinecraftVersionList
-import net.kdt.pojavlaunch.JMinecraftVersionList.LoggingConfig
-import net.kdt.pojavlaunch.NewJREUtil
-import net.kdt.pojavlaunch.PojavApplication
-import net.kdt.pojavlaunch.Tools
+import net.kdt.pojavlaunch.*
 import net.kdt.pojavlaunch.downloader.Downloader
 import net.kdt.pojavlaunch.downloader.TaskMetadata
 import net.kdt.pojavlaunch.mirrors.DownloadMirror
@@ -19,48 +14,49 @@ import net.kdt.pojavlaunch.mirrors.DownloadMirror.isMirrored
 import net.kdt.pojavlaunch.mirrors.MirrorTamperedException
 import net.kdt.pojavlaunch.prefs.LauncherPreferences
 import net.kdt.pojavlaunch.tasks.AsyncMinecraftDownloader.DoneListener
+import net.kdt.pojavlaunch.utils.DownloadUtils
 import net.kdt.pojavlaunch.utils.DownloadUtils.SHA1VerificationException
 import net.kdt.pojavlaunch.utils.DownloadUtils.ensureSha1
+import net.kdt.pojavlaunch.utils.FileUtils
 import net.kdt.pojavlaunch.utils.FileUtils.ensureDirectory
 import net.kdt.pojavlaunch.utils.FileUtils.ensureParentDirectory
-import net.kdt.pojavlaunch.utils.FileUtils.removeExtension
 import net.kdt.pojavlaunch.utils.JSONUtils
+import net.kdt.pojavlaunch.utils.MavenNameUtils
 import net.kdt.pojavlaunch.utils.jre.RuntimeSelectionException
-import net.kdt.pojavlaunch.value.DependentLibrary
-import net.kdt.pojavlaunch.value.MinecraftClientInfo
+import net.kdt.pojavlaunch.value.*
 import java.io.File
 import java.io.IOException
+import java.io.InputStream
 import java.net.URL
+import java.util.*
+import java.util.concurrent.Future
 
 class MinecraftDownloader : Downloader(ProgressLayout.DOWNLOAD_MINECRAFT) {
-    private var mScheduledDownloadTasks: ArrayList<TaskMetadata?>? = null
-    private var mDeclaredNatives: ArrayList<File?>? = null
-    private var mSourceJarFile: File? =
-        null // The source client JAR picked during the inheritance process
-    private var mTargetJarFile: File? =
-        null // The destination client JAR to which the source will be copied to.
+    private val mNativeName = "android-" + Architecture.archAsString(Architecture.deviceArchitecture)
+
+    private var mScheduledDownloadTasks: ArrayList<TaskMetadata>? = null
+    private var mDeclaredNatives: ArrayList<NativeLibraryExtractable>? = null
+    private var mAllLibraries: LinkedHashMap<String, DependentLibrary>? = null
+    private var mClassPath: LinkedHashSet<File>? = null
+    private var mSubstitutionMap: SubstitutionMap? = null
+
+    private var mSourceJarFile: File? = null
+    private var mTargetJarFile: File? = null
     private var mVersionName: String? = null
 
-    /**
-     * Start the game version download process on the global executor service.
-     * @param assetManager AssetManager, used for automatic installation of JRE 17 if needed
-     * @param version The JMinecraftVersionList.Version from the version list, if available
-     * @param realVersion The version ID (necessary)
-     * @param listener The download status listener
-     */
     fun start(
         assetManager: AssetManager?, version: JMinecraftVersionList.Version?,
-        realVersion: String,  // this was there for a reason
+        realVersion: String,
         listener: DoneListener
     ) {
         PojavApplication.sExecutorService.execute {
             try {
                 downloadGame(assetManager, version, realVersion)
-                listener.onDownloadDone()
+                listener.onDownloadDone(mClassPath!!.toTypedArray())
             } catch (e: JsonParseException) {
-                listener.onDownloadFailed(e) // Handled separately from the general case because it subclasses RuntimeException. Ugh.
+                listener.onDownloadFailed(e)
             } catch (e: RuntimeException) {
-                throw e // log fatal errors to Google Play
+                throw e
             } catch (e: Exception) {
                 listener.onDownloadFailed(e)
             }
@@ -68,31 +64,49 @@ class MinecraftDownloader : Downloader(ProgressLayout.DOWNLOAD_MINECRAFT) {
         }
     }
 
-    /**
-     * Download the game version.
-     * @param assetManager AssetManager, used for automatic installation of JRE 17 if needed
-     * @param verInfo The JMinecraftVersionList.Version from the version list, if available
-     * @param versionName The version ID (necessary)
-     * @throws Exception when an exception occurs in the function body or in any of the downloading threads.
-     */
     @Throws(Exception::class)
     private fun downloadGame(
         assetManager: AssetManager?,
         verInfo: JMinecraftVersionList.Version?,
         versionName: String?
     ) {
-        // Put up a dummy progress line, for the activity to start the service and do all the other necessary
-        // work to keep the launcher alive. We will replace this line when we will start downloading stuff.
         ProgressLayout.setProgress(ProgressLayout.DOWNLOAD_MINECRAFT, 0, R.string.newdl_starting)
 
         mTargetJarFile = createGameJarPath(versionName)
         mScheduledDownloadTasks = ArrayList()
         mDeclaredNatives = ArrayList()
+        mAllLibraries = LinkedHashMap()
+
+        if (sSubstitutionMapFuture == null && assetManager != null) {
+            prepareSubstitutionMap(assetManager)
+        }
+        
+        mSubstitutionMap = sSubstitutionMapFuture?.get() ?: SubstitutionMap()
+
         mVersionName = versionName
 
         downloadAndProcessMetadata(assetManager, verInfo, versionName)
 
-        runDownloads(mScheduledDownloadTasks)
+        val downloadLibCount = mAllLibraries!!.size
+        mClassPath = LinkedHashSet(downloadLibCount)
+        growDownloadList(downloadLibCount)
+        
+        for (dependentLibrary in mAllLibraries!!.values) {
+            if (dependentLibrary.name?.startsWith("net.java.dev.jna:jna:") == true && !dependentLibrary.replaced) {
+                scheduleAarDownload(Tools.MAVEN_CENTRAL, dependentLibrary)
+            }
+
+            if (dependentLibrary.downloads != null) {
+                processLibraryWithDownloads(dependentLibrary)
+            } else {
+                processRawLibrary(dependentLibrary)
+            }
+        }
+
+        mAllLibraries!!.clear()
+        mClassPath!!.add(mTargetJarFile!!)
+
+        runDownloads(mScheduledDownloadTasks!!)
 
         ensureJarFileCopy()
         extractNatives(mVersionName)
@@ -106,29 +120,20 @@ class MinecraftDownloader : Downloader(ProgressLayout.DOWNLOAD_MINECRAFT) {
         return File(Tools.DIR_HOME_VERSION, "$versionId${File.separator}$versionId.jar")
     }
 
-    /**
-     * Ensure that there is a copy of the client JAR file in the version folder, if a copy is
-     * needed.
-     * @throws IOException if the copy fails
-     */
     @Throws(IOException::class)
     private fun ensureJarFileCopy() {
         if (mSourceJarFile == null) return
         if (mSourceJarFile == mTargetJarFile) return
         if (mTargetJarFile?.exists() == true) return
         ensureParentDirectory(mTargetJarFile!!)
-        Log.i(
-            "NewMCDownloader",
-            "Copying ${mSourceJarFile!!.name} to ${mTargetJarFile!!.absolutePath}"
-        )
+        Log.i("NewMCDownloader", "Copying ${mSourceJarFile!!.name} to ${mTargetJarFile!!.absolutePath}")
         org.apache.commons.io.FileUtils.copyFile(mSourceJarFile, mTargetJarFile, false)
     }
 
     @Throws(IOException::class)
     private fun extractNatives(versionName: String?) {
-        val declaredNatives = mDeclaredNatives ?: return
-        if (declaredNatives.isEmpty()) return
-        val totalCount = declaredNatives.size
+        if (mDeclaredNatives!!.isEmpty()) return
+        val totalCount = mDeclaredNatives!!.size
 
         ProgressLayout.setProgress(
             ProgressLayout.DOWNLOAD_MINECRAFT, 0,
@@ -139,8 +144,12 @@ class MinecraftDownloader : Downloader(ProgressLayout.DOWNLOAD_MINECRAFT) {
         ensureDirectory(targetDirectory)
         val nativesExtractor = NativesExtractor(targetDirectory)
         var extractedCount = 0
-        for (source in declaredNatives) {
-            nativesExtractor.extractFromAar(source)
+        for (extractable in mDeclaredNatives!!) {
+            if (extractable.extractInfo == null) {
+                nativesExtractor.extractFromAar(extractable.path)
+            } else {
+                // nativesExtractor.extractMoJson(extractable.path, extractable.extractInfo)
+            }
             extractedCount++
             ProgressLayout.setProgress(
                 ProgressLayout.DOWNLOAD_MINECRAFT, extractedCount * 100 / totalCount,
@@ -152,7 +161,7 @@ class MinecraftDownloader : Downloader(ProgressLayout.DOWNLOAD_MINECRAFT) {
     @Throws(IOException::class, MirrorTamperedException::class)
     private fun downloadGameJson(verInfo: JMinecraftVersionList.Version): File {
         val targetFile = createGameJsonPath(verInfo.id)
-        if (verInfo.sha1 == null && canReuseMetadataWithoutSha1(targetFile)) return targetFile
+        if (verInfo.sha1 == null && targetFile.canRead() && targetFile.isFile) return targetFile
         ensureParentDirectory(targetFile)
         try {
             ensureSha1(
@@ -175,26 +184,6 @@ class MinecraftDownloader : Downloader(ProgressLayout.DOWNLOAD_MINECRAFT) {
             else throw e
         }
         return targetFile
-    }
-
-    private fun canReuseMetadataWithoutSha1(targetFile: File): Boolean {
-        if (!targetFile.isFile || !targetFile.canRead()) return false
-        return try {
-            val cachedVersion = JSONUtils.readFromFile(
-                targetFile,
-                JMinecraftVersionList.Version::class.java
-            ) ?: return false
-
-            val hasLaunchMetadata = Tools.isValidString(cachedVersion.mainClass)
-                    || Tools.isValidString(cachedVersion.inheritsFrom)
-            val hasAssetMetadata = cachedVersion.assetIndex != null
-                    || Tools.isValidString(cachedVersion.assets)
-                    || Tools.isValidString(cachedVersion.inheritsFrom)
-
-            hasLaunchMetadata && hasAssetMetadata
-        } catch (_: Exception) {
-            false
-        }
     }
 
     @Throws(IOException::class)
@@ -224,14 +213,6 @@ class MinecraftDownloader : Downloader(ProgressLayout.DOWNLOAD_MINECRAFT) {
         return downloads?.get("client")
     }
 
-    /**
-     * Download (if necessary) and process a version's metadata, scheduling all downloads that this
-     * version needs.
-     * @param assetManager AssetManager, used for automatic installation of JRE 17 if needed
-     * @param verInfo The JMinecraftVersionList.Version from the version list, if available
-     * @param versionName The version ID (necessary)
-     * @throws IOException if the download of any of the metadata files fails
-     */
     @Throws(
         IOException::class,
         MirrorTamperedException::class,
@@ -246,6 +227,7 @@ class MinecraftDownloader : Downloader(ProgressLayout.DOWNLOAD_MINECRAFT) {
         var currentVerInfo = verInfo
         val versionJsonFile = if (currentVerInfo != null) downloadGameJson(currentVerInfo)
         else createGameJsonPath(versionName)
+        
         if (versionJsonFile.canRead()) {
             currentVerInfo = JSONUtils.readFromFile(
                 versionJsonFile,
@@ -257,21 +239,22 @@ class MinecraftDownloader : Downloader(ProgressLayout.DOWNLOAD_MINECRAFT) {
 
         if (assetManager != null) NewJREUtil.installNewJreIfNeeded(assetManager, currentVerInfo)
 
+        if (Tools.isValidString(currentVerInfo.inheritsFrom)) {
+            val inheritedVersion = AsyncMinecraftDownloader.getListedVersion(currentVerInfo.inheritsFrom)
+            downloadAndProcessMetadata(assetManager, inheritedVersion, currentVerInfo.inheritsFrom)
+        }
+
         val assets = downloadAssetsIndex(currentVerInfo)
         if (assets != null) scheduleAssetDownloads(assets)
 
         val minecraftClientInfo = getClientInfo(currentVerInfo)
         if (minecraftClientInfo != null) scheduleGameJarDownload(minecraftClientInfo, versionName)
 
-        currentVerInfo.libraries?.filterNotNull()?.toTypedArray()?.let { scheduleLibraryDownloads(it) }
-
-        currentVerInfo.logging?.let { scheduleLoggingAssetDownloadIfNeeded(it) }
-
-        if (Tools.isValidString(currentVerInfo.inheritsFrom)) {
-            val inheritedVersion = AsyncMinecraftDownloader.getListedVersion(currentVerInfo.inheritsFrom)
-            // Infinite inheritance !?! :noway:
-            downloadAndProcessMetadata(assetManager, inheritedVersion, currentVerInfo.inheritsFrom)
+        if (currentVerInfo.libraries != null) {
+            scheduleLibraryDownloads(currentVerInfo.libraries!!.filterNotNull().toTypedArray())
         }
+
+        if (currentVerInfo.logging != null) scheduleLoggingAssetDownloadIfNeeded(currentVerInfo.logging!!)
     }
 
     private fun growDownloadList(addedElementCount: Int) {
@@ -283,90 +266,123 @@ class MinecraftDownloader : Downloader(ProgressLayout.DOWNLOAD_MINECRAFT) {
         targetFile: File, downloadClass: Int, url: String?, sha1: String?,
         size: Long
     ) {
-        var currentSha1 = sha1
         ensureParentDirectory(targetFile)
-        if (!Tools.isValidString(currentSha1)) currentSha1 = null
         var urlObject: URL? = null
         if (Tools.isValidString(url)) urlObject = URL(url)
-        val taskMetadata = TaskMetadata(targetFile, urlObject, size, currentSha1, downloadClass)
+        val taskMetadata = TaskMetadata(targetFile, urlObject, size, sha1, downloadClass)
         mScheduledDownloadTasks!!.add(taskMetadata)
     }
 
-    /**
-     * Schedule the download of an AAR library containing the required natives, for later extraction
-     * and adding to the library path.
-     * @param baseRepository the source Maven repository to download from.
-     * @param dependentLibrary the DependentLibrary to get the path from
-     * @throws IOException in case if download scheduling fails.
-     */
     @Throws(IOException::class)
-    private fun scheduleNativeLibraryDownload(
-        baseRepository: String?,
-        dependentLibrary: DependentLibrary
-    ) {
-        val path = removeExtension(Tools.artifactToPath(dependentLibrary)) + ".aar"
+    private fun scheduleAarDownload(baseRepository: String?, dependentLibrary: DependentLibrary) {
+        val path = MavenNameUtils.mavenNameToAarPath(dependentLibrary.name!!)
         val downloadUrl = baseRepository + path
         val targetPath = File(Tools.DIR_HOME_LIBRARY, path)
-        mDeclaredNatives!!.add(targetPath)
+        mDeclaredNatives!!.add(NativeLibraryExtractable(targetPath, null))
         scheduleDownload(targetPath, DownloadMirror.DOWNLOAD_CLASS_LIBRARIES, downloadUrl, null, -1)
+    }
+
+    @Throws(IOException::class)
+    private fun submitBareLibrary(path: String, baseUrl: String) {
+        val artifactPath = File(Tools.DIR_HOME_LIBRARY, path)
+        if (!mClassPath!!.add(artifactPath)) {
+            Log.w("MinecraftDownloader", "Repeated classpath entry $path skipped")
+            return
+        }
+        scheduleDownload(
+            artifactPath,
+            DownloadMirror.DOWNLOAD_CLASS_LIBRARIES,
+            baseUrl + path, null, -1
+        )
+    }
+
+    @Throws(IOException::class)
+    private fun submitArtifact(artifact: MinecraftLibraryArtifact): File? {
+        val artifactPath = File(Tools.DIR_HOME_LIBRARY, artifact.path!!)
+        if (!mClassPath!!.add(artifactPath)) {
+            Log.w("MinecraftDownloader", "Repeated classpath entry ${artifact.path} skipped")
+            return null
+        }
+        scheduleDownload(
+            artifactPath,
+            DownloadMirror.DOWNLOAD_CLASS_LIBRARIES,
+            artifact.url, artifact.sha1, artifact.size
+        )
+        return artifactPath
+    }
+
+    private fun canIgnoreNatives(libName: String?): Boolean {
+        return libName?.startsWith("com.mojang:text2speech") == true
+    }
+
+    @Throws(IOException::class)
+    private fun processNatives(library: DependentLibrary) {
+        val libraryClassifier = library.natives?.get(mNativeName)
+        if (libraryClassifier == null) {
+            val canIgnore = canIgnoreNatives(library.name)
+            if (!canIgnore) throw IOException("library ${library.name} does not include native $mNativeName")
+            Log.i("MinecraftDownloader", "Library ${library.name} doesn't have an $mNativeName natives-classifier (skipped)")
+            return
+        }
+
+        val artifact = library.downloads?.classifiers?.get(libraryClassifier)
+            ?: throw IOException("library ${library.name} is missing required classifier $libraryClassifier")
+
+        val artifactPath = submitArtifact(artifact)
+        if (library.extract != null && artifactPath != null) {
+            mDeclaredNatives!!.add(NativeLibraryExtractable(artifactPath, library.extract))
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun processLibraryWithDownloads(library: DependentLibrary) {
+        val downloads = library.downloads ?: return
+        if (downloads.artifact != null) submitArtifact(downloads.artifact!!)
+        if (library.natives != null && downloads.classifiers != null) processNatives(library)
+    }
+
+    @Throws(IOException::class)
+    private fun processRawLibrary(library: DependentLibrary) {
+        val path = MavenNameUtils.mavenNameToPath(library.name!!)
+        var baseUrl = library.url
+        baseUrl = if (baseUrl != null) baseUrl.replace("http://", "https://")
+        else "https://libraries.minecraft.net/"
+        submitBareLibrary(path, baseUrl)
     }
 
     @Throws(IOException::class)
     private fun scheduleLibraryDownloads(dependentLibraries: Array<DependentLibrary>) {
         Tools.preProcessLibraries(dependentLibraries)
-        growDownloadList(dependentLibraries.size)
         for (dependentLibrary in dependentLibraries) {
-            if (Tools.shouldSkipLibrary(dependentLibrary)) continue
-            // Special handling for JNA Android natives
-            if (dependentLibrary.name?.startsWith("net.java.dev.jna:jna:") == true && !dependentLibrary.replaced) {
-                scheduleNativeLibraryDownload(Tools.MAVEN_CENTRAL, dependentLibrary)
+            var lib = dependentLibrary
+            if (lib.rules != null) {
+                val ruleSetAction = MoJsonRule.ruleSetCheck(lib.rules)
+                if (ruleSetAction != "allow") continue
             }
-            val libArtifactPath = Tools.artifactToPath(dependentLibrary)
-            var sha1: String? = null
-            var url: String? = null
-            var size: Long = -1
-            val downloads = dependentLibrary.downloads
-            if (downloads != null) {
-                val artifact = downloads.artifact
-                if (artifact != null) {
-                    sha1 = artifact.sha1
-                    url = artifact.url
-                    size = artifact.size.toLong()
-                } else {
-                    // If the library has a downloads section but doesn't have an artifact in
-                    // it, it is likely natives-only, which means it can be skipped.
-                    Log.i(
-                        "NewMCDownloader",
-                        "Skipped library ${dependentLibrary.name} due to lack of artifact"
-                    )
-                    continue
-                }
+
+            val substitution = mSubstitutionMap!!.findSubstitution(lib.name!!)
+            if (substitution != null) {
+                if (substitution.skip) continue
+                lib = substitution
             }
-            if (url == null) {
-                url = (if (dependentLibrary.url == null)
-                    "https://libraries.minecraft.net/"
-                else
-                    dependentLibrary.url!!.replace("http://", "https://")) + libArtifactPath
+
+            val libraryTrimmedName = MavenNameUtils.mavenBaseName(lib.name!!)
+            if (mAllLibraries!!.containsKey(libraryTrimmedName)) {
+                mAllLibraries!!.remove(libraryTrimmedName)
             }
-            scheduleDownload(
-                File(Tools.DIR_HOME_LIBRARY, libArtifactPath),
-                DownloadMirror.DOWNLOAD_CLASS_LIBRARIES,
-                url, sha1, size
-            )
+            mAllLibraries!!.put(libraryTrimmedName, lib)
         }
     }
 
     @Throws(IOException::class)
     private fun scheduleAssetDownloads(assets: JAssets) {
         val assetObjects = assets.objects ?: return
-        val assetNames = assetObjects.keys.filterNotNull()
+        val assetNames = assetObjects.keys
         growDownloadList(assetNames.size)
         for (asset in assetNames) {
             val assetInfo = assetObjects[asset] ?: continue
-            val hash = assetInfo.hash ?: continue
-            val hashedPath = hash.substring(0, 2) + File.separator + hash
-            val basePath =
-                if (assets.mapToResources) Tools.OBSOLETE_RESOURCES_PATH else Tools.ASSETS_PATH
+            val hashedPath = assetInfo.hash!!.substring(0, 2) + File.separator + assetInfo.hash
+            val basePath = if (assets.mapToResources) Tools.OBSOLETE_RESOURCES_PATH else Tools.ASSETS_PATH
             val targetFile = if (assets.virtual || assets.mapToResources) {
                 File(basePath, asset)
             } else {
@@ -376,24 +392,22 @@ class MinecraftDownloader : Downloader(ProgressLayout.DOWNLOAD_MINECRAFT) {
                 targetFile,
                 DownloadMirror.DOWNLOAD_CLASS_ASSETS,
                 MINECRAFT_RES + hashedPath,
-                hash,
-                assetInfo.size.toLong()
+                assetInfo.hash,
+                assetInfo.size
             )
         }
     }
 
     @Throws(IOException::class)
-    private fun scheduleLoggingAssetDownloadIfNeeded(loggingConfig: LoggingConfig) {
+    private fun scheduleLoggingAssetDownloadIfNeeded(loggingConfig: JMinecraftVersionList.LoggingConfig) {
         val client = loggingConfig.client ?: return
         val loggingFileProperties = client.file ?: return
-        val logId = loggingFileProperties.id ?: return
-        val patchId = logId.replace("client", "log4j-rce-patch")
         val internalLoggingConfig = File(
             Tools.DIR_DATA + File.separator + "security",
-            patchId
+            loggingFileProperties.id!!.replace("client", "log4j-rce-patch")
         )
         if (internalLoggingConfig.exists()) return
-        val destination = File(Tools.DIR_GAME_NEW, logId)
+        val destination = File(Tools.DIR_GAME_NEW, loggingFileProperties.id!!)
         scheduleDownload(
             destination,
             DownloadMirror.DOWNLOAD_CLASS_LIBRARIES,
@@ -404,10 +418,7 @@ class MinecraftDownloader : Downloader(ProgressLayout.DOWNLOAD_MINECRAFT) {
     }
 
     @Throws(IOException::class)
-    private fun scheduleGameJarDownload(
-        minecraftClientInfo: MinecraftClientInfo,
-        versionName: String?
-    ) {
+    private fun scheduleGameJarDownload(minecraftClientInfo: MinecraftClientInfo, versionName: String?) {
         val clientJar = createGameJarPath(versionName)
         growDownloadList(1)
         scheduleDownload(
@@ -415,13 +426,26 @@ class MinecraftDownloader : Downloader(ProgressLayout.DOWNLOAD_MINECRAFT) {
             DownloadMirror.DOWNLOAD_CLASS_LIBRARIES,
             minecraftClientInfo.url,
             minecraftClientInfo.sha1,
-            minecraftClientInfo.size.toLong()
+            minecraftClientInfo.size
         )
-        // Store the path of the JAR to copy it into our new version folder later.
         mSourceJarFile = clientJar
     }
 
     companion object {
-        const val MINECRAFT_RES: String = "https://resources.download.minecraft.net/"
+        const val MINECRAFT_RES = "https://resources.download.minecraft.net/"
+        private var sSubstitutionMapFuture: Future<SubstitutionMap>? = null
+
+        @JvmStatic
+        fun prepareSubstitutionMap(assetManager: AssetManager) {
+            sSubstitutionMapFuture = PojavApplication.sExecutorService.submit<SubstitutionMap> {
+                try {
+                    assetManager.open("substitutions.json").use { stream ->
+                        return@submit JSONUtils.readFromStream(stream, SubstitutionMap::class.java)
+                    }
+                } catch (e: IOException) {
+                    return@submit SubstitutionMap()
+                }
+            }
+        }
     }
 }

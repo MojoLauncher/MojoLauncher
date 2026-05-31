@@ -22,7 +22,6 @@ class SelectAuthFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                // ✅ Enabled dynamic color
                 PojavTheme(dynamicColor = true) {
                     SelectAuthScreen(
                         onBack = { parentFragmentManager.popBackStack() },

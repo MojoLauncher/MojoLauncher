@@ -4,6 +4,7 @@ import net.kdt.pojavlaunch.modloaders.OptiFineUtils.OptiFineVersion
 import net.kdt.pojavlaunch.tasks.AsyncMinecraftDownloader
 import net.kdt.pojavlaunch.tasks.AsyncMinecraftDownloader.DoneListener
 import net.kdt.pojavlaunch.tasks.MinecraftDownloader
+import java.io.File
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -57,7 +58,7 @@ class OptiFineDownloadTask(private val mOptiFineVersion: OptiFineVersion) : Done
         return mDownloaderThrowable == null
     }
 
-    override fun onDownloadDone() {
+    override fun onDownloadDone(classPath: Array<File>) {
         synchronized(mMinecraftDownloadLock) {
             mDownloaderThrowable = null
             (mMinecraftDownloadLock as Object).notifyAll()

@@ -36,7 +36,6 @@ class ContentInstallerFragment : Fragment() {
 
         return ComposeView(requireContext()).apply {
             setContent {
-                // ✅ Enabled dynamic color
                 PojavTheme(dynamicColor = true) {
                     ContentInstallerScreen(
                         onBack = { Tools.backToMainMenu(requireActivity()) },

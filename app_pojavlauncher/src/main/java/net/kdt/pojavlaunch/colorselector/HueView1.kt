@@ -23,8 +23,8 @@ class HueView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     private var mWidthThird = 0f
 
     init {
-        blackPaint.setColor(Color.BLACK)
-        blackPaint.setStrokeWidth(dpToPx(3f))
+        blackPaint.color = Color.BLACK
+        blackPaint.strokeWidth = dpToPx(3f)
     }
 
     fun setHueSelectionListener(listener: HueSelectionListener?) {
@@ -38,18 +38,18 @@ class HueView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
-            getParent().requestDisallowInterceptTouchEvent(true)
+        if (event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_MOVE) {
+            parent.requestDisallowInterceptTouchEvent(true)
         }
 
-        mSelectionHue = event.getY() * mHeightHueRatio
+        mSelectionHue = event.y * mHeightHueRatio
         invalidate()
         if (mHueSelectionListener != null) mHueSelectionListener!!.onHueSelected(mSelectionHue)
         return true
     }
 
     override fun onDraw(canvas: Canvas) {
-        canvas.drawBitmap(mGamma!!, 0f, 0f, null)
+        mGamma?.let { canvas.drawBitmap(it, 0f, 0f, null) }
         val linePos = mSelectionHue * mHueHeightRatio
         canvas.drawLine(0f, linePos, mWidthThird, linePos, blackPaint)
         canvas.drawLine(mWidthThird * 2, linePos, mWidth, linePos, blackPaint)
@@ -64,7 +64,7 @@ class HueView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     protected fun regenerateGammaBitmap() {
         if (mGamma != null) mGamma!!.recycle()
-        mGamma = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888)
+        mGamma = Bitmap.createBitmap(width.coerceAtLeast(1), height.coerceAtLeast(1), Bitmap.Config.ARGB_8888)
         val paint = Paint()
         val canvas = Canvas(mGamma!!)
         mHeightHueRatio = 360 / mHeight
@@ -73,7 +73,7 @@ class HueView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         var i = 0f
         while (i < mHeight) {
             hsvFiller[0] = i * mHeightHueRatio
-            paint.setColor(Color.HSVToColor(hsvFiller))
+            paint.color = Color.HSVToColor(hsvFiller)
             canvas.drawLine(0f, i, mWidth, i, paint)
             i++
         }

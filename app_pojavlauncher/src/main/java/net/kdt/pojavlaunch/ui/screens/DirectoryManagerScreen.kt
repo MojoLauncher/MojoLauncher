@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -107,29 +108,6 @@ fun DirectoryManagerScreen(
                         .verticalScroll(leftScrollState)
                         .padding(4.dp)
                 ) {
-                    // Header
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        IconButton(onClick = onBack, modifier = Modifier.size(36.dp)) {
-                            Icon(
-                                Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Back",
-                                tint = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = title,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
                     // Path Breadcrumbs
                     Box(
                         modifier = Modifier
@@ -168,7 +146,7 @@ fun DirectoryManagerScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Action Buttons
+                    // Action Buttons - High Emphasis Pill Shape
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -199,7 +177,7 @@ fun DirectoryManagerScreen(
                             icon = R.drawable.ic_px_trash,
                             onClick = onDeleteClick,
                             enabled = selectedFile != null,
-                            overrideColor = MaterialTheme.colorScheme.error // Use theme error color
+                            isError = true
                         )
                     }
 
@@ -259,36 +237,42 @@ fun FileActionButton(
     icon: Int,
     onClick: () -> Unit,
     enabled: Boolean = true,
-    overrideColor: Color? = null
+    isError: Boolean = false
 ) {
-    val baseColor = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
-    val finalColor = if (enabled && overrideColor != null) overrideColor else baseColor
-
-    Surface(
-        onClick = if (enabled) onClick else ({}),
+    Button(
+        onClick = onClick,
+        enabled = enabled,
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 44.dp),
-        shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.1f))
+            .heightIn(min = 40.dp),
+        shape = CircleShape,
+        colors = if (isError) {
+            ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.error,
+                contentColor = MaterialTheme.colorScheme.onError
+            )
+        } else {
+            ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            )
+        },
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 painter = painterResource(id = icon),
                 contentDescription = null,
-                modifier = Modifier.size(20.dp),
-                tint = finalColor
+                modifier = Modifier.size(18.dp)
             )
             Spacer(modifier = Modifier.width(12.dp))
             Text(
                 text = text,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Medium,
-                color = finalColor
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold
             )
         }
     }

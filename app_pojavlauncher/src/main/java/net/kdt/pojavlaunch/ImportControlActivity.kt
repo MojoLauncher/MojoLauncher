@@ -1,6 +1,5 @@
 package net.kdt.pojavlaunch
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -24,7 +23,7 @@ import java.io.OutputStream
 /**
  * An activity dedicated to importing control files.
  */
-class ImportControlActivity : Activity() {
+class ImportControlActivity : BaseActivity() {
     private var mUriData: Uri? = null
     private var mHasIntentChanged = true
 
@@ -51,9 +50,9 @@ class ImportControlActivity : Activity() {
      * Override the previous loaded intent
      * @param intent the intent used to replace the old one.
      */
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        if (intent != null) setIntent(intent)
+        setIntent(intent)
         mHasIntentChanged = true
     }
 

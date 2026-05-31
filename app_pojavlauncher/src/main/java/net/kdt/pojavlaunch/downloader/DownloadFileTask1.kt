@@ -19,7 +19,7 @@ class DownloadFileTask internal constructor(
     private fun performRetry(attempt: Int, rangeAllowed: Boolean) {
         mDownloader.addSize(-mBytesDownloaded.get()) // It will get readded again on next tryDownload() if range is allowed
         
-        // ✅ Add a small delay between retries to potentially fix "aborted" connections
+        // Add a small delay between retries to potentially fix "aborted" connections
         try {
             Thread.sleep((200 * attempt).toLong())
         } catch (ignored: InterruptedException) {

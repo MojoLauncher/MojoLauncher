@@ -44,7 +44,6 @@ class ProfileSelectionViewModel : ViewModel() {
             } catch (e: IOException) {
                 withContext(Dispatchers.Main) {
                     isLoading = false
-                    // Handle error if needed, maybe a toast via a flow
                 }
             }
         }
@@ -109,7 +108,6 @@ class ProfileSelectionViewModel : ViewModel() {
                     onDone()
                 }
             } catch (e: IOException) {
-                // Handle error
             }
         }
     }

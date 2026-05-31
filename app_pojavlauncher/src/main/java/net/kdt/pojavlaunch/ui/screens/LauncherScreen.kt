@@ -47,11 +47,11 @@ import net.kdt.pojavlaunch.extra.ExtraConstants
 import net.kdt.pojavlaunch.extra.ExtraCore
 import net.kdt.pojavlaunch.extra.ExtraListener
 import net.kdt.pojavlaunch.fragments.MainMenuFragment
+import net.kdt.pojavlaunch.prefs.LauncherPreferences
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper
 import net.kdt.pojavlaunch.progresskeeper.ProgressListener
 import net.kdt.pojavlaunch.ui.theme.PojavTheme
 
-/** Data class to track task progress in Compose state */
 class TaskProgress(
     val key: String,
     initialProgress: Int = 0,
@@ -111,7 +111,6 @@ fun ProgressCard(
     val isPreview = LocalInspectionMode.current
     val context = LocalContext.current
     
-    // Map to keep track of active tasks using Compose state
     val activeTasks = remember { mutableStateOf(mutableStateMapOf<String, TaskProgress>()) }
     var isExpanded by remember { mutableStateOf(true) }
 
@@ -506,6 +505,7 @@ fun TopBarButton(
     topBarHeight: androidx.compose.ui.unit.Dp,
     isSelected: Boolean = false,
     isSpecialActive: Boolean = false,
+    badgeCount: Int = 0,
     modifier: Modifier = Modifier
 ) {
     val defaultContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
@@ -513,41 +513,54 @@ fun TopBarButton(
     
     val finalContainerColor = if (isSelected || isSpecialActive) activeColor else defaultContainerColor
 
-    FilledTonalButton(
-        onClick = onClick,
-        modifier = modifier
-            .height(topBarHeight - 16.dp)
-            .padding(horizontal = 4.dp)
-            .animateContentSize(), // Smooth extension
-        shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.filledTonalButtonColors(
-            containerColor = finalContainerColor,
-            contentColor = MaterialTheme.colorScheme.onSurface
-        ),
-        contentPadding = PaddingValues(horizontal = 12.dp)
-    ) {
-        Icon(
-            painter = painterResource(id = icon),
-            contentDescription = label,
-            modifier = Modifier.size(18.dp)
-        )
-        
-        // ✅ Improved label animation to avoid cutoff
-        AnimatedVisibility(
-            visible = isSelected,
-            enter = fadeIn() + expandHorizontally(),
-            exit = fadeOut() + shrinkHorizontally()
+    Box(modifier = modifier) {
+        FilledTonalButton(
+            onClick = onClick,
+            modifier = Modifier
+                .height(topBarHeight - 16.dp)
+                .padding(horizontal = 4.dp)
+                .animateContentSize(), 
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.filledTonalButtonColors(
+                containerColor = finalContainerColor,
+                contentColor = MaterialTheme.colorScheme.onSurface
+            ),
+            contentPadding = PaddingValues(horizontal = 12.dp)
         ) {
-            Row {
-                Spacer(Modifier.width(8.dp))
-                Text(
-                    text = label, 
-                    fontSize = 13.sp, 
-                    fontWeight = FontWeight.Bold, 
-                    maxLines = 1,
-                    overflow = TextOverflow.Clip,
-                    modifier = Modifier.wrapContentWidth(unbounded = true)
-                )
+            Icon(
+                painter = painterResource(id = icon),
+                contentDescription = label,
+                modifier = Modifier.size(18.dp)
+            )
+            
+            AnimatedVisibility(
+                visible = isSelected,
+                enter = fadeIn() + expandHorizontally(),
+                exit = fadeOut() + shrinkHorizontally()
+            ) {
+                Row {
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = label, 
+                        fontSize = 13.sp, 
+                        fontWeight = FontWeight.Bold, 
+                        maxLines = 1,
+                        overflow = TextOverflow.Clip,
+                        modifier = Modifier.wrapContentWidth(unbounded = true)
+                    )
+                }
+            }
+        }
+
+        if (badgeCount > 0) {
+            Badge(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .offset(x = 2.dp, y = (-2).dp),
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            ) {
+                Text(badgeCount.toString(), fontSize = 10.sp)
             }
         }
     }
@@ -562,28 +575,25 @@ fun LauncherScreen(
     onProgressClick: () -> Unit,
     fragmentManager: androidx.fragment.app.FragmentManager?,
     isProgressVisible: Boolean,
-    isTaskRunning: Boolean
+    taskCount: Int,
+    isFragmentOpen: Boolean = false
 ) {
     val isPreview = LocalInspectionMode.current
     val backgroundBitmap = if (isPreview) null else BaseActivity.getBackgroundBitmap()
     val topBarHeight = dimensionResource(id = R.dimen._50sdp)
+    val ignoreNotch = if (isPreview) true else LauncherPreferences.PREF_IGNORE_NOTCH
     
     val hasBackground = backgroundBitmap != null
 
-    // State for login progress shared with AccountSelector
     var loginProgress by remember { mutableFloatStateOf(1f) }
     var isLoggingIn by remember { mutableStateOf(false) }
     
-    // Track selected category to support "clicking active button makes it not extended"
     var selectedCategory by remember { mutableIntStateOf(-1) }
 
-    // Sync selectedCategory with external visibility states
-    LaunchedEffect(isProgressVisible) {
-        if (!isProgressVisible && selectedCategory == 0) selectedCategory = -1
-    }
+    val isAnyScreenOpen = selectedCategory != -1 || isFragmentOpen
 
-    // Determine if any screen is open to replace account selector with close button
-    val isAnyScreenOpen = selectedCategory != -1 || isProgressVisible
+    // Animation Intensity scale
+    val animDuration = (300 * LauncherPreferences.PREF_ANIMATION_INTENSITY).toInt()
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -608,25 +618,24 @@ fun LauncherScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(topBarHeight)
-                    // Make top bar semi-transparent to show background through it
                     .background(MaterialTheme.colorScheme.surface.copy(alpha = if (hasBackground) 0.4f else 1f))
             ) {
-                // Apply horizontal display cutout padding to keep UI elements safe from the notch
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // Replace account spinner with "Home" button when screen is open with animation
+                        .run {
+                            if (ignoreNotch) this
+                            else windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal))
+                        },
+                    verticalAlignment = Alignment.CenterVertically) {
                     Box(modifier = Modifier.padding(start = 8.dp)) {
                         AnimatedContent(
                             targetState = isAnyScreenOpen,
                             transitionSpec = {
-                                (fadeIn(animationSpec = tween(220, delayMillis = 90)) + 
-                                 slideInHorizontally(initialOffsetX = { -it / 2 }))
-                                .togetherWith(fadeOut(animationSpec = tween(90)) + 
-                                 slideOutHorizontally(targetOffsetX = { -it / 2 }))
+                                (fadeIn(animationSpec = tween(animDuration, delayMillis = (animDuration * 0.4).toInt())) + 
+                                 slideInHorizontally(animationSpec = tween(animDuration), initialOffsetX = { -it / 2 }))
+                                .togetherWith(fadeOut(animationSpec = tween((animDuration * 0.4).toInt())) + 
+                                 slideOutHorizontally(animationSpec = tween(animDuration), targetOffsetX = { -it / 2 }))
                             },
                             label = "homeSwitch"
                         ) { targetAnyOpen ->
@@ -656,17 +665,14 @@ fun LauncherScreen(
 
                     Row(
                         modifier = Modifier.padding(end = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+                        verticalAlignment = Alignment.CenterVertically) {
                         TopBarButton(
                             onClick = { 
-                                if (selectedCategory != 0) {
-                                    selectedCategory = 0
-                                    if (!isProgressVisible) onProgressClick()
-                                }
+                                onProgressClick()
                             },
                             isSelected = false,
-                            isSpecialActive = isTaskRunning || selectedCategory == 0 || isProgressVisible,
+                            isSpecialActive = taskCount > 0 || isProgressVisible,
+                            badgeCount = taskCount,
                             icon = R.drawable.ic_px_progress,
                             label = "Tasks",
                             topBarHeight = topBarHeight
@@ -674,11 +680,9 @@ fun LauncherScreen(
 
                         TopBarButton(
                             onClick = { 
-                                if (selectedCategory != 1) {
-                                    if (isProgressVisible) onProgressClick()
-                                    selectedCategory = 1
-                                    onFilesClick() 
-                                }
+                                if (isProgressVisible) onProgressClick()
+                                selectedCategory = if (selectedCategory == 1) -1 else 1
+                                onFilesClick() 
                             },
                             isSelected = selectedCategory == 1,
                             icon = R.drawable.ic_px_folder,
@@ -688,11 +692,9 @@ fun LauncherScreen(
 
                         TopBarButton(
                             onClick = { 
-                                if (selectedCategory != 2) {
-                                    if (isProgressVisible) onProgressClick()
-                                    selectedCategory = 2
-                                    onInstallerClick() 
-                                }
+                                if (isProgressVisible) onProgressClick()
+                                selectedCategory = if (selectedCategory == 2) -1 else 2
+                                onInstallerClick() 
                             },
                             isSelected = selectedCategory == 2,
                             icon = R.drawable.ic_px_download,
@@ -702,11 +704,9 @@ fun LauncherScreen(
 
                         TopBarButton(
                             onClick = { 
-                                if (selectedCategory != 3) {
-                                    if (isProgressVisible) onProgressClick()
-                                    selectedCategory = 3
-                                    onSettingsClick() 
-                                }
+                                if (isProgressVisible) onProgressClick()
+                                selectedCategory = if (selectedCategory == 3) -1 else 3
+                                onSettingsClick()
                             },
                             isSelected = selectedCategory == 3,
                             icon = R.drawable.ic_px_alt_sliders,
@@ -749,7 +749,10 @@ fun LauncherScreen(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(top = topBarHeight + 12.dp, end = 12.dp)
-                    .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
+                    .run {
+                        if (ignoreNotch) this
+                        else windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal))
+                    },
                 topBarHeight = topBarHeight
             )
         }
@@ -768,7 +771,8 @@ fun LauncherScreenPreview() {
             onProgressClick = {},
             fragmentManager = null,
             isProgressVisible = true,
-            isTaskRunning = true
+            taskCount = 2,
+            isFragmentOpen = true
         )
     }
 }

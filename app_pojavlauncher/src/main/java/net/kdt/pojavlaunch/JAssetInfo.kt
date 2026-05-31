@@ -5,5 +5,5 @@ import androidx.annotation.Keep
 @Keep
 class JAssetInfo {
     var hash: String? = null
-    var size: Int = 0
+    var size: Long = 0
 }

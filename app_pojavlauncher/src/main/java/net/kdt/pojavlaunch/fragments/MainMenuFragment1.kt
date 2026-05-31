@@ -53,7 +53,7 @@ class MainMenuFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                PojavTheme(dynamicColor = false) {
+                PojavTheme(dynamicColor = true) {
                     Box(modifier = Modifier.fillMaxSize().background(Color.Transparent)) {
                         MainMenuRevamp(
                             onEditProfileClick = {

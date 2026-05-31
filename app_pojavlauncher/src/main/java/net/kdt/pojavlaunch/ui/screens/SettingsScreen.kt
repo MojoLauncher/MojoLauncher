@@ -1,9 +1,14 @@
 package net.kdt.pojavlaunch.ui.screens
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.RenderEffect
 import android.graphics.Shader
 import android.os.Build
+import android.app.ActivityManager
+import android.content.Context
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -36,10 +42,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.edit
 import net.ashmeet.hyperlauncher.R
 import net.kdt.pojavlaunch.BaseActivity
+import net.kdt.pojavlaunch.CustomControlsActivity
+import net.kdt.pojavlaunch.Tools
+import net.kdt.pojavlaunch.contracts.OpenDocumentWithExtension
+import net.kdt.pojavlaunch.multirt.MultiRTConfigDialog
+import net.kdt.pojavlaunch.plugins.LibraryPlugin
 import net.kdt.pojavlaunch.prefs.LauncherPreferences
 import net.kdt.pojavlaunch.ui.theme.PojavTheme
+import net.kdt.pojavlaunch.utils.RendererCompatUtil
 
 enum class SettingsPage(val titleRes: Int, val iconRes: Int) {
     APPEARANCE(R.string.preference_appearance_title, R.drawable.ic_px_color),
@@ -51,6 +64,7 @@ enum class SettingsPage(val titleRes: Int, val iconRes: Int) {
     DRAWER_BUTTON(R.string.preference_appearance_title, R.drawable.ic_px_drawer_button)
 }
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
@@ -93,11 +107,14 @@ fun SettingsScreen(
                         contentColor = MaterialTheme.colorScheme.onSurface,
                         windowInsets = WindowInsets(0, 0, 0, 0)
                     ) {
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
                         
                         Column(
-                            modifier = Modifier.fillMaxHeight().verticalScroll(railScrollState),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .verticalScroll(railScrollState),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
                             SettingsPage.entries.filter { it != SettingsPage.DRAWER_BUTTON }.forEach { page ->
                                 NavigationRailItem(
@@ -107,10 +124,14 @@ fun SettingsScreen(
                                         isMainPage = false
                                     },
                                     icon = { Icon(painterResource(page.iconRes), contentDescription = null, modifier = Modifier.size(24.dp)) },
+                                    label = { Text(stringResource(page.titleRes).substringBefore(" "), fontSize = 10.sp) },
+                                    alwaysShowLabel = false,
                                     colors = NavigationRailItemDefaults.colors(
                                         selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                                         indicatorColor = MaterialTheme.colorScheme.primaryContainer,
-                                        unselectedIconColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                        unselectedIconColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                                        selectedTextColor = MaterialTheme.colorScheme.primary,
+                                        unselectedTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                                     )
                                 )
                             }
@@ -121,18 +142,7 @@ fun SettingsScreen(
                     
                     Scaffold(
                         containerColor = Color.Transparent,
-                        contentWindowInsets = WindowInsets(0, 0, 0, 0),
-                        topBar = {
-                            TopAppBar(
-                                title = { Text(stringResource(currentPage.titleRes), fontWeight = FontWeight.Bold) },
-                                windowInsets = WindowInsets(0, 0, 0, 0),
-                                colors = TopAppBarDefaults.topAppBarColors(
-                                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = if (hasBackground) 0.4f else 1f),
-                                    titleContentColor = MaterialTheme.colorScheme.onSurface,
-                                    navigationIconContentColor = MaterialTheme.colorScheme.onSurface
-                                )
-                            )
-                        }
+                        contentWindowInsets = WindowInsets(0, 0, 0, 0)
                     ) { padding ->
                         Box(modifier = Modifier.padding(padding).fillMaxSize()) {
                             SettingsContent(currentPage, onNavigate = { currentPage = it })
@@ -143,18 +153,7 @@ fun SettingsScreen(
                 if (isMainPage) {
                     Scaffold(
                         containerColor = Color.Transparent,
-                        contentWindowInsets = WindowInsets(0, 0, 0, 0),
-                        topBar = {
-                            TopAppBar(
-                                title = { Text(stringResource(R.string.mcl_options), fontWeight = FontWeight.Bold) },
-                                windowInsets = WindowInsets(0, 0, 0, 0),
-                                colors = TopAppBarDefaults.topAppBarColors(
-                                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = if (hasBackground) 0.4f else 1f),
-                                    titleContentColor = MaterialTheme.colorScheme.onSurface,
-                                    navigationIconContentColor = MaterialTheme.colorScheme.onSurface
-                                )
-                            )
-                        }
+                        contentWindowInsets = WindowInsets(0, 0, 0, 0)
                     ) { padding ->
                         Box(modifier = Modifier.padding(padding)) {
                             MainSettings(onNavigate = { 
@@ -166,18 +165,7 @@ fun SettingsScreen(
                 } else {
                     Scaffold(
                         containerColor = Color.Transparent,
-                        contentWindowInsets = WindowInsets(0, 0, 0, 0),
-                        topBar = {
-                            TopAppBar(
-                                title = { Text(if (currentPage == SettingsPage.DRAWER_BUTTON) "Drawer Button" else stringResource(currentPage.titleRes), fontWeight = FontWeight.Bold) },
-                                windowInsets = WindowInsets(0, 0, 0, 0),
-                                colors = TopAppBarDefaults.topAppBarColors(
-                                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = if (hasBackground) 0.4f else 1f),
-                                    titleContentColor = MaterialTheme.colorScheme.onSurface,
-                                    navigationIconContentColor = MaterialTheme.colorScheme.onSurface
-                                )
-                            )
-                        }
+                        contentWindowInsets = WindowInsets(0, 0, 0, 0)
                     ) { padding ->
                         BackHandler { 
                             if (currentPage == SettingsPage.DRAWER_BUTTON) {
@@ -263,7 +251,7 @@ fun MainSettings(onNavigate: (SettingsPage) -> Unit) {
                     onCheckedChange = {
                         forceEnglish = it
                         LauncherPreferences.PREF_FORCE_ENGLISH = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("force_english", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("force_english", it) }
                     }
                 )
             }
@@ -285,7 +273,7 @@ fun AppearanceSettings(onNavigate: (SettingsPage) -> Unit) {
                     onValueChange = {
                         theme = it
                         LauncherPreferences.PREF_APP_THEME = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putString("appTheme", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putString("appTheme", it) }
                         LauncherPreferences.applyTheme()
                     },
                     icon = painterResource(R.drawable.ic_px_theme)
@@ -312,7 +300,7 @@ fun AppearanceSettings(onNavigate: (SettingsPage) -> Unit) {
                     onCheckedChange = {
                         backgroundBlur = it
                         LauncherPreferences.PREF_BACKGROUND_BLUR = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("appBackgroundBlur", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("appBackgroundBlur", it) }
                     }
                 )
                 
@@ -325,7 +313,7 @@ fun AppearanceSettings(onNavigate: (SettingsPage) -> Unit) {
                         onValueChange = {
                             blurIntensity = it
                             LauncherPreferences.PREF_BACKGROUND_BLUR_INTENSITY = it.toInt()
-                            LauncherPreferences.DEFAULT_PREF?.edit()?.putInt("appBackgroundBlurIntensity", it.toInt())?.apply()
+                            LauncherPreferences.DEFAULT_PREF?.edit { putInt("appBackgroundBlurIntensity", it.toInt()) }
                         },
                         valueRange = 1f..100f
                     )
@@ -339,7 +327,7 @@ fun AppearanceSettings(onNavigate: (SettingsPage) -> Unit) {
                     onCheckedChange = {
                         overlayEnabled = it
                         LauncherPreferences.PREF_BACKGROUND_IMAGE_OVERLAY_ENABLED = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("backgroundImageOverlayEnabled", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("backgroundImageOverlayEnabled", it) }
                     }
                 )
                 
@@ -352,7 +340,7 @@ fun AppearanceSettings(onNavigate: (SettingsPage) -> Unit) {
                         onValueChange = {
                             overlayOpacity = it
                             LauncherPreferences.PREF_BACKGROUND_IMAGE_OVERLAY_ALPHA = it / 100f
-                            LauncherPreferences.DEFAULT_PREF?.edit()?.putInt("backgroundImageOverlayOpacity", it.toInt())?.apply()
+                            LauncherPreferences.DEFAULT_PREF?.edit { putInt("backgroundImageOverlayOpacity", it.toInt()) }
                         },
                         valueRange = 0f..100f
                     )
@@ -372,7 +360,7 @@ fun AppearanceSettings(onNavigate: (SettingsPage) -> Unit) {
                     onValueChange = {
                         iconPreset = it
                         LauncherPreferences.PREF_ICON_PRESET = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putString("iconPreset", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putString("iconPreset", it) }
                     },
                     icon = painterResource(R.drawable.ic_px_preset)
                 )
@@ -396,7 +384,7 @@ fun AppearanceSettings(onNavigate: (SettingsPage) -> Unit) {
                     onValueChange = {
                         appearancePreset = it
                         LauncherPreferences.PREF_APPEARANCE_PRESET = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putString("appearancePreset", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putString("appearancePreset", it) }
                     },
                     icon = painterResource(R.drawable.ic_px_preset)
                 )
@@ -414,7 +402,7 @@ fun AppearanceSettings(onNavigate: (SettingsPage) -> Unit) {
                     onValueChange = {
                         cornerRadius = it
                         LauncherPreferences.PREF_MINEBUTTON_CORNER_RADIUS = it.toInt()
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putInt("minebutton_corner_radius", it.toInt())?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putInt("minebutton_corner_radius", it.toInt()) }
                     },
                     valueRange = 0f..50f
                 )
@@ -432,7 +420,7 @@ fun AppearanceSettings(onNavigate: (SettingsPage) -> Unit) {
                     onValueChange = {
                         animType = it
                         LauncherPreferences.PREF_ANIMATION_TYPE = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putString("animationType", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putString("animationType", it) }
                     },
                     icon = painterResource(R.drawable.ic_px_animation)
                 )
@@ -445,7 +433,7 @@ fun AppearanceSettings(onNavigate: (SettingsPage) -> Unit) {
                     onValueChange = {
                         animIntensity = it
                         LauncherPreferences.PREF_ANIMATION_INTENSITY = it / 100f
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putInt("animationIntensity", it.toInt())?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putInt("animationIntensity", it.toInt()) }
                     },
                     valueRange = 0f..100f
                 )
@@ -470,19 +458,29 @@ fun AppearanceSettings(onNavigate: (SettingsPage) -> Unit) {
 
 @Composable
 fun VideoSettings() {
+    val context = LocalContext.current
+    val compatibleRenderers = remember { RendererCompatUtil.getCompatibleRenderers(context) }
+    val rendererNames = remember { compatibleRenderers.rendererDisplayNames?.filterNotNull()?.toTypedArray() ?: emptyArray() }
+    val rendererValues = remember { compatibleRenderers.rendererIds.filterNotNull().toTypedArray() }
+    
+    val supportsSustainedPerf = remember { Build.VERSION.SDK_INT >= Build.VERSION_CODES.N }
+    
+    val allPlugins = remember { LibraryPlugin.discoverAllPlugins(context) }
+    val hasAnglePlugin = remember { allPlugins.any { it.packageName == LibraryPlugin.ID_ANGLE_PLUGIN } }
+
     LazyColumn(contentPadding = PaddingValues(vertical = 12.dp)) {
         item {
             PreferenceGroup(title = stringResource(R.string.preference_category_video)) {
                 var renderer by remember { mutableStateOf(LauncherPreferences.PREF_RENDERER) }
                 PreferenceList(
                     title = stringResource(R.string.mcl_setting_category_renderer),
-                    entries = stringArrayResource(R.array.renderer),
-                    entryValues = stringArrayResource(R.array.renderer_values),
+                    entries = rendererNames,
+                    entryValues = rendererValues,
                     selectedValue = renderer,
                     onValueChange = {
                         renderer = it
                         LauncherPreferences.PREF_RENDERER = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putString("renderer", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putString("renderer", it) }
                     },
                     icon = painterResource(R.drawable.ic_px_image_renderer)
                 )
@@ -496,7 +494,7 @@ fun VideoSettings() {
                     onValueChange = {
                         backend = it
                         LauncherPreferences.PREF_PREFERRED_GRAPHICS_BACKEND = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putString("preferredGraphicsBackend", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putString("preferredGraphicsBackend", it) }
                     },
                     icon = painterResource(R.drawable.ic_px_image)
                 )
@@ -510,7 +508,7 @@ fun VideoSettings() {
                     onCheckedChange = {
                         ignoreNotch = it
                         LauncherPreferences.PREF_IGNORE_NOTCH = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("ignoreNotch", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("ignoreNotch", it) }
                     }
                 )
                 
@@ -522,23 +520,25 @@ fun VideoSettings() {
                     onValueChange = {
                         resRatio = it
                         LauncherPreferences.PREF_SCALE_FACTOR = it / 100f
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putInt("resolutionRatio", it.toInt())?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putInt("resolutionRatio", it.toInt()) }
                     },
                     valueRange = 25f..100f,
                     icon = painterResource(R.drawable.ic_px_resolution)
                 )
                 
-                var sustainedPerf by remember { mutableStateOf(LauncherPreferences.PREF_SUSTAINED_PERFORMANCE) }
-                PreferenceSwitch(
-                    title = stringResource(R.string.preference_sustained_performance_title),
-                    summary = stringResource(R.string.preference_sustained_performance_description),
-                    checked = sustainedPerf,
-                    onCheckedChange = {
-                        sustainedPerf = it
-                        LauncherPreferences.PREF_SUSTAINED_PERFORMANCE = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("sustainedPerformance", it)?.apply()
-                    }
-                )
+                if (supportsSustainedPerf) {
+                    var sustainedPerf by remember { mutableStateOf(LauncherPreferences.PREF_SUSTAINED_PERFORMANCE) }
+                    PreferenceSwitch(
+                        title = stringResource(R.string.preference_sustained_performance_title),
+                        summary = stringResource(R.string.preference_sustained_performance_description),
+                        checked = sustainedPerf,
+                        onCheckedChange = {
+                            sustainedPerf = it
+                            LauncherPreferences.PREF_SUSTAINED_PERFORMANCE = it
+                            LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("sustainedPerformance", it) }
+                        }
+                    )
+                }
                 
                 var altSurface by remember { mutableStateOf(LauncherPreferences.PREF_USE_ALTERNATE_SURFACE) }
                 PreferenceSwitch(
@@ -548,7 +548,7 @@ fun VideoSettings() {
                     onCheckedChange = {
                         altSurface = it
                         LauncherPreferences.PREF_USE_ALTERNATE_SURFACE = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("alternate_surface", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("alternate_surface", it) }
                     }
                 )
                 
@@ -560,21 +560,23 @@ fun VideoSettings() {
                     onCheckedChange = {
                         forceVsync = it
                         LauncherPreferences.PREF_FORCE_VSYNC = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("force_vsync", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("force_vsync", it) }
                     }
                 )
                 
-                var useAngle by remember { mutableStateOf(LauncherPreferences.PREF_USE_ANGLE) }
-                PreferenceSwitch(
-                    title = stringResource(R.string.preference_use_angle_title),
-                    summary = stringResource(R.string.preference_use_angle_description),
-                    checked = useAngle,
-                    onCheckedChange = {
-                        useAngle = it
-                        LauncherPreferences.PREF_USE_ANGLE = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("use_angle", it)?.apply()
-                    }
-                )
+                if (hasAnglePlugin) {
+                    var useAngle by remember { mutableStateOf(LauncherPreferences.PREF_USE_ANGLE) }
+                    PreferenceSwitch(
+                        title = stringResource(R.string.preference_use_angle_title),
+                        summary = stringResource(R.string.preference_use_angle_description),
+                        checked = useAngle,
+                        onCheckedChange = {
+                            useAngle = it
+                            LauncherPreferences.PREF_USE_ANGLE = it
+                            LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("use_angle", it) }
+                        }
+                    )
+                }
                 
                 var vsinkInZink by remember { mutableStateOf(LauncherPreferences.PREF_VSYNC_IN_ZINK) }
                 PreferenceSwitch(
@@ -584,7 +586,7 @@ fun VideoSettings() {
                     onCheckedChange = {
                         vsinkInZink = it
                         LauncherPreferences.PREF_VSYNC_IN_ZINK = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("vsync_in_zink", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("vsync_in_zink", it) }
                     }
                 )
             }
@@ -594,13 +596,19 @@ fun VideoSettings() {
 
 @Composable
 fun ControlSettings() {
+    val context = LocalContext.current
+    val supportsGyro = remember { Tools.deviceSupportsGyro(context) }
+
     LazyColumn(contentPadding = PaddingValues(vertical = 12.dp)) {
         item {
             PreferenceGroup {
                 PreferenceItem(
                     title = stringResource(R.string.preference_edit_controls_title),
                     summary = stringResource(R.string.preference_edit_controls_summary),
-                    icon = painterResource(R.drawable.ic_px_gamepad)
+                    icon = painterResource(R.drawable.ic_px_gamepad),
+                    onClick = {
+                        context.startActivity(Intent(context, CustomControlsActivity::class.java))
+                    }
                 )
             }
         }
@@ -616,7 +624,7 @@ fun ControlSettings() {
                     onCheckedChange = {
                         disableGestures = it
                         LauncherPreferences.PREF_DISABLE_GESTURES = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("disableGestures", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("disableGestures", it) }
                     }
                 )
                 
@@ -628,7 +636,7 @@ fun ControlSettings() {
                     onCheckedChange = {
                         disableDoubleTap = it
                         LauncherPreferences.PREF_DISABLE_SWAP_HAND = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("disableDoubleTap", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("disableDoubleTap", it) }
                     }
                 )
                 
@@ -641,7 +649,7 @@ fun ControlSettings() {
                     onValueChange = {
                         longPressTrigger = it
                         LauncherPreferences.PREF_LONGPRESS_TRIGGER = it.toInt()
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putInt("timeLongPressTrigger", it.toInt())?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putInt("timeLongPressTrigger", it.toInt()) }
                     },
                     valueRange = 100f..1000f
                 )
@@ -659,7 +667,7 @@ fun ControlSettings() {
                     onValueChange = {
                         buttonScale = it
                         LauncherPreferences.PREF_BUTTONSIZE = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putInt("buttonscale", it.toInt())?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putInt("buttonscale", it.toInt()) }
                     },
                     valueRange = 50f..200f
                 )
@@ -672,7 +680,7 @@ fun ControlSettings() {
                     onCheckedChange = {
                         buttonAllCaps = it
                         LauncherPreferences.PREF_BUTTON_ALL_CAPS = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("buttonAllCaps", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("buttonAllCaps", it) }
                     }
                 )
             }
@@ -689,7 +697,7 @@ fun ControlSettings() {
                     onValueChange = {
                         mouseScale = it
                         LauncherPreferences.PREF_MOUSESCALE = it / 100f
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putInt("mousescale", it.toInt())?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putInt("mousescale", it.toInt()) }
                     },
                     valueRange = 25f..300f
                 )
@@ -703,7 +711,7 @@ fun ControlSettings() {
                     onValueChange = {
                         mouseSpeed = it
                         LauncherPreferences.PREF_MOUSESPEED = it / 100f
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putInt("mousespeed", it.toInt())?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putInt("mousespeed", it.toInt()) }
                     },
                     valueRange = 25f..300f
                 )
@@ -716,88 +724,90 @@ fun ControlSettings() {
                     onCheckedChange = {
                         mouseStart = it
                         LauncherPreferences.PREF_VIRTUAL_MOUSE_START = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("mouse_start", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("mouse_start", it) }
                     }
                 )
             }
         }
 
-        item {
-            PreferenceGroup(title = stringResource(R.string.preference_category_gyro_controls)) {
-                var enableGyro by remember { mutableStateOf(LauncherPreferences.PREF_ENABLE_GYRO) }
-                PreferenceSwitch(
-                    title = stringResource(R.string.preference_enable_gyro_title),
-                    summary = stringResource(R.string.preference_enable_gyro_description),
-                    checked = enableGyro,
-                    onCheckedChange = {
-                        enableGyro = it
-                        LauncherPreferences.PREF_ENABLE_GYRO = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("enableGyro", it)?.apply()
+        if (supportsGyro) {
+            item {
+                PreferenceGroup(title = stringResource(R.string.preference_category_gyro_controls)) {
+                    var enableGyro by remember { mutableStateOf(LauncherPreferences.PREF_ENABLE_GYRO) }
+                    PreferenceSwitch(
+                        title = stringResource(R.string.preference_enable_gyro_title),
+                        summary = stringResource(R.string.preference_enable_gyro_description),
+                        checked = enableGyro,
+                        onCheckedChange = {
+                            enableGyro = it
+                            LauncherPreferences.PREF_ENABLE_GYRO = it
+                            LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("enableGyro", it) }
+                        }
+                    )
+                    
+                    if (enableGyro) {
+                        var gyroSens by remember { mutableFloatStateOf(LauncherPreferences.PREF_GYRO_SENSITIVITY * 100f) }
+                        PreferenceSlider(
+                            title = stringResource(R.string.preference_gyro_sensitivity_title),
+                            summary = stringResource(R.string.preference_gyro_sensitivity_description),
+                            value = gyroSens,
+                            onValueChange = {
+                                gyroSens = it
+                                LauncherPreferences.PREF_GYRO_SENSITIVITY = it / 100f
+                                LauncherPreferences.DEFAULT_PREF?.edit { putInt("gyroSensitivity", it.toInt()) }
+                            },
+                            valueRange = 25f..300f
+                        )
+                        
+                        var gyroRate by remember { mutableFloatStateOf(LauncherPreferences.PREF_GYRO_SAMPLE_RATE.toFloat()) }
+                        PreferenceSlider(
+                            title = stringResource(R.string.preference_gyro_sample_rate_title),
+                            summary = stringResource(R.string.preference_gyro_sample_rate_description),
+                            value = gyroRate,
+                            onValueChange = {
+                                gyroRate = it
+                                LauncherPreferences.PREF_GYRO_SAMPLE_RATE = it.toInt()
+                                LauncherPreferences.DEFAULT_PREF?.edit { putInt("gyroSampleRate", it.toInt()) }
+                            },
+                            valueRange = 5f..50f
+                        )
+                        
+                        var gyroSmoothing by remember { mutableStateOf(LauncherPreferences.PREF_GYRO_SMOOTHING) }
+                        PreferenceSwitch(
+                            title = stringResource(R.string.preference_gyro_smoothing_title),
+                            summary = stringResource(R.string.preference_gyro_smoothing_description),
+                            checked = gyroSmoothing,
+                            onCheckedChange = {
+                                gyroSmoothing = it
+                                LauncherPreferences.PREF_GYRO_SMOOTHING = it
+                                LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("gyroSmoothing", it) }
+                            }
+                        )
+                        
+                        var gyroInvertX by remember { mutableStateOf(LauncherPreferences.PREF_GYRO_INVERT_X) }
+                        PreferenceSwitch(
+                            title = stringResource(R.string.preference_gyro_invert_x_axis),
+                            summary = stringResource(R.string.preference_gyro_invert_x_axis_description),
+                            checked = gyroInvertX,
+                            onCheckedChange = {
+                                gyroInvertX = it
+                                LauncherPreferences.PREF_GYRO_INVERT_X = it
+                                LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("gyroInvertX", it) }
+                            }
+                        )
+                        
+                        var gyroInvertY by remember { mutableStateOf(LauncherPreferences.PREF_GYRO_INVERT_Y) }
+                        PreferenceSwitch(
+                            title = stringResource(R.string.preference_gyro_invert_y_axis),
+                            summary = stringResource(R.string.preference_gyro_invert_y_axis_description),
+                            checked = gyroInvertY,
+                            onCheckedChange = {
+                                gyroInvertY = it
+                                LauncherPreferences.PREF_GYRO_INVERT_Y = it
+                                LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("gyroInvertY", it) }
+                            }
+                        )
                     }
-                )
-                
-                if (enableGyro) {
-                    var gyroSens by remember { mutableFloatStateOf(LauncherPreferences.PREF_GYRO_SENSITIVITY * 100f) }
-                    PreferenceSlider(
-                        title = stringResource(R.string.preference_gyro_sensitivity_title),
-                        summary = stringResource(R.string.preference_gyro_sensitivity_description),
-                        value = gyroSens,
-                        onValueChange = {
-                            gyroSens = it
-                            LauncherPreferences.PREF_GYRO_SENSITIVITY = it / 100f
-                            LauncherPreferences.DEFAULT_PREF?.edit()?.putInt("gyroSensitivity", it.toInt())?.apply()
-                        },
-                        valueRange = 25f..300f
-                    )
-                    
-                    var gyroRate by remember { mutableFloatStateOf(LauncherPreferences.PREF_GYRO_SAMPLE_RATE.toFloat()) }
-                    PreferenceSlider(
-                        title = stringResource(R.string.preference_gyro_sample_rate_title),
-                        summary = stringResource(R.string.preference_gyro_sample_rate_description),
-                        value = gyroRate,
-                        onValueChange = {
-                            gyroRate = it
-                            LauncherPreferences.PREF_GYRO_SAMPLE_RATE = it.toInt()
-                            LauncherPreferences.DEFAULT_PREF?.edit()?.putInt("gyroSampleRate", it.toInt())?.apply()
-                        },
-                        valueRange = 5f..50f
-                    )
-                    
-                    var gyroSmoothing by remember { mutableStateOf(LauncherPreferences.PREF_GYRO_SMOOTHING) }
-                    PreferenceSwitch(
-                        title = stringResource(R.string.preference_gyro_smoothing_title),
-                        summary = stringResource(R.string.preference_gyro_smoothing_description),
-                        checked = gyroSmoothing,
-                        onCheckedChange = {
-                            gyroSmoothing = it
-                            LauncherPreferences.PREF_GYRO_SMOOTHING = it
-                            LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("gyroSmoothing", it)?.apply()
-                        }
-                    )
-                    
-                    var gyroInvertX by remember { mutableStateOf(LauncherPreferences.PREF_GYRO_INVERT_X) }
-                    PreferenceSwitch(
-                        title = stringResource(R.string.preference_gyro_invert_x_axis),
-                        summary = stringResource(R.string.preference_gyro_invert_x_axis_description),
-                        checked = gyroInvertX,
-                        onCheckedChange = {
-                            gyroInvertX = it
-                            LauncherPreferences.PREF_GYRO_INVERT_X = it
-                            LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("gyroInvertX", it)?.apply()
-                        }
-                    )
-                    
-                    var gyroInvertY by remember { mutableStateOf(LauncherPreferences.PREF_GYRO_INVERT_Y) }
-                    PreferenceSwitch(
-                        title = stringResource(R.string.preference_gyro_invert_y_axis),
-                        summary = stringResource(R.string.preference_gyro_invert_y_axis_description),
-                        checked = gyroInvertY,
-                        onCheckedChange = {
-                            gyroInvertY = it
-                            LauncherPreferences.PREF_GYRO_INVERT_Y = it
-                            LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("gyroInvertY", it)?.apply()
-                        }
-                    )
                 }
             }
         }
@@ -815,7 +825,7 @@ fun ControlSettings() {
                     onValueChange = {
                         deadzone = it
                         LauncherPreferences.PREF_DEADZONE_SCALE = it / 100f
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putInt("gamepad_deadzone_scale", it.toInt())?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putInt("gamepad_deadzone_scale", it.toInt()) }
                     },
                     valueRange = 50f..200f
                 )
@@ -826,15 +836,69 @@ fun ControlSettings() {
 
 @Composable
 fun JavaSettings() {
+    val context = LocalContext.current
+    var showJvmArgsDialog by remember { mutableStateOf(false) }
+
+    val mVmInstallLauncher = rememberLauncherForActivityResult(
+        OpenDocumentWithExtension("xz")
+    ) { uri ->
+        if (uri != null) Tools.installRuntimeFromUri(context, uri)
+    }
+
+    val mDialogScreen = remember {
+        MultiRTConfigDialog().apply {
+            prepare(context, mVmInstallLauncher)
+        }
+    }
+
+    if (showJvmArgsDialog) {
+        var jvmArgs by remember { mutableStateOf(LauncherPreferences.PREF_CUSTOM_JAVA_ARGS ?: "") }
+        AlertDialog(
+            onDismissRequest = { showJvmArgsDialog = false },
+            title = { Text(stringResource(R.string.mcl_setting_title_javaargs)) },
+            text = {
+                OutlinedTextField(
+                    value = jvmArgs,
+                    onValueChange = { jvmArgs = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    placeholder = { Text(stringResource(R.string.mcl_setting_subtitle_javaargs)) }
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    LauncherPreferences.PREF_CUSTOM_JAVA_ARGS = jvmArgs
+                    LauncherPreferences.DEFAULT_PREF?.edit { putString("javaArgs", jvmArgs) }
+                    showJvmArgsDialog = false
+                }) {
+                    Text(stringResource(R.string.global_save))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showJvmArgsDialog = false }) {
+                    Text(stringResource(android.R.string.cancel))
+                }
+            }
+        )
+    }
+
     LazyColumn(contentPadding = PaddingValues(vertical = 12.dp)) {
         item {
             PreferenceGroup(title = stringResource(R.string.preference_category_java_tweaks)) {
-                PreferenceItem(title = stringResource(R.string.multirt_title), summary = stringResource(R.string.multirt_subtitle))
+                PreferenceItem(
+                    title = stringResource(R.string.multirt_title),
+                    summary = stringResource(R.string.multirt_subtitle),
+                    onClick = {
+                        mDialogScreen.show()
+                    }
+                )
                 
                 PreferenceItem(
                     title = stringResource(R.string.mcl_setting_title_javaargs),
-                    summary = LauncherPreferences.PREF_CUSTOM_JAVA_ARGS ?: stringResource(R.string.mcl_setting_subtitle_javaargs),
-                    icon = painterResource(R.drawable.ic_px_java)
+                    summary = LauncherPreferences.PREF_CUSTOM_JAVA_ARGS?.ifEmpty { null } ?: stringResource(R.string.mcl_setting_subtitle_javaargs),
+                    icon = painterResource(R.drawable.ic_px_java),
+                    onClick = {
+                        showJvmArgsDialog = true
+                    }
                 )
                 
                 var ram by remember { mutableFloatStateOf(LauncherPreferences.PREF_RAM_ALLOCATION.toFloat()) }
@@ -845,7 +909,7 @@ fun JavaSettings() {
                     onValueChange = {
                         ram = it
                         LauncherPreferences.PREF_RAM_ALLOCATION = it.toInt()
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putInt("allocation", it.toInt())?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putInt("allocation", it.toInt()) }
                     },
                     valueRange = 512f..8192f
                 )
@@ -858,7 +922,7 @@ fun JavaSettings() {
                     onCheckedChange = {
                         javaSandbox = it
                         LauncherPreferences.PREF_JAVA_SANDBOX = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("java_sandbox", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("java_sandbox", it) }
                     }
                 )
             }
@@ -880,7 +944,7 @@ fun MiscSettings() {
                     onCheckedChange = {
                         checkFiles = it
                         LauncherPreferences.PREF_VERIFY_FILES = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("checkGameFiles", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("checkGameFiles", it) }
                     }
                 )
                 
@@ -892,7 +956,7 @@ fun MiscSettings() {
                     onCheckedChange = {
                         fastStart = it
                         LauncherPreferences.PREF_RAPID_START = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("fastStartupCheck", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("fastStartupCheck", it) }
                     }
                 )
                 
@@ -905,7 +969,7 @@ fun MiscSettings() {
                     onValueChange = {
                         dlSource = it
                         LauncherPreferences.PREF_DOWNLOAD_SOURCE = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putString("downloadSource", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putString("downloadSource", it) }
                     },
                     icon = painterResource(R.drawable.ic_px_download)
                 )
@@ -918,7 +982,7 @@ fun MiscSettings() {
                     onCheckedChange = {
                         verifyManifest = it
                         LauncherPreferences.PREF_VERIFY_MANIFEST = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("verifyManifest", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("verifyManifest", it) }
                     }
                 )
                 
@@ -930,7 +994,7 @@ fun MiscSettings() {
                     onCheckedChange = {
                         zinkPreferSystem = it
                         LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("zinkPreferSystemDriver", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("zinkPreferSystemDriver", it) }
                     }
                 )
             }
@@ -951,7 +1015,7 @@ fun ExperimentalSettings() {
                     onCheckedChange = {
                         dumpShaders = it
                         LauncherPreferences.PREF_DUMP_SHADERS = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("dump_shaders", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("dump_shaders", it) }
                     }
                 )
                 
@@ -963,7 +1027,7 @@ fun ExperimentalSettings() {
                     onCheckedChange = {
                         bigCore = it
                         LauncherPreferences.PREF_BIG_CORE_AFFINITY = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("bigCoreAffinity", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("bigCoreAffinity", it) }
                     }
                 )
                 
@@ -975,7 +1039,7 @@ fun ExperimentalSettings() {
                     onCheckedChange = {
                         enableMipmap = it
                         LauncherPreferences.PREF_ENABLE_MIPMAP = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("enableMipmap", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("enableMipmap", it) }
                     }
                 )
                 
@@ -987,7 +1051,7 @@ fun ExperimentalSettings() {
                     onCheckedChange = {
                         disableErrorCheck = it
                         LauncherPreferences.PREF_DISABLE_ERROR_CHECK = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("disableErrorCheck", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("disableErrorCheck", it) }
                     }
                 )
                 
@@ -999,7 +1063,7 @@ fun ExperimentalSettings() {
                     onCheckedChange = {
                         optimizeNetwork = it
                         LauncherPreferences.PREF_OPTIMIZE_NETWORK = it
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putBoolean("optimizeNetwork", it)?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("optimizeNetwork", it) }
                     }
                 )
             }
@@ -1019,7 +1083,7 @@ fun DrawerButtonSettings() {
                     onValueChange = {
                         buttonSize = it
                         LauncherPreferences.PREF_DRAWER_BUTTON_SIZE = it.toInt()
-                        LauncherPreferences.DEFAULT_PREF?.edit()?.putInt("drawerButtonSize", it.toInt())?.apply()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putInt("drawerButtonSize", it.toInt()) }
                     },
                     valueRange = 20f..100f
                 )
@@ -1048,7 +1112,7 @@ fun PreferenceGroup(
             modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.1f))
         ) {
-            Column(content = content)
+            Column(modifier = Modifier.padding(vertical = 4.dp), content = content)
         }
     }
 }

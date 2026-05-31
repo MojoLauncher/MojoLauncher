@@ -19,7 +19,6 @@ class SettingsFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                // ✅ Enabled dynamic color to use phone wallpaper colors
                 PojavTheme(dynamicColor = true) {
                     SettingsScreen(
                         onBack = {

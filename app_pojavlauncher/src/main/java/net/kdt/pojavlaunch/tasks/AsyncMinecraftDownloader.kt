@@ -4,6 +4,7 @@ import net.kdt.pojavlaunch.JMinecraftVersionList
 import net.kdt.pojavlaunch.extra.ExtraConstants
 import net.kdt.pojavlaunch.extra.ExtraCore
 import net.kdt.pojavlaunch.instances.Instance
+import java.io.File
 
 object AsyncMinecraftDownloader {
     @JvmStatic
@@ -41,7 +42,7 @@ object AsyncMinecraftDownloader {
     }
 
     interface DoneListener {
-        fun onDownloadDone()
+        fun onDownloadDone(classPath: Array<File>)
         fun onDownloadFailed(throwable: Throwable?)
     }
 }

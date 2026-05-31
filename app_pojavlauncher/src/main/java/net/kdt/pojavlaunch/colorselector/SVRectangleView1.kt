@@ -27,21 +27,21 @@ class SVRectangleView(context: Context?, attrs: AttributeSet?) : View(context, a
     var mRectSelectionListener: RectangleSelectionListener? = null
 
     init {
-        mColorPaint.setColor(Color.BLACK)
-        mColorPaint.setStyle(Paint.Style.FILL)
+        mColorPaint.color = Color.BLACK
+        mColorPaint.style = Paint.Style.FILL
         mPointerSize = dpToPx(6f)
-        mPointerPaint.setColor(Color.BLACK)
-        mPointerPaint.setStrokeWidth(dpToPx(3f))
+        mPointerPaint.color = Color.BLACK
+        mPointerPaint.strokeWidth = dpToPx(3f)
     }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
-            getParent().requestDisallowInterceptTouchEvent(true)
+        if (event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_MOVE) {
+            parent.requestDisallowInterceptTouchEvent(true)
         }
 
-        val x = event.getX()
-        val y = event.getY()
+        val x = event.x
+        val y = event.y
         mFingerPosX = x * mWidthInverted
         mFingerPosY = y * mHeightInverted
 
@@ -66,7 +66,7 @@ class SVRectangleView(context: Context?, attrs: AttributeSet?) : View(context, a
     }
 
     fun setColor(color: Int, invalidate: Boolean) {
-        mColorPaint.setColor(color)
+        mColorPaint.color = color
         if (invalidate) invalidate()
     }
 
@@ -83,50 +83,46 @@ class SVRectangleView(context: Context?, attrs: AttributeSet?) : View(context, a
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.drawRect(mViewSize!!, mColorPaint)
-        canvas.drawBitmap(mSvRectangle!!, 0f, 0f, null)
-        drawPointer(canvas, mViewSize!!.right * mFingerPosX, mViewSize!!.bottom * mFingerPosY)
+        mViewSize?.let { canvas.drawRect(it, mColorPaint) }
+        mSvRectangle?.let { canvas.drawBitmap(it, 0f, 0f, null) }
+        mViewSize?.let { drawPointer(canvas, it.right * mFingerPosX, it.bottom * mFingerPosY) }
     }
 
     override fun onSizeChanged(w: Int, h: Int, old_w: Int, old_h: Int) {
         mViewSize = RectF(0f, 0f, w.toFloat(), h.toFloat())
-        mWidthInverted = 1 / mViewSize!!.right
-        mHeightInverted = 1 / mViewSize!!.bottom
+        mWidthInverted = 1f / mViewSize!!.right
+        mHeightInverted = 1f / mViewSize!!.bottom
         if (w > 0 && h > 0) regenerateRectangle()
     }
 
     protected fun regenerateRectangle() {
-        val w = getWidth()
-        val h = getHeight()
+        val w = width
+        val h = height
         if (mSvRectangle != null) mSvRectangle!!.recycle()
-        mSvRectangle = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        mSvRectangle = Bitmap.createBitmap(w.coerceAtLeast(1), h.coerceAtLeast(1), Bitmap.Config.ARGB_8888)
         val rectPaint = Paint()
         val canvas = Canvas(mSvRectangle!!)
         val h2f = h / 2f
         val w2f = w / 2f
-        rectPaint.setShader(
-            LinearGradient(
-                0f,
-                h2f,
-                w.toFloat(),
-                h2f,
-                Color.WHITE,
-                0,
-                Shader.TileMode.CLAMP
-            )
+        rectPaint.shader = LinearGradient(
+            0f,
+            h2f,
+            w.toFloat(),
+            h2f,
+            Color.WHITE,
+            0,
+            Shader.TileMode.CLAMP
         )
-        canvas.drawRect(mViewSize!!, rectPaint)
-        rectPaint.setShader(
-            LinearGradient(
-                w2f,
-                0f,
-                w2f,
-                h.toFloat(),
-                Color.BLACK,
-                0,
-                Shader.TileMode.CLAMP
-            )
+        mViewSize?.let { canvas.drawRect(it, rectPaint) }
+        rectPaint.shader = LinearGradient(
+            w2f,
+            0f,
+            w2f,
+            h.toFloat(),
+            Color.BLACK,
+            0,
+            Shader.TileMode.CLAMP
         )
-        canvas.drawRect(mViewSize!!, rectPaint)
+        mViewSize?.let { canvas.drawRect(it, rectPaint) }
     }
 }

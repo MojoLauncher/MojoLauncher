@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -63,55 +64,39 @@ fun SelectAuthScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Surface(
-                modifier = Modifier.fillMaxWidth(0.8f),
-                shape = RoundedCornerShape(24.dp),
-                color = MaterialTheme.colorScheme.surface.copy(alpha = if (hasBackground) 0.7f else 1f),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.1f)),
-                tonalElevation = 4.dp
+            Column(
+                modifier = Modifier.fillMaxWidth(0.85f),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    modifier = Modifier.padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                // Header centered, back button removed
+                Text(
+                    text = "Select Login Method",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color.White
+                )
+
+                Spacer(Modifier.height(48.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(24.dp)
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        IconButton(onClick = onBack) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.onSurface)
-                        }
-                        Spacer(Modifier.width(8.dp))
-                        Text(
-                            text = "Select Login Method",
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
-
-                    Spacer(Modifier.height(32.dp))
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        AuthMethodCard(
-                            modifier = Modifier.weight(1f),
-                            title = stringResource(id = R.string.auth_select_microsoft),
-                            onClick = onMicrosoftClick
-                        )
-                        AuthMethodCard(
-                            modifier = Modifier.weight(1f),
-                            title = stringResource(id = R.string.auth_select_elyby),
-                            onClick = onElyByClick
-                        )
-                        AuthMethodCard(
-                            modifier = Modifier.weight(1f),
-                            title = stringResource(id = R.string.auth_select_local),
-                            onClick = onLocalClick
-                        )
-                    }
+                    AuthMethodButton(
+                        modifier = Modifier.weight(1f),
+                        title = stringResource(id = R.string.auth_select_microsoft),
+                        onClick = onMicrosoftClick
+                    )
+                    AuthMethodButton(
+                        modifier = Modifier.weight(1f),
+                        title = stringResource(id = R.string.auth_select_elyby),
+                        onClick = onElyByClick
+                    )
+                    AuthMethodButton(
+                        modifier = Modifier.weight(1f),
+                        title = stringResource(id = R.string.auth_select_local),
+                        onClick = onLocalClick
+                    )
                 }
             }
         }
@@ -119,29 +104,30 @@ fun SelectAuthScreen(
 }
 
 @Composable
-fun AuthMethodCard(
+fun AuthMethodButton(
     modifier: Modifier = Modifier,
     title: String,
     onClick: () -> Unit
 ) {
-    Surface(
+    Button(
         onClick = onClick,
-        modifier = modifier.height(100.dp),
-        shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.1f))
+        modifier = modifier.height(52.dp), // standard high emphasis height
+        shape = CircleShape, // Pill shape
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary
+        ),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp),
+        contentPadding = PaddingValues(horizontal = 12.dp)
     ) {
-        Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(12.dp)) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
     }
 }
 
@@ -181,35 +167,25 @@ fun LocalLoginScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth(0.5f)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(MaterialTheme.colorScheme.surface.copy(alpha = if (hasBackground) 0.7f else 1f))
-                    .border(BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.1f)), RoundedCornerShape(20.dp))
                     .padding(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.onSurface)
-                    }
-                    Spacer(Modifier.width(8.dp))
-                    Text(
-                        text = stringResource(id = R.string.auth_select_local),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
+                // Header centered, back button removed
+                Text(
+                    text = stringResource(id = R.string.auth_select_local),
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color.White
+                )
 
-                Spacer(Modifier.height(24.dp))
+                Spacer(Modifier.height(32.dp))
 
                 Text(
                     text = stringResource(id = R.string.login_online_username_hint),
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = Color.White,
                     modifier = Modifier.align(Alignment.Start).padding(start = 4.dp, bottom = 4.dp),
-                    fontSize = 12.sp,
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.Medium
                 )
 
@@ -226,16 +202,17 @@ fun LocalLoginScreen(
                         focusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
                         unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.1f),
                         focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedPlaceholderColor = Color.LightGray
                     )
                 )
 
-                Spacer(Modifier.height(24.dp))
+                Spacer(Modifier.height(32.dp))
 
                 Button(
                     onClick = { onLoginClick(username) },
-                    modifier = Modifier.fillMaxWidth().height(48.dp),
-                    shape = RoundedCornerShape(14.dp),
+                    modifier = Modifier.fillMaxWidth().height(52.dp),
+                    shape = CircleShape, // Pill shape
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary,
                         contentColor = MaterialTheme.colorScheme.onPrimary
@@ -243,7 +220,8 @@ fun LocalLoginScreen(
                 ) {
                     Text(
                         text = stringResource(id = R.string.login_online_login_label).uppercase(),
-                        fontWeight = FontWeight.ExtraBold
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 16.sp
                     )
                 }
             }

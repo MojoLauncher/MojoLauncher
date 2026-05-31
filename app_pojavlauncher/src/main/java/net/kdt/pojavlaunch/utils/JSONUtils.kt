@@ -1,10 +1,7 @@
 package net.kdt.pojavlaunch.utils
 
 import net.kdt.pojavlaunch.Tools
-import java.io.File
-import java.io.FileReader
-import java.io.FileWriter
-import java.io.IOException
+import java.io.*
 
 object JSONUtils {
     fun insertJSONValueList(
@@ -40,6 +37,13 @@ object JSONUtils {
     fun <T> readFromFile(file: File?, clazs: Class<T>): T? {
         FileReader(file).use { fileReader ->
             return Tools.GLOBAL_GSON.fromJson(fileReader, clazs)
+        }
+    }
+
+    @JvmStatic
+    fun <T> readFromStream(stream: InputStream, clazs: Class<T>): T? {
+        InputStreamReader(stream).use { reader ->
+            return Tools.GLOBAL_GSON.fromJson(reader, clazs)
         }
     }
 }

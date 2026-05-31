@@ -41,6 +41,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -563,6 +564,15 @@ object Tools {
                     MAVEN_CENTRAL + "org/ow2/asm/asm-all/5.0.4/asm-all-5.0.4.jar"
                 libItem.downloads!!.artifact!!.size = 241810
                 libItem.replaced = true
+            } else if (name.startsWith("com.mojang:jtracy:")) {
+                // Fix for missing TracyClient dependency in newer Minecraft versions
+                libItem.replaced = true
+                createLibraryInfo(libItem)
+                // Skip verification as the server-side file might have changed hashes
+                libItem.downloads!!.artifact!!.url = "https://libraries.minecraft.net/com/mojang/jtracy/1.0.31/jtracy-1.0.31.jar"
+                libItem.downloads!!.artifact!!.path = "com/mojang/jtracy/1.0.31/jtracy-1.0.31.jar"
+                libItem.downloads!!.artifact!!.sha1 = null
+                libItem.downloads!!.artifact!!.size = -1L
             }
         }
     }
@@ -832,11 +842,49 @@ object Tools {
         fragmentActivity: FragmentActivity, fragmentClass: Class<out Fragment>,
         fragmentTag: String?, bundle: Bundle?
     ) {
-        // When people tab out, it might happen
-        fragmentActivity.supportFragmentManager.beginTransaction()
-            .setReorderingAllowed(true)
+        val transaction = fragmentActivity.supportFragmentManager.beginTransaction()
+        setFragmentAnimation(transaction, true)
+        transaction.setReorderingAllowed(true)
             .addToBackStack(fragmentClass.name)
             .replace(R.id.container_fragment, fragmentClass, bundle, fragmentTag).commit()
+    }
+
+    /** Set the fragment animation based on preferences  */
+    @JvmStatic
+    fun setFragmentAnimation(transaction: FragmentTransaction, opening: Boolean) {
+        var enter = 0
+        var exit = 0
+        var popEnter = 0
+        var popExit = 0
+
+        when (LauncherPreferences.PREF_ANIMATION_TYPE) {
+            "jelly" -> {
+                enter = R.anim.jelly_in
+                exit = R.anim.jelly_out
+                popEnter = R.anim.jelly_in
+                popExit = R.anim.jelly_out
+            }
+            "slide" -> {
+                if (opening) {
+                    enter = R.anim.slide_in_right
+                    exit = R.anim.slide_out_left
+                    popEnter = R.anim.slide_in_left
+                    popExit = R.anim.slide_out_right
+                } else {
+                    enter = R.anim.slide_in_left
+                    exit = R.anim.slide_out_right
+                    popEnter = R.anim.slide_in_right
+                    popExit = R.anim.slide_out_left
+                }
+            }
+            "default" -> {
+                enter = R.anim.fade_in
+                exit = R.anim.fade_out
+                popEnter = R.anim.fade_in
+                popExit = R.anim.fade_out
+            }
+        }
+        transaction.setCustomAnimations(enter, exit, popEnter, popExit)
     }
 
     @JvmStatic
@@ -1033,7 +1081,6 @@ object Tools {
             return
         }
         if (ctx is Activity) ctx.finish()
-        fullyExit()
     }
 
     interface DownloaderFeedback {

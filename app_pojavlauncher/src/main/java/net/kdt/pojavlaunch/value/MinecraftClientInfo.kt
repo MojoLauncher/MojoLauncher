@@ -7,7 +7,7 @@ open class MinecraftClientInfo {
     @JvmField
     var sha1: String? = null
     @JvmField
-    var size: Int = -1
+    var size: Long = -1
     @JvmField
     var url: String? = null
 }

@@ -18,7 +18,9 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.annotation.Keep
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
@@ -98,6 +100,13 @@ class MainActivity : BaseActivity(), ControlButtonMenuListener, EditorExitable, 
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // ✅ Enable edge-to-edge support AFTER super.onCreate to override any default system bar logic
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
+            navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
+        )
+
         instance = net.kdt.pojavlaunch.instances.Instances.loadSelectedInstance()
         minecraftAccount = Accounts.current
         if (instance == null) {
@@ -167,8 +176,8 @@ class MainActivity : BaseActivity(), ControlButtonMenuListener, EditorExitable, 
                     drawerState = drawerState,
                     loadingVisible = mLoadingVisible.value,
                     onLoadingClick = { hideLoading() },
-                    onControlLayoutBound = { 
-                        mControlLayout = it 
+                    onControlLayoutBound = { layout ->
+                        mControlLayout = layout 
                         mControlLayout?.setMenuListener(this@MainActivity)
                         mControlLayout?.modifiable = false
                         // Trigger control loading as soon as the layout is bound and metrics are ready
@@ -177,26 +186,26 @@ class MainActivity : BaseActivity(), ControlButtonMenuListener, EditorExitable, 
                              loadControls()
                         }
                     },
-                    onGlSurfaceBound = { 
-                        minecraftGLView = it 
+                    onGlSurfaceBound = { surface ->
+                        minecraftGLView = surface 
                         CallbackBridge.addGrabListener(minecraftGLView)
                         setupSurfaceReadyListener()
                     },
-                    onTouchpadBound = { 
-                        MainActivity.touchpad = it 
+                    onTouchpadBound = { pad ->
+                        MainActivity.touchpad = pad 
                         CallbackBridge.addGrabListener(MainActivity.touchpad)
                     },
-                    onCharInputBound = { 
-                        MainActivity.touchCharInput = it 
+                    onCharInputBound = { input ->
+                        MainActivity.touchCharInput = input 
                         MainActivity.touchCharInput?.setCharacterSender(LwjglCharSender())
                     },
-                    onPullButtonBound = { 
-                        mDrawerPullButton = it 
+                    onPullButtonBound = { button ->
+                        mDrawerPullButton = button 
                         setupDrawerButton()
                     },
-                    onHotbarBound = { mHotbarView = it },
-                    onLoggerBound = { loggerView = it },
-                    onNavListBound = { navDrawer = it },
+                    onHotbarBound = { hotbar -> mHotbarView = hotbar },
+                    onLoggerBound = { logger -> loggerView = logger },
+                    onNavListBound = { list -> navDrawer = list },
                     onDismissMenu = { mDrawerValue.value = DrawerValue.Closed },
                     drawerContent = { isExpanded ->
                         RailMenuContent(isExpanded)

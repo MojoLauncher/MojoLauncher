@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicInteger
 class ContentInstallerViewModel : ViewModel() {
     private val mModrinthApi = ApiHandler("https://api.modrinth.com/v2")
     private val mSearchToken = AtomicInteger(0)
-    private val mIconCache = LruCache<String?, Bitmap?>(64)
+    private val mIconCache = LruCache<String?, Bitmap?>(128)
 
     var projects by mutableStateOf<List<ModrinthProject>>(emptyList())
     var isLoading by mutableStateOf(false)
@@ -47,7 +47,6 @@ class ContentInstallerViewModel : ViewModel() {
     var viewingProject by mutableStateOf<ModrinthProject?>(null)
     var projectVersions by mutableStateOf<List<ModrinthVersion>>(emptyList())
     
-    // For the MC Version selection step within a project
     var availableProjectMCVersions by mutableStateOf<List<String>>(emptyList())
     var selectedProjectMCVersion by mutableStateOf<String?>(null)
 
@@ -95,31 +94,58 @@ class ContentInstallerViewModel : ViewModel() {
         val token = mSearchToken.incrementAndGet()
         isLoading = true
         statusText = "Searching..."
+        submitProgress(ProgressLayout.CONTENT_INSTALL, 0, 0, statusText)
 
         mSearchJob = viewModelScope.launch(Dispatchers.IO) {
             try {
+                // Fetch projects from API
                 val results = searchProjects(query, type)
-                // Download icons for results
-                val updatedResults = results.map { project ->
-                    val icon = if (project.iconUrl != null) {
-                        mIconCache.get(project.iconUrl) ?: downloadIcon(project.iconUrl)?.also {
-                            mIconCache.put(project.iconUrl, it)
-                        }
-                    } else null
-                    project.copy(iconBitmap = icon)
-                }
-
+                
                 withContext(Dispatchers.Main) {
                     if (token != mSearchToken.get()) return@withContext
-                    projects = updatedResults
+                    projects = results // Show text results immediately
                     isLoading = false
-                    statusText = if (results.isEmpty()) "No results" else ""
+                    statusText = if (results.isEmpty()) "No results" else "Found ${results.size} projects"
+                    submitProgress(ProgressLayout.CONTENT_INSTALL, 100, 0, statusText)
+                    
+                    launch {
+                        delay(2000)
+                        if (token == mSearchToken.get()) submitProgress(ProgressLayout.CONTENT_INSTALL, -1, -1)
+                    }
+                }
+
+                // Load icons in parallel to avoid blocking the UI update
+                results.forEach { project ->
+                    if (project.iconUrl != null) {
+                        launch {
+                            val cached = mIconCache.get(project.iconUrl)
+                            val bitmap = cached ?: downloadIcon(project.iconUrl)?.also {
+                                mIconCache.put(project.iconUrl, it)
+                            }
+                            
+                            if (bitmap != null && token == mSearchToken.get()) {
+                                withContext(Dispatchers.Main) {
+                                    val currentProjects = projects.toMutableList()
+                                    val idx = currentProjects.indexOfFirst { it.id == project.id }
+                                    if (idx != -1) {
+                                        currentProjects[idx] = currentProjects[idx].copy(iconBitmap = bitmap)
+                                        projects = currentProjects
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     if (token != mSearchToken.get()) return@withContext
                     isLoading = false
                     statusText = "Failed to load"
+                    submitProgress(ProgressLayout.CONTENT_INSTALL, 100, 0, statusText)
+                    launch {
+                        delay(2000)
+                        submitProgress(ProgressLayout.CONTENT_INSTALL, -1, -1)
+                    }
                 }
             }
         }
@@ -166,6 +192,7 @@ class ContentInstallerViewModel : ViewModel() {
         selectedProjectMCVersion = null
         isLoading = true
         statusText = "Loading versions..."
+        submitProgress(ProgressLayout.CONTENT_INSTALL, 0, 0, statusText)
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -177,16 +204,25 @@ class ContentInstallerViewModel : ViewModel() {
                     isLoading = false
                     projectVersions = versions
                     
-                    // Extract unique MC versions available for this project
                     availableProjectMCVersions = versions.flatMap { it.gameVersions }.distinct().sortedDescending()
                     
-                    statusText = if (versions.isEmpty()) "No downloadable versions found" else ""
+                    statusText = if (versions.isEmpty()) "No downloadable versions found" else "Found ${versions.size} versions"
+                    submitProgress(ProgressLayout.CONTENT_INSTALL, 100, 0, statusText)
+                    launch {
+                        delay(2000)
+                        if (token == mSearchToken.get()) submitProgress(ProgressLayout.CONTENT_INSTALL, -1, -1)
+                    }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     if (token != mSearchToken.get()) return@withContext
                     isLoading = false
                     statusText = "Failed to load versions"
+                    submitProgress(ProgressLayout.CONTENT_INSTALL, 100, 0, statusText)
+                    launch {
+                        delay(2000)
+                        submitProgress(ProgressLayout.CONTENT_INSTALL, -1, -1)
+                    }
                 }
             }
         }
@@ -240,13 +276,17 @@ class ContentInstallerViewModel : ViewModel() {
             try {
                 downloadFile(version.url, target)
                 withContext(Dispatchers.Main) {
-                    submitProgress(ProgressLayout.CONTENT_INSTALL, -1, -1)
+                    submitProgress(ProgressLayout.CONTENT_INSTALL, 100, 0, "Downloaded: ${target.name}")
                     Toast.makeText(context, "Saved: ${target.name}", Toast.LENGTH_LONG).show()
+                    delay(3000)
+                    submitProgress(ProgressLayout.CONTENT_INSTALL, -1, -1)
                 }
             } catch (e: IOException) {
                 withContext(Dispatchers.Main) {
-                    submitProgress(ProgressLayout.CONTENT_INSTALL, -1, -1)
+                    submitProgress(ProgressLayout.CONTENT_INSTALL, 100, 0, "Failed: ${target.name}")
                     Tools.showError(context, e)
+                    delay(3000)
+                    submitProgress(ProgressLayout.CONTENT_INSTALL, -1, -1)
                 }
             }
         }
@@ -271,7 +311,10 @@ class ContentInstallerViewModel : ViewModel() {
 
     private fun downloadIcon(url: String): Bitmap? {
         return try {
-            URL(url).openStream().use { BitmapFactory.decodeStream(it) }
+            val connection = URL(url).openConnection()
+            connection.connectTimeout = 5000
+            connection.readTimeout = 5000
+            connection.getInputStream().use { BitmapFactory.decodeStream(it) }
         } catch (e: IOException) {
             null
         }

@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -28,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
@@ -35,6 +37,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -72,6 +75,7 @@ fun ProfileSelectionScreen(
 ) {
     val leftScrollState = rememberScrollState()
     val listState = rememberLazyListState()
+    var isFiltersExpanded by remember { mutableStateOf(true) }
 
     val isPreview = LocalInspectionMode.current
     val backgroundBitmap = if (isPreview) null else BaseActivity.getBackgroundBitmap()
@@ -113,41 +117,7 @@ fun ProfileSelectionScreen(
                         .verticalScroll(leftScrollState)
                         .padding(4.dp)
                 ) {
-                    // Header (No back button)
-                    Text(
-                        text = stringResource(id = R.string.profile_selection_title),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.padding(vertical = 12.dp, horizontal = 4.dp)
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    // Search Bar
-                    OutlinedTextField(
-                        value = searchQuery,
-                        onValueChange = onSearch,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(52.dp),
-                        placeholder = { Text(stringResource(id = R.string.installer_search_hint), fontSize = 13.sp) },
-                        leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, modifier = Modifier.size(18.dp)) },
-                        singleLine = true,
-                        shape = RoundedCornerShape(14.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
-                            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
-                            focusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
-                            unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.1f),
-                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface
-                        ),
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                        keyboardActions = KeyboardActions(onSearch = { onSearch(searchQuery) })
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
+                    // Header and Search bar removed per request
                     
                     // Vertical Filter Menu
                     Column(
@@ -156,24 +126,49 @@ fun ProfileSelectionScreen(
                             .clip(RoundedCornerShape(14.dp))
                             .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f))
                             .border(BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.1f)), RoundedCornerShape(14.dp))
-                            .padding(vertical = 4.dp)
+                            .padding(vertical = 4.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        Text(
-                            text = "Filters",
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
-                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { isFiltersExpanded = !isFiltersExpanded }
+                                .padding(horizontal = 12.dp, vertical = 6.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = "Filters",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                            )
+                            Icon(
+                                painter = painterResource(id = R.drawable.spinner_arrow),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(12.dp)
+                                    .rotate(if (isFiltersExpanded) 0f else -90f),
+                                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                            )
+                        }
                         
-                        ProfileFilterItem("Releases", showReleases) { onFilterChange(it, showSnapshots, showModded) }
-                        ProfileFilterItem("Snapshots", showSnapshots) { onFilterChange(showReleases, it, showModded) }
-                        ProfileFilterItem("Modded", showModded) { onFilterChange(showReleases, showSnapshots, it) }
+                        AnimatedVisibility(
+                            visible = isFiltersExpanded,
+                            enter = expandVertically() + fadeIn(),
+                            exit = shrinkVertically() + fadeOut()
+                        ) {
+                            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                ProfileFilterItem("Releases", showReleases) { onFilterChange(it, showSnapshots, showModded) }
+                                ProfileFilterItem("Snapshots", showSnapshots) { onFilterChange(showReleases, it, showModded) }
+                                ProfileFilterItem("Modded", showModded) { onFilterChange(showReleases, showSnapshots, it) }
+                            }
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Action Buttons
+                    // Action Buttons - High Emphasis (Filled Pill Shape)
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -286,31 +281,34 @@ fun ProfileActionButton(
     icon: Int,
     onClick: () -> Unit
 ) {
-    Surface(
+    // ✅ High emphasis Filled Button with Pill Shape
+    Button(
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(min = 44.dp),
-        shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.1f))
+        shape = CircleShape,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary
+        ),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 painter = painterResource(id = icon),
                 contentDescription = null,
                 modifier = Modifier.size(20.dp),
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.onPrimary
             )
             Spacer(modifier = Modifier.width(12.dp))
             Text(
                 text = text,
                 fontSize = 13.sp,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.onSurface
+                fontWeight = FontWeight.Bold
             )
         }
     }
@@ -348,8 +346,7 @@ fun ProfileItem(
     ) {
         Row(
             modifier = Modifier.padding(10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+            verticalAlignment = Alignment.CenterVertically) {
             RadioButton(
                 selected = isSelected,
                 onClick = null,
