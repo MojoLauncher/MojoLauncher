@@ -315,7 +315,7 @@
     <string name="of_dl_select_version">ऑप्टिफाइन संस्करण चुनें</string>
     <string name="of_dl_failed_to_scrape">ऑप्टिफाइन इंस्टॉलेशन के लिए डेटा एकत्र करने में विफल।</string>
     <string name="of_dl_progress">%s डाउनलोड हो रहा है</string>
-    <string name="mod_dl_install_optifine">ऑप्टिफाइन इंस्टॉल करें</string>
+    <string name="mod_dl_install_optifine">OptiFine इंस्टॉल करें</string>
 
 
     <string name="hint_search_modpack">मॉडपैक खोजें</string>
