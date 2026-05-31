@@ -33,4 +33,7 @@ object ExtraConstants {
 
     /* ExtraCore constant: Notify the account spinner that user has returned to the main menu. */
     const val REFRESH_ACCOUNT_SPINNER: String = "refresh_account_spinner"
+
+    /* ExtraCore constant: Notify that the background image or settings have changed */
+    const val REFRESH_BACKGROUND: String = "refresh_background"
 }

@@ -19,8 +19,8 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import net.ashmeet.hyperlauncher.R
-import net.kdt.pojavlaunch.colorselector.ColorSelectionListener
-import net.kdt.pojavlaunch.colorselector.ColorSelector
+import net.kdt.pojavlaunch.extra.ExtraConstants
+import net.kdt.pojavlaunch.extra.ExtraCore
 import net.kdt.pojavlaunch.prefs.LauncherPreferences
 import net.kdt.pojavlaunch.utils.CropperUtils
 import net.kdt.pojavlaunch.utils.CropperUtils.CropperReceiver
@@ -33,8 +33,6 @@ class LauncherPreferenceAppearanceFragment : LauncherPreferenceFragment(), Cropp
     private val mCropperLauncher: ActivityResultLauncher<*> =
         CropperUtils.registerCropper(this, this)
     private var mIsPickingBackground = false
-    private var mColorSelector: ColorSelector? = null
-    private var mIconColorSelector: ColorSelector? = null
 
     override fun onCreatePreferences(b: Bundle?, str: String?) {
         addPreferencesFromResource(R.xml.pref_appearance)
@@ -51,17 +49,8 @@ class LauncherPreferenceAppearanceFragment : LauncherPreferenceFragment(), Cropp
                 putString("appBackgroundPath", null)
             }
             context?.let { LauncherPreferences.loadPreferences(it) }
+            ExtraCore.setValue(ExtraConstants.REFRESH_BACKGROUND, true)
             Toast.makeText(context, "Background reset to default", Toast.LENGTH_SHORT).show()
-            true
-        }
-
-        requirePreference("minebutton_color_picker").onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            showColorPickerDialog()
-            true
-        }
-
-        requirePreference("global_icon_color_picker").onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            showIconColorPickerDialog()
             true
         }
 
@@ -98,11 +87,8 @@ class LauncherPreferenceAppearanceFragment : LauncherPreferenceFragment(), Cropp
                         remove("appBackgroundPath")
                         remove("appBackgroundBlur")
                         remove("appBackgroundBlurIntensity")
-                        remove("iconPreset")
-                        remove("globalIconColor")
-                        remove("appearancePreset")
-                        remove("mineButtonColor")
-                        remove("minebutton_corner_radius")
+                        remove("backgroundImageOverlayEnabled")
+                        remove("backgroundImageOverlayOpacity")
                         remove("animationType")
                         remove("animationIntensity")
                         remove("mouseCursorPath")
@@ -113,6 +99,7 @@ class LauncherPreferenceAppearanceFragment : LauncherPreferenceFragment(), Cropp
                     File(ctx.filesDir, "custom_pointer.png").delete()
 
                     LauncherPreferences.loadPreferences(ctx)
+                    ExtraCore.setValue(ExtraConstants.REFRESH_BACKGROUND, true)
                     activity?.recreate()
                     Toast.makeText(
                         ctx,
@@ -127,72 +114,27 @@ class LauncherPreferenceAppearanceFragment : LauncherPreferenceFragment(), Cropp
 
         val reloadListener = Preference.OnPreferenceChangeListener { preference, newValue ->
             prefs.edit {
-                putString(preference.key, newValue as String?)
+                if (newValue is String) {
+                    putString(preference.key, newValue)
+                } else if (newValue is Boolean) {
+                    putBoolean(preference.key, newValue)
+                } else if (newValue is Int) {
+                    putInt(preference.key, newValue)
+                }
             }
             context?.let { LauncherPreferences.loadPreferences(it) }
+            if (preference.key.startsWith("appBackground") || preference.key.startsWith("backgroundImageOverlay")) {
+                ExtraCore.setValue(ExtraConstants.REFRESH_BACKGROUND, true)
+            }
             true
         }
 
-        findPreference<Preference?>("appearancePreset")?.onPreferenceChangeListener = reloadListener
-        findPreference<Preference?>("iconPreset")?.onPreferenceChangeListener = reloadListener
         findPreference<Preference?>("appTheme")?.onPreferenceChangeListener = reloadListener
         findPreference<Preference?>("animationType")?.onPreferenceChangeListener = reloadListener
-
-        findPreference<Preference?>("minebutton_corner_radius")?.onPreferenceChangeListener =
-            Preference.OnPreferenceChangeListener { preference, newValue ->
-                switchToCustom("appearancePreset")
-                prefs.edit {
-                    putInt(preference.key, newValue as Int)
-                }
-                context?.let { LauncherPreferences.loadPreferences(it) }
-                true
-            }
-    }
-
-    private fun switchToCustom(key: String) {
-        val presetPref = findPreference<Preference?>(key) as? ListPreference
-        if (presetPref != null) {
-            presetPref.value = "custom"
-            LauncherPreferences.DEFAULT_PREF?.edit { putString(key, "custom") }
-        }
-    }
-
-    private fun showColorPickerDialog() {
-        val root = requireActivity().findViewById<ViewGroup>(android.R.id.content)
-        if (mColorSelector == null) {
-            mColorSelector =
-                ColorSelector(requireContext(), root, object : ColorSelectionListener {
-                    override fun onColorSelected(color: Int) {
-                        switchToCustom("appearancePreset")
-                        LauncherPreferences.DEFAULT_PREF?.edit {
-                            putInt("mineButtonColor", color)
-                        }
-                        context?.let { LauncherPreferences.loadPreferences(it) }
-                    }
-                })
-            mColorSelector?.setAlphaEnabled(true)
-            mColorSelector?.setTitle(R.string.customctrl_background_color)
-        }
-        mColorSelector?.show(true, LauncherPreferences.PREF_MINEBUTTON_COLOR)
-    }
-
-    private fun showIconColorPickerDialog() {
-        val root = requireActivity().findViewById<ViewGroup>(android.R.id.content)
-        if (mIconColorSelector == null) {
-            mIconColorSelector =
-                ColorSelector(requireContext(), root, object : ColorSelectionListener {
-                    override fun onColorSelected(color: Int) {
-                        switchToCustom("iconPreset")
-                        LauncherPreferences.DEFAULT_PREF?.edit {
-                            putInt("globalIconColor", color)
-                        }
-                        context?.let { LauncherPreferences.loadPreferences(it) }
-                    }
-                })
-            mIconColorSelector?.setAlphaEnabled(false)
-            mIconColorSelector?.setTitle(R.string.customctrl_stroke_color)
-        }
-        mIconColorSelector?.show(true, LauncherPreferences.PREF_GLOBAL_ICON_COLOR)
+        findPreference<Preference?>("appBackgroundBlur")?.onPreferenceChangeListener = reloadListener
+        findPreference<Preference?>("appBackgroundBlurIntensity")?.onPreferenceChangeListener = reloadListener
+        findPreference<Preference?>("backgroundImageOverlayEnabled")?.onPreferenceChangeListener = reloadListener
+        findPreference<Preference?>("backgroundImageOverlayOpacity")?.onPreferenceChangeListener = reloadListener
     }
 
     private fun showHotspotDialog() {
@@ -320,6 +262,7 @@ class LauncherPreferenceAppearanceFragment : LauncherPreferenceFragment(), Cropp
                     putString("appBackgroundPath", bgFile.absolutePath)
                 }
                 LauncherPreferences.loadPreferences(ctx)
+                ExtraCore.setValue(ExtraConstants.REFRESH_BACKGROUND, true)
                 Toast.makeText(ctx, "Launcher background updated", Toast.LENGTH_SHORT).show()
             } else {
                 val pointerFile = File(ctx.filesDir, "custom_pointer.png")
@@ -347,11 +290,5 @@ class LauncherPreferenceAppearanceFragment : LauncherPreferenceFragment(), Cropp
 
     override fun onFailed(exception: Exception?) {
         Toast.makeText(context, "Failed: ${exception?.message}", Toast.LENGTH_LONG).show()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mColorSelector?.disappear(true)
-        mIconColorSelector?.disappear(true)
     }
 }

@@ -67,45 +67,6 @@
             app:key="app_background_reset"
             app:summary="Reset the launcher background to default"
             app:title="Reset Background" />
-
-        <net.kdt.pojavlaunch.prefs.MaterialListPreference
-            android:defaultValue="default"
-            app:entries="@array/icon_preset_names"
-            app:entryValues="@array/icon_preset_values"
-            android:icon="@drawable/ic_px_preset"
-            app:key="iconPreset"
-            app:title="Icon Color Preset" />
-
-        <net.kdt.pojavlaunch.prefs.MaterialPreference
-            android:icon="@drawable/ic_px_color"
-            app:key="global_icon_color_picker"
-            app:summary="Change the color of various launcher icons"
-            app:title="Global Icon Color" />
-    </androidx.preference.PreferenceCategory>
-
-    <androidx.preference.PreferenceCategory app:title="Minecraft Button Style">
-        <net.kdt.pojavlaunch.prefs.MaterialListPreference
-            android:defaultValue="default"
-            app:entries="@array/appearance_preset_names"
-            app:entryValues="@array/appearance_preset_values"
-            android:icon="@drawable/ic_px_preset"
-            app:key="appearancePreset"
-            app:title="Appearance Preset" />
-
-        <net.kdt.pojavlaunch.prefs.MaterialPreference
-            android:icon="@drawable/ic_px_color"
-            app:key="minebutton_color_picker"
-            app:summary="Change the background color of main buttons"
-            app:title="Button Color" />
-
-        <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
-            android:defaultValue="28"
-            android:max="50"
-            app:key="minebutton_corner_radius"
-            app:min="0"
-            app:seekBarIncrement="1"
-            app:showSeekBarValue="true"
-            app:title="Button Corner Radius (dp)" />
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory app:title="Animations">

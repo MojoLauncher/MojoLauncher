@@ -2,18 +2,14 @@ package net.kdt.pojavlaunch.ui.screens
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.RenderEffect
-import android.graphics.Shader
 import android.os.Build
-import android.app.ActivityManager
-import android.content.Context
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -27,14 +23,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -48,6 +42,8 @@ import net.kdt.pojavlaunch.BaseActivity
 import net.kdt.pojavlaunch.CustomControlsActivity
 import net.kdt.pojavlaunch.Tools
 import net.kdt.pojavlaunch.contracts.OpenDocumentWithExtension
+import net.kdt.pojavlaunch.extra.ExtraConstants
+import net.kdt.pojavlaunch.extra.ExtraCore
 import net.kdt.pojavlaunch.multirt.MultiRTConfigDialog
 import net.kdt.pojavlaunch.plugins.LibraryPlugin
 import net.kdt.pojavlaunch.prefs.LauncherPreferences
@@ -68,33 +64,40 @@ enum class SettingsPage(val titleRes: Int, val iconRes: Int) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onPickBackground: () -> Unit,
+    onPickMousePointer: () -> Unit,
+    onPickDrawerButtonImage: () -> Unit
 ) {
     var currentPage by remember { mutableStateOf(SettingsPage.APPEARANCE) }
-    var isMainPage by remember { mutableStateOf(true) }
+    var isMainPage by remember { mutableStateOf(false) }
     val railScrollState = rememberScrollState()
 
     val isPreview = LocalInspectionMode.current
-    val backgroundBitmap = if (isPreview) null else BaseActivity.getBackgroundBitmap()
+    
+    // ✅ Fix: Don't render background if not in preview to avoid overlapping with LauncherScreen
+    val backgroundBitmap = if (isPreview) BaseActivity.getBackgroundBitmap() else null
     val hasBackground = backgroundBitmap != null
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Shared Background Logic
-        if (backgroundBitmap != null) {
-            Image(
-                bitmap = backgroundBitmap.asImageBitmap(),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
-        } else {
-            Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background))
-        }
+        // Shared Background Logic (Preview only)
+        if (isPreview) {
+            if (backgroundBitmap != null) {
+                Image(
+                    bitmap = backgroundBitmap.asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background))
+            }
 
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black.copy(alpha = if (hasBackground) 0.4f else 0f))
-        )
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface.copy(alpha = if (hasBackground) 0.4f else 0f))
+            )
+        }
 
         BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
             val isWide = maxWidth > 600.dp
@@ -103,7 +106,7 @@ fun SettingsScreen(
                 Row(modifier = Modifier.fillMaxSize()) {
                     NavigationRail(
                         modifier = Modifier.fillMaxHeight().width(80.dp),
-                        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = if (hasBackground) 0.4f else 1f),
+                        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = if (!isPreview) 0.4f else if (hasBackground) 0.4f else 1f),
                         contentColor = MaterialTheme.colorScheme.onSurface,
                         windowInsets = WindowInsets(0, 0, 0, 0)
                     ) {
@@ -142,10 +145,16 @@ fun SettingsScreen(
                     
                     Scaffold(
                         containerColor = Color.Transparent,
-                        contentWindowInsets = WindowInsets(0, 0, 0, 0)
+                        contentWindowInsets = WindowInsets(0, 0, 0, 0),
                     ) { padding ->
                         Box(modifier = Modifier.padding(padding).fillMaxSize()) {
-                            SettingsContent(currentPage, onNavigate = { currentPage = it })
+                            SettingsContent(
+                                currentPage,
+                                onNavigate = { currentPage = it },
+                                onPickBackground = onPickBackground,
+                                onPickMousePointer = onPickMousePointer,
+                                onPickDrawerButtonImage = onPickDrawerButtonImage
+                            )
                         }
                     }
                 }
@@ -153,8 +162,16 @@ fun SettingsScreen(
                 if (isMainPage) {
                     Scaffold(
                         containerColor = Color.Transparent,
-                        contentWindowInsets = WindowInsets(0, 0, 0, 0)
+                        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+                        topBar = {
+                            TopAppBar(
+                                title = { Text("Settings", fontWeight = FontWeight.Bold) },
+                                navigationIcon = { },
+                                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+                            )
+                        }
                     ) { padding ->
+                        BackHandler { onBack() }
                         Box(modifier = Modifier.padding(padding)) {
                             MainSettings(onNavigate = { 
                                 currentPage = it
@@ -165,7 +182,14 @@ fun SettingsScreen(
                 } else {
                     Scaffold(
                         containerColor = Color.Transparent,
-                        contentWindowInsets = WindowInsets(0, 0, 0, 0)
+                        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+                        topBar = {
+                            TopAppBar(
+                                title = { Text("Settings", fontWeight = FontWeight.Bold) },
+                                navigationIcon = { },
+                                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+                            )
+                        }
                     ) { padding ->
                         BackHandler { 
                             if (currentPage == SettingsPage.DRAWER_BUTTON) {
@@ -175,7 +199,13 @@ fun SettingsScreen(
                             }
                         }
                         Box(modifier = Modifier.padding(padding)) {
-                            SettingsContent(currentPage, onNavigate = { currentPage = it })
+                            SettingsContent(
+                                currentPage,
+                                onNavigate = { currentPage = it },
+                                onPickBackground = onPickBackground,
+                                onPickMousePointer = onPickMousePointer,
+                                onPickDrawerButtonImage = onPickDrawerButtonImage
+                            )
                         }
                     }
                 }
@@ -185,15 +215,25 @@ fun SettingsScreen(
 }
 
 @Composable
-fun SettingsContent(page: SettingsPage, onNavigate: (SettingsPage) -> Unit) {
+fun SettingsContent(
+    page: SettingsPage,
+    onNavigate: (SettingsPage) -> Unit,
+    onPickBackground: () -> Unit,
+    onPickMousePointer: () -> Unit,
+    onPickDrawerButtonImage: () -> Unit
+) {
     when (page) {
-        SettingsPage.APPEARANCE -> AppearanceSettings(onNavigate = onNavigate)
+        SettingsPage.APPEARANCE -> AppearanceSettings(
+            onNavigate = onNavigate,
+            onPickBackground = onPickBackground,
+            onPickMousePointer = onPickMousePointer
+        )
         SettingsPage.VIDEO -> VideoSettings()
         SettingsPage.CONTROL -> ControlSettings()
         SettingsPage.JAVA -> JavaSettings()
         SettingsPage.MISC -> MiscSettings()
         SettingsPage.EXPERIMENTAL -> ExperimentalSettings()
-        SettingsPage.DRAWER_BUTTON -> DrawerButtonSettings()
+        SettingsPage.DRAWER_BUTTON -> DrawerButtonSettings(onPickImage = onPickDrawerButtonImage)
     }
 }
 
@@ -260,7 +300,12 @@ fun MainSettings(onNavigate: (SettingsPage) -> Unit) {
 }
 
 @Composable
-fun AppearanceSettings(onNavigate: (SettingsPage) -> Unit) {
+fun AppearanceSettings(
+    onNavigate: (SettingsPage) -> Unit,
+    onPickBackground: () -> Unit,
+    onPickMousePointer: () -> Unit
+) {
+    val context = LocalContext.current
     LazyColumn(contentPadding = PaddingValues(vertical = 12.dp)) {
         item {
             PreferenceGroup(title = "General") {
@@ -289,7 +334,8 @@ fun AppearanceSettings(onNavigate: (SettingsPage) -> Unit) {
                 PreferenceItem(
                     title = "Launcher Background",
                     summary = "Change the launcher background image",
-                    icon = painterResource(R.drawable.ic_px_image)
+                    icon = painterResource(R.drawable.ic_px_image),
+                    onClick = onPickBackground
                 )
                 
                 var backgroundBlur by remember { mutableStateOf(LauncherPreferences.PREF_BACKGROUND_BLUR) }
@@ -301,6 +347,7 @@ fun AppearanceSettings(onNavigate: (SettingsPage) -> Unit) {
                         backgroundBlur = it
                         LauncherPreferences.PREF_BACKGROUND_BLUR = it
                         LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("appBackgroundBlur", it) }
+                        ExtraCore.setValue(ExtraConstants.REFRESH_BACKGROUND, true)
                     }
                 )
                 
@@ -314,6 +361,7 @@ fun AppearanceSettings(onNavigate: (SettingsPage) -> Unit) {
                             blurIntensity = it
                             LauncherPreferences.PREF_BACKGROUND_BLUR_INTENSITY = it.toInt()
                             LauncherPreferences.DEFAULT_PREF?.edit { putInt("appBackgroundBlurIntensity", it.toInt()) }
+                            ExtraCore.setValue(ExtraConstants.REFRESH_BACKGROUND, true)
                         },
                         valueRange = 1f..100f
                     )
@@ -328,6 +376,7 @@ fun AppearanceSettings(onNavigate: (SettingsPage) -> Unit) {
                         overlayEnabled = it
                         LauncherPreferences.PREF_BACKGROUND_IMAGE_OVERLAY_ENABLED = it
                         LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("backgroundImageOverlayEnabled", it) }
+                        ExtraCore.setValue(ExtraConstants.REFRESH_BACKGROUND, true)
                     }
                 )
                 
@@ -341,6 +390,7 @@ fun AppearanceSettings(onNavigate: (SettingsPage) -> Unit) {
                             overlayOpacity = it
                             LauncherPreferences.PREF_BACKGROUND_IMAGE_OVERLAY_ALPHA = it / 100f
                             LauncherPreferences.DEFAULT_PREF?.edit { putInt("backgroundImageOverlayOpacity", it.toInt()) }
+                            ExtraCore.setValue(ExtraConstants.REFRESH_BACKGROUND, true)
                         },
                         valueRange = 0f..100f
                     )
@@ -348,63 +398,13 @@ fun AppearanceSettings(onNavigate: (SettingsPage) -> Unit) {
                 
                 PreferenceItem(
                     title = "Reset Background",
-                    summary = "Reset the launcher background to default"
-                )
-                
-                var iconPreset by remember { mutableStateOf(LauncherPreferences.PREF_ICON_PRESET) }
-                PreferenceList(
-                    title = "Icon Color Preset",
-                    entries = stringArrayResource(R.array.icon_preset_names),
-                    entryValues = stringArrayResource(R.array.icon_preset_values),
-                    selectedValue = iconPreset,
-                    onValueChange = {
-                        iconPreset = it
-                        LauncherPreferences.PREF_ICON_PRESET = it
-                        LauncherPreferences.DEFAULT_PREF?.edit { putString("iconPreset", it) }
-                    },
-                    icon = painterResource(R.drawable.ic_px_preset)
-                )
-                
-                PreferenceItem(
-                    title = "Global Icon Color",
-                    summary = "Change the color of various launcher icons",
-                    icon = painterResource(R.drawable.ic_px_color)
-                )
-            }
-        }
-        
-        item {
-            PreferenceGroup(title = "Minecraft Button Style") {
-                var appearancePreset by remember { mutableStateOf(LauncherPreferences.PREF_APPEARANCE_PRESET) }
-                PreferenceList(
-                    title = "Appearance Preset",
-                    entries = stringArrayResource(R.array.appearance_preset_names),
-                    entryValues = stringArrayResource(R.array.appearance_preset_values),
-                    selectedValue = appearancePreset,
-                    onValueChange = {
-                        appearancePreset = it
-                        LauncherPreferences.PREF_APPEARANCE_PRESET = it
-                        LauncherPreferences.DEFAULT_PREF?.edit { putString("appearancePreset", it) }
-                    },
-                    icon = painterResource(R.drawable.ic_px_preset)
-                )
-                
-                PreferenceItem(
-                    title = "Button Color",
-                    summary = "Change the background color of main buttons",
-                    icon = painterResource(R.drawable.ic_px_color)
-                )
-                
-                var cornerRadius by remember { mutableFloatStateOf(LauncherPreferences.PREF_MINEBUTTON_CORNER_RADIUS.toFloat()) }
-                PreferenceSlider(
-                    title = "Button Corner Radius (dp)",
-                    value = cornerRadius,
-                    onValueChange = {
-                        cornerRadius = it
-                        LauncherPreferences.PREF_MINEBUTTON_CORNER_RADIUS = it.toInt()
-                        LauncherPreferences.DEFAULT_PREF?.edit { putInt("minebutton_corner_radius", it.toInt()) }
-                    },
-                    valueRange = 0f..50f
+                    summary = "Reset the launcher background to default",
+                    onClick = {
+                        LauncherPreferences.DEFAULT_PREF?.edit()?.remove("appBackgroundPath")?.apply()
+                        LauncherPreferences.loadPreferences(context)
+                        ExtraCore.setValue(ExtraConstants.REFRESH_BACKGROUND, true)
+                        Toast.makeText(context, "Background reset", Toast.LENGTH_SHORT).show()
+                    }
                 )
             }
         }
@@ -442,15 +442,49 @@ fun AppearanceSettings(onNavigate: (SettingsPage) -> Unit) {
         
         item {
             PreferenceGroup(title = "Mouse Pointer") {
-                PreferenceItem(title = stringResource(R.string.preference_mouse_cursor_title), summary = stringResource(R.string.preference_mouse_cursor_description))
+                PreferenceItem(
+                    title = stringResource(R.string.preference_mouse_cursor_title),
+                    summary = stringResource(R.string.preference_mouse_cursor_description),
+                    onClick = onPickMousePointer
+                )
                 PreferenceItem(title = stringResource(R.string.preference_mouse_hotspot_title), summary = stringResource(R.string.preference_mouse_hotspot_description))
-                PreferenceItem(title = stringResource(R.string.preference_mouse_reset_title), summary = stringResource(R.string.preference_mouse_reset_description))
+                PreferenceItem(
+                    title = stringResource(R.string.preference_mouse_reset_title),
+                    summary = stringResource(R.string.preference_mouse_reset_description),
+                    onClick = {
+                        LauncherPreferences.DEFAULT_PREF?.edit()?.apply {
+                            remove("mouseCursorPath")
+                            remove("mouseHotspotX")
+                            remove("mouseHotspotY")
+                        }?.apply()
+                        LauncherPreferences.loadPreferences(context)
+                        Toast.makeText(context, "Mouse pointer reset", Toast.LENGTH_SHORT).show()
+                    }
+                )
             }
         }
         
         item {
             PreferenceGroup(title = "Reset All Appearance Settings") {
-                PreferenceItem(title = "Reset Appearance", summary = "Reset all appearance and theme settings to default")
+                PreferenceItem(
+                    title = "Reset Appearance", 
+                    summary = "Reset all appearance and theme settings to default",
+                    onClick = {
+                        LauncherPreferences.DEFAULT_PREF?.edit()?.apply {
+                            remove("appTheme")
+                            remove("appBackgroundPath")
+                            remove("appBackgroundBlur")
+                            remove("appBackgroundBlurIntensity")
+                            remove("backgroundImageOverlayEnabled")
+                            remove("backgroundImageOverlayOpacity")
+                            remove("animationType")
+                            remove("animationIntensity")
+                        }?.apply()
+                        LauncherPreferences.loadPreferences(context)
+                        ExtraCore.setValue(ExtraConstants.REFRESH_BACKGROUND, true)
+                        Toast.makeText(context, "Appearance settings reset", Toast.LENGTH_SHORT).show()
+                    }
+                )
             }
         }
     }
@@ -1072,8 +1106,108 @@ fun ExperimentalSettings() {
 }
 
 @Composable
-fun DrawerButtonSettings() {
+fun DrawerButtonSettings(onPickImage: () -> Unit) {
+    val context = LocalContext.current
+    var posX by remember { mutableFloatStateOf(LauncherPreferences.PREF_DRAWER_BUTTON_X) }
+    var posY by remember { mutableFloatStateOf(LauncherPreferences.PREF_DRAWER_BUTTON_Y) }
+    var preset by remember { mutableStateOf(LauncherPreferences.PREF_DRAWER_BUTTON_PRESET) }
+
     LazyColumn(contentPadding = PaddingValues(vertical = 12.dp)) {
+        item {
+            PreferenceGroup(title = "Drawer Button Position") {
+                var customPosition by remember { mutableStateOf(preset == "custom") }
+
+                PreferenceList(
+                    title = "Position Preset",
+                    entries = stringArrayResource(R.array.drawer_button_preset_names),
+                    entryValues = stringArrayResource(R.array.drawer_button_preset_values),
+                    selectedValue = preset,
+                    onValueChange = { newValue ->
+                        preset = newValue
+                        LauncherPreferences.PREF_DRAWER_BUTTON_PRESET = newValue
+                        LauncherPreferences.DEFAULT_PREF?.edit { putString("drawerButtonPreset", newValue) }
+                        
+                        if (newValue != "custom") {
+                            customPosition = false
+                            val (x, y) = when (newValue) {
+                                "top_left" -> 0 to 0
+                                "top_center" -> 50 to 0
+                                "top_right" -> 100 to 0
+                                "bottom_left" -> 0 to 100
+                                "bottom_center" -> 50 to 100
+                                "bottom_right" -> 100 to 100
+                                "center_left" -> 0 to 50
+                                "center_right" -> 100 to 50
+                                "center" -> 50 to 50
+                                else -> 50 to 0
+                            }
+                            posX = x.toFloat()
+                            posY = y.toFloat()
+                            LauncherPreferences.PREF_DRAWER_BUTTON_X = x.toFloat()
+                            LauncherPreferences.PREF_DRAWER_BUTTON_Y = y.toFloat()
+                            LauncherPreferences.DEFAULT_PREF?.edit { 
+                                putInt("drawerButtonX", x)
+                                putInt("drawerButtonY", y)
+                            }
+                            LauncherPreferences.loadPreferences(context)
+                        }
+                    },
+                    icon = painterResource(R.drawable.ic_px_position),
+                    enabled = !customPosition
+                )
+
+                PreferenceSwitch(
+                    title = "Custom Position",
+                    summary = "Enable manual positioning using sliders",
+                    checked = customPosition,
+                    onCheckedChange = {
+                        customPosition = it
+                        if (it) {
+                            preset = "custom"
+                            LauncherPreferences.PREF_DRAWER_BUTTON_PRESET = "custom"
+                            LauncherPreferences.DEFAULT_PREF?.edit { putString("drawerButtonPreset", "custom") }
+                        }
+                    }
+                )
+
+                PreferenceSlider(
+                    title = "Horizontal Position (%)",
+                    value = posX,
+                    onValueChange = {
+                        posX = it
+                        LauncherPreferences.PREF_DRAWER_BUTTON_X = it
+                        LauncherPreferences.DEFAULT_PREF?.edit { putInt("drawerButtonX", it.toInt()) }
+                    },
+                    valueRange = 0f..100f,
+                    enabled = customPosition
+                )
+
+                PreferenceSlider(
+                    title = "Vertical Position (%)",
+                    value = posY,
+                    onValueChange = {
+                        posY = it
+                        LauncherPreferences.PREF_DRAWER_BUTTON_Y = it
+                        LauncherPreferences.DEFAULT_PREF?.edit { putInt("drawerButtonY", it.toInt()) }
+                    },
+                    valueRange = 0f..100f,
+                    enabled = customPosition
+                )
+
+                var movable by remember { mutableStateOf(LauncherPreferences.PREF_DRAWER_BUTTON_MOVABLE) }
+                PreferenceSwitch(
+                    title = "Allow Dragging Button",
+                    summary = "When enabled, you can drag the button freely on the screen",
+                    checked = movable,
+                    onCheckedChange = {
+                        movable = it
+                        LauncherPreferences.PREF_DRAWER_BUTTON_MOVABLE = it
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("drawerButtonMovable", it) }
+                    }
+                )
+            }
+        }
+
         item {
             PreferenceGroup(title = "Drawer Button Style") {
                 var buttonSize by remember { mutableFloatStateOf(LauncherPreferences.PREF_DRAWER_BUTTON_SIZE.toFloat()) }
@@ -1086,6 +1220,102 @@ fun DrawerButtonSettings() {
                         LauncherPreferences.DEFAULT_PREF?.edit { putInt("drawerButtonSize", it.toInt()) }
                     },
                     valueRange = 20f..100f
+                )
+
+                var cornerRadius by remember { mutableFloatStateOf(LauncherPreferences.PREF_DRAWER_BUTTON_CORNER_RADIUS.toFloat()) }
+                PreferenceSlider(
+                    title = "Button Corner Radius (dp)",
+                    value = cornerRadius,
+                    onValueChange = {
+                        cornerRadius = it
+                        LauncherPreferences.PREF_DRAWER_BUTTON_CORNER_RADIUS = it.toInt()
+                        LauncherPreferences.DEFAULT_PREF?.edit { putInt("drawerButtonCornerRadius", it.toInt()) }
+                    },
+                    valueRange = 0f..50f
+                )
+
+                var bgOpacity by remember { mutableFloatStateOf(LauncherPreferences.PREF_DRAWER_BUTTON_BG_OPACITY * 100f) }
+                PreferenceSlider(
+                    title = "Background Opacity (%)",
+                    value = bgOpacity,
+                    onValueChange = {
+                        bgOpacity = it
+                        LauncherPreferences.PREF_DRAWER_BUTTON_BG_OPACITY = it / 100f
+                        LauncherPreferences.DEFAULT_PREF?.edit { putInt("drawerButtonBgOpacity", it.toInt()) }
+                    },
+                    valueRange = 0f..100f
+                )
+
+                var iconOpacity by remember { mutableFloatStateOf(LauncherPreferences.PREF_DRAWER_BUTTON_ICON_OPACITY * 100f) }
+                PreferenceSlider(
+                    title = "Icon Opacity (%)",
+                    value = iconOpacity,
+                    onValueChange = {
+                        iconOpacity = it
+                        LauncherPreferences.PREF_DRAWER_BUTTON_ICON_OPACITY = it / 100f
+                        LauncherPreferences.DEFAULT_PREF?.edit { putInt("drawerButtonIconOpacity", it.toInt()) }
+                    },
+                    valueRange = 0f..100f
+                )
+
+                var strokeEnabled by remember { mutableStateOf(LauncherPreferences.PREF_DRAWER_BUTTON_STROKE_ENABLED) }
+                PreferenceSwitch(
+                    title = "Show Button Stroke",
+                    summary = "Toggle the outline around the drawer button",
+                    checked = strokeEnabled,
+                    onCheckedChange = {
+                        strokeEnabled = it
+                        LauncherPreferences.PREF_DRAWER_BUTTON_STROKE_ENABLED = it
+                        LauncherPreferences.DEFAULT_PREF?.edit { putBoolean("drawerButtonStrokeEnabled", it) }
+                    }
+                )
+
+                PreferenceItem(
+                    title = "Custom Button Image",
+                    summary = "Select a custom image for the drawer button",
+                    onClick = onPickImage
+                )
+            }
+        }
+
+        item {
+            PreferenceGroup(title = "Drawer List Style") {
+                var listOpacity by remember { mutableFloatStateOf(LauncherPreferences.PREF_DRAWER_LIST_OPACITY * 100f) }
+                PreferenceSlider(
+                    title = "Drawer Background Opacity (%)",
+                    value = listOpacity,
+                    onValueChange = {
+                        listOpacity = it
+                        LauncherPreferences.PREF_DRAWER_LIST_OPACITY = it / 100f
+                        LauncherPreferences.DEFAULT_PREF?.edit { putInt("drawerListOpacity", it.toInt()) }
+                    },
+                    valueRange = 10f..100f
+                )
+            }
+        }
+
+        item {
+            PreferenceGroup(title = "Reset") {
+                PreferenceItem(
+                    title = "Reset Drawer Button",
+                    summary = "Reset drawer button to default",
+                    onClick = {
+                        LauncherPreferences.DEFAULT_PREF?.edit()?.apply {
+                            remove("drawerButtonPreset")
+                            remove("drawerButtonX")
+                            remove("drawerButtonY")
+                            remove("drawerButtonMovable")
+                            remove("drawerButtonSize")
+                            remove("drawerButtonCornerRadius")
+                            remove("drawerButtonBgOpacity")
+                            remove("drawerButtonIconOpacity")
+                            remove("drawerButtonStrokeEnabled")
+                            remove("drawerButtonImagePath")
+                            remove("drawerListOpacity")
+                        }?.apply()
+                        LauncherPreferences.loadPreferences(context)
+                        Toast.makeText(context, "Drawer button reset", Toast.LENGTH_SHORT).show()
+                    }
                 )
             }
         }
@@ -1122,13 +1352,14 @@ fun PreferenceItem(
     title: String,
     summary: String? = null,
     icon: Painter? = null,
+    enabled: Boolean = true,
     onClick: () -> Unit = {}
 ) {
     ListItem(
-        headlineContent = { Text(title, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
-        supportingContent = summary?.let { { Text(it, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)) } },
-        leadingContent = icon?.let { { Icon(it, contentDescription = null, modifier = Modifier.size(24.dp), tint = MaterialTheme.colorScheme.onSurface) } },
-        modifier = Modifier.clickable { onClick() }.padding(horizontal = 4.dp, vertical = 2.dp),
+        headlineContent = { Text(title, fontWeight = FontWeight.Bold, color = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)) },
+        supportingContent = summary?.let { { Text(it, color = if (enabled) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f) else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.24f)) } },
+        leadingContent = icon?.let { { Icon(it, contentDescription = null, modifier = Modifier.size(24.dp), tint = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)) } },
+        modifier = Modifier.clickable(enabled = enabled) { onClick() }.padding(horizontal = 4.dp, vertical = 2.dp),
         colors = ListItemDefaults.colors(containerColor = Color.Transparent)
     )
 }
@@ -1138,17 +1369,19 @@ fun PreferenceSwitch(
     title: String,
     summary: String? = null,
     icon: Painter? = null,
+    enabled: Boolean = true,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
     ListItem(
-        headlineContent = { Text(title, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
-        supportingContent = summary?.let { { Text(it, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)) } },
-        leadingContent = icon?.let { { Icon(it, contentDescription = null, modifier = Modifier.size(24.dp), tint = MaterialTheme.colorScheme.onSurface) } },
+        headlineContent = { Text(title, fontWeight = FontWeight.Bold, color = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)) },
+        supportingContent = summary?.let { { Text(it, color = if (enabled) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f) else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.24f)) } },
+        leadingContent = icon?.let { { Icon(it, contentDescription = null, modifier = Modifier.size(24.dp), tint = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)) } },
         trailingContent = {
             Switch(
                 checked = checked, 
                 onCheckedChange = onCheckedChange,
+                enabled = enabled,
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
                     checkedTrackColor = MaterialTheme.colorScheme.primary,
@@ -1158,7 +1391,7 @@ fun PreferenceSwitch(
                 )
             )
         },
-        modifier = Modifier.clickable { onCheckedChange(!checked) }.padding(horizontal = 4.dp, vertical = 2.dp),
+        modifier = Modifier.clickable(enabled = enabled) { onCheckedChange(!checked) }.padding(horizontal = 4.dp, vertical = 2.dp),
         colors = ListItemDefaults.colors(containerColor = Color.Transparent)
     )
 }
@@ -1168,11 +1401,12 @@ fun PreferenceSlider(
     title: String,
     summary: String? = null,
     icon: Painter? = null,
+    enabled: Boolean = true,
     value: Float,
     onValueChange: (Float) -> Unit,
     valueRange: ClosedFloatingPointRange<Float>
 ) {
-    Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)) {
+    Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp).alpha(if (enabled) 1f else 0.38f)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             if (icon != null) {
                 Icon(icon, contentDescription = null, modifier = Modifier.size(24.dp).padding(end = 16.dp), tint = MaterialTheme.colorScheme.onSurface)
@@ -1188,6 +1422,7 @@ fun PreferenceSlider(
                 value = value,
                 onValueChange = onValueChange,
                 valueRange = valueRange,
+                enabled = enabled,
                 modifier = Modifier.weight(1f),
                 colors = SliderDefaults.colors(
                     thumbColor = MaterialTheme.colorScheme.primary,
@@ -1211,6 +1446,7 @@ fun PreferenceList(
     title: String,
     summary: String? = null,
     icon: Painter? = null,
+    enabled: Boolean = true,
     entries: Array<String>,
     entryValues: Array<String>,
     selectedValue: String,
@@ -1225,6 +1461,7 @@ fun PreferenceList(
         title = title,
         summary = summary ?: displayValue,
         icon = icon,
+        enabled = enabled,
         onClick = { showDialog = true }
     )
     
@@ -1272,6 +1509,6 @@ fun PreferenceList(
 @Composable
 fun SettingsScreenPreview() {
     PojavTheme(dynamicColor = true) {
-        SettingsScreen(onBack = {})
+        SettingsScreen(onBack = {}, onPickBackground = {}, onPickMousePointer = {}, onPickDrawerButtonImage = {})
     }
 }

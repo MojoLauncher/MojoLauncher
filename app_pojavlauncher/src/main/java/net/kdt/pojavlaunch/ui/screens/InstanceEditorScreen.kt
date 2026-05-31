@@ -75,25 +75,30 @@ fun InstanceEditorScreen(
 ) {
     val scrollState = rememberScrollState()
     val isPreview = LocalInspectionMode.current
-    val backgroundBitmap = if (isPreview) null else BaseActivity.getBackgroundBitmap()
+    
+    // ✅ Fix: Don't render background if not in preview to avoid overlapping with LauncherScreen
+    val backgroundBitmap = if (isPreview) BaseActivity.getBackgroundBitmap() else null
     val hasBackground = backgroundBitmap != null
 
     Box(modifier = Modifier.fillMaxSize()) {
-        if (backgroundBitmap != null) {
-            Image(
-                bitmap = backgroundBitmap.asImageBitmap(),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
-        } else {
-            Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background))
-        }
+        // Shared Background Logic (Preview only)
+        if (isPreview) {
+            if (backgroundBitmap != null) {
+                Image(
+                    bitmap = backgroundBitmap.asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background))
+            }
 
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black.copy(alpha = if (hasBackground) 0.4f else 0f))
-        )
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = if (hasBackground) 0.4f else 0f))
+            )
+        }
 
         Row(
             modifier = Modifier
@@ -114,8 +119,6 @@ fun InstanceEditorScreen(
                         .verticalScroll(scrollState)
                         .padding(4.dp)
                 ) {
-                    // Header and back button removed per request
-
                     // Icon and Name Section
                     Box(
                         modifier = Modifier.fillMaxWidth(),

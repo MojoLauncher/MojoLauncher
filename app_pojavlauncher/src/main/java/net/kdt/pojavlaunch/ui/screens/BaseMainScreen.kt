@@ -1,5 +1,7 @@
 package net.kdt.pojavlaunch.ui.screens
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
@@ -26,6 +28,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -42,6 +46,9 @@ import net.kdt.pojavlaunch.customcontrols.handleview.DrawerPullButton
 import net.kdt.pojavlaunch.customcontrols.keyboard.TouchCharInput
 import net.kdt.pojavlaunch.customcontrols.mouse.HotbarView
 import net.kdt.pojavlaunch.customcontrols.mouse.Touchpad
+import net.kdt.pojavlaunch.extra.ExtraConstants
+import net.kdt.pojavlaunch.extra.ExtraCore
+import net.kdt.pojavlaunch.extra.ExtraListener
 import net.kdt.pojavlaunch.prefs.LauncherPreferences
 import net.kdt.pojavlaunch.ui.theme.PojavTheme
 
@@ -62,7 +69,6 @@ fun BaseMainScreen(
     onDismissMenu: () -> Unit = {}
 ) {
     val isPreview = LocalInspectionMode.current
-    val backgroundBitmap = if (isPreview) null else BaseActivity.getBackgroundBitmap()
     val ignoreNotch = if (isPreview) true else LauncherPreferences.PREF_IGNORE_NOTCH
 
     val primaryContainerColor = MaterialTheme.colorScheme.primaryContainer
@@ -77,6 +83,37 @@ fun BaseMainScreen(
         label = "railWidth"
     )
 
+    // ✅ Background State
+    var backgroundBitmap by remember { mutableStateOf<Bitmap?>(null) }
+    var blurEnabled by remember { mutableStateOf(false) }
+    var blurIntensity by remember { mutableFloatStateOf(0f) }
+    var overlayEnabled by remember { mutableStateOf(false) }
+    var overlayOpacity by remember { mutableFloatStateOf(0f) }
+
+    fun updateBackgroundState() {
+        if (isPreview) return
+        val path = LauncherPreferences.PREF_BACKGROUND_PATH
+        backgroundBitmap = if (path != null) BitmapFactory.decodeFile(path) else null
+        blurEnabled = LauncherPreferences.PREF_BACKGROUND_BLUR
+        blurIntensity = LauncherPreferences.PREF_BACKGROUND_BLUR_INTENSITY.toFloat()
+        overlayEnabled = LauncherPreferences.PREF_BACKGROUND_IMAGE_OVERLAY_ENABLED
+        overlayOpacity = LauncherPreferences.PREF_BACKGROUND_IMAGE_OVERLAY_ALPHA
+    }
+
+    val backgroundRefreshListener = remember {
+        ExtraListener<Any?> { _, _ ->
+            updateBackgroundState()
+            false
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        updateBackgroundState()
+        ExtraCore.addExtraListener(ExtraConstants.REFRESH_BACKGROUND, backgroundRefreshListener)
+    }
+
+    val hasBackground = backgroundBitmap != null
+
     val layoutModifier = if (ignoreNotch) {
         Modifier.fillMaxSize()
     } else {
@@ -85,12 +122,16 @@ fun BaseMainScreen(
     }
 
     Box(modifier = layoutModifier) {
-
+        // Shared Background Logic
         if (backgroundBitmap != null) {
             androidx.compose.foundation.Image(
-                bitmap = backgroundBitmap.asImageBitmap(),
+                bitmap = backgroundBitmap!!.asImageBitmap(),
                 contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .run {
+                        if (blurEnabled && blurIntensity > 0) blur((blurIntensity / 2.5f).dp) else this
+                    },
                 contentScale = ContentScale.Crop
             )
         } else {
@@ -101,10 +142,18 @@ fun BaseMainScreen(
             )
         }
 
+        // Overlay Logic - Use MaterialTheme surface color
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(primaryContainerColor.copy(alpha = 0.18f))
+                .background(MaterialTheme.colorScheme.surface.copy(alpha = if (hasBackground && overlayEnabled) overlayOpacity else 0f))
+        )
+
+        // Tint Overlay (reduced alpha to avoid washing out dynamic colors)
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(primaryContainerColor.copy(alpha = 0.08f))
         )
 
         AndroidView(

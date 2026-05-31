@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -20,6 +21,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -126,6 +128,14 @@ fun MainMenuRevamp(
             stiffness = Spring.StiffnessLow
         ),
         label = "headScale"
+    )
+
+    // ✅ Terminate Button rotation state
+    var terminateRotationAngle by remember { mutableFloatStateOf(0f) }
+    val animatedTerminateRotation by animateFloatAsState(
+        targetValue = terminateRotationAngle,
+        animationSpec = tween(durationMillis = 600),
+        label = "terminateRotation"
     )
 
     Box(
@@ -318,6 +328,8 @@ fun MainMenuRevamp(
                         color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
                     )
 
+
+
                     // ✅ Correctly display the selected instance name or "No Instance"
                     OutlinedButton(
                         onClick = onInstanceSelect,
@@ -419,7 +431,10 @@ fun MainMenuRevamp(
 
                         // Terminate button - High emphasis (Filled) Pill Shape
                         Button(
-                            onClick = onTerminateClick,
+                            onClick = {
+                                terminateRotationAngle += 360f
+                                onTerminateClick()
+                            },
                             modifier = Modifier.size(44.dp),
                             shape = CircleShape,
                             colors = ButtonDefaults.buttonColors(
@@ -432,7 +447,9 @@ fun MainMenuRevamp(
                             Icon(
                                 Icons.Rounded.Clear,
                                 contentDescription = "Terminate",
-                                modifier = Modifier.size(22.dp)
+                                modifier = Modifier
+                                    .size(22.dp)
+                                    .rotate(animatedTerminateRotation)
                             )
                         }
                     }

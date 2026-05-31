@@ -1,6 +1,9 @@
 package net.kdt.pojavlaunch.ui.screens
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Build
 import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
@@ -17,18 +20,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,7 +40,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentContainerView
 import com.kdt.mcgui.ProgressLayout
 import net.ashmeet.hyperlauncher.R
-import net.kdt.pojavlaunch.BaseActivity
 import net.kdt.pojavlaunch.authenticator.AuthType
 import net.kdt.pojavlaunch.authenticator.accounts.Accounts
 import net.kdt.pojavlaunch.authenticator.accounts.MinecraftAccount
@@ -184,8 +185,7 @@ fun ProgressCard(
                     .fillMaxWidth()
                     .clickable { isExpanded = !isExpanded }
                     .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+                verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_px_progress),
                     contentDescription = null,
@@ -508,8 +508,8 @@ fun TopBarButton(
     badgeCount: Int = 0,
     modifier: Modifier = Modifier
 ) {
-    val defaultContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
-    val activeColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f)
+    val defaultContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f)
+    val activeColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.95f)
     
     val finalContainerColor = if (isSelected || isSpecialActive) activeColor else defaultContainerColor
 
@@ -523,7 +523,7 @@ fun TopBarButton(
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.filledTonalButtonColors(
                 containerColor = finalContainerColor,
-                contentColor = MaterialTheme.colorScheme.onSurface
+                contentColor = if (isSelected || isSpecialActive) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurface
             ),
             contentPadding = PaddingValues(horizontal = 12.dp)
         ) {
@@ -579,10 +579,37 @@ fun LauncherScreen(
     isFragmentOpen: Boolean = false
 ) {
     val isPreview = LocalInspectionMode.current
-    val backgroundBitmap = if (isPreview) null else BaseActivity.getBackgroundBitmap()
     val topBarHeight = dimensionResource(id = R.dimen._50sdp)
     val ignoreNotch = if (isPreview) true else LauncherPreferences.PREF_IGNORE_NOTCH
     
+    var backgroundBitmap by remember { mutableStateOf<Bitmap?>(null) }
+    var blurEnabled by remember { mutableStateOf(false) }
+    var blurIntensity by remember { mutableFloatStateOf(0f) }
+    var overlayEnabled by remember { mutableStateOf(false) }
+    var overlayOpacity by remember { mutableFloatStateOf(0f) }
+
+    fun updateBackgroundState() {
+        if (isPreview) return
+        val path = LauncherPreferences.PREF_BACKGROUND_PATH
+        backgroundBitmap = if (path != null) BitmapFactory.decodeFile(path) else null
+        blurEnabled = LauncherPreferences.PREF_BACKGROUND_BLUR
+        blurIntensity = LauncherPreferences.PREF_BACKGROUND_BLUR_INTENSITY.toFloat()
+        overlayEnabled = LauncherPreferences.PREF_BACKGROUND_IMAGE_OVERLAY_ENABLED
+        overlayOpacity = LauncherPreferences.PREF_BACKGROUND_IMAGE_OVERLAY_ALPHA
+    }
+
+    val backgroundRefreshListener = remember {
+        ExtraListener<Any?> { _, _ ->
+            updateBackgroundState()
+            false
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        updateBackgroundState()
+        ExtraCore.addExtraListener(ExtraConstants.REFRESH_BACKGROUND, backgroundRefreshListener)
+    }
+
     val hasBackground = backgroundBitmap != null
 
     var loginProgress by remember { mutableFloatStateOf(1f) }
@@ -601,16 +628,21 @@ fun LauncherScreen(
     ) {
         if (backgroundBitmap != null) {
             Image(
-                bitmap = backgroundBitmap.asImageBitmap(),
+                bitmap = backgroundBitmap!!.asImageBitmap(),
                 contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .run {
+                        if (blurEnabled && blurIntensity > 0) blur((blurIntensity / 2.5f).dp) else this
+                    },
                 contentScale = ContentScale.Crop
             )
         }
 
+        // ✅ Overlay Logic - Fixed to use MaterialTheme surface color for dynamic matching
         Box(modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black.copy(alpha = if (hasBackground) 0.4f else 0f))
+            .background(MaterialTheme.colorScheme.surface.copy(alpha = if (hasBackground && overlayEnabled) overlayOpacity else 0f))
         )
 
         Column(modifier = Modifier.fillMaxSize()) {
@@ -618,7 +650,8 @@ fun LauncherScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(topBarHeight)
-                    .background(MaterialTheme.colorScheme.surface.copy(alpha = if (hasBackground) 0.4f else 1f))
+                    // ✅ Dynamic top bar background
+                    .background(MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp).copy(alpha = if (hasBackground) 0.8f else 1f))
             ) {
                 Row(
                     modifier = Modifier
