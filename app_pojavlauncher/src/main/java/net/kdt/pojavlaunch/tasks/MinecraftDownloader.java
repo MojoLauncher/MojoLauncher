@@ -311,6 +311,10 @@ public class MinecraftDownloader extends Downloader {
     }
 
     private File submitArtifact(MinecraftLibraryArtifact artifact) throws IOException {
+        if(artifact.path == null){
+            Log.w("MinecraftDownloader", "Null path in library artifact");
+            return null;
+        }
         File artifactPath = new File(Tools.DIR_HOME_LIBRARY, artifact.path);
         if(!mClassPath.add(artifactPath)) {
             Log.w("MinecraftDownloader", "Repeated classpath entry " + artifact.path +" skipped");
