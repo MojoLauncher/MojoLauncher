@@ -1,14 +1,13 @@
 package net.kdt.pojavlaunch.customcontrols.buttons;
 
 import static net.kdt.pojavlaunch.LwjglGlfwKeycode.GLFW_KEY_UNKNOWN;
-import static net.kdt.pojavlaunch.CallbackBridge.sendMouseButton;
+import static org.lwjgl.glfw.CallbackBridge.sendKeyPress;
+import static org.lwjgl.glfw.CallbackBridge.sendMouseButton;
 
 import android.annotation.SuppressLint;
-import android.content.res.ColorStateList;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -16,22 +15,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import net.kdt.pojavlaunch.EfficientAndroidLWJGLKeycode;
 import net.kdt.pojavlaunch.LwjglGlfwKeycode;
 import net.kdt.pojavlaunch.MainActivity;
-
-import git.artdeell.dnbootstrap.glfw.GLFW;
-import git.artdeell.mojo.R;
-
-import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.customcontrols.ControlData;
 import net.kdt.pojavlaunch.customcontrols.ControlLayout;
 import net.kdt.pojavlaunch.customcontrols.handleview.EditControlSideDialog;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
-import net.kdt.pojavlaunch.CallbackBridge;
-
-import static net.kdt.pojavlaunch.customcontrols.buttons.BackgroundTint.DEFAULT_TINT_LIST;
-import static net.kdt.pojavlaunch.customcontrols.buttons.BackgroundTint.TOGGLE_TINT_LIST;
+import org.lwjgl.glfw.CallbackBridge;
 
 @SuppressLint({"ViewConstructor", "AppCompatCustomView"})
 public class ControlButton extends TextView implements ControlInterface {
@@ -41,9 +34,9 @@ public class ControlButton extends TextView implements ControlInterface {
 
     /* Cache value from the ControlData radius for drawing purposes */
     private float mComputedRadius;
-    private boolean mHasBitmap;
 
     protected boolean mIsToggled = false;
+    protected boolean mIsPointerOutOfBounds = false;
 
     public ControlButton(ControlLayout layout, ControlData properties) {
         super(layout.getContext());
@@ -70,36 +63,21 @@ public class ControlButton extends TextView implements ControlInterface {
         return mProperties;
     }
 
-    private void setupBitmapTint() {
-        BackgroundTint.applyToggleTint(getContext());
-        ColorStateList tintStateList = mProperties.isToggle ? TOGGLE_TINT_LIST : DEFAULT_TINT_LIST;
-        setBackgroundTintList(tintStateList);
-        setBackgroundTintMode(PorterDuff.Mode.SRC_ATOP);
-    }
-
-    private void setupNormalTint() {
+    public void setProperties(ControlData properties, boolean changePos) {
+        mProperties = properties;
+        ControlInterface.super.setProperties(properties, changePos);
         mComputedRadius = ControlInterface.super.computeCornerRadius(mProperties.cornerRadius);
-        setBackgroundTintList(null);
+
         if (mProperties.isToggle) {
             //For the toggle layer
             final TypedValue value = new TypedValue();
             getContext().getTheme().resolveAttribute(R.attr.colorAccent, value, true);
             mRectPaint.setColor(value.data);
-            mRectPaint.setAlpha(BackgroundTint.BACKGROUND_TOGGLE_TINT_ALPHA);
+            mRectPaint.setAlpha(128);
         } else {
             mRectPaint.setColor(Color.WHITE);
-            mRectPaint.setAlpha(BackgroundTint.BACKGROUND_DEFAULT_TINT_ALPHA);
+            mRectPaint.setAlpha(60);
         }
-    }
-
-    public void setProperties(ControlData properties, boolean changePos) {
-        mProperties = properties;
-        ControlInterface.super.setProperties(properties, changePos);
-
-        mHasBitmap = Tools.isValidString(mProperties.bitmapTag);
-
-        if(mHasBitmap) setupBitmapTint();
-        else setupNormalTint();
 
         setText(properties.name);
     }
@@ -107,16 +85,10 @@ public class ControlButton extends TextView implements ControlInterface {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        // Bitmap uses a tint list, so don't do any custom rendering
-        if(mHasBitmap || !isActivated()) return;
-        canvas.drawRoundRect(0, 0, getWidth(), getHeight(), mComputedRadius, mComputedRadius, mRectPaint);
+        if (mIsToggled || (!mProperties.isToggle && isActivated()))
+            canvas.drawRoundRect(0, 0, getWidth(), getHeight(), mComputedRadius, mComputedRadius, mRectPaint);
     }
 
-    @Override
-    public boolean isActivated() {
-        // Any possible side effects?
-        return super.isActivated() || (mProperties.isToggle && mIsToggled);
-    }
 
     public void loadEditValues(EditControlSideDialog editControlPopup){
         editControlPopup.loadValues(getProperties());
@@ -132,59 +104,69 @@ public class ControlButton extends TextView implements ControlInterface {
 
     /** Remove any trace of this button from the layout */
     public void removeButton() {
-        ControlLayout parent = getControlLayoutParent();
-        if(parent == null) return;
-        parent.getLayout().mControlDataList.remove(getProperties());
-        parent.removeView(this);
+        getControlLayoutParent().getLayout().mControlDataList.remove(getProperties());
+        getControlLayoutParent().removeView(this);
     }
 
-    @Override
-    public void handlePressed() {
-        if(!getProperties().isToggle){
-            sendKeyPresses(true);
-        }
-    }
-
-    @Override
-    public void handleReleased() {
-        if(!triggerToggle()) {
-            sendKeyPresses(false);
-        }
-    }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        ControlData properties = getProperties();
-        int action = event.getActionMasked();
-        switch (action) {
+        switch (event.getActionMasked()){
             case MotionEvent.ACTION_MOVE:
-            case MotionEvent.ACTION_UP: // 1
-            case MotionEvent.ACTION_CANCEL: // 3
-            case MotionEvent.ACTION_POINTER_UP: // 6
-                if(properties.passThruEnabled){
-                    //Send the event to be taken as a mouse action
+                //Send the event to be taken as a mouse action
+                if(getProperties().passThruEnabled && CallbackBridge.isGrabbing()){
                     View gameSurface = getControlLayoutParent().getGameSurface();
                     if(gameSurface != null) gameSurface.dispatchTouchEvent(event);
                 }
+
+                //If out of bounds
+                if(event.getX() < getControlView().getLeft() || event.getX() > getControlView().getRight() ||
+                        event.getY() < getControlView().getTop()  || event.getY() > getControlView().getBottom()){
+                    if(getProperties().isSwipeable && !mIsPointerOutOfBounds){
+                        //Remove keys
+                        if(!triggerToggle()) {
+                            sendKeyPresses(false);
+                        }
+                    }
+                    mIsPointerOutOfBounds = true;
+                    getControlLayoutParent().onTouch(this, event);
+                    break;
+                }
+
+                //Else if we now are in bounds
+                if(mIsPointerOutOfBounds) {
+                    getControlLayoutParent().onTouch(this, event);
+                    //RE-press the button
+                    if(getProperties().isSwipeable && !getProperties().isToggle){
+                        sendKeyPresses(true);
+                    }
+                }
+                mIsPointerOutOfBounds = false;
                 break;
-        }
 
-        if(getProperties().isSwipeable) {
-            getControlLayoutParent().onTouch(this, event);
-            return true;
-        }
-
-        switch (action){
             case MotionEvent.ACTION_DOWN: // 0
             case MotionEvent.ACTION_POINTER_DOWN: // 5
-                handlePressed();
+                if(!getProperties().isToggle){
+                    sendKeyPresses(true);
+                }
                 break;
+
             case MotionEvent.ACTION_UP: // 1
             case MotionEvent.ACTION_CANCEL: // 3
             case MotionEvent.ACTION_POINTER_UP: // 6
-                handleReleased();
+                if(getProperties().passThruEnabled){
+                    View gameSurface = getControlLayoutParent().getGameSurface();
+                    if(gameSurface != null) gameSurface.dispatchTouchEvent(event);
+                }
+                if(mIsPointerOutOfBounds) getControlLayoutParent().onTouch(this, event);
+                mIsPointerOutOfBounds = false;
+
+                if(!triggerToggle()) {
+                    sendKeyPresses(false);
+                }
                 break;
+
             default:
                 return false;
         }
@@ -210,9 +192,8 @@ public class ControlButton extends TextView implements ControlInterface {
         setActivated(isDown);
         for(int keycode : mProperties.keycodes){
             if(keycode >= GLFW_KEY_UNKNOWN){
+                sendKeyPress(keycode, EfficientAndroidLWJGLKeycode.getLwjglChar(keycode), CallbackBridge.getCurrentMods(), isDown);
                 CallbackBridge.setModifiers(keycode, isDown);
-                int modifiers = CallbackBridge.getCurrentMods();
-                GLFW.sendKeyEvent(keycode, isDown, modifiers);
             }else{
                 Log.i("punjabilauncher", "sendSpecialKey("+keycode+","+isDown+")");
                 sendSpecialKey(keycode, isDown);

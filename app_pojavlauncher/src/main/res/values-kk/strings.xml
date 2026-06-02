@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Android-ке арналған Minecraft: Java Edition)</string>
-    <string name="app_short_name">MojoLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -13,7 +11,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Мод орнатқыш таңдау</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher кенет іркілді</string>
+    <string name="error_fatal">Copper кенет іркілді</string>
     <string name="error_no_version">Нұсқа жоқ!</string>
     <string name="error_show_more">Көрсету</string>
     <string name="error_show_less">Жасыру</string>
@@ -61,17 +59,8 @@
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">Чат</string>
     <string name="control_debug">Оңдау</string>
-    <string name="control_primary">Pri</string>
-    <string name="control_secondary">Sec</string>
-    <string name="control_shift">◇</string>
     <string name="control_inventory">Инв</string>
-    <string name="control_up">▲</string>
-    <string name="control_left">◀</string>
-    <string name="control_right">▶</string>
-    <string name="control_down">▼</string>
-    <string name="control_jump">⬛</string>
     <string name="control_thirdperson">F5</string>
-    <string name="control_listplayers">Tab</string>
     <string name="control_mouse">Тінтуір</string>
     <string name="control_mouseoff">Тінтуір: өшір.</string>
     <string name="control_mouseon">Тінтуір: қос.</string>

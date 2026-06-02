@@ -2,6 +2,8 @@ package net.kdt.pojavlaunch.tasks;
 
 
 import static net.kdt.pojavlaunch.Architecture.archAsString;
+import static net.kdt.pojavlaunch.Architecture.archAsStringAndroid;
+import static net.kdt.pojavlaunch.Architecture.getDeviceArchitecture;
 import static net.kdt.pojavlaunch.PojavApplication.sExecutorService;
 
 import android.content.Context;
@@ -10,17 +12,16 @@ import android.util.Log;
 
 import com.kdt.mcgui.ProgressLayout;
 
+import net.kdt.pojavlaunch.Architecture;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 
 public class AsyncAssetManager {
 
@@ -65,7 +66,9 @@ public class AsyncAssetManager {
         ProgressLayout.setProgress(ProgressLayout.EXTRACT_SINGLE_FILES, 0);
         sExecutorService.execute(() -> {
             try {
+                Tools.copyAssetFile(ctx, "options.txt", Tools.DIR_GAME_NEW, false);
                 Tools.copyAssetFile(ctx, "default.json", Tools.CTRLMAP_PATH, false);
+
                 Tools.copyAssetFile(ctx, "launcher_profiles.json", Tools.DIR_GAME_NEW, false);
                 Tools.copyAssetFile(ctx,"resolv.conf",Tools.DIR_DATA, false);
             } catch (IOException e) {
@@ -78,81 +81,92 @@ public class AsyncAssetManager {
     public static void unpackComponents(Context ctx){
         ProgressLayout.setProgress(ProgressLayout.EXTRACT_COMPONENTS, 0);
         sExecutorService.execute(() -> {
-            tryUnpackComponent(ctx, "caciocavallo", false);
-            tryUnpackComponent(ctx, "caciocavallo17", false);
-            //tryUnpackComponent(ctx, "lwjgl3", false);
-
-            tryUnpackComponent(ctx, "security", true);
-            tryUnpackComponent(ctx, "arc_dns_injector", true);
-            tryUnpackComponent(ctx, "forge_installer", true);
-            tryUnpackComponent(ctx, "authlib-injector", true);
+            try {
+                unpackComponent(ctx, "caciocavallo", false);
+                unpackComponent(ctx, "caciocavallo17", false);
+                // Since the Java module system doesn't allow multiple JARs to declare the same module,
+                // we repack them to a single file here
+                unpackLwjglNatives(ctx);
+                unpackComponent(ctx, "lwjgl3/3.3.3", false);
+                unpackComponent(ctx, "lwjgl3/3.4.1", false);
+                unpackComponent(ctx, "security", true);
+                unpackComponent(ctx, "arc_dns_injector", true);
+                unpackComponent(ctx, "methods_injector_agent", true);
+                unpackComponent(ctx, "forge_installer", true);
+            } catch (IOException e) {
+                Log.e("AsyncAssetManager", "Failed to unpack components !",e );
+            }
             ProgressLayout.clearProgress(ProgressLayout.EXTRACT_COMPONENTS);
         });
     }
+    // Piggybacks off of the java modules extracting later to use their version files for update checks
+    // This is indeed prone to breaking.
+    private static void unpackLwjglNatives(Context ctx) throws IOException {
+        AssetManager am = ctx.getAssets();
+        String rootDir = Tools.DIR_DATA;
+        String sArch = archAsStringAndroid(getDeviceArchitecture());
 
-    private static String readInstalledComponentVersion(File componentRoot) {
-        File localVersionFile = new File(componentRoot, "version");
-        try(FileInputStream fileInputStream = new FileInputStream(localVersionFile)) {
-            return IOUtils.toString(fileInputStream, StandardCharsets.UTF_8);
-        }catch (IOException ignored) {}
-        return null;
-    }
+        String[] lwjglVersions = {"3.3.3", "3.4.1"};
+        for (String lwjglVer : lwjglVersions) {
+            File versionFile = new File(Tools.DIR_GAME_HOME + String.format("/lwjgl3/%s/version", lwjglVer));
+            InputStream is = am.open("components/lwjgl3/" + lwjglVer + "/version");
+            String pathToLwjglNatives = String.format("lwjgl-%s-natives/", lwjglVer) + sArch;
 
-    private static String readBuiltinComponentVersion(AssetManager assetManager, String componentName) {
-        String componentVersionLocation = "components/"+componentName+"/version";
-        try (InputStream inputStream = assetManager.open(componentVersionLocation)) {
-            return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
-        }catch (IOException ignored) {}
-        return null;
-    }
+            boolean shouldUpdate = true;
+            if (versionFile.exists()) {
+                FileInputStream fis = new FileInputStream(versionFile);
+                String release1 = Tools.read(is);
+                String release2 = Tools.read(fis);
+                if (release1.equals(release2))
+                    shouldUpdate = false;
+            }
 
-    private static void tryUnpackComponent(Context ctx, String component, boolean privateDirectory) {
-        try {
-            unpackComponent(ctx, component, privateDirectory);
-        }catch (IOException e) {
-            Log.e("AssetUnpacker", "Failed to unpack component "+component, e);
+            if (shouldUpdate) {
+                Log.i("UnpackLwjgl", lwjglVer + " was installed manually, or does not exist, unpacking new...");
+                String[] fileList = am.list("components/" + pathToLwjglNatives);
+                for (String fileName : fileList) {
+                    Tools.copyAssetFile(ctx, "components/" + pathToLwjglNatives + "/" + fileName, rootDir + "/" + pathToLwjglNatives, true);
+                }
+            } else {
+                Log.i("UnpackLwjgl", lwjglVer + " is up-to-date with the launcher, continuing...");
+            }
         }
     }
 
     private static void unpackComponent(Context ctx, String component, boolean privateDirectory) throws IOException {
         AssetManager am = ctx.getAssets();
         String rootDir = privateDirectory ? Tools.DIR_DATA : Tools.DIR_GAME_HOME;
-        File componentTarget = new File(rootDir, component);
-        String installedVersion = readInstalledComponentVersion(componentTarget);
-        String builtinVersion = readBuiltinComponentVersion(am, component);
-        if(installedVersion != null && installedVersion.equals(builtinVersion)) {
-            Log.i("AssetUnpacker", "Component "+component+" is up-to-date, continuing...");
-            return;
-        }
-        Log.i("AssetUnpacker", "Updating "+component);
 
-        if(componentTarget.exists()) {
-            FileUtils.deleteDirectory(componentTarget);
-        }
-        if(!componentTarget.mkdirs()) {
-            throw new IOException("Failed to create directory for "+component);
-        }
+        File versionFile = new File(rootDir + "/" + component + "/version");
+        InputStream is = am.open("components/" + component + "/version");
+        if(!versionFile.exists()) {
+            if (versionFile.getParentFile().exists() && versionFile.getParentFile().isDirectory()) {
+                FileUtils.deleteDirectory(versionFile.getParentFile());
+            }
+            versionFile.getParentFile().mkdir();
 
-        String componentSource = "components/" + component;
+            Log.i("UnpackPrep", component + ": Pack was installed manually, or does not exist, unpacking new...");
+            String[] fileList = am.list("components/" + component);
+            for(String s : fileList) {
+                Tools.copyAssetFile(ctx, "components/" + component + "/" + s, rootDir + "/" + component, true);
+            }
+        } else {
+            FileInputStream fis = new FileInputStream(versionFile);
+            String release1 = Tools.read(is);
+            String release2 = Tools.read(fis);
+            if (!release1.equals(release2)) {
+                if (versionFile.getParentFile().exists() && versionFile.getParentFile().isDirectory()) {
+                    FileUtils.deleteDirectory(versionFile.getParentFile());
+                }
+                versionFile.getParentFile().mkdir();
 
-        String[] fileList = am.list(componentSource);
-        for (String fileName : fileList) {
-            if(fileName.equals("version")) continue;
-            String sourcePath = componentSource + "/" + fileName;
-            Tools.copyAssetFile(ctx, sourcePath, componentTarget.getAbsolutePath(), true);
-        }
-
-        // Always write the version file separately after extracting everything else, to improve
-        // reliability.
-        Tools.write(new File(componentTarget, "version"), builtinVersion);
-    }
-
-    public static void extractDefaultSettings(Context context, File gamedir)  {
-        try {
-            String gameDirPath = gamedir.getAbsolutePath();
-            Tools.copyAssetFile(context, "options.txt", gameDirPath, false);
-        }catch (IOException e) {
-            Tools.showError(context, e);
+                String[] fileList = am.list("components/" + component);
+                for (String fileName : fileList) {
+                    Tools.copyAssetFile(ctx, "components/" + component + "/" + fileName, rootDir + "/" + component, true);
+                }
+            } else {
+                Log.i("UnpackPrep", component + ": Pack is up-to-date with the launcher, continuing...");
+            }
         }
     }
 }

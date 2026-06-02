@@ -1,6 +1,6 @@
 package net.kdt.pojavlaunch.customcontrols.mouse;
 
-import net.kdt.pojavlaunch.CallbackBridge;
+import org.lwjgl.glfw.CallbackBridge;
 
 public class Scroller {
 

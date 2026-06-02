@@ -18,8 +18,8 @@ import android.webkit.MimeTypeMap;
 
 import androidx.annotation.Nullable;
 
-import git.artdeell.mojo.BuildConfig;
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.BuildConfig;
+import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.Tools;
 
 import org.apache.commons.io.FileUtils;
@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * A document provider for the Storage Access Framework which exposes the files in the
@@ -45,7 +44,6 @@ import java.util.concurrent.TimeUnit;
  * - <a href="http://developer.android.com/guide/topics/providers/document-provider.html#43">...</a>
  */
 public class FolderProvider extends DocumentsProvider {
-    private static final List<String> BLOCKED = List.of("com.dnamobile.modlymodmanager");
 
     private static final String ALL_MIME_TYPES = "*/*";
 
@@ -54,7 +52,6 @@ public class FolderProvider extends DocumentsProvider {
     private ContentResolver mContentResolver;
 
     private String mStorageProviderAuthortiy;
-    private final Object mWaitObject = new Object();
 
     // The default columns to return information about a root if no specific
     // columns are requested in a query.
@@ -80,18 +77,6 @@ public class FolderProvider extends DocumentsProvider {
         Document.COLUMN_SIZE
     };
 
-    private void validateQuery(){
-        if(BLOCKED.contains(getCallingPackage())) {
-            try {
-                synchronized (mWaitObject) {
-                    mWaitObject.wait();
-                }
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
     @Override
     public Cursor queryRoots(String[] projection) {
         final MatrixCursor result = new MatrixCursor(projection != null ? projection : DEFAULT_ROOT_PROJECTION);
@@ -116,7 +101,6 @@ public class FolderProvider extends DocumentsProvider {
 
     @Override
     public Cursor queryDocument(String documentId, String[] projection) throws FileNotFoundException {
-        validateQuery();
         final MatrixCursor result = new MatrixCursor(projection != null ? projection : DEFAULT_DOCUMENT_PROJECTION);
         // Future-proofing in case if we implement realtime file watching
         result.setNotificationUri(mContentResolver, createUriForDocId(documentId));
@@ -126,7 +110,6 @@ public class FolderProvider extends DocumentsProvider {
 
     @Override
     public Cursor queryChildDocuments(String parentDocumentId, String[] projection, String sortOrder) throws FileNotFoundException {
-        validateQuery();
         final MatrixCursor result = new MatrixCursor(projection != null ? projection : DEFAULT_DOCUMENT_PROJECTION);
         final File parent = getFileForDocId(parentDocumentId);
         final File[] children = parent.listFiles();
@@ -155,9 +138,9 @@ public class FolderProvider extends DocumentsProvider {
 
     @Override
     public boolean onCreate() {
-        if (Tools.checkStorageRoot(getContext())) {
+        if(Tools.checkStorageRoot(getContext())) {
             Tools.initStorageConstants(getContext());
-        } else {
+        }else {
             return false;
         }
         BASE_DIR = new File(Tools.DIR_GAME_HOME);
@@ -168,7 +151,6 @@ public class FolderProvider extends DocumentsProvider {
 
     @Override
     public String createDocument(String parentDocumentId, String mimeType, String displayName) throws FileNotFoundException {
-        validateQuery();
         File newFile = new File(parentDocumentId, displayName);
         int noConflictId = 2;
         while (newFile.exists()) {

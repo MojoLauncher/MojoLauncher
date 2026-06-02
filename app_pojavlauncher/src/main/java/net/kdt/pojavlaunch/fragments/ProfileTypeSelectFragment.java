@@ -1,57 +1,70 @@
 package net.kdt.pojavlaunch.fragments;
 
+import static net.kdt.pojavlaunch.Tools.hasNoOnlineProfileDialog;
+import static net.kdt.pojavlaunch.Tools.hasOnlineProfile;
+
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.PojavProfile;
+import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.Tools;
-import net.kdt.pojavlaunch.instances.Instance;
-import net.kdt.pojavlaunch.instances.Instances;
-
-import java.io.IOException;
 
 public class ProfileTypeSelectFragment extends Fragment {
     public static final String TAG = "ProfileTypeSelectFragment";
     public ProfileTypeSelectFragment() {
         super(R.layout.fragment_profile_type);
     }
+    public ProfileTypeSelectFragment(int layout) {
+        super(layout);
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.findViewById(R.id.vanilla_profile).setOnClickListener(v -> {
-            try {
-                Instance instance = Instances.createDefaultInstance();
-                Instances.setSelectedInstance(instance);
-                Tools.swapFragment(requireActivity(), InstanceEditorFragment.class,
-                        InstanceEditorFragment.TAG, new Bundle(1));
-            }catch (IOException e) {
-                Tools.showError(view.getContext(), e);
-            }
-        });
+        view.findViewById(R.id.vanilla_profile).setOnClickListener(v ->
+                navigateTo(ProfileEditorFragment.class, ProfileEditorFragment.TAG, new Bundle(1)));
 
-        // NOTE: Special care needed! If you wll decide to add these to the back stack, please read
-        // the comment in FabricInstallFragment.onDownloadFinished() and amend the code
-        // in FabricInstallFragment.onDownloadFinished() and ModVersionListFragment.onDownloadFinished()
-        view.findViewById(R.id.optifine_profile).setOnClickListener(v -> Tools.swapFragment(requireActivity(), OptiFineInstallFragment.class,
-                OptiFineInstallFragment.TAG, null));
+        view.findViewById(R.id.optifine_profile).setOnClickListener(v ->
+                tryInstall(OptiFineInstallFragment.class, OptiFineInstallFragment.TAG));
         view.findViewById(R.id.modded_profile_fabric).setOnClickListener((v)->
-                Tools.swapFragment(requireActivity(), FabricInstallFragment.class, FabricInstallFragment.TAG, null));
+                tryInstall(FabricInstallFragment.class, FabricInstallFragment.TAG));
         view.findViewById(R.id.modded_profile_forge).setOnClickListener((v)->
-                Tools.swapFragment(requireActivity(), ForgeInstallFragment.class, ForgeInstallFragment.TAG, null));
-        view.findViewById(R.id.modded_profile_modpack).setOnClickListener((v)->
-                Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG, null));
-        view.findViewById(R.id.modded_profile_quilt).setOnClickListener((v)->
-                Tools.swapFragment(requireActivity(), QuiltInstallFragment.class, QuiltInstallFragment.TAG, null));
-        view.findViewById(R.id.modded_profile_bta).setOnClickListener((v)->
-                Tools.swapFragment(requireActivity(), BTAInstallFragment.class, BTAInstallFragment.TAG, null));
+                tryInstall(ForgeInstallFragment.class, ForgeInstallFragment.TAG));
         view.findViewById(R.id.modded_profile_neoforge).setOnClickListener((v)->
-                Tools.swapFragment(requireActivity(), NeoforgeInstallFragment.class, NeoforgeInstallFragment.TAG, null));
-        view.findViewById(R.id.modded_profile_legacy_fabric).setOnClickListener((v) ->
-                Tools.swapFragment(requireActivity(), LegacyFabricInstallFragment.class, LegacyFabricInstallFragment.TAG, null));
+                tryInstall(NeoForgeInstallFragment.class, NeoForgeInstallFragment.TAG));
+        view.findViewById(R.id.modded_profile_modpack).setOnClickListener((v)->
+                tryInstall(ModpackCreateFragment.class, ModpackCreateFragment.TAG));
+        view.findViewById(R.id.modded_profile_quilt).setOnClickListener((v)->
+                tryInstall(QuiltInstallFragment.class, QuiltInstallFragment.TAG));
+        view.findViewById(R.id.modded_profile_bta).setOnClickListener((v)->
+                tryInstall(BTAInstallFragment.class, BTAInstallFragment.TAG));
+    }
+
+    /** Navigate within right pane if inside MainMenuFragment, otherwise full-screen swap. */
+    protected void navigateTo(Class<? extends Fragment> cls, String tag, android.os.Bundle args) {
+        // Walk up to find MainMenuFragment (could be grandparent if nested)
+        Fragment parent = getParentFragment();
+        while (parent != null && !(parent instanceof MainMenuFragment)) {
+            parent = parent.getParentFragment();
+        }
+        if (parent instanceof MainMenuFragment) {
+            ((MainMenuFragment) parent).openChildPane(cls, tag, args);
+        } else {
+            Tools.swapFragment(requireActivity(), cls, tag, args);
+        }
+    }
+
+    private void tryInstall(Class<? extends Fragment> fragmentClass, String tag){
+        if(!hasOnlineProfile()){
+            hasNoOnlineProfileDialog(requireActivity());
+        } else {
+            navigateTo(fragmentClass, tag, null);
+        }
     }
 }

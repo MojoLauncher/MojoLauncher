@@ -16,9 +16,8 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.kdt.pojavlaunch.EfficientAndroidLWJGLKeycode;
-
-import git.artdeell.dnbootstrap.glfw.GrabListener;
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.GrabListener;
+import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.Tools;
 
 import android.widget.TextView;
@@ -324,6 +323,11 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
     public void attachGrabListener(GrabListener grabListener) {
         mGamepadGrabListener = grabListener;
         grabListener.onGrabState(mGrabState);
+    }
+
+    @Override
+    public void detachGrabListener(GrabListener grabListener) {
+        mGamepadGrabListener = null;
     }
 
     public void setGrabState(boolean newState) {

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition pour Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_name">Copper</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -15,7 +14,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Sélectionnez un installateur de mods</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher a cessé de fonctionner de façon inattendue</string>
+    <string name="error_fatal">Copper a cessé de fonctionner de façon inattendue</string>
     <string name="error_no_version">Aucune version !</string>
     <string name="error_show_more">Afficher plus</string>
     <string name="error_show_less">Afficher moins</string>
@@ -49,12 +48,14 @@
     <string name="mcl_setting_subtitle_mousescale">Modifier la taille de la souris virtuelle.</string>
     <string name="mcl_setting_title_javaargs">Arguments de lancement JVM</string>
     <string name="mcl_setting_subtitle_javaargs">Attention, cela peut faire planter le jeu si ce paramètre est modifié sans connaissance.</string>
+    <string name="mcl_setting_title_renderer_settings">Paramètres du moteur de rendu supplémentaires</string>
+    <string name="mcl_setting_title_renderer_subtitle">Paramètres spécifiques au moteur de rendu</string>
     <string name="mcl_setting_category_renderer">Moteur de rendu</string>
-    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (toutes les versions, rapide)</string>
+    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES (1.21.4&lt; seulement, rapide)</string>
     <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) - (toutes les versions, mid)</string>
+    <string name="mcl_setting_renderer_mobileglues">MobileGlues (OpenGL ES) - (1.17+ seulement, rapide)</string>
     <string name="mcl_setting_renderer_ltw">LTW (OpenGL ES 3) - 1.17+ uniquement</string>
     <string name="mcl_setting_veroption_release">Version officielle</string>
-    <string name="mcl_setting_veroption_snapshot">Snapshot</string>
     <string name="mcl_setting_veroption_oldalpha">Alpha</string>
     <string name="mcl_setting_veroption_oldbeta">Bêta</string>
     <string name="mcl_setting_java_sandbox">Exécution de Sandbox .jar</string>
@@ -75,21 +76,23 @@
     <string name="global_select">Sélectionner</string>
     <string name="global_retry">Réessayer</string>
     <string name="global_default">Par défaut</string>
+    <string name="global_off">Désactivé</string>
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">L\'Application/Jeu a quitté avec le code %d, vérifiez le fichier latestlog.txt pour plus de détails.</string>
+    <string name="mcn_signal_title">L\'application/Le jeu s\'est fermé(e) avec le code %d, vérifiez le fichier latestlog.txt pour plus de détails.</string>
     <string name="mcn_exit_confirm">Voulez-vous vraiment forcer la fermeture ?</string>
     <string name="mcn_check_fail_vulkan_support">Le moteur de rendu Zink (Vulkan) n\'est pas pris en charge sur votre appareil !</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">Tchat</string>
     <string name="control_debug">Débog.</string>
     <string name="control_primary">Pri</string>
-    <string name="control_secondary">Sec</string>
+    <string name="control_secondary">Dec</string>
     <string name="control_shift">◇</string>
     <string name="control_inventory">Inv</string>
     <string name="control_up">▲</string>
     <string name="control_left">◀</string>
     <string name="control_right">▶</string>
-    <string name="control_down">▼</string>
+    <string name="control_down">▶</string>
     <string name="control_jump">⬛</string>
     <string name="control_thirdperson">F5</string>
     <string name="control_listplayers">Tab</string>
@@ -114,8 +117,6 @@
 -->
     <string name="customctrl_toggle">Basculable</string>
     <string name="customctrl_size">Taille</string>
-    <string name="customctrl_mapping">Mapping</string>
-    <string name="customctrl_orientation">Orientation</string>
     <string name="customctrl_background_color">Couleur d\'arrière-plan</string>
     <string name="customctrl_corner_radius">Rayon des coins</string>
     <string name="customctrl_stroke_width">Épaisseur du contour</string>
@@ -123,7 +124,6 @@
     <string name="customctrl_button_opacity">Opacité du bouton</string>
     <string name="customctrl_addbutton">Ajouter un bouton</string>
     <string name="customctrl_addbutton_drawer">Ajouter un tiroir à boutons</string>
-    <string name="customctrl_addbutton_joystick">Ajouter un joystick</string>
     <string name="customctrl_addsubbutton">Ajouter un sous-bouton</string>
     <string name="customctrl_selectdefault">Sélectionner la controlmap par défaut</string>
     <string name="customctrl_export">Exporter la controlmap</string>
@@ -142,9 +142,10 @@
     <string name="mcl_disable_swap_hand_subtitle">Désactive le double appui sur un item de la barre de l\'inventaire pour l\'ajouter dans la seconde main.</string>
     <string name="mcl_setting_title_mousespeed">Vitesse du curseur</string>
     <string name="mcl_setting_subtitle_mousespeed">Change la vitesse de la souris virtuelle.</string>
+    <string name="mcl_setting_title_grab_mouse">Utiliser un curseur virtuel</string>
+    <string name="mcl_setting_subtitle_grab_mouse">Assure que le curseur reste dans le jeu. Empêche la souris de cliquer sur la disposition du contrôle.</string>
     <string name="customctrl_passthru">Souris pass-thru</string>
     <string name="customctrl_swipeable">Balayable</string>
-    <string name="customctrl_forward_lock">Verrouillage vers l\'avant</string>
     <string name="customctrl_absolute_tracking">Suivi absolu du doigt</string>
     <string name="memory_warning_msg">La quantité actuelle de RAM libre (%d) est inférieure à la RAM allouée (%d), ce qui peut entraîner des plantages. Changez l\'allocation si le jeu plante.</string>
     <string name="address_memory_warning_msg">La quantité actuelle d\'espace RAM allouable libre (%d) est inférieure à la RAM allouée (%d), ce qui entraînera des crashs. Modifiez l\'allocation de la RAM si le jeu crash.</string>
@@ -175,7 +176,6 @@
     <string name="preference_java_description">Versions de Java, Arguments JVM, Quantité de RAM et Sandbox</string>
     <string name="preference_misc_title">Paramètres divers</string>
     <string name="preference_misc_description">Liste des versions, et vérifications des librairies</string>
-    <string name="preference_experimental_title">Trucs Expérimentaux</string>
     <string name="preference_experimental_description">Utilisez ces options avec prudence, aucun support ne sera fourni</string>
     <string name="preference_sustained_performance_title">Activer le mode de performances soutenues</string>
     <string name="preference_sustained_performance_description">Limiter la baisse de performance thermique (chauffe) en limitant les performances maximales.</string>
@@ -198,12 +198,13 @@
     <string name="profiles_latest_snapshot">Dernière snapshot</string>
     <string name="profiles_latest_release">Dernière version</string>
     <string name="profiles_profile_name">Nom</string>
-    <string name="profiles_profile_version">Version</string>
     <string name="global_delete">Supprimer</string>
     <string name="pedit_java_runtime">Exécutable Java</string>
     <string name="pedit_renderer">Moteur de rendu</string>
+    <string name="arc_capes_title">Capes Cosmetica</string>
+    <string name="arc_capes_desc">Active les capes Cosmetica. Pour plus d\'informations visitez https://cosmetica.cc. Nécessite OptiFine.</string>
     <string name="notif_channel_name">Général</string>
-    <string name="lazy_service_default_title">Service de premier plan de Mojo</string>
+    <string name="lazy_service_default_title">Service de premier plan de Copper</string>
     <string name="mcl_setting_veroption_installed">Installés</string>
     <string name="use_global_default">(Utiliser la valeur globale par défaut)</string>
     <string name="default_control">Contrôles par défaut</string>
@@ -233,13 +234,12 @@
     <string name="preference_gyro_sample_rate_title">Taux d\'échantillonnage du gyroscope</string>
     <string name="preference_gyro_sample_rate_description">Si vous avez des problèmes de performance avec les commandes du gyroscope, augmentez cette valeur.</string>
     <string name="microsoft_login_retry_later">Trop de requêtes, s\'il vous plaît réessayez plus tard.</string>
-    <string name="storage_required">MojoLauncher nécessite que le stockage externe soit connecté. Veuillez le reconnecter et redémarrer l\'application.</string>
+    <string name="storage_required">PojavLauncher nécessite que le stockage externe soit connecté. Veuillez le reconnecter et redémarrer l\'application.</string>
     <string name="mcl_setting_title_buttonallcaps">N\'utilisez que des lettres majuscules dans les libellés des boutons</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Désactivez cette option si vous souhaitez utiliser des lettres minuscules dans vos contrôles.</string>
     <string name="preference_shader_dump_title">Activer le dumping du shader</string>
     <string name="preference_shader_dump_description">Enregistre les shaders convertis dans le fichier journal.</string>
-    <string name="percent_format">%d%%</string>
-    <string name="millisecond_format">%d ms</string>
+    <string name="millisecond_format">%d%%</string>
     <string name="customctrl_editor_exit_title">Partir?</string>
     <string name="customctrl_editor_exit_msg">Êtes-vous sûr·e de vouloir quitter?</string>
     <string name="customctrl_editor_exit">Quitter l\'éditeur</string>
@@ -265,12 +265,17 @@
     <string name="fabric_dl_game_version">Version de Minecraft</string>
     <string name="fabric_dl_install">Installer</string>
     <string name="fabric_dl_cant_read_meta">Échec de la lecture des métadonnées du chargeur %s. Veuillez réessayer plus tard.</string>
+    <string name="modloader_dl_install_fabric">Créer un profil Fabric</string>
+    <string name="modloader_dl_install_quilt">Créer un profil Quilt</string>
+    <string name="modloader_dl_install_forge">Créer un profil Forge</string>
+    <string name="create_profile_vanilla">Créer un profil vanilla</string>
     <string name="create_profile_vanilla_like_versions">Versions ressemblantes à une version Vanilla</string>
     <string name="create_profile_modded_versions">Versions moddées</string>
     <string name="fabric_dl_loader_title">Sélectionner des versions</string>
     <string name="of_dl_select_version">Sélectionnez la version OptiFine</string>
     <string name="of_dl_failed_to_scrape">Échec de la collecte des données pour l\'installation d\'OptiFine</string>
     <string name="of_dl_progress">Téléchargement de %s</string>
+    <string name="create_profile_optifine">Créer un profil OptiFine</string>
     <string name="hint_search_modpack">Rechercher des modpacks</string>
     <string name="preference_vulkan_driver_system_title">Utiliser le pilote Vulkan du système</string>
     <string name="preference_vulkan_driver_system_description">Force le launcher à utiliser le pilote Vulkan du système au lieu de Turnip sur les GPU Adreno. N\'affecte que Zink et les mods qui utilisent Vulkan.</string>
@@ -284,11 +289,12 @@
     <string name="modpack_download_downloading_mods">Téléchargement des mods (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Téléchargement des mods (Fichier %d sur %d)</string>
     <string name="modpack_download_applying_overrides">Application des remplacements (%d/%d)</string>
-    <string name="modpack_install_notification_title">Installeur Mojo de Modpack</string>
+    <string name="modpack_install_notification_title">Installeur Pojav de Modpack</string>
     <string name="modpack_install_notification_success">Cliquez ici pour terminer l\'installation du modpack</string>
     <string name="modpack_install_notification_data_not_available">Échec du téléchargement de l\'information du chargeur de mod</string>
     <string name="modpack_install_modloader_download_failed">Impossible de télécharger les fichiers du chargeur de mod</string>
     <string name="modpack_install_download_failed">Échec du téléchargement des fichiers de modpack</string>
+    <string name="modpack_install_button">Créer un profil de modpack</string>
     <string name="notif_error_occured">Une erreur est survenue</string>
     <string name="notif_error_occured_desc">Cliquez ici pour obtenir plus de détails</string>
     <string name="fabric_dl_only_stable">Afficher uniquement les versions stables</string>
@@ -313,7 +319,7 @@
     <string name="preference_category_miscellaneous">Paramètres divers</string>
     <string name="preference_category_video">Paramètres vidéo</string>
     <string name="notification_permission_dialog_title">Demande de permission</string>
-    <string name="notification_permission_dialog_text">MojoLauncher a besoin d\'une autorisation pour afficher des notifications afin d\'éviter que les téléchargements de jeux/modpacks ne s\'arrêtent lorsque vous quittez l\'application. Sans cette autorisation, Android peut interrompre vos téléchargements lorsque vous mettez MojoLauncher en mode arrière-plan.</string>
+    <string name="notification_permission_dialog_text">PojavLauncher a besoin d\'une autorisation pour afficher des notifications afin d\'éviter que les téléchargements de jeux/modpacks ne s\'arrêtent lorsque vous quittez l\'application. Sans cette autorisation, Android peut interrompre vos téléchargements lorsque vous mettez PojavLauncher en mode arrière-plan.</string>
     <string name="notification_permission_toast">Vous pouvez toujours changer d\'avis plus tard en allant dans Paramètres</string>
     <string name="preference_ask_for_notification_title">Autoriser les notifications</string>
     <string name="preference_ask_for_notification_description">Cliquez sur ce bouton pour redemander l\'autorisation de notification, nécessaire au bon fonctionnement des téléchargements en arrière-plan des jeux/modpacks.</string>
@@ -336,14 +342,11 @@
     <string name="log_view_label_log_output">Sortie des logs :</string>
     <string name="execute_jar_failed_to_read_file">Impossible de lire le fichier .jar</string>
     <string name="execute_jar_incompatible_runtime">La fonction \"Exécuter le fichier .jar\" n\'est pas compatible avec Java%d</string>
-    <string name="controller_button_a">A</string>
-    <string name="controller_button_b">B</string>
-    <string name="controller_button_x">X</string>
-    <string name="controller_button_y">Y</string>
-    <string name="controller_button_start">Start</string>
     <string name="controller_button_select">Sélectionner</string>
     <string name="controller_button_trigger_left">Gâchette gauche</string>
     <string name="controller_button_trigger_right">Gâchette droite</string>
+    <string name="controller_button_shoulder_left">Gâchette Gauche</string>
+    <string name="controller_button_shoulder_right">Gâchette Droite</string>
     <string name="controller_direction_forward">Stick (haut)</string>
     <string name="controller_direction_backward">Stick (bas)</string>
     <string name="controller_direction_left">Stick (gauche)</string>
@@ -357,8 +360,57 @@
     <string name="controller_remapper_exit_part1">Maintenir</string>
     <string name="controller_remapper_exit_part2">pour quitter</string>
     <string name="controller_remapper_operating_mode">Mode actuel</string>
-    <string name="customctrl_visibility_title">Visibilité</string>
     <string name="customctrl_visibility_ingame">En jeu</string>
     <string name="customctrl_visibility_in_menus">Dans les menus</string>
     <string name="controller_remapper_expand_entry">Développer pour changer les codes de touches</string>
+    <string name="preference_remap_controller_title">Modifier les liaisons de touches de la manette</string>
+    <string name="preference_remap_controller_description">Permet de modifier les touches du clavier associées à chaque bouton de lla manette</string>
+    <string name="mcl_button_discord">Discord</string>
+    <string name="ltw_render_distance_warning_msg">Votre GPU n\'est pas capable d\'afficher au dessus de 7 tronçons de rendu sans Sodium ou d\'autres mods similaires. La distance de rendu sera automatiquement réduite lorsque vous appuierez sur \"OK\".</string>
+    <string name="mcl_button_open_directory">Ouvrir le répertoire du jeu</string>
+    <string name="local_login_bad_username_title">Nom d\'utilisateur inadapté</string>
+    <string name="local_login_bad_username_text">Le nom d\'utilisateur doit comporter entre 3 et 16 caractères et ne doit contenir que des lettres latines, des chiffres 0 à 9 et des tirets bas.</string>
+    <string name="quick_setting_title">Paramètres rapides</string>
+    <string name="create_bta_profile">Créez un profil \"Better than Adventure!\"</string>
+    <string name="select_bta_version">Sélectionnez la version de \"Better than Adventure!\"</string>
+    <string name="bta_installer_available_versions">Version de BTA supportées</string>
+    <string name="bta_installer_untested_versions">Versions de BTA non testées</string>
+    <string name="bta_installer_nightly_versions">Versions de BTA pas encore sorties</string>
+    <string name="newdl_extracting_native_libraries">Extraction des bibliothèques natives (%d/%d)</string>
+    <string name="toast_not_available_demo">Ceci n\'est pas disponible en mode démo</string>
+    <string name="preference_renderer_mobileglues_settings">Paramètres du moteur de rendu MobileGlues</string>
+    <string name="mg_renderer_glsl_cache">Taille du cache GLSL maximal</string>
+    <string name="mg_renderer_angle">Utiliser ANGLE comme pilote</string>
+    <string name="mg_renderer_multidraw">Mode d\'émulation multidessin</string>
+    <string name="mg_renderer_title_errorSetting">Filtrage d\'erreurs</string>
+    <string name="mg_renderer_title_timerQueryExt">Désactiver l\'indicateur d\'utilisation du GPU dans le menu F3</string>
+    <string name="mg_renderer_summary_timerQueryExt">Corrige des plantages aléatoires lorsque F3 est ouvert sur certains appareils Mali</string>
+    <string name="preference_ANGLE_only">Options ANGLE uniquement</string>
+    <string name="mg_renderer_title_angleDepthClearFixMode">Empêche les objets tenus de passer dans les blocs</string>
+    <string name="mg_renderer_summary_angleDepthClearFixMode">N\'affecte que ANGLE, peut affecter les performances.</string>
+    <string name="preference_experimental_title">Trucs Expérimentaux</string>
+    <string name="mg_renderer_title_gl43exts">Autoriser les extensions expérimentales OpenGL 4.3</string>
+    <string name="mg_renderer_summary_gl43exts">Peut aider pour des plantages de mods. À désactiver si ce n\'est pas nécessaire, peut aussi en causer.</string>
+    <string name="mg_renderer_title_computeShaderext">Activer les extension de nuanceurs de calcul expérimentals</string>
+    <string name="mg_renderer_summary_computeShaderext">Peut aider pour des bugs de shaders. À désactiver si ce n\'est pas nécessaire, peut causer des plantages.</string>
+    <string name="mg_renderer_title_multidrawCompute">Utiliser l\'émulation de calcul multidessin</string>
+    <string name="mg_renderer_summary_multidrawCompute">Utilise les nuanceurs de calcul pour l\'émulation multidessin</string>
+    <string name="app_short_name">Copper</string>
+    <string name="demo_versions_supported">Seules les versions Vanilla 1.3.1 et supérieures sont supportées sur les comptes de démo</string>
+    <string name="demo_unsupported">Profil de démo non pris en charge</string>
+    <string name="change_account">Veuillez changer de compte pour utiliser cette fonction</string>
+    <string name="no_minecraft_account_found">Aucun compte Minecraft trouvé</string>
+    <string name="feature_requires_java_account">Cette fonctionnalité nécessite un compte Microsoft qui possède Minecraft Java Edition.</string>
+    <string name="delete_account_and_login">Supprimer le compte et se connecter</string>
+    <string name="login_again">Veuillez vous connecter à nouveau</string>
+    <string name="account_corrupted">Le compte sélectionné est corrompu</string>
+    <string name="modloader_dl_install_neoforge">Créer une instance NeoForge</string>
+    <string name="neoforge_dl_select_version">Sélectionnez la version de NeoForge</string>
+    <string name="neoforge_dl_no_installer">Désolé, mais cette version de Forge n\'a pas d\'installateur, ce qui n\'est pas encore supporté.</string>
+    <string name="preference_category_touchcontroller_settings">Paramètres de TouchController</string>
+    <string name="preference_force_enable_touchcontroller_title">Forcer l\'activation de TouchController</string>
+    <string name="preference_force_enable_touchcontroller_description">Forcer l\'intégration de TouchController, même si le fichier mod n\'est pas trouvé.</string>
+    <string name="preference_touchcontroller_vibrate_length_title">Longueur de la vibration TouchController</string>
+    <string name="preference_touchcontroller_vibrate_length_description">Définissez la longueur des vibrations lors de l\'utilisation de TouchController.</string>
+    <string name="error_vanilla_json_corrupt">Le json Vanilla semble être corrompu. Veuillez envoyer un rapport de bug sur github ou discord.</string>
 </resources>

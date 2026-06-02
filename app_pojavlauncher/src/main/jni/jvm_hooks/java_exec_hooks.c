@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <dlfcn.h>
 
+#include "environ/environ.h"
 #include "utils.h"
 
 static jint (*orig_ProcessImpl_forkAndExec)(JNIEnv *env, jobject process, jint mode, jbyteArray helperpath, jbyteArray prog, jbyteArray argBlock, jint argc, jbyteArray envBlock, jint envc, jbyteArray dir, jintArray std_fds, jboolean redirectErrorStream);
@@ -50,9 +51,7 @@ static jint hooked_ProcessImpl_forkAndExec(JNIEnv *env, jobject process, jint mo
 
     if(strcmp(prog_basename, "xdg-open") == 0) {
         // When invoking xdg-open, send the open URL into Android
-        jbyte* elements = (*env)->GetByteArrayElements(env, argBlock, NULL);
-        openLink((const char*) elements);
-        (*env)->ReleaseByteArrayElements(env, argBlock, elements, JNI_ABORT);
+        Java_org_lwjgl_glfw_CallbackBridge_nativeClipboard(env, NULL, CLIPBOARD_OPEN, argBlock);
         return 0;
     }else if(strcmp(prog_basename, "ffmpeg") == 0) {
         // When invoking ffmpeg, always replace the program path with the path to ffmpeg from the plugin.
@@ -73,32 +72,17 @@ static jint hooked_ProcessImpl_forkAndExec(JNIEnv *env, jobject process, jint mo
 
 // Hook the forkAndExec method in the Java runtime for custom executable overriding.
 void hookExec(JNIEnv *env) {
-    void* libjava = dlopen("libjava.so", RTLD_NOLOAD);
-    if(libjava == NULL) {
-        printf("Failed to register forkAndExec: libjava not found\n");
-        return;
-    }
     jclass hookClass;
-    orig_ProcessImpl_forkAndExec = dlsym(libjava, "Java_java_lang_UNIXProcess_forkAndExec");
+    orig_ProcessImpl_forkAndExec = dlsym(RTLD_DEFAULT, "Java_java_lang_UNIXProcess_forkAndExec");
     if (!orig_ProcessImpl_forkAndExec) {
-        orig_ProcessImpl_forkAndExec = dlsym(libjava, "Java_java_lang_ProcessImpl_forkAndExec");
+        orig_ProcessImpl_forkAndExec = dlsym(RTLD_DEFAULT, "Java_java_lang_ProcessImpl_forkAndExec");
         hookClass = (*env)->FindClass(env, "java/lang/ProcessImpl");
     } else {
         hookClass = (*env)->FindClass(env, "java/lang/UNIXProcess");
-    }
-    if(hookClass == NULL) {
-        (*env)->ExceptionDescribe(env);
-        (*env)->ExceptionClear(env);
-        return;
     }
     JNINativeMethod methods[] = {
             {"forkAndExec", "(I[B[B[BI[BI[B[IZ)I", (void *)&hooked_ProcessImpl_forkAndExec}
     };
     (*env)->RegisterNatives(env, hookClass, methods, 1);
-    if((*env)->ExceptionCheck(env)) {
-        (*env)->ExceptionDescribe(env);
-        (*env)->ExceptionClear(env);
-    }else {
-        printf("Registered forkAndExec\n");
-    }
+    printf("Registered forkAndExec\n");
 }

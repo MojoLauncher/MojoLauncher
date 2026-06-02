@@ -7,14 +7,13 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.Selection;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.R;
 
 /**
  * This class is intended for sending characters used in chat via the virtual keyboard
@@ -152,9 +151,10 @@ public class TouchCharInput extends androidx.appcompat.widget.AppCompatEditText 
                     mCharacterSender.sendBackspace();
                 }
 
-
-
-                mCharacterSender.sendChars(text.subSequence(start, start + lengthAfter));
+                for(int i=start, count = 0; count < lengthAfter; ++i){
+                    mCharacterSender.sendChar(text.charAt(i));
+                    ++count;
+                }
             }
         }
 

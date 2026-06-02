@@ -11,15 +11,13 @@ import android.view.ViewParent;
 
 import androidx.annotation.Nullable;
 
+import net.kdt.pojavlaunch.GrabListener;
 import net.kdt.pojavlaunch.LwjglGlfwKeycode;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
 import net.kdt.pojavlaunch.utils.MathUtils;
 
-import net.kdt.pojavlaunch.CallbackBridge;
-
-import git.artdeell.dnbootstrap.glfw.GLFW;
-import git.artdeell.dnbootstrap.glfw.GrabListener;
+import org.lwjgl.glfw.CallbackBridge;
 
 public class HotbarView extends View implements MCOptionUtils.MCOptionListener, View.OnLayoutChangeListener, Runnable {
     private final TapDetector mDoubleTapDetector = new TapDetector(2, TapDetector.DETECTION_METHOD_DOWN);
@@ -77,28 +75,32 @@ public class HotbarView extends View implements MCOptionUtils.MCOptionListener, 
         }
         mGuiScale = MCOptionUtils.getMcScale();
         repositionView();
-        GLFW.addGrabListener(mGrabListener);
+        CallbackBridge.addGrabListener(mGrabListener);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        CallbackBridge.removeGrabListener(mGrabListener);
     }
 
     private void repositionView() {
         ViewGroup.LayoutParams layoutParams = getLayoutParams();
         if(!(layoutParams instanceof ViewGroup.MarginLayoutParams))
             throw new RuntimeException("Incorrect LayoutParams type, expected ViewGroup.MarginLayoutParams");
-        ViewGroup parent = (ViewGroup) getParent();
         ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) layoutParams;
         int height;
         marginLayoutParams.width = mWidth = mcScale(180);
         marginLayoutParams.height = height = mcScale(20);
-        marginLayoutParams.leftMargin = (parent.getWidth() / 2) - (mWidth / 2);
-        marginLayoutParams.topMargin = parent.getHeight() - height;
+        marginLayoutParams.leftMargin = (CallbackBridge.physicalWidth / 2) - (mWidth / 2);
+        marginLayoutParams.topMargin = CallbackBridge.physicalHeight - height;
         setLayoutParams(marginLayoutParams);
     }
 
     @SuppressWarnings("ClickableViewAccessibility") // performClick does not report coordinates.
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        // Avoid going through the JNI each time.
-        if(!GLFW.isGrabbing()) return false;
+        if(!CallbackBridge.isGrabbing()) return false;
         boolean hasDoubleTapped = mDoubleTapDetector.onTouchEvent(event);
 
         // Check if we need to cancel the drop event

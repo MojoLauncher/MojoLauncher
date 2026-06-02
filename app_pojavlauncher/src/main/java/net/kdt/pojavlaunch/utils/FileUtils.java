@@ -20,7 +20,7 @@ public class FileUtils {
      */
     public static String getFileName(String pathOrUrl) {
         int lastSlashIndex = pathOrUrl.lastIndexOf('/');
-        if(lastSlashIndex == -1) return pathOrUrl;
+        if(lastSlashIndex == -1) return null;
         return pathOrUrl.substring(lastSlashIndex);
     }
 
@@ -63,14 +63,11 @@ public class FileUtils {
      * @param targetFile the directory to check
      * @throws IOException when the checks fail
      */
-    public static void ensureDirectory(File targetFile) throws IOException {
+    public static void ensureDirectory(File targetFile) throws IOException{
         if(targetFile.isFile()) throw new IOException("Target directory is a file");
         if(targetFile.exists()) {
             if(!targetFile.canWrite()) throw new IOException("Target directory is not writable");
-        }else if(!targetFile.mkdirs()) {
-            // check again just in case (???)
-            if(!targetFile.isDirectory()) throw new IOException("Unable to create target directory");
-        }
+        }else if(!targetFile.mkdirs()) throw new IOException("Unable to create target directory");
     }
 
     /**

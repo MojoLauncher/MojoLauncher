@@ -1,10 +1,13 @@
 package net.kdt.pojavlaunch.modloaders.modpacks.api;
 
+import android.app.Activity;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import net.kdt.pojavlaunch.PojavApplication;
+import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.Constants;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
@@ -12,14 +15,18 @@ import net.kdt.pojavlaunch.modloaders.modpacks.models.ModItem;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchFilters;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchResult;
 
+import org.jdom2.IllegalDataException;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 /**
  * Group all apis under the same umbrella, as another layer of abstraction
@@ -30,19 +37,10 @@ public class CommonApi implements ModpackApi {
     private final ModpackApi mModrinthApi;
     private final ModpackApi[] mModpackApis;
 
-    public static final byte PACK_MODRINTH = 1;
-    public static final byte PACK_CURSEFORGE = 2;
-    public static final byte PACK_UNDEFINED = 0;
-
     public CommonApi(String curseforgeApiKey) {
+        mCurseforgeApi = new CurseforgeApi(curseforgeApiKey);
         mModrinthApi = new ModrinthApi();
-        if ("DUMMY".equals(curseforgeApiKey)) {
-            mCurseforgeApi = null;
-            mModpackApis = new ModpackApi[]{mModrinthApi};
-        } else {
-            mCurseforgeApi = new CurseforgeApi(curseforgeApiKey);
-            mModpackApis = new ModpackApi[]{mModrinthApi, mCurseforgeApi};
-        }
+        mModpackApis = new ModpackApi[]{mModrinthApi, mCurseforgeApi};
     }
 
     @Override
@@ -121,24 +119,13 @@ public class CommonApi implements ModpackApi {
     }
 
     @Override
-    public ModLoader installModpack(ModDetail modDetail, int selectedVersion) throws IOException {
-        return getModpackApi(modDetail.apiSource).installModpack(modDetail, selectedVersion);
+    public ModLoader installMod(ModDetail modDetail, int selectedVersion) throws IOException {
+        return getModpackApi(modDetail.apiSource).installMod(modDetail, selectedVersion);
     }
 
-    public ModLoader installLocalModpack(String modpackName, File modpackFile, String icon) throws IOException {
-        short s = checkModpack(modpackFile);
-        switch (s) {
-            case PACK_MODRINTH:
-                return mModrinthApi.installLocalModpack(modpackName, modpackFile, icon);
-            case PACK_CURSEFORGE:
-                if (mCurseforgeApi == null) return null;
-                else return mCurseforgeApi.installLocalModpack(modpackName, modpackFile, icon);
-            case PACK_UNDEFINED:
-                modpackFile.delete();
-                return null;
-            default:
-                return null;
-        }
+    @Override
+    public ModLoader importModpack(Activity activity, Uri zipUri) throws IOException, NoSuchAlgorithmException {
+        return getModpackApi(activity, zipUri).importModpack(activity, zipUri);
     }
 
     private @NonNull ModpackApi getModpackApi(int apiSource) {
@@ -146,27 +133,35 @@ public class CommonApi implements ModpackApi {
             case Constants.SOURCE_MODRINTH:
                 return mModrinthApi;
             case Constants.SOURCE_CURSEFORGE:
-                if (mCurseforgeApi == null) return null;
-                else return mCurseforgeApi;
+                return mCurseforgeApi;
             default:
                 throw new UnsupportedOperationException("Unknown API source: " + apiSource);
         }
     }
 
-    public static short checkModpack(File outFile) {
-        try (ZipFile zipFile = new ZipFile(outFile)) {
-            ZipEntry modrinth = zipFile.getEntry("modrinth.index.json");
-            ZipEntry curseforge = zipFile.getEntry("manifest.json");
-            if (modrinth != null) {
-                return CommonApi.PACK_MODRINTH;
+    private @NonNull ModpackApi getModpackApi(Activity activity, Uri zipUri){
+        String modrinthPackInfoFileName = "modrinth.index.json";
+        String curseforgePackInfoFileName = "manifest.json";
+        InputStream inputStream = null;
+        try {
+            inputStream = activity.getContentResolver().openInputStream(zipUri);
+            ZipInputStream zipInputStream = new ZipInputStream(inputStream);
+            ZipEntry zipEntry;
+            boolean isModrinth;
+            boolean isCurseforge;
+            while ((zipEntry = zipInputStream.getNextEntry()) != null) {
+                isModrinth = zipEntry.getName().equals(modrinthPackInfoFileName);
+                isCurseforge = zipEntry.getName().equals(curseforgePackInfoFileName);
+                if(isModrinth) {
+                    return mModrinthApi;
+                } else if (isCurseforge) {
+                    return mCurseforgeApi;
+                }
             }
-            if (curseforge != null) {
-                return CommonApi.PACK_CURSEFORGE;
-            }
-            return CommonApi.PACK_UNDEFINED; // return this if no modpack was detected
         } catch (Exception e) {
-            return -1;
+            throw new RuntimeException(e);
         }
+        throw new IllegalArgumentException("Zip provided does not contain a manifest file");
     }
 
     /** Fuse the arrays in a way that's fair for every endpoint */

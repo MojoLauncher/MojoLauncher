@@ -15,6 +15,7 @@ import org.apache.commons.io.*;
 @SuppressWarnings("IOStreamConstructor")
 public class DownloadUtils {
     public static final String USER_AGENT = Tools.APP_NAME;
+    private static final int TIME_OUT = 10000;
 
     public static void download(String url, OutputStream os) throws IOException {
         download(new URL(url), os);
@@ -26,7 +27,8 @@ public class DownloadUtils {
             // System.out.println("Connecting: " + url.toString());
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestProperty("User-Agent", USER_AGENT);
-            conn.setConnectTimeout(10000);
+            conn.setConnectTimeout(TIME_OUT);
+            conn.setReadTimeout(TIME_OUT);
             conn.setDoInput(true);
             conn.connect();
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -59,6 +61,12 @@ public class DownloadUtils {
         FileUtils.ensureParentDirectory(out);
         try (FileOutputStream fileOutputStream = new FileOutputStream(out)) {
             download(url, fileOutputStream);
+        } catch (IOException e) {
+            if (out.length() < 1) { // Only delete it if file is 0 bytes cause this file might already be downloaded and something else went wrong.
+                Log.i("DownloadUtils", "Cleaning up failed download: " + out.getAbsolutePath());
+                out.delete();
+                throw e;
+            }
         }
     }
 
@@ -67,6 +75,8 @@ public class DownloadUtils {
         FileUtils.ensureParentDirectory(outputFile);
 
         HttpURLConnection conn = (HttpURLConnection) new URL(urlInput).openConnection();
+        conn.setConnectTimeout(TIME_OUT);
+        conn.setReadTimeout(TIME_OUT);
         InputStream readStr = conn.getInputStream();
         try (FileOutputStream fos = new FileOutputStream(outputFile)) {
             int current;
@@ -81,8 +91,9 @@ public class DownloadUtils {
                 monitor.updateProgress(overall, length);
             }
             conn.disconnect();
+        } catch (IOException e) {
+            throw new IOException("Unable to download from " + urlInput, e);
         }
-
     }
 
     public static <T> T downloadStringCached(String url, String cacheName, ParseCallback<T> parseCallback) throws IOException, ParseException{
@@ -113,7 +124,7 @@ public class DownloadUtils {
         }
 
         if(tryWriteCache) try {
-            Tools.write(cacheDestination, urlContent);
+            Tools.write(cacheDestination.getAbsolutePath(), urlContent);
         }catch(IOException e) {
             Log.i("DownloadUtils", "Failed to cache the string", e);
         }
@@ -131,8 +142,8 @@ public class DownloadUtils {
         }
     }
 
-    private static boolean verifyFile(File file, String sha1) throws IOException {
-        return file.exists() && HashUtils.compareSHA1(file, sha1);
+    private static boolean verifyFile(File file, String sha1) {
+        return file.exists() && Tools.compareSHA1(file, sha1);
     }
 
     public static <T> T ensureSha1(File outputFile, @Nullable String sha1, Callable<T> downloadFunction) throws IOException {
@@ -159,19 +170,16 @@ public class DownloadUtils {
      * Get the content length for a given URL.
      * @param url the URL to get the length for
      * @return the length in bytes or -1 if not available
+     * @throws IOException if an I/O error occurs.
      */
-    public static long getContentLength(String url) {
-        try {
-            HttpURLConnection urlConnection = (HttpURLConnection) new URL(url).openConnection();
-            urlConnection.setRequestMethod("HEAD");
-            urlConnection.setDoInput(false);
-            urlConnection.setDoOutput(false);
-            urlConnection.connect();
-            int responseCode = urlConnection.getResponseCode();
-            if(responseCode >= 200 && responseCode <= 299) return urlConnection.getContentLength();
-        }catch (IOException e) {
-            Log.w("DownloadUtils", "Failed to get content length", e);
-        }
+    public static long getContentLength(String url) throws IOException {
+        HttpURLConnection urlConnection = (HttpURLConnection) new URL(url).openConnection();
+        urlConnection.setRequestMethod("HEAD");
+        urlConnection.setDoInput(false);
+        urlConnection.setDoOutput(false);
+        urlConnection.connect();
+        int responseCode = urlConnection.getResponseCode();
+        if(responseCode >= 200 && responseCode <= 299) return urlConnection.getContentLength();
         return -1;
     }
 

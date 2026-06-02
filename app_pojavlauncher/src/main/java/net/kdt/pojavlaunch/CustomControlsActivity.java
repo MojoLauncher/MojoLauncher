@@ -1,7 +1,6 @@
 package net.kdt.pojavlaunch;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
@@ -9,10 +8,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-import com.google.gson.JsonSyntaxException;
 
 import net.kdt.pojavlaunch.customcontrols.ControlData;
 import net.kdt.pojavlaunch.customcontrols.ControlDrawerData;
@@ -20,25 +16,18 @@ import net.kdt.pojavlaunch.customcontrols.ControlJoystickData;
 import net.kdt.pojavlaunch.customcontrols.ControlLayout;
 import net.kdt.pojavlaunch.customcontrols.EditorExitable;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
-import net.kdt.pojavlaunch.utils.CropperUtils;
 
 import java.io.IOException;
 
-import git.artdeell.mojo.R;
 
-
-public class CustomControlsActivity extends BaseActivity implements EditorExitable, CropperUtils.CropperReceiver {
+public class CustomControlsActivity extends BaseActivity implements EditorExitable {
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerNavigationView;
 	private ControlLayout mControlLayout;
-	private CropperUtils.CropperReceiver mCropperReceiver;
-	private ActivityResultLauncher<?> mCropperLauncher;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		mCropperLauncher = CropperUtils.registerCropper(this, this);
 
 		setContentView(R.layout.activity_custom_controls);
 
@@ -80,22 +69,11 @@ public class CustomControlsActivity extends BaseActivity implements EditorExitab
 			mDrawerLayout.closeDrawers();
 		});
 		mControlLayout.setModifiable(true);
-	}
-
-	@Override
-	public void onAttachedToWindow() {
-		mControlLayout.post(()->{
-			try {
-				mControlLayout.loadLayout(LauncherPreferences.PREF_DEFAULTCTRL_PATH);
-			}catch (IOException | JsonSyntaxException e) {
-				Tools.showError(this, e);
-			}
-		});
-	}
-
-	public void startCropping(CropperUtils.CropperReceiver cropperReceiver) {
-		mCropperReceiver = cropperReceiver;
-		CropperUtils.startCropper(mCropperLauncher);
+		try {
+			mControlLayout.loadLayout(LauncherPreferences.PREF_DEFAULTCTRL_PATH);
+		}catch (IOException e) {
+			Tools.showError(this, e);
+		}
 	}
 
 	@Override
@@ -106,27 +84,5 @@ public class CustomControlsActivity extends BaseActivity implements EditorExitab
 	@Override
 	public void exitEditor() {
 		super.onBackPressed();
-	}
-
-	@Override
-	public float getAspectRatio() {
-		if(mCropperReceiver != null) return mCropperReceiver.getAspectRatio();
-		return 1f;
-	}
-
-	@Override
-	public int getTargetMaxSide() {
-		if(mCropperReceiver != null) return mCropperReceiver.getTargetMaxSide();
-		return 128;
-	}
-
-	@Override
-	public void onCropped(Bitmap contentBitmap) {
-		if(mCropperReceiver != null) mCropperReceiver.onCropped(contentBitmap);
-	}
-
-	@Override
-	public void onFailed(Exception exception) {
-		if(mCropperReceiver != null) mCropperReceiver.onFailed(exception);
 	}
 }

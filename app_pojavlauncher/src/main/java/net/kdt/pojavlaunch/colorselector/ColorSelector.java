@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 
 import com.kdt.SideDialogView;
 
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.R;
 
 public class ColorSelector extends SideDialogView implements HueSelectionListener, RectangleSelectionListener, AlphaSelectionListener, TextWatcher{
     private static final int ALPHA_MASK = ~(0xFF << 24);

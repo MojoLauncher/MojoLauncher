@@ -1,11 +1,11 @@
 package net.kdt.pojavlaunch.customcontrols.gamepad;
 
-
-import git.artdeell.dnbootstrap.glfw.GrabListener;
+import net.kdt.pojavlaunch.GrabListener;
 
 public interface GamepadDataProvider {
     GamepadMap getMenuMap();
     GamepadMap getGameMap();
     boolean isGrabbing();
     void attachGrabListener(GrabListener grabListener);
+    void detachGrabListener(GrabListener grabListener);
 }

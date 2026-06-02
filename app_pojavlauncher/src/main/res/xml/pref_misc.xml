@@ -7,20 +7,17 @@
     <PreferenceCategory android:title="@string/preference_category_miscellaneous">
         <SwitchPreference
             android:defaultValue="true"
-            android:icon="@drawable/ic_px_hash"
-            android:key="checkGameFiles"
-            android:summary="@string/preference_verify_game_files_description"
-            android:title="@string/preference_verify_game_files_title" />
-
+            android:icon="@drawable/ic_setting_hash_verification"
+            android:key="checkLibraries"
+            android:summary="@string/mcl_setting_check_libraries_subtitle"
+            android:title="@string/mcl_setting_check_libraries" />
         <SwitchPreference
-            android:defaultValue="true"
-            android:icon="@drawable/ic_px_zap"
-            android:key="fastStartupCheck"
-            android:summary="@string/preference_go_vroom_description"
-            android:title="@string/preference_go_vroom_title" />
+            android:defaultValue="false"
+            android:key="arc_capes"
+            android:summary="@string/arc_capes_desc"
+            android:title="@string/arc_capes_title" />
         <androidx.preference.ListPreference
             android:defaultValue="default"
-            android:icon="@drawable/ic_px_file_dl"
             android:key="downloadSource"
             android:entries="@array/download_source_names"
             android:entryValues="@array/download_source_values"
@@ -29,22 +26,15 @@
             app2:useSimpleSummaryProvider="true"/>
         <SwitchPreference
             android:defaultValue="true"
-            android:icon="@drawable/ic_px_verify_hash"
             android:key="verifyManifest"
             android:title="@string/preference_verify_manifest_title"
             android:summary="@string/preference_verify_manifest_description"/>
 
         <SwitchPreference
             android:defaultValue="false"
-            android:icon="@drawable/ic_px_volcano"
             android:key="zinkPreferSystemDriver"
             android:summary="@string/preference_vulkan_driver_system_description"
             android:title="@string/preference_vulkan_driver_system_title"/>
-        <Preference
-            android:key="microphoneAccessRequest"
-            android:icon="@drawable/ic_microphone"
-            android:title="@string/preference_microphone_access_title"
-            android:summary="@string/preference_microphone_access_description" />
 
     </PreferenceCategory>
 

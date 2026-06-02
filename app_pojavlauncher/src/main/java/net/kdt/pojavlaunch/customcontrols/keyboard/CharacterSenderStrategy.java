@@ -8,6 +8,7 @@ public interface CharacterSenderStrategy {
     /** Called when we want to send enter specifically */
     void sendEnter();
 
-    void sendChars(CharSequence chars);
+    /** Called when there is a character to send, may be called multiple times in a row */
+    void sendChar(char character);
 
 }

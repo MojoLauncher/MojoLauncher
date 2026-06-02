@@ -1,27 +1,27 @@
 package net.kdt.pojavlaunch.customcontrols.mouse;
 
+import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
 
 import net.kdt.pojavlaunch.LwjglGlfwKeycode;
+import net.kdt.pojavlaunch.SingleTapConfirm;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
-import net.kdt.pojavlaunch.CallbackBridge;
+import org.lwjgl.glfw.CallbackBridge;
 
-public class InGUIEventProcessor extends TouchEventProcessor {
+public class InGUIEventProcessor implements TouchEventProcessor {
     public static final float FINGER_SCROLL_THRESHOLD = Tools.dpToPx(6);
     public static final float FINGER_STILL_THRESHOLD = Tools.dpToPx(5);
 
     private final PointerTracker mTracker = new PointerTracker();
     private final TapDetector mSingleTapDetector;
-    private View mTouchpad;
+    private AbstractTouchpad mTouchpad;
     private boolean mIsMouseDown = false;
     private float mStartX, mStartY;
     private final Scroller mScroller = new Scroller(FINGER_SCROLL_THRESHOLD);
 
-    public InGUIEventProcessor(View hostView) {
-        super(hostView);
+    public InGUIEventProcessor() {
         mSingleTapDetector = new TapDetector(1, TapDetector.DETECTION_METHOD_BOTH);
     }
 
@@ -46,7 +46,7 @@ public class InGUIEventProcessor extends TouchEventProcessor {
                 int pointerIndex = mTracker.trackEvent(motionEvent);
                 if(pointerCount == 1 || LauncherPreferences.PREF_DISABLE_GESTURES) {
                     if(touchpadDisplayed()) {
-                        applyMoveVector(mTracker.getMotionVector());
+                        mTouchpad.applyMotionVector(mTracker.getMotionVector());
                     } else {
                         float mainPointerX = motionEvent.getX(pointerIndex);
                         float mainPointerY = motionEvent.getY(pointerIndex);
@@ -54,7 +54,7 @@ public class InGUIEventProcessor extends TouchEventProcessor {
 
                         if(!mIsMouseDown) {
                             if(!hasGestureStarted()) setGestureStart(motionEvent);
-                            if(!LeftClickGesture.isFingerStill(mStartX, mStartY, mainPointerX, mainPointerY, FINGER_STILL_THRESHOLD))
+                            if(!LeftClickGesture.isFingerStill(mStartX, mStartY, FINGER_STILL_THRESHOLD))
                                 enableMouse();
                         }
 
@@ -69,7 +69,7 @@ public class InGUIEventProcessor extends TouchEventProcessor {
 
                 // Handle single tap on gestures
                 if((!LauncherPreferences.PREF_DISABLE_GESTURES || touchpadDisplayed()) && !mIsMouseDown && singleTap) {
-                    CallbackBridge.performClick(LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_LEFT);
+                    CallbackBridge.putMouseEventWithCoords(LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_LEFT, CallbackBridge.mouseX, CallbackBridge.mouseY);
                 }
 
                 if(mIsMouseDown) disableMouse();
@@ -81,11 +81,15 @@ public class InGUIEventProcessor extends TouchEventProcessor {
     }
 
     private boolean touchpadDisplayed() {
-        return mTouchpad != null && mTouchpad.getVisibility() == View.VISIBLE;
+        return mTouchpad != null && mTouchpad.getDisplayState();
     }
 
-    public void setAbstractTouchpad(View touchpad) {
+    public void setAbstractTouchpad(AbstractTouchpad touchpad) {
         mTouchpad = touchpad;
+    }
+
+    private void sendTouchCoordinates(float x, float y) {
+        CallbackBridge.sendCursorPos( x * LauncherPreferences.PREF_SCALE_FACTOR, y * LauncherPreferences.PREF_SCALE_FACTOR);
     }
 
     private void enableMouse() {
@@ -99,8 +103,8 @@ public class InGUIEventProcessor extends TouchEventProcessor {
     }
 
     private void setGestureStart(MotionEvent event) {
-        mStartX = event.getX();
-        mStartY = event.getY();
+        mStartX = event.getX() * LauncherPreferences.PREF_SCALE_FACTOR;
+        mStartY = event.getY() * LauncherPreferences.PREF_SCALE_FACTOR;
     }
 
     private void resetGesture() {
@@ -114,6 +118,6 @@ public class InGUIEventProcessor extends TouchEventProcessor {
     @Override
     public void cancelPendingActions() {
         mScroller.resetScrollOvershoot();
-        if(mIsMouseDown) disableMouse();
+        disableMouse();
     }
 }

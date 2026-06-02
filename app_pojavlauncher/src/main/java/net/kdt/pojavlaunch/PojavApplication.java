@@ -2,40 +2,35 @@ package net.kdt.pojavlaunch;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
-import android.app.Application;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.os.Build;
-import android.util.Log;
+import android.app.*;
+import android.content.*;
+import android.content.pm.*;
+import android.content.res.*;
+import android.os.*;
+import androidx.core.app.*;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-
-import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
-import net.kdt.pojavlaunch.prefs.LauncherPreferences;
-import net.kdt.pojavlaunch.tasks.AsyncAssetManager;
-import net.kdt.pojavlaunch.tasks.MinecraftDownloader;
-import net.kdt.pojavlaunch.utils.FileUtils;
-import net.kdt.pojavlaunch.utils.LocaleUtils;
-
-import java.io.File;
-import java.io.PrintStream;
-import java.text.DateFormat;
-import java.util.Date;
+import android.util.*;
+import java.io.*;
+import java.text.*;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import git.artdeell.mojo.BuildConfig;
+import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
+import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.tasks.AsyncAssetManager;
+import net.kdt.pojavlaunch.utils.*;
+import net.kdt.pojavlaunch.utils.FileUtils;
 
 public class PojavApplication extends Application {
 	public static final String CRASH_REPORT_TAG = "PojavCrashReport";
 	public static final ExecutorService sExecutorService = new ThreadPoolExecutor(4, 4, 500, TimeUnit.MILLISECONDS,  new LinkedBlockingQueue<>());
-
-	private void installFatalErrorHandler() {
+	
+	@Override
+	public void onCreate() {
+		ContextExecutor.setApplication(this);
 		Thread.setDefaultUncaughtExceptionHandler((thread, th) -> {
 			boolean storagePermAllowed = (Build.VERSION.SDK_INT < 23 || Build.VERSION.SDK_INT >= 29 ||
 					ActivityCompat.checkSelfPermission(PojavApplication.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) && Tools.checkStorageRoot(PojavApplication.this);
@@ -44,7 +39,7 @@ public class PojavApplication extends Application {
 				// Write to file, since some devices may not able to show error
 				FileUtils.ensureParentDirectory(crashFile);
 				PrintStream crashStream = new PrintStream(crashFile);
-				crashStream.append("PojavLauncher crash report\n");
+				crashStream.append("Copper crash report\n");
 				crashStream.append(" - Time: ").append(DateFormat.getDateTimeInstance().format(new Date())).append("\n");
 				crashStream.append(" - Device: ").append(Build.PRODUCT).append(" ").append(Build.MODEL).append("\n");
 				crashStream.append(" - Android version: ").append(Build.VERSION.RELEASE).append("\n");
@@ -60,15 +55,6 @@ public class PojavApplication extends Application {
 			FatalErrorActivity.showError(PojavApplication.this, crashFile.getAbsolutePath(), storagePermAllowed, th);
 			Tools.fullyExit();
 		});
-	}
-
-	@Override
-	public void onCreate() {
-		ContextExecutor.setApplication(this);
-		// Disable fatal errors on gplay. This is necessary so that google can collect crash report data and send it to me
-		// (where i can find the cause and fix it)
-        //noinspection ConstantValue
-        if(!BuildConfig.BUILD_TYPE.equals("gplay")) installFatalErrorHandler();
 		
 		try {
 			super.onCreate();
@@ -89,7 +75,6 @@ public class PojavApplication extends Application {
 												originalJNIDirectory.lastIndexOf("/"))
 												.concat("/x86");
 			}
-            MinecraftDownloader.prepareSubstitutionMap(getAssets());
 			AsyncAssetManager.unpackRuntime(getAssets());
 		} catch (Throwable throwable) {
 			Intent ferrorIntent = new Intent(this, FatalErrorActivity.class);
@@ -111,7 +96,7 @@ public class PojavApplication extends Application {
     }
 
     @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+    public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         LocaleUtils.setLocale(this);
     }

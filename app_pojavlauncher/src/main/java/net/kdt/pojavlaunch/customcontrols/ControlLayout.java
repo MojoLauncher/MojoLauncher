@@ -1,24 +1,22 @@
 package net.kdt.pojavlaunch.customcontrols;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
+import static net.kdt.pojavlaunch.Tools.currentDisplayMetrics;
+
+import static org.lwjgl.glfw.CallbackBridge.isGrabbing;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Insets;
-import android.graphics.Point;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowInsets;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.gson.JsonSyntaxException;
@@ -26,9 +24,7 @@ import com.kdt.pickafile.FileListView;
 import com.kdt.pickafile.FileSelectedListener;
 
 import net.kdt.pojavlaunch.MinecraftGLSurface;
-
-import git.artdeell.dnbootstrap.glfw.GLFW;
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.customcontrols.buttons.ControlButton;
 import net.kdt.pojavlaunch.customcontrols.buttons.ControlDrawer;
@@ -73,18 +69,14 @@ public class ControlLayout extends FrameLayout {
 
 
 	public void loadLayout(String jsonPath) throws IOException, JsonSyntaxException {
-		Point size = new Point(getWidth(), getHeight());
-        try {
-            CustomControls layout = LayoutConverter.loadAndConvertIfNecessary(size, jsonPath);
-            loadLayout(layout);
-            updateLoadedFileName(jsonPath);
-        }catch (IOException | JsonSyntaxException e) {
-            // Load an empty layout on exception to avoid breakage when adding buttons in the editor
-            CustomControls customControls = new CustomControls();
-            customControls.mLayoutBitmaps = LayoutBitmaps.createEmpty();
-            loadLayout(customControls);
-            throw e;
-        }
+		CustomControls layout = LayoutConverter.loadAndConvertIfNecessary(jsonPath);
+		if(layout != null) {
+			loadLayout(layout);
+			updateLoadedFileName(jsonPath);
+			return;
+		}
+
+		throw new IOException("Unsupported control layout version");
 	}
 
 	public void loadLayout(CustomControls controlLayout) {
@@ -260,9 +252,7 @@ public class ControlLayout extends FrameLayout {
 
 		mControlVisible = isVisible;
 		for(ControlInterface button : getButtonChildren()){
-            // Avoid going through the JNI each time.
-            // Avoid going through the JNI each time.
-            button.setVisible(((button.getProperties().displayInGame && GLFW.isGrabbing()) || (button.getProperties().displayInMenu && !GLFW.isGrabbing())) && isVisible);
+			button.setVisible(((button.getProperties().displayInGame && isGrabbing()) || (button.getProperties().displayInMenu && !isGrabbing())) && isVisible);
 		}
 	}
 
@@ -301,7 +291,10 @@ public class ControlLayout extends FrameLayout {
 	}
 
 	public void refreshControlButtonPositions(){
-		requestLayout();
+		for(ControlInterface button : getButtonChildren()){
+			button.setDynamicX(button.getProperties().dynamicX);
+			button.setDynamicY(button.getProperties().dynamicY);
+		}
 	}
 
     @Override
@@ -329,7 +322,7 @@ public class ControlLayout extends FrameLayout {
 		mControlDialog.internalChanges = true;
 		mControlDialog.setCurrentlyEditedButton(button);
 
-		mControlDialog.appear(button.getControlView().getX() + button.getControlView().getWidth()/2f < getWidth()/2f);
+		mControlDialog.appear(button.getControlView().getX() + button.getControlView().getWidth()/2f < currentDisplayMetrics.widthPixels/2f);
 		button.loadEditValues(mControlDialog);
 
 		mControlDialog.internalChanges = false;
@@ -353,15 +346,8 @@ public class ControlLayout extends FrameLayout {
 
 	final HashMap<View, ControlInterface> mapTable = new HashMap<>();
 
-	private static boolean eventInViewBounds(MotionEvent event, View view) {
-		float x = event.getX();
-		float y = event.getY();
-		return x > view.getLeft() && x < view.getRight() && y > view.getTop() && y < view.getBottom();
-	}
-
 	//While this is called onTouch, this should only be called from a ControlButton.
 	public void onTouch(View v, MotionEvent ev) {
-		int action = ev.getActionMasked();
 		ControlInterface lastControlButton = mapTable.get(v);
 
 		// Map location to screen coordinates
@@ -369,34 +355,44 @@ public class ControlLayout extends FrameLayout {
 
 
 		//Check if the action is cancelling, reset the lastControl button associated to the view
-		if (action == MotionEvent.ACTION_UP
-				|| action == MotionEvent.ACTION_CANCEL
-				|| action == MotionEvent.ACTION_POINTER_UP) {
-			if (lastControlButton != null) lastControlButton.handleReleased();
+		if (ev.getActionMasked() == MotionEvent.ACTION_UP
+				|| ev.getActionMasked() == MotionEvent.ACTION_CANCEL
+				|| ev.getActionMasked() == MotionEvent.ACTION_POINTER_UP) {
+			if (lastControlButton != null) lastControlButton.sendKeyPresses(false);
 			mapTable.put(v, null);
 			return;
 		}
 
-		if (action != MotionEvent.ACTION_MOVE && action != MotionEvent.ACTION_DOWN) return;
+		if (ev.getActionMasked() != MotionEvent.ACTION_MOVE) return;
+
 
 		//Optimization pass to avoid looking at all children again
 		if (lastControlButton != null) {
-			if (eventInViewBounds(ev, lastControlButton.getControlView())) {
+			System.out.println("last control button check" + ev.getX() + "-" + ev.getY() + "-" + lastControlButton.getControlView().getX() + "-" + lastControlButton.getControlView().getY());
+			if (ev.getX() > lastControlButton.getControlView().getX()
+					&& ev.getX() < lastControlButton.getControlView().getX() + lastControlButton.getControlView().getWidth()
+					&& ev.getY() > lastControlButton.getControlView().getY()
+					&& ev.getY() < lastControlButton.getControlView().getY() + lastControlButton.getControlView().getHeight()) {
 				return;
 			}
 		}
 
 		//Release last keys
-		if (lastControlButton != null) lastControlButton.handleReleased();
+		if (lastControlButton != null) lastControlButton.sendKeyPresses(false);
 		mapTable.remove(v);
 
 		// Update the state of all swipeable buttons
 		for (ControlInterface button : getButtonChildren()) {
 			if (!button.getProperties().isSwipeable) continue;
-			if (eventInViewBounds(ev, button.getControlView())) {
+
+			if (ev.getX() > button.getControlView().getX()
+					&& ev.getX() < button.getControlView().getX() + button.getControlView().getWidth()
+					&& ev.getY() > button.getControlView().getY()
+					&& ev.getY() < button.getControlView().getY() + button.getControlView().getHeight()) {
+
 				//Press the new key
 				if (!button.equals(lastControlButton)) {
-					button.handlePressed();
+					button.sendKeyPresses(true);
 					mapTable.put(v, button);
 					return;
 				}
@@ -405,32 +401,16 @@ public class ControlLayout extends FrameLayout {
 		}
 	}
 
-    @RequiresApi(30)
-    private boolean isKeyboardShown() {
-        WindowInsets windowInsets = getRootWindowInsets();
-        Insets imeInsets = windowInsets.getInsets(WindowInsets.Type.ime());
-        return imeInsets.bottom != 0 || imeInsets.left != 0 || imeInsets.top != 0 || imeInsets.right != 0;
-    }
-
 	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if (mModifiable && event.getActionMasked() != MotionEvent.ACTION_UP || mControlDialog == null)
 			return true;
+
 		InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
 
-        boolean isKeyboardHidden;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            boolean keyboardShown = isKeyboardShown();
-            isKeyboardHidden = !keyboardShown;
-            if(keyboardShown) imm.hideSoftInputFromWindow(getWindowToken(), 0);
-        }else {
-            // When the input window cannot be hidden (meaning it's already hidden), it returns false
-            // Docs don't seem to suggest that this is the case anymore. But it is on a10 and i
-            // don't want to mess with the way insets are done on a10
-            isKeyboardHidden = !imm.hideSoftInputFromWindow(getWindowToken(), 0);
-        }
-        if(isKeyboardHidden){
+		// When the input window cannot be hidden, it returns false
+		if(!imm.hideSoftInputFromWindow(getWindowToken(), 0)){
 			if(mControlDialog.disappearLayer()){
 				mActionRow.setFollowedButton(null);
 				mHandleView.hide();
@@ -615,96 +595,7 @@ public class ControlLayout extends FrameLayout {
 		builder.show();
 	}
 
-	// Copied from https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/widget/FrameLayout.java
-	// (and edited to avoid laying out control buttons)
-	@SuppressWarnings("RtlHardcoded") // Handled explicitly via getAbsoluteGravity()
-	private void layoutNonButtonChildren(int left, int top, int right, int bottom) {
-		final int count = getChildCount();
-		final int parentLeft = getPaddingLeft();
-		final int parentRight = right - left - getPaddingRight();
-		final int parentTop = getPaddingTop();
-		final int parentBottom = bottom - top - getPaddingBottom();
-		final int layoutDirection = getLayoutDirection();
-		for (int i = 0; i < count; i++) {
-			final View child = getChildAt(i);
-			if(child instanceof ControlInterface || child.getVisibility() == GONE) continue;
-			final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-			final int width = child.getMeasuredWidth();
-			final int height = child.getMeasuredHeight();
-			int childLeft, childTop;
-			int gravity = lp.gravity;
-			if (gravity == -1) {
-				gravity = Gravity.START | Gravity.TOP;
-			}
-			final int absoluteGravity = Gravity.getAbsoluteGravity(gravity, layoutDirection);
-			switch (absoluteGravity & Gravity.HORIZONTAL_GRAVITY_MASK) {
-				case Gravity.CENTER_HORIZONTAL:
-					childLeft = parentLeft + (parentRight - parentLeft - width) / 2 +
-							lp.leftMargin - lp.rightMargin;
-					break;
-				case Gravity.RIGHT:
-					childLeft = parentRight - width - lp.rightMargin;
-					break;
-				case Gravity.LEFT:
-				default:
-					childLeft = parentLeft + lp.leftMargin;
-			}
-			switch (gravity & Gravity.VERTICAL_GRAVITY_MASK) {
-				case Gravity.TOP:
-				default:
-					childTop = parentTop + lp.topMargin;
-					break;
-				case Gravity.CENTER_VERTICAL:
-					childTop = parentTop + (parentBottom - parentTop - height) / 2 +
-							lp.topMargin - lp.bottomMargin;
-					break;
-				case Gravity.BOTTOM:
-					childTop = parentBottom - height - lp.bottomMargin;
-					break;
-			}
-			child.layout(childLeft, childTop, childLeft + width, childTop + height);
-		}
-	}
-
-	@Override
-	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-		layoutNonButtonChildren(left, top, right, bottom);
-		int w = right - left;
-		int h = bottom - top;
-
-		for(ControlInterface controlInterface : getButtonChildren()) {
-			ControlData properties = controlInterface.getProperties();
-			View interfaceView = controlInterface.getControlView();
-
-			int width = (int) properties.getWidth();
-			int height = (int) properties.getHeight();
-
-			interfaceView.measure(
-					MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
-					MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
-			);
-
-			if(!changed && !interfaceView.isLayoutRequested()) {
-				interfaceView.layout(
-						interfaceView.getLeft(), interfaceView.getTop(),
-						interfaceView.getRight(), interfaceView.getBottom()
-				);
-			} else {
-				int l = (int) (properties.insertDynamicPos(properties.dynamicX, w, h) + left);
-				int t = (int) (properties.insertDynamicPos(properties.dynamicY, w, h) + top);
-
-				int r = l + width;
-				int b = t + height;
-				interfaceView.layout(l, t, r, b);
-			}
-		}
-	}
-
 	public boolean areControlVisible(){
 		return mControlVisible;
-	}
-
-	public LayoutBitmaps getBitmaps() {
-		return mLayout.mLayoutBitmaps;
 	}
 }
