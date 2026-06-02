@@ -4,13 +4,11 @@ import com.google.gson.JsonSyntaxException;
 
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
-import net.kdt.pojavlaunch.utils.FileUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -19,7 +17,7 @@ public class FabriclikeUtils {
 
     public static final FabriclikeUtils FABRIC_UTILS = new FabriclikeUtils("https://meta.fabricmc.net/v2", "fabric", "Fabric", "fabric");
     public static final FabriclikeUtils QUILT_UTILS = new FabriclikeUtils("https://meta.quiltmc.org/v3", "quilt", "Quilt", "quilt");
-    public static final FabriclikeUtils LEGACY_FABRIC_UTILS = new FabriclikeUtils("https://meta.legacyfabric.net/v2", "legacy_fabric", "Legacy Fabric", "fabric");
+
     private static final String LOADER_METADATA_URL = "%s/versions/loader/%s";
     private static final String GAME_METADATA_URL = "%s/versions/game";
 
@@ -78,23 +76,6 @@ public class FabriclikeUtils {
     }
     public String getIconName() {
         return mIconName;
-    }
-
-    public String install(String gameVersion, String loaderVersion) throws IOException {
-        String fabricJson = DownloadUtils.downloadString(createJsonDownloadUrl(gameVersion, loaderVersion));
-        String versionId;
-        try {
-            JSONObject fabricJsonObject = new JSONObject(fabricJson);
-            versionId = fabricJsonObject.getString("id");
-        }catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
-        File versionJsonDir = new File(Tools.DIR_HOME_VERSION, versionId);
-        File versionJsonFile = new File(versionJsonDir, versionId+".json");
-        FileUtils.ensureDirectory(versionJsonDir);
-        Tools.write(versionJsonFile, fabricJson);
-        return versionId;
     }
 
     private static FabricVersion[] deserializeLoaderVersions(String input) throws JSONException {

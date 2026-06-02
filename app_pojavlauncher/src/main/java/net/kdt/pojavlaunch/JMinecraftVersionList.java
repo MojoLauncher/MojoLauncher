@@ -60,11 +60,24 @@ public class JMinecraftVersionList {
 
         @Keep
         public static class ArgValue {
-            public MoJsonRule[] rules;
+            public ArgRules[] rules;
             public String value;
 
             // TLauncher styled argument...
             public String[] values;
+
+            @Keep
+            public static class ArgRules {
+                public String action;
+                public String features;
+                public ArgOS os;
+
+                @Keep
+                public static class ArgOS {
+                    public String name;
+                    public String version;
+                }
+            }
         }
     }
     @Keep

@@ -1,45 +1,65 @@
 plugins {
-    id 'com.android.application' version '8.11.1'
-    id 'de.undercouch.download' version '5.6.0'
-    id 'org.ajoberstar.grgit' version '5.3.2'
+    id 'com.android.application' version '8.7.2'
 }
-
-apply from: rootProject.file('gradle/prefab_bypass.gradle')
-
-import de.undercouch.gradle.tasks.download.Download
 
 static def getDate() { return new Date().format('yyyyMMdd') }
 
-static def getDateSeconds() {
-    if (System.getenv("GITHUB_ACTIONS") == "true") {
-        return Integer.parseInt(System.getenv("GITHUB_RUN_NUMBER"))
-    } else {
-        return 172005
-    }
-}
-
 def getVersionName = {
-    def currentBranch = grgit.branch.current()
-    def latestCommit = grgit.log(maxCommits: 1)
-    def dateToday = getDate()
-    if(currentBranch == null || latestCommit == null) {
-        return "LOCAL-${dateToday}"
-    }else {
-        def branchName = currentBranch.getName()
-        def commitAbbreviation = latestCommit.abbreviatedId
-        return "iris-${dateToday}-${commitAbbreviation}-${branchName}"
+    // Get the last version tag, as well as the short head of the last commit
+    ByteArrayOutputStream TAG = new ByteArrayOutputStream()
+    String semVer = "1.1.5"
+    // Used by the fallback for github actions
+    ByteArrayOutputStream TAG_PART_COMMIT = new ByteArrayOutputStream()
+    String TAG_STRING
+
+    exec {
+        try {
+            commandLine 'git', 'describe', '--tags'
+            ignoreExitValue true
+            standardOutput = TAG
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+    if (TAG.toString() == "") {
+        exec {
+            // Fallback for action builds
+            try {
+                commandLine 'git', 'describe', '--always', '--tags'
+                ignoreExitValue true
+                standardOutput = TAG_PART_COMMIT
+            } catch (Exception e) {
+            }
+        }
+    }
+
+
+    if(TAG.toString() != ""){
+        TAG_STRING = TAG.toString()
+    }else {
+        if(TAG_PART_COMMIT.toString().trim() == ""){
+             //Fallback no repo
+            return ("LOCAL-" + "${getDate()}")
+        }else {
+            // Used by github actions
+            TAG_STRING =  'copper-legacy-' + "${getDate()}" + "-" + TAG_PART_COMMIT.toString().trim()
+        }
+
+    }
+
+    return TAG_STRING.trim().replace("-g", "-") + "-" + semVer
 }
 
 def getCFApiKey = {
-    String key = System.getenv("CURSEFORGE_API_KEY")
-    if(key != null) return key
-    File curseforgeKeyFile = new File("./curseforge_key.txt")
+    String key = System.getenv("CURSEFORGE_API_KEY");
+    if(key != null) return key;
+    File curseforgeKeyFile = new File("$projectDir/curseforge_key.txt");
     if(curseforgeKeyFile.canRead() && curseforgeKeyFile.isFile()) {
-        return curseforgeKeyFile.text
+        return curseforgeKeyFile.text;
     }
-    logger.warn('BUILD: You have no CurseForge key, the curseforge api will get disabled !')
-    return "DUMMY"
+    logger.warn('BUILD: You have no CurseForge key, the curseforge api will get disabled !');
+    return "DUMMY";
 }
 
 configurations {
@@ -50,9 +70,9 @@ configurations {
 }
 
 android {
-    namespace 'git.artdeell.mojo'
+    namespace 'net.kdt.pojavlaunch'
 
-    compileSdk = 36
+    compileSdk = 34
 
     lintOptions {
         abortOnError false
@@ -65,40 +85,33 @@ android {
             keyAlias "androiddebugkey"
             keyPassword "android"
         }
-        googlePlayBuild {
-            storeFile file("mojo_upload.jks")
-            storePassword System.getenv("UPLOAD_KEYSTORE_PASSWORD")
-            keyAlias "key0"
-            keyPassword System.getenv("UPLOAD_KEYSTORE_PASSWORD")
+        customRelease {
+            storeFile file("aamc_upload.jks")
+            storePassword System.getenv("GPLAY_KEYSTORE_PASSWORD")
+            keyAlias "android_github_release"
+            keyPassword System.getenv("GPLAY_KEYSTORE_PASSWORD")
         }
-        publicBuild {
-            storeFile file("mojo_pub.jks")
-            storePassword System.getenv("MOJOPUB_KEYSTORE_PASSWORD")
-            keyAlias "key0"
-            keyPassword System.getenv("MOJOPUB_KEYSTORE_PASSWORD")
+        googlePlayBuild {
+            storeFile file("upload.jks")
+            storePassword System.getenv("GPLAY_KEYSTORE_PASSWORD")
+            keyAlias "upload"
+            keyPassword System.getenv("GPLAY_KEYSTORE_PASSWORD")
         }
     }
 
     defaultConfig {
-        applicationId "git.artdeell.mojo"
+        applicationId "com.maxjubayeryt.copper"
         minSdkVersion 21
-        targetSdkVersion 36
-        versionCode getDateSeconds()
+        targetSdkVersion 34
+        versionCode 10000000
         versionName getVersionName()
-        multiDexEnabled false //important
+        multiDexEnabled true //important
         resValue 'string', 'curseforge_api_key', getCFApiKey()
-    }
-
-    flavorDimensions  = ["runtime"]
-    
-    productFlavors {
-        full {
-            dimension "runtime"
-        }
-        
-        noruntime {
-            dimension "runtime"
-            versionNameSuffix "-noruntime"
+        externalNativeBuild {
+            ndkBuild {
+                // Fix for Windows command line length limit
+                arguments "APP_SHORT_COMMANDS=true"
+            }
         }
     }
 
@@ -109,8 +122,11 @@ android {
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.customDebug
-            resValue 'string', 'application_package', 'git.artdeell.mojo.debug'
-            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mojo.scoped.gamefolder.debug'
+            resValue "string", "app_name", "Copper (Debug)"
+            resValue "string", "app_short_name", "Copper (Debug)"
+            resValue 'string', 'application_package', 'com.maxjubayeryt.copper.debug'
+            resValue 'string', 'storageProviderAuthorities', 'com.maxjubayeryt.copper.scoped.gamefolder.debug'
+            resValue 'string', 'shareProviderAuthority', 'com.maxjubayeryt.copper.scoped.controlfolder.debug'
         }
         proguard {
             initWith debug
@@ -126,30 +142,27 @@ android {
             // Don't set to true or java.awt will be a.a or something similar.
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.customRelease
             // defaultConfig already set
             // multiDexEnabled = true
             // debuggable = true
-            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mojo.scoped.gamefolder'
-            resValue 'string', 'application_package', 'git.artdeell.mojo'
+            resValue "string", "app_name", "Copper"
+            resValue "string", "app_short_name", "Copper"
+            resValue 'string', 'storageProviderAuthorities', 'com.maxjubayeryt.copper.gamefolder'
+            resValue 'string', 'application_package', 'com.maxjubayeryt.copper'
         }
         gplay {
             initWith release
             signingConfig signingConfigs.googlePlayBuild
-        }
-        pubRelease {
-            initWith release
-            signingConfig signingConfigs.customDebug // WIP, changeme
-            applicationIdSuffix '.pub'
-            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mojo.pub.scoped.gamefolder'
-            resValue 'string', 'application_package', 'git.artdeell.mojo.pub'
+            matchingFallbacks = [ 'release' ]
         }
     }
 
-    ndkVersion "29.0.14206865"
+    ndkVersion = "27.3.13750724"
 
     externalNativeBuild {
-        cmake {
-            path file('src/main/jni/CMakeLists.txt')
+        ndkBuild {
+            path file('src/main/jni/Android.mk')
         }
     }
 
@@ -168,159 +181,38 @@ android {
         jniLibs {
             useLegacyPackaging = true
         }
+        doNotStrip += [
+                "**/libcutils.so"
+        ]
         pickFirst '**/libbytehook.so'
     }
 
     buildFeatures {
+        prefab true
         buildConfig true
     }
-}
 
-class AssetTaskRegistrar {
-    private Project project
-    private Task mergeAssetsTask
-    private File targetAssetsDir
-    private String variantName
-    private File targetDownloadDir
-    private File projectJarDir
-
-    AssetTaskRegistrar(Project project) {
-        this.project = project
-
-        targetDownloadDir = new File(project.projectDir, "build/intermediates/download_deps")
-        projectJarDir = new File(project.projectDir, "build/intermediates/package_jar_deps")
-        createDirectories targetDownloadDir
-        createDirectories projectJarDir
-    }
-
-    def setVariant(variant) {
-        variantName = variant.getName().capitalize()
-        mergeAssetsTask = variant.getPreBuildProvider().get()
-
-        targetAssetsDir = new File(project.projectDir, "build/intermediates/remote_asset_set/${variantName.toLowerCase()}/")
-        createDirectories(targetAssetsDir)
-
-        project.android.sourceSets[variant.getName()].assets.srcDirs += targetAssetsDir.absolutePath
-    }
-
-    static def createDirectories(File location) {
-        if(!location.isDirectory() && !location.mkdirs())
-            throw new RuntimeException("Failed to create directory "+location.getAbsolutePath())
-    }
-
-    static def writeVersion(File dir) {
-        File versionFile = new File(dir, "version")
-        versionFile.write(String.valueOf(new Date().getTime()))
-    }
-
-    private def assetDestination(String relativePath) {
-        return new File(targetAssetsDir, relativePath)
-    }
-
-    private def onlineUnzipTask(String downloadUrl, String name, File targetExtractionDir) {
-        createDirectories targetExtractionDir
-
-        def downloadTarget = new File(targetDownloadDir, name)
-
-        def dependencySuffix = "${name}${variantName}"
-        def downloadTask = project.tasks.register("download${dependencySuffix}", Download) {
-            src downloadUrl
-            dest downloadTarget
-            overwrite false
-        }
-
-        def unzipTask = project.tasks.register("unzip${dependencySuffix}", Copy) {
-            from project.zipTree(downloadTarget)
-            into targetExtractionDir
-            dependsOn downloadTask
-        }
-        return unzipTask
-    }
-
-    def onlineZipDependency(String downloadUrl, String name, String relativePath) {
-	    mergeAssetsTask.dependsOn(onlineUnzipTask downloadUrl, name, assetDestination(relativePath))
-    }
-
-    def projectJarDependency(Project project, String relativePath) {
-        def assetTargetDir = assetDestination(relativePath)
-        def jarTargetDir = new File(projectJarDir, relativePath)
-        createDirectories assetTargetDir
-        createDirectories jarTargetDir
-
-        def copyTaskName = "copyProjectJar${jarTargetDir.getName()}${variantName}"
-        def copyTask = project.tasks.register(copyTaskName, Copy) {
-            from jarTargetDir
-            into assetTargetDir
-            // Nasty hack: explicitly reference project by name to force Gradle to configure it.
-            // Makes jar task search below work properly for fresh configurations.
-            dependsOn ":${project.name}:jar"
-        }
-
-        mergeAssetsTask.dependsOn copyTask
-
-        project.tasks.withType(org.gradle.jvm.tasks.Jar.class).configureEach {
-            it.destinationDirectory = jarTargetDir
-            doLast {
-                if(!it.didWork) return
-                writeVersion jarTargetDir
-            }
-        }
-    }
-
-    def onlineJarDependency(String jarUrl, String jarProject, String dependency, String version, String suffix,  String relativePath) {
-        File targetDir = assetDestination(relativePath)
-        createDirectories targetDir
-        def dependencySuffix = "${jarProject}${dependency}${variantName}"
-        def downloadTask = project.tasks.register("download${dependencySuffix}", Download) {
-            src String.format(jarUrl, jarProject, dependency, version, suffix)
-            dest targetDir
-            overwrite false
-            doLast {
-                if(!it.didWork) return
-                writeVersion targetDir
-            }
-        }
-        mergeAssetsTask.dependsOn(downloadTask)
-    }
-
-    def jreRuntimeDependency(int version, String relPath) {
-        def jreUrl = "https://github.com/MojoLauncher/android-openjdk-build-multiarch/releases/download/rolling/jre%d-pojav.zip"
-        onlineZipDependency(String.format(jreUrl, version), "ComponentRuntime$version", relPath)
-    }
+    buildToolsVersion = '34.0.0'
 }
 
 afterEvaluate {
-    def registrar = new AssetTaskRegistrar(project)
-
-    android.applicationVariants.configureEach { variant ->
-        registrar.setVariant(variant)
-
-        registrar.projectJarDependency project(":forge_installer"), "components/forge_installer"
-
-		if (variant.getName().toLowerCase().contains("full")) {
-            registrar.jreRuntimeDependency 8, "components/jre"
-        }
-        
-		def cacioJarUrl = "https://jitpack.io/com/github/MojoLauncher/%1\$s/%2\$s/%3\$s/%2\$s-%3\$s%4\$s.jar"
-
-        registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-shared", "-01d2dc1d65-1", "", "components/caciocavallo"
-        registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-androidnw", "-01d2dc1d65-1", "", "components/caciocavallo"
-
-        registrar.onlineJarDependency cacioJarUrl, "caciocavallo17", "cacio-tta", "72a9ab6323", "-jar-with-dependencies", "components/caciocavallo17"
-    }
+    // Explicit dependencies for which the apk relies on
+    tasks.mergeDebugAssets.dependsOn(":forge_installer:jar", ":arc_dns_injector:jar", ":methods_injector_agent:jar", ":jre_lwjgl3glfw:jar")
+    tasks.mergeReleaseAssets.dependsOn(":forge_installer:jar", ":arc_dns_injector:jar", ":methods_injector_agent:jar", ":jre_lwjgl3glfw:jar")
 }
 
 dependencies {
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
-    implementation 'commons-codec:commons-codec:1.19.0'
+    implementation 'commons-codec:commons-codec:1.15'
     // implementation 'com.wu-man:android-bsf-api:3.1.3'
-    implementation 'androidx.preference:preference:1.2.1'
+    implementation 'androidx.preference:preference:1.2.0'
+    implementation 'androidx.palette:palette:1.0.0'
     //implementation 'androidx.core:core:1.7.0'
     implementation 'androidx.drawerlayout:drawerlayout:1.2.0'
-    implementation 'androidx.viewpager2:viewpager2:1.1.0'
-    implementation 'androidx.annotation:annotation:1.9.1'
+    implementation 'androidx.viewpager2:viewpager2:1.1.0-beta01'
+    implementation 'androidx.annotation:annotation:1.5.0'
 
-    implementation "androidx.constraintlayout:constraintlayout:2.2.1"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
 
     implementation 'com.github.duanhong169:checkerboarddrawable:1.0.2'
     implementation 'com.github.PojavLauncherTeam:portrait-sdp:ed33e89cbc'
@@ -332,17 +224,18 @@ dependencies {
     // implementation 'com.intuit.sdp:sdp-android:1.0.5'
     // implementation 'com.intuit.ssp:ssp-android:1.0.5'
 
-    implementation 'org.tukaani:xz:1.10'
+    implementation 'org.tukaani:xz:1.8'
     // Our version of exp4j can be built from source at
     // https://github.com/PojavLauncherTeam/exp4j
-    implementation 'net.sourceforge.htmlcleaner:htmlcleaner:2.29'
-    implementation 'com.bytedance:bytehook:1.1.1'
-
-    implementation 'com.github.MojoLauncher:alsoft-android-aar:f369161d5f'
-
-    implementation project(":dnbglfw")
+    implementation 'net.sourceforge.htmlcleaner:htmlcleaner:2.6.1'
+    implementation 'com.bytedance:bytehook:1.0.9'
 
     // implementation 'net.sourceforge.streamsupport:streamsupport-cfuture:1.7.0'
 
+    implementation 'top.fifthlight.touchcontroller:proxy-client-android:0.0.4'
+
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+
+    implementation "net.java.dev.jna:jna:5.13.0@aar"
+
 }

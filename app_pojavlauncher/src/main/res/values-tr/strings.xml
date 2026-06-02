@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Android için Minecraft: Java Edition)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_name">Copper</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
     <string name="login_online_username_hint">Kullanıcı Adı</string>
     <string name="login_online_login_label">Giriş yap</string>
     <!-- Hint -->
+    <string name="hint_control_mapping">"\"Bağlam menüsünü açmak için orta üstteki dişli simgesine dokunun ⚙\nBir düğmeye dokunarak özelleştirin: düzenle, boyutlandır, kaldır veya tuş atamalarını değiştir."</string>
     <!-- Warnings -->
     <string name="warning_remove_account">Bu hesap kaldırılacak!</string>
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Bir mod yükleyicisi seç</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher beklenmedik bir sebepten dolayı çöktü</string>
+    <string name="error_fatal">Copper beklenmedik bir sebepten dolayı çöktü</string>
     <string name="error_no_version">Sürüm yok!</string>
     <string name="error_show_more">Daha fazla göster</string>
     <string name="error_show_less">Daha az göster</string>
@@ -48,9 +48,13 @@
     <string name="mcl_setting_subtitle_mousescale">Sanal farenin boyutunu ayarlayın.</string>
     <string name="mcl_setting_title_javaargs">JVM Başlatıcı argümanları</string>
     <string name="mcl_setting_subtitle_javaargs">Dikkatli olun, eğer bilgisizce değiştirilirse oyunun çökmesine sebep olabilir.</string>
-    <string name="mcl_setting_category_renderer">Görüntü İşleyici</string>
-    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (bütün sürümler, hızlı)</string>
+    <string name="mcl_setting_title_renderer_settings">Ek işleyici ayarları</string>
+    <string name="mcl_setting_title_renderer_subtitle">İşleyiciye özgü ayarlar</string>
+    <string name="mcl_setting_category_renderer">İşleyici</string>
+    <string name="mcl_setting_renderer_gles2_4">Kutsal GL4ES- (1.21.4&lt; sadece, Hızlı)</string>
     <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) - (tüm sürümler için, orta)</string>
+    <string name="mcl_setting_renderer_mobileglues">MobileGlues (OpenGL ES) - (sadece 1.17+, hızlı)</string>
+    <string name="mcl_setting_renderer_ltw">LTW (OpenGL ES 3) - sadece 1.17+</string>
     <string name="mcl_setting_veroption_release">Sürümler</string>
     <string name="mcl_setting_veroption_snapshot">Test sürümleri</string>
     <string name="mcl_setting_veroption_oldalpha">Eski-alfa</string>
@@ -73,8 +77,10 @@
     <string name="global_select">Seç</string>
     <string name="global_retry">Tekrar deneyin</string>
     <string name="global_default">Varsayılan</string>
+    <string name="global_off">Kapalı</string>
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Uygulama/Oyundan %d koduyla çıkıldı, daha fazla bilgi için latestlog.txt\'ye bakın.</string>
+    <string name="mcn_signal_title">Uygulama/Oyun, ciddi bir sinyal (%d) nedeniyle sonlandırıldı. Daha fazla bilgi için latestlog.txt dosyasını kontrol edin.</string>
     <string name="mcn_exit_confirm">Zorla kapatmak istediğinize emin misiniz?</string>
     <string name="mcn_check_fail_vulkan_support">Zink (Vulkan) işleyicisi bu cihazda desteklenmiyor!</string>
     <!-- MainActivity: Control buttons -->
@@ -110,7 +116,7 @@
     <string name="control_more3"></string>
     <string name="control_more4"></string>
 -->
-    <string name="customctrl_toggle">Açılıp kapanabilir</string>
+    <string name="customctrl_toggle">Değiştirilebilir</string>
     <string name="customctrl_size">Boyut</string>
     <string name="customctrl_mapping">Atama</string>
     <string name="customctrl_orientation">Yön</string>
@@ -140,11 +146,14 @@
     <string name="mcl_disable_swap_hand_subtitle">İkinci elde değiştirmek için kısayol çubuğu ögesine iki kez dokunmayı devre dışı bırakır.</string>
     <string name="mcl_setting_title_mousespeed">İmleç Hızı</string>
     <string name="mcl_setting_subtitle_mousespeed">Sanal farenin hızını ayarlar.</string>
+    <string name="mcl_setting_title_grab_mouse">Sanal imleç kullan</string>
+    <string name="mcl_setting_subtitle_grab_mouse">İmlecin oyun içinde kaldığından emin olur. Farenin dokunmatik kontrol düzeniyle etkileşime geçmesini engeller.</string>
     <string name="customctrl_passthru">İmleç geçişi</string>
     <string name="customctrl_swipeable">Kaydırılabilir</string>
-    <string name="customctrl_forward_lock">İleri kilit</string>
+    <string name="customctrl_forward_lock">İleri kilidi</string>
     <string name="customctrl_absolute_tracking">Mutlak parmak takibi</string>
     <string name="memory_warning_msg">Şuanki boş bellek (%d) verilecek bellekten (%d) daha az, bu durum çökmelere sebep olabilir. Eğer oyun çökerse verilen belleği değiştirin.</string>
+    <string name="address_memory_warning_msg">Mevcut kullanılabilir adreslenebilir bellek miktarı (%d), ayrılan bellek (%d) miktarından daha az ve bu çökme sorunlarına yol açabilir. Oyun çökerse bellek tahsisini değiştirin.</string>
     <string name="mcl_memory_allocation">Bellek ayırma</string>
     <string name="mcl_memory_allocation_subtitle">Minecraft\'a ne kadar bellek verileceğini kontrol eder.</string>
     <string name="multirt_runtime_corrupt">Bozuk Java Runtime</string>
@@ -157,10 +166,11 @@
     <string name="multirt_config_setdefault">Varsayılan olarak ayarla</string>
     <string name="multirt_config_setdefault_already">Varsayılan</string>
     <string name="multirt_config_removeerror_last">En az bir Java Runtime\'ın kurulu olması gerekmektedir.</string>
+    <string name="multirt_nocompatiblert">Uyumlu bir Java Runtime bulunamadı. Bu sürüm Java %d veya daha yenisini gerektirir.</string>
     <string name="multirt_nojava8rt">Java 8 bulunamadı. Bu seçeneği kullanabilmeniz için Java 8 kurmanız gerekiyor.</string>
     <string name="multirt_delete_runtime">Runtime\'ı sil</string>
     <string name="pvc_gameDirectory">Oyun dizini</string>
-    <string name="pvc_jvmArgs">JVM değişkenleri</string>
+    <string name="pvc_jvmArgs">JVM argümanları</string>
     <string name="preference_mouse_start_title">Sanal imleç açık olarak başla</string>
     <string name="preference_mouse_start_description">Bu seçenek açık olduğunda, başlangıçta Sanal Fare görünür olacak.</string>
     <string name="preference_video_title">Video ve görüntü işleyici</string>
@@ -168,10 +178,9 @@
     <string name="preference_control_title">Kontrol özelleştirmesi</string>
     <string name="preference_control_description">Hareketler, butonlar ve ölçeklendirme</string>
     <string name="preference_java_title">Java Ayarlamaları</string>
-    <string name="preference_java_description">Java Runtime\'ları, JVM Değişkenleri, RAM miktarı ve sandbox</string>
+    <string name="preference_java_description">Java Runtime\'ları, JVM Argümanları, Bellek miktarı ve sandbox</string>
     <string name="preference_misc_title">Çeşitli ayarlar</string>
     <string name="preference_misc_description">Sürüm listesi ve kütüphane kontrolü</string>
-    <string name="preference_experimental_title">Deneysel Ayarlar</string>
     <string name="preference_experimental_description">Buradaki ayarları düşünerek kullanın, destek yoktur</string>
     <string name="preference_sustained_performance_title">Kısıtlı performans modunu aç</string>
     <string name="preference_sustained_performance_description">Üst performansı kısıtlayarak ısınmayı limitle.</string>
@@ -197,9 +206,11 @@
     <string name="profiles_profile_version">Sürüm</string>
     <string name="global_delete">Sil</string>
     <string name="pedit_java_runtime">Java Runtime</string>
-    <string name="pedit_renderer">Görüntü İşleyici</string>
+    <string name="pedit_renderer">İşleyici</string>
+    <string name="arc_capes_title">Cosmetica Pelerinleri</string>
+    <string name="arc_capes_desc">Cosmetica\'nın (eskiden Arc olarak biliniyordu) Pelerinlerini etkinleştirir. Daha fazla bilgi için lütfen https://cosmetica.cc\'u ziyaret edin. OptiFine gerektirir.</string>
     <string name="notif_channel_name">Genel</string>
-    <string name="lazy_service_default_title">Mojo Önplan Hizmeti</string>
+    <string name="lazy_service_default_title">Copper Önplan Hizmeti</string>
     <string name="mcl_setting_veroption_installed">Kuruldu</string>
     <string name="use_global_default">(Genel varsayılanı kullan)</string>
     <string name="default_control">Varsayılan kontroller</string>
@@ -229,12 +240,13 @@
     <string name="preference_gyro_sample_rate_title">Jiroskop örnekleme oranı</string>
     <string name="preference_gyro_sample_rate_description">Eğer jiroskop kontrolleriyle performans probleminiz varsa bunu arttırın.</string>
     <string name="microsoft_login_retry_later">Çok fazla istek, Lütfen daha sonra tekrar deneyin.</string>
-    <string name="storage_required">MojoLauncher harici depolama biriminin bağlı olmasını gerektirir. Lütfen yeniden bağlayın ve uygulamayı yeniden başlatın.</string>
+    <string name="storage_required">PojavLauncher harici depolama biriminin bağlı olmasını gerektirir. Lütfen yeniden bağlayın ve uygulamayı yeniden başlatın.</string>
     <string name="mcl_setting_title_buttonallcaps">Düğme etiketlerinde yalnızca büyük harfler kullanın</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Kontrollerinizde küçük harfler kullanmak istiyorsanız bunu devre dışı bırakın.</string>
+    <string name="create_profile">Yeni profil oluştur</string>
     <string name="preference_shader_dump_title">Gölgelendirici bilgi göstergesini etkinleştir</string>
     <string name="preference_shader_dump_description">Dönüştürülen shader\'ları günlük dosyasına (log\'a) kaydedin.</string>
-    <string name="percent_format">%d%%</string>
+    <string name="millisecond_format">%d ms</string>
     <string name="customctrl_editor_exit_title">Çıkılsın mı?</string>
     <string name="customctrl_editor_exit_msg">Çıkmak istediğinizden emin misiniz?</string>
     <string name="customctrl_editor_exit">Düzenleyici\'den çık</string>
@@ -248,24 +260,29 @@
     <string name="preference_deadzone_scale_title">Joystick ölü bölge ölçeği</string>
     <string name="preference_deadzone_scale_description">Joystick kayıyorsa artırın.</string>
     <string name="preference_force_big_core_title">İşleyiciyi ana çekirdekte çalışmaya zorla</string>
-    <string name="preference_force_big_core_desc">Minecraft işleme bölümünün en yüksek frekansta çalışan çekirdekte çalışmasına zorlar.</string>
+    <string name="preference_force_big_core_desc">Bu ayar Minecraft görüntü işleyeciyi en yüksek frekansa sahip çekirdekte çalıştırmaya zorlar.</string>
     <string name="version_select_hint">Bir Sürüm Seçin</string>
     <string name="forge_dl_progress">%s için yükleyici indiriliyor</string>
     <string name="forge_dl_searching">Forge sürüm numarası aranıyor</string>
     <string name="modloader_dl_failed_to_load_list">Sürüm listesi yüklenemedi!</string>
-    <string name="forge_dl_no_installer">Üzgünüz, bu Forge sürümünün yükleyicisi olmadığından desteklenmemektedir.</string>
+    <string name="forge_dl_no_installer">Üzgünüz, bu Forge sürümünün yükleyicisinin kurulum dosyası bulunmuyor, bu nedenle şuanlık desteklenmemektedir.</string>
     <string name="forge_dl_select_version">Forge sürümünü seç</string>
     <string name="fabric_dl_progress">%s yükleyici meta verileri indiriliyor</string>
     <string name="fabric_dl_loader_version">%s yükleyici sürümü</string>
     <string name="fabric_dl_game_version">Minecraft sürümü</string>
     <string name="fabric_dl_install">Yükle</string>
     <string name="fabric_dl_cant_read_meta">%s yükleyici meta verileri okunamadı. Lütfen daha sonra tekrar deneyin.</string>
+    <string name="modloader_dl_install_fabric">Fabric profili oluştur</string>
+    <string name="modloader_dl_install_quilt">Quilt profili oluştur</string>
+    <string name="modloader_dl_install_forge">Forge profili oluştur</string>
+    <string name="create_profile_vanilla">Vanilla profil oluştur</string>
     <string name="create_profile_vanilla_like_versions">Vanilla usülü sürümler</string>
     <string name="create_profile_modded_versions">Modlu sürümler</string>
     <string name="fabric_dl_loader_title">Sürümleri seçiniz</string>
     <string name="of_dl_select_version">OptiFine sürümü seçiniz</string>
     <string name="of_dl_failed_to_scrape">OptiFine yüklemesi için veri toplanamadı</string>
     <string name="of_dl_progress">%s indiriliyor</string>
+    <string name="create_profile_optifine">OptiFine profili oluştur</string>
     <string name="hint_search_modpack">Mod paketleri arayın</string>
     <string name="preference_vulkan_driver_system_title">Sistem Vulkan sürücüsünü kullan</string>
     <string name="preference_vulkan_driver_system_description">Başlatıcıyı Adreno GPU\'lardaki Turnip yerine sistem Vulkan sürücüsünü kullanmaya zorlayın. Sadece Zink ve Vulkan kullanan modları etkiler.</string>
@@ -278,26 +295,27 @@
     <string name="modpack_download_downloading_metadata">Mod paketi meta verileri indirliyor (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods">Modlar indiriliyor (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Modlar indiriliyor (%d dosyadan %d tanesi)</string>
-    <string name="modpack_download_applying_overrides">Geçersiz kılmalar uygulanıyor (%d/%d)</string>
-    <string name="modpack_install_notification_title">Mojo Mod Paketi Yükleyicisi</string>
+    <string name="modpack_download_applying_overrides">Overrides uygulanıyor (%d/%d)</string>
+    <string name="modpack_install_notification_title">Pojav Mod Paketi Yükleyicisi</string>
     <string name="modpack_install_notification_success">Modpack kurulumunu tamamlamak için buraya tıklayın</string>
     <string name="modpack_install_notification_data_not_available">Mod yükleyici bilgileri indirilemedi</string>
     <string name="modpack_install_modloader_download_failed">Mod yükleyici dosyaları indirilemedi</string>
     <string name="modpack_install_download_failed">Modpack dosyaları indirilemedi</string>
-    <string name="notif_error_occured">bir hata oluştu</string>
+    <string name="modpack_install_button">Modpack profili oluştur</string>
+    <string name="notif_error_occured">Bir hata oluştu</string>
     <string name="notif_error_occured_desc">Daha fazla ayrıntı görmek için tıklayın</string>
     <string name="fabric_dl_only_stable">Sadece kararlı sürümleri göster</string>
     <string name="dl_tampered_manifest_title">Dosya doğrulama hatası</string>
     <string name="dl_tampered_manifest"><![CDATA[Aynadaki oyun sürümü bildirimi resmi Mojang sürüm bildirimi ile eşleşmiyor, bu da üzerinde oynanmış olabileceği anlamına geliyor.<br/>
         <b>Bu güvenli değil. Devam ederseniz kişisel bilgileriniz risk altında olabilir.</b><br/>
-        Aynayı kullanmaya devam etmek istiyorsanız, \"Bildirim kontrollerini kapat\" düğmesine basın ve indirmeyi yeniden başlatın.<br/>
+        Mirror\'ı kullanmaya devam etmek istiyorsanız, \"Manifest kontrollerini kapat\" düğmesine basın ve indirmeyi yeniden başlatın.<br/>
         Resmi indirme kaynağını kullanmak istiyorsanız, \"Resmi siteye geç\" düğmesine basın ve indirmeyi yeniden başlatın.<br/>]]></string>
-    <string name="dl_turn_off_manifest_checks">Bildirim kontrollerini kapatın</string>
+    <string name="dl_turn_off_manifest_checks">Manifest kontrollerini kapatın</string>
     <string name="dl_switch_to_official_site">Resmi siteye geçiş yapın</string>
     <string name="preference_download_source_title">Oyun indirme kaynağı</string>
-    <string name="preference_download_source_description">Resmi indirme sunucusunu kullanmak yerine bir indirme yansıtıcısı seçin</string>
-    <string name="preference_verify_manifest_title">Oyun sürüm bildirimini doğrulayın</string>
-    <string name="preference_verify_manifest_description">Etkinleştirildiğinde, başlatıcı kütüphanelerle birlikte oyun sürümü bildirimini kontrol edecektir.</string>
+    <string name="preference_download_source_description">Resmi indirme sunucusunu kullanmak yerine bir indirme mirror\'u seçin</string>
+    <string name="preference_verify_manifest_title">Oyun sürüm manfiest\'ini doğrulayın</string>
+    <string name="preference_verify_manifest_description">Etkinleştirildiğinde, başlatıcı kütüphanelerle birlikte oyun sürümü manifest\'ini kontrol edecektir.</string>
     <string name="notif_download_finished">Oyun başlatılmaya hazır</string>
     <string name="notif_download_finished_desc">Başlatmak için buraya tıklayın!</string>
     <string name="preference_category_gestures">Hareketler</string>
@@ -308,7 +326,7 @@
     <string name="preference_category_miscellaneous">Çeşitli ayarlar</string>
     <string name="preference_category_video">Video ayarları</string>
     <string name="notification_permission_dialog_title">İzin isteği</string>
-    <string name="notification_permission_dialog_text">MojoLauncher, uygulamadan ayrıldığınızda oyun/mod paketi indirmelerinin durmasını önlemek için bildirim gönderme izni gerektirir. Bu izin olmadan, Android MojoLauncher\'ı arka plan moduna aldığınızda indirmelerinizi kapatabilir.</string>
+    <string name="notification_permission_dialog_text">PojavLauncher, uygulamadan ayrıldığınızda oyun/mod paketi indirmelerinin durmasını önlemek için bildirim gönderme izni gerektirir. Bu izin olmadan, Android PojavLauncher\'ı arka plan moduna aldığınızda indirmelerinizi kapatabilir.</string>
     <string name="notification_permission_toast">Fikrinizi daha sonra Ayarlar\'a girerek her zaman değiştirebilirsiniz</string>
     <string name="preference_ask_for_notification_title">Bildirimlere izin ver</string>
     <string name="preference_ask_for_notification_description">Oyun/mod paketi arka plan indirmelerinin düzgün çalışması için gerekli olan bildirim iznini yeniden istemek için tıklayın.</string>
@@ -317,11 +335,96 @@
     <string name="exception_failed_to_unpack_jre17">JRE 17 yüklenemedi</string>
     <string name="newdl_starting">Oyun meta verileri okunuyor…</string>
     <string name="newdl_downloading_metadata">Oyun meta verileri indiriliyor (%s)</string>
+    <string name="newdl_downloading_game_files">Oyun indiriliyor… (%d/%d, %.2f MB/s)</string>
+    <string name="newdl_downloading_game_files_size">Oyun indiriliyor… (%.2f/%.2f MB, %.2f MB/s)</string>
+    <string name="cropper_title">Görsel bölgesi seç</string>
+    <string name="cropper_lock_vertical">Dikey kilitlenme</string>
+    <string name="cropper_lock_horizontal">Yatay kilitlenme</string>
+    <string name="cropper_reset">Sıfırla</string>
+    <string name="cropper_select_cancelled">Seçim iptal edildi</string>
+    <string name="log_view_button_scroll_off">Oto kaydırma\nKAPALI</string>
+    <string name="log_view_button_scroll_on">Oto Kaydırma\nAÇIK</string>
+    <string name="log_view_button_output_off">ÇIKTI\nKAPALI</string>
+    <string name="log_view_button_output_on">ÇIKTI\nAÇIK</string>
+    <string name="log_view_label_log_output">Konsol çıktısı:</string>
+    <string name="execute_jar_failed_to_read_file">.jar dosyası okunurken bir hata oluştu</string>
+    <string name="execute_jar_incompatible_runtime">.jar çalıştırma özelliği Java %d ile uyumlu değil</string>
     <string name="controller_button_a">A</string>
     <string name="controller_button_b">B</string>
     <string name="controller_button_x">X</string>
     <string name="controller_button_y">Y</string>
-    <string name="controller_button_start">Başla</string>
+    <string name="controller_button_start">Bașlat</string>
     <string name="controller_button_select">Seç</string>
+    <string name="controller_button_trigger_left">Sol Tetik</string>
+    <string name="controller_button_trigger_right">Sağ Tetik</string>
+    <string name="controller_button_shoulder_left">Sol omuz</string>
+    <string name="controller_button_shoulder_right">Sağ Omuz</string>
+    <string name="controller_direction_forward">Kontrolcü yukarı</string>
+    <string name="controller_direction_backward">Kontrolcü aşağı</string>
+    <string name="controller_direction_left">Kontrolcü Sol</string>
+    <string name="controller_direction_right">Kontrolcü Sağ</string>
+    <string name="controller_stick_press_l">Sol analog çubuğu (tıklama)</string>
+    <string name="controller_stick_press_r">Sağ analog çubuğu (tıklama)</string>
+    <string name="controller_dpad_up">D-Pad Yukarı</string>
+    <string name="controller_dpad_down">D-Pad Aşağı</string>
+    <string name="controller_dpad_left">D-Pad Sol</string>
+    <string name="controller_dpad_right">D-Pad Sağ</string>
+    <string name="controller_remapper_exit_part1">Basılı tut</string>
+    <string name="controller_remapper_exit_part2">çıkmak için</string>
+    <string name="controller_remapper_operating_mode">Geçerli mod</string>
     <string name="customctrl_visibility_title">Görünürlük</string>
+    <string name="customctrl_visibility_ingame">Oyun İçi</string>
+    <string name="customctrl_visibility_in_menus">Menülerde</string>
+    <string name="controller_remapper_expand_entry">Tuș kodlarını değiștirmek için genişlet</string>
+    <string name="preference_remap_controller_title">Kontrolcü tuș atamalarını değiştir</string>
+    <string name="preference_remap_controller_description">Her bir kontrolcü düğmesine atanmış klavye tuşlarını değiştirmenizi sağlar</string>
+    <string name="mcl_button_discord">Discord</string>
+    <string name="ltw_render_distance_warning_msg">Ekran kartınız, Sodium veya benzeri modlar olmadan 7\'nin üzerinde görüş mesafesi işleyemez. “Tamam”a tıkladığınızda görüş mesafesi otomatik olarak düşürülecek.</string>
+    <string name="mcl_button_open_directory">Oyun dizinini aç</string>
+    <string name="local_login_bad_username_title">Kullanım için uyumsuz Kullanıcı adı</string>
+    <string name="local_login_bad_username_text">Kullanıcı adı 3–16 karakter uzunluğunda olmalı ve yalnızca latin harfleri, 0–9 arası rakamları ve alt çizgileri (_) içermelidir.</string>
+    <string name="quick_setting_title">Hızlı ayarlar</string>
+    <string name="create_bta_profile">\"Better than Adventure\" profili oluştur</string>
+    <string name="select_bta_version">\"Better than adventure\" sürümünü seç</string>
+    <string name="bta_installer_available_versions">Desteklenen BTA sürümleri</string>
+    <string name="bta_installer_untested_versions">Test edilmemiş BTA sürümleri</string>
+    <string name="bta_installer_nightly_versions">Günlük BTA sürümleri</string>
+    <string name="newdl_extracting_native_libraries">Yerel kütüphaneler çıkarılıyor (%d/%d)</string>
+    <string name="toast_not_available_demo">Bu demo modunda yoktur</string>
+    <string name="preference_renderer_mobileglues_settings">MobileGlues Ișleyici Seçenekleri</string>
+    <string name="mg_renderer_glsl_cache">Maks GLSL önbellek boyutu</string>
+    <string name="mg_renderer_angle">Sürücü olarak ANGLE\'ı kullan</string>
+    <string name="mg_renderer_multidraw">Multidraw emulasyon modu</string>
+    <string name="mg_renderer_title_errorSetting">Hata filtreleme</string>
+    <string name="mg_renderer_title_timerQueryExt">GPU kullanımını F3 menüsünde devre dışı bırak</string>
+    <string name="mg_renderer_summary_timerQueryExt">Bazı Mali Cihazlarda F3 menüsü açıldığında oluşan rastgele crash hatalarını düzeltir</string>
+    <string name="preference_ANGLE_only">Sadece ANGLE için ayarlar</string>
+    <string name="mg_renderer_title_angleDepthClearFixMode">Elin ve Elde tutulan eşyaların blokların içerisinden geçmesini düzeltir</string>
+    <string name="mg_renderer_summary_angleDepthClearFixMode">Sadece ANGLE\'ı etki eder, Performansa etkisi olabilir.</string>
+    <string name="preference_experimental_title">Deneysel Ayarlar</string>
+    <string name="mg_renderer_title_gl43exts">Deneysel OpenGL 4.3 uzantılarını destekliyormuş gibi göster</string>
+    <string name="mg_renderer_summary_gl43exts">Mod çökmelerine yardımcı olabilir. Ihtiyaç yoksa devre dışı bırakın, çökmelere sebep olabilir.</string>
+    <string name="mg_renderer_title_computeShaderext">Deneysel Compute Shader uzantısını destekliyormuş gibi göster</string>
+    <string name="mg_renderer_summary_computeShaderext">Shader paketi bozulmalarına yardımcı olabilir. Ihtiyaç yoksa devre dışı bırakın, çökmelere sebep olabilir.</string>
+    <string name="mg_renderer_title_multidrawCompute">Hesaplama ile Çoklu Çizim Taklidi Kullan</string>
+    <string name="mg_renderer_summary_multidrawCompute">Çoklu çizim emülasyonu için hesaplama shader’larını kullanır</string>
+    <string name="app_short_name">Copper</string>
+    <string name="demo_versions_supported">Sadece Vanilla 1.3.1 ve üzeri sürümler deneme hesaplarında desteklenmektedir</string>
+    <string name="demo_unsupported">Deneme Profili desteklenmemektedir</string>
+    <string name="change_account">Lütfen hesapları değiştirmek için bu fonksiyonu kullanınız</string>
+    <string name="no_minecraft_account_found">Minecraft hesabı bulunamadı</string>
+    <string name="feature_requires_java_account">Bu özellik Minecraft Java Versiyonu\'na (Premium\'a) sahip bir Microsoft Hesabı Gerektirmektedir.</string>
+    <string name="delete_account_and_login">Hesabı sil ve giriş yap</string>
+    <string name="login_again">Lütfen Tekrar Giriş yapınız</string>
+    <string name="account_corrupted">Seçilen Hesap hasarlı/Kullanılmaz durumda</string>
+    <string name="modloader_dl_install_neoforge">Neoforge profili yarat</string>
+    <string name="neoforge_dl_select_version">Lütfen NeoForge Sürümü seçiniz</string>
+    <string name="neoforge_dl_no_installer">Özür dileriz, ama NeoForge\'un bu sürümü indiriciye sahip değil veya gözükmüyor, bu yüzden şu durumda destek dışıdır.</string>
+    <string name="preference_category_touchcontroller_settings">DokunmatikKotnrolcü Ayarları</string>
+    <string name="preference_force_enable_touchcontroller_title">DokunmatikKontrolcülerini zorla aktif eder</string>
+    <string name="preference_force_enable_touchcontroller_description">DokunmatikKontrolcü entegrasyonunu zorla aktif eder, öyleki mod dosyası bulunmasa bile.</string>
+    <string name="preference_touchcontroller_vibrate_length_title">DokunmatikKontrolcü titreşim uzunluğu</string>
+    <string name="preference_touchcontroller_vibrate_length_description">DokunmatikKontrolcü kullanılır iken oluşan titreşim uzunluğunu ayarla.</string>
+    <string name="error_vanilla_json_corrupt">Vanila json dosyaları görünüşe göre bozulmuş veya deforme halde. Lütfen Github veya discord\'a bir Hata raporu yollayınız.</string>
+    <string name="preference_ask_for_microphone_title">Mikrofona izin ver</string>
 </resources>

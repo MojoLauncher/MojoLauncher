@@ -1,7 +1,9 @@
 package net.kdt.pojavlaunch;
 
+import static net.kdt.pojavlaunch.prefs.LauncherPreferences.DEFAULT_PREF;
+
 import android.annotation.SuppressLint;
-import android.content.ClipData;
+import android.app.ProgressDialog;
 import android.content.ClipboardManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.Keep;
 import androidx.appcompat.app.AlertDialog;
 
 import com.kdt.LoggerView;
@@ -27,9 +28,9 @@ import net.kdt.pojavlaunch.multirt.Runtime;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.JREUtils;
 import net.kdt.pojavlaunch.utils.MathUtils;
-import net.kdt.pojavlaunch.utils.jre.JavaRunner;
 
 import org.apache.commons.io.IOUtils;
+import org.lwjgl.glfw.CallbackBridge;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,18 +38,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
-
-import git.artdeell.mojo.R;
+import java.util.zip.ZipFile;
 
 public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouchListener {
 
-    private static volatile ClipboardManager CLIPBOARD;
     private AWTCanvasView mTextureView;
     private LoggerView mLoggerView;
     private TouchCharInput mTouchCharInput;
@@ -58,7 +55,6 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
     private GestureDetector mGestureDetector;
 
     private boolean mIsVirtualMouseEnabled;
-    private boolean mIsTrusted;
     
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -74,8 +70,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         }catch (IOException e) {
             Tools.showError(this, e, true);
         }
-
-        CLIPBOARD = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        MainActivity.GLOBAL_CLIPBOARD = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         mTouchCharInput = findViewById(R.id.awt_touch_char);
         mTouchCharInput.setCharacterSender(new AwtCharSender());
 
@@ -122,8 +117,8 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
                     AWTInputBridge.sendMousePress(AWTInputEvent.BUTTON1_DOWN_MASK);
                 } else {
                     if (action == MotionEvent.ACTION_MOVE) { // 2
-                        mouseX = Math.max(0, Math.min(v.getWidth(), mouseX + x - prevX));
-                        mouseY = Math.max(0, Math.min(v.getHeight(), mouseY + y - prevY));
+                        mouseX = Math.max(0, Math.min(CallbackBridge.physicalWidth, mouseX + x - prevX));
+                        mouseY = Math.max(0, Math.min(CallbackBridge.physicalHeight, mouseY + y - prevY));
                         placeMouseAt(mouseX, mouseY);
                         sendScaledMousePosition(mouseX, mouseY);
                     }
@@ -157,22 +152,25 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         });
 
         try {
+
+            placeMouseAt(CallbackBridge.physicalWidth / 2f, CallbackBridge.physicalHeight / 2f);
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
                 finish();
                 return;
             }
-            mIsTrusted = extras.getBoolean("trusted", false);
-            final List<String> javaArgs = extras.getStringArrayList("javaArgs");
-            final Uri resourceUri = extras.getParcelable("modUri");
-            final String jarPath = extras.getString("modPath");
-            if(jarPath != null) {
-                File jarFile = new File(jarPath);
-                startModInstaller(jarFile, javaArgs);
-            }else {
-                PojavApplication.sExecutorService.execute(()->startModInstallerWithUri(resourceUri, javaArgs));
-            }
+            final String javaArgs = extras.getString("javaArgs");
+            final Uri resourceUri = (Uri) extras.getParcelable("modUri");
             if(extras.getBoolean("openLogOutput", false)) openLogOutput(null);
+            if (javaArgs != null) {
+                startModInstaller(null, javaArgs);
+            }else if(resourceUri != null) {
+                ProgressDialog barrierDialog = Tools.getWaitingDialog(this, R.string.multirt_progress_caching);
+                PojavApplication.sExecutorService.execute(()->{
+                    startModInstallerWithUri(resourceUri);
+                    runOnUiThread(barrierDialog::dismiss);
+                });
+            }
         } catch (Throwable th) {
             Tools.showError(this, th, true);
         }
@@ -186,11 +184,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         });
     }
 
-    private void startModInstallerWithUri(Uri uri, List<String> javaArgs) {
-        if(uri == null) {
-            startModInstaller(null, javaArgs);
-            return;
-        }
+    private void startModInstallerWithUri(Uri uri) {
         try {
             File cacheFile = new File(getCacheDir(), "mod-installer-temp");
             InputStream contentStream = getContentResolver().openInputStream(uri);
@@ -199,13 +193,14 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
                 IOUtils.copy(contentStream, fileOutputStream);
             }
             contentStream.close();
-            startModInstaller(cacheFile, javaArgs);
+            startModInstaller(cacheFile, null);
         }catch (IOException e) {
             Tools.showError(this, e, true);
         }
     }
 
-    public Runtime selectRuntime(int javaVersion) {
+    public Runtime selectRuntime(File modFile) {
+        int javaVersion = getJavaVersion(modFile);
         if(javaVersion == -1) {
             finalErrorDialog(getString(R.string.execute_jar_failed_to_read_file));
             return null;
@@ -215,50 +210,51 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
             finalErrorDialog(getString(R.string.multirt_nocompatiblert, javaVersion));
             return null;
         }
-        return MultiRTUtils.forceReread(nearestRuntime);
+        Runtime selectedRuntime = MultiRTUtils.forceReread(nearestRuntime);
+        int selectedJavaVersion = Math.max(javaVersion, selectedRuntime.javaVersion);
+        // Don't allow versions higher than Java 17 because our caciocavallo implementation does not allow for it
+        if(selectedJavaVersion > 17) {
+            finalErrorDialog(getString(R.string.execute_jar_incompatible_runtime, selectedJavaVersion));
+            return null;
+        }
+        return selectedRuntime;
     }
 
-    private static class JarFileProperties {
-        public final String mainClass;
-        public final int minJavaVersion;
-
-        private JarFileProperties(String mainClass, int minJavaVersion) {
-            this.mainClass = mainClass;
-            this.minJavaVersion = minJavaVersion;
+    private File findModPath(List<String> argList) {
+        int argsSize = argList.size();
+        for(int i = 0; i < argsSize; i++) {
+            // Look for the -jar argument
+            if(!argList.get(i).equals("-jar")) continue;
+            int pathIndex = i+1;
+            // Check if the supposed path is out of the argument bounds
+            if(pathIndex >= argsSize) return null;
+            // Use the path as a file
+            return new File(argList.get(pathIndex));
         }
+        return null;
+    }
 
-        public static JarFileProperties read(File file) throws IOException {
-            try (JarFile jarFile = new JarFile(file)) {
-                Manifest manifest = jarFile.getManifest();
-                if(manifest == null) return null;
-                Attributes mainAttrs = manifest.getMainAttributes();
-                if(mainAttrs == null) return null;
-                String mainClass = mainAttrs.getValue("Main-Class");
-                if(mainClass == null) return null;
-                int javaVersion = getJavaVersion(jarFile, mainClass);
-                return new JarFileProperties(mainClass, javaVersion);
+    private void startModInstaller(File modFile, String javaArgs) {
+        new Thread(() -> {
+            // Maybe replace with more advanced arg parsing logic later
+            List<String> argList = javaArgs != null ? Arrays.asList(javaArgs.split(" ")) : null;
+            File selectedMod = modFile;
+            if(selectedMod == null && argList != null) {
+                // If modFile is not specified directly, try to extract the -jar argument from the javaArgs
+                selectedMod = findModPath(argList);
             }
-        }
-    }
-
-    private void runModInstaller(File modFile, List<String> javaArgs) {
-        JarFileProperties jarFileProperties = null;
-        try {
-            jarFileProperties = JarFileProperties.read(modFile);
-        }catch (IOException e) {
-            Log.i("JavaGUILauncherActivity", "Failed to read JarFileProperties", e);
-        }
-        if(jarFileProperties == null) {
-            finalErrorDialog(getString(R.string.execute_jar_failed_to_read_file));
-            return;
-        }
-        Runtime selectedRuntime = selectRuntime(jarFileProperties.minJavaVersion);
-        if(selectedRuntime == null) return;
-        launchJavaRuntime(selectedRuntime, javaArgs,  modFile, jarFileProperties.mainClass);
-    }
-
-    private void startModInstaller(File modFile, List<String> javaArgs) {
-        new Thread(() -> runModInstaller(modFile, javaArgs), "JREMainThread").start();
+            Runtime selectedRuntime;
+            if(selectedMod == null || DEFAULT_PREF.getBoolean("disable_autojre_select", false)) {
+                // If we are unable to find out the path to the mod or the user explicitly desires so, we use the default runtime
+                selectedRuntime = MultiRTUtils.forceReread(LauncherPreferences.PREF_DEFAULT_RUNTIME);
+            }else {
+                // Autoselect it properly in the other case.
+                selectedRuntime = selectRuntime(selectedMod);
+                // If the selection failed, just return. The autoselect function has already shown the dialog.
+                if(selectedRuntime == null) return;
+            }
+            launchJavaRuntime(selectedRuntime, modFile, argList);
+        }, "JREMainThread").start();
     }
 
     private void finalErrorDialog(CharSequence msg) {
@@ -352,24 +348,26 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
     public void toggleVirtualMouse(View v) {
         mIsVirtualMouseEnabled = !mIsVirtualMouseEnabled;
         mTouchPad.setVisibility(mIsVirtualMouseEnabled ? View.VISIBLE : View.GONE);
-        if(mIsVirtualMouseEnabled && mMousePointerImageView.getX() == 0 && mMousePointerImageView.getY() == 0) {
-            mTouchPad.post(()->placeMouseAt(mTouchPad.getWidth() / 2f, mTouchPad.getHeight() / 2f));
-        }
         Toast.makeText(this,
                 mIsVirtualMouseEnabled ? R.string.control_mouseon : R.string.control_mouseoff,
                 Toast.LENGTH_SHORT).show();
     }
 
-    public void launchJavaRuntime(Runtime runtime, List<String> javaArgs, File modFile, String mainClass) {
+    public void launchJavaRuntime(Runtime runtime, File modFile, List<String> javaArgs) {
         JREUtils.redirectAndPrintJRELog();
         try {
             List<String> javaArgList = new ArrayList<>();
-
+            // Enable Caciocavallo
+            Tools.getCacioJavaArgs(javaArgList,runtime.javaVersion == 8, this);
             if(javaArgs != null) {
                 javaArgList.addAll(javaArgs);
             }
+            if(modFile != null) {
+                javaArgList.add("-jar");
+                javaArgList.add(modFile.getAbsolutePath());
+            }
             
-            if (LauncherPreferences.PREF_JAVA_SANDBOX && !mIsTrusted) {
+            if (LauncherPreferences.PREF_JAVA_SANDBOX) {
                 Collections.reverse(javaArgList);
                 javaArgList.add("-Xbootclasspath/a:" + Tools.DIR_DATA + "/security/pro-grade.jar");
                 javaArgList.add("-Djava.security.manager=net.sourceforge.prograde.sm.ProGradeJSM");
@@ -377,10 +375,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
                 Collections.reverse(javaArgList);
             }
 
-            Logger.appendToLog("Info: Java arguments: " + javaArgList);
-
-            JavaRunner.nativeSetupExit(this.getApplicationContext());
-            JavaRunner.startJvm(runtime, javaArgList, Collections.singletonList(modFile.getAbsolutePath()), mainClass, Collections.emptyList());
+            Logger.appendToLog("Info: Java arguments: " + Arrays.toString(javaArgList.toArray(new String[0])));
 
             JREUtils.launchJavaVM(this, runtime,null,javaArgList, LauncherPreferences.PREF_CUSTOM_JAVA_ARGS);
         } catch (Throwable th) {
@@ -403,60 +398,38 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         AWTInputBridge.sendKey(' ', AWTInputEvent.VK_CONTROL, 0);
     }
 
-    private static int getJavaVersion(JarFile jarFile, String mainClass) throws IOException{
-        mainClass = mainClass.trim().replace('.', '/') + ".class";
-        ZipEntry mainClassFile = jarFile.getEntry(mainClass);
-        if(mainClassFile == null) return -1;
+    public int getJavaVersion(File modFile) {
+        try (ZipFile zipFile = new ZipFile(modFile)){
+            ZipEntry manifest = zipFile.getEntry("META-INF/MANIFEST.MF");
+            if(manifest == null) return -1;
 
-        byte[] bytesWeNeed = new byte[8];
-        try(InputStream classStream = jarFile.getInputStream(mainClassFile)) {
+            String manifestString = Tools.read(zipFile.getInputStream(manifest));
+            String mainClass = Tools.extractUntilCharacter(manifestString, "Main-Class:", '\n');
+            if(mainClass == null) return -1;
+
+            mainClass = mainClass.trim().replace('.', '/') + ".class";
+            ZipEntry mainClassFile = zipFile.getEntry(mainClass);
+            if(mainClassFile == null) return -1;
+
+            InputStream classStream = zipFile.getInputStream(mainClassFile);
+            byte[] bytesWeNeed = new byte[8];
             int readCount = classStream.read(bytesWeNeed);
-            if(readCount < bytesWeNeed.length) return -1;
+            classStream.close();
+            if(readCount < 8) return -1;
+
+            ByteBuffer byteBuffer = ByteBuffer.wrap(bytesWeNeed);
+            if(byteBuffer.getInt() != 0xCAFEBABE) return -1;
+            short minorVersion = byteBuffer.getShort();
+            short majorVersion = byteBuffer.getShort();
+            Log.i("JavaGUILauncher", majorVersion+","+minorVersion);
+            return classVersionToJavaVersion(majorVersion);
+        }catch (Exception e) {
+            Log.e("JavaVersion", "Exception thrown", e);
+            return -1;
         }
-        ByteBuffer byteBuffer = ByteBuffer.wrap(bytesWeNeed);
-        if(byteBuffer.getInt() != 0xCAFEBABE) return -1;
-        short minorVersion = byteBuffer.getShort();
-        short majorVersion = byteBuffer.getShort();
-        Log.i("JavaGUILauncher", majorVersion+","+minorVersion);
-        return classVersionToJavaVersion(majorVersion);
     }
     public static int classVersionToJavaVersion(int majorVersion) {
         if(majorVersion < 46) return 2; // there isn't even an arm64 port of jre 1.1 (or anything before 1.8 in fact)
         return majorVersion - 44;
-    }
-
-
-    @Keep
-    public static void querySystemClipboard() {
-        Tools.runOnUiThread(()->{
-            ClipData clipData = CLIPBOARD.getPrimaryClip();
-            if(clipData == null) {
-                AWTInputBridge.nativeClipboardReceived(null, null);
-                return;
-            }
-            ClipData.Item firstClipItem = clipData.getItemAt(0);
-            //TODO: coerce to HTML if the clip item is styled
-            CharSequence clipItemText = firstClipItem.getText();
-            if(clipItemText == null) {
-                AWTInputBridge.nativeClipboardReceived(null, null);
-                return;
-            }
-            AWTInputBridge.nativeClipboardReceived(clipItemText.toString(), "plain");
-        });
-    }
-
-    @Keep
-    public static void putClipboardData(String data, String mimeType) {
-        Tools.runOnUiThread(()-> {
-            ClipData clipData = null;
-            switch(mimeType) {
-                case "text/plain":
-                    clipData = ClipData.newPlainText("AWT Paste", data);
-                    break;
-                case "text/html":
-                    clipData = ClipData.newHtmlText("AWT Paste", data, data);
-            }
-            if(clipData != null) CLIPBOARD.setPrimaryClip(clipData);
-        });
     }
 }

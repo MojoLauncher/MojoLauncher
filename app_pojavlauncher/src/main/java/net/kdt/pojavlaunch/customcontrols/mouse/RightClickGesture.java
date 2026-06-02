@@ -4,25 +4,30 @@ import android.os.Handler;
 
 import net.kdt.pojavlaunch.LwjglGlfwKeycode;
 
-import net.kdt.pojavlaunch.CallbackBridge;
+import org.lwjgl.glfw.CallbackBridge;
 
-public class RightClickGesture extends DistanceGesture {
+public class RightClickGesture extends ValidatorGesture {
     private boolean mGestureEnabled = true;
     private boolean mGestureValid = true;
-
+    private float mGestureStartX, mGestureStartY, mGestureEndX, mGestureEndY;
     public RightClickGesture(Handler mHandler) {
         super(mHandler);
     }
 
-    @Override
-    void onGestureSubmitted() {
-        mGestureEnabled = false;
-        mGestureValid = true;
+    public final void inputEvent() {
+        if(!mGestureEnabled) return;
+        if(submit()) {
+            mGestureStartX = mGestureEndX = CallbackBridge.mouseX;
+            mGestureStartY = mGestureEndY = CallbackBridge.mouseY;
+            mGestureEnabled = false;
+            mGestureValid = true;
+        }
     }
 
-    @Override
-    boolean shouldSubmitGesture() {
-        return mGestureEnabled;
+    public void setMotion(float deltaX, float deltaY) {
+        System.out.println("set motion called");
+        mGestureEndX += deltaX;
+        mGestureEndY += deltaY;
     }
 
     @Override
@@ -44,7 +49,7 @@ public class RightClickGesture extends DistanceGesture {
     public void onGestureCancelled(boolean isSwitching) {
         mGestureEnabled = true;
         if(!mGestureValid || isSwitching) return;
-        boolean fingerStill = travelBelowThreshold(LeftClickGesture.FINGER_STILL_THRESHOLD);
+        boolean fingerStill = LeftClickGesture.isFingerStill(mGestureStartX, mGestureStartY, mGestureEndX, mGestureEndY, LeftClickGesture.FINGER_STILL_THRESHOLD);
         System.out.println("Right click: " + fingerStill);
         if(!fingerStill) return;
         CallbackBridge.sendMouseButton(LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_RIGHT, true);

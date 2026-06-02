@@ -1,14 +1,14 @@
 package net.kdt.pojavlaunch.modloaders.modpacks.imagecache;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 
 import net.kdt.pojavlaunch.Tools;
-import net.kdt.pojavlaunch.instances.Instance;
-import net.kdt.pojavlaunch.utils.FileUtils;
+
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -28,7 +28,8 @@ public class ModIconCache {
     private final List<WeakReference<ImageReceiver>> mCancelledReceivers = new ArrayList<>();
     public ModIconCache() {
         cachePath = getImageCachePath();
-        if(!FileUtils.ensureDirectorySilently(cachePath)) {
+        if(!cachePath.exists() && !cachePath.isFile() && Tools.DIR_CACHE.canWrite()) {
+            if(!cachePath.mkdirs())
                 throw new RuntimeException("Failed to create icon cache directory");
         }
 
@@ -86,20 +87,23 @@ public class ModIconCache {
      * @return the base64 encoded image or null if not cached
      */
 
-    public static void writeInstanceImage(Instance instance, String imageTag) {
+    public static String getBase64Image(String imageTag) {
         File imagePath = new File(Tools.DIR_CACHE, "mod_icons/"+imageTag+".ca");
         Log.i("IconCache", "Creating base64 version of icon "+imageTag);
         if(!imagePath.canRead() || !imagePath.isFile()) {
             Log.i("IconCache", "Icon does not exist");
-            return;
+            return null;
         }
         try {
-            Bitmap bitmap = BitmapFactory.decodeFile(imagePath.getAbsolutePath());
-            if(bitmap == null) return;
-            instance.encodeNewIcon(bitmap);
+            try(FileInputStream fileInputStream = new FileInputStream(imagePath)) {
+                byte[] imageBytes = IOUtils.toByteArray(fileInputStream);
+                // reencode to png? who cares! our profile icon cache is an omnivore!
+                // if some other launcher parses this and dies it is not our problem :troll:
+                return "data:image/png;base64,"+ Base64.encodeToString(imageBytes, Base64.DEFAULT);
+            }
         }catch (IOException e) {
-            Log.i("ModIconCache", "Failed to reencode icon for instance");
             e.printStackTrace();
+            return null;
         }
     }
 }

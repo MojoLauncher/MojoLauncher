@@ -3,7 +3,6 @@ package net.kdt.pojavlaunch.tasks;
 import net.kdt.pojavlaunch.Architecture;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.utils.FileUtils;
-import net.kdt.pojavlaunch.value.ExtractSettings;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,7 +56,7 @@ public class NativesExtractor {
         throw new RuntimeException("Unknown CPU architecture: "+architecture);
     }
 
-    private void extract(File source, ExtractFilter extractFilter) throws IOException {
+    public void extractFromAar(File source) throws IOException {
         byte[] buffer = new byte[8192];
         try (FileInputStream fileInputStream = new FileInputStream(source);
              ZipInputStream zipInputStream = new ZipInputStream(fileInputStream)) {
@@ -67,7 +66,7 @@ public class NativesExtractor {
             ZipEntry entry;
             while((entry = zipInputStream.getNextEntry()) != null) {
                 String entryName = entry.getName();
-                if(!extractFilter.shouldExtract(entryName) || entry.isDirectory()) continue;
+                if(!entryName.startsWith(mLibraryLocation) || entry.isDirectory()) continue;
                 // Entry name is actually the full path, so we need to strip the path before extraction
                 entryName = FileUtils.getFileName(entryName);
                 // getFileName may make the file name null, avoid that case.
@@ -76,20 +75,6 @@ public class NativesExtractor {
                 processEntry(entryCopyStream, entry, new File(mDestinationDir, entryName), buffer);
             }
         }
-    }
-
-    public void extractFromAar(File source) throws IOException {
-        extract(source, name->name.startsWith(mLibraryLocation));
-    }
-
-    public void extractMoJson(File source, ExtractSettings settings) throws IOException {
-        extract(source, name->{
-            if(settings.exclude == null) return true;
-            for(String exclude : settings.exclude) {
-                if(name.startsWith(exclude)) return false;
-            }
-            return true;
-        });
     }
 
     private static long fileCrc32(File target, byte[] buffer) throws IOException {
@@ -116,9 +101,6 @@ public class NativesExtractor {
         org.apache.commons.io.FileUtils.copyInputStreamToFile(sourceStream, entryDestination);
     }
 
-    private interface ExtractFilter {
-        boolean shouldExtract(String entry);
-    }
 
     private static class NonCloseableInputStream extends FilterInputStream {
 

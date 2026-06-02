@@ -1,27 +1,26 @@
 package net.kdt.pojavlaunch.modloaders.modpacks.api;
 
+import android.app.Activity;
+import android.net.Uri;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.kdt.mcgui.ProgressLayout;
 
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.Tools;
-import net.kdt.pojavlaunch.downloader.Downloader;
-import net.kdt.pojavlaunch.downloader.TaskMetadata;
-import net.kdt.pojavlaunch.mirrors.DownloadMirror;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.Constants;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModItem;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModrinthIndex;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchFilters;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchResult;
-import net.kdt.pojavlaunch.utils.FileUtils;
+import net.kdt.pojavlaunch.progresskeeper.DownloaderProgressWrapper;
 import net.kdt.pojavlaunch.utils.ZipUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.ZipFile;
@@ -53,6 +52,8 @@ public class ModrinthApi implements ModpackApi{
         facetString.append(String.format("[\"project_type:%s\"]", searchFilters.isModpack ? "modpack" : "mod"));
         if(searchFilters.mcVersion != null && !searchFilters.mcVersion.isEmpty())
             facetString.append(String.format(",[\"versions:%s\"]", searchFilters.mcVersion));
+        if(searchFilters.modLoader != null && !searchFilters.modLoader.isEmpty())
+            facetString.append(String.format(",[\"categories:%s\"]", searchFilters.modLoader));
         facetString.append("]");
         params.put("facets", facetString.toString());
         params.put("query", searchFilters.name);
@@ -87,42 +88,99 @@ public class ModrinthApi implements ModpackApi{
 
     @Override
     public ModDetail getModDetails(ModItem item) {
+        return getModDetails(item, null, null);
+    }
 
+    public ModDetail getModDetails(ModItem item, String filterMcVersion) {
+        return getModDetails(item, filterMcVersion, null);
+    }
+
+    public ModDetail getModDetails(ModItem item, String filterMcVersion, String filterLoader) {
         JsonArray response = mApiHandler.get(String.format("project/%s/version", item.id), JsonArray.class);
         if(response == null) return null;
-        System.out.println(response);
-        String[] names = new String[response.size()];
-        String[] mcNames = new String[response.size()];
-        String[] urls = new String[response.size()];
-        String[] hashes = new String[response.size()];
 
-        for (int i=0; i<response.size(); ++i) {
-            JsonObject version = response.get(i).getAsJsonObject();
-            names[i] = version.get("name").getAsString();
-            mcNames[i] = version.get("game_versions").getAsJsonArray().get(0).getAsString();
-            urls[i] = version.get("files").getAsJsonArray().get(0).getAsJsonObject().get("url").getAsString();
-            // Assume there may not be hashes, in case the API changes
-            JsonObject hashesMap = version.getAsJsonArray("files").get(0).getAsJsonObject()
-                    .get("hashes").getAsJsonObject();
-            if(hashesMap == null || hashesMap.get("sha1") == null){
-                hashes[i] = null;
-                continue;
+        // Collect versions, optionally filtering by MC version and/or loader
+        java.util.List<JsonObject> versions = new java.util.ArrayList<>();
+        for (int i = 0; i < response.size(); i++) {
+            JsonObject v = response.get(i).getAsJsonObject();
+            if (filterMcVersion != null && !filterMcVersion.isEmpty()) {
+                JsonArray gameVersions = v.get("game_versions").getAsJsonArray();
+                boolean matches = false;
+                for (int j = 0; j < gameVersions.size(); j++) {
+                    if (filterMcVersion.equals(gameVersions.get(j).getAsString())) {
+                        matches = true;
+                        break;
+                    }
+                }
+                if (!matches) continue;
             }
-
-            hashes[i] = hashesMap.get("sha1").getAsString();
+            if (filterLoader != null && !filterLoader.isEmpty()) {
+                JsonArray loaders = v.get("loaders").getAsJsonArray();
+                boolean matches = false;
+                for (int j = 0; j < loaders.size(); j++) {
+                    if (filterLoader.equalsIgnoreCase(loaders.get(j).getAsString())) {
+                        matches = true;
+                        break;
+                    }
+                }
+                if (!matches) continue;
+            }
+            versions.add(v);
         }
 
-        return new ModDetail(item, names, mcNames, urls, hashes);
+        if (versions.isEmpty()) return null;
+
+        int size = versions.size();
+        String[] names      = new String[size];
+        String[] mcNames    = new String[size];
+        String[] urls       = new String[size];
+        String[] hashes     = new String[size];
+        String[][] depIds   = new String[size][];
+        String[][] depTypes = new String[size][];
+
+        for (int i = 0; i < size; i++) {
+            JsonObject version = versions.get(i);
+            names[i]   = version.get("name").getAsString();
+            mcNames[i] = version.get("game_versions").getAsJsonArray().get(0).getAsString();
+            urls[i]    = version.get("files").getAsJsonArray().get(0).getAsJsonObject().get("url").getAsString();
+
+            JsonObject hashesMap = version.getAsJsonArray("files").get(0).getAsJsonObject()
+                    .get("hashes").getAsJsonObject();
+            hashes[i] = (hashesMap == null || hashesMap.get("sha1") == null) ? null
+                    : hashesMap.get("sha1").getAsString();
+
+            // Capture dependencies
+            if (version.has("dependencies") && !version.get("dependencies").isJsonNull()) {
+                JsonArray deps = version.getAsJsonArray("dependencies");
+                java.util.List<String> ids   = new java.util.ArrayList<>();
+                java.util.List<String> types = new java.util.ArrayList<>();
+                for (int j = 0; j < deps.size(); j++) {
+                    JsonObject dep = deps.get(j).getAsJsonObject();
+                    if (dep.has("project_id") && !dep.get("project_id").isJsonNull()) {
+                        ids.add(dep.get("project_id").getAsString());
+                        types.add(dep.has("dependency_type") ? dep.get("dependency_type").getAsString() : "required");
+                    }
+                }
+                depIds[i]   = ids.toArray(new String[0]);
+                depTypes[i] = types.toArray(new String[0]);
+            } else {
+                depIds[i]   = new String[0];
+                depTypes[i] = new String[0];
+            }
+        }
+
+        return new ModDetail(item, names, mcNames, urls, hashes, depIds, depTypes);
     }
 
     @Override
-    public ModLoader installModpack(ModDetail modDetail, int selectedVersion) throws IOException{
+    public ModLoader installMod(ModDetail modDetail, int selectedVersion) throws IOException{
         //TODO considering only modpacks for now
-        return ModpackInstaller.downloadModpack(modDetail, selectedVersion, this::installMrpack);
+        return ModpackInstaller.installModpack(modDetail, selectedVersion, this::installMrpack);
     }
 
-    public ModLoader installLocalModpack(String modpackName, File modpackFile, String icon) throws IOException {
-        return ModpackInstaller.installModpack(modpackName, modpackName, modpackFile, icon, this::installMrpack);
+    @Override
+    public ModLoader importModpack(Activity activity, Uri zipUri) throws IOException, NoSuchAlgorithmException {
+        return ModpackInstaller.importModpack(activity, zipUri, this::installMrpack);
     }
 
     private static ModLoader createInfo(ModrinthIndex modrinthIndex) {
@@ -143,7 +201,6 @@ public class ModrinthApi implements ModpackApi{
         if((modLoaderVersion = dependencies.get("neoforge")) != null) {
             return new ModLoader(ModLoader.MOD_LOADER_NEOFORGE, modLoaderVersion, mcVersion);
         }
-
         return null;
     }
 
@@ -152,11 +209,12 @@ public class ModrinthApi implements ModpackApi{
             ModrinthIndex modrinthIndex = Tools.GLOBAL_GSON.fromJson(
                     Tools.read(ZipUtils.getEntryStream(modpackZipFile, "modrinth.index.json")),
                     ModrinthIndex.class);
-            try {
-                new ModrinthDownloader().startDownloads(modrinthIndex.files, instanceDestination);
-            }catch (InterruptedException e) {
-                throw new IOException("NIY: InterruptedException", e);
+            
+            ModDownloader modDownloader = new ModDownloader(instanceDestination);
+            for(ModrinthIndex.ModrinthIndexFile indexFile : modrinthIndex.files) {
+                modDownloader.submitDownload(indexFile.fileSize, indexFile.path, indexFile.hashes.sha1, indexFile.downloads);
             }
+            modDownloader.awaitFinish(new DownloaderProgressWrapper(R.string.modpack_download_downloading_mods, ProgressLayout.INSTALL_MODPACK));
             ProgressLayout.setProgress(ProgressLayout.INSTALL_MODPACK, 0, R.string.modpack_download_applying_overrides, 1, 2);
             ZipUtils.zipExtract(modpackZipFile, "overrides/", instanceDestination);
             ProgressLayout.setProgress(ProgressLayout.INSTALL_MODPACK, 50, R.string.modpack_download_applying_overrides, 2, 2);
@@ -167,27 +225,5 @@ public class ModrinthApi implements ModpackApi{
 
     class ModrinthSearchResult extends SearchResult {
         int previousOffset;
-    }
-
-    static class ModrinthDownloader extends Downloader {
-        public ModrinthDownloader() {
-            super(ProgressLayout.INSTALL_MODPACK);
-        }
-
-        protected void startDownloads(ModrinthIndex.ModrinthIndexFile[] indexFiles, File instanceDestination) throws IOException, InterruptedException {
-            String absoluteInstancePath = instanceDestination.getAbsolutePath();
-            ArrayList<TaskMetadata> taskMetadatas = new ArrayList<>(indexFiles.length);
-            for(ModrinthIndex.ModrinthIndexFile file : indexFiles) {
-                File targetPath = new File(instanceDestination, file.path);
-                if(!targetPath.getAbsolutePath().startsWith(absoluteInstancePath)) throw new IOException("Bad path!");
-                FileUtils.ensureParentDirectory(targetPath);
-                taskMetadatas.add(new TaskMetadata(
-                        targetPath, new URL(file.downloads[0]), // TODO source selection
-                        file.fileSize, file.hashes.sha1,
-                        DownloadMirror.DOWNLOAD_CLASS_NONE
-                ));
-            }
-            runDownloads(taskMetadatas);
-        }
     }
 }

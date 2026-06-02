@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition para Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -14,7 +12,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Seleccione un instalador de modificaciones</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher se ha detenido de forma inesperada</string>
+    <string name="error_fatal">Copper se ha detenido de forma inesperada</string>
     <string name="error_no_version">¡No hay versiones!</string>
     <string name="error_show_more">Mostrar más</string>
     <string name="error_show_less">Mostrar menos</string>
@@ -46,16 +44,15 @@
     <string name="mcl_setting_subtitle_buttonscale">Auméntales el tamaño si los botones son muy pequeños.</string>
     <string name="mcl_setting_title_mousescale">Escala del ratón</string>
     <string name="mcl_setting_subtitle_mousescale">Cambia el tamaño del ratón virtual.</string>
-    <string name="mcl_setting_title_javaargs">Argumentos de lanzamiento JVM</string>
+    <string name="mcl_setting_title_javaargs">JRE Argumentos de lanzamiento</string>
     <string name="mcl_setting_subtitle_javaargs">Ten cuidado, esto puede hacer que el juego se cierre si es modificado sin ningún conocimiento previo.</string>
     <string name="mcl_setting_category_renderer">Renderizador</string>
-    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (Todas las versiones, rápido)</string>
     <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) - (todas las versiones, medio)</string>
     <string name="mcl_setting_renderer_ltw">LTW (OpenGL ES 3) - solo 1.17+</string>
     <string name="mcl_setting_veroption_release">Lanzamientos</string>
     <string name="mcl_setting_veroption_snapshot">Snapshots</string>
     <string name="mcl_setting_veroption_oldalpha">Alphas</string>
-    <string name="mcl_setting_veroption_oldbeta">Beta</string>
+    <string name="mcl_setting_veroption_oldbeta">Betas</string>
     <string name="mcl_setting_java_sandbox">Ejecutar .jar en un Sandbox</string>
     <string name="mcl_setting_java_sandbox_subtitle">Controla la disponibilidad del gestor de seguridad del sandbox al ejecutar un archivo jar.</string>
     <string name="mcl_version_clone">Clonar</string>
@@ -76,15 +73,13 @@
     <string name="global_default">Predeterminado</string>
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">La aplicación/juego ha finalizado con el código %d, mira el archivo latestlog.txt para más detalles.</string>
+    <string name="mcn_signal_title">La aplicación/juego ha finalizado con código %d, revise latestlog.txt para más detalles.</string>
     <string name="mcn_exit_confirm">¿Estás seguro de que quieres forzar el cierre?</string>
     <string name="mcn_check_fail_vulkan_support">¡El renderizador Zink (Vulkan) no es compatible con este dispositivo!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">Chat</string>
-    <string name="control_debug">Debug</string>
-    <string name="control_primary">Pri</string>
+    <string name="control_debug">Depuración</string>
     <string name="control_secondary">Seg</string>
-    <string name="control_shift">◇</string>
-    <string name="control_inventory">Inv</string>
     <string name="control_up">▲</string>
     <string name="control_left">◀</string>
     <string name="control_right">▶</string>
@@ -113,7 +108,7 @@
 -->
     <string name="customctrl_toggle">Activable</string>
     <string name="customctrl_size">Tamaño</string>
-    <string name="customctrl_mapping">Mapeo</string>
+    <string name="customctrl_mapping">Mapeado</string>
     <string name="customctrl_orientation">Orientación</string>
     <string name="customctrl_background_color">Color de fondo</string>
     <string name="customctrl_corner_radius">Radio de las esquinas</string>
@@ -141,9 +136,9 @@
     <string name="mcl_disable_swap_hand_subtitle">Deshabilita el doble toque sobre un item de la hotbar para cambiarlo a la mano secundaria.</string>
     <string name="mcl_setting_title_mousespeed">Velocidad del ratón</string>
     <string name="mcl_setting_subtitle_mousespeed">Cambia la velocidad del ratón virtual.</string>
+    <string name="mcl_setting_title_grab_mouse">Usar cursor virtual</string>
     <string name="customctrl_passthru">Passthrough del ratón</string>
     <string name="customctrl_swipeable">Deslizable</string>
-    <string name="customctrl_forward_lock">Bloqueo hacia adelante</string>
     <string name="customctrl_absolute_tracking">Seguimiento absoluto del dedo</string>
     <string name="memory_warning_msg">La cantidad actual de memoria RAM libre (%d) es menor que la memoria RAM asignada (%d), lo que puede provocar cierres forzados. Cambia la asignación si el juego se cierra.</string>
     <string name="address_memory_warning_msg">La cantidad actual de RAM libre (%d) es menor que la RAM asignada (%d), lo cual puede causar cierres forzados. Cambie la cantidad asignada si el juego se cierra.</string>
@@ -174,7 +169,6 @@
     <string name="preference_java_description">Versiones de Java, Argumentos JVM, Cantidad de RAM y sandbox</string>
     <string name="preference_misc_title">Ajustes varios</string>
     <string name="preference_misc_description">Lista de versiones, y comprobación de librerías</string>
-    <string name="preference_experimental_title">Cosas Experimentales</string>
     <string name="preference_experimental_description">Usa las cosas de aquí con consideración, no habrá soporte</string>
     <string name="preference_sustained_performance_title">Activar el modo de rendimiento sostenido</string>
     <string name="preference_sustained_performance_description">Limita la regulación térmica limitando el rendimiento máximo.</string>
@@ -199,10 +193,11 @@
     <string name="profiles_profile_name">Nombre</string>
     <string name="profiles_profile_version">Versión</string>
     <string name="global_delete">Eliminar</string>
-    <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Renderizador</string>
+    <string name="arc_capes_title">Capas de Comestica</string>
+    <string name="arc_capes_desc">Activa las capas de Cosmetica (anteriormente Arc). Para más información ve a esta página https://cosmetica.cc. Necesitas Optifine.</string>
     <string name="notif_channel_name">General</string>
-    <string name="lazy_service_default_title">Servicio de primer plano de MojoLauncher</string>
+    <string name="lazy_service_default_title">Servicio de primer plano de Copper</string>
     <string name="mcl_setting_veroption_installed">Instalada</string>
     <string name="use_global_default">(Usar predeterminado global)</string>
     <string name="default_control">Controles por defecto</string>
@@ -224,20 +219,19 @@
     <string name="xerr_child">Su cuenta es una cuenta de menor y necesita ser añadida a una Familia para poder iniciar sesión.</string>
     <string name="minecraft_not_owned">Parece que esta cuenta no tiene un perfil Minecraft. Si tienes el Xbox Game Pass, por favor inicia sesión en https://minecraft.net/ y configurarlo.</string>
     <string name="xerr_not_available">Xbox Live no está disponible en su país</string>
-    <string name="preference_enable_gyro_title">Habilitar controles de giroscopio</string>
+    <string name="preference_enable_gyro_title">Activar controles de giroscopio</string>
     <string name="preference_enable_gyro_description">Activar esto te permitirá mover la cámara al girar tu teléfono.</string>
-    <string name="preference_gyro_sensitivity_title">Sensibilidad del giroscopio</string>
     <string name="preference_gyro_sensitivity_description">Ajusta la sensibilidad del giroscopio.</string>
     <string name="toast_turn_on_gyro">¡Primero debes activar los controles por giroscopio para usar esto!</string>
     <string name="preference_gyro_sample_rate_title">Tasa de muestreo del giroscopio</string>
     <string name="preference_gyro_sample_rate_description">Si tienes problemas de rendimiento con el giroscopio, sube esto.</string>
     <string name="microsoft_login_retry_later">Demasiadas solicitudes, inténtalo de nuevo más tarde.</string>
-    <string name="storage_required">MojoLauncher necesita que el almacenamiento externo esté conectado, por favor reconéctalo y reinicia la aplicación.</string>
+    <string name="storage_required">PojavLauncher necesita que el almacenamiento externo esté conectado, por favor reconéctalo y reinicia la aplicación.</string>
     <string name="mcl_setting_title_buttonallcaps">Usa únicamente letras mayúsculas en las etiquetas de los botones</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Desactiva esta opción si quieres usar letras minúsculas en tus controles.</string>
+    <string name="create_profile">Crear un nuevo perfil</string>
     <string name="preference_shader_dump_title">Activar dumpeo de shaders</string>
     <string name="preference_shader_dump_description">Registra shaders compilados (sic).</string>
-    <string name="percent_format">%d%%</string>
     <string name="millisecond_format">%d ms</string>
     <string name="customctrl_editor_exit_title">¿Vas a salir?</string>
     <string name="customctrl_editor_exit_msg">¿Estás seguro de que quieres salir?</string>
@@ -257,25 +251,30 @@
     <string name="forge_dl_progress">Descargando instalador para %s</string>
     <string name="forge_dl_searching">Buscando el número de la versión de Forge</string>
     <string name="modloader_dl_failed_to_load_list">Oh no, ¡Ocurrió un error cargando la lista de versiones!</string>
-    <string name="forge_dl_no_installer">Lo siento, pero esta versión de Forge no tiene un instalador, lo cúal aún no esta soportado por Mojo.</string>
+    <string name="forge_dl_no_installer">Lo siento, pero esta versión de Forge no tiene un instalador, lo cúal aún no esta soportado por Pojav.</string>
     <string name="forge_dl_select_version">Elige la versión de Forge</string>
     <string name="fabric_dl_progress">Descargando metadatos del cargador %s</string>
     <string name="fabric_dl_loader_version">Versión del cargador %s</string>
     <string name="fabric_dl_game_version">Versión de Minecraft</string>
     <string name="fabric_dl_install">Instalar</string>
     <string name="fabric_dl_cant_read_meta">Error al leer los metadatos del cargador %s. Intente de nuevo más tarde.</string>
+    <string name="modloader_dl_install_fabric">Crear instancia de Fabric</string>
+    <string name="modloader_dl_install_quilt">Crear instancia de Quilt</string>
+    <string name="modloader_dl_install_forge">Crear instancia de Forge</string>
+    <string name="create_profile_vanilla">Crear instancia de Minecraft Vanilla</string>
     <string name="create_profile_vanilla_like_versions">Versiones de Minecraft Vanilla</string>
     <string name="create_profile_modded_versions">Versiones modificadas</string>
     <string name="fabric_dl_loader_title">Elige versiones</string>
     <string name="of_dl_select_version">Seleciona la versión de OptiFine</string>
     <string name="of_dl_failed_to_scrape">Fallo al recolectar datos para la instalacion de OptiFine</string>
     <string name="of_dl_progress">Descargando %s</string>
+    <string name="create_profile_optifine">Crear instancia de OptiFine</string>
     <string name="hint_search_modpack">Buscar paquetes de mods</string>
     <string name="preference_vulkan_driver_system_title">Usar controlador Vulkan del sistema</string>
     <string name="preference_vulkan_driver_system_description">Forzar al launcher a usar el controlador Vulkan del sistema en lugar de Turnip en GPUs Adreno. Sólo afecta a Zink y mods que usan Vulkan.</string>
     <string name="generic_install">Instalar</string>
     <string name="generic_apply">Aplicar</string>
-    <string name="generic_debug">Debug</string>
+    <string name="generic_debug">Depuración</string>
     <string name="search_modpack_no_result">No se encontraron modpacks</string>
     <string name="search_modpack_error">No se pudo encontrar modpacks</string>
     <string name="search_modpack_download_error">Error al descargar los metadatos del modpack</string>
@@ -288,6 +287,7 @@
     <string name="modpack_install_notification_data_not_available">No se pudo descargar la información del mod loader</string>
     <string name="modpack_install_modloader_download_failed">Error al descargar los archivos del mod loader</string>
     <string name="modpack_install_download_failed">Error al descargar los archivos de modpack</string>
+    <string name="modpack_install_button">Crear perfil de modpack</string>
     <string name="notif_error_occured">Ha ocurrido un error</string>
     <string name="notif_error_occured_desc">Da clic para ver más detalles</string>
     <string name="fabric_dl_only_stable">Mostrar solo versiones estables</string>
@@ -312,7 +312,7 @@
     <string name="preference_category_miscellaneous">Ajustes varios</string>
     <string name="preference_category_video">Ajustes de video</string>
     <string name="notification_permission_dialog_title">Permiso requerido</string>
-    <string name="notification_permission_dialog_text">MojoLauncher necesita un permiso para enviar notificaciones para evitar que las descargas del juego o modpacks se detengan cuando minimizes la aplicación. Sin este permiso, Android puede cancelar tus descargas cuando MojoLauncher esté en segundo plano.</string>
+    <string name="notification_permission_dialog_text">PojavLauncher necesita un permiso para enviar notificaciones para evitar que las descargas del juego o modpacks se detengan cuando minimizes la aplicación. Sin este permiso, Android puede cancelar tus descargas cuando PojavLauncher esté en segundo plano.</string>
     <string name="notification_permission_toast">Siempre puedes cambiar de opinión más tarde yendo a Ajustes</string>
     <string name="preference_ask_for_notification_title">Permitir notificaciones</string>
     <string name="preference_ask_for_notification_description">Haz clic para volver a solicitar el permiso de notificaciones, necesario para qué las descargas en segundo plano del juego/modpack funcionen correctamente.</string>
@@ -337,7 +337,6 @@
     <string name="controller_button_b">B</string>
     <string name="controller_button_x">X</string>
     <string name="controller_button_y">Y</string>
-    <string name="controller_button_start">Start</string>
     <string name="controller_button_select">Seleccionar</string>
     <string name="controller_button_trigger_left">Activador izquierdo</string>
     <string name="controller_button_trigger_right">Activador derecho</string>
@@ -347,10 +346,14 @@
     <string name="customctrl_visibility_title">Visibilidad</string>
     <string name="preference_remap_controller_title">Cambiar configuración de teclas del controlador</string>
     <string name="preference_remap_controller_description">Te permite modificar las teclas del teclado asignadas a cada botón del controlador</string>
-    <string name="mcl_button_social_media">Discord</string>
+    <string name="mcl_button_discord">Discord</string>
     <string name="ltw_render_distance_warning_msg">Su GPU no es capaz de renderizar más de 7 de distancia sin usar Sodium o mods similares. La distancia de renderizado será reducido automáticamente cuando haga click en \"OK\".</string>
     <string name="mcl_button_open_directory">Abrir directorio del juego</string>
     <string name="local_login_bad_username_title">Nombre de usuario inadecuado</string>
     <string name="local_login_bad_username_text">El nombre de usuario debe de ser entre 3 a 16 caracteres, y solo contener letras latinas, números de 0 a 9 y guiones bajos.</string>
     <string name="quick_setting_title">Configuraciones rápidas</string>
+    <string name="preference_experimental_title">Cosas Experimentales</string>
+    <string name="modloader_dl_install_neoforge">Crear perfil de Neoforge</string>
+    <string name="neoforge_dl_select_version">Seleccionar versión de NeoForge</string>
+    <string name="neoforge_dl_no_installer">Lo sentimos, pero esta versión de NeoForge no tiene un instalador, lo cual aún no está soportado.</string>
 </resources>

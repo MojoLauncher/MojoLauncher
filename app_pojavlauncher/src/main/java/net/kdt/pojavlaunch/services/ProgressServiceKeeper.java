@@ -11,8 +11,7 @@ public class ProgressServiceKeeper implements TaskCountListener {
     }
 
     @Override
-    public boolean onUpdateTaskCount(int taskCount) {
+    public void onUpdateTaskCount(int taskCount) {
         if(taskCount > 0) ProgressService.startService(context);
-        return false;
     }
 }

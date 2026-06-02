@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">Mojo Эхлүүлэгч (Minecraft: Java Edition-ийг Гар утсан дээр)</string>
-    <string name="app_short_name">Mojolauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -13,7 +11,6 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Татах гэж буй client, mod-ийнхаа .jar file-ийг сонгоно уу.</string>
     <!-- Error messages -->
-    <string name="error_fatal">Mojo эхлүүлэгчэд гэнэт алдаа гарлаа</string>
     <string name="error_no_version">Хувилбар сонгоогүй</string>
     <string name="error_show_more">Бүгдийн харуулах</string>
     <string name="error_show_less">Бүгдийн нуух</string>
@@ -32,7 +29,6 @@
     <string name="mcl_launch_downloading_progress">"Татаж байна %s (%.2f МБ / %.2f МБ)"</string>
     <string name="mcl_launch_download_assets">Татаж авхад бэлдэж байна</string>
     <string name="mcl_options">Тохиргоо</string>
-    <string name="mcl_option_customcontrol">Control солих</string>
     <string name="mcl_setting_title_use_surface_view">Alternate surface rendering-ийг ашиглах</string>
     <string name="mcl_setting_subtitle_use_surface_view">GPU Ашигладаг хувилбаруудад сайжруулж магадгүй.</string>
     <string name="mcl_setting_title_ignore_notch">Булангийн хүрээг орихох</string>
@@ -43,21 +39,13 @@
     <string name="control_debug">Дэбаг</string>
     <string name="control_primary">Зүүн дар</string>
     <string name="control_secondary">Баруун дар</string>
-    <string name="control_shift">◇</string>
     <string name="control_inventory">Цүнх</string>
-    <string name="control_up">▲</string>
-    <string name="control_left">◀</string>
-    <string name="control_right">▶</string>
-    <string name="control_down">▼</string>
-    <string name="control_jump">⬛</string>
     <string name="control_thirdperson">Өнцөг сонгох</string>
     <string name="control_listplayers">Таб</string>
     <string name="control_mouse">Хулган</string>
     <string name="control_mouseoff">Хулган: унтарсан</string>
     <string name="control_mouseon">Хулган: ассан </string>
     <!-- MainActivity: Menu advanced controls -->
-    <string name="control_forceclose">Хүчээр гарах</string>
-    <string name="control_viewout">Явц харах</string>
     <string name="control_adebug">Дэбаг хийх</string>
     <string name="control_customkey">Өөрийн key явуулах</string>
     <!-- ImportControlActivity Strings -->
@@ -71,19 +59,10 @@
     <string name="control_more3"></string>
     <string name="control_more4"></string>
 -->
-    <string name="customctrl_toggle">Асааж болох</string>
-    <string name="customctrl_size">Хэмжээ</string>
-    <string name="customctrl_mapping">Сонгон</string>
-    <string name="customctrl_orientation">Баримтлал</string>
-    <string name="customctrl_background_color">Ар талын өнгө</string>
     <string name="customctrl_corner_radius">Булангийн хэмжээ</string>
     <string name="customctrl_stroke_width">Хэмжээ</string>
-    <string name="customctrl_stroke_color">өнгө</string>
     <string name="customctrl_button_opacity">Харагдац</string>
-    <string name="customctrl_addbutton">Товч нэм</string>
     <string name="customctrl_addbutton_drawer">Товч нэмэх(шургуулаг)</string>
-    <string name="customctrl_addbutton_joystick">Joystick нэмэх</string>
-    <string name="pvc_gameDirectory">Тоглоомын байрлал </string>
     <string name="pvc_jvmArgs">JVM-үүд</string>
     <string name="preference_mouse_start_title">Хулгантай эхлүүлэх</string>
     <string name="preference_video_title">Видёо болон уншуулагч</string>

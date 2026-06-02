@@ -20,25 +20,23 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:name="net.kdt.pojavlaunch.PojavApplication"
+        android:name=".PojavApplication"
         android:allowBackup="true"
         android:allowNativeHeapPointerTagging="false"
         android:appCategory="game"
         android:hasFragileUserData="true"
         android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:isGame="true"
         android:label="@string/app_name"
         android:process=":launcher"
         android:resizeableActivity="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:theme="@style/AppTheme"
-        android:networkSecurityConfig="@xml/netconfig"
-        android:enableOnBackInvokedCallback="false"
-        tools:ignore="UnusedAttribute">
+        android:theme="@style/AppTheme">
         <activity
-            android:name="net.kdt.pojavlaunch.MissingStorageActivity"
+            android:name=".MissingStorageActivity"
             android:exported="false" />
 
         <meta-data
@@ -46,7 +44,7 @@
             android:value="ratio_float" />
 
         <activity
-            android:name="net.kdt.pojavlaunch.TestStorageActivity"
+            android:name=".TestStorageActivity"
             android:exported="true"
             android:label="@string/app_short_name"
             android:launchMode="singleTop">
@@ -57,11 +55,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="net.kdt.pojavlaunch.LauncherActivity"
+            android:name=".LauncherActivity"
             android:label="@string/app_short_name"
             android:windowSoftInputMode="adjustResize"/>
         <activity
-            android:name="net.kdt.pojavlaunch.ImportControlActivity"
+            android:name=".ImportControlActivity"
             android:configChanges="keyboard|keyboardHidden"
             android:exported="true"
             android:launchMode="singleInstance"
@@ -81,23 +79,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="net.kdt.pojavlaunch.FatalErrorActivity"
+            android:name=".FatalErrorActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|keyboard|navigation"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
-        <activity android:name="net.kdt.pojavlaunch.ShowErrorActivity"
+        <activity android:name=".ShowErrorActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|keyboard|navigation"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
         <activity
-            android:name="net.kdt.pojavlaunch.ExitActivity"
+            android:name=".ExitActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|keyboard|navigation"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
         <activity
             android:process=":gui_installer"
-            android:name="net.kdt.pojavlaunch.JavaGUILauncherActivity"
+            android:name=".JavaGUILauncherActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout|keyboard|navigation|uiMode"
             android:screenOrientation="sensorLandscape" />
         <activity
-            android:name="net.kdt.pojavlaunch.CustomControlsActivity"
+            android:name=".CustomControlsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|keyboard|navigation"
             android:exported="false"
             android:screenOrientation="sensorLandscape">
@@ -108,14 +106,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="net.kdt.pojavlaunch.MainActivity"
+            android:name=".MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout|keyboard|navigation|uiMode"
             android:launchMode="singleTop"
             android:process=":game"
             android:screenOrientation="sensorLandscape" />
 
         <provider
-            android:name="net.kdt.pojavlaunch.scoped.FolderProvider"
+            android:name=".scoped.FolderProvider"
             android:authorities="@string/storageProviderAuthorities"
             android:exported="true"
             android:grantUriPermissions="true"
@@ -125,16 +123,15 @@
             </intent-filter>
         </provider>
 
-        <service android:name="net.kdt.pojavlaunch.services.ProgressService"
+        <service android:name=".services.ProgressService"
             android:foregroundServiceType="dataSync"/>
-        <service android:name="net.kdt.pojavlaunch.services.GameService" android:process=":game"
+        <service android:name=".services.GameService" android:process=":game"
             android:foregroundServiceType="specialUse">
             <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="This application is intended to run a 3rd-party piece of software which cannot be managed using the activity's saved instance state. This service is used for background persistence of this piece of software."/>
         </service>
     </application>
     <queries>
-        <package android:name="git.mojo.ffmpeg"/>
-        <package android:name="git.mojo.angle"/>
+        <package android:name="net.kdt.pojavlaunch.ffmpeg"/>
     </queries>
 </manifest>

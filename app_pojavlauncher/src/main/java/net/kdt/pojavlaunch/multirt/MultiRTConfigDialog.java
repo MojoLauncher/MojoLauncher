@@ -9,7 +9,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.R;
 
 public class MultiRTConfigDialog {
     private AlertDialog mDialog;
@@ -27,11 +27,16 @@ public class MultiRTConfigDialog {
         if(adapter != null) adapter.notifyDataSetChanged();
     }
 
+    public MultiRTConfigDialog get() {
+        return this;
+    }
+
     /** Build the dialog behavior and style */
     public void prepare(Context activity, ActivityResultLauncher<Object> installJvmLauncher) {
         mDialogView = new RecyclerView(activity);
         mDialogView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
         RTRecyclerViewAdapter adapter = new RTRecyclerViewAdapter();
+        adapter.setDialog(get());
         mDialogView.setAdapter(adapter);
 
         mDialog = new AlertDialog.Builder(activity)

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Android өсөн Minecraft: Java Edition)</string>
-    <string name="app_short_name">MojoLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -13,7 +11,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Мода ҡуйыусыһын һайлағыҙ</string>
     <!-- Error messages -->
-    <string name="error_fatal">Көтмәгәндә MojoLauncher программаһының эше боҙолоп китә</string>
+    <string name="error_fatal">Көтмәгәндә Copper программаһының эше боҙолоп китә</string>
     <string name="error_no_version">Версиялар юҡ!</string>
     <string name="error_show_more">Күберәк</string>
     <string name="error_show_less">Әҙерәк</string>
@@ -32,7 +30,6 @@
     <string name="mcl_launch_downloading_progress">"Йөкләү %s (%.2f МБ/%.2f МБ)"</string>
     <string name="mcl_launch_download_assets">Ресурстарҙы йөкләүгә әҙерлек</string>
     <string name="mcl_options">Опциялар</string>
-    <string name="mcl_option_customcontrol">Ҡулланыусы идара итеү элементтары</string>
     <string name="mcl_setting_title_use_surface_view">Өҫкө йөҙҙөң альтернатив рендерын ҡулланығыҙ</string>
     <string name="mcl_setting_subtitle_use_surface_view">График процессор менән бәйле сценарийҙарҙа етештереүсәнлекте арттыра ала.</string>
     <string name="mcl_setting_title_ignore_notch">Зазубринаны һанға һуҡмау</string>
@@ -45,10 +42,8 @@
     <string name="mcl_setting_subtitle_buttonscale">Төймәләре бик бәләкәй булһа, уларҙың ҙурлығын арттырығыҙ.</string>
     <string name="mcl_setting_title_mousescale">Сысҡан ярҙамында масштаблау</string>
     <string name="mcl_setting_subtitle_mousescale">Виртуаль сысҡандың ҙурлығын үҙгәртегеҙ.</string>
-    <string name="mcl_setting_title_javaargs">JVM-ды эшләтеп ебәреү аргументтары</string>
     <string name="mcl_setting_subtitle_javaargs">Һаҡ булығыҙ, әгәр ҡулланыусы белмәһә, үҙгәрештәр индерһәгеҙ, уйындың боҙолоуына килтереүе ихтимал.</string>
     <string name="mcl_setting_category_renderer">Рендерер</string>
-    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES (бөтә версиялар, тиҙ)</string>
     <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) (бөтә версиялар, уртаса)</string>
     <string name="mcl_setting_veroption_release">Релиздар</string>
     <string name="mcl_setting_veroption_snapshot">Снапшотттар</string>
@@ -69,14 +64,7 @@
     <string name="control_chat">Сүбхәт</string>
     <string name="control_primary">ҺСТ</string>
     <string name="control_secondary">УСТ</string>
-    <string name="control_shift">◇</string>
-    <string name="control_up">▲</string>
-    <string name="control_left">◀</string>
-    <string name="control_right">▶</string>
-    <string name="control_down">▼</string>
-    <string name="control_jump">⬛</string>
     <string name="control_thirdperson">F5</string>
-    <string name="control_listplayers">Tab</string>
     <string name="control_mouse">Сысҡан</string>
     <string name="control_mouseoff">Сысҡан: Һүн</string>
     <string name="control_mouseon">Сысҡан: Ҡаб </string>

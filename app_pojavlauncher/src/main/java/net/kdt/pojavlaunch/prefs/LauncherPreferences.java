@@ -7,6 +7,7 @@ import static net.kdt.pojavlaunch.Architecture.is32BitsDevice;
 
 import android.app.Activity;
 import android.content.*;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.DisplayMetrics;
@@ -14,20 +15,21 @@ import android.util.Log;
 
 import net.kdt.pojavlaunch.*;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
+import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.JREUtils;
 
+import java.io.File;
 import java.io.IOException;
-
-import git.artdeell.mojo.R;
+import java.util.LinkedHashMap;
 
 public class LauncherPreferences {
-    public static final String PREF_KEY_CURRENT_INSTANCE = "currentInstance";
+    public static final String PREF_KEY_CURRENT_PROFILE = "currentProfile";
     public static final String PREF_KEY_SKIP_NOTIFICATION_CHECK = "skipNotificationPermissionCheck";
 
     public static SharedPreferences DEFAULT_PREF;
-    public static String PREF_RENDERER = "opengles2";
 
 	public static boolean PREF_IGNORE_NOTCH = false;
+	public static int PREF_NOTCH_SIZE = 0;
 	public static float PREF_BUTTONSIZE = 100f;
 	public static float PREF_MOUSESCALE = 1f;
 	public static int PREF_LONGPRESS_TRIGGER = 300;
@@ -35,13 +37,17 @@ public class LauncherPreferences {
 	public static String PREF_CUSTOM_JAVA_ARGS;
     public static boolean PREF_FORCE_ENGLISH = false;
     public static final String PREF_VERSION_REPOS = "https://piston-meta.mojang.com/mc/game/version_manifest_v2.json";
+    public static boolean PREF_CHECK_LIBRARY_SHA = true;
     public static boolean PREF_DISABLE_GESTURES = false;
+    public static boolean PREF_GAMEPAD_SDL_PASSTHRU = false;
+    public static boolean PREF_GAMEPAD_FORCEDSDL_PASSTHRU = false;
     public static boolean PREF_DISABLE_SWAP_HAND = false;
     public static float PREF_MOUSESPEED = 1f;
     public static int PREF_RAM_ALLOCATION;
     public static String PREF_DEFAULT_RUNTIME;
     public static boolean PREF_SUSTAINED_PERFORMANCE = false;
     public static boolean PREF_VIRTUAL_MOUSE_START = false;
+    public static boolean PREF_ARC_CAPES = false;
     public static boolean PREF_USE_ALTERNATE_SURFACE = true;
     public static boolean PREF_JAVA_SANDBOX = true;
     public static float PREF_SCALE_FACTOR = 1f;
@@ -55,8 +61,6 @@ public class LauncherPreferences {
 
     public static boolean PREF_FORCE_VSYNC = false;
 
-    public static boolean PREF_USE_ANGLE = false;
-
     public static boolean PREF_BUTTON_ALL_CAPS = true;
     public static boolean PREF_DUMP_SHADERS = false;
     public static float PREF_DEADZONE_SCALE = 1f;
@@ -67,11 +71,10 @@ public class LauncherPreferences {
     public static String PREF_DOWNLOAD_SOURCE = "default";
     public static boolean PREF_SKIP_NOTIFICATION_PERMISSION_CHECK = false;
     public static boolean PREF_VSYNC_IN_ZINK = true;
+    public static boolean PREF_FORCE_ENABLE_TOUCHCONTROLLER = false;
+    public static int PREF_TOUCHCONTROLLER_VIBRATE_LENGTH = 100;
 
-    public static boolean PREF_RAPID_START = true;
-    public static boolean PREF_VERIFY_FILES = true;
-
-    public static boolean PREF_FREEDRENO_SYSMEM = false;
+    public static boolean PREF_MOUSE_GRAB_FORCE = false;
 
 
     public static void loadPreferences(Context ctx) {
@@ -79,7 +82,6 @@ public class LauncherPreferences {
         Tools.initStorageConstants(ctx);
         boolean isDevicePowerful = isDevicePowerful(ctx);
 
-        PREF_RENDERER = DEFAULT_PREF.getString("renderer", "opengles2");
         PREF_BUTTONSIZE = DEFAULT_PREF.getInt("buttonscale", 100);
         PREF_MOUSESCALE = DEFAULT_PREF.getInt("mousescale", 100)/100f;
         PREF_MOUSESPEED = ((float)DEFAULT_PREF.getInt("mousespeed",100))/100f;
@@ -87,12 +89,16 @@ public class LauncherPreferences {
 		PREF_LONGPRESS_TRIGGER = DEFAULT_PREF.getInt("timeLongPressTrigger", 300);
 		PREF_DEFAULTCTRL_PATH = DEFAULT_PREF.getString("defaultCtrl", Tools.CTRLDEF_FILE);
         PREF_FORCE_ENGLISH = DEFAULT_PREF.getBoolean("force_english", false);
+        PREF_CHECK_LIBRARY_SHA = DEFAULT_PREF.getBoolean("checkLibraries",true);
         PREF_DISABLE_GESTURES = DEFAULT_PREF.getBoolean("disableGestures",false);
+        PREF_GAMEPAD_SDL_PASSTHRU = DEFAULT_PREF.getBoolean("gamepadPassthru",false);
+        PREF_GAMEPAD_FORCEDSDL_PASSTHRU = DEFAULT_PREF.getBoolean("gamepadPassthruForced",false);
         PREF_DISABLE_SWAP_HAND = DEFAULT_PREF.getBoolean("disableDoubleTap", false);
         PREF_RAM_ALLOCATION = DEFAULT_PREF.getInt("allocation", findBestRAMAllocation(ctx));
         PREF_CUSTOM_JAVA_ARGS = DEFAULT_PREF.getString("javaArgs", "");
         PREF_SUSTAINED_PERFORMANCE = DEFAULT_PREF.getBoolean("sustainedPerformance", isDevicePowerful);
         PREF_VIRTUAL_MOUSE_START = DEFAULT_PREF.getBoolean("mouse_start", false);
+        PREF_ARC_CAPES = DEFAULT_PREF.getBoolean("arc_capes",false);
         PREF_USE_ALTERNATE_SURFACE = DEFAULT_PREF.getBoolean("alternate_surface", isDevicePowerful);
         PREF_JAVA_SANDBOX = DEFAULT_PREF.getBoolean("java_sandbox", true);
         PREF_SCALE_FACTOR = DEFAULT_PREF.getInt("resolutionRatio", findBestResolution(ctx, isDevicePowerful))/100f;
@@ -103,7 +109,6 @@ public class LauncherPreferences {
         PREF_GYRO_INVERT_X = DEFAULT_PREF.getBoolean("gyroInvertX", false);
         PREF_GYRO_INVERT_Y = DEFAULT_PREF.getBoolean("gyroInvertY", false);
         PREF_FORCE_VSYNC = DEFAULT_PREF.getBoolean("force_vsync", isDevicePowerful);
-        PREF_USE_ANGLE = DEFAULT_PREF.getBoolean("use_angle", false);
         PREF_BUTTON_ALL_CAPS = DEFAULT_PREF.getBoolean("buttonAllCaps", true);
         PREF_DUMP_SHADERS = DEFAULT_PREF.getBoolean("dump_shaders", false);
         PREF_DEADZONE_SCALE = ((float) DEFAULT_PREF.getInt("gamepad_deadzone_scale", 100))/100f;
@@ -113,9 +118,9 @@ public class LauncherPreferences {
         PREF_VERIFY_MANIFEST = DEFAULT_PREF.getBoolean("verifyManifest", true);
         PREF_SKIP_NOTIFICATION_PERMISSION_CHECK = DEFAULT_PREF.getBoolean(PREF_KEY_SKIP_NOTIFICATION_CHECK, false);
         PREF_VSYNC_IN_ZINK = DEFAULT_PREF.getBoolean("vsync_in_zink", true);
-        PREF_VERIFY_FILES = DEFAULT_PREF.getBoolean("checkGameFiles", true);
-        PREF_RAPID_START = DEFAULT_PREF.getBoolean("fastStartupCheck", true);
-        PREF_FREEDRENO_SYSMEM = DEFAULT_PREF.getBoolean("freedrenoSysmem", false);
+        PREF_FORCE_ENABLE_TOUCHCONTROLLER = DEFAULT_PREF.getBoolean("forceEnableTouchController", false);
+        PREF_TOUCHCONTROLLER_VIBRATE_LENGTH = DEFAULT_PREF.getInt("touchControllerVibrateLength", 100);
+        PREF_MOUSE_GRAB_FORCE = DEFAULT_PREF.getBoolean("always_grab_mouse", false);
 
         String argLwjglLibname = "-Dorg.lwjgl.opengl.libname=";
         for (String arg : JREUtils.parseJavaArguments(PREF_CUSTOM_JAVA_ARGS)) {
@@ -128,11 +133,11 @@ public class LauncherPreferences {
         if(DEFAULT_PREF.contains("defaultRuntime")) {
             PREF_DEFAULT_RUNTIME = DEFAULT_PREF.getString("defaultRuntime","");
         }else{
-            if(MultiRTUtils.getRuntimes().isEmpty()) {
+            if(MultiRTUtils.getInstalledRuntimes().isEmpty()) {
                 PREF_DEFAULT_RUNTIME = "";
                 return;
             }
-            PREF_DEFAULT_RUNTIME = MultiRTUtils.getRuntimes().get(0).name;
+            PREF_DEFAULT_RUNTIME = MultiRTUtils.getInstalledRuntimes().get(0).name;
             LauncherPreferences.DEFAULT_PREF.edit().putString("defaultRuntime",LauncherPreferences.PREF_DEFAULT_RUNTIME).apply();
         }
     }
@@ -200,9 +205,9 @@ public class LauncherPreferences {
         return false;
     }
 
-    /** Check if the device has a display cutout */
-    public static boolean hasNotch(Activity activity) {
-        if (Build.VERSION.SDK_INT < P) return false;
+    /** Compute the notch size to avoid being out of bounds */
+    public static void computeNotchSize(Activity activity) {
+        if (Build.VERSION.SDK_INT < P) return;
         try {
             final Rect cutout;
             if(SDK_INT >= Build.VERSION_CODES.S){
@@ -210,10 +215,52 @@ public class LauncherPreferences {
             } else {
                 cutout = activity.getWindow().getDecorView().getRootWindowInsets().getDisplayCutout().getBoundingRects().get(0);
             }
-            return cutout.width() != 0 || cutout.height() != 0;
+
+            // Notch values are rotation sensitive, handle all cases
+            int orientation = activity.getResources().getConfiguration().orientation;
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) LauncherPreferences.PREF_NOTCH_SIZE = cutout.height();
+            else if (orientation == Configuration.ORIENTATION_LANDSCAPE) LauncherPreferences.PREF_NOTCH_SIZE = cutout.width();
+            else LauncherPreferences.PREF_NOTCH_SIZE = Math.min(cutout.width(), cutout.height());
+
         }catch (Exception e){
             Log.i("NOTCH DETECTION", "No notch detected, or the device if in split screen mode");
-            return false;
+            LauncherPreferences.PREF_NOTCH_SIZE = -1;
+        }
+        Tools.updateWindowSize(activity);
+    }
+    public static void writeMGRendererSettings() throws IOException {
+        LinkedHashMap<String, Object> MGConfigJson = new LinkedHashMap<>();
+        // Copying the defaultValues from pref_renderer.xml to use as defaults here too
+
+        // We need to get the string and convert it to int because the android:defaultValues only takes in string-arrays.
+        // Using .getInt() leads to a class cast exception and using integer-arrays will just crash the layout/fragment.
+        MGConfigJson.put("enableANGLE", Integer.parseInt(DEFAULT_PREF.getString("mg_renderer_setting_angle", "0")));
+        MGConfigJson.put("enableNoError", Integer.parseInt(DEFAULT_PREF.getString("mg_renderer_setting_errorSetting", "0")));
+        MGConfigJson.put("fsr1Setting", Integer.parseInt(DEFAULT_PREF.getString("mg_renderer_setting_fsr", "0")));
+
+        // These guys are SwitchPreferences so they get special treatment, they need to be converted to ints
+        int gl43exts = DEFAULT_PREF.getBoolean("mg_renderer_setting_gl43ext", false) ? 1 : 0;
+        int computeShaderext = DEFAULT_PREF.getBoolean("mg_renderer_computeShaderext", false) ? 1 : 0;
+        int angleDepthClearFixMode = DEFAULT_PREF.getBoolean("mg_renderer_setting_angleDepthClearFixMode", false) ? 1 : 0;
+        int timerQueryExt = DEFAULT_PREF.getBoolean("mg_renderer_setting_timerQueryExt", false) ? 1 : 0;
+        int dsaExt = DEFAULT_PREF.getBoolean("mg_renderer_dsaExt", false) ? 1 : 0;
+        MGConfigJson.put("enableExtGL43", gl43exts);
+        MGConfigJson.put("enableExtComputeShader", computeShaderext);
+        MGConfigJson.put("angleDepthClearFixMode", angleDepthClearFixMode);
+        MGConfigJson.put("enableExtTimerQuery", timerQueryExt);
+        MGConfigJson.put("enableExtDirectStateAccess", dsaExt);
+        if (DEFAULT_PREF.getBoolean("mg_renderer_multidrawCompute", false)) {
+            MGConfigJson.put("multidrawMode", 5); // Special handling for the (special mayhaps) compute emulation
+        } else MGConfigJson.put("multidrawMode", Integer.parseInt(DEFAULT_PREF.getString("mg_renderer_setting_multidraw", "0")));
+        MGConfigJson.put("maxGlslCacheSize", Integer.parseInt(DEFAULT_PREF.getString("mg_renderer_setting_glsl_cache_size", "128")));
+        File configFile = new File(Tools.DIR_DATA + "/MobileGlues", "config.json");
+        FileUtils.ensureParentDirectory(configFile);
+        try {
+            Tools.write(configFile.getAbsolutePath(),Tools.GLOBAL_GSON.toJson(MGConfigJson));
+            Logger.appendToLog("Writing MG configs to " + configFile.getAbsolutePath());
+            Logger.appendToLog("MG Config is " + Tools.GLOBAL_GSON.toJson(MGConfigJson));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

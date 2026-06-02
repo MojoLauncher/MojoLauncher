@@ -1,6 +1,56 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true" android:drawable="@drawable/mine_button_focused" />
-    <item android:state_enabled="false" android:drawable="@drawable/mine_button_focused" />
-    <item android:drawable="@drawable/mine_button_unfocused" />
+
+    <!-- PRESSED STATE -->
+    <item android:state_pressed="true">
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="#3C3C3C"/>
+                    <corners android:radius="12dp"/>
+                </shape>
+            </item>
+            <item
+                android:left="1dp"
+                android:top="1dp"
+                android:right="1dp"
+                android:bottom="1dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="#3C3C3C"/>
+                    <corners android:radius="11dp"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+    <!-- DISABLED STATE -->
+    <item android:state_enabled="false">
+        <shape android:shape="rectangle">
+            <solid android:color="#2A2A2A"/>
+            <corners android:radius="12dp"/>
+        </shape>
+    </item>
+
+    <!-- DEFAULT STATE — uses theme accent colour -->
+    <item>
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="?attr/copperAccent"/>
+                    <corners android:radius="12dp"/>
+                </shape>
+            </item>
+            <item
+                android:left="1dp"
+                android:top="1dp"
+                android:right="1dp"
+                android:bottom="1dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="?attr/copperAccent"/>
+                    <corners android:radius="11dp"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
 </selector>

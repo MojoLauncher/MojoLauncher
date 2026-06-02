@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Android өчен Minecraft: Java Edition)</string>
-    <string name="app_short_name">MojoLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -14,7 +12,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Мод утырткычын сайлагыз</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher сафтан көтелмичә чыкты</string>
+    <string name="error_fatal">Copper сафтан көтелмичә чыкты</string>
     <string name="error_no_version">Версия юк!</string>
     <string name="error_show_more">Күбрәк күрсәтү</string>
     <string name="error_show_less">Әзрәк күрсәтү</string>
@@ -38,7 +36,6 @@
     <string name="mcl_setting_title_mousescale">Курсор масштабы</string>
     <string name="mcl_setting_title_javaargs">JVM кушу аргументлары</string>
     <string name="mcl_setting_category_renderer">Күрсәткеч</string>
-    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (барлык версияләр өчен, тиз)</string>
     <string name="mcl_setting_veroption_release">Чыгарылыш</string>
     <string name="mcl_setting_veroption_snapshot">Снапшотлар</string>
     <string name="mcl_setting_veroption_oldalpha">Иске альфа</string>
@@ -63,17 +60,8 @@
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">Чат</string>
     <string name="control_debug">Төзәтү</string>
-    <string name="control_primary">Pri</string>
-    <string name="control_secondary">Sec</string>
-    <string name="control_shift">◇</string>
     <string name="control_inventory">Инв</string>
-    <string name="control_up">▲</string>
-    <string name="control_left">◀</string>
-    <string name="control_right">▶</string>
-    <string name="control_down">▼</string>
-    <string name="control_jump">⬛</string>
     <string name="control_thirdperson">F5</string>
-    <string name="control_listplayers">Tab</string>
     <string name="control_mouse">Тычкан</string>
     <string name="control_mouseoff">Тычкан: Сүнек</string>
     <string name="control_mouseon">Тычкан: Кушык </string>
@@ -119,17 +107,15 @@
     <string name="preference_control_title">Идарә элементлары</string>
     <string name="preference_java_title">Java төзәтмәләре</string>
     <string name="preference_misc_title">Башка көйләүләр</string>
-    <string name="preference_experimental_title">Эксперименталь нәрсәләр</string>
     <string name="preference_category_virtual_mouse">Виртуаль тычкан</string>
     <string name="preference_back_title">Артка</string>
     <string name="unnamed">Исемсез</string>
     <string name="profiles_latest_snapshot">Соңгы ярдәмче версия</string>
     <string name="profiles_latest_release">Соңгы версия</string>
     <string name="profiles_profile_name">Исем</string>
-    <string name="profiles_profile_version">Версия</string>
     <string name="global_delete">Бетерү</string>
-    <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Күрсәткеч</string>
+    <string name="arc_capes_title">Cosmetica япмалары</string>
     <string name="notif_channel_name">Гомуми</string>
     <string name="mcl_setting_veroption_installed">Утыртылган</string>
     <string name="notification_terminate">Тәмамлау</string>
@@ -141,7 +127,6 @@
     <string name="main_add_account">Аккаунт өстәү</string>
     <string name="no_saved_accounts">Сакланган аккаунтлар юк</string>
     <string name="mc_download_failed">Minecraft йөкләнеп булмады! Бу акрын тоташу яки файл урнашуда хаталар аркасында туа ала торган.</string>
-    <string name="percent_format">%d%%</string>
     <string name="customctrl_editor_exit_title">Чыгумы?</string>
     <string name="global_save_and_exit">Саклау һәм чыгу</string>
     <string name="global_yes">Әйе</string>
@@ -157,4 +142,6 @@
     <string name="preference_category_java_tweaks">Java төзәтмәләре</string>
     <string name="preference_category_miscellaneous">Башка көйләүләр</string>
     <string name="controller_button_select">Сайлау</string>
+    <string name="preference_experimental_title">Эксперименталь нәрсәләр</string>
+    <string name="no_minecraft_account_found">Minecraft аккаунт юк</string>
 </resources>

@@ -21,9 +21,8 @@ import net.kdt.pojavlaunch.customcontrols.ControlLayout;
 import net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick;
 import net.kdt.pojavlaunch.customcontrols.handleview.EditControlSideDialog;
 
-import net.kdt.pojavlaunch.CallbackBridge;
+import org.lwjgl.glfw.CallbackBridge;
 
-import git.artdeell.dnbootstrap.glfw.GLFW;
 import io.github.controlwear.virtual.joystick.android.JoystickView;
 
 @SuppressLint("ViewConstructor")
@@ -45,8 +44,7 @@ public class ControlJoystick extends JoystickView implements ControlInterface {
 
     private static void sendInput(int[] keys, boolean isDown) {
         for (int key : keys) {
-            int modifiers = CallbackBridge.getCurrentMods();
-            GLFW.sendKeyEvent(key, isDown, modifiers);
+            CallbackBridge.sendKeyPress(key, CallbackBridge.getCurrentMods(), isDown);
         }
     }
 
@@ -111,12 +109,6 @@ public class ControlJoystick extends JoystickView implements ControlInterface {
         getControlLayoutParent().addJoystickButton(data);
     }
 
-    @Override
-    public void handlePressed() {/*STUB since non swipeable*/}
-
-    @Override
-    public void handleReleased() {/*STUB since non swipeable*/}
-
 
     @Override
     public void setBackground() {
@@ -124,6 +116,9 @@ public class ControlJoystick extends JoystickView implements ControlInterface {
         setBorderColor(getProperties().strokeColor);
         setBackgroundColor(getProperties().bgColor);
     }
+
+    @Override
+    public void sendKeyPresses(boolean isDown) {/*STUB since non swipeable*/ }
 
     @Override
     public void loadEditValues(EditControlSideDialog editControlPopup) {

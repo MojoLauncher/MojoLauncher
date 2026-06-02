@@ -5,19 +5,19 @@
     <net.kdt.pojavlaunch.prefs.BackButtonPreference/>
 
     <PreferenceCategory android:title="@string/preference_category_video" >
-        <androidx.preference.ListPreference
-            android:title="@string/mcl_setting_category_renderer"
-            android:key="renderer"
-            android:defaultValue="opengles2"
-            android:icon="@drawable/ic_px_image_renderer"
-            app2:useSimpleSummaryProvider="true"/>
+        <Preference
+            android:title="@string/mcl_setting_title_renderer_settings"
+            android:summary="@string/mcl_setting_title_renderer_subtitle"
+            android:icon="@drawable/ic_setting_engine"
+            android:fragment="net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceRendererSettingsFragment"
+            />
 
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="ignoreNotch"
             android:summary="@string/mcl_setting_subtitle_ignore_notch"
             android:title="@string/mcl_setting_title_ignore_notch"
-            android:icon="@drawable/ic_px_viewport_expand"
+            android:icon="@drawable/ic_setting_hide_notch"
             />
 
         <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
@@ -28,7 +28,7 @@
             app2:selectable="false"
             app2:min="@integer/resolution_seekbar_min"
             app2:seekBarIncrement="@integer/resolution_seekbar_increment"
-            android:icon="@drawable/ic_px_resolution"
+            android:icon="@drawable/ic_setting_screen_resolution"
             />
 
         <SwitchPreference
@@ -49,12 +49,6 @@
             android:key="force_vsync"
             android:summary="@string/preference_force_vsync_description"
             android:title="@string/preference_force_vsync_title"
-            />
-        <androidx.preference.SwitchPreferenceCompat
-            android:defaultValue="false"
-            android:key="use_angle"
-            android:summary="@string/preference_use_angle_description"
-            android:title="@string/preference_use_angle_title"
             />
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"

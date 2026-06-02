@@ -1,5 +1,5 @@
-# Remove MojoLauncher account data
-MojoLauncher uses two types of accounts:
+# Remove Angel Aura Copper account data
+Angel Aura Copper uses two types of accounts:
 - Local accounts
 - Microsoft accounts
 <br>

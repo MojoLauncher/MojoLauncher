@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: รุ่น Java สำหรับ Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
-    <string name="login_online_username_hint">ชื่อผู้ใช้</string>
     <string name="login_online_login_label">เข้าสู่ระบบ</string>
     <!-- Hint -->
     <!-- Warnings -->
@@ -14,7 +11,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">เลือกตัวติดตั้งม็อด</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher ได้ขัดข้องโดยไม่คาดคิด</string>
+    <string name="error_fatal">Copper ได้ขัดข้องโดยไม่คาดคิด</string>
     <string name="error_no_version">ไม่มีเวอร์ชัน!</string>
     <string name="error_show_more">แสดงเพิ่มเติม</string>
     <string name="error_show_less">แสดงน้อยลง</string>
@@ -46,15 +43,12 @@
     <string name="mcl_setting_subtitle_buttonscale">เพิ่มสเกลหากปุ่มมีขนาดเล็กเกินไป</string>
     <string name="mcl_setting_title_mousescale">การปรับขนาดเมาส์</string>
     <string name="mcl_setting_subtitle_mousescale">เปลี่ยนขนาดของเมาส์เสมือน</string>
-    <string name="mcl_setting_title_javaargs">อาร์กิวเมนต์เปิดใช้ JVM</string>
     <string name="mcl_setting_subtitle_javaargs">ระวัง อาจทำให้เกมพังได้หากแก้ไขโดยขาดความรู้</string>
     <string name="mcl_setting_category_renderer">การแสดงผล</string>
-    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (รองรับทุกเวอร์ชั่น, เร็ว)</string>
     <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) - (รองรับทุกเวอร์ชั่น, กลาง)</string>
     <string name="mcl_setting_veroption_release">ปล่อย</string>
     <string name="mcl_setting_veroption_snapshot">ภาพรวม</string>
-    <string name="mcl_setting_veroption_oldalpha">อัลฟ่าเก่า</string>
-    <string name="mcl_setting_veroption_oldbeta">เบต้าเก่า</string>
+    <string name="mcl_setting_veroption_oldbeta">เบตาเก่า</string>
     <string name="mcl_setting_java_sandbox">การดำเนินการแซนด์บ็อกซ์ .jar</string>
     <string name="mcl_setting_java_sandbox_subtitle">ควบคุมความพร้อมใช้งานของตัวจัดการความปลอดภัยของแซนด์บ็อกซ์เมื่อเรียกใช้ไฟล์ .jar</string>
     <string name="mcl_version_clone">คัดลอก</string>
@@ -82,13 +76,7 @@
     <string name="control_debug">ดีบั๊ก</string>
     <string name="control_primary">หลัก</string>
     <string name="control_secondary">รอง</string>
-    <string name="control_shift">◇</string>
     <string name="control_inventory">กระเป๋า</string>
-    <string name="control_up">▲</string>
-    <string name="control_left">◀</string>
-    <string name="control_right">▶</string>
-    <string name="control_down">▼</string>
-    <string name="control_jump">⬛</string>
     <string name="control_thirdperson">มุมมอง</string>
     <string name="control_listplayers">แท็บ</string>
     <string name="control_mouse">เมาส์</string>
@@ -121,7 +109,6 @@
     <string name="customctrl_button_opacity">ความเข้มของปุ่มทั้งหมด</string>
     <string name="customctrl_addbutton">เพิ่มปุ่ม</string>
     <string name="customctrl_addbutton_drawer">เพื่มปุ่มรวมควบคุม</string>
-    <string name="customctrl_addbutton_joystick">เพิ่มจอยสติ๊ก</string>
     <string name="customctrl_addsubbutton">เพื่มปุ่มรอง</string>
     <string name="customctrl_selectdefault">เลือกปุ่มควบคุมเริ่มต้น</string>
     <string name="customctrl_export">ส่งออกปุ่มควบคุม</string>
@@ -142,7 +129,6 @@
     <string name="mcl_setting_subtitle_mousespeed">เปลี่ยนความเร็วของเมาส์เสมือน</string>
     <string name="customctrl_passthru">เมาส์ผ่านได้</string>
     <string name="customctrl_swipeable">ลากได้</string>
-    <string name="customctrl_forward_lock">ล็อคไปข้างหน้า</string>
     <string name="customctrl_absolute_tracking">การตรวจจับนั้วเเบบสมบูรณ์</string>
     <string name="memory_warning_msg">ขณะนี้เเรมที่เหลือในเครืองของคุณ (%d) น้อยกว่าเเรมที่ตั้งไว้ (%d) อาจะทำให้เด้งได้ ปรับค่าเเรมที่ต้องการเมื่อเกมเด้ง</string>
     <string name="mcl_memory_allocation">การจัดสรรหน่วยความจำ</string>
@@ -159,7 +145,7 @@
     <string name="multirt_config_removeerror_last">คุณต้องติดตั้งรันไทม์ Java อย่างน้อยหนึ่งรายการ</string>
     <string name="multirt_nojava8rt">ไม่สามารถหาจาวา 8 ในการใช้ออฟชั่นนี้คุณต้องติดตั้งจาวา 8</string>
     <string name="multirt_delete_runtime">ลบรันไทม์</string>
-    <string name="pvc_gameDirectory">ตำเเหน่งโฟรเดอร์เกม</string>
+    <string name="pvc_gameDirectory">ตำเเห่งโฟรเดอร์เกม</string>
     <string name="pvc_jvmArgs">ตัวคำสั่ง เจวิเอ็ม</string>
     <string name="preference_mouse_start_title">เปิดเกมด้วยเมาส์จำลอง</string>
     <string name="preference_mouse_start_description">เมาส์เสมือนจะปรากฏขึ้นเมื่อเริ่มต้นระบบเมื่อตัวเลือกนี้เปิดอยู่</string>
@@ -171,7 +157,6 @@
     <string name="preference_java_description">รันไทม์ Java, อาร์กิวเมนต์ JVM, จำนวน RAM และแซนด์บ็อกซ์</string>
     <string name="preference_misc_title">การตั้งค่าเบ็ดเตล็ด</string>
     <string name="preference_misc_description">รายการเวอร์ชันและการตรวจสอบไลบรารี</string>
-    <string name="preference_experimental_title">การตั้งค่าที่ทดสอบ</string>
     <string name="preference_experimental_description">ใช้ของตรงนั้นโดยคำนึงถึงไม่สนับสนุน</string>
     <string name="preference_sustained_performance_title">เปิดตัวควบคุมความสามารถ</string>
     <string name="preference_sustained_performance_description">จำกัดการควบคุมปริมาณความร้อนโดยการจำกัดประสิทธิภาพสูงสุด</string>
@@ -193,13 +178,12 @@
     <string name="profiles_latest_snapshot">ตัวทดลองล่าสุด</string>
     <string name="profiles_latest_release">เนื้อหาใหม่ล่าสุด</string>
     <string name="profiles_profile_name">ชื่อ</string>
-    <string name="profiles_profile_version">เวอร์ชัน</string>
     <string name="global_delete">ลบ</string>
     <string name="pedit_java_runtime">จาวา รันไทม์</string>
     <string name="pedit_renderer">การแสดงผล</string>
+    <string name="arc_capes_title">ผ้าคลุมที่มีภาพ</string>
+    <string name="arc_capes_desc">เปิดผ้าคลุมจาก cosmetica (เเต่ก่อนเป็น arc) ข้อมูลเพิ่มเติมที่ https://cosmetica.cc ต้องมี optfine</string>
     <string name="notif_channel_name">ทั่วไป</string>
-    <string name="lazy_service_default_title">เรียกใช้บริการpojavที่ใช้งานอยู่</string>
-    <string name="mcl_setting_veroption_installed">ติดตั้งแล้ว</string>
     <string name="use_global_default">(ใช้การตั้งค่าหลัก)</string>
     <string name="default_control">ปุ่มควบคุมเริ่มต้น</string>
     <string name="progresslayout_tasks_in_progress">%d กำลังดำเนินงาน
@@ -229,12 +213,11 @@
     <string name="preference_gyro_sample_rate_title">อัตราการสุ่มตัวอย่างไจโร</string>
     <string name="preference_gyro_sample_rate_description">หากคุณมีปัญหาด้านประสิทธิภาพกับการควบคุมไจโรสโคป ให้เพิ่มสิ่งนี้</string>
     <string name="microsoft_login_retry_later">ส่งคำขอบ่อยเกินไป, กรุณาลองอีกครั้งภายหลัง</string>
-    <string name="storage_required">MojoLauncher จำเป็นต้องแนบที่จัดเก็บข้อมูลภายนอก โปรดเชื่อมต่อใหม่และรีสตาร์ทแอป</string>
+    <string name="storage_required">PojavLauncher จำเป็นต้องแนบที่จัดเก็บข้อมูลภายนอก โปรดเชื่อมต่อใหม่และรีสตาร์ทแอป</string>
     <string name="mcl_setting_title_buttonallcaps">ใช้อักษรตัวพิมพ์ใหญ่ในป้ายปุ่มเท่านั้น</string>
     <string name="mcl_setting_subtitle_buttonallcaps">ปิดการใช้งานนี้หากคุณต้องการใช้อักษรตัวพิมพ์เล็กในการควบคุมของคุณ</string>
     <string name="preference_shader_dump_title">เปิดใช้งานบันทึกข้อมูลเชเดอร์</string>
     <string name="preference_shader_dump_description">บันทึกการแปลงเชเดอร์ลงในไฟล์บันทึก</string>
-    <string name="percent_format">%d%%</string>
     <string name="customctrl_editor_exit_title">ออก?</string>
     <string name="customctrl_editor_exit_msg">คุณแน่ใจหรือไม่ว่าต้องการออก</string>
     <string name="customctrl_editor_exit">ออกจากการแก้ไข</string>
@@ -260,12 +243,17 @@
     <string name="fabric_dl_game_version">เวอร์ชั่นมายคราฟ</string>
     <string name="fabric_dl_install">ติดตั้ง</string>
     <string name="fabric_dl_cant_read_meta">อ่านไม่ออก %s ข้อมูลเมตาของตัวโหลด กรุณาลองใหม่อีกครั้งในภายหลัง</string>
+    <string name="modloader_dl_install_fabric">สร้างโปรไฟล์ผ้า</string>
+    <string name="modloader_dl_install_quilt">สร้างโปรไฟล์ผ้าห่ม</string>
+    <string name="modloader_dl_install_forge">สร้างโปรไฟล์ฟอร์จ</string>
+    <string name="create_profile_vanilla">สร้างโปรไฟล์ Vanilla</string>
     <string name="create_profile_vanilla_like_versions">รุ่นคล้าย Vanilla</string>
     <string name="create_profile_modded_versions">เวอร์ชันดัดแปลง</string>
     <string name="fabric_dl_loader_title">เลือกเวอร์ชัน</string>
     <string name="of_dl_select_version">เลือกเวอร์ชัน OptiFine</string>
     <string name="of_dl_failed_to_scrape">ไม่สามารถรวบรวมข้อมูลสำหรับการติดตั้ง OptiFine</string>
     <string name="of_dl_progress">กำลังดาวน์โหลด %s</string>
+    <string name="create_profile_optifine">สร้างโปรไฟล์ OptiFine</string>
     <string name="hint_search_modpack">ค้นหา modpack</string>
     <string name="preference_vulkan_driver_system_title">ใช้ไดรเวอร์ระบบ Vulkan</string>
     <string name="preference_vulkan_driver_system_description">บังคับให้ตัวเรียกใช้งานใช้ไดรเวอร์ระบบ Vulkan แทน Turnip บน Adreno GPU มีผลกับ Zink และ mod ที่ใช้ Vulkan เท่านั้น</string>
@@ -279,11 +267,12 @@
     <string name="modpack_download_downloading_mods">กำลังดาวน์โหลดม็อด (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">กำลังดาวน์โหลดม็อด (ไฟล์ %d ออกจาก %d)</string>
     <string name="modpack_download_applying_overrides">กำลังใช้การแทนที่ (%d/%d)</string>
-    <string name="modpack_install_notification_title">ตัวติดตั้ง Mojo Modpack</string>
+    <string name="modpack_install_notification_title">ตัวติดตั้ง Pojav Modpack</string>
     <string name="modpack_install_notification_success">คลิกที่นี่เพื่อเสร็จสิ้นการติดตั้ง modpack</string>
     <string name="modpack_install_notification_data_not_available">ดาวน์โหลดข้อมูลตัวโหลด mod ไม่สำเร็จ</string>
     <string name="modpack_install_modloader_download_failed">ไม่สามารถดาวน์โหลดไฟล์ mod loader ได้</string>
     <string name="modpack_install_download_failed">ดาวน์โหลดไฟล์ modpack ไม่สำเร็จ</string>
+    <string name="modpack_install_button">สร้างโปรไฟล์ modpack</string>
     <string name="notif_error_occured">เกิดข้อผิดพลาด</string>
     <string name="notif_error_occured_desc">คลิกเพื่อดูรายละเอียดเพิ่มเติม</string>
     <string name="fabric_dl_only_stable">แสดงเฉพาะเวอร์ชันที่เสถียรเท่านั้น</string>
@@ -308,7 +297,7 @@
     <string name="preference_category_miscellaneous">การตั้งค่าเบ็ดเตล็ด</string>
     <string name="preference_category_video">การตั้งค่าวิดีโอ</string>
     <string name="notification_permission_dialog_title">ขออนุญาต</string>
-    <string name="notification_permission_dialog_text">MojoLauncher ต้องได้รับอนุญาตในการโพสต์การแจ้งเตือนเพื่อป้องกันไม่ให้การดาวน์โหลดเกม/modpack หยุดเมื่อคุณออกจากแอป หากไม่ได้รับอนุญาตนี้ Android อาจปิดการดาวน์โหลดของคุณเมื่อคุณให้ MojoLauncher อยู่ในโหมดเบื้องหลัง</string>
+    <string name="notification_permission_dialog_text">PojavLauncher ต้องได้รับอนุญาตในการโพสต์การแจ้งเตือนเพื่อป้องกันไม่ให้การดาวน์โหลดเกม/modpack หยุดเมื่อคุณออกจากแอป หากไม่ได้รับอนุญาตนี้ Android อาจปิดการดาวน์โหลดของคุณเมื่อคุณให้ PojavLauncher อยู่ในโหมดเบื้องหลัง</string>
     <string name="notification_permission_toast">คุณสามารถเปลี่ยนใจในภายหลังได้ตลอดเวลาโดยไปที่การตั้งค่า</string>
     <string name="preference_ask_for_notification_title">อนุญาตการแจ้งเตือน</string>
     <string name="preference_ask_for_notification_description">คลิกเพื่อขอสิทธิ์การแจ้งเตือนอีกครั้ง ซึ่งจำเป็นสำหรับการดาวน์โหลดเกม/modpack พื้นหลังเพื่อให้ทำงานได้อย่างถูกต้อง</string>
@@ -318,4 +307,5 @@
     <string name="newdl_starting">กำลังอ่านข้อมูลไฟล์เกม...</string>
     <string name="newdl_downloading_metadata">กำลังดาวโหลดข้อมูลไฟล์เกม (%s)</string>
     <string name="controller_button_select">เลือก</string>
+    <string name="preference_experimental_title">การตั้งค่าที่ทดสอบ</string>
 </resources>

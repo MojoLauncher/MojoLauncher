@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition for Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_name" translatable="false">Copper</string>
 
     <!-- Action bar part -->
 
@@ -22,7 +21,7 @@
     <string name="alerttitle_installmod">Select a mod installer</string>
 
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher has unexpectedly crashed</string>
+    <string name="error_fatal">Copper has unexpectedly crashed</string>
     <string name="error_no_version">No version!</string>
     <string name="error_show_more">Show more</string>
     <string name="error_show_less">Show less</string>
@@ -63,11 +62,14 @@
     <string name="mcl_setting_subtitle_mousescale">Change the size of the virtual mouse.</string>
     <string name="mcl_setting_title_javaargs">JVM Launch arguments</string>
     <string name="mcl_setting_subtitle_javaargs">Be careful, this may make game crash if modified without knowledge.</string>
+    <string name="mcl_setting_title_renderer_settings">Extra Renderer Settings</string>
+    <string name="mcl_setting_title_renderer_subtitle">Renderer specific settings</string>
     <string name="mcl_setting_category_renderer">Renderer</string>
-    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - all versions till 1.21.4, fast</string>
-    <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) - all versions, mid</string>
-    <string name="mcl_setting_renderer_freedreno_kgsl">Freedreno - all versions, fast, Adreno-only</string>
-    <string name="mcl_setting_renderer_ltw">LTW (OpenGL ES 3) - 1.17+ only, fast</string>
+    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (1.21.4&lt; only, fast)</string>
+    <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) - (all versions, mid)</string>
+    <string name="mcl_setting_renderer_mobileglues">MobileGlues (OpenGL ES) - (1.17+ only, fast)</string>
+    <string name="mcl_setting_renderer_ltw">LTW (OpenGL ES 3) - 1.17+ only</string>
+    <string name="mcl_setting_renderer_KW">Krypton Wrapper - (all versions, fast)</string>
     <string name="mcl_setting_veroption_release">Release</string>
     <string name="mcl_setting_veroption_snapshot">Snapshot</string>
     <string name="mcl_setting_veroption_oldalpha">Old-alpha</string>
@@ -90,11 +92,18 @@
     <string name="global_waiting">Wait</string>
     <string name="global_select">Select</string>
     <string name="global_retry">Retry</string>
+    <string name="global_back">Back</string>
+    <string name="global_add">Add</string>
+    <string name="manage_mods_empty">No mods installed for this profile.</string>
+    <string name="manage_mods_delete_confirm">Delete %s?</string>
+    <string name="mod_install_success">%s installed to mods folder.</string>
+    <string name="hint_search_mod">Search for mods</string>
     <string name="global_default">Default</string>
+    <string name="global_off">Off</string>
 
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Application/Game exited with code %d, check latestlog.txt for more details.</string>
-    <string name="mcn_abort_title">Application/Game aborted, check latestlog.txt for more information</string>
+    <string name="mcn_signal_title">Application/Game aborted by fatal signal %d, check latestlog.txt for more details.</string>
     <string name="mcn_exit_confirm">Are you sure want to force close?</string>
     <string name="mcn_check_fail_vulkan_support">Zink (Vulkan) renderer is not supported on this device!</string>
 
@@ -139,9 +148,7 @@
 
     <string name="customctrl_mapping">Mapping</string>
     <string name="customctrl_orientation">Orientation</string>
-    <string name="customctrl_background_bitmap">Background image</string>
     <string name="customctrl_background_color">Background color</string>
-    <string name="customctrl_background_color_warning">Changing background color will reset the background image</string>
     <string name="customctrl_corner_radius">Corner radius</string>
     <string name="customctrl_stroke_width">Stroke width</string>
     <string name="customctrl_stroke_color">Stroke color</string>
@@ -165,12 +172,16 @@
     <string name="dl_library_sha_fail">Library %s is damaged and will be redownloaded</string>
     <string name="dl_library_sha_unknown">Library %s can\'t be checked, have to assume it\'s good</string>
     <string name="dl_library_sha_pass">Library %s is fine and usable</string>
+    <string name="mcl_gamepad_SDL">Enable SDL controller backend</string>
+    <string name="mcl_gamepad_SDL_subtitle">Enables SDL controller backend. Has better mod support. Falls back to GLFW if not used.</string>
     <string name="mcl_disable_gestures">Disable gestures</string>
     <string name="mcl_disable_gestures_subtitle">Disables gestures, such as hold to break block, and tap to place a block.</string>
     <string name="mcl_disable_swap_hand">Disable double tap to swap hands</string>
     <string name="mcl_disable_swap_hand_subtitle">Disables double tapping on the hotbar item to swap it in the second hand.</string>
     <string name="mcl_setting_title_mousespeed">Mouse Speed</string>
     <string name="mcl_setting_subtitle_mousespeed">Changes the speed of the virtual mouse.</string>
+    <string name="mcl_setting_title_grab_mouse">Use virtual cursor</string>
+    <string name="mcl_setting_subtitle_grab_mouse">Ensures the cursor stays inside the game. Prevents mouse from clicking touch control layout.</string>
     <string name="customctrl_passthru">Mouse pass-thru</string>
     <string name="customctrl_swipeable">Swipeable</string>
     <string name="customctrl_forward_lock">Forward lock</string>
@@ -205,14 +216,11 @@
     <string name="preference_java_description">Java Runtimes, JVM Arguments, RAM amount and sandbox</string>
     <string name="preference_misc_title">Miscellaneous settings</string>
     <string name="preference_misc_description">Version list and libraries check</string>
-    <string name="preference_experimental_title">Experimental Stuff</string>
     <string name="preference_experimental_description">Use things there with consideration, no support</string>
     <string name="preference_sustained_performance_title">Enable sustained performance mode</string>
     <string name="preference_sustained_performance_description">Limit thermal throttling by limiting peak performance.</string>
     <string name="preference_force_vsync_title">Force enable VSync</string>
     <string name="preference_force_vsync_description">Limit thermal throttling by limiting peak performance.</string>
-    <string name="preference_use_angle_title">Use ANGLE</string>
-    <string name="preference_use_angle_description">Allows using ANGLE instead of the system driver for LTW. Can fix graphical issues with mods on some GPUs</string>
     <string name="preference_force_english_title">Force language to English</string>
     <string name="preference_force_english_description">Allows you to see original strings, as intended by developers. Requires a restart.</string>
     <string name="preference_edit_controls_title">Edit custom controls</string>
@@ -234,16 +242,15 @@
     <string name="profiles_latest_release">Latest release</string>
     <string name="profiles_profile_name">Name</string>
     <string name="profiles_profile_version">Version</string>
-    <string name="instance_shared_data">Shared data (click to switch)</string>
-    <string name="instance_shared_data_on">Store game data in a shared directory</string>
-    <string name="instance_shared_data_off">Store game data in the instance directory</string>
     <string name="global_delete">Delete</string>
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Renderer</string>
+    <string name="arc_capes_title">Cosmetica Capes</string>
+    <string name="arc_capes_desc">Enables capes from Cosmetica (previously Arc). For more information please visit https://cosmetica.cc. Requires OptiFine.</string>
     <string name="color_default_hex" translatable="false">FFFF0000</string>
     <string name="notif_channel_name">General</string>
     <string name="notif_channel_id" translatable="false">channel_id</string>
-    <string name="lazy_service_default_title">Mojo Foreground Service</string>
+    <string name="lazy_service_default_title">Copper Foreground Service</string>
     <string name="mcl_setting_veroption_installed">Installed</string>
     <string name="use_global_default">(Use global default)</string>
     <string name="default_control">Default controlmap</string>
@@ -258,7 +265,7 @@
     <string name="main_add_account">Add account</string>
     <string name="tasks_ongoing">Tasks are in progress, please wait</string>
     <string name="no_saved_accounts">No saved accounts</string>
-    <string name="mc_download_failed">Failed to download Minecraft! This could be due to bad network connection, incorrectly placed files, etc..</string>
+    <string name="mc_download_failed">Failed to download Minecraft! This could be due to bad network connection, incorrectly placed files, trying to download Minecraft from a Local account, etc..</string>
     <string name="xerr_unknown">Unknown Xbox Live API error %d</string>
     <string name="xerr_no_account">You don\'t seem to have an Xbox Live account. Please log in once on https://minecraft.net/ and try again.</string>
     <string name="xerr_adult_verification">An adult needs to verify your account.</string>
@@ -273,13 +280,13 @@
     <string name="preference_gyro_sample_rate_title">Gyroscope sampling rate</string>
     <string name="preference_gyro_sample_rate_description">If you have performance issues with gyroscope controls, increase this.</string>
     <string name="microsoft_login_retry_later">Too many requests, please try again later.</string>
-    <string name="storage_required">MojoLauncher requires external storage to be attached. Please reconnect it and restart the app.</string>
+    <string name="storage_required">PojavLauncher requires external storage to be attached. Please reconnect it and restart the app.</string>
     <string name="mcl_setting_title_buttonallcaps">Only use capital letters in button labels</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Disable this if you want to use lowercase letters in your controls.</string>
-    <string name="create_instance">Create new instance</string>
+    <string name="create_profile">Create new profile</string>
     <string name="preference_shader_dump_title">Enable shader dumping</string>
     <string name="preference_shader_dump_description">Log converted shaders into the log file.</string>
-    <string name="percent_format">%d%%</string>
+    <string name="percent_format" translatable="false">%d%%</string>
     <string name="millisecond_format">%d ms</string>
     <string name="customctrl_editor_exit_title">Leaving?</string>
     <string name="customctrl_editor_exit_msg">Are you sure you want to exit?</string>
@@ -295,37 +302,48 @@
     <string name="preference_deadzone_scale_title">Joystick deadzone scale</string>
     <string name="preference_deadzone_scale_description">Increase it if the joystick drifts.</string>
 
-    <string name="preference_microphone_access_title">Request microphone access permission</string>
-    <string name="preference_microphone_access_description">Requests system to give access to device microphone for the game</string>
 
     <string name="preference_force_big_core_title">Force the renderer to run on the big core</string>
     <string name="preference_force_big_core_desc">Forces the Minecraft render thread to run on the core with the highest maximum frequency.</string>
+    <string name="preference_force_landscape_title">Force landscape orientation</string>
+    <string name="preference_force_landscape_summary">Always rotate the launcher to landscape, regardless of device orientation.</string>
+    <string name="preference_category_launcher_appearance">Launcher appearance</string>
+    <string name="preference_set_custom_bg_title">Set custom launcher background</string>
+    <string name="preference_set_custom_bg_summary">Pick an image from your gallery to use as the launcher background.</string>
+    <string name="preference_remove_custom_bg_title">Remove custom launcher background</string>
+    <string name="preference_remove_custom_bg_summary">Reset the launcher background to the default (no image).</string>
+    <string name="preference_custom_bg_set_success">Custom background applied.</string>
+    <string name="preference_custom_bg_removed">Custom background removed.</string>
+    <string name="preference_custom_bg_error">Failed to load the selected image.</string>
+    <string name="preference_colour_presets_title">Colour theme presets</string>
+    <string name="preference_colour_presets_summary">Choose a built-in colour scheme or reset to default.</string>
+    <string name="preference_colour_reset">Reset to default</string>
+    <string name="preference_colour_theme_applied">Theme applied. Restart the launcher for full effect.</string>
+    <string name="preference_bg_gradient_title">Background Color</string>
+    <string name="preference_bg_gradient_summary">Enable theme background colours.</string>
     <string name="version_select_hint">Select a version</string>
     <string name="forge_dl_progress">Downloading installer for %s</string>
     <string name="forge_dl_searching">Searching for Forge version number</string>
+    <string name="neoforge_dl_searching">Searching for NeoForge version number</string>
     <string name="modloader_dl_failed_to_load_list">Failed to load the version list!</string>
     <string name="forge_dl_no_installer">Sorry, but this version of Forge does not have an installer, which is not yet supported.</string>
     <string name="forge_dl_select_version">Select Forge version</string>
-    <string name="neoforge_dl_no_installer">Sorry, but this version of NeoForge does not have an installer, which is not yet supported.</string>
-    <string name="neoforge_dl_select_version">Select NeoForge version</string>
     <string name="fabric_dl_progress">Downloading %s loader metadata</string>
     <string name="fabric_dl_loader_version">%s loader version</string>
     <string name="fabric_dl_game_version">Minecraft version</string>
     <string name="fabric_dl_install">Install</string>
     <string name="fabric_dl_cant_read_meta">Failed to read %s loader metadata. Please try again later.</string>
-    <string name="fabric_dl_cant_read_meta2">Failed to read Fabric loader metadata. Please try again later.</string>
-    <string name="modloader_dl_install_fabric_instance">Create Fabric instance</string>
-    <string name="modloader_dl_install_quilt_instance">Create Quilt instance</string>
-    <string name="modloader_dl_install_forge_instance">Create Forge instance</string>
-    <string name="modloader_dl_install_neoforge_instance">Create NeoForge instance</string>
-    <string name="create_instance_vanilla">Create vanilla instance</string>
+    <string name="modloader_dl_install_fabric">Create Fabric profile</string>
+    <string name="modloader_dl_install_quilt">Create Quilt profile</string>
+    <string name="modloader_dl_install_forge">Create Forge profile</string>
+    <string name="create_profile_vanilla">Create vanilla profile</string>
     <string name="create_profile_vanilla_like_versions">Vanilla-like versions</string>
     <string name="create_profile_modded_versions">Modded versions</string>
     <string name="fabric_dl_loader_title">Select versions</string>
     <string name="of_dl_select_version">Select OptiFine version</string>
     <string name="of_dl_failed_to_scrape">Failed to collect data for OptiFine installation</string>
     <string name="of_dl_progress">Downloading %s</string>
-    <string name="mod_dl_install_optifine">Install OptiFine</string>
+    <string name="create_profile_optifine">Create OptiFine profile</string>
 
 
     <string name="hint_search_modpack">Search for modpacks</string>
@@ -339,18 +357,20 @@
 
     <string name="search_modpack_no_result">No modpacks found</string>
     <string name="search_modpack_error">Failed to find modpacks</string>
+    <string name="search_mod_no_result">No mods found</string>
+    <string name="search_mod_error">Failed to find mods</string>
     <string name="search_modpack_download_error">Failed to download modpack metadata</string>
 
     <string name="modpack_download_downloading_metadata">Downloading modpack metadata (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods">Downloading mods (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Downloading mods (File %d out of %d)</string>
     <string name="modpack_download_applying_overrides">Applying overrides (%d/%d)</string>
-    <string name="modpack_install_notification_title">Mojo Modpack Installer</string>
+    <string name="modpack_install_notification_title">Pojav Modpack Installer</string>
     <string name="modpack_install_notification_success">Click here to finish modpack installation</string>
     <string name="modpack_install_notification_data_not_available">Failed to download mod loader information</string>
     <string name="modpack_install_modloader_download_failed">Failed to download the mod loader files</string>
     <string name="modpack_install_download_failed">Failed to download modpack files</string>
-    <string name="modpack_install_instance_button">Create modpack instance</string>
+    <string name="modpack_install_button">Create modpack profile</string>
 
     <string name="notif_error_occured">An error has occurred</string>
     <string name="notif_error_occured_desc">Click to see more details</string>
@@ -377,7 +397,7 @@
     <string name="preference_category_miscellaneous">Miscellaneous settings</string>
     <string name="preference_category_video">Video settings</string>
     <string name="notification_permission_dialog_title">Permission request</string>
-    <string name="notification_permission_dialog_text">MojoLauncher requires a permission to post notifications to prevent game/modpack downloads from stopping when you leave the app. Without this permission, Android may shut down your downloads when you put MojoLauncher in background mode.</string>
+    <string name="notification_permission_dialog_text">PojavLauncher requires a permission to post notifications to prevent game/modpack downloads from stopping when you leave the app. Without this permission, Android may shut down your downloads when you put PojavLauncher in background mode.</string>
     <string name="notification_permission_toast">You can always change your mind later by going into Settings</string>
     <string name="preference_ask_for_notification_title">Allow notifications</string>
     <string name="preference_ask_for_notification_description">Click to re-request the notification permission, required for game/modpack background downloads to work properly.</string>
@@ -385,6 +405,7 @@
     <string name="preference_vsync_in_zink_description">Allows the launcher to use internal system APIs to enable V-Sync for Zink. Turn this off if your launcher suddenly crashes with Zink after a system update.</string>
     <string name="exception_failed_to_unpack_jre17">Failed to install JRE 17</string>
     <string name="newdl_starting">Reading game metadata…</string>
+    <string name="newdl_downloading_jre_runtime">Downloading Java %s runtime (%.2f/%.2f MB)</string>
     <string name="newdl_downloading_metadata">Downloading game metadata (%s)</string>
     <string name="newdl_downloading_game_files">Downloading game… (%d/%d, %.2f MB/s)</string>
     <string name="newdl_downloading_game_files_size">Downloading game… (%.2f/%.2f MB, %.2f MB/s)</string>
@@ -429,63 +450,95 @@
     <string name="controller_remapper_expand_entry">Expand to change keycodes</string>
     <string name="preference_remap_controller_title">Change controller key bindings</string>
     <string name="preference_remap_controller_description">Allows you to modify the keyboard keys bound to each controller button</string>
-    <string name="mcl_button_social_media">Discord</string>
+    <string name="mcl_button_discord">Discord</string>
+    <string name="mcl_section_quick_actions">Quick Actions</string>
+    <string name="mcl_section_instance_tools">Instance Tools</string>
+    <string name="mcl_section_instances">Select Instance</string>
+    <string name="mcl_button_mod_store">Browse Mods</string>
+    <string name="mcl_button_settings">Settings</string>
+    <string name="mcl_button_manage_mods">Manage Mods</string>
+    <string name="mcl_button_install_modpack">Install Modpack (.mrpack/zip)</string>
+    <string name="delete">Delete</string>
     <string name="ltw_render_distance_warning_msg">Your GPU is not capable of rendering above 7 render distance without Sodium or other similar mods. The render distance will be automatically reduced when you click "OK".</string>
     <string name="mcl_button_open_directory">Open game directory</string>
-    <string name="social_media_invite" translatable="false">https://discord.gg/VHdwQFsaGX</string>
+    <string name="discord_invite" translatable="false">https://discord.gg/8WzF2RVAq4</string>
     <string name="local_login_bad_username_title">Unsuitable username</string>
     <string name="local_login_bad_username_text">The username must be between 3–16 characters long, and must only contain latin letters, numbers 0–9 and underscores.</string>
     <string name="quick_setting_title">Quick settings</string>
-    <string name="create_bta_instance">Create \"Better than Adventure!\" instance</string>
+    <string name="create_bta_profile">Create \"Better than Adventure!\" profile</string>
     <string name="select_bta_version">Select \"Better than Adventure!\" version</string>
     <string name="bta_installer_available_versions">Supported BTA versions</string>
     <string name="bta_installer_untested_versions">Untested BTA versions</string>
     <string name="bta_installer_nightly_versions">Nightly BTA versions</string>
     <string name="newdl_extracting_native_libraries">Extracting native libraries (%d/%d)</string>
-    <string name="compat_version_not_supported">Your device cannot run this version because LTW is not supported on your device.</string>
-    <string name="compat_sodium_not_supported">Your device cannot run Sodium on this version because LTW is not supported on your device.</string>
-    <string name="oauth_unknown_error">Unknown authentication error</string>
-    <string name="oauth_web_complete">Authenticating…</string>
-    <string name="auth_select_microsoft">Microsoft account</string>
-    <string name="auth_select_elyby">Ely.by account</string>
-    <string name="auth_select_local">Local account</string>
-    <string name="instance_dir_missing">Instance is missing</string>
-    <string name="gamedir_open_failed">Failed to open game directory</string>
-    <string name="newerdl_inserting_metadata">Searching for file metadata…</string>
-    <string name="newerdl_inserting_metadata_count">Searching for file metadata… (%d/%d)</string>
-    <string name="newerdl_downloading_files_count">Downloading files… (%d/%d, %.2f MB/s)</string>
-    <string name="newerdl_downloading_files_size">Downloading files… (%.2f/%.2f MB, %.2f MB/s)</string>
-    <string name="preference_verify_game_files_title">Verify game files</string>
-    <string name="preference_verify_game_files_description">Verify downloaded game files against the checksum and size set in the metadata. Metadata JSON files are verified regardless of this setting.</string>
-    <string name="preference_go_vroom_title">Fast game startup</string>
-    <string name="preference_go_vroom_description">Don\'t verify file checksums upon sequential restarts. Makes the game start-up very fast.</string>
-    <string name="vml_fail_load_runtime">Failed to load the Java virtual machine: %s</string>
-    <string name="vml_fail_create_runtime">Failed to create the Java virtual machine: %s</string>
-    <string name="vml_fail_find_hooks_native">Failed to find native hooks.</string>
-    <string name="vml_fail_find_hooks">Failed to find hook targets. Check latestlog.txt for details</string>
-    <string name="vml_fail_insert_hooks">Failed to install hooks: %s</string>
-    <string name="vml_fail_load_classpath">Failed to load the classpath. Check latestlog.txt for details</string>
-    <string name="vml_fail_run_main">Failed to start the main class. Check latestlog.txt for details</string>
-    <string name="vml_huh">\???</string>
-    <string name="vml_err_ok">Success</string>
-    <string name="vml_err_unknown">Unknown error</string>
-    <string name="vml_err_detached">Thread is detached from the Java VM</string>
-    <string name="vml_err_version">Incompatible JNI version</string>
-    <string name="vml_err_nomem">Out of RAM</string>
-    <string name="vml_err_exists">The VM is already loaded</string>
-    <string name="vml_err_inval">Bad arguments</string>
-    <string name="gr_err_renderer_load_Failed">Failed to load renderer library</string>
-    <string name="ltw_4x_msaa_warning_msg">It appears that you have turned on "Force 4x MSAA" in Developer settings. Please turn it off to avoid rendering issues.</string>
-    <string name="no_instance">No instance is selected. Please create an instance or select one.</string>
-    <string name="downloading_java_runtime_uni">Downloading runtime, stage 1/2 (%.2f/%.2f MB)</string>
-    <string name="downloading_java_runtime_platform">Downloading runtime, stage 2/2 (%.2f/%.2f MB)</string>
-    <string name="runtime_error_title">Runtime not available</string>
-    <string name="runtime_error_missing">Java %d is not yet installed. Please choose another compatible runtime or connect to the Internet to install it automatically.</string>
-    <string name="runtime_error_install_failed">Failed to install Java %d. Please check your Internet connection and try again.</string>
-    <string name="modloader_dl_install_legacy_fabric_instance">Create Legacy Fabric instance</string>
-    <string name="instance_delete">Delete instance</string>
-    <string name="instance_delete_confirmation">Are you sure you want to delete the instance? This will permanently delete all worlds, mods, resources and any other data in the instance directory. This action cannot be undone!</string>
-    <string name="import_local_modpack">Import local modpack</string>
-    <string name="preference_sysmem_title">Force rendering into the system memory</string>
-    <string name="preference_sysmem_summary">Forces Freedreno to render directly into the system memory. Enable if performance is low or you experience rendering issues</string>
+    <string name="toast_not_available_demo">This is not available in demo mode</string>
+
+    <string name="preference_renderer_mobileglues_settings">MobileGlues Renderer Settings</string>
+    <string name="mg_renderer_glsl_cache">Max GLSL cache size</string>
+    <string name="mg_renderer_angle">Use ANGLE as driver</string>
+    <string name="mg_renderer_multidraw">Multidraw emulation mode</string>
+    <string name="mg_renderer_title_errorSetting">Error Filtering</string>
+    <string name="mg_renderer_title_timerQueryExt">Disable GPU Utilization in F3 menu</string>
+    <string name="mg_renderer_summary_timerQueryExt">Fixes random crashes when F3 is open on some Mali devices</string>
+    <string name="preference_ANGLE_only">ANGLE Only Options</string>
+    <string name="mg_renderer_title_angleDepthClearFixMode">Fix hand and held items from going through blocks</string>
+    <string name="mg_renderer_summary_angleDepthClearFixMode">Only affects ANGLE, can affect performance.</string>
+    <string name="preference_experimental_title">Experimental Stuff</string>
+    <string name="mg_renderer_title_gl43exts">Advertise Experimental OpenGL 4.3 extensions</string>
+    <string name="mg_renderer_summary_gl43exts">May help with mod crashes. Disable if not needed, can cause crashes.</string>
+    <string name="mg_renderer_title_computeShaderext">Advertise Experimental Compute Shader extension</string>
+    <string name="mg_renderer_summary_computeShaderext">May help with shaderpack glitches. Disable if not needed, can cause crashes.</string>
+    <string name="mg_renderer_title_multidrawCompute">Use Compute Multidraw Emulation</string>
+    <string name="mg_renderer_summary_multidrawCompute">Uses compute shaders for multidraw emulation</string>
+    <string name="app_short_name" translatable="false">Copper</string>
+    <string name="demo_versions_supported">Only Vanilla 1.3.1 and above are supported on demo accounts</string>
+    <string name="demo_unsupported">Demo Profile not supported</string>
+    <string name="change_account">Please change accounts to use this function</string>
+    <string name="no_minecraft_account_found">No Minecraft Account Found</string>
+    <string name="feature_requires_java_account">This feature requires a Microsoft account that owns Minecraft Java Edition.</string>
+    <string name="delete_account_and_login">Delete account and log in</string>
+    <string name="login_again">Please log in again</string>
+    <string name="account_corrupted">Selected account is corrupted</string>
+    <string name="modloader_dl_install_neoforge">Create Neoforge profile</string>
+    <string name="neoforge_dl_select_version">Select NeoForge version</string>
+    <string name="neoforge_dl_no_installer">Sorry, but this version of NeoForge does not have an installer, which is not yet supported.</string>
+
+    <string name="preference_category_touchcontroller_settings">TouchController Settings</string>
+    <string name="preference_force_enable_touchcontroller_title">Force enable TouchController</string>
+    <string name="preference_force_enable_touchcontroller_description">Force enable TouchController integration, even if mod file is not found.</string>
+    <string name="preference_touchcontroller_vibrate_length_title">TouchController vibrate length</string>
+    <string name="preference_touchcontroller_vibrate_length_description">Set the length of the vibration when using TouchController.</string>
+    <string name="error_vanilla_json_corrupt">Vanilla json seems to be corrupt. Please send a bug report on github or discord.</string>
+    <string name="preference_ask_for_microphone_title">Allow microphone</string>
+    <string name="preference_ask_for_microphone_description">Click to re-request the notification permission, required for voice chat mods like Simple Voice Chat.</string>
+    <string name="mcl_gamepad_forcedSDL_subtitle">Can allow old versions of Legacy4J to use SDL backend</string>
+    <string name="mcl_gamepad_forcedSDL">Forcibly start SDL controller handling</string>
+    <string name="preference_category_SDL_settings">SDL Settings</string>
+    <string name="oldL4JFound">You are using a version of Legacy4J without the android fixes! You will need to manually enable SDL in the controller settings to get the best experience!</string>
+    <string name="global_warning">Warning!</string>
+    <string name="controllableFound">Controllable currently has a random chance of crashing on launch. Either keep trying again and hope it launches or use another mod like Controlify.</string>
+    <string name="mg_renderer_title_dsaExt">Advertise Experimental Direct State Access extension</string>
+    <string name="mg_renderer_summary_dsaExt">May help with Iris shaderpacks, required for AcceleratedRendering mod</string>
+    <string name="mg_renderer_title_fsr">AMD FSR 1 Upscaling</string>
+    <string name="autorendererselectfailed">Auto-renderer select failed, defaulting to HolyGL4ES</string>
+    <string name="sodium_warning_title">Sodium detected!</string>
+    <string name="sodium_warning_message">It appears you are using sodium, this is unsupported and may lead to graphical issues or crashes. Please remove it and all dependent mods.</string>
+    <string name="delete_sodium">Delete Sodium and Launch report this if you see this it should have been removed</string>
+    <string name="sodium_override_title">Run sodium forcefully</string>
+    <string name="sodium_override_summaryOff">Using sodium may cause visual bugs and crashes. You have been warned.</string>
+    <string name="sodium_override_summaryOn">Sodium is not supported. No help will be given if you encounter any issues.</string>
+    <!--  Make sure the people turning this on can read English.  -->
+    <string name="sodium_math_warning_title" translatable="false">Solve the math question to enable</string>
+    <string name="sodium_math_warning_message" translatable="false">
+    Sodium is unsupported, you are on your own. No support will be given in the discord server.\nUsing sodium may result in bugs, glitches, and crashes. No help will be given even if you lose any of your worlds or saves.\n\nNow what\'s %1$s multiplied by %2$s plus %3$s minus %4$s?
+    </string>
+    <string name="not_modpack_file">Not a modpack file!</string>
+    <string name="global_not_installed">Not Installed</string>
+    <string name="global_download">Download</string>
+    <string name="multirt_no_internet">Failed to download, check your internet connection.</string>
+    <string name="global_installing">Installing…</string>
+
+    <string name="mod_deps_title">Select dependencies to install</string>
+    <string name="mod_deps_install_selected">Install selected</string>
+    <string name="mod_deps_install_without">Install without deps</string>
 </resources>

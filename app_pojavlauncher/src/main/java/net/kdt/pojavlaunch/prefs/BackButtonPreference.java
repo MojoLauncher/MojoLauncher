@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 
 import androidx.preference.Preference;
 
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 
@@ -24,7 +24,7 @@ public class BackButtonPreference extends Preference {
             setTitle(R.string.preference_back_title);
         }
         if(getIcon() == null){
-            setIcon(R.drawable.ic_px_arrow_left);
+            setIcon(R.drawable.ic_arrow_back_white);
         }
     }
 
