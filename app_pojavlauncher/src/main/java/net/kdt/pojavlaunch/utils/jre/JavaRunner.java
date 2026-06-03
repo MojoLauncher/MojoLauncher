@@ -11,6 +11,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import net.kdt.pojavlaunch.AWTCanvasView;
+import net.kdt.pojavlaunch.Architecture;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.Runtime;
@@ -247,6 +248,15 @@ public class JavaRunner {
         return hasJavaAgent;
     }
 
+    private static void addx86SignalWorkaround(List<String> args) {
+        if(Build.VERSION.SDK_INT != 23) return;
+        if(Architecture.getDeviceArchitecture() != Architecture.ARCH_X86) return;
+        // On Marshmallow x86, something related to signal handling is broken inside of ART/sigchain library
+        // is broken, causing unclaimed signals to be sent into the sigchain. This drops the whole launcher into an abort.
+        // Enabling -Xrs prevents the VM from sending those signals (
+        args.add("-Xrs");
+    }
+
     /**
      * Start the Java(tm) Virtual Machine.
      * @param runtime the Runtime that we're starting.
@@ -270,6 +280,7 @@ public class JavaRunner {
 
 
         runtimeArgs.add("-XX:ActiveProcessorCount=" + java.lang.Runtime.getRuntime().availableProcessors());
+        addx86SignalWorkaround(runtimeArgs);
         StringBuilder classpathBuilder = new StringBuilder().append("-Djava.class.path=");
         boolean first = true;
         for(String entry : classpathEntries) {
