@@ -158,7 +158,7 @@ public class JavaRunner {
         return null;
     }
 
-    private static File findVmPath(File runtimeHomeDir, String runtimeArch) {
+    public static File findVmPath(File runtimeHomeDir, String runtimeArch) {
         File finalPath;
         if((finalPath = findVmForArch(runtimeHomeDir, null)) != null) return finalPath;
         switch (runtimeArch) {
@@ -233,7 +233,7 @@ public class JavaRunner {
                     break;
                 case "-d32":
                 case "-d64":
-                case "-Xint":
+                //case "-Xint":
                 case "-XX:+UseTransparentHugePages":
                 case "-XX:+UseLargePagesInMetaspace":
                 case "-XX:+UseLargePages":
