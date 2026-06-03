@@ -233,7 +233,7 @@ public class JavaRunner {
                     break;
                 case "-d32":
                 case "-d64":
-                //case "-Xint":
+                case "-Xint":
                 case "-XX:+UseTransparentHugePages":
                 case "-XX:+UseLargePagesInMetaspace":
                 case "-XX:+UseLargePages":
