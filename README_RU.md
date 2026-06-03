@@ -1,12 +1,11 @@
 <H1 align="center">MojoLauncher</H1>
 
-<a href="https://github.com/MojoLauncher/MojoLauncher/blob/v3_openjdk/README.md">Readme in English</a>
+<a href="./README.md">Readme in English</a>
 
-<img src="https://github.com/MojoLauncher/MojoLauncher/blob/v3_openjdk/app_pojavlauncher/src/main/assets/pojavlauncher.png" align="left" width="150" height="150" alt="MojoLauncher logo">
+<img src="./app_pojavlauncher/src/main/assets/pojavlauncher.png" align="left" width="150" height="150" alt="MojoLauncher logo">
 
 [![Android CI](https://github.com/MojoLauncher/MojoLauncher/workflows/Android%20CI/badge.svg)](https://github.com/MojoLauncher/MojoLauncher/actions)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/MojoLauncher/MojoLauncher)](https://github.com/MojoLauncher/MojoLauncher/actions)
-[![Crowdin](https://badges.crowdin.net/pojavlauncher/localized.svg)](https://crowdin.com/project/pojavlauncher)
 [![Discord](https://img.shields.io/discord/1365346109131722753.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/VHdwQFsaGX)
 
 * MojoLauncher это лаунчер, основанный на [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher), позволяющий играть в Minecraft: Java Edition на устройствах Android!
@@ -14,7 +13,7 @@
 * Он может запускать почти любую версию Minecraft, позволяя устанваливать через .jar загрузчики модов такие как [Forge](https://files.minecraftforge.net/) и [Fabric](http://fabricmc.net/), и моды по типу [OptiFine](https://optifine.net).
 
 ## Навигация
-- [Введение](#introduction)  
+- [Введение](#introduction)
 - [Как получить MojoLauncher](#getting-mojolauncher)
 - [Сборка](#building) 
 - [Текущие планы](#current-roadmap) 
@@ -24,19 +23,21 @@
 
 ## Введение 
 * MojoLauncher это лаунчер Minecraft: Java Edition для Android основанный на [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher)
-* Лаунчер может запускать почти все доступные версии Minecraft в диапазоне от rd-132211 до снапшотов 1.21 (включая версии Combat Test). 
+* Лаунчер может запускать почти все доступные версии Minecraft в диапазоне от rd-132211 до снапшотов 26.x (включая версии Combat Test). 
 * Моддинг через Forge и Fabric так же поддерживается. 
 
 ## Как получить MojoLauncher
 
-Получить копию MojoLauncher можно тремя способами:
+Получить копию MojoLauncher можно четырьмя способами:
 
-1. Можно скачать готовый билд с раздела [автоматических сборок](https://github.com/MojoLauncher/MojoLauncher/actions).
+1. Можно скачать готовый билд с раздела [релизов](http://github.com/mojolauncher/mojolauncher/releases).
 
 2. Можно скачать с Google Play нажав на кнопку ниже:
 [![Google Play](https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=git.artdeell.mojo)
 
-3. Можно [собрать](#building) с исходного кода.
+3. Можно скачать с ранние билды с [Github Actions](http://github.com/mojolauncher/mojolauncher/actions).
+
+4. Можно [собрать](#building) с исходного кода.
 ## Сборка  
 * Скомпилируйте лаунчер (все необходимые компоненты скачаются автоматически)
 ```
