@@ -140,10 +140,9 @@ public class JREUtils {
         MesaUtils.initEnvironment(context, renderer, envMap);
 
         // HACK
-        envMap.put("POJAV_NATIVEDIR", Tools.NATIVE_LIB_DIR);
+        String customLd = MesaUtils.getCustomLdPath();
+        envMap.put("POJAV_NATIVEDIR", customLd == null ? Tools.NATIVE_LIB_DIR : customLd + ":" + Tools.NATIVE_LIB_DIR);
         envMap.put("EGL_PLATFORM", "android");
-
-        Logger.appendToLog("Native directory: " + envMap.get("POJAV_NATIVEDIR"));
 
         if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
 

@@ -74,4 +74,9 @@ public class MesaUtils {
             return zink.resolveAbsolutePath(MESA_EGL_LEGACY);
         } else return MESA_EGL;
     }
+    public static String getCustomLdPath() {
+        if ((LauncherPreferences.PREF_ZINK_FORCE_LEGACY || GLInfoUtils.getGlInfo().isArm()) && zink != null)
+            return zink.getLibraryPath();
+        return null;
+    }
 }
