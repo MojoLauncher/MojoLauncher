@@ -2,6 +2,7 @@ package net.kdt.pojavlaunch.utils;
 
 import android.content.Context;
 
+import net.kdt.pojavlaunch.Architecture;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
@@ -30,7 +31,7 @@ public class MesaUtils {
                 // HACK: GLSL version override for Mesa-based renderers (i.e. Zink)
                 // Required to run the game properly on some mobile Vulkan drivers (Minecraft fails to compile shaders without)
                 envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
-                if(LauncherPreferences.PREF_ZINK_FORCE_LEGACY || GLInfoUtils.getGlInfo().isArm()) {
+                if(!Architecture.isx86Device() && (LauncherPreferences.PREF_ZINK_FORCE_LEGACY || GLInfoUtils.getGlInfo().isArm())) {
                     zink = LibraryPlugin.discoverPlugin(context, LibraryPlugin.ID_ZINK_PLUGIN);
                     if(zink == null) return;
                     envMap.put("LIBGL_DRIVERS_PATH", zink.getLibraryPath());
