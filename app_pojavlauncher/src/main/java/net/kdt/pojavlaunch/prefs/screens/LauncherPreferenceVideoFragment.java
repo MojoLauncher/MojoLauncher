@@ -43,13 +43,18 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
 
         requirePreference("alternate_surface", SwitchPreferenceCompat.class).setChecked(LauncherPreferences.PREF_USE_ALTERNATE_SURFACE);
         requirePreference("force_vsync", SwitchPreferenceCompat.class).setChecked(LauncherPreferences.PREF_FORCE_VSYNC);
-        requirePreference("zinkForceLegacy", SwitchPreference.class).setChecked(LauncherPreferences.PREF_ZINK_FORCE_LEGACY);
 
         // Show ANGLE switch only if AnglePlugin is available
         LibraryPlugin angle = LibraryPlugin.discoverPlugin(getContext(), LibraryPlugin.ID_ANGLE_PLUGIN);
         SwitchPreferenceCompat angleSwitch = requirePreference("use_angle", SwitchPreferenceCompat.class);
         angleSwitch.setVisible(angle != null);
         angleSwitch.setChecked(LauncherPreferences.PREF_USE_ANGLE);
+
+        // Same but for ZINK plugin
+        LibraryPlugin zink = LibraryPlugin.discoverPlugin(getContext(), LibraryPlugin.ID_ZINK_PLUGIN);
+        SwitchPreference legacyZink = requirePreference("zinkForceLegacy", SwitchPreference.class);
+        legacyZink.setChecked(LauncherPreferences.PREF_ZINK_FORCE_LEGACY);
+        legacyZink.setVisible(zink != null);
 
         ListPreference rendererListPreference = requirePreference("renderer",
                 ListPreference.class);
