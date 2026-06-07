@@ -1,0 +1,348 @@
+plugins {
+    id 'com.android.application' version '8.11.1'
+    id 'de.undercouch.download' version '5.6.0'
+    id 'org.ajoberstar.grgit' version '5.3.2'
+}
+
+apply from: rootProject.file('gradle/prefab_bypass.gradle')
+
+import de.undercouch.gradle.tasks.download.Download
+
+static def getDate() { return new Date().format('yyyyMMdd') }
+
+static def getDateSeconds() {
+    if (System.getenv("GITHUB_ACTIONS") == "true") {
+        return Integer.parseInt(System.getenv("GITHUB_RUN_NUMBER"))
+    } else {
+        return 172005
+    }
+}
+
+def getVersionName = {
+    def currentBranch = grgit.branch.current()
+    def latestCommit = grgit.log(maxCommits: 1)
+    def dateToday = getDate()
+    if(currentBranch == null || latestCommit == null) {
+        return "LOCAL-${dateToday}"
+    }else {
+        def branchName = currentBranch.getName()
+        def commitAbbreviation = latestCommit.abbreviatedId
+        return "iris-${dateToday}-${commitAbbreviation}-${branchName}"
+    }
+}
+
+def getCFApiKey = {
+    String key = System.getenv("CURSEFORGE_API_KEY")
+    if(key != null) return key
+    File curseforgeKeyFile = new File("./curseforge_key.txt")
+    if(curseforgeKeyFile.canRead() && curseforgeKeyFile.isFile()) {
+        return curseforgeKeyFile.text
+    }
+    logger.warn('BUILD: You have no CurseForge key, the curseforge api will get disabled !')
+    return "DUMMY"
+}
+
+configurations {
+    instrumentedClasspath {
+        canBeConsumed = false
+        canBeResolved = true
+    }
+}
+
+android {
+    namespace 'git.artdeell.mojo'
+
+    compileSdk = 36
+
+    lintOptions {
+        abortOnError false
+    }
+
+    signingConfigs {
+        customDebug {
+            storeFile file("debug.keystore")
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+        googlePlayBuild {
+            storeFile file("mojo_upload.jks")
+            storePassword System.getenv("UPLOAD_KEYSTORE_PASSWORD")
+            keyAlias "key0"
+            keyPassword System.getenv("UPLOAD_KEYSTORE_PASSWORD")
+        }
+        publicBuild {
+            storeFile file("mojo_pub.jks")
+            storePassword System.getenv("MOJOPUB_KEYSTORE_PASSWORD")
+            keyAlias "key0"
+            keyPassword System.getenv("MOJOPUB_KEYSTORE_PASSWORD")
+        }
+    }
+
+    defaultConfig {
+        applicationId "git.artdeell.mojo"
+        minSdkVersion 21
+        targetSdkVersion 36
+        versionCode getDateSeconds()
+        versionName getVersionName()
+        multiDexEnabled false //important
+        resValue 'string', 'curseforge_api_key', getCFApiKey()
+    }
+
+    flavorDimensions  = ["runtime"]
+    
+    productFlavors {
+        full {
+            dimension "runtime"
+        }
+        
+        noruntime {
+            dimension "runtime"
+            versionNameSuffix "-noruntime"
+        }
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix '.debug'
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.customDebug
+            resValue 'string', 'application_package', 'git.artdeell.mojo.debug'
+            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mojo.scoped.gamefolder.debug'
+        }
+        proguard {
+            initWith debug
+            minifyEnabled true
+            shrinkResources true
+        }
+        proguardNoDebug {
+            initWith proguard
+            debuggable false
+        }
+
+        release {
+            // Don't set to true or java.awt will be a.a or something similar.
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // defaultConfig already set
+            // multiDexEnabled = true
+            // debuggable = true
+            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mojo.scoped.gamefolder'
+            resValue 'string', 'application_package', 'git.artdeell.mojo'
+        }
+        gplay {
+            initWith release
+            signingConfig signingConfigs.googlePlayBuild
+        }
+        pubRelease {
+            initWith release
+            signingConfig signingConfigs.customDebug // WIP, changeme
+            applicationIdSuffix '.pub'
+            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mojo.pub.scoped.gamefolder'
+            resValue 'string', 'application_package', 'git.artdeell.mojo.pub'
+        }
+    }
+
+    ndkVersion "29.0.14206865"
+
+    externalNativeBuild {
+        cmake {
+            path file('src/main/jni/CMakeLists.txt')
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+        pickFirst '**/libbytehook.so'
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+}
+
+class AssetTaskRegistrar {
+    private Project project
+    private Task mergeAssetsTask
+    private File targetAssetsDir
+    private String variantName
+    private File targetDownloadDir
+    private File projectJarDir
+
+    AssetTaskRegistrar(Project project) {
+        this.project = project
+
+        targetDownloadDir = new File(project.projectDir, "build/intermediates/download_deps")
+        projectJarDir = new File(project.projectDir, "build/intermediates/package_jar_deps")
+        createDirectories targetDownloadDir
+        createDirectories projectJarDir
+    }
+
+    def setVariant(variant) {
+        variantName = variant.getName().capitalize()
+        mergeAssetsTask = variant.getPreBuildProvider().get()
+
+        targetAssetsDir = new File(project.projectDir, "build/intermediates/remote_asset_set/${variantName.toLowerCase()}/")
+        createDirectories(targetAssetsDir)
+
+        project.android.sourceSets[variant.getName()].assets.srcDirs += targetAssetsDir.absolutePath
+    }
+
+    static def createDirectories(File location) {
+        if(!location.isDirectory() && !location.mkdirs())
+            throw new RuntimeException("Failed to create directory "+location.getAbsolutePath())
+    }
+
+    static def writeVersion(File dir) {
+        File versionFile = new File(dir, "version")
+        versionFile.write(String.valueOf(new Date().getTime()))
+    }
+
+    private def assetDestination(String relativePath) {
+        return new File(targetAssetsDir, relativePath)
+    }
+
+    private def onlineUnzipTask(String downloadUrl, String name, File targetExtractionDir) {
+        createDirectories targetExtractionDir
+
+        def downloadTarget = new File(targetDownloadDir, name)
+
+        def dependencySuffix = "${name}${variantName}"
+        def downloadTask = project.tasks.register("download${dependencySuffix}", Download) {
+            src downloadUrl
+            dest downloadTarget
+            overwrite false
+        }
+
+        def unzipTask = project.tasks.register("unzip${dependencySuffix}", Copy) {
+            from project.zipTree(downloadTarget)
+            into targetExtractionDir
+            dependsOn downloadTask
+        }
+        return unzipTask
+    }
+
+    def onlineZipDependency(String downloadUrl, String name, String relativePath) {
+	    mergeAssetsTask.dependsOn(onlineUnzipTask downloadUrl, name, assetDestination(relativePath))
+    }
+
+    def projectJarDependency(Project project, String relativePath) {
+        def assetTargetDir = assetDestination(relativePath)
+        def jarTargetDir = new File(projectJarDir, relativePath)
+        createDirectories assetTargetDir
+        createDirectories jarTargetDir
+
+        def copyTaskName = "copyProjectJar${jarTargetDir.getName()}${variantName}"
+        def copyTask = project.tasks.register(copyTaskName, Copy) {
+            from jarTargetDir
+            into assetTargetDir
+            // Nasty hack: explicitly reference project by name to force Gradle to configure it.
+            // Makes jar task search below work properly for fresh configurations.
+            dependsOn ":${project.name}:jar"
+        }
+
+        mergeAssetsTask.dependsOn copyTask
+
+        project.tasks.withType(org.gradle.jvm.tasks.Jar.class).configureEach {
+            it.destinationDirectory = jarTargetDir
+            doLast {
+                if(!it.didWork) return
+                writeVersion jarTargetDir
+            }
+        }
+    }
+
+    def onlineJarDependency(String jarUrl, String jarProject, String dependency, String version, String suffix,  String relativePath) {
+        File targetDir = assetDestination(relativePath)
+        createDirectories targetDir
+        def dependencySuffix = "${jarProject}${dependency}${variantName}"
+        def downloadTask = project.tasks.register("download${dependencySuffix}", Download) {
+            src String.format(jarUrl, jarProject, dependency, version, suffix)
+            dest targetDir
+            overwrite false
+            doLast {
+                if(!it.didWork) return
+                writeVersion targetDir
+            }
+        }
+        mergeAssetsTask.dependsOn(downloadTask)
+    }
+
+    def jreRuntimeDependency(int version, String relPath) {
+        def jreUrl = "https://github.com/MojoLauncher/android-openjdk-build-multiarch/releases/download/rolling/jre%d-pojav.zip"
+        onlineZipDependency(String.format(jreUrl, version), "ComponentRuntime$version", relPath)
+    }
+}
+
+afterEvaluate {
+    def registrar = new AssetTaskRegistrar(project)
+
+    android.applicationVariants.configureEach { variant ->
+        registrar.setVariant(variant)
+
+        registrar.projectJarDependency project(":forge_installer"), "components/forge_installer"
+
+		if (variant.getName().toLowerCase().contains("full")) {
+            registrar.jreRuntimeDependency 8, "components/jre"
+        }
+        
+		def cacioJarUrl = "https://jitpack.io/com/github/MojoLauncher/%1\$s/%2\$s/%3\$s/%2\$s-%3\$s%4\$s.jar"
+
+        registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-shared", "-01d2dc1d65-1", "", "components/caciocavallo"
+        registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-androidnw", "-01d2dc1d65-1", "", "components/caciocavallo"
+
+        registrar.onlineJarDependency cacioJarUrl, "caciocavallo17", "cacio-tta", "72a9ab6323", "-jar-with-dependencies", "components/caciocavallo17"
+    }
+}
+
+dependencies {
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'
+    implementation 'commons-codec:commons-codec:1.19.0'
+    // implementation 'com.wu-man:android-bsf-api:3.1.3'
+    implementation 'androidx.preference:preference:1.2.1'
+    //implementation 'androidx.core:core:1.7.0'
+    implementation 'androidx.drawerlayout:drawerlayout:1.2.0'
+    implementation 'androidx.viewpager2:viewpager2:1.1.0'
+    implementation 'androidx.annotation:annotation:1.9.1'
+
+    implementation "androidx.constraintlayout:constraintlayout:2.2.1"
+
+    implementation 'com.github.duanhong169:checkerboarddrawable:1.0.2'
+    implementation 'com.github.PojavLauncherTeam:portrait-sdp:ed33e89cbc'
+    implementation 'com.github.PojavLauncherTeam:portrait-ssp:6c02fd739b'
+    implementation 'com.github.Mathias-Boulay:ExtendedView:1.0.0'
+    implementation 'com.github.Mathias-Boulay:android_gamepad_remapper:2.0.3'
+    implementation 'com.github.Mathias-Boulay:virtual-joystick-android:1.14'
+
+    // implementation 'com.intuit.sdp:sdp-android:1.0.5'
+    // implementation 'com.intuit.ssp:ssp-android:1.0.5'
+
+    implementation 'org.tukaani:xz:1.10'
+    // Our version of exp4j can be built from source at
+    // https://github.com/PojavLauncherTeam/exp4j
+    implementation 'net.sourceforge.htmlcleaner:htmlcleaner:2.29'
+    implementation 'com.bytedance:bytehook:1.1.1'
+
+    implementation 'com.github.MojoLauncher:alsoft-android-aar:f369161d5f'
+
+    implementation project(":dnbglfw")
+
+    // implementation 'net.sourceforge.streamsupport:streamsupport-cfuture:1.7.0'
+
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+}
