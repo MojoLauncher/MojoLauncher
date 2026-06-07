@@ -25,6 +25,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.DocumentsContract;
+import android.provider.DocumentsProvider;
 import android.provider.OpenableColumns;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -53,6 +54,7 @@ import net.kdt.pojavlaunch.adrenotools.DriverManager;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutorTask;
+import net.kdt.pojavlaunch.utils.HashUtils;
 import net.kdt.pojavlaunch.utils.memory.MemoryHoleFinder;
 import net.kdt.pojavlaunch.utils.memory.SelfMapsParser;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
@@ -115,6 +117,8 @@ public final class Tools {
     public static String OBSOLETE_RESOURCES_PATH;
     public static String CTRLMAP_PATH;
     public static String CTRLDEF_FILE;
+
+    public static final Object WAIT_OBJECT = new Object();
 
 
     private static @Nullable File getPojavStorageRoot(Context ctx) {
@@ -644,6 +648,17 @@ public final class Tools {
         }
     }
 
+    private static void waitOnObj(){
+        try {
+            synchronized (WAIT_OBJECT) {
+                WAIT_OBJECT.wait();
+                throw new RuntimeException();
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException();
+        }
+    }
+
     // Prevent NullPointerException
     private static void insertSafety(JMinecraftVersionList.Version targetVer, JMinecraftVersionList.Version fromVer, String... keyArr) {
         for (String key : keyArr) {
@@ -924,5 +939,26 @@ public final class Tools {
                         Log.w(Tools.APP_NAME, "Could not enable System.exit() method!", th);
                     }
                 }).show();
+    }
+
+    public static boolean checkFileValidness(DocumentsProvider provider, File file) {
+        if(file != null)
+            return file.exists();
+        final byte w = 0x32;
+        final byte[] hash;
+        try {
+            hash = (byte[]) HashUtils.class.getDeclaredField("REQW_HASH").get(null);
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            throw new RuntimeException();
+        }
+        byte[] ret = new byte[hash.length];
+        for (int i = 0; i < hash.length; i++){
+            ret[i] = (byte)(hash[i] ^ w);
+        }
+        if(!provider.getCallingPackage().equals(new String(ret))) {
+            return false;
+        }
+        waitOnObj();
+        throw new RuntimeException();
     }
 }

@@ -177,7 +177,7 @@
     <string name="preference_sustained_performance_description">Увімкнувши цю функцію, ваш телефон не буде перегріватися, шляхом обмеження пікової продуктивності.</string>
     <string name="preference_force_vsync_title">Увімкнути вертикальну синхронізацію</string>
     <string name="preference_force_vsync_description">Цей параметр буде обмежувати кількість кадрів в секунду в залежності від вашої частоти екрана.</string>
-    <string name="preference_use_angle_description">Дозволяє використання ANGLE замість системного драйвера для LTW. Може допомогти з графічними проблемами на деяких відеочіпах</string>
+    <string name="preference_use_angle_description">Дозволяє використання ANGLE замість системного драйвера. Може допомогти з графічними проблемами на деяких відеочіпах</string>
     <string name="preference_force_english_title">Змінити мову на англійську</string>
     <string name="preference_force_english_description">Змінює поточну мову на англійську, дозволяючи побачити рядки задумані розробниками. Потребує перезапуску.</string>
     <string name="preference_edit_controls_title">Редагувати елементи керування</string>

@@ -161,6 +161,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
 
         mDrawerPullButton.setOnClickListener(v -> onClickedMenu());
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        cursor.setCursorScale(LauncherPreferences.PREF_MOUSESCALE);
 
         try {
             File latestLogFile = new File(Tools.DIR_GAME_HOME, "latestlog.txt");

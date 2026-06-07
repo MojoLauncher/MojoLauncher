@@ -186,7 +186,7 @@
     <string name="preference_force_vsync_title">Принудительная вертикальная синхронизация</string>
     <string name="preference_force_vsync_description">Уменьшает перегрев устройства за счёт ограничения максимальной производительности.</string>
     <string name="preference_use_angle_title">Использовать ANGLE</string>
-    <string name="preference_use_angle_description">Позволяет использовать ANGLE вместо системного драйвера для LTW. Может исправить некоторые графические проблемы при использовании модов на некоторых видеоядрах</string>
+    <string name="preference_use_angle_description">Позволяет использовать ANGLE вместо системного драйвера. Может исправить некоторые графические проблемы при использовании модов на некоторых видеоядрах</string>
     <string name="preference_force_english_title">Принудительно включить английский</string>
     <string name="preference_force_english_description">Позволяет увидеть оригинальные строки такими, какими их задумали разработчики. Требуется перезапуск.</string>
     <string name="preference_edit_controls_title">Изменить раскладку</string>
@@ -326,7 +326,7 @@
     <string name="preference_category_java_tweaks">Настройки Java</string>
     <string name="preference_category_main_categories">Разделы</string>
     <string name="preference_category_miscellaneous">Другие настройки</string>
-    <string name="preference_category_video">Настойки графики</string>
+    <string name="preference_category_video">Настройки графики</string>
     <string name="notification_permission_dialog_title">Запрос разрешения</string>
     <string name="notification_permission_dialog_text">Лаунчеру требуется разрешение на отправку уведомлений, чтобы предотвратить остановку игры/загрузки её данных при сворачивании приложения. Без этого разрешения Android может принудительно завершить работу MojoLauncher при переходе в фоновый режим.</string>
     <string name="notification_permission_toast">Выбор можно изменить позже, перейдя в настройки.</string>
