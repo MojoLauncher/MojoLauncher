@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app2="http://schemas.android.com/apk/res-auto">
+
+    <net.kdt.pojavlaunch.prefs.BackButtonPreference/>
+
+    <PreferenceCategory android:title="@string/preference_category_miscellaneous">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:icon="@drawable/ic_px_hash"
+            android:key="checkGameFiles"
+            android:summary="@string/preference_verify_game_files_description"
+            android:title="@string/preference_verify_game_files_title" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:icon="@drawable/ic_px_zap"
+            android:key="fastStartupCheck"
+            android:summary="@string/preference_go_vroom_description"
+            android:title="@string/preference_go_vroom_title" />
+        <androidx.preference.ListPreference
+            android:defaultValue="default"
+            android:icon="@drawable/ic_px_file_dl"
+            android:key="downloadSource"
+            android:entries="@array/download_source_names"
+            android:entryValues="@array/download_source_values"
+            android:title="@string/preference_download_source_title"
+            android:summary="@string/preference_download_source_description"
+            app2:useSimpleSummaryProvider="true"/>
+        <SwitchPreference
+            android:defaultValue="true"
+            android:icon="@drawable/ic_px_verify_hash"
+            android:key="verifyManifest"
+            android:title="@string/preference_verify_manifest_title"
+            android:summary="@string/preference_verify_manifest_description"/>
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:icon="@drawable/ic_px_volcano"
+            android:key="zinkPreferSystemDriver"
+            android:summary="@string/preference_vulkan_driver_system_description"
+            android:title="@string/preference_vulkan_driver_system_title"/>
+        <Preference
+            android:key="microphoneAccessRequest"
+            android:icon="@drawable/ic_microphone"
+            android:title="@string/preference_microphone_access_title"
+            android:summary="@string/preference_microphone_access_description" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
