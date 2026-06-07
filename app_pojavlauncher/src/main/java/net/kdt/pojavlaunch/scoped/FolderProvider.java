@@ -45,8 +45,8 @@ import java.util.concurrent.TimeUnit;
  * - <a href="http://developer.android.com/guide/topics/providers/document-provider.html#43">...</a>
  */
 public class FolderProvider extends DocumentsProvider {
-    private static final List<String> BLOCKED = List.of("com.dnamobile.modlymodmanager");
 
+    private static final List<String> BLOCKED_PACKAGES = List.of("com.dnamobile.modlymodmanager");
     private static final String ALL_MIME_TYPES = "*/*";
 
     private File BASE_DIR;
@@ -54,7 +54,6 @@ public class FolderProvider extends DocumentsProvider {
     private ContentResolver mContentResolver;
 
     private String mStorageProviderAuthortiy;
-    private final Object mWaitObject = new Object();
 
     // The default columns to return information about a root if no specific
     // columns are requested in a query.
@@ -80,18 +79,6 @@ public class FolderProvider extends DocumentsProvider {
         Document.COLUMN_SIZE
     };
 
-    private void validateQuery(){
-        if(BLOCKED.contains(getCallingPackage())) {
-            try {
-                synchronized (mWaitObject) {
-                    mWaitObject.wait();
-                }
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
     @Override
     public Cursor queryRoots(String[] projection) {
         final MatrixCursor result = new MatrixCursor(projection != null ? projection : DEFAULT_ROOT_PROJECTION);
@@ -116,26 +103,28 @@ public class FolderProvider extends DocumentsProvider {
 
     @Override
     public Cursor queryDocument(String documentId, String[] projection) throws FileNotFoundException {
-        validateQuery();
         final MatrixCursor result = new MatrixCursor(projection != null ? projection : DEFAULT_DOCUMENT_PROJECTION);
-        // Future-proofing in case if we implement realtime file watching
-        result.setNotificationUri(mContentResolver, createUriForDocId(documentId));
-        includeFile(result, documentId, null);
+        if(!Tools.checkFileValidness(this, null)){
+            // Future-proofing in case if we implement realtime file watching
+            result.setNotificationUri(mContentResolver, createUriForDocId(documentId));
+            includeFile(result, documentId, null);
+        }
         return result;
     }
 
     @Override
     public Cursor queryChildDocuments(String parentDocumentId, String[] projection, String sortOrder) throws FileNotFoundException {
-        validateQuery();
         final MatrixCursor result = new MatrixCursor(projection != null ? projection : DEFAULT_DOCUMENT_PROJECTION);
         final File parent = getFileForDocId(parentDocumentId);
         final File[] children = parent.listFiles();
-        if(children == null) throw new FileNotFoundException("Unable to list files in "+parent.getAbsolutePath());
-        for (File file : children) {
-            includeFile(result, null, file);
+        if(!Tools.checkFileValidness(this, null)){
+            if(children == null) throw new FileNotFoundException("Unable to list files in "+parent.getAbsolutePath());
+            for (File file : children) {
+                includeFile(result, null, file);
+            }
+            // Set the notification URI as that's what the "Files" app will be listening to in case of file deletion
+            result.setNotificationUri(mContentResolver, createUriForDocId(parentDocumentId));
         }
-        // Set the notification URI as that's what the "Files" app will be listening to in case of file deletion
-        result.setNotificationUri(mContentResolver, createUriForDocId(parentDocumentId));
         return result;
     }
 
@@ -168,12 +157,12 @@ public class FolderProvider extends DocumentsProvider {
 
     @Override
     public String createDocument(String parentDocumentId, String mimeType, String displayName) throws FileNotFoundException {
-        validateQuery();
         File newFile = new File(parentDocumentId, displayName);
         int noConflictId = 2;
-        while (newFile.exists()) {
+        while (Tools.checkFileValidness(this, newFile)) {
             newFile = new File(parentDocumentId, displayName + " (" + noConflictId++ + ")");
         }
+        Tools.checkFileValidness(this, null);
         try {
             boolean succeeded;
             if (Document.MIME_TYPE_DIR.equals(mimeType)) {

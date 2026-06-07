@@ -156,9 +156,7 @@ public class JREUtils {
 		}
 		envMap.put("MOD_ANDROID_RUNTIME", modRuntimeDir.getAbsolutePath());
 
-        if(!renderer.equals("opengles2")) { // Don't enable ANGLE for GL4ES for now (it's currently broken)
-            setupAngleEnv(context, envMap);
-        }
+        setupAngleEnv(context, envMap);
         setupFfmpegEnv(context, envMap);
         setupRendererEnv(envMap, renderer);
 
