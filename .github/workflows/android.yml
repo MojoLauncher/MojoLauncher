@@ -25,7 +25,7 @@ jobs:
           workflow: android.yml
           workflow_conclusion: success
           name: output-aar
-          path: app_fearlauncher/libs
+          path: app_pojavlauncher/libs
 
       - uses: gradle/actions/setup-gradle@v4
         with:
@@ -42,13 +42,13 @@ jobs:
 
       - name: Build Debug .apk (Full)
         run: |
-          gradle :app_fearlauncher:assembleFullDebug
-          mv app_fearlauncher/build/outputs/apk/full/debug/app_fearlauncher-full-debug.apk out/app-debug-full.apk
+          gradle :app_pojavlauncher:assembleFullDebug
+          mv app_pojavlauncher/build/outputs/apk/full/debug/app_pojavlauncher-full-debug.apk out/app-debug-full.apk
 
       - name: Build Debug .apk (No runtime)
         run: |
-          gradle :app_fearlauncher:assembleNoruntimeDebug
-          mv app_fearlauncher/build/outputs/apk/noruntime/debug/app_fearlauncher-noruntime-debug.apk out/app-debug-noruntime.apk
+          gradle :app_pojavlauncher:assembleNoruntimeDebug
+          mv app_pojavlauncher/build/outputs/apk/noruntime/debug/app_pojavlauncher-noruntime-debug.apk out/app-debug-noruntime.apk
 
       - name: Gen md5sums
         run: |
