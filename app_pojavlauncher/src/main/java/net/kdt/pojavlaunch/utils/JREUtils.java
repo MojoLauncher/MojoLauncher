@@ -272,10 +272,6 @@ public class JREUtils {
                 renderLibrary = "libltw.so";
                 useGles = true;
                 glesVersion = 3;
-                // Allow ANGLE to use custom Vulkan library by running LTW (and thus ANGLE too) in the same namespace as the driver
-                if(LauncherPreferences.PREF_USE_ANGLE && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
-                    bypassNamespace = true;
-                }
                 break;
             case "opengles2":
             case "opengles2_5":
@@ -285,6 +281,10 @@ public class JREUtils {
                 useGles = true;
                 glesVersion = Integer.parseInt((String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION));
                 break;
+        }
+        // Always bypass namespaces with ANGLE so ANGLE can pick mjlvlk driver
+        if(LauncherPreferences.PREF_USE_ANGLE && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
+            bypassNamespace = true;
         }
         if (!configureRenderspec(renderLibrary, bypassNamespace, useGles, glesVersion)) {
             Log.e("RENDER_LIBRARY","Failed to load renderer " + renderLibrary );
