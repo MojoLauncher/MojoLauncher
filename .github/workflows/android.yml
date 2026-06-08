@@ -29,6 +29,15 @@ jobs:
           name: output-aar
           path: app_pojavlauncher/libs
 
+      - name: Get ANGLE
+        uses: dawidd6/action-download-artifact@v11
+        with:
+          name: angle-aar
+          path: app_pojavlauncher/libs
+          repo: MojoLauncher/angle-builder
+          workflow: blank.yml
+          workflow_conclusion: success
+
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.14.3"

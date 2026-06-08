@@ -82,15 +82,12 @@ public class JREUtils {
     // Sets up ANGLE driver environment
     public static void setupAngleEnv(Context ctx, Map<String, String> envMap) {
         if (!LauncherPreferences.PREF_USE_ANGLE) return;
-        LibraryPlugin angle = LibraryPlugin.discoverPlugin(ctx, LibraryPlugin.ID_ANGLE_PLUGIN);
-        if (angle == null) return;
-        String[] angleLibs = {"libEGL_angle.so", "libGLESv2_angle.so"};
-        if (!angle.checkLibraries(angleLibs)) {
-            Log.e("AngleEnvSetup", "AnglePlugin exists, but the ANGLE libraries are not present. Is the plugin corrupted?");
+        if (!RendererCompatUtil.appHasAngleEGL) {
+            Log.e("AngleEnvSetup", "The ANGLE libraries are not present.");
             return;
         }
-        envMap.put("LIBGL_EGL", angle.resolveAbsolutePath(angleLibs[0]));
-        envMap.put("LIBGL_GLES", angle.resolveAbsolutePath(angleLibs[1]));
+        envMap.put("LIBGL_EGL", "libEGL_angle.so");
+        envMap.put("LIBGL_GLES", "libGLESv2_angle.so");
     }
 
     public static void setupFfmpegEnv(Context ctx, Map<String, String> envMap) {

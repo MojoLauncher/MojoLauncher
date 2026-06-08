@@ -135,6 +135,5 @@
     </application>
     <queries>
         <package android:name="git.mojo.ffmpeg"/>
-        <package android:name="git.mojo.angle"/>
     </queries>
 </manifest>
