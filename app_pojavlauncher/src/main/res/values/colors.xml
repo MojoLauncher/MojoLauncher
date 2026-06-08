@@ -1,7 +1,6 @@
 <resources>
 
     <!-- MAIN BACKGROUND -->
-
     <color name="background_app">#050816</color>
     <color name="background_overlay">#0B1220</color>
     <color name="background_status_bar">#050816</color>
