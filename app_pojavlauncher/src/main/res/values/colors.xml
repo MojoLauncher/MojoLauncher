@@ -2,10 +2,10 @@
 
     <!-- MAIN BACKGROUND -->
 
-    <color name="background_app">#050816</color>
-    <color name="background_overlay">#0B1220</color>
-    <color name="background_status_bar">#050816</color>
-    <color name="background_bottom_bar">#0F172A</color>
+    <color name="background_app">#0A0A0A</color>
+    <color name="background_overlay">#1A1A1A</color>
+    <color name="background_status_bar">#0A0A0A</color>
+    <color name="background_bottom_bar">#151515</color>
 
     <!-- PRIMARY ACCENT -->
 
@@ -19,26 +19,26 @@
 
     <!-- BUTTONS -->
 
-    <color name="control_button_color">#162033</color>
-    <color name="control_button_pressed_color">#223047</color>
+    <color name="control_button_color">#2A2A2A</color>
+    <color name="control_button_pressed_color">#3D3D3D</color>
 
     <!-- CARDS -->
 
-    <color name="card_background">#162033</color>
-    <color name="card_border">#223047</color>
+    <color name="card_background">#1F1F1F</color>
+    <color name="card_border">#333333</color>
 
     <!-- TEXT -->
 
-    <color name="primary_text">#FFFFFF</color>
-    <color name="secondary_text">#9FB0CC</color>
+    <color name="primary_text">#F5F5F5</color>
+    <color name="secondary_text">#B0B0B0</color>
 
     <!-- ICONS -->
 
-    <color name="icon_outline_color">#FFFFFF</color>
+    <color name="icon_outline_color">#E8E8E8</color>
 
     <!-- DIVIDERS -->
 
-    <color name="divider">#1E293B</color>
+    <color name="divider">#2D2D2D</color>
 
     <!-- SPECIAL -->
 
@@ -48,6 +48,6 @@
 
     <color name="premium_blue">#4F8CFF</color>
     <color name="premium_cyan">#00E5FF</color>
-    <color name="glass_overlay">#AA111827</color>
+    <color name="glass_overlay">#AA0F0F0F</color>
 
 </resources>
