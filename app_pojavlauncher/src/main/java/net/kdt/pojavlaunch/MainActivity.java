@@ -343,7 +343,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             renderer = firstCompatibleRenderer;
         }
         Logger.appendToLog("--------- Starting game with Launcher Debug!");
-        Tools.printLauncherInfo(versionId, instance.getLaunchArgs(), renderer);
+        Tools.printLauncherInfo(versionId, instance.getLaunchArgs(), renderer, MainActivity.this);
         JREUtils.redirectAndPrintJRELog();
         GameRunner.launchMinecraft(this, minecraftAccount, instance, versionId, classpath, renderer);
         //Note that we actually stall in the above function, even if the game crashes. But let's be safe.
