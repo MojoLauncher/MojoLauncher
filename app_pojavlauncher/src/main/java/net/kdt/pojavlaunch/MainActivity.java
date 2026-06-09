@@ -73,6 +73,7 @@ import java.util.Objects;
 
 import git.artdeell.dnbootstrap.glfw.AndroidClipboardProvider;
 import git.artdeell.dnbootstrap.glfw.GLFW;
+import git.artdeell.dnbootstrap.glfw.GLFWCursor;
 import git.artdeell.dnbootstrap.glfw.GLFWCursorView;
 import git.artdeell.mojo.R;
 
@@ -140,6 +141,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         // https://issuetracker.google.com/issues/266331465
         if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q)
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
         ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (view, insets) -> {
             if(minecraftGLView.mSurface == null)
                 return insets;
@@ -149,10 +151,18 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
                 anim.translationY(0).start();
                 return insets;
             }
-            if(!mDoPanning)
+            int imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
+            if(!mDoPanning) {
+                int cursorY = minecraftGLView.touchLastY;
+                int visibleHeight = minecraftGLView.mSurface.getHeight() - imeHeight;
+                if(cursorY < visibleHeight)
+                    return insets;
+                final int padding = 50;
+                int translationY = cursorY - visibleHeight + padding;
+                anim.translationY(-translationY).start();
                 return insets;
-            anim.translationY(-insets.getInsets(WindowInsetsCompat.Type.ime()).bottom).start();
-            mDoPanning = false;
+            }
+            anim.translationY(-imeHeight).start();
             return insets;
         });
 
@@ -466,8 +476,8 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
 
     public static void switchKeyboardState(boolean panning) {
         if(touchCharInput != null) {
-            MainActivity.mDoPanning = panning;
             touchCharInput.switchKeyboardState();
+            MainActivity.mDoPanning = panning;
         }
     }
 
