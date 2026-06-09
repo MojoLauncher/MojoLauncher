@@ -25,6 +25,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -34,6 +35,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -132,8 +134,14 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
             getWindow().setSustainedPerformanceMode(PREF_SUSTAINED_PERFORMANCE);
 
-        // Make keyboard pan the activity so the user sees what they're typing in
+        // Make keyboard pan the activity so the user sees what they're typing
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        // This is required on Android 10 for the insets listener
+        // https://issuetracker.google.com/issues/266331465
+        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q)
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (view, insets) -> {
+            Log.i("InsetListener", "Executing listener");
             if(minecraftGLView.mSurface == null)
                 return insets;
             ViewPropertyAnimator anim = minecraftGLView.mSurface.animate()
