@@ -141,20 +141,17 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q)
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (view, insets) -> {
-            Log.i("InsetListener", "Executing listener");
             if(minecraftGLView.mSurface == null)
                 return insets;
             ViewPropertyAnimator anim = minecraftGLView.mSurface.animate()
                     .setDuration(100);
-            boolean imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime());
-            if(!imeVisible){
+            if(!insets.isVisible(WindowInsetsCompat.Type.ime())){
                 anim.translationY(0).start();
                 return insets;
             }
             if(!mDoPanning)
                 return insets;
-            int imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
-            anim.translationY(-imeHeight).start();
+            anim.translationY(-insets.getInsets(WindowInsetsCompat.Type.ime()).bottom).start();
             mDoPanning = false;
             return insets;
         });
