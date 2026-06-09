@@ -302,6 +302,7 @@ public class JREUtils {
 
     public static native void setLdLibraryPath(String ldLibraryPath);
     public static native boolean configureRenderspec(String eglPath, boolean useLoaderBypass, boolean useGles, int glesVersion);
+    public static native void configureRenderspecDisplay(int width, int height, int refreshRate);
     public static native void preloadVulkan();
     public static native void setUseTurnip(boolean enable);
     //public static native void initializeHooks();

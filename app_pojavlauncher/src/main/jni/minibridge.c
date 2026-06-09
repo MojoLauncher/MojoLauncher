@@ -72,6 +72,15 @@ Java_net_kdt_pojavlaunch_utils_JREUtils_configureRenderspec(JNIEnv *env, jclass 
     return true;
 }
 
+JNIEXPORT void JNICALL
+Java_net_kdt_pojavlaunch_utils_JREUtils_configureRenderspecDisplay(JNIEnv *env, jclass clazz,
+                                                                   jint width, jint height,
+                                                                   jint refresh_rate) {
+    renderspec.disp_width = width;
+    renderspec.disp_height = height;
+    renderspec.disp_hz = refresh_rate;
+}
+
 const pojavexec_renderspec_t* pojavexec_getRenderSpec() {
     return &renderspec;
 }
