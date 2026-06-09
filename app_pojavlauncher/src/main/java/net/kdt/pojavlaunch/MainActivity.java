@@ -24,6 +24,7 @@ import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -100,6 +101,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     private GameService.LocalBinder mServiceBinder;
 
     private QuickSettingSideDialog mQuickSettingSideDialog;
+    private static boolean mDoPanning = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -134,12 +136,18 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (view, insets) -> {
             if(minecraftGLView.mSurface == null)
                 return insets;
+            ViewPropertyAnimator anim = minecraftGLView.mSurface.animate()
+                    .setDuration(100);
             boolean imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime());
+            if(!imeVisible){
+                anim.translationY(0).start();
+                return insets;
+            }
+            if(!mDoPanning)
+                return insets;
             int imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
-            minecraftGLView.mSurface.animate()
-                    .translationY(imeVisible ? -imeHeight : 0)
-                    .setDuration(100)
-                    .start();
+            anim.translationY(-imeHeight).start();
+            mDoPanning = false;
             return insets;
         });
 
@@ -451,8 +459,11 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         return handleEvent;
     }
 
-    public static void switchKeyboardState() {
-        if(touchCharInput != null) touchCharInput.switchKeyboardState();
+    public static void switchKeyboardState(boolean panning) {
+        if(touchCharInput != null) {
+            MainActivity.mDoPanning = panning;
+            touchCharInput.switchKeyboardState();
+        }
     }
 
     @Override
