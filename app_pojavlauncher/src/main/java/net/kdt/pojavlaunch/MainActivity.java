@@ -161,7 +161,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
                 if(cursorY < visibleHeight)
                     return insets;
                 final int padding = 50;
-                int translationY = cursorY - visibleHeight + padding;
+                int translationY = Math.min(imeHeight, cursorY - visibleHeight + padding);
                 anim.translationY(-translationY).start();
                 return insets;
             }
