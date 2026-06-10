@@ -151,7 +151,10 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
                 anim.translationY(0).start();
                 return insets;
             }
+            if(!mDoPanning && !LauncherPreferences.PREF_KEYBOARD_AUTOPANNING)
+                return insets;
             int imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
+            // Autopanning (if keyboardPan wasn't clicked)
             if(!mDoPanning) {
                 int cursorY = minecraftGLView.touchLastY;
                 int visibleHeight = minecraftGLView.mSurface.getHeight() - imeHeight;

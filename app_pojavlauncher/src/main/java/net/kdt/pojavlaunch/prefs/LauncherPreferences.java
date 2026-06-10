@@ -72,6 +72,7 @@ public class LauncherPreferences {
     public static boolean PREF_VERIFY_FILES = true;
 
     public static boolean PREF_FREEDRENO_SYSMEM = false;
+    public static boolean PREF_KEYBOARD_AUTOPANNING = true;
 
 
     public static void loadPreferences(Context ctx) {
@@ -116,6 +117,7 @@ public class LauncherPreferences {
         PREF_VERIFY_FILES = DEFAULT_PREF.getBoolean("checkGameFiles", true);
         PREF_RAPID_START = DEFAULT_PREF.getBoolean("fastStartupCheck", true);
         PREF_FREEDRENO_SYSMEM = DEFAULT_PREF.getBoolean("freedrenoSysmem", false);
+        PREF_KEYBOARD_AUTOPANNING = DEFAULT_PREF.getBoolean("keyboardAutoPanning", true);
 
         String argLwjglLibname = "-Dorg.lwjgl.opengl.libname=";
         for (String arg : JREUtils.parseJavaArguments(PREF_CUSTOM_JAVA_ARGS)) {
