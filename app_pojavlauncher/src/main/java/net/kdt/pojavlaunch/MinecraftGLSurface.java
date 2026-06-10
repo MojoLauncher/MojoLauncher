@@ -144,7 +144,17 @@ public class MinecraftGLSurface extends View implements GrabListener, GamepadEna
             return true; //mouse event handled successfully
         }
         if (mIngameProcessor == null || mInGUIProcessor == null) return true;
-        return mCurrentTouchProcessor.processTouchEvent(e);
+        boolean ret = mCurrentTouchProcessor.processTouchEvent(e);
+        if(MainActivity.mImeHeight > 0){
+            int translationY = Tools.getTranslationFromCursorY(
+                    (int)(GLFW.cursorY * mSurface.getHeight()),
+                    mSurface.getHeight(),
+                    MainActivity.mImeHeight,
+                    50
+            );
+            mSurface.setTranslationY(-translationY);
+        }
+        return ret;
     }
 
     private void createGamepad(InputDevice inputDevice) {

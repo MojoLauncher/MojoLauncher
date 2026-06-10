@@ -105,6 +105,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
 
     private QuickSettingSideDialog mQuickSettingSideDialog;
     private static boolean mDoPanning = false;
+    public static int mImeHeight = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -149,23 +150,25 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
                     .setDuration(100);
             if(!insets.isVisible(WindowInsetsCompat.Type.ime())){
                 anim.translationY(0).start();
+                mImeHeight = 0;
                 return insets;
             }
             if(!mDoPanning && !LauncherPreferences.PREF_KEYBOARD_AUTOPANNING)
                 return insets;
-            int imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
+            mImeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
             // Autopanning (if keyboardPan wasn't clicked)
             if(!mDoPanning) {
                 int cursorY = (int) (GLFW.cursorY * minecraftGLView.mSurface.getHeight());
-                int visibleHeight = minecraftGLView.mSurface.getHeight() - imeHeight;
-                if(cursorY < visibleHeight)
-                    return insets;
-                final int padding = 50;
-                int translationY = Math.min(imeHeight, cursorY - visibleHeight + padding);
+                int translationY = Tools.getTranslationFromCursorY(
+                        cursorY,
+                        minecraftGLView.mSurface.getHeight(),
+                        mImeHeight,
+                        50
+                );
                 anim.translationY(-translationY).start();
                 return insets;
             }
-            anim.translationY(-imeHeight).start();
+            anim.translationY(-mImeHeight).start();
             return insets;
         });
 
