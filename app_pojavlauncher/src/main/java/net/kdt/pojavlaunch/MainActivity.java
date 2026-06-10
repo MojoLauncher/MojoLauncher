@@ -84,7 +84,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     public static TouchCharInput touchCharInput;
     private MinecraftGLSurface minecraftGLView;
     private static WeakReference<GLFWCursorView> weakCursor;
-    private GLFWCursorView cursor;
+    public GLFWCursorView cursor;
     private LoggerView loggerView;
     private DrawerLayout drawerLayout;
     private ListView navDrawer;
@@ -146,29 +146,33 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (view, insets) -> {
             if(minecraftGLView.mSurface == null)
                 return insets;
-            ViewPropertyAnimator anim = minecraftGLView.mSurface.animate()
+            ViewPropertyAnimator animSurface = minecraftGLView.mSurface.animate()
+                    .setDuration(100);
+            ViewPropertyAnimator animCursor = cursor.animate()
                     .setDuration(100);
             if(!insets.isVisible(WindowInsetsCompat.Type.ime())){
-                anim.translationY(0).start();
+                animSurface.translationY(0).start();
+                animCursor.translationY(0).start();
                 mImeHeight = 0;
                 return insets;
             }
             if(!mDoPanning && !LauncherPreferences.PREF_KEYBOARD_AUTOPANNING)
                 return insets;
             mImeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
+            int translationY;
             // Autopanning (if keyboardPan wasn't clicked)
             if(!mDoPanning) {
                 int cursorY = (int) (GLFW.cursorY * minecraftGLView.mSurface.getHeight());
-                int translationY = Tools.getTranslationFromCursorY(
+                translationY = Tools.getTranslationFromCursorY(
                         cursorY,
                         minecraftGLView.mSurface.getHeight(),
                         mImeHeight,
                         50
                 );
-                anim.translationY(-translationY).start();
-                return insets;
-            }
-            anim.translationY(-mImeHeight).start();
+            } else
+                translationY = mImeHeight;
+            animSurface.translationY(-translationY).start();
+            animCursor.translationY(-translationY).start();
             return insets;
         });
 

@@ -147,12 +147,13 @@ public class MinecraftGLSurface extends View implements GrabListener, GamepadEna
         boolean ret = mCurrentTouchProcessor.processTouchEvent(e);
         if(MainActivity.mImeHeight > 0){
             int translationY = Tools.getTranslationFromCursorY(
-                    (int)(GLFW.cursorY * mSurface.getHeight()),
+                    (int)(GLFW.cursorY * mSurface.getHeight() + 100),
                     mSurface.getHeight(),
                     MainActivity.mImeHeight,
                     50
             );
             mSurface.setTranslationY(-translationY);
+            ((MainActivity) getContext()).cursor.setTranslationY(-translationY);
         }
         return ret;
     }
