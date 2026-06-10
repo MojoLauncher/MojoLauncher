@@ -1,0 +1,45 @@
+name: Rename Module and Package
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  rename:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Rename module folder
+        run: git mv app_pojavlauncher app_fearlauncher
+
+      - name: Update settings.gradle
+        run: sed -i "s/':app_pojavlauncher'/':app_fearlauncher'/" settings.gradle
+
+      - name: Update build.gradle (namespace, appId, resValues)
+        run: |
+          sed -i "s/namespace 'git\.artdeell\.mojo'/namespace 'net.kdt.fearlaunch'/" app_fearlauncher/build.gradle
+          sed -i 's/applicationId "git\.artdeell\.mojo"/applicationId "com.fearlauncher.app"/' app_fearlauncher/build.gradle
+          sed -i 's/git\.artdeell\.mojo/com.fearlauncher.app/g' app_fearlauncher/build.gradle
+
+      - name: Rename Java package (optional)
+        run: |
+          find . -type f \( -name "*.java" -o -name "*.kt" \) -exec sed -i \
+            -e 's/^package net\.kdt\.pojavlaunch/package net.kdt.fearlaunch/' \
+            -e 's/import net\.kdt\.pojavlaunch/import net.kdt.fearlaunch/g' \
+            -e 's/import static net\.kdt\.pojavlaunch/import static net.kdt.fearlaunch/g' \
+            -e 's/net\.kdt\.pojavlaunch/net.kdt.fearlaunch/g' {} +
+          find . -type f -name "*.xml" -exec sed -i 's/net\.kdt\.pojavlaunch/net.kdt.fearlaunch/g' {} +
+          find . -type f \( -name "*.gradle" -o -name "*.pro" \) -exec sed -i 's/net\.kdt\.pojavlaunch/net.kdt.fearlaunch/g' {} +
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Rename module and package to FearLauncher" || echo "No changes"
+          git push
