@@ -83,9 +83,6 @@ public class MinecraftGLSurface extends View implements GrabListener, GamepadEna
     private View mTouchpad;
     private boolean mLastGrabState = false;
 
-    public int touchLastX;
-    public int touchLastY;
-
     public MinecraftGLSurface(Context context) {
         this(context, null);
     }
@@ -147,8 +144,6 @@ public class MinecraftGLSurface extends View implements GrabListener, GamepadEna
             return true; //mouse event handled successfully
         }
         if (mIngameProcessor == null || mInGUIProcessor == null) return true;
-        touchLastX = (int)e.getX();
-        touchLastY = (int)e.getY();
         return mCurrentTouchProcessor.processTouchEvent(e);
     }
 
