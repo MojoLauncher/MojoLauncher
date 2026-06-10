@@ -153,7 +153,7 @@ public class MinecraftGLSurface extends View implements GrabListener, GamepadEna
                     50
             );
             mSurface.setTranslationY(-translationY);
-            ((MainActivity) getContext()).cursor.setTranslationY(-translationY);
+            mTouchpad.setTranslationY(-translationY);
         }
         return ret;
     }

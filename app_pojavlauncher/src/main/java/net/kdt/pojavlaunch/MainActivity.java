@@ -84,7 +84,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     public static TouchCharInput touchCharInput;
     private MinecraftGLSurface minecraftGLView;
     private static WeakReference<GLFWCursorView> weakCursor;
-    public GLFWCursorView cursor;
+    private GLFWCursorView cursor;
     private LoggerView loggerView;
     private DrawerLayout drawerLayout;
     private ListView navDrawer;
@@ -136,13 +136,11 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
             getWindow().setSustainedPerformanceMode(PREF_SUSTAINED_PERFORMANCE);
 
-        // Make keyboard pan the activity so the user sees what they're typing
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         // This is required on Android 10 for the insets listener
         // https://issuetracker.google.com/issues/266331465
         if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q)
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
+        // Make keyboard pan the activity so the user sees what they're typing
         ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (view, insets) -> {
             if(minecraftGLView.mSurface == null)
                 return insets;
