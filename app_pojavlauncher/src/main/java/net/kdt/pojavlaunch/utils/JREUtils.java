@@ -23,6 +23,10 @@ import net.kdt.pojavlaunch.prefs.*;
 
 public class JREUtils {
 
+    private static final String TAG = "JREUtils";
+    private static final String TAG_LOGCAT = "jrelog-logcat";
+    private static final String TAG_MOBILEGLUES = "MobileGlues";
+
     public static void redirectAndPrintJRELog() {
         Log.v("jrelog", "Log starts here");
 
@@ -40,11 +44,11 @@ public class JREUtils {
                         ).redirectErrorStream(true);
                     }
 
-                    Log.i("jrelog-logcat", "Clearing logcat");
+                    Log.i(TAG_LOGCAT, "Clearing logcat");
                     new ProcessBuilder().command("logcat", "-c")
                             .redirectErrorStream(true).start();
 
-                    Log.i("jrelog-logcat", "Starting logcat");
+                    Log.i(TAG_LOGCAT, "Starting logcat");
                     java.lang.Process p = logcatPb.start();
 
                     byte[] buf = new byte[1024];
@@ -56,7 +60,7 @@ public class JREUtils {
                     }
 
                     if (p.waitFor() != 0) {
-                        Log.e("jrelog-logcat",
+                        Log.e(TAG_LOGCAT,
                                 "Logcat exited with code " + p.exitValue());
 
                         failTime++;
@@ -68,7 +72,7 @@ public class JREUtils {
                     }
 
                 } catch (Throwable e) {
-                    Log.e("jrelog-logcat",
+                    Log.e(TAG_LOGCAT,
                             "Exception on logging thread", e);
 
                     Logger.appendToLog(
@@ -79,7 +83,7 @@ public class JREUtils {
             }
         }).start();
 
-        Log.i("jrelog-logcat", "Logcat thread started");
+        Log.i(TAG_LOGCAT, "Logcat thread started");
     }
 
     private static void overrideEnvVars(Map<String, String> envMap)
@@ -91,21 +95,25 @@ public class JREUtils {
 
         if (!customEnvFile.exists() || !customEnvFile.isFile()) return;
 
-        BufferedReader reader =
-                new BufferedReader(new FileReader(customEnvFile));
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(customEnvFile));
 
-        String line;
-        while ((line = reader.readLine()) != null) {
-            int index = line.indexOf("=");
-            if (index == -1) continue;
+            String line;
+            while ((line = reader.readLine()) != null) {
+                int index = line.indexOf("=");
+                if (index == -1) continue;
 
-            envMap.put(
-                    line.substring(0, index),
-                    line.substring(index + 1)
-            );
+                envMap.put(
+                        line.substring(0, index),
+                        line.substring(index + 1)
+                );
+            }
+        } finally {
+            if (reader != null) {
+                reader.close();
+            }
         }
-
-        reader.close();
     }
 
     public static void setupAngleEnv(Context ctx,
@@ -150,12 +158,53 @@ public class JREUtils {
         );
     }
 
+    /**
+     * Setup MobileGlues renderer environment variables.
+     * Fixes Mali GPU multi-draw crashes and EGL binding issues.
+     */
+    private static void setupMobileGluesEnv(Map<String, String> envMap) {
+        Log.i(TAG_MOBILEGLUES, "Configuring MobileGlues environment");
+
+        try {
+            // Step 1: Set immediate environment variable before native library loading
+            // This ensures the custom wrapper layer is available to native hooks
+            Os.setenv("POJAVEXEC_EGL", "libmobileglues.so", true);
+            Logger.appendToLog("MOBILEGLUES: Set POJAVEXEC_EGL=libmobileglues.so (immediate)");
+            Log.d(TAG_MOBILEGLUES, "Immediate POJAVEXEC_EGL export successful");
+        } catch (Exception e) {
+            Log.e(TAG_MOBILEGLUES, "Failed to set immediate POJAVEXEC_EGL: " + e.getMessage());
+            Logger.appendToLog("MOBILEGLUES ERROR: Failed immediate export - " + e.getMessage());
+        }
+
+        // Step 2: Configure MobileGlues-specific environment variables
+        envMap.put("MOBILEGLUES_INFO_GETTER", "libmobileglues_info_getter.so");
+        Logger.appendToLog("MOBILEGLUES: Set MOBILEGLUES_INFO_GETTER=libmobileglues_info_getter.so");
+
+        // Step 3: Apply Mali GPU fixes for multi-draw compatibility
+        envMap.put("MG_multidrawMode", "1");
+        envMap.put("MG_enableNoError", "1");
+        envMap.put("MG_enableExtComputeShader", "0");
+        envMap.put("MG_enableExtTimerQuery", "0");
+        envMap.put("MG_enableExtDirectStateAccess", "0");
+        Logger.appendToLog("MOBILEGLUES: Applied Mali GPU multi-draw fixes");
+
+        // Step 4: Bind to system EGL framework for proper OpenGL initialization
+        // This prevents POJAVEXEC_EGL conflicts and ensures pojavInitOpenGL succeeds
+        envMap.put("POJAVEXEC_EGL", "libEGL.so");
+        envMap.remove("MESA_GL_VERSION_OVERRIDE");
+        envMap.remove("MESA_GLSL_VERSION_OVERRIDE");
+        Logger.appendToLog("MOBILEGLUES: Set final POJAVEXEC_EGL=libEGL.so");
+
+        Log.i(TAG_MOBILEGLUES, "MobileGlues environment configured successfully");
+    }
+
     public static void setEnvironmentForGame(Context context,
                                              String renderer)
             throws Throwable {
 
         Map<String, String> envMap = new ArrayMap<>();
 
+        // Base OpenGL configuration
         envMap.put("LIBGL_MIPMAP", "3");
         envMap.put("LIBGL_NOERROR", "1");
         envMap.put("LIBGL_NOINTOVLHACK", "1");
@@ -170,12 +219,10 @@ public class JREUtils {
         if (Tools.deviceHasHangingLinker())
             envMap.put("POJAV_EMUI_ITERATOR_MITIGATE", "1");
 
-        envMap.put(
-                "LIBGL_ES",
-                (String) ExtraCore.getValue(
-                        ExtraConstants.OPEN_GL_VERSION
-                )
-        );
+        String glVersion = (String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION);
+        if (glVersion != null) {
+            envMap.put("LIBGL_ES", glVersion);
+        }
 
         @SuppressWarnings("deprecation")
         String forceVsyncVal = String.valueOf(LauncherPreferences.PREF_FORCE_VSYNC);
@@ -193,12 +240,15 @@ public class JREUtils {
         );
 
         if (!modRuntimeDir.exists()) {
-            modRuntimeDir.mkdirs();
+            if (!modRuntimeDir.mkdirs()) {
+                Log.w(TAG, "Failed to create mod runtime directory");
+            }
         }
 
         envMap.put("MOD_ANDROID_RUNTIME",
                 modRuntimeDir.getAbsolutePath());
 
+        // Setup renderer-specific configurations
         if (!renderer.equals("opengles2")) {
             setupAngleEnv(context, envMap);
         }
@@ -207,69 +257,97 @@ public class JREUtils {
 
         envMap.put("MOJO_RENDERER", renderer);
 
+        // Renderer-specific setup
         if (renderer.equals("mobileglues")) {
-            // FIX: Sequentially export the custom wrapper layer ahead of time 
-            // so background native hooks can intercept it before the map override.
-            try {
-                Os.setenv("POJAVEXEC_EGL", "libmobileglues.so", true);
-                Logger.appendToLog("Added custom env (immediate): POJAVEXEC_EGL=libmobileglues.so");
-            } catch (Exception exception) {
-                Log.e("JREUtils", "Failed sequential mobileglues export: " + exception.toString());
-            }
-
-            envMap.put("MOBILEGLUES_INFO_GETTER", "libmobileglues_info_getter.so");
-
-            // Correct MobileGlues values to fix Mali multi_draw crash
-            envMap.put("MG_multidrawMode", "1"); 
-            envMap.put("MG_enableNoError", "1");
-            envMap.put("MG_enableExtComputeShader", "0");
-            envMap.put("MG_enableExtTimerQuery", "0");
-            envMap.put("MG_enableExtDirectStateAccess", "0");
-
-            // FIX: Point explicitly to system EGL framework so pojavInitOpenGL binds cleanly
-            envMap.put("POJAVEXEC_EGL", "libEGL.so");
-            envMap.remove("MESA_GL_VERSION_OVERRIDE");
-            envMap.remove("MESA_GLSL_VERSION_OVERRIDE");
-        }
-        
-        if (renderer.equals("opengles3_ltw")) {
+            setupMobileGluesEnv(envMap);
+        } else if (renderer.equals("opengles3_ltw")) {
             envMap.put("POJAVEXEC_EGL", "libltw.so");
+            Logger.appendToLog("Set POJAVEXEC_EGL=libltw.so for OpenGLES 3 LTW");
         }
-        
-        if (LauncherPreferences.PREF_BIG_CORE_AFFINITY)
+
+        // GPU-specific optimizations
+        if (LauncherPreferences.PREF_BIG_CORE_AFFINITY) {
             envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
+            Logger.appendToLog("Enabled big core affinity optimization");
+        }
 
         if (GLInfoUtils.getGlInfo().isAdreno()
                 && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
             envMap.put("POJAV_LOAD_TURNIP", "1");
+            Logger.appendToLog("Enabled Turnip driver for Adreno GPU");
         }
 
-        overrideEnvVars(envMap);
+        // Apply custom environment overrides
+        try {
+            overrideEnvVars(envMap);
+        } catch (IOException e) {
+            Log.e(TAG, "Failed to load custom environment variables: " + e.getMessage());
+            Logger.appendToLog("ERROR: Failed to load custom_env.txt - " + e.getMessage());
+        }
+
+        // Export all environment variables to system
+        int successCount = 0;
+        int failCount = 0;
 
         for (Map.Entry<String, String> env : envMap.entrySet()) {
-            Logger.appendToLog(
-                    "Added custom env: " +
-                            env.getKey() + "=" + env.getValue()
-            );
+            String key = env.getKey();
+            String value = env.getValue();
+
+            Logger.appendToLog("Set env: " + key + "=" + value);
 
             try {
-                Os.setenv(env.getKey(), env.getValue(), true);
-            } catch (NullPointerException exception) {
-                Log.e("JREUtils", exception.toString());
+                Os.setenv(key, value, true);
+                successCount++;
+            } catch (NullPointerException e) {
+                Log.e(TAG, "NullPointerException setting " + key + ": " + e.getMessage());
+                failCount++;
+            } catch (Exception e) {
+                Log.e(TAG, "Exception setting " + key + ": " + e.getMessage());
+                failCount++;
             }
         }
 
+        Log.i(TAG, "Environment variables set: " + successCount + " success, " + failCount + " failed");
+        Logger.appendToLog("Environment export complete: " + successCount + " set, " + failCount + " failed");
+
         // ====================================================================
-        // CRITICAL FIX: Native libraries are dynamically loaded ONLY after
-        // the environment hooks are systematically exported into the shell system layer.
+        // CRITICAL: Load native libraries AFTER environment is fully configured
+        // This ensures all environment hooks are available to native code
         // ====================================================================
-        try {
-            System.loadLibrary("exithook");
-            System.loadLibrary("pojavexec");
-            System.loadLibrary("pojavexec_awt");
-            Log.i("JREUtils", "Native hook modules bound successfully with system properties.");
-        } catch (UnsatisfiedLinkError linkError) {
-            Log.e("JREUtils", "Failed loading platform runtime libraries: " + linkError.getMessage());
+        loadNativeLibraries();
+    }
+
+    /**
+     * Load native libraries required for Java/OpenGL integration.
+     * Must be called AFTER all environment variables are set.
+     */
+    private static void loadNativeLibraries() {
+        String[] nativeLibs = {"exithook", "pojavexec", "pojavexec_awt"};
+        int loaded = 0;
+        int failed = 0;
+
+        Log.i(TAG, "Loading native libraries...");
+        Logger.appendToLog("Loading native runtime libraries");
+
+        for (String libName : nativeLibs) {
+            try {
+                System.loadLibrary(libName);
+                Log.i(TAG, "Successfully loaded: " + libName);
+                Logger.appendToLog("Loaded: " + libName);
+                loaded++;
+            } catch (UnsatisfiedLinkError e) {
+                Log.e(TAG, "Failed to load " + libName + ": " + e.getMessage());
+                Logger.appendToLog("ERROR: Failed to load " + libName);
+                failed++;
+            }
+        }
+
+        if (failed == 0) {
+            Log.i(TAG, "All native libraries loaded successfully");
+            Logger.appendToLog("Native runtime binding successful");
+        } else {
+            Log.w(TAG, "Failed to load " + failed + " native libraries");
+            Logger.appendToLog("WARNING: " + failed + " native libraries failed to load");
         }
     }
 
@@ -287,7 +365,7 @@ public class JREUtils {
         ArrayList<String> parsedArguments = new ArrayList<>(0);
         if (args == null || args.trim().isEmpty()) return parsedArguments;
 
-        // FIX: Removed global blank replacement execution to preserve parameters containing spaces
+        // FIX: Removed global blank replacement to preserve space-containing parameters
         args = args.trim();
 
         String[] separators = new String[]{
@@ -369,6 +447,7 @@ public class JREUtils {
             return null;
         }
 
+        Log.i("RENDER_LIBRARY", "Successfully loaded renderer: " + renderLibrary);
         return renderLibrary;
     }
 
