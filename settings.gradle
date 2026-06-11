@@ -15,7 +15,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name='PojavLauncher'
-include ':app_pojavlauncher'
 
-include ':forge_installer'
-include ':dnbglfw'
+include ':app_fearlauncher'
