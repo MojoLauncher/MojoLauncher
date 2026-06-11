@@ -188,12 +188,12 @@ public class JREUtils {
         envMap.put("MG_enableExtDirectStateAccess", "0");
         Logger.appendToLog("MOBILEGLUES: Applied Mali GPU multi-draw fixes");
 
-        // Step 4: Bind to system EGL framework for proper OpenGL initialization
-        // This prevents POJAVEXEC_EGL conflicts and ensures pojavInitOpenGL succeeds
-        envMap.put("POJAVEXEC_EGL", "libEGL.so");
+        // Step 4: Keep MobileGlues as primary EGL handler - do NOT override with libEGL.so
+        // The immediate setenv() has already established libmobileglues.so binding
+        envMap.put("POJAVEXEC_EGL", "libmobileglues.so");
         envMap.remove("MESA_GL_VERSION_OVERRIDE");
         envMap.remove("MESA_GLSL_VERSION_OVERRIDE");
-        Logger.appendToLog("MOBILEGLUES: Set final POJAVEXEC_EGL=libEGL.so");
+        Logger.appendToLog("MOBILEGLUES: Confirmed POJAVEXEC_EGL=libmobileglues.so");
 
         Log.i(TAG_MOBILEGLUES, "MobileGlues environment configured successfully");
     }
