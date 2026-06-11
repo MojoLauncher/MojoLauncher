@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">Mojo Эхлүүлэгч (Minecraft: Java Edition-ийг Гар утсан дээр)</string>
-    <string name="app_short_name">Mojolauncher</string>
+    <string name="app_name">CrazeLuncher (Minecraft: Java Edition-ийг Гар утсан дээр)</string>
+    <string name="app_short_name">CrazeLuncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
