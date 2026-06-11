@@ -1,4 +1,4 @@
-name: Fix Build Gradle & Build
+name: Build FearLauncher (Fixed)
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ permissions:
   contents: write
 
 jobs:
-  fix-and-build:
+  build:
     runs-on: ubuntu-22.04
     env:
       UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
@@ -18,19 +18,20 @@ jobs:
         with:
           submodules: true
 
-      - name: Overwrite build.gradle with correct flavors
+      # Ensure productFlavors block exists in app_fearlauncher/build.gradle
+      - name: Ensure productFlavors in build.gradle
         run: |
-          cat > app_pojavlauncher/build.gradle << 'BUILDEOF'
-          # ----- PASTE THE CORRECTED BUILD.GRADLE CODE FROM ABOVE -----
-          # (include plugins, android block, dependencies, etc.)
-          BUILDEOF
+          if ! grep -q "productFlavors" app_fearlauncher/build.gradle; then
+            # Insert productFlavors right after flavorDimensions line
+            sed -i "/flavorDimensions/a \    productFlavors {\n        full { dimension \"runtime\" }\n        noruntime { dimension \"runtime\"; versionNameSuffix \"-noruntime\" }\n    }" app_fearlauncher/build.gradle
+          fi
 
-      - name: Commit fix
+      - name: Commit if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add app_pojavlauncher/build.gradle
-          git commit -m "Restore productFlavors in build.gradle" || echo "No changes"
+          git add app_fearlauncher/build.gradle
+          git commit -m "Add productFlavors if missing" || echo "No changes"
           git push
 
       - uses: actions/setup-java@v3
@@ -38,11 +39,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Build APK
+      - name: Build Debug APK
         run: |
-          ./gradlew :app_pojavlauncher:assembleFullDebug
+          ./gradlew :app_fearlauncher:assembleFullDebug
           mkdir -p out
-          mv app_pojavlauncher/build/outputs/apk/full/debug/app_pojavlauncher-full-debug.apk out/FearLauncher.apk
+          mv app_fearlauncher/build/outputs/apk/full/debug/app_fearlauncher-full-debug.apk out/FearLauncher.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
