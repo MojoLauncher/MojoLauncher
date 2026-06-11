@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">মোজোলঞ্চার (মাইনক্রাফট: জাভা এডিশন আ্যন্ডরয়েডের জন্য)</string>
-    <string name="app_short_name">মোজোলঞ্চার </string>
+    <string name="app_name">CrazeLuncher(মাইনক্রাফট: জাভা এডিশন আ্যন্ডরয়েডের জন্য)</string>
+    <string name="app_short_name">CrazeLuncher </string>
 
     <!-- Action bar part -->
 
