@@ -1,4 +1,4 @@
-name: Fix Missing Module & Build
+name: Complete Fix & Build
 
 on:
   workflow_dispatch:
@@ -16,29 +16,31 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          submodules: true   # ensures dnbglfw folder is present
+          submodules: true   # ensures forge_installer and dnbglfw are present
 
-      # 1. Ensure dnbglfw is included in settings.gradle
-      - name: Add dnbglfw to settings.gradle if missing
+      # 1. Ensure all required modules are included in settings.gradle
+      - name: Add missing modules to settings.gradle
         run: |
-          if ! grep -q "':dnbglfw'" settings.gradle; then
-            echo "include ':dnbglfw'" >> settings.gradle
-          fi
+          for module in dnbglfw forge_installer; do
+            if ! grep -q "':$module'" settings.gradle; then
+              echo "include ':$module'" >> settings.gradle
+            fi
+          done
 
-      # 2. Ensure productFlavors in app_fearlauncher/build.gradle (already done maybe, but safe)
+      # 2. Ensure productFlavors exist in app_fearlauncher/build.gradle
       - name: Add productFlavors if missing
         run: |
           if ! grep -q "productFlavors" app_fearlauncher/build.gradle; then
             sed -i "/flavorDimensions/a \    productFlavors {\n        full { dimension \"runtime\" }\n        noruntime { dimension \"runtime\"; versionNameSuffix \"-noruntime\" }\n    }" app_fearlauncher/build.gradle
           fi
 
-      # 3. Commit if any changes
-      - name: Commit configuration fixes
+      # 3. Commit configuration fixes
+      - name: Commit fixes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add settings.gradle app_fearlauncher/build.gradle
-          git commit -m "Include dnbglfw and ensure flavors" || echo "No changes"
+          git commit -m "Include all required modules and ensure flavors" || echo "No changes"
           git push
 
       - uses: actions/setup-java@v3
