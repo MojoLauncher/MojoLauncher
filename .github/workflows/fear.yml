@@ -1,4 +1,4 @@
-name: Final Working Build
+name: Final FearLauncher Build
 
 on:
   workflow_dispatch:
@@ -18,28 +18,40 @@ jobs:
         with:
           submodules: true
 
-      - name: Get original PojavLauncher build.gradle
-        run: git clone --depth 1 https://github.com/PojavLauncherTeam/PojavLauncher.git /tmp/pojavlauncher
+      - name: Clone original PojavLauncher for reference
+        run: git clone --depth 1 https://github.com/PojavLauncherTeam/PojavLauncher.git /tmp/pojav
 
-      - name: Copy original build.gradle to app_fearlauncher
-        run: cp /tmp/pojavlauncher/app_pojavlauncher/build.gradle app_fearlauncher/build.gradle
+      - name: Copy original build.gradle
+        run: cp /tmp/pojav/app_pojavlauncher/build.gradle app_fearlauncher/build.gradle
 
-      - name: Rebrand (namespace & applicationId)
+      - name: Rebrand namespace & applicationId
         run: |
           sed -i "s/namespace 'git\.artdeell\.mojo'/namespace 'net.kdt.fearlaunch'/" app_fearlauncher/build.gradle
           sed -i 's/applicationId "git\.artdeell\.mojo"/applicationId "com.fearlauncher.app"/' app_fearlauncher/build.gradle
           sed -i 's/git\.artdeell\.mojo/com.fearlauncher.app/g' app_fearlauncher/build.gradle
 
-      - name: Remove problematic afterEvaluate block
+      # productFlavors ko afterEvaluate se nikaal kar android block mein dalo
+      - name: Move productFlavors outside afterEvaluate
         run: |
-          python3 -c "
+          python3 << 'EOF'
           import re
-          with open('app_fearlauncher/build.gradle', 'r') as f:
+          with open("app_fearlauncher/build.gradle", "r") as f:
               content = f.read()
-          content = re.sub(r'afterEvaluate \{.*?\n}\n', '', content, flags=re.DOTALL)
-          with open('app_fearlauncher/build.gradle', 'w') as f:
+          # Find afterEvaluate block and extract productFlavors if inside
+          # PojavLauncher's afterEvaluate contains productFlavors definition inside it for some reason? Actually not, productFlavors is in android block. But check.
+          # Safer: ensure productFlavors exists in android block.
+          if "productFlavors" not in content:
+              # Inject productFlavors right after flavorDimensions line (which is present)
+              content = re.sub(
+                  r'(flavorDimensions\s*=\s*\[.*?\]\s*\n)',
+                  r'\1    productFlavors {\n        full { dimension "runtime" }\n        noruntime { dimension "runtime"; versionNameSuffix "-noruntime" }\n    }\n',
+                  content
+              )
+          # Remove the entire afterEvaluate block to avoid Groovy compilation errors
+          content = re.sub(r'afterEvaluate\s*\{.*?\n}\n', '', content, flags=re.DOTALL)
+          with open("app_fearlauncher/build.gradle", "w") as f:
               f.write(content)
-          "
+          EOF
 
       - name: Ensure required modules in settings.gradle
         run: |
@@ -48,17 +60,13 @@ jobs:
               echo "include ':$mod'" >> settings.gradle
             fi
           done
-          # Also ensure app_fearlauncher is included (should already be)
-          if ! grep -q "':app_fearlauncher'" settings.gradle; then
-            echo "include ':app_fearlauncher'" >> settings.gradle
-          fi
 
       - name: Commit all fixes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Final fix: remove afterEvaluate, ensure modules" || echo "No changes"
+          git commit -m "Fix productFlavors and remove afterEvaluate" || echo "No changes"
           git push
 
       - uses: actions/setup-java@v3
@@ -66,7 +74,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Build APK
+      - name: Build APK with wrapper
         run: |
           ./gradlew :app_fearlauncher:assembleFullDebug
           mkdir -p out
