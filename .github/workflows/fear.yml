@@ -1,4 +1,4 @@
-name: Final FearLauncher Build
+name: Final Build with Flavors
 
 on:
   workflow_dispatch:
@@ -18,7 +18,7 @@ jobs:
         with:
           submodules: true
 
-      - name: Clone original PojavLauncher for reference
+      - name: Clone original PojavLauncher
         run: git clone --depth 1 https://github.com/PojavLauncherTeam/PojavLauncher.git /tmp/pojav
 
       - name: Copy original build.gradle
@@ -30,28 +30,16 @@ jobs:
           sed -i 's/applicationId "git\.artdeell\.mojo"/applicationId "com.fearlauncher.app"/' app_fearlauncher/build.gradle
           sed -i 's/git\.artdeell\.mojo/com.fearlauncher.app/g' app_fearlauncher/build.gradle
 
-      # productFlavors ko afterEvaluate se nikaal kar android block mein dalo
-      - name: Move productFlavors outside afterEvaluate
+      # Inject productFlavors right after flavorDimensions line
+      - name: Inject productFlavors block
         run: |
-          python3 << 'EOF'
-          import re
-          with open("app_fearlauncher/build.gradle", "r") as f:
-              content = f.read()
-          # Find afterEvaluate block and extract productFlavors if inside
-          # PojavLauncher's afterEvaluate contains productFlavors definition inside it for some reason? Actually not, productFlavors is in android block. But check.
-          # Safer: ensure productFlavors exists in android block.
-          if "productFlavors" not in content:
-              # Inject productFlavors right after flavorDimensions line (which is present)
-              content = re.sub(
-                  r'(flavorDimensions\s*=\s*\[.*?\]\s*\n)',
-                  r'\1    productFlavors {\n        full { dimension "runtime" }\n        noruntime { dimension "runtime"; versionNameSuffix "-noruntime" }\n    }\n',
-                  content
-              )
-          # Remove the entire afterEvaluate block to avoid Groovy compilation errors
-          content = re.sub(r'afterEvaluate\s*\{.*?\n}\n', '', content, flags=re.DOTALL)
-          with open("app_fearlauncher/build.gradle", "w") as f:
-              f.write(content)
-          EOF
+          sed -i '/flavorDimensions\s*=\s*\[/a\    productFlavors {\n        full {\n            dimension "runtime"\n        }\n        noruntime {\n            dimension "runtime"\n            versionNameSuffix "-noruntime"\n        }\n    }' app_fearlauncher/build.gradle
+
+      # Remove the entire afterEvaluate block (which causes Groovy errors)
+      - name: Remove afterEvaluate block
+        run: |
+          # Remove lines from 'afterEvaluate {' to '}' at the same indent level
+          sed -i '/^afterEvaluate {/,/^}/d' app_fearlauncher/build.gradle
 
       - name: Ensure required modules in settings.gradle
         run: |
@@ -61,12 +49,12 @@ jobs:
             fi
           done
 
-      - name: Commit all fixes
+      - name: Commit fixes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Fix productFlavors and remove afterEvaluate" || echo "No changes"
+          git commit -m "Add productFlavors, remove afterEvaluate" || echo "No changes"
           git push
 
       - uses: actions/setup-java@v3
@@ -74,7 +62,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Build APK with wrapper
+      - name: Build APK
         run: |
           ./gradlew :app_fearlauncher:assembleFullDebug
           mkdir -p out
