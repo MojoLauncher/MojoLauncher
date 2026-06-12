@@ -13,7 +13,7 @@ jobs:
       UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
       MOJOPUB_KEYSTORE_PASSWORD: ${{ secrets.MOJOPUB_KEYSTORE_PASSWORD }}
       CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
-      
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -33,54 +33,70 @@ jobs:
           sed -i 's/applicationId "git\.artdeell\.mojo"/applicationId "com.fearlauncher.app"/' app_fearlauncher/build.gradle
           sed -i 's/git\.artdeell\.mojo/com.fearlauncher.app/g' app_fearlauncher/build.gradle
 
-      # ✅ FIX: Reliable Python script instead of broken sed injection
-      - name: Inject productFlavors Safely
+      # ✅ FIX 1: Safely remove ALL afterEvaluate blocks (Fixes ListenerBroadcast crash)
+      - name: Remove afterEvaluate blocks completely
         run: |
-          python3 << 'EOF'
+          python3 << 'PYEOF'
           import re
-          
-          gradle_path = "app_fearlauncher/build.gradle"
-          with open(gradle_path, "r") as f:
+
+          path = "app_fearlauncher/build.gradle"
+          with open(path, "r") as f:
               content = f.read()
-          
-          flavors_block = """
+
+          # Nested braces ko properly handle karne wala regex
+          pattern = r'afterEvaluate\s*\{(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\}'
+          cleaned = re.sub(pattern, '', content, flags=re.DOTALL)
+
+          if cleaned != content:              with open(path, "w") as f:
+                  f.write(cleaned)
+              print("✅ Successfully removed afterEvaluate block(s)")
+          else:
+              print("ℹ️ No afterEvaluate block found to remove")
+          PYEOF
+
+      # ✅ FIX 2: Inject productFlavors safely using Python instead of broken sed
+      - name: Inject productFlavors safely
+        run: |
+          python3 << 'PYEOF'
+          import re
+
+          path = "app_fearlauncher/build.gradle"
+          with open(path, "r") as f:
+              content = f.read()
+
+          if "productFlavors" in content and "full {" in content:
+              print("ℹ️ productFlavors already exist, skipping injection")
+          else:
+              flavors_block = '''
+              flavorDimensions "runtime"
               productFlavors {
                   full {
                       dimension "runtime"
-                  }                  noruntime {
+                  }
+                  noruntime {
                       dimension "runtime"
                       versionNameSuffix "-noruntime"
                   }
               }
-          """
-          
-          # flavorDimensions ke turant baad productFlavors inject karein
-          pattern = r'(flavorDimensions\s*=?\s*[\["\']runtime[\]"\'])'
-          if re.search(pattern, content):
-              content = re.sub(pattern, r'\1' + flavors_block, content, count=1)
-          else:
-              # Fallback: android block ke andar dimensions + flavors dono add karein
-              android_pattern = r'(android\s*\{)'
-              fallback = r'\1\n    flavorDimensions "runtime"' + flavors_block
-              content = re.sub(android_pattern, fallback, content, count=1)
-          
-          with open(gradle_path, "w") as f:
-              f.write(content)
-              
-          print("✅ productFlavors injected successfully")
-          EOF
+          '''
+              pattern = r'(android\s*\{)'
+              if re.search(pattern, content):
+                  content = re.sub(pattern, r'\1' + flavors_block, content, count=1)
+                  with open(path, "w") as f:
+                      f.write(content)
+                  print("✅ productFlavors injected successfully inside android {} block")
+              else:
+                  raise Exception("❌ Could not find android {} block in build.gradle!")
+          PYEOF
 
-      - name: Remove afterEvaluate block
+      # ✅ FIX 3: Validate before building to catch errors early
+      - name: Validate build.gradle syntax
         run: |
-          python3 -c "
-          import re
-          path = 'app_fearlauncher/build.gradle'
-          with open(path, 'r') as f: content = f.read()
-          content = re.sub(r'afterEvaluate\s*\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', '', content, flags=re.DOTALL)
-          with open(path, 'w') as f: f.write(content)
-          print('✅ afterEvaluate block removed')
-          "
-
+          echo "=== Checking for remaining afterEvaluate ==="
+          grep -n "afterEvaluate" app_fearlauncher/build.gradle && echo "⚠️ WARNING: afterEvaluate still exists!" || echo "✅ No afterEvaluate found"
+          
+          echo "=== Checking for productFlavors ==="
+          grep -n "productFlavors" app_fearlauncher/build.gradle && echo "✅ productFlavors present" || echo "❌ ERROR: productFlavors missing!"
       - name: Ensure required modules in settings.gradle
         run: |
           for mod in dnbglfw forge_installer; do
@@ -94,15 +110,15 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Add productFlavors, remove afterEvaluate" || echo "No changes to commit"
+          git commit -m "Fix: Add productFlavors, remove afterEvaluate via Python" || echo "No changes to commit"
           git push
+
       - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # ✅ FIX: NDK + Gradle caching (saves ~2 mins per build)
       - name: Cache Gradle & NDK
         uses: actions/cache@v4
         with:
@@ -113,9 +129,14 @@ jobs:
           key: ${{ runner.os }}-fearlauncher-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: ${{ runner.os }}-fearlauncher-
 
-      - name: Build APK
+      # ✅ FIX 4: Clean stale daemon cache that causes ListenerBroadcast errors
+      - name: Clean Gradle Cache
         run: |
           chmod +x gradlew
+          ./gradlew clean --no-daemon || true
+
+      - name: Build APK
+        run: |
           ./gradlew :app_fearlauncher:assembleFullDebug --no-daemon --stacktrace
           mkdir -p out
           cp app_fearlauncher/build/outputs/apk/full/debug/*.apk out/FearLauncher.apk
