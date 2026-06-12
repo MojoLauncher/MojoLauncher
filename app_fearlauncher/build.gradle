@@ -88,6 +88,16 @@ configurations {
 }
 
 android {
+    flavorDimensions "runtime"
+    productFlavors {
+        full {
+            dimension "runtime"
+        }                  noruntime {
+            dimension "runtime"
+            versionNameSuffix "-noruntime"
+        }
+    }
+
     namespace 'net.kdt.pojavlaunch'
 
     compileSdk = 34
@@ -191,6 +201,7 @@ android {
 
     buildToolsVersion = '34.0.0'
 }
+
 
 
 dependencies {
