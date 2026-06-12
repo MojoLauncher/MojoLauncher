@@ -92,7 +92,8 @@ android {
     productFlavors {
         full {
             dimension "runtime"
-        }                  noruntime {
+        }
+        noruntime {
             dimension "runtime"
             versionNameSuffix "-noruntime"
         }
