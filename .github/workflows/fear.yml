@@ -1,4 +1,4 @@
-name: Clean & Rebuild
+name: Fix Build & Generate APK
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ permissions:
   contents: write
 
 jobs:
-  clean-build:
+  build:
     runs-on: ubuntu-22.04
     env:
       UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
@@ -18,7 +18,36 @@ jobs:
         with:
           submodules: true
 
-      # 1. Ensure all required modules are in settings.gradle
+      # 1. Clone original PojavLauncher for its build.gradle
+      - name: Get original PojavLauncher build.gradle
+        run: |
+          git clone --depth 1 https://github.com/PojavLauncherTeam/PojavLauncher.git /tmp/pojavlauncher
+
+      # 2. Copy original build.gradle to our module
+      - name: Copy original build.gradle
+        run: cp /tmp/pojavlauncher/app_pojavlauncher/build.gradle app_fearlauncher/build.gradle
+
+      # 3. Rebrand namespace and applicationId for FearLauncher
+      - name: Rebrand build.gradle
+        run: |
+          sed -i "s/namespace 'git\.artdeell\.mojo'/namespace 'net.kdt.fearlaunch'/" app_fearlauncher/build.gradle
+          sed -i 's/applicationId "git\.artdeell\.mojo"/applicationId "com.fearlauncher.app"/' app_fearlauncher/build.gradle
+          sed -i 's/git\.artdeell\.mojo/com.fearlauncher.app/g' app_fearlauncher/build.gradle
+
+      # 4. Remove the afterEvaluate block that causes download task issues
+      - name: Remove problematic afterEvaluate block
+        run: |
+          python3 -c "
+          import re
+          with open('app_fearlauncher/build.gradle', 'r') as f:
+              content = f.read()
+          # remove from 'afterEvaluate {' to the end of that block (just before 'dependencies {')
+          content = re.sub(r'afterEvaluate \{.*?\n}\n', '', content, flags=re.DOTALL)
+          with open('app_fearlauncher/build.gradle', 'w') as f:
+              f.write(content)
+          "
+
+      # 5. Ensure required modules in settings.gradle
       - name: Add missing modules to settings.gradle
         run: |
           for mod in dnbglfw forge_installer; do
@@ -27,20 +56,13 @@ jobs:
             fi
           done
 
-      # 2. Ensure productFlavors in app_fearlauncher/build.gradle
-      - name: Add productFlavors if missing
-        run: |
-          if ! grep -q "productFlavors" app_fearlauncher/build.gradle; then
-            sed -i "/flavorDimensions/a \    productFlavors {\n        full { dimension \"runtime\" }\n        noruntime { dimension \"runtime\"; versionNameSuffix \"-noruntime\" }\n    }" app_fearlauncher/build.gradle
-          fi
-
-      # 3. Commit config fixes (if any)
-      - name: Commit config fixes
+      # 6. Commit all fixes
+      - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add settings.gradle app_fearlauncher/build.gradle
-          git commit -m "Ensure modules and flavors" || echo "No changes"
+          git add -A
+          git commit -m "Fix build.gradle and remove non‑essential tasks" || echo "No changes"
           git push
 
       - uses: actions/setup-java@v3
@@ -48,13 +70,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # 4. Clean Gradle cache and project build directories
-      - name: Clean everything
-        run: |
-          ./gradlew clean
-          rm -rf ~/.gradle/caches/
-
-      # 5. Build APK
+      # 7. Build APK
       - name: Build APK
         run: |
           ./gradlew :app_fearlauncher:assembleFullDebug
