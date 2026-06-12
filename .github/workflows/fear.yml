@@ -1,4 +1,4 @@
-name: Complete Fix & Build
+name: Clean & Rebuild
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  clean-build:
     runs-on: ubuntu-22.04
     env:
       UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
@@ -16,31 +16,31 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          submodules: true   # ensures forge_installer and dnbglfw are present
+          submodules: true
 
-      # 1. Ensure all required modules are included in settings.gradle
+      # 1. Ensure all required modules are in settings.gradle
       - name: Add missing modules to settings.gradle
         run: |
-          for module in dnbglfw forge_installer; do
-            if ! grep -q "':$module'" settings.gradle; then
-              echo "include ':$module'" >> settings.gradle
+          for mod in dnbglfw forge_installer; do
+            if ! grep -q "':$mod'" settings.gradle; then
+              echo "include ':$mod'" >> settings.gradle
             fi
           done
 
-      # 2. Ensure productFlavors exist in app_fearlauncher/build.gradle
+      # 2. Ensure productFlavors in app_fearlauncher/build.gradle
       - name: Add productFlavors if missing
         run: |
           if ! grep -q "productFlavors" app_fearlauncher/build.gradle; then
             sed -i "/flavorDimensions/a \    productFlavors {\n        full { dimension \"runtime\" }\n        noruntime { dimension \"runtime\"; versionNameSuffix \"-noruntime\" }\n    }" app_fearlauncher/build.gradle
           fi
 
-      # 3. Commit configuration fixes
-      - name: Commit fixes
+      # 3. Commit config fixes (if any)
+      - name: Commit config fixes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add settings.gradle app_fearlauncher/build.gradle
-          git commit -m "Include all required modules and ensure flavors" || echo "No changes"
+          git commit -m "Ensure modules and flavors" || echo "No changes"
           git push
 
       - uses: actions/setup-java@v3
@@ -48,6 +48,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      # 4. Clean Gradle cache and project build directories
+      - name: Clean everything
+        run: |
+          ./gradlew clean
+          rm -rf ~/.gradle/caches/
+
+      # 5. Build APK
       - name: Build APK
         run: |
           ./gradlew :app_fearlauncher:assembleFullDebug
