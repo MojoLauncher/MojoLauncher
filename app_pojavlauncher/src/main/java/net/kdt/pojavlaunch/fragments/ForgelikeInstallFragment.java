@@ -53,7 +53,7 @@ public abstract class ForgelikeInstallFragment extends ModVersionListFragment<Li
                 instance.installer = instanceInstaller;
                 // Switch the instance renderer to LTW to workaround early window brokeness on GL4ES
                 // Won't affect versions early than 1.17
-                if(LauncherPreferences.PREF_RENDERER.equals("opengles2")) instance.renderer = "opengles3_ltw";
+                if(instance.getLaunchRenderer().equals("opengles2")) instance.renderer = "opengles3_ltw";
             }, selectedVersion);
             ProgressLayout.clearProgress(ProgressLayout.INSTALL_MODPACK);
             instanceInstaller.start();
