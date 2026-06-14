@@ -19,6 +19,7 @@ typedef struct {
 } pojavexec_renderspec_t;
 
 void* pojavexec_loadVulkanDriver();
+const char* pojavexec_getNativeDirectory();
 const pojavexec_renderspec_t* pojavexec_getRenderSpec();
 
 #endif //POJAVLAUNCHER_POJAVEXEC_H

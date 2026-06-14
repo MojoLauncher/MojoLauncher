@@ -15,6 +15,7 @@ public class LibraryPlugin {
     // Known plugins constants
     public static final String ID_ANGLE_PLUGIN = "git.mojo.angle";
     public static final String ID_FFMPEG_PLUGIN = "git.mojo.ffmpeg";
+    public static final String ID_ZINK_PLUGIN = "git.mojo.zink";
 
     private String appId;
     private String libraryPath;

@@ -98,30 +98,6 @@ public class JREUtils {
         if(ffmpeg == null) return;
         envMap.put("POJAV_FFMPEG_PATH", ffmpeg.resolveAbsolutePath("libffmpeg.so"));
     }
-
-    // Setup environment for mesa-based renderers
-    public static void setupRendererEnv(Map<String, String> envMap, String renderer) {
-        switch(renderer) {
-            case "vulkan_zink":
-                envMap.put("GALLIUM_DRIVER", "zink");
-                envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
-                // HACK: GLSL version override for Mesa-based renderers (i.e. Zink)
-                // Required to run the game properly on some mobile Vulkan drivers (Minecraft fails to compile shaders without)
-                envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
-                break;
-            case "freedreno_kgsl":
-                if(GLInfoUtils.getGlInfo().isAdreno()) {
-                    envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "kgsl");
-                    // On Adreno 5XX and lower only Core 3.1 is exposed by default due to missing hardware extensions.
-                    // 3.3 is required for modern Minecraft so let's force 3.3 if running on such GPU - it's known to be working.
-                    if(GLInfoUtils.getGlInfo().isAdreno500Lower()) {
-                        envMap.put("MESA_GL_VERSION_OVERRIDE", "3.3");
-                        envMap.put("MESA_GLSL_VERSION_OVERRIDE", "330");
-                    }
-                }
-                break;
-        }
-    }
     public static void setEnviroimentForGame(Context context, String renderer) throws Throwable {
         Map<String, String> envMap = new ArrayMap<>();
         envMap.put("LIBGL_MIPMAP", "3");
@@ -158,11 +134,11 @@ public class JREUtils {
 
         setupAngleEnv(context, envMap);
         setupFfmpegEnv(context, envMap);
-        setupRendererEnv(envMap, renderer);
+        // Init mesa renderers
+        MesaUtils.initEnvironment(context, renderer, envMap);
 
-        // HACK
+        setRendererLibraryPath(Tools.NATIVE_LIB_DIR, MesaUtils.getCustomZinkLibraryPath());
         envMap.put("POJAV_NATIVEDIR", Tools.NATIVE_LIB_DIR);
-        envMap.put("EGL_PLATFORM", "android");
 
         if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
 
@@ -267,7 +243,7 @@ public class JREUtils {
             case "freedreno_kgsl":
                 preloadVk = false;
             case "vulkan_zink":
-                renderLibrary = "libEGL_mesa.so";
+                renderLibrary = MesaUtils.getPreferredEGL();
                 useGles = false;
                 bypassNamespace = true; // Mesa is linked to a bunch of libraries not available in the pojavexec namespace
                 glesVersion = 3;
@@ -292,17 +268,24 @@ public class JREUtils {
             Log.e("RENDER_LIBRARY","Failed to load renderer " + renderLibrary );
             return null;
         }
+        MesaUtils.destroyZink(); // Not needed anymore
         return renderLibrary;
     }
 
     public static int getDetectedVersion() {
         return GLInfoUtils.getGlInfo().glesMajorVersion;
     }
+    public static void setRendererLibraryPath(String mainPath, String additionalPath){
+        if(additionalPath != null)
+            mainPath = additionalPath + ":" + mainPath;
+        nsetRendererLibraryPath(mainPath);
+    }
     public static native int chdir(String path);
 
     public static native void setLdLibraryPath(String ldLibraryPath);
     public static native boolean configureRenderspec(String eglPath, boolean useLoaderBypass, boolean useGles, int glesVersion);
     public static native void configureRenderspecDisplay(int width, int height, int refreshRate);
+    private static native void nsetRendererLibraryPath(String path);
     public static native void preloadVulkan();
     public static native void setUseTurnip(boolean enable);
     //public static native void initializeHooks();
