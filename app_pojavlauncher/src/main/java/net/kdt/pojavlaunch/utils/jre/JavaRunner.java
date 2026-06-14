@@ -202,6 +202,7 @@ public class JavaRunner {
 
     private static void setImmutableEnvVars(File jreHome) {
         try {
+            Os.setenv("POJAV_NATIVEDIR", Tools.NATIVE_LIB_DIR, true);
             Os.setenv("JAVA_HOME", jreHome.getAbsolutePath(), true);
             Os.setenv("HOME", Tools.DIR_GAME_HOME, true);
             Os.setenv("TMPDIR", Tools.DIR_CACHE.getAbsolutePath(), true);

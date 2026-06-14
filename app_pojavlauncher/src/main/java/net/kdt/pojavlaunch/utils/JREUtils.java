@@ -140,6 +140,7 @@ public class JREUtils {
         MesaUtils.initEnvironment(context, renderer, envMap);
 
         setRendererLibraryPath(Tools.NATIVE_LIB_DIR, MesaUtils.getCustomZinkLibraryPath());
+        envMap.put("POJAV_NATIVEDIR", Tools.NATIVE_LIB_DIR);
 
         if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
 
