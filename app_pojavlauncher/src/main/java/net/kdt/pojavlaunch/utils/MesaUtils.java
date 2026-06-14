@@ -34,7 +34,6 @@ public class MesaUtils {
                 if(!Architecture.isx86Device() && (LauncherPreferences.PREF_ZINK_FORCE_LEGACY || GLInfoUtils.getGlInfo().isArm())) {
                     zink = LibraryPlugin.discoverPlugin(context, LibraryPlugin.ID_ZINK_PLUGIN);
                     if(zink == null) return;
-                    envMap.put("LIBGL_DRIVERS_PATH", zink.getLibraryPath());
                     // Mali additionally wants this
                     envMap.put("MESA_GL_VERSION_OVERRIDE", "3.3");
                 }
@@ -74,7 +73,12 @@ public class MesaUtils {
             return zink.resolveAbsolutePath(MESA_EGL_LEGACY);
         } else return MESA_EGL;
     }
-    public static String getCustomLdPath() {
+
+    /**
+     * Get ZINK plugin library path
+     * @return library path string
+     */
+    public static String getCustomZinkLibraryPath() {
         if ((LauncherPreferences.PREF_ZINK_FORCE_LEGACY || GLInfoUtils.getGlInfo().isArm()) && zink != null)
             return zink.getLibraryPath();
         return null;

@@ -139,10 +139,7 @@ public class JREUtils {
         // Init mesa renderers
         MesaUtils.initEnvironment(context, renderer, envMap);
 
-        // HACK
-        String customLd = MesaUtils.getCustomLdPath();
-        envMap.put("POJAV_NATIVEDIR", customLd == null ? Tools.NATIVE_LIB_DIR : customLd + ":" + Tools.NATIVE_LIB_DIR);
-        envMap.put("EGL_PLATFORM", "android");
+        setRendererLibraryPath(Tools.NATIVE_LIB_DIR, MesaUtils.getCustomZinkLibraryPath());
 
         if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
 
@@ -248,7 +245,6 @@ public class JREUtils {
                 preloadVk = false;
             case "vulkan_zink":
                 renderLibrary = MesaUtils.getPreferredEGL();
-                MesaUtils.destroyZink(); // Not needed anymore
                 useGles = false;
                 bypassNamespace = true; // Mesa is linked to a bunch of libraries not available in the pojavexec namespace
                 glesVersion = 3;
@@ -273,16 +269,23 @@ public class JREUtils {
             Log.e("RENDER_LIBRARY","Failed to load renderer " + renderLibrary );
             return null;
         }
+        MesaUtils.destroyZink(); // Not needed anymore
         return renderLibrary;
     }
 
     public static int getDetectedVersion() {
         return GLInfoUtils.getGlInfo().glesMajorVersion;
     }
+    public static void setRendererLibraryPath(String mainPath, String additionalPath){
+        if(additionalPath != null)
+            mainPath = additionalPath + ":" + mainPath;
+        nsetRendererLibraryPath(mainPath);
+    }
     public static native int chdir(String path);
 
     public static native void setLdLibraryPath(String ldLibraryPath);
     public static native boolean configureRenderspec(String eglPath, boolean useLoaderBypass, boolean useGles, int glesVersion);
+    private static native void nsetRendererLibraryPath(String path);
     public static native void preloadVulkan();
     public static native void setUseTurnip(boolean enable);
     //public static native void initializeHooks();
