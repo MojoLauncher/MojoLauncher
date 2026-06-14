@@ -4,6 +4,7 @@
 
 #include "android_namespace_func.h"
 #include "fake_dlfcn.h"
+#include <elf_defs.h>
 #include <dlfcn.h>
 
 #define TAG __FILE_NAME__
@@ -21,7 +22,11 @@ static bool load_symbols(dlsym_impl idlsym, void* handle, android_ldfuncs_t* fun
 
 static void* fakel_locate_libdl_android() {
     // u mad? :trollface:
+#ifdef PLATFORM_64
     void* linker_handle = fake_dlopen("linker64", 0);
+#else
+    void* linker_handle = fake_dlopen("linker", 0);
+#endif
     if(!linker_handle) {
         LOGE("fakel failed to find linker in VA space");
         return NULL;

@@ -14,6 +14,8 @@
 #define ELF_XWORD Elf64_Xword
 #define ELF_DYN Elf64_Dyn
 #define ELF_SYM Elf64_Sym
+
+#define PLATFORM_64
 #elif defined(__arm__) || defined(__i386__)
 #define ELF_EHDR Elf32_Ehdr
 #define ELF_SHDR Elf32_Shdr
