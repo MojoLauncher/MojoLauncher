@@ -174,7 +174,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
                         cursorY,
                         minecraftGLView.mSurface.getHeight(),
                         mImeHeight,
-                        50
+                        0
                 );
             } else
                 translationY = mImeHeight;
