@@ -9,7 +9,6 @@
     <string name="login_online_username_hint">使用者名稱</string>
     <string name="login_online_login_label">登入</string>
     <!-- Hint -->
-    <string name="hint_control_mapping">"請輕觸頂部中央的齒輪圖示 ⚙ 開啟選單。\n輕觸按鈕來進行自訂：編輯、調整大小、移除或變更其按鍵綁定。"</string>
     <!-- Warnings -->
     <string name="warning_remove_account">這個帳號將被移除！</string>
     <!-- AlertDialog title -->

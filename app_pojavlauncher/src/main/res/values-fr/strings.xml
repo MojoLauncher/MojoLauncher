@@ -9,7 +9,7 @@
     <string name="login_online_username_hint">Nom d’utilisateur</string>
     <string name="login_online_login_label">Se connecter</string>
     <!-- Hint -->
-    <string name="hint_control_mapping">"Appuyez sur l'icône d'engrenage \"⚙\" pour ouvrir le menu contextuel\nAppuyez sur un bouton pour le personnaliser : modifier, redimensionner, supprimer ou changer son raccourci clavier."</string>
+    <string name="hint_control_mapping">Appuyez sur l\'icône d\'engrenage ⚙ pour ouvrir le menu contextuel\nAppuyez sur un bouton pour le : modifier, redimensionner, supprimer ou changer son raccourci clavier.</string>
     <!-- Warnings -->
     <string name="warning_remove_account">Ce compte sera retiré !</string>
     <!-- AlertDialog title -->

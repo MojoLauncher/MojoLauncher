@@ -13,7 +13,6 @@
     <string name="login_online_login_label">Đăng nhập</string>
 
     <!-- Hint -->
-    <string name="hint_control_mapping">"Chạm phím bánh răng ở giữa cạnh trên màn hình để mở menu ⚙\nChạm vào các phím để tùy chỉnh chúng: chỉnh sửa, thay đổi kích thước, xoá, hoặc thay đổi liên kết phím."</string>
 
     <!-- Warnings -->
     <string name="warning_remove_account">Tài khoản này sẽ bị xoá!</string>

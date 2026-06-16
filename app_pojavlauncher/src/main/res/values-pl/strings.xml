@@ -9,7 +9,7 @@
     <string name="login_online_username_hint">Nazwa użytkownika</string>
     <string name="login_online_login_label">Zaloguj się</string>
     <!-- Hint -->
-    <string name="hint_control_mapping">"Dotknij ikony zębatki, aby otworzyć menu kontekstowe ⚙\nNaciśnij przycisk, aby dostosować: edytuj, zmień rozmiar, usuń lub zmień przypisanie klawiszy."</string>
+    <string name="hint_control_mapping">Dotknij ikony zębatki, aby otworzyć menu kontekstowe ⚙\nNaciśnij przycisk, aby dostosować: edytuj, zmień rozmiar, usuń lub zmień przypisanie klawiszy.</string>
     <!-- Warnings -->
     <string name="warning_remove_account">To konto zostanie usunięte!</string>
     <!-- AlertDialog title -->

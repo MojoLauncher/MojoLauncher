@@ -35,4 +35,12 @@ public class DrawerPullButton extends View {
         mDrawable.draw(canvas);
         canvas.restore();
     }
+
+    // Move the button to the third quarter of the screen
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        int parentWidth = ((View) getParent()).getWidth();
+        setX((int)(parentWidth * 0.75) - (getWidth() - 2));
+    }
 }

@@ -9,7 +9,6 @@
     <string name="login_online_username_hint">Nome utente</string>
     <string name="login_online_login_label">Accedi</string>
     <!-- Hint -->
-    <string name="hint_control_mapping">"Toccare la rotella dentata in alto al centro per aprire il menu contestuale ⚙ Toccare un pulsante per personalizzarlo: modificarlo, ridimensionarlo, rimuoverlo o cambiarne i tasti."</string>
     <!-- Warnings -->
     <string name="warning_remove_account">L\'account sarà cancellato!</string>
     <!-- AlertDialog title -->

@@ -9,7 +9,7 @@
     <string name="login_online_username_hint">اسم المستخدم</string>
     <string name="login_online_login_label">تسجيل الدخول</string>
     <!-- Hint -->
-    <string name="hint_control_mapping">"أضغط على أيقونة الإعدادات في أعلى منتصف الشاشة لفتح قائمة التعديلات ⚙\nأضغط على زر للتخصيص: تغيير, تعديل الحجم، حذف، أو تعديل أزرار التحكم."</string>
+    <string name="hint_control_mapping">أضغط على أيقونة الإعدادات لفتح قائمة التعديلات ⚙\nأضغط على زر للتخصيص: تغيير، تعديل الحجم، حذف، أو تعديل أزرار التحكم.</string>
     <!-- Warnings -->
     <string name="warning_remove_account">سيتم إزالة هذا الحساب!</string>
     <!-- AlertDialog title -->
