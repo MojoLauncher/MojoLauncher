@@ -98,6 +98,14 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         mControlSelectButton.setOnClickListener(controlSelectListener);
         mDefaultControl.setOnClickListener(controlSelectListener);
 
+        // Long Click Listener
+        mDefaultControl.setOnLongClickListener(v -> {
+            mSelectedControlLayout = "";
+            mDefaultControl.setText(v.getContext().getString(R.string.use_global_default));
+            Toast.makeText(v.getContext(), "Reset to Global Default", Toast.LENGTH_SHORT).show();
+            return true;
+        });
+
         // Setup the expendable list behavior
         View.OnClickListener versionSelectListener = getVersionSelectListener();
         mVersionSelectButton.setOnClickListener(versionSelectListener);
