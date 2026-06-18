@@ -33,6 +33,7 @@ import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.render.SurfaceProvider;
 import net.kdt.pojavlaunch.render.SurfaceViewSurfaceProvider;
 import net.kdt.pojavlaunch.render.TextureViewSurfaceProvider;
+import net.kdt.pojavlaunch.utils.JREUtils;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
 
 import fr.spse.gamepad_remapper.GamepadHandler;
@@ -312,6 +313,7 @@ public class MinecraftGLSurface extends View implements GrabListener, GamepadEna
             Log.w("MGLSurface", "Attempt to refresh size on null surface");
             return;
         }
+        JREUtils.configureRenderspecDisplay(windowWidth, windowHeight, (int) mSurface.getDisplay().getRefreshRate());
         mSurfaceProvider.updateSize();
     }
 
