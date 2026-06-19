@@ -14,12 +14,12 @@ public class ModLoader {
     public static final int MOD_LOADER_LEGACY_FABRIC = 4;
     public final int modLoaderType;
     public final String modLoaderVersion;
-    public final String minecraftVersion;
+    public final String gameVersion;
 
-    public ModLoader(int modLoaderType, String modLoaderVersion, String minecraftVersion) {
+    public ModLoader(int modLoaderType, String modLoaderVersion, String gameVersion) {
         this.modLoaderType = modLoaderType;
         this.modLoaderVersion = modLoaderVersion;
-        this.minecraftVersion = minecraftVersion;
+        this.gameVersion = gameVersion;
     }
 
     /**
@@ -29,15 +29,15 @@ public class ModLoader {
     public String getVersionId() {
         switch (modLoaderType) {
             case MOD_LOADER_FORGE:
-                return minecraftVersion+"-forge-"+modLoaderVersion;
+                return gameVersion +"-forge-"+modLoaderVersion;
             case MOD_LOADER_FABRIC:
-                return "fabric-loader-"+modLoaderVersion+"-"+minecraftVersion;
+                return "fabric-loader-"+modLoaderVersion+"-"+ gameVersion;
             case MOD_LOADER_QUILT:
-                return "quilt-loader-"+modLoaderVersion+"-"+minecraftVersion;
+                return "quilt-loader-"+modLoaderVersion+"-"+ gameVersion;
             case MOD_LOADER_NEOFORGE:
                 return "neoforge-"+modLoaderVersion;
             case MOD_LOADER_LEGACY_FABRIC:
-                return "legacy-fabric-loader-"+modLoaderVersion+"-"+minecraftVersion;
+                return "legacy-fabric-loader-"+modLoaderVersion+"-"+ gameVersion;
             default:
                 return null;
         }
@@ -50,11 +50,11 @@ public class ModLoader {
     public String installHeadlessly() throws IOException{
         switch (modLoaderType) {
             case MOD_LOADER_FABRIC:
-                return FabriclikeUtils.FABRIC_UTILS.install(minecraftVersion, modLoaderVersion);
+                return FabriclikeUtils.FABRIC_UTILS.install(gameVersion, modLoaderVersion);
             case MOD_LOADER_QUILT:
-                return FabriclikeUtils.QUILT_UTILS.install(minecraftVersion, modLoaderVersion);
+                return FabriclikeUtils.QUILT_UTILS.install(gameVersion, modLoaderVersion);
             case MOD_LOADER_LEGACY_FABRIC:
-                return FabriclikeUtils.LEGACY_FABRIC_UTILS.install(minecraftVersion, modLoaderVersion);
+                return FabriclikeUtils.LEGACY_FABRIC_UTILS.install(gameVersion, modLoaderVersion);
             case MOD_LOADER_FORGE:
             case MOD_LOADER_NEOFORGE:
             default:
@@ -69,9 +69,9 @@ public class ModLoader {
     public InstanceInstaller createInstaller() throws IOException {
         switch (modLoaderType) {
             case MOD_LOADER_NEOFORGE:
-                return ForgelikeUtils.NEOFORGE_UTILS.createInstaller(minecraftVersion, modLoaderVersion);
+                return ForgelikeUtils.NEOFORGE_UTILS.createInstaller(gameVersion, modLoaderVersion);
             case MOD_LOADER_FORGE:
-                return ForgelikeUtils.FORGE_UTILS.createInstaller(minecraftVersion, modLoaderVersion);
+                return ForgelikeUtils.FORGE_UTILS.createInstaller(gameVersion, modLoaderVersion);
             case MOD_LOADER_QUILT:
             case MOD_LOADER_FABRIC:
             case MOD_LOADER_LEGACY_FABRIC:

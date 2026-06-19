@@ -32,7 +32,7 @@ import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.authenticator.AuthType;
 import net.kdt.pojavlaunch.authenticator.BackgroundLogin;
 import net.kdt.pojavlaunch.authenticator.accounts.Accounts;
-import net.kdt.pojavlaunch.authenticator.accounts.MinecraftAccount;
+import net.kdt.pojavlaunch.authenticator.accounts.Account;
 import net.kdt.pojavlaunch.authenticator.impl.PresentedException;
 import net.kdt.pojavlaunch.authenticator.listener.LoginListener;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
@@ -76,8 +76,8 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
     private final ExtraListener<String> mElyByLoginListener = new LoginExtraListener(AuthType.ELY_BY);
     private final ExtraListener<String[]> mMojangLoginListener = (key, value) -> {
         try {
-            MinecraftAccount minecraftAccount = Accounts.create(acc-> acc.username = value[0]);
-            onLoginDone(minecraftAccount);
+            Account account = Accounts.create(acc-> acc.username = value[0]);
+            onLoginDone(account);
         }catch (IOException e) {
             onLoginError(e);
         }
@@ -162,16 +162,16 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
             setSelection(0);
         } else {
             setSelection(accounts.selectionIndex + 1);
-            refreshAccount(Objects.requireNonNull((MinecraftAccount) getSelectedItem()));
+            refreshAccount(Objects.requireNonNull((Account) getSelectedItem()));
         }
     }
 
-    private void refreshAccount(MinecraftAccount minecraftAccount) {
+    private void refreshAccount(Account account) {
         // Wait until all tasks (including other possible login tasks) are done before
         // attempting to refresh the account.
         ProgressKeeper.waitUntilDone(()->{
             // Reload the account data before attempting to refresh (what if it was already refreshed in the background?)
-            MinecraftAccount refreshAccount = minecraftAccount.reload();
+            Account refreshAccount = account.reload();
             if(refreshAccount == null) return;
             AuthType authType = refreshAccount.authType;
             if(authType.requiresLogin() && System.currentTimeMillis() > refreshAccount.expiresAt) {
@@ -200,7 +200,7 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
     }
 
     @Override
-    public void onLoginDone(MinecraftAccount account) {
+    public void onLoginDone(Account account) {
         mLoginStep = mMaxSteps;
         invalidate();
 
@@ -250,8 +250,8 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        MinecraftAccount minecraftAccount = mAdapter.getItem(i);
-        if(minecraftAccount == null) {
+        Account account = mAdapter.getItem(i);
+        if(account == null) {
             if(i == 0) {
                 createAccount();
             }else {
@@ -259,8 +259,8 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
             }
             return;
         }
-        Accounts.setCurrent(minecraftAccount);
-        refreshAccount(minecraftAccount);
+        Accounts.setCurrent(account);
+        refreshAccount(account);
         dismissPopup();
     }
 
@@ -273,13 +273,13 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
         invalidate();
     }
 
-    private class Adapter extends ArrayAdapter<MinecraftAccount> {
+    private class Adapter extends ArrayAdapter<Account> {
         private final HashMap<Integer, BitmapDrawable> mSkinHeadCache = new HashMap<>();
         private final LayoutInflater mInflater;
 
 
         public Adapter(@NonNull Context context) {
-            super(context, R.layout.item_minecraft_account);
+            super(context, R.layout.item_account);
             mInflater = LayoutInflater.from(context);
         }
 
@@ -287,7 +287,7 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             if(convertView == null) {
-                convertView = mInflater.inflate(R.layout.item_minecraft_account, parent, false);
+                convertView = mInflater.inflate(R.layout.item_account, parent, false);
             }
             populateView(convertView, position, false);
             return convertView;
@@ -296,7 +296,7 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
         @Override
         public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             if(convertView == null) {
-                convertView = mInflater.inflate(R.layout.item_minecraft_account, parent, false);
+                convertView = mInflater.inflate(R.layout.item_account, parent, false);
             }
             populateView(convertView, position, true);
             return convertView;
@@ -329,7 +329,7 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
             }
 
 
-            MinecraftAccount account = Objects.requireNonNull(getItem(position));
+            Account account = Objects.requireNonNull(getItem(position));
 
             int authTypeResource = account.authType.iconResource;
 
@@ -355,7 +355,7 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
                     .setMessage(R.string.warning_remove_account)
                     .setPositiveButton(android.R.string.cancel, null)
                     .setNeutralButton(R.string.global_delete, (dialog, which) -> {
-                        MinecraftAccount account = getItem(position);
+                        Account account = getItem(position);
                         Accounts.delete(account);
                         reload();
                     })

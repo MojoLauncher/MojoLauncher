@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition pour Android)</string>
     <string name="app_short_name">MojoLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->

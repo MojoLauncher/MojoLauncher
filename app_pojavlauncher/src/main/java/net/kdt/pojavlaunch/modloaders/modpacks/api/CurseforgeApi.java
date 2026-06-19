@@ -38,7 +38,7 @@ public class CurseforgeApi implements ModpackApi{
     private static final int ALGO_SHA_1 = 1;
     // Stolen from
     // https://github.com/AnzhiZhang/CurseForgeModpackDownloader/blob/6cb3f428459f0cc8f444d16e54aea4cd1186fd7b/utils/requester.py#L93
-    private static final int CURSEFORGE_MINECRAFT_GAME_ID = 432;
+    private static final int CURSEFORGE_MC_GAME_ID = 432;
     private static final int CURSEFORGE_MODPACK_CLASS_ID = 4471;
     // https://api.curseforge.com/v1/categories?gameId=432 and search for "Mods" (case-sensitive)
     private static final int CURSEFORGE_MOD_CLASS_ID = 6;
@@ -57,7 +57,7 @@ public class CurseforgeApi implements ModpackApi{
         CurseforgeSearchResult curseforgeSearchResult = (CurseforgeSearchResult) previousPageResult;
 
         HashMap<String, Object> params = new HashMap<>();
-        params.put("gameId", CURSEFORGE_MINECRAFT_GAME_ID);
+        params.put("gameId", CURSEFORGE_MC_GAME_ID);
         params.put("classId", searchFilters.isModpack ? CURSEFORGE_MODPACK_CLASS_ID : CURSEFORGE_MOD_CLASS_ID);
         params.put("searchFilter", searchFilters.name);
         params.put("sortField", CURSEFORGE_SORT_RELEVANCY);

@@ -16,7 +16,7 @@ import androidx.core.app.ActivityCompat;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.tasks.AsyncAssetManager;
-import net.kdt.pojavlaunch.tasks.MinecraftDownloader;
+import net.kdt.pojavlaunch.tasks.MoJsonDownloader;
 import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.LocaleUtils;
 
@@ -89,7 +89,7 @@ public class PojavApplication extends Application {
 												originalJNIDirectory.lastIndexOf("/"))
 												.concat("/x86");
 			}
-            MinecraftDownloader.prepareSubstitutionMap(getAssets());
+            MoJsonDownloader.prepareSubstitutionMap(getAssets());
 			AsyncAssetManager.unpackRuntime(getAssets());
 		} catch (Throwable throwable) {
 			Intent ferrorIntent = new Intent(this, FatalErrorActivity.class);

@@ -21,7 +21,7 @@ import com.google.gson.JsonParseException;
 import org.apache.commons.io.IOUtils;
 
 @Keep
-public class MinecraftAccount {
+public class Account {
     public transient File mSaveLocation;
     public String accessToken = "0"; // access token
     public String profileId = "00000000-0000-0000-0000-000000000000"; // profile UUID, for obtaining skin
@@ -33,7 +33,7 @@ public class MinecraftAccount {
     public long expiresAt;
     private transient Bitmap mFaceCache;
 
-    protected MinecraftAccount() {}
+    protected Account() {}
 
     public void updateSkinFace() {
         String skinFaceUrlTemplate = authType.skinUrl;
@@ -69,12 +69,12 @@ public class MinecraftAccount {
         JSONUtils.writeToFile(mSaveLocation, this);
     }
 
-    public MinecraftAccount reload() {
+    public Account reload() {
         try {
-            MinecraftAccount minecraftAccount = JSONUtils.readFromFile(mSaveLocation, MinecraftAccount.class);
-            if(minecraftAccount == null) return null;
-            minecraftAccount.mSaveLocation = mSaveLocation;
-            return minecraftAccount;
+            Account account = JSONUtils.readFromFile(mSaveLocation, Account.class);
+            if(account == null) return null;
+            account.mSaveLocation = mSaveLocation;
+            return account;
         }catch (IOException | JsonParseException e) {
             return null;
         }

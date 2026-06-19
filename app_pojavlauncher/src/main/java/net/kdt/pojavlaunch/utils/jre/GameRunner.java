@@ -8,9 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import net.kdt.pojavlaunch.Architecture;
-import net.kdt.pojavlaunch.JMinecraftVersionList;
+import net.kdt.pojavlaunch.JVersionList;
 import net.kdt.pojavlaunch.Tools;
-import net.kdt.pojavlaunch.authenticator.accounts.MinecraftAccount;
+import net.kdt.pojavlaunch.authenticator.accounts.Account;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.LifecycleAwareAlertDialog;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
@@ -85,7 +85,7 @@ public class GameRunner {
      * @return whether the GPU is affected by the Large Thin Wrapper render distance issue on vanilla
      */
 
-    private static boolean affectedByRenderDistanceIssue(JMinecraftVersionList.Version version) throws ParseException {
+    private static boolean affectedByRenderDistanceIssue(JVersionList.Version version) throws ParseException {
         if(LauncherPreferences.PREF_USE_ANGLE) return false;
         GLInfoUtils.GLInfo info = GLInfoUtils.getGlInfo();
         return info.isAdreno() &&
@@ -94,7 +94,7 @@ public class GameRunner {
                 DateUtils.dateBefore(DateUtils.getOriginalReleaseDate(version), 2025, 2, 25);
     }
 
-    private static boolean checkRenderDistance(JMinecraftVersionList.Version version, File gamedir) throws ParseException {
+    private static boolean checkRenderDistance(JVersionList.Version version, File gamedir) throws ParseException {
         if(!affectedByRenderDistanceIssue(version)) return false;
         if(hasSodium(gamedir)) return false;
         try {
@@ -108,11 +108,11 @@ public class GameRunner {
         return renderDistance > 7;
     }
 
-    private static boolean isGl4esCompatible(JMinecraftVersionList.Version version) throws Exception{
+    private static boolean isGl4esCompatible(JVersionList.Version version) throws Exception{
         return DateUtils.dateBefore(DateUtils.getOriginalReleaseDate(version), 2025, 1, 7);
     }
 
-    private static boolean isCompatContext(JMinecraftVersionList.Version version) throws Exception{
+    private static boolean isCompatContext(JVersionList.Version version) throws Exception{
         // Day before the release date of 21w10a, the first OpenGL 3 Core Minecraft version
         return DateUtils.dateBefore(DateUtils.getOriginalReleaseDate(version), 2021, 3, 9);
     }
@@ -139,8 +139,8 @@ public class GameRunner {
         }
     }
 
-    public static void launchMinecraft(final AppCompatActivity activity, MinecraftAccount minecraftAccount,
-                                       Instance instance, String versionId, File[] classpath, String rendererName) throws Throwable {
+    public static void launchGame(final AppCompatActivity activity, Account account,
+                                  Instance instance, String versionId, File[] classpath, String rendererName) throws Throwable {
         int freeDeviceMemory = Tools.getFreeDeviceMemory(activity);
         int localeString;
         int freeAddressSpace = Architecture.is32BitsDevice() ? Tools.getMaxContinuousAddressSpaceSize() : -1;
@@ -165,7 +165,7 @@ public class GameRunner {
             }
         }
         File gamedir = instance.getGameDirectory();
-        JMinecraftVersionList.Version versionInfo = Tools.getVersionInfo(versionId);
+        JVersionList.Version versionInfo = Tools.getVersionInfo(versionId);
 
         // Switch renderer to GL4ES when running a compat context version on LTW
         if(isCompatContext(versionInfo) && !hasAngelica(gamedir) && rendererName.equals("opengles3_ltw")) {
@@ -212,7 +212,7 @@ public class GameRunner {
 
         // Pre-process specific files
         disableSplash(gamedir);
-        List<String> launchArgs = getMinecraftClientArgs(minecraftAccount, versionInfo, gamedir);
+        List<String> launchArgs = getMoJsonClientArgs(account, versionInfo, gamedir);
 
         // Select the appropriate openGL version
         OldVersionsUtils.selectOpenGlVersion(versionInfo);
@@ -248,9 +248,9 @@ public class GameRunner {
         FileUtils.ensureDirectory(lwjglExtractDir);
         javaArgList.add("-Dorg.lwjgl.system.SharedLibraryExtractPath="+lwjglExtractDir.getAbsolutePath());
 
-        addAuthlibInjectorArgs(javaArgList, minecraftAccount);
+        addAuthlibInjectorArgs(javaArgList, account);
 
-        javaArgList.addAll(getMinecraftJVMArgs(versionId));
+        javaArgList.addAll(getMoJsonJvmArgs(versionId));
 
         javaArgList.addAll(JREUtils.parseJavaArguments(instance.getLaunchArgs()));
 
@@ -310,14 +310,14 @@ public class GameRunner {
         }
     }
 
-    private static void addAuthlibInjectorArgs(List<String> javaArgList, MinecraftAccount minecraftAccount) {
-        String injectorUrl = minecraftAccount.authType.injectorUrl;
+    private static void addAuthlibInjectorArgs(List<String> javaArgList, Account account) {
+        String injectorUrl = account.authType.injectorUrl;
         if(injectorUrl == null) return;
         javaArgList.add("-javaagent:"+Tools.DIR_DATA+"/authlib-injector/authlib-injector.jar="+injectorUrl);
     }
 
-    private static List<String> getMinecraftJVMArgs(String versionName) {
-        JMinecraftVersionList.Version versionInfo = Tools.getVersionInfo(versionName, true);
+    private static List<String> getMoJsonJvmArgs(String versionName) {
+        JVersionList.Version versionInfo = Tools.getVersionInfo(versionName, true);
         // Parse Forge 1.17+ additional JVM Arguments
         if (versionInfo.inheritsFrom == null || versionInfo.arguments == null || versionInfo.arguments.jvm == null) {
             return Collections.emptyList();
@@ -329,18 +329,18 @@ public class GameRunner {
         varArgMap.put("version_name", versionInfo.id);
         varArgMap.put("natives_directory", Tools.NATIVE_LIB_DIR);
 
-        List<String> minecraftArgs = new ArrayList<>();
+        List<String> clientVmArgs = new ArrayList<>();
         if (versionInfo.arguments != null) {
             for (Object arg : versionInfo.arguments.jvm) {
                 if (arg instanceof String) {
-                    minecraftArgs.add((String) arg);
+                    clientVmArgs.add((String) arg);
                 } //TODO: implement (?maybe?)
             }
         }
-        return JSONUtils.insertJSONValueList(minecraftArgs, varArgMap);
+        return JSONUtils.insertJSONValueList(clientVmArgs, varArgMap);
     }
 
-    private static List<String> getMinecraftClientArgs(MinecraftAccount profile, JMinecraftVersionList.Version versionInfo, File gameDir) {
+    private static List<String> getMoJsonClientArgs(Account profile, JVersionList.Version versionInfo, File gameDir) {
         String username = profile.username;
         String versionName = versionInfo.id;
         if (versionInfo.inheritsFrom != null) {
@@ -376,19 +376,19 @@ public class GameRunner {
         varArgMap.put("version_name", versionName);
         varArgMap.put("version_type", versionInfo.type);
 
-        List<String> minecraftArgs = new ArrayList<>();
+        List<String> clientArgs = new ArrayList<>();
         if (versionInfo.arguments != null && versionInfo.arguments.game != null) {
             // Support Minecraft 1.13+
             for (Object arg : versionInfo.arguments.game) {
                 if (arg instanceof String) {
-                    minecraftArgs.add((String) arg);
+                    clientArgs.add((String) arg);
                 } //TODO: implement else clause
             }
         }
         if(versionInfo.minecraftArguments != null){
-            minecraftArgs.addAll(splitAndFilterEmpty(versionInfo.minecraftArguments));
+            clientArgs.addAll(splitAndFilterEmpty(versionInfo.minecraftArguments));
         }
-        return JSONUtils.insertJSONValueList(minecraftArgs, varArgMap);
+        return JSONUtils.insertJSONValueList(clientArgs, varArgMap);
     }
 
     private static List<String> splitAndFilterEmpty(String argStr) {

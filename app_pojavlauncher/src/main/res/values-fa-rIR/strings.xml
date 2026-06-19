@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">پوجاو لانچر (ماینکرفت: جاوا ادیشن برای اندروید)</string>
     <string name="app_short_name">پوجاو لانچر</string>
     <!-- Action bar part -->
     <!-- Languages list part -->

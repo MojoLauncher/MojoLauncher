@@ -42,10 +42,9 @@ import net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceFragment;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
 import net.kdt.pojavlaunch.progresskeeper.TaskCountListener;
 import net.kdt.pojavlaunch.services.ProgressServiceKeeper;
-import net.kdt.pojavlaunch.tasks.AsyncMinecraftDownloader;
+import net.kdt.pojavlaunch.tasks.MoJsonExtras;
 import net.kdt.pojavlaunch.tasks.AsyncVersionList;
-import net.kdt.pojavlaunch.tasks.MinecraftDownloader;
-import net.kdt.pojavlaunch.utils.JREUtils;
+import net.kdt.pojavlaunch.tasks.MoJsonDownloader;
 import net.kdt.pojavlaunch.utils.NotificationUtils;
 
 import git.artdeell.mojo.R;
@@ -129,9 +128,9 @@ public class LauncherActivity extends BaseActivity {
             ExtraCore.setValue(ExtraConstants.SELECT_AUTH_METHOD, true);
             return false;
         }
-        String normalizedVersionId = AsyncMinecraftDownloader.normalizeVersionId(selectedInstance.versionId);
-        JMinecraftVersionList.Version mcVersion = AsyncMinecraftDownloader.getListedVersion(normalizedVersionId);
-        new MinecraftDownloader().start(
+        String normalizedVersionId = MoJsonExtras.normalizeVersionId(selectedInstance.versionId);
+        JVersionList.Version mcVersion = MoJsonExtras.getListedVersion(normalizedVersionId);
+        new MoJsonDownloader().start(
                 this.getAssets(),
                 mcVersion,
                 normalizedVersionId,
@@ -196,7 +195,7 @@ public class LauncherActivity extends BaseActivity {
 
         new AsyncVersionList().getVersionList(versions -> ExtraCore.setValue(ExtraConstants.RELEASE_TABLE, versions));
 
-        mProgressLayout.observe(ProgressLayout.DOWNLOAD_MINECRAFT);
+        mProgressLayout.observe(ProgressLayout.DOWNLOAD_GAME);
         mProgressLayout.observe(ProgressLayout.UNPACK_RUNTIME);
         mProgressLayout.observe(ProgressLayout.INSTALL_MODPACK);
         mProgressLayout.observe(ProgressLayout.AUTHENTICATE);

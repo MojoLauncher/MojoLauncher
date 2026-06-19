@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition for Android)</string>
     <string name="app_short_name">MojoLauncher</string>
 
     <!-- Action bar part -->
@@ -178,7 +177,7 @@
     <string name="memory_warning_msg">The current amount of free RAM (%d) is lower than allocated RAM (%d), which may lead to crashes. Change the allocation if the game crashes.</string>
     <string name="address_memory_warning_msg">The current amount of free addressable RAM space (%d) is lower than the allocated RAM (%d), which will lead to crashes. Change the allocation if the game crashes.</string>
     <string name="mcl_memory_allocation">Memory allocation</string>
-    <string name="mcl_memory_allocation_subtitle">Controls how much memory is given to Minecraft.</string>
+    <string name="mcl_memory_allocation_subtitle">Controls how much memory is given to the Java runtime.</string>
     <string name="multirt_runtime_corrupt">Corrupted Java Runtime</string>
     <string name="multirt_runtime_incompatiblearch">Incompatible architecture: %s</string>
     <string name="multirt_config_title">Java Runtimes</string>
@@ -260,12 +259,12 @@
     <string name="main_add_account">Add account</string>
     <string name="tasks_ongoing">Tasks are in progress, please wait</string>
     <string name="no_saved_accounts">No saved accounts</string>
-    <string name="mc_download_failed">Failed to download Minecraft! This could be due to bad network connection, incorrectly placed files, etc..</string>
+    <string name="mc_download_failed">Failed to download the game! This could be due to bad network connection, incorrectly placed files, etc..</string>
     <string name="xerr_unknown">Unknown Xbox Live API error %d</string>
     <string name="xerr_no_account">You don\'t seem to have an Xbox Live account. Please log in once on https://minecraft.net/ and try again.</string>
     <string name="xerr_adult_verification">An adult needs to verify your account.</string>
     <string name="xerr_child">Your account is a child account, and needs to be added into a Family in order to log in.</string>
-    <string name="minecraft_not_owned">It seems like this account does not have a Minecraft profile. If you have Xbox Game Pass, please log in on https://minecraft.net/ and set it up.</string>
+    <string name="minecraft_not_owned">It seems like this account does not have an MC profile. If you have Xbox Game Pass, please log in on https://minecraft.net/ and set it up.</string>
     <string name="xerr_not_available">Xbox Live is not available in your country</string>
     <string name="preference_enable_gyro_title">Enable gyroscope controls</string>
     <string name="preference_enable_gyro_description">Enabling this will allow you to turn in-game by turning your phone.</string>
@@ -301,7 +300,7 @@
     <string name="preference_microphone_access_description">Requests system to give access to device microphone for the game</string>
 
     <string name="preference_force_big_core_title">Force the renderer to run on the big core</string>
-    <string name="preference_force_big_core_desc">Forces the Minecraft render thread to run on the core with the highest maximum frequency.</string>
+    <string name="preference_force_big_core_desc">Forces the game\'s render thread to run on the core with the highest maximum frequency.</string>
     <string name="version_select_hint">Select a version</string>
     <string name="forge_dl_progress">Downloading installer for %s</string>
     <string name="forge_dl_searching">Searching for Forge version number</string>
@@ -312,7 +311,7 @@
     <string name="neoforge_dl_select_version">Select NeoForge version</string>
     <string name="fabric_dl_progress">Downloading %s loader metadata</string>
     <string name="fabric_dl_loader_version">%s loader version</string>
-    <string name="fabric_dl_game_version">Minecraft version</string>
+    <string name="fabric_dl_game_version">Game version</string>
     <string name="fabric_dl_install">Install</string>
     <string name="fabric_dl_cant_read_meta">Failed to read %s loader metadata. Please try again later.</string>
     <string name="fabric_dl_cant_read_meta2">Failed to read Fabric loader metadata. Please try again later.</string>

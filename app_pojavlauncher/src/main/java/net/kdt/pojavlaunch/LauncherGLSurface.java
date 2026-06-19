@@ -46,7 +46,7 @@ import git.artdeell.dnbootstrap.glfw.GrabListener;
 /**
  * Class dealing with showing minecraft surface and taking inputs to dispatch them to minecraft
  */
-public class MinecraftGLSurface extends View implements GrabListener, GamepadEnableHandler, SurfaceProvider.SurfaceCallback {
+public class LauncherGLSurface extends View implements GrabListener, GamepadEnableHandler, SurfaceProvider.SurfaceCallback {
     /* Gamepad object for gamepad inputs, instantiated on need */
     private GamepadHandler mGamepadHandler;
     /* The RemapperView.Builder object allows you to set which buttons to remap */
@@ -84,11 +84,11 @@ public class MinecraftGLSurface extends View implements GrabListener, GamepadEna
     private View mTouchpad;
     private boolean mLastGrabState = false;
 
-    public MinecraftGLSurface(Context context) {
+    public LauncherGLSurface(Context context) {
         this(context, null);
     }
 
-    public MinecraftGLSurface(Context context, AttributeSet attributeSet) {
+    public LauncherGLSurface(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         setFocusable(true);
         GLFW.setGamepadEnableHandler(this);

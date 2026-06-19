@@ -2,7 +2,7 @@ package net.kdt.pojavlaunch.utils;
 
 import androidx.annotation.NonNull;
 
-import net.kdt.pojavlaunch.JMinecraftVersionList;
+import net.kdt.pojavlaunch.JVersionList;
 import net.kdt.pojavlaunch.Tools;
 
 import java.text.ParseException;
@@ -44,7 +44,7 @@ public class DateUtils {
      * @param gameVersion the JMinecraftVersionList.Version object
      * @return the game's original release date
      */
-    public static Date getOriginalReleaseDate(JMinecraftVersionList.Version gameVersion) throws ParseException {
+    public static Date getOriginalReleaseDate(JVersionList.Version gameVersion) throws ParseException {
         if(Tools.isValidString(gameVersion.inheritsFrom)) {
             gameVersion = Tools.getVersionInfo(gameVersion.inheritsFrom, true);
         }else {

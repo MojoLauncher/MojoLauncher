@@ -4,7 +4,7 @@ import static net.kdt.pojavlaunch.PojavApplication.sExecutorService;
 
 import androidx.annotation.Nullable;
 
-import net.kdt.pojavlaunch.JMinecraftVersionList;
+import net.kdt.pojavlaunch.JVersionList;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
@@ -15,9 +15,9 @@ import java.io.IOException;
 public class AsyncVersionList {
     private static final int MAX_RETRIES = 5;
 
-    private static JMinecraftVersionList parseList(String input) throws DownloadUtils.ParseException{
+    private static JVersionList parseList(String input) throws DownloadUtils.ParseException{
         try {
-            return Tools.GLOBAL_GSON.fromJson(input, JMinecraftVersionList.class);
+            return Tools.GLOBAL_GSON.fromJson(input, JVersionList.class);
         }catch (Exception e) {
             throw new DownloadUtils.ParseException(e);
         }
@@ -25,7 +25,7 @@ public class AsyncVersionList {
 
     private void getVersionListAsync(VersionDoneListener versionDoneListener, int retries) {
         try {
-            JMinecraftVersionList versionList = DownloadUtils.downloadStringCached(
+            JVersionList versionList = DownloadUtils.downloadStringCached(
                     LauncherPreferences.PREF_VERSION_REPOS,
                     "version_list",
                     AsyncVersionList::parseList
@@ -47,7 +47,7 @@ public class AsyncVersionList {
 
     /** Basic listener, acting as a callback */
     public interface VersionDoneListener{
-        void onVersionDone(JMinecraftVersionList versions);
+        void onVersionDone(JVersionList versions);
     }
 
 }

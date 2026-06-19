@@ -59,7 +59,7 @@ import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.GLInfoUtils;
 import net.kdt.pojavlaunch.value.DependentLibrary;
-import net.kdt.pojavlaunch.value.MinecraftLibraryArtifact;
+import net.kdt.pojavlaunch.value.LibraryArtifact;
 
 import org.apache.commons.io.IOUtils;
 
@@ -535,7 +535,7 @@ public final class Tools {
         Logger.appendToLog("Info: Architecture: " + Architecture.archAsString(DEVICE_ARCHITECTURE));
         Logger.appendToLog("Info: Device model: " + Build.MANUFACTURER + " " +Build.MODEL);
         Logger.appendToLog("Info: API version: " + SDK_INT);
-        Logger.appendToLog("Info: Selected Minecraft version: " + gameVersion);
+        Logger.appendToLog("Info: Selected game version: " + gameVersion);
         Logger.appendToLog("Info: Custom Java arguments: \"" + javaArguments + "\"");
         GLInfoUtils.GLInfo info = GLInfoUtils.getGlInfo();
         Logger.appendToLog("Info: RAM allocated: " + LauncherPreferences.PREF_RAM_ALLOCATION + " Mb");
@@ -543,21 +543,21 @@ public final class Tools {
         Logger.appendToLog("Info: Selected renderer: " + renderer);
     }
 
-    public static JMinecraftVersionList.Version getVersionInfo(String versionName) {
+    public static JVersionList.Version getVersionInfo(String versionName) {
         return getVersionInfo(versionName, false);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static JMinecraftVersionList.Version getVersionInfo(String versionName, boolean skipInheriting) {
+    public static JVersionList.Version getVersionInfo(String versionName, boolean skipInheriting) {
         try {
-            JMinecraftVersionList.Version customVer = GLOBAL_GSON.fromJson(read(DIR_HOME_VERSION + "/" + versionName + "/" + versionName + ".json"), JMinecraftVersionList.Version.class);
+            JVersionList.Version customVer = GLOBAL_GSON.fromJson(read(DIR_HOME_VERSION + "/" + versionName + "/" + versionName + ".json"), JVersionList.Version.class);
             if (skipInheriting || customVer.inheritsFrom == null || customVer.inheritsFrom.equals(customVer.id)) {
                 preProcessLibraries(customVer.libraries);
             } else {
-                JMinecraftVersionList.Version inheritsVer;
+                JVersionList.Version inheritsVer;
                 //If it won't download, just search for it
                 try{
-                    inheritsVer = GLOBAL_GSON.fromJson(read(DIR_HOME_VERSION + "/" + customVer.inheritsFrom + "/" + customVer.inheritsFrom + ".json"), JMinecraftVersionList.Version.class);
+                    inheritsVer = GLOBAL_GSON.fromJson(read(DIR_HOME_VERSION + "/" + customVer.inheritsFrom + "/" + customVer.inheritsFrom + ".json"), JVersionList.Version.class);
                 }catch(IOException e) {
                     throw new RuntimeException("Can't find the source version for "+ versionName +" (req version="+customVer.inheritsFrom+")");
                 }
@@ -657,7 +657,7 @@ public final class Tools {
     }
 
     // Prevent NullPointerException
-    private static void insertSafety(JMinecraftVersionList.Version targetVer, JMinecraftVersionList.Version fromVer, String... keyArr) {
+    private static void insertSafety(JVersionList.Version targetVer, JVersionList.Version fromVer, String... keyArr) {
         for (String key : keyArr) {
             Object value = null;
             try {
@@ -686,7 +686,7 @@ public final class Tools {
 
     public static void createLibraryInfo(DependentLibrary library) {
         if(library.downloads == null || library.downloads.artifact == null)
-            library.downloads = new DependentLibrary.LibraryDownloads(new MinecraftLibraryArtifact());
+            library.downloads = new DependentLibrary.LibraryDownloads(new LibraryArtifact());
     }
 
     public interface DownloaderFeedback {
