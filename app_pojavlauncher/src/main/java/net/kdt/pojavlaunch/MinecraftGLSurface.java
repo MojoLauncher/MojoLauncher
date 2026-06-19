@@ -80,7 +80,7 @@ public class MinecraftGLSurface extends View implements GrabListener, GamepadEna
     private final InGameEventProcessor mIngameProcessor = new InGameEventProcessor(this, mSensitivityFactor);
     private final InGUIEventProcessor mInGUIProcessor = new InGUIEventProcessor(this);
     private TouchEventProcessor mCurrentTouchProcessor = mInGUIProcessor;
-    public AndroidPointerCapture mPointerCapture;
+    private AndroidPointerCapture mPointerCapture;
     private View mTouchpad;
     private boolean mLastGrabState = false;
 
