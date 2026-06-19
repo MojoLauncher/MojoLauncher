@@ -202,7 +202,7 @@
     <string name="pedit_java_runtime">Java 執行環境</string>
     <string name="pedit_renderer">渲染器</string>
     <string name="notif_channel_name">一般設定</string>
-    <string name="lazy_service_default_title">Mojo 背景服務</string>
+    <string name="lazy_service_default_title">MJ 背景服務</string>
     <string name="mcl_setting_veroption_installed">已安裝</string>
     <string name="use_global_default">（使用全域預設控制鍵）</string>
     <string name="default_control">預設控制鍵位</string>
@@ -283,7 +283,7 @@
     <string name="modpack_download_downloading_mods">正在下載模組 (%.2f MB/%.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">正在下載模組（第 %d/%d 個檔案）</string>
     <string name="modpack_download_applying_overrides">正在套用覆蓋（%d/%d）</string>
-    <string name="modpack_install_notification_title">Mojo 模組包安裝程式</string>
+    <string name="modpack_install_notification_title">MJ 模組包安裝程式</string>
     <string name="modpack_install_notification_success">按這裡完成模組包安裝</string>
     <string name="modpack_install_notification_data_not_available">模組載入器資訊下載失敗！</string>
     <string name="modpack_install_modloader_download_failed">模組載入器檔案下載失敗！</string>

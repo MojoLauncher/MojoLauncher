@@ -198,7 +198,7 @@
     <string name="pedit_java_runtime">Έκδοση Java</string>
     <string name="pedit_renderer">Απόδοση</string>
     <string name="notif_channel_name">Γενικά</string>
-    <string name="lazy_service_default_title">Υπηρεσία Προσκήνιου Mojo</string>
+    <string name="lazy_service_default_title">Υπηρεσία Προσκήνιου MJ</string>
     <string name="mcl_setting_veroption_installed">Εγκατεστημένο</string>
     <string name="use_global_default">(Χρήση της γενικής προεπιλογής)</string>
     <string name="default_control">Προεπιλεγμένος χάρτης ελέγχου</string>
@@ -278,7 +278,7 @@
     <string name="modpack_download_downloading_mods">Λήψη mods (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Λήψη mods (Αρχείο %d από %d)</string>
     <string name="modpack_download_applying_overrides">Εφαρμογή παρακάμψεων (%d/%d)</string>
-    <string name="modpack_install_notification_title">Mojo Modpack Installer</string>
+    <string name="modpack_install_notification_title">MJ Modpack Installer</string>
     <string name="modpack_install_notification_success">Κάντε κλικ εδώ για να ολοκληρώσετε την εγκατάσταση modpack</string>
     <string name="modpack_install_notification_data_not_available">Αποτυχία λήψης πληροφοριών για το mod loader</string>
     <string name="modpack_install_modloader_download_failed">Αποτυχία λήψης των αρχείων του mod loader</string>

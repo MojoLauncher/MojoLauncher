@@ -153,7 +153,7 @@
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Randator</string>
     <string name="notif_channel_name">General</string>
-    <string name="lazy_service_default_title">Serviciu Mojo prim-plan</string>
+    <string name="lazy_service_default_title">Serviciu MJ prim-plan</string>
     <string name="mcl_setting_veroption_installed">Instalat</string>
     <string name="use_global_default">(Utilizare implicită globală)</string>
     <string name="progresslayout_tasks_in_progress">%d sarcini în curs</string>

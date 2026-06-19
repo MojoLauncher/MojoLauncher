@@ -213,7 +213,7 @@
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Визуализатор</string>
     <string name="notif_channel_name">Общее</string>
-    <string name="lazy_service_default_title">Активная служба Mojo</string>
+    <string name="lazy_service_default_title">Активная служба MJ</string>
     <string name="mcl_setting_veroption_installed">Установленные</string>
     <string name="use_global_default">(Как везде)</string>
     <string name="default_control">Раскладка управления</string>

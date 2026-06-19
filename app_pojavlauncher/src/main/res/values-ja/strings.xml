@@ -173,7 +173,7 @@
     <string name="pedit_java_runtime">Javaランタイム</string>
     <string name="pedit_renderer">レンダラー</string>
     <string name="notif_channel_name">一般</string>
-    <string name="lazy_service_default_title">Mojo フォアグラウンドサービス</string>
+    <string name="lazy_service_default_title">MJ フォアグラウンドサービス</string>
     <string name="mcl_setting_veroption_installed">インストール済み</string>
     <string name="use_global_default">(グローバル既定値を使用する)</string>
     <string name="progresslayout_tasks_in_progress">%d タスクが進行中</string>

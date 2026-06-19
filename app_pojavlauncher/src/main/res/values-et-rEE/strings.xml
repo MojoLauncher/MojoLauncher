@@ -120,7 +120,7 @@
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Renderdaja</string>
     <string name="notif_channel_name">Üldine</string>
-    <string name="lazy_service_default_title">Mojo esiplaaniteenus</string>
+    <string name="lazy_service_default_title">MJ esiplaaniteenus</string>
     <string name="notification_terminate">Sundsulge</string>
     <string name="notification_game_runs">Mäng töötab!</string>
     <string name="folder_dialog_create">Loo</string>
@@ -145,7 +145,7 @@
     <string name="generic_install">Paigalda</string>
     <string name="generic_apply">Rakenda</string>
     <string name="generic_debug">Silur</string>
-    <string name="modpack_install_notification_title">Mojo modipakipaigaldaja</string>
+    <string name="modpack_install_notification_title">MJ modipakipaigaldaja</string>
     <string name="preference_category_java_tweaks">Java trikid</string>
     <string name="preference_category_miscellaneous">Mitmesugused seaded</string>
     <string name="controller_button_select">Vali</string>

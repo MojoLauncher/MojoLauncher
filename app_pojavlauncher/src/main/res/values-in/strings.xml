@@ -202,7 +202,7 @@
     <string name="pedit_java_runtime">Runtime Java</string>
     <string name="pedit_renderer">Renderer</string>
     <string name="notif_channel_name">Umum</string>
-    <string name="lazy_service_default_title">Mojo Foreground Service</string>
+    <string name="lazy_service_default_title">MJ Foreground Service</string>
     <string name="mcl_setting_veroption_installed">Terpasang</string>
     <string name="use_global_default">(Gunakan global bawaan)</string>
     <string name="default_control">Kontrol bawaan</string>
@@ -283,7 +283,7 @@
     <string name="modpack_download_downloading_mods">Mengunduh mod-mod (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Mengunduh mod-mod (Berkas %d dari %d)</string>
     <string name="modpack_download_applying_overrides">Menerapkan pergantian-pergantian paksa (%d/%d)</string>
-    <string name="modpack_install_notification_title">Pemasang Modpack Mojo</string>
+    <string name="modpack_install_notification_title">Pemasang Modpack MJ</string>
     <string name="modpack_install_notification_success">Pencet ini untuk menyelesaikan pemasangan modpack</string>
     <string name="modpack_install_notification_data_not_available">Gagal mengunduh informasi loader mod</string>
     <string name="modpack_install_modloader_download_failed">Gagal mengunduh berkas-berkas loader mod</string>
@@ -312,7 +312,7 @@
     <string name="preference_category_miscellaneous">Pengaturan lain-lain</string>
     <string name="preference_category_video">Pengaturan video</string>
     <string name="notification_permission_dialog_title">Permintaan izin</string>
-    <string name="notification_permission_dialog_text">Mojo launcher memperlukan izin untuk post notifikasi untuk mencegah download game/modpack berhenti ketika keluar dari aplikasi. Tanpa izin ini, android mungkin membatalkan unduhan ketita menempatkan MojoLaunher dalam mode latar belakang.</string>
+    <string name="notification_permission_dialog_text">MJ launcher memperlukan izin untuk post notifikasi untuk mencegah download game/modpack berhenti ketika keluar dari aplikasi. Tanpa izin ini, android mungkin membatalkan unduhan ketita menempatkan MJLaunher dalam mode latar belakang.</string>
     <string name="notification_permission_toast">kamu selalu dapat berubah pikiran nanti dengan masuk ke Pengaturan</string>
     <string name="preference_ask_for_notification_title">Izinkan notifikasi</string>
     <string name="preference_ask_for_notification_description">Tekan untuk meminta kembali izin notifikasi, dibutuhkan untuk pengunduhan latar belakang permainan/modpack untuk berjalan dengan benar.</string>

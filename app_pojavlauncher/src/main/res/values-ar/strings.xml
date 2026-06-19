@@ -202,7 +202,7 @@
     <string name="pedit_java_runtime">بيئة تشغيل Java</string>
     <string name="pedit_renderer">عارض الرسوميات</string>
     <string name="notif_channel_name">عام</string>
-    <string name="lazy_service_default_title">خدمة Mojo في المقدمة</string>
+    <string name="lazy_service_default_title">خدمة MJ في المقدمة</string>
     <string name="mcl_setting_veroption_installed">مثبت</string>
     <string name="use_global_default">(استخدم الافتراضي العام)</string>
     <string name="default_control">مخطط التحكم الأفتراضي</string>
@@ -283,7 +283,7 @@
     <string name="modpack_download_downloading_mods">تحميل المودات (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">تحميل المودات (الملف %d من %d)</string>
     <string name="modpack_download_applying_overrides">تطبيق التجاوزات (%d/%d)</string>
-    <string name="modpack_install_notification_title">Mojo Modpack Installerⁿ</string>
+    <string name="modpack_install_notification_title">MJ Modpack Installerⁿ</string>
     <string name="modpack_install_notification_success">انقر هنا لإنهاء تثبيت modpack</string>
     <string name="modpack_install_notification_data_not_available">Не удалось загрузить информацию о загрузчике модов</string>
     <string name="modpack_install_modloader_download_failed">فشل تنزيل ملفات محمل المودات</string>

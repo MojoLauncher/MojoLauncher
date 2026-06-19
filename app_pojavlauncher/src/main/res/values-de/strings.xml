@@ -202,7 +202,7 @@
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Renderer</string>
     <string name="notif_channel_name">Allgemein</string>
-    <string name="lazy_service_default_title">Mojo-Vordergrunddienst</string>
+    <string name="lazy_service_default_title">MJ-Vordergrunddienst</string>
     <string name="mcl_setting_veroption_installed">Installiert</string>
     <string name="use_global_default">(Standardvorgaben verwenden)</string>
     <string name="default_control">Standard-Steuerung</string>
@@ -283,7 +283,7 @@
     <string name="modpack_download_downloading_mods">Lade Mods herunter (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Lade Mods herunter ( %d von %d)</string>
     <string name="modpack_download_applying_overrides">Wende Overrides an (%d/%d)</string>
-    <string name="modpack_install_notification_title">Mojo-Modpack-Installer</string>
+    <string name="modpack_install_notification_title">MJ-Modpack-Installer</string>
     <string name="modpack_install_notification_success">Klicke hier, um die Installation des Modpack abzuschließen</string>
     <string name="modpack_install_notification_data_not_available">Fehler beim Herunterladen der Mod-Loader-Informationen</string>
     <string name="modpack_install_modloader_download_failed">Fehler beim Herunterladen der Mod-Loader-Dateien</string>

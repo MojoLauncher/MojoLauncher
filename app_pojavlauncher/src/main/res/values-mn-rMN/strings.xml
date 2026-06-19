@@ -12,7 +12,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Татах гэж буй client, mod-ийнхаа .jar file-ийг сонгоно уу.</string>
     <!-- Error messages -->
-    <string name="error_fatal">Mojo эхлүүлэгчэд гэнэт алдаа гарлаа</string>
+    <string name="error_fatal">MJ эхлүүлэгчэд гэнэт алдаа гарлаа</string>
     <string name="error_no_version">Хувилбар сонгоогүй</string>
     <string name="error_show_more">Бүгдийн харуулах</string>
     <string name="error_show_less">Бүгдийн нуух</string>

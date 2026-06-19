@@ -196,7 +196,7 @@
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Vykresľovač</string>
     <string name="notif_channel_name">Všeobecné nastavenia notifikácií</string>
-    <string name="lazy_service_default_title">Mojo Foreground Service</string>
+    <string name="lazy_service_default_title">MJ Foreground Service</string>
     <string name="use_global_default">(Použiť predvolené nastavenie)</string>
     <string name="default_control">Predvolené kontrolky</string>
     <string name="progresslayout_tasks_in_progress">Počet prebiehajúcich operácií: %d</string>
@@ -275,7 +275,7 @@
     <string name="modpack_download_downloading_mods">Sťahujú sa módy (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Sťahujú sa módy (Súbor %d z %d)</string>
     <string name="modpack_download_applying_overrides">Aplikovanie overridov (%d/%d)</string>
-    <string name="modpack_install_notification_title">Mojo inštalátor modpackov</string>
+    <string name="modpack_install_notification_title">MJ inštalátor modpackov</string>
     <string name="modpack_install_notification_success">Ťuknite sem na dokončenie inštalácie modpacku</string>
     <string name="modpack_install_notification_data_not_available">Nebolo možné stiahnuť informácie o mod loaderi</string>
     <string name="modpack_install_modloader_download_failed">Nebolo možné stiahnuť súbory mod loaderu</string>

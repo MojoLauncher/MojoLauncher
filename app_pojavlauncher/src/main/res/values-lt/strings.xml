@@ -176,7 +176,7 @@
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Vaizdo generatorius</string>
     <string name="notif_channel_name">Pagrindinis</string>
-    <string name="lazy_service_default_title">Mojo foninis servisas</string>
+    <string name="lazy_service_default_title">MJ foninis servisas</string>
     <string name="mcl_setting_veroption_installed">Instaliuota</string>
     <string name="notification_terminate">Nutraukti</string>
     <string name="notification_game_runs">Žaidimas bėga!</string>
@@ -226,7 +226,7 @@
     <string name="search_modpack_error">Nepavyksta rasti modpacks</string>
     <string name="modpack_download_downloading_mods_fc">Atsiunčiamos modifikacijos (Failas %d iš %d)</string>
     <string name="modpack_download_applying_overrides">Taikyti perašymus (%d/%d)</string>
-    <string name="modpack_install_notification_title">Mojo Modpack diegėjas</string>
+    <string name="modpack_install_notification_title">MJ Modpack diegėjas</string>
     <string name="modpack_install_notification_success">Paspausk čia norint pabaigti Modpack instaliaciją</string>
     <string name="modpack_install_notification_data_not_available">Klaida atsiunčiant modifikacijų paleidėjo informaciją</string>
     <string name="notif_error_occured">Įvyko klaida</string>

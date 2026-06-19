@@ -199,7 +199,7 @@
     <string name="pedit_java_runtime">Середовище Java</string>
     <string name="pedit_renderer">Візуалізатор</string>
     <string name="notif_channel_name">Загальне</string>
-    <string name="lazy_service_default_title">Фонова Служба Mojo</string>
+    <string name="lazy_service_default_title">Фонова Служба MJ</string>
     <string name="mcl_setting_veroption_installed">Встановлено</string>
     <string name="use_global_default">(Використовувати за стандартом)</string>
     <string name="default_control">Стандартне керування</string>

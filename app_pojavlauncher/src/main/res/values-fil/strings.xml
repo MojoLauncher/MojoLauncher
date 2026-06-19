@@ -150,7 +150,7 @@
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Renderer</string>
     <string name="notif_channel_name">Pangkalahatan</string>
-    <string name="lazy_service_default_title">Serbisyong Harapan ng Mojo</string>
+    <string name="lazy_service_default_title">Serbisyong Harapan ng MJ</string>
     <string name="mcl_setting_veroption_installed">Naka-Install</string>
     <string name="of_dl_progress">Nagda-download %s</string>
     <string name="generic_debug">Debug</string>

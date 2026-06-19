@@ -202,7 +202,7 @@
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Vykreslovač</string>
     <string name="notif_channel_name">Všeobecné</string>
-    <string name="lazy_service_default_title">Služba Popředí Mojou</string>
+    <string name="lazy_service_default_title">Služba Popředí MJu</string>
     <string name="mcl_setting_veroption_installed">Nainstalováno</string>
     <string name="use_global_default">(Užít globální výchozí nastavení)</string>
     <string name="default_control">Výchozí ovládání</string>
@@ -283,7 +283,7 @@
     <string name="modpack_download_downloading_mods">Stahování módů (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Stahování módů (Soubor %d z %d)</string>
     <string name="modpack_download_applying_overrides">Provádení přepisů (%d/%d)</string>
-    <string name="modpack_install_notification_title">Instalátor Modpacků Mojou</string>
+    <string name="modpack_install_notification_title">Instalátor Modpacků MJu</string>
     <string name="modpack_install_notification_success">Klikněte zde k dokončení instalace modpacku</string>
     <string name="modpack_install_notification_data_not_available">Stahování informací načítače módů selhalo</string>
     <string name="modpack_install_modloader_download_failed">Stahování souborů načítače módů selhalo</string>

@@ -199,7 +199,7 @@
     <string name="pedit_java_runtime">Java 런타임</string>
     <string name="pedit_renderer">렌더러</string>
     <string name="notif_channel_name">일반</string>
-    <string name="lazy_service_default_title">Mojo 포그라운드 서비스</string>
+    <string name="lazy_service_default_title">MJ 포그라운드 서비스</string>
     <string name="mcl_setting_veroption_installed">이미 설치되어 있는 버전입니다.</string>
     <string name="use_global_default">(글로벌 기본값 사용)</string>
     <string name="default_control">기본 조작</string>
@@ -229,7 +229,7 @@
     <string name="preference_gyro_sample_rate_title">자이로스코프 샘플링 속도</string>
     <string name="preference_gyro_sample_rate_description">자이로스코프 컨트롤을 사용할때 성능 문제가 발생한다면 이것을 높이세요.</string>
     <string name="microsoft_login_retry_later">요청이 너무 많습니다. 잠시후 다시 시도해 주세요.</string>
-    <string name="storage_required">MojoLuancher를 사용하려면 외부 저장소를 연결해야합니다. 다시 연결한 후 앱을 다시 시작하세요.</string>
+    <string name="storage_required">MJLuancher를 사용하려면 외부 저장소를 연결해야합니다. 다시 연결한 후 앱을 다시 시작하세요.</string>
     <string name="mcl_setting_title_buttonallcaps">컨트롤 버튼 문자에 대문자만 사용</string>
     <string name="mcl_setting_subtitle_buttonallcaps">컨트롤 버튼 문자에 소문자를 사용하려면 이것을 비활성화하세요.</string>
     <string name="preference_shader_dump_title">쉐이더 덤핑 활성화</string>
@@ -308,7 +308,7 @@
     <string name="preference_category_miscellaneous">기타 설정</string>
     <string name="preference_category_video">비디오 설정</string>
     <string name="notification_permission_dialog_title">권한 요청</string>
-    <string name="notification_permission_dialog_text">MojoLuancher는 앱을 종료할 때 게임/모드팩 다운로드가 중지되는 것을 방지하기 위해 알림을 게시할 수 있는 권한이 필요합니다. 이 권한이 없으면 MJLauncher를 백그라운드 모드로 전환할 때 Android에서 다운로드를 종료할 수 있습니다.</string>
+    <string name="notification_permission_dialog_text">MJLuancher는 앱을 종료할 때 게임/모드팩 다운로드가 중지되는 것을 방지하기 위해 알림을 게시할 수 있는 권한이 필요합니다. 이 권한이 없으면 MJLauncher를 백그라운드 모드로 전환할 때 Android에서 다운로드를 종료할 수 있습니다.</string>
     <string name="notification_permission_toast">추후에 설정에서 언제든지 변경 가능합니다</string>
     <string name="preference_ask_for_notification_title">알람 허용</string>
     <string name="preference_ask_for_notification_description">게임/모드팩 백그라운드 다운로드가 제대로 작동하는 데 필요한 알림 권한을 다시 요청하려면 클릭하세요.</string>

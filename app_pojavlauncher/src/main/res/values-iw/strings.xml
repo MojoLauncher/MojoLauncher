@@ -185,7 +185,7 @@
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">רינדור</string>
     <string name="notif_channel_name">כללי</string>
-    <string name="lazy_service_default_title">שירות הרקע של Mojo</string>
+    <string name="lazy_service_default_title">שירות הרקע של MJ</string>
     <string name="use_global_default">(השתמש בהגדרות ברירת המחדל הגלובליות)</string>
     <string name="default_control">מפת בקר ברירת מחדל</string>
     <string name="progresslayout_tasks_in_progress">משימות בתהליך%d</string>

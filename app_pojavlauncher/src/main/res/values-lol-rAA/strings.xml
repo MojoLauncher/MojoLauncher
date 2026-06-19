@@ -196,7 +196,7 @@
     <string name="pedit_java_runtime">Java runtime</string>
     <string name="pedit_renderer">Renderer</string>
     <string name="notif_channel_name">Geneal</string>
-    <string name="lazy_service_default_title">Mojo background police</string>
+    <string name="lazy_service_default_title">MJ background police</string>
     <string name="use_global_default">(Use Base Normal)</string>
     <string name="default_control">Default controlmap</string>
     <string name="progresslayout_tasks_in_progress">%d taskz in progress</string>
@@ -275,7 +275,7 @@
     <string name="modpack_download_downloading_mods">Downloading mods (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Downloading mods (File %d out of %d)</string>
     <string name="modpack_download_applying_overrides">Applying overrides (%d/%d)</string>
-    <string name="modpack_install_notification_title">Mojo Modpack Installer really gud</string>
+    <string name="modpack_install_notification_title">MJ Modpack Installer really gud</string>
     <string name="modpack_install_notification_success">Click here to finish modpack installation</string>
     <string name="modpack_install_notification_data_not_available">Failed to download mod loader information please stay like a sigma 😎😎</string>
     <string name="modpack_install_modloader_download_failed">Failed to download the mod loader files</string>

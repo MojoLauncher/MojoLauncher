@@ -240,7 +240,7 @@
     <string name="pedit_java_runtime">জাভা রানটাইম</string>
     <string name="pedit_renderer">রেন্ডারার</string>
     <string name="notif_channel_name">সাধারণ</string>
-    <string name="lazy_service_default_title">Mojo ফোরগ্রাউন্ড সার্ভিস</string>
+    <string name="lazy_service_default_title">MJ ফোরগ্রাউন্ড সার্ভিস</string>
     <string name="mcl_setting_veroption_installed">ইনস্টলকৃত</string>
     <string name="use_global_default">(গ্লোবাল ডিফল্ট ব্যবহার করুন)</string>
     <string name="default_control">ডিফল্ট কন্ট্রোলম্যাপ</string>
@@ -328,7 +328,7 @@
     <string name="modpack_download_downloading_mods">মডগুলি ডাউনলোড হচ্ছে (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">মডগুলি ডাউনলোড হচ্ছে (ফাইল %d / %d)</string>
     <string name="modpack_download_applying_overrides">ওভাররাইড প্রয়োগ হচ্ছে (%d/%d)</string>
-    <string name="modpack_install_notification_title">Mojo Modpack ইনস্টলার</string>
+    <string name="modpack_install_notification_title">MJ Modpack ইনস্টলার</string>
     <string name="modpack_install_notification_success">মডপ্যাক ইনস্টলেশন সম্পূর্ণ করতে এখানে ক্লিক করুন</string>
     <string name="modpack_install_notification_data_not_available">মড লোডার তথ্য ডাউনলোড ব্যর্থ</string>
     <string name="modpack_install_modloader_download_failed">মড লোডার ফাইল ডাউনলোড করতে ব্যর্থ</string>

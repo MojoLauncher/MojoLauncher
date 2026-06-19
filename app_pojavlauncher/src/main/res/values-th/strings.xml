@@ -278,7 +278,7 @@
     <string name="modpack_download_downloading_mods">กำลังดาวน์โหลดม็อด (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">กำลังดาวน์โหลดม็อด (ไฟล์ %d ออกจาก %d)</string>
     <string name="modpack_download_applying_overrides">กำลังใช้การแทนที่ (%d/%d)</string>
-    <string name="modpack_install_notification_title">ตัวติดตั้ง Mojo Modpack</string>
+    <string name="modpack_install_notification_title">ตัวติดตั้ง MJ Modpack</string>
     <string name="modpack_install_notification_success">คลิกที่นี่เพื่อเสร็จสิ้นการติดตั้ง modpack</string>
     <string name="modpack_install_notification_data_not_available">ดาวน์โหลดข้อมูลตัวโหลด mod ไม่สำเร็จ</string>
     <string name="modpack_install_modloader_download_failed">ไม่สามารถดาวน์โหลดไฟล์ mod loader ได้</string>

@@ -202,7 +202,7 @@
     <string name="pedit_java_runtime">Runtime Java</string>
     <string name="pedit_renderer">Renderer</string>
     <string name="notif_channel_name">Generale</string>
-    <string name="lazy_service_default_title">Servizio di Foreground Mojo</string>
+    <string name="lazy_service_default_title">Servizio di Foreground MJ</string>
     <string name="mcl_setting_veroption_installed">Installato</string>
     <string name="use_global_default">(Utilizza il predefinito globale)</string>
     <string name="default_control">Controlli default</string>

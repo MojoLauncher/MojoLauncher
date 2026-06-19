@@ -198,7 +198,7 @@
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Görüntü İşleyici</string>
     <string name="notif_channel_name">Genel</string>
-    <string name="lazy_service_default_title">Mojo Önplan Hizmeti</string>
+    <string name="lazy_service_default_title">MJ Önplan Hizmeti</string>
     <string name="mcl_setting_veroption_installed">Kuruldu</string>
     <string name="use_global_default">(Genel varsayılanı kullan)</string>
     <string name="default_control">Varsayılan kontroller</string>
@@ -278,7 +278,7 @@
     <string name="modpack_download_downloading_mods">Modlar indiriliyor (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Modlar indiriliyor (%d dosyadan %d tanesi)</string>
     <string name="modpack_download_applying_overrides">Geçersiz kılmalar uygulanıyor (%d/%d)</string>
-    <string name="modpack_install_notification_title">Mojo Mod Paketi Yükleyicisi</string>
+    <string name="modpack_install_notification_title">MJ Mod Paketi Yükleyicisi</string>
     <string name="modpack_install_notification_success">Modpack kurulumunu tamamlamak için buraya tıklayın</string>
     <string name="modpack_install_notification_data_not_available">Mod yükleyici bilgileri indirilemedi</string>
     <string name="modpack_install_modloader_download_failed">Mod yükleyici dosyaları indirilemedi</string>

@@ -202,7 +202,7 @@
     <string name="pedit_java_runtime">Exécutable Java</string>
     <string name="pedit_renderer">Moteur de rendu</string>
     <string name="notif_channel_name">Général</string>
-    <string name="lazy_service_default_title">Service de premier plan de Mojo</string>
+    <string name="lazy_service_default_title">Service de premier plan de MJ</string>
     <string name="mcl_setting_veroption_installed">Installés</string>
     <string name="use_global_default">(Utiliser la valeur globale par défaut)</string>
     <string name="default_control">Contrôles par défaut</string>
@@ -283,7 +283,7 @@
     <string name="modpack_download_downloading_mods">Téléchargement des mods (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Téléchargement des mods (Fichier %d sur %d)</string>
     <string name="modpack_download_applying_overrides">Application des remplacements (%d/%d)</string>
-    <string name="modpack_install_notification_title">Installeur Mojo de Modpack</string>
+    <string name="modpack_install_notification_title">Installeur MJ de Modpack</string>
     <string name="modpack_install_notification_success">Cliquez ici pour terminer l\'installation du modpack</string>
     <string name="modpack_install_notification_data_not_available">Échec du téléchargement de l\'information du chargeur de mod</string>
     <string name="modpack_install_modloader_download_failed">Impossible de télécharger les fichiers du chargeur de mod</string>

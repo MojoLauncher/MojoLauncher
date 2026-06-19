@@ -283,7 +283,7 @@
     <string name="modpack_download_downloading_mods">Baixando mods (%.2f MB /%.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Baixando mods (Arquivo %d de %d)</string>
     <string name="modpack_download_applying_overrides">Aplicando substituições (%d/%d)</string>
-    <string name="modpack_install_notification_title">Instalador de Modpack do Mojo</string>
+    <string name="modpack_install_notification_title">Instalador de Modpack do MJ</string>
     <string name="modpack_install_notification_success">Clique aqui para finalizar a instalação do modpack</string>
     <string name="modpack_install_notification_data_not_available">Falha ao baixar informações do mod loader</string>
     <string name="modpack_install_modloader_download_failed">Falha ao baixar os arquivos do mod loader</string>
