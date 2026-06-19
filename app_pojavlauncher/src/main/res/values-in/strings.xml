@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -14,7 +14,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Pilih sebuah instaler mod</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher tiba-tiba crash tanpa diduga</string>
+    <string name="error_fatal">MJLauncher tiba-tiba crash tanpa diduga</string>
     <string name="error_no_version">Versi tidak ada!</string>
     <string name="error_show_more">Selengkapnya</string>
     <string name="error_show_less">Tampilkan Sedikit</string>
@@ -232,7 +232,7 @@
     <string name="preference_gyro_sample_rate_title">Tingkat pengambilan sampel giroskop</string>
     <string name="preference_gyro_sample_rate_description">Jika anda memiliki masalah perfoma dengan kontrol giroskop, tingkatkan ini.</string>
     <string name="microsoft_login_retry_later">Terlalu banyak permintaan, coba lagi nanti.</string>
-    <string name="storage_required">MojoLauncher membutuhkan penyimpanan eksternal. Mohon untuk dipasang kembali dan merestart aplikasi.</string>
+    <string name="storage_required">MJLauncher membutuhkan penyimpanan eksternal. Mohon untuk dipasang kembali dan merestart aplikasi.</string>
     <string name="mcl_setting_title_buttonallcaps">Hanya gunakan huruf kapital di label tombol</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Matikan ini jika kamu ingin menggunakan huruf kecil di kontrol.</string>
     <string name="preference_shader_dump_title">Aktifkan shader dumping</string>

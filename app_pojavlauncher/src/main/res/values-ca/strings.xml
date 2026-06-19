@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -12,7 +12,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Selecciona un mod per afegir</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher s’ha parat inesperadament</string>
+    <string name="error_fatal">MJLauncher s’ha parat inesperadament</string>
     <string name="error_no_version">Cap versio!</string>
     <string name="error_show_more">Mostra més</string>
     <string name="error_show_less">Mostrar menys</string>
@@ -175,7 +175,7 @@
     <string name="preference_gyro_sample_rate_title">Tassa d\'actualització del giroscopi</string>
     <string name="preference_gyro_sample_rate_description">Si tens problemes de rendiment amb el giroscopi, puja aquest valor.</string>
     <string name="microsoft_login_retry_later">Massa peticions, si us plau, torneu-ho a intentar més tard.</string>
-    <string name="storage_required">El MojoLauncher requereix que hi hagi emmagatzemament extern connectat. Si us plau, reconnecteu-ho i reinicieu l\'app.</string>
+    <string name="storage_required">El MJLauncher requereix que hi hagi emmagatzemament extern connectat. Si us plau, reconnecteu-ho i reinicieu l\'app.</string>
     <string name="of_dl_progress">Downloading %s</string>
     <string name="generic_debug">Debug</string>
     <string name="modpack_download_downloading_mods_fc">Baixant mods (Fitxer %d de %d)</string>

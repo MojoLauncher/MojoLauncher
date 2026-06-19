@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -12,7 +12,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Selecteer een mod installatie</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher is onverwacht gecrasht</string>
+    <string name="error_fatal">MJLauncher is onverwacht gecrasht</string>
     <string name="error_no_version">Geen versie!</string>
     <string name="error_show_more">Meer weergeven</string>
     <string name="error_show_less">Minder weergeven</string>
@@ -258,7 +258,7 @@
     <string name="preference_category_miscellaneous">Overige instellingen</string>
     <string name="preference_category_video">Video-instellingen</string>
     <string name="notification_permission_dialog_title">Verzoek om toestemming</string>
-    <string name="notification_permission_dialog_text">MojoLauncher heeft toestemming nodig om meldingen te plaatsen om te voorkomen dat downloads van game/modpack stoppen wanneer je de app verlaat. Zonder deze toestemming kan Android je downloads afsluiten als je MojoLauncher in de achtergrondmodus plaatst.</string>
+    <string name="notification_permission_dialog_text">MJLauncher heeft toestemming nodig om meldingen te plaatsen om te voorkomen dat downloads van game/modpack stoppen wanneer je de app verlaat. Zonder deze toestemming kan Android je downloads afsluiten als je MJLauncher in de achtergrondmodus plaatst.</string>
     <string name="notification_permission_toast">U kunt later altijd van gedachten veranderen door naar Instellingen te gaan</string>
     <string name="preference_ask_for_notification_title">Meldingen toestaan</string>
     <string name="preference_ask_for_notification_description">Klik om de meldingsmachtiging opnieuw op te vragen, vereist voor game/modpack achtergrond downloads om correct te werken.</string>

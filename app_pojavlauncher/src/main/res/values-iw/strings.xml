@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -12,7 +12,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">בחר מתקין mod</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher קרס באופן בלתי צפוי</string>
+    <string name="error_fatal">MJLauncher קרס באופן בלתי צפוי</string>
     <string name="error_no_version">אין גרסה!</string>
     <string name="error_show_more">הצג עוד</string>
     <string name="error_show_less">הצג פחות</string>
@@ -214,7 +214,7 @@
     <string name="preference_gyro_sample_rate_title">קצב דגימת חיישן הכיוון</string>
     <string name="preference_gyro_sample_rate_description">אם אתם חווים בעיות ביצועים עם בקרי חיישן הכיוון, הגדילו ערך זה.</string>
     <string name="microsoft_login_retry_later">יותר מדי בקשות, נסו שוב מאוחר יותר.</string>
-    <string name="storage_required">MojoLauncher דורש אחסון חיצוני מחובר. אנא חבר אותו מחדש והפעל מחדש את האפליקציה.</string>
+    <string name="storage_required">MJLauncher דורש אחסון חיצוני מחובר. אנא חבר אותו מחדש והפעל מחדש את האפליקציה.</string>
     <string name="mcl_setting_title_buttonallcaps">השתמש באותיות גדולות בלבד בתוויות הכפתורים.</string>
     <string name="mcl_setting_subtitle_buttonallcaps">השבת אפשרות זו אם ברצונך להשתמש באותיות קטנות בבקרים שלך.</string>
     <string name="preference_shader_dump_title">אפשר השלכת הצללה</string>

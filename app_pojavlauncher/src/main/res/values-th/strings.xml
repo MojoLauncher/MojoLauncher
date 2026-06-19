@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -13,7 +13,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">เลือกตัวติดตั้งม็อด</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher ได้ขัดข้องโดยไม่คาดคิด</string>
+    <string name="error_fatal">MJLauncher ได้ขัดข้องโดยไม่คาดคิด</string>
     <string name="error_no_version">ไม่มีเวอร์ชัน!</string>
     <string name="error_show_more">แสดงเพิ่มเติม</string>
     <string name="error_show_less">แสดงน้อยลง</string>
@@ -228,7 +228,7 @@
     <string name="preference_gyro_sample_rate_title">อัตราการสุ่มตัวอย่างไจโร</string>
     <string name="preference_gyro_sample_rate_description">หากคุณมีปัญหาด้านประสิทธิภาพกับการควบคุมไจโรสโคป ให้เพิ่มสิ่งนี้</string>
     <string name="microsoft_login_retry_later">ส่งคำขอบ่อยเกินไป, กรุณาลองอีกครั้งภายหลัง</string>
-    <string name="storage_required">MojoLauncher จำเป็นต้องแนบที่จัดเก็บข้อมูลภายนอก โปรดเชื่อมต่อใหม่และรีสตาร์ทแอป</string>
+    <string name="storage_required">MJLauncher จำเป็นต้องแนบที่จัดเก็บข้อมูลภายนอก โปรดเชื่อมต่อใหม่และรีสตาร์ทแอป</string>
     <string name="mcl_setting_title_buttonallcaps">ใช้อักษรตัวพิมพ์ใหญ่ในป้ายปุ่มเท่านั้น</string>
     <string name="mcl_setting_subtitle_buttonallcaps">ปิดการใช้งานนี้หากคุณต้องการใช้อักษรตัวพิมพ์เล็กในการควบคุมของคุณ</string>
     <string name="preference_shader_dump_title">เปิดใช้งานบันทึกข้อมูลเชเดอร์</string>
@@ -307,7 +307,7 @@
     <string name="preference_category_miscellaneous">การตั้งค่าเบ็ดเตล็ด</string>
     <string name="preference_category_video">การตั้งค่าวิดีโอ</string>
     <string name="notification_permission_dialog_title">ขออนุญาต</string>
-    <string name="notification_permission_dialog_text">MojoLauncher ต้องได้รับอนุญาตในการโพสต์การแจ้งเตือนเพื่อป้องกันไม่ให้การดาวน์โหลดเกม/modpack หยุดเมื่อคุณออกจากแอป หากไม่ได้รับอนุญาตนี้ Android อาจปิดการดาวน์โหลดของคุณเมื่อคุณให้ MojoLauncher อยู่ในโหมดเบื้องหลัง</string>
+    <string name="notification_permission_dialog_text">MJLauncher ต้องได้รับอนุญาตในการโพสต์การแจ้งเตือนเพื่อป้องกันไม่ให้การดาวน์โหลดเกม/modpack หยุดเมื่อคุณออกจากแอป หากไม่ได้รับอนุญาตนี้ Android อาจปิดการดาวน์โหลดของคุณเมื่อคุณให้ MJLauncher อยู่ในโหมดเบื้องหลัง</string>
     <string name="notification_permission_toast">คุณสามารถเปลี่ยนใจในภายหลังได้ตลอดเวลาโดยไปที่การตั้งค่า</string>
     <string name="preference_ask_for_notification_title">อนุญาตการแจ้งเตือน</string>
     <string name="preference_ask_for_notification_description">คลิกเพื่อขอสิทธิ์การแจ้งเตือนอีกครั้ง ซึ่งจำเป็นสำหรับการดาวน์โหลดเกม/modpack พื้นหลังเพื่อให้ทำงานได้อย่างถูกต้อง</string>

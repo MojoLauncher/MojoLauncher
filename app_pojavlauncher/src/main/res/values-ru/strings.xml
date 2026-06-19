@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -14,7 +14,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Выберите установщик мода</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher был остановлен в результате сбоя</string>
+    <string name="error_fatal">MJLauncher был остановлен в результате сбоя</string>
     <string name="error_no_version">Нет версий!</string>
     <string name="error_show_more">Развернуть</string>
     <string name="error_show_less">Свернуть</string>
@@ -243,7 +243,7 @@
     <string name="preference_gyro_sample_rate_title">Интервал опроса гироскопа</string>
     <string name="preference_gyro_sample_rate_description">Увеличьте, если управление наклоном снижает производительность.</string>
     <string name="microsoft_login_retry_later">Слишком много запросов, попробуйте ещё раз позже.</string>
-    <string name="storage_required">MojoLauncher требует подключения к внешнему хранилищу. Переподключите его и перезапустите приложение.</string>
+    <string name="storage_required">MJLauncher требует подключения к внешнему хранилищу. Переподключите его и перезапустите приложение.</string>
     <string name="mcl_setting_title_buttonallcaps">Заглавные буквы на кнопках</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Отключите, если хотите использовать строчные буквы в своей раскладке управления.</string>
     <string name="create_instance">Создать новую установку</string>
@@ -299,7 +299,7 @@
     <string name="modpack_download_downloading_mods">Загрузка модов (%.2f МБ / %.2f МБ)</string>
     <string name="modpack_download_downloading_mods_fc">Загрузка модов (файл %d из %d)</string>
     <string name="modpack_download_applying_overrides">Перезапись параметров (%d/%d)</string>
-    <string name="modpack_install_notification_title">Установка сборки MojoLauncher</string>
+    <string name="modpack_install_notification_title">Установка сборки MJLauncher</string>
     <string name="modpack_install_notification_success">Нажмите для завершения установки сборки</string>
     <string name="modpack_install_notification_data_not_available">Не удалось загрузить информацию о загрузчике модов</string>
     <string name="modpack_install_modloader_download_failed">Не удалось загрузить файлы загрузчика модов</string>
@@ -329,7 +329,7 @@
     <string name="preference_category_miscellaneous">Другие настройки</string>
     <string name="preference_category_video">Настройки графики</string>
     <string name="notification_permission_dialog_title">Запрос разрешения</string>
-    <string name="notification_permission_dialog_text">Лаунчеру требуется разрешение на отправку уведомлений, чтобы предотвратить остановку игры/загрузки её данных при сворачивании приложения. Без этого разрешения Android может принудительно завершить работу MojoLauncher при переходе в фоновый режим.</string>
+    <string name="notification_permission_dialog_text">Лаунчеру требуется разрешение на отправку уведомлений, чтобы предотвратить остановку игры/загрузки её данных при сворачивании приложения. Без этого разрешения Android может принудительно завершить работу MJLauncher при переходе в фоновый режим.</string>
     <string name="notification_permission_toast">Выбор можно изменить позже, перейдя в настройки.</string>
     <string name="preference_ask_for_notification_title">Разрешить уведомления</string>
     <string name="preference_ask_for_notification_description">Нажмите, чтобы ещё раз запросить разрешение на вывод уведомлений. Они нужны для правильной загрузки игры и сборок модов в фоне.</string>
@@ -397,7 +397,7 @@
     <string name="modloader_dl_install_fabric_instance">Установка с Fabric</string>
     <string name="modloader_dl_install_quilt_instance">Установка с Quilt</string>
     <string name="modloader_dl_install_forge_instance">Установка с Forge</string>
-    <string name="social_media_invite" translatable="false">https://t.me/mojolauncher</string>
+    <string name="social_media_invite" translatable="false">https://t.me/MJLauncher</string>
     <string name="compat_version_not_supported">Ваше устройство не может запустить эту версию поскольку LTW не поддерживается</string>
     <string name="compat_sodium_not_supported">Ваше устройство не может запустить Sodium на этой версии поскольку LTW не поддерживается</string>
     <string name="oauth_unknown_error">Неизвестная ошибка авторизации</string>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -13,7 +13,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Pumili ng mod installer</string>
     <!-- Error messages -->
-    <string name="error_fatal">Ang MojoLauncher ay hindi inaasahang nag-crash</string>
+    <string name="error_fatal">Ang MJLauncher ay hindi inaasahang nag-crash</string>
     <string name="error_no_version">Walang bersyon!</string>
     <string name="error_show_more">Magpakita ng higit pa</string>
     <string name="error_show_less">Magpakita ng kaunti</string>

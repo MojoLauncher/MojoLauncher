@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -12,7 +12,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Vybrať installer módu</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher neočakávane spadol</string>
+    <string name="error_fatal">MJLauncher neočakávane spadol</string>
     <string name="error_no_version">Žiadne verzie!</string>
     <string name="error_show_more">Zobraziť viac</string>
     <string name="error_show_less">Zobraziť menej</string>
@@ -225,7 +225,7 @@
     <string name="preference_gyro_sample_rate_title">Obnovovacia frekvencia gyroskopu</string>
     <string name="preference_gyro_sample_rate_description">Ak máte problémy s výkonom pri používaní ovládania gyroskopom, zvýšte toto.</string>
     <string name="microsoft_login_retry_later">Príliš veľa žiadostí. Skúste to neskôr, prosím.</string>
-    <string name="storage_required">MojoLauncher vyžaduje pripojené externé úložisko. Pripojte ho a reštartujte aplikáciu.</string>
+    <string name="storage_required">MJLauncher vyžaduje pripojené externé úložisko. Pripojte ho a reštartujte aplikáciu.</string>
     <string name="mcl_setting_title_buttonallcaps">V označeniach tlačidiel používať len veľké písmená</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Ak chcete v ovládacích prvkoch používať malé písmená, vypnite toto.</string>
     <string name="preference_shader_dump_title">Povolenie shader dumpingu</string>
@@ -304,7 +304,7 @@
     <string name="preference_category_miscellaneous">Iné nastavenia</string>
     <string name="preference_category_video">Video a vykresľovač</string>
     <string name="notification_permission_dialog_title">Vyžaduje sa povolenie</string>
-    <string name="notification_permission_dialog_text">MojoLauncher vyžaduje povolenie na ukazovanie upozornení, aby sa zabránilo zastaveniu sťahovania hry/modpackov, keď opustíte aplikáciu. Bez tohto povolenia môže Android zastaviť sťahovanie, keď pošlete MojoLauncher do pozadia.</string>
+    <string name="notification_permission_dialog_text">MJLauncher vyžaduje povolenie na ukazovanie upozornení, aby sa zabránilo zastaveniu sťahovania hry/modpackov, keď opustíte aplikáciu. Bez tohto povolenia môže Android zastaviť sťahovanie, keď pošlete MJLauncher do pozadia.</string>
     <string name="notification_permission_toast">Toto povolenie môžete kedykoľvek zmeniť v nastaveniach</string>
     <string name="preference_ask_for_notification_title">Povoliť upozornenia</string>
     <string name="preference_ask_for_notification_description">Kliknutím znova požiadate o povolenie upozornení, ktoré je potrebné na správne fungovanie sťahovania hier/modpackov na pozadí.</string>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -14,7 +14,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Seleziona un installer mod</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher è crashato inaspettatamente</string>
+    <string name="error_fatal">MJLauncher è crashato inaspettatamente</string>
     <string name="error_no_version">Nessuna versione!</string>
     <string name="error_show_more">Mostra altro</string>
     <string name="error_show_less">Mostra meno</string>
@@ -232,7 +232,7 @@
     <string name="preference_gyro_sample_rate_title">Frequenza di campionamento giroscopio</string>
     <string name="preference_gyro_sample_rate_description">Se avete problemi di prestazioni con i controlli del giroscopio, aumentare questo.</string>
     <string name="microsoft_login_retry_later">Troppe richieste, riprova più tardi.</string>
-    <string name="storage_required">MojoLauncher necessita della memoria esterna, connettila e riavvia l\'applicazione</string>
+    <string name="storage_required">MJLauncher necessita della memoria esterna, connettila e riavvia l\'applicazione</string>
     <string name="mcl_setting_title_buttonallcaps">Usa solo lettere maiuscole nelle etichette dei pulsanti</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Disabilita questa opzione se vuoi usare lettere minuscole nei tuoi controlli.</string>
     <string name="preference_shader_dump_title">Abilità shader dumping</string>
@@ -312,7 +312,7 @@ se vuoi scaricare dalla sorgente ufficiale premi \"Passa al sito ufficiale"\ e r
     <string name="preference_category_miscellaneous">Impostazioni varie</string>
     <string name="preference_category_video">Impostazioni del video</string>
     <string name="notification_permission_dialog_title">Richiesta di autorizzazione</string>
-    <string name="notification_permission_dialog_text">MojoLauncher richiede l\'autorizzazione a inviare notifiche per evitare che i download di giochi/modpack si interrompano quando si lascia l\'applicazione. Senza questa autorizzazione, Android potrebbe interrompere i download quando si mette MojoLauncher in modalità di sfondo.</string>
+    <string name="notification_permission_dialog_text">MJLauncher richiede l\'autorizzazione a inviare notifiche per evitare che i download di giochi/modpack si interrompano quando si lascia l\'applicazione. Senza questa autorizzazione, Android potrebbe interrompere i download quando si mette MJLauncher in modalità di sfondo.</string>
     <string name="notification_permission_toast">È sempre possibile cambiare idea in un secondo momento, accedendo a Impostazioni</string>
     <string name="preference_ask_for_notification_title">Permettere le notifiche</string>
     <string name="preference_ask_for_notification_description">Clicca per richiedere nuovamente il permesso di notifiche, necessario per il corretto funzionamento dei download in background di giochi/modpack.</string>

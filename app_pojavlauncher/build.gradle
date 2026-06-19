@@ -66,7 +66,7 @@ android {
             keyPassword "android"
         }
         googlePlayBuild {
-            storeFile file("mojo_upload.jks")
+            storeFile file("mojo_upload_next.jks")
             storePassword System.getenv("UPLOAD_KEYSTORE_PASSWORD")
             keyAlias "key0"
             keyPassword System.getenv("UPLOAD_KEYSTORE_PASSWORD")
@@ -80,7 +80,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "git.artdeell.mojo"
+        applicationId "git.artdeell.mjlaunch"
         minSdkVersion 21
         targetSdkVersion 36
         versionCode getDateSeconds()

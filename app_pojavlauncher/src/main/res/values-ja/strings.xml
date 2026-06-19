@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -13,7 +13,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Mod インストーラーを選択</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher が異常終了しました</string>
+    <string name="error_fatal">MJLauncher が異常終了しました</string>
     <string name="error_no_version">バージョンがありません</string>
     <string name="error_show_more">詳細を表示</string>
     <string name="error_show_less">詳細を閉じる</string>

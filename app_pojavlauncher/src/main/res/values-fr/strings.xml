@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -14,7 +14,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Sélectionnez un installateur de mods</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher a cessé de fonctionner de façon inattendue</string>
+    <string name="error_fatal">MJLauncher a cessé de fonctionner de façon inattendue</string>
     <string name="error_no_version">Aucune version !</string>
     <string name="error_show_more">Afficher plus</string>
     <string name="error_show_less">Afficher moins</string>
@@ -232,7 +232,7 @@
     <string name="preference_gyro_sample_rate_title">Taux d\'échantillonnage du gyroscope</string>
     <string name="preference_gyro_sample_rate_description">Si vous avez des problèmes de performance avec les commandes du gyroscope, augmentez cette valeur.</string>
     <string name="microsoft_login_retry_later">Trop de requêtes, s\'il vous plaît réessayez plus tard.</string>
-    <string name="storage_required">MojoLauncher nécessite que le stockage externe soit connecté. Veuillez le reconnecter et redémarrer l\'application.</string>
+    <string name="storage_required">MJLauncher nécessite que le stockage externe soit connecté. Veuillez le reconnecter et redémarrer l\'application.</string>
     <string name="mcl_setting_title_buttonallcaps">N\'utilisez que des lettres majuscules dans les libellés des boutons</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Désactivez cette option si vous souhaitez utiliser des lettres minuscules dans vos contrôles.</string>
     <string name="preference_shader_dump_title">Activer le dumping du shader</string>
@@ -312,7 +312,7 @@
     <string name="preference_category_miscellaneous">Paramètres divers</string>
     <string name="preference_category_video">Paramètres vidéo</string>
     <string name="notification_permission_dialog_title">Demande de permission</string>
-    <string name="notification_permission_dialog_text">MojoLauncher a besoin d\'une autorisation pour afficher des notifications afin d\'éviter que les téléchargements de jeux/modpacks ne s\'arrêtent lorsque vous quittez l\'application. Sans cette autorisation, Android peut interrompre vos téléchargements lorsque vous mettez MojoLauncher en mode arrière-plan.</string>
+    <string name="notification_permission_dialog_text">MJLauncher a besoin d\'une autorisation pour afficher des notifications afin d\'éviter que les téléchargements de jeux/modpacks ne s\'arrêtent lorsque vous quittez l\'application. Sans cette autorisation, Android peut interrompre vos téléchargements lorsque vous mettez MJLauncher en mode arrière-plan.</string>
     <string name="notification_permission_toast">Vous pouvez toujours changer d\'avis plus tard en allant dans Paramètres</string>
     <string name="preference_ask_for_notification_title">Autoriser les notifications</string>
     <string name="preference_ask_for_notification_description">Cliquez sur ce bouton pour redemander l\'autorisation de notification, nécessaire au bon fonctionnement des téléchargements en arrière-plan des jeux/modpacks.</string>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -13,7 +13,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Вибрати інсталятор моду</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher був зупинений у результаті збою</string>
+    <string name="error_fatal">MJLauncher був зупинений у результаті збою</string>
     <string name="error_no_version">Версію не знайдено!</string>
     <string name="error_show_more">Розгорнути</string>
     <string name="error_show_less">Згорнути</string>
@@ -229,7 +229,7 @@
     <string name="preference_gyro_sample_rate_title">Частота оновлення гіроскопа</string>
     <string name="preference_gyro_sample_rate_description">Якщо у вас виникають проблеми з гіроскопом, збільште цей параметр.</string>
     <string name="microsoft_login_retry_later">Занадто багато запитів, спробуйте пізніше.</string>
-    <string name="storage_required">MojoLauncher потрібен дозвіл для доступу в сховище, дайте цей доступ та перезапустіть лаунчер</string>
+    <string name="storage_required">MJLauncher потрібен дозвіл для доступу в сховище, дайте цей доступ та перезапустіть лаунчер</string>
     <string name="mcl_setting_title_buttonallcaps">Використовувати лише великі літери в назвах кнопок</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Вимкніть, якщо бажаєте використовувати малі літери в елементах керування.</string>
     <string name="create_instance">Створити нову версію</string>
@@ -320,7 +320,7 @@
     <string name="preference_category_miscellaneous">Інші параметри</string>
     <string name="preference_category_video">Налаштування відео</string>
     <string name="notification_permission_dialog_title">Запит на дозвіл</string>
-    <string name="notification_permission_dialog_text">MojoLauncher попросить дозвіл на сповіщення, це потрібно щоб Android не закривав лаунчер у фоновому режимі, щоб не перервати завантаження.</string>
+    <string name="notification_permission_dialog_text">MJLauncher попросить дозвіл на сповіщення, це потрібно щоб Android не закривав лаунчер у фоновому режимі, щоб не перервати завантаження.</string>
     <string name="notification_permission_toast">Ви завжди зможете змінити це в налаштуваннях</string>
     <string name="preference_ask_for_notification_title">Дозволити сповіщення</string>
     <string name="preference_ask_for_notification_description">Натисніть, щоб повторно запитати дозвіл на сповіщення, необхідний для коректної роботи фонових завантажень гри/модпаку.</string>
@@ -378,7 +378,7 @@
     <string name="mcl_button_social_media">Telegram</string>
     <string name="ltw_render_distance_warning_msg">Ваше відеоядро не може візуалізовувати більше 7 чанків без Sodium чи йому подібних модів. Дистанція промальовкий</string>
     <string name="mcl_button_open_directory">Відкрити папку гри</string>
-    <string name="social_media_invite">https://t.me/mojolauncher</string>
+    <string name="social_media_invite">https://t.me/MJLauncher</string>
     <string name="local_login_bad_username_title">Недопустиме ім\'я користувача</string>
     <string name="local_login_bad_username_text">Ім\'я користувача має мати як мінімум від 3-х до 16 символів, і має мати лише латинські літери, цифри 0-9 і нижнє підкреслення</string>
     <string name="quick_setting_title">Швидкі налаштування</string>

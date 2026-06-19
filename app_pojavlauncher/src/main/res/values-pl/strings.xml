@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -14,7 +14,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Wybierz instalator modyfikacji</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher uległ nieoczekiwanej awarii</string>
+    <string name="error_fatal">MJLauncher uległ nieoczekiwanej awarii</string>
     <string name="error_no_version">Brak wersji!</string>
     <string name="error_show_more">Pokaż więcej</string>
     <string name="error_show_less">Pokaż mniej</string>
@@ -232,7 +232,7 @@
     <string name="preference_gyro_sample_rate_title">Częstotliwość próbkowania żyroskopu</string>
     <string name="preference_gyro_sample_rate_description">Jeśli masz problemy z wydajnością sterowania żyroskopowego, zwiększ tę wartość.</string>
     <string name="microsoft_login_retry_later">Zbyt wiele zapytań. Spróbuj ponownie później.</string>
-    <string name="storage_required">MojoLauncher wymaga podłączonej pamięci zewnętrznej. Podłącz ją ponownie i zrestartuj aplikację.</string>
+    <string name="storage_required">MJLauncher wymaga podłączonej pamięci zewnętrznej. Podłącz ją ponownie i zrestartuj aplikację.</string>
     <string name="mcl_setting_title_buttonallcaps">Używaj tylko dużych liter w etykietach przycisków</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Wyłącz tę opcję, jeśli chcesz używać małych liter w sterowaniu dotykowym.</string>
     <string name="preference_shader_dump_title">Włącz dumping shaderów</string>
@@ -312,7 +312,7 @@
     <string name="preference_category_miscellaneous">Pozostałe ustawienia</string>
     <string name="preference_category_video">Ustawienia wideo</string>
     <string name="notification_permission_dialog_title">Prośba o pozwolenie</string>
-    <string name="notification_permission_dialog_text">MojoLauncher wymaga uprawnień do wysyłania powiadomień, aby zapobiec zatrzymaniu pobierania po opuszczeniu aplikacji. Bez tego zezwolenia Android może zatrzymać pobieranie po opuszczeniu MojoLauncher.</string>
+    <string name="notification_permission_dialog_text">MJLauncher wymaga uprawnień do wysyłania powiadomień, aby zapobiec zatrzymaniu pobierania po opuszczeniu aplikacji. Bez tego zezwolenia Android może zatrzymać pobieranie po opuszczeniu MJLauncher.</string>
     <string name="notification_permission_toast">Zawsze możesz zmienić to później przechodząc do Ustawień</string>
     <string name="preference_ask_for_notification_title">Zezwól na powiadomienia</string>
     <string name="preference_ask_for_notification_description">Kliknij, aby ponownie poprosić o uprawnienia do powiadomień, wymagane do poprawnego działania pobierania w tle.</string>
