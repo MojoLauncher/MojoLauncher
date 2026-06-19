@@ -41,6 +41,6 @@ public class DrawerPullButton extends View {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         int parentWidth = ((View) getParent()).getWidth();
-        setX((int)(parentWidth * 0.75) - (getWidth() - 2));
+        setTranslationX((int)(parentWidth * 0.25));
     }
 }
