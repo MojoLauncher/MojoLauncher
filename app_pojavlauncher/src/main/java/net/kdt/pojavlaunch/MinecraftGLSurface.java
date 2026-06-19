@@ -156,10 +156,10 @@ public class MinecraftGLSurface extends View implements GrabListener, GamepadEna
             );
             // If the view was force panned (KeyboardPan keycode) apply an animation instead of immediate override
             // This fixes weird jumps when the user moves the cursor first time after pressing that keycode
-            if(MainActivity.mDoPanning) {
+            if(MainActivity.mForceFullPanning) {
                 mSurface.animate().setDuration(100).translationY(-translationY).start();
                 mTouchpad.animate().setDuration(100).translationY(-translationY).start();
-                MainActivity.mDoPanning = false;
+                MainActivity.mForceFullPanning = false;
             } else {
                 mSurface.setTranslationY(-translationY);
                 mTouchpad.setTranslationY(-translationY);

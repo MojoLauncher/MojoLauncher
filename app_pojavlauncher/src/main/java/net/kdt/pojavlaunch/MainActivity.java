@@ -35,7 +35,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -73,7 +72,6 @@ import java.util.Objects;
 
 import git.artdeell.dnbootstrap.glfw.AndroidClipboardProvider;
 import git.artdeell.dnbootstrap.glfw.GLFW;
-import git.artdeell.dnbootstrap.glfw.GLFWCursor;
 import git.artdeell.dnbootstrap.glfw.GLFWCursorView;
 import git.artdeell.mojo.R;
 
@@ -105,7 +103,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
 
     private QuickSettingSideDialog mQuickSettingSideDialog;
 
-    public static boolean mDoPanning = false;
+    public static boolean mForceFullPanning = false;
     public static int mImeHeight = 0;
 
     @Override
@@ -139,7 +137,8 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
 
         // This is required on Android 10 for the insets listener
         // https://issuetracker.google.com/issues/266331465
-        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q)
+        boolean androidCompat = Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q;
+        if(androidCompat)
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         // Make keyboard pan the activity so the user sees what they're typing
         ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (view, insets) -> {
@@ -153,7 +152,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
                 animSurface.translationY(0).start();
                 animCursor.translationY(0).start();
                 mImeHeight = 0;
-                if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
+                if(androidCompat) {
                     // AndroidX keeps SystemUI visible for some reason after IME session
                     view.postDelayed(() -> {
                         view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN);
@@ -161,12 +160,12 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
                 }
                 return insets;
             }
-            if(!mDoPanning && !LauncherPreferences.PREF_KEYBOARD_AUTOPANNING)
+            if(!mForceFullPanning && !LauncherPreferences.PREF_KEYBOARD_AUTOPANNING)
                 return insets;
             mImeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
             int translationY;
             // Autopanning (if keyboardPan wasn't clicked)
-            if(!mDoPanning) {
+            if(!mForceFullPanning) {
                 int cursorY = (int) (GLFW.cursorY * minecraftGLView.mSurface.getHeight()) + 100;
                 translationY = Tools.getTranslationFromCursorY(
                         cursorY,
@@ -492,7 +491,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     public static void switchKeyboardState(boolean panning) {
         if(touchCharInput != null) {
             touchCharInput.switchKeyboardState();
-            MainActivity.mDoPanning = panning;
+            MainActivity.mForceFullPanning = panning;
         }
     }
 
