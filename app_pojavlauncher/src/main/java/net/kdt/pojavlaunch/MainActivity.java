@@ -154,11 +154,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
                 mImeHeight = 0;
                 if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
                     view.postDelayed(() -> {
-                        view.setSystemUiVisibility(
-                                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                                        View.SYSTEM_UI_FLAG_FULLSCREEN
-                        );
+                        view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN);
                     }, 150);
                 }
                 return insets;
