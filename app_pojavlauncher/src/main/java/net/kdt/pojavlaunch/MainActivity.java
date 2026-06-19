@@ -153,6 +153,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
                 animCursor.translationY(0).start();
                 mImeHeight = 0;
                 if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
+                    // AndroidX keeps SystemUI visible for some reason after IME session
                     view.postDelayed(() -> {
                         view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN);
                     }, 150);

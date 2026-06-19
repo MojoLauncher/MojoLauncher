@@ -147,7 +147,7 @@ public class MinecraftGLSurface extends View implements GrabListener, GamepadEna
         if (mIngameProcessor == null || mInGUIProcessor == null) return true;
         boolean ret = mCurrentTouchProcessor.processTouchEvent(e);
         // Keep cursor on screen if panning with IME inset
-        if(MainActivity.mImeHeight > 0){
+        if(LauncherPreferences.PREF_KEYBOARD_AUTOPANNING && MainActivity.mImeHeight > 0){
             int translationY = Tools.getTranslationFromCursorY(
                     (int)(GLFW.cursorY * mSurface.getHeight() + 100),
                     mSurface.getHeight(),
