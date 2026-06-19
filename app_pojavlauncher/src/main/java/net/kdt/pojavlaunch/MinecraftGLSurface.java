@@ -33,6 +33,7 @@ import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.render.SurfaceProvider;
 import net.kdt.pojavlaunch.render.SurfaceViewSurfaceProvider;
 import net.kdt.pojavlaunch.render.TextureViewSurfaceProvider;
+import net.kdt.pojavlaunch.utils.JREUtils;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
 
 import fr.spse.gamepad_remapper.GamepadHandler;
@@ -144,7 +145,27 @@ public class MinecraftGLSurface extends View implements GrabListener, GamepadEna
             return true; //mouse event handled successfully
         }
         if (mIngameProcessor == null || mInGUIProcessor == null) return true;
-        return mCurrentTouchProcessor.processTouchEvent(e);
+        boolean ret = mCurrentTouchProcessor.processTouchEvent(e);
+        // Keep cursor on screen if panning with IME inset
+        if(LauncherPreferences.PREF_KEYBOARD_AUTOPANNING && MainActivity.mImeHeight > 0){
+            int translationY = Tools.getTranslationFromCursorY(
+                    (int)(GLFW.cursorY * mSurface.getHeight() + 100),
+                    mSurface.getHeight(),
+                    MainActivity.mImeHeight,
+                    0
+            );
+            // If the view was force panned (KeyboardPan keycode) apply an animation instead of immediate override
+            // This fixes weird jumps when the user moves the cursor first time after pressing that keycode
+            if(MainActivity.mForceFullPanning) {
+                mSurface.animate().setDuration(100).translationY(-translationY).start();
+                mTouchpad.animate().setDuration(100).translationY(-translationY).start();
+                MainActivity.mForceFullPanning = false;
+            } else {
+                mSurface.setTranslationY(-translationY);
+                mTouchpad.setTranslationY(-translationY);
+            }
+        }
+        return ret;
     }
 
     private void createGamepad(InputDevice inputDevice) {
@@ -301,6 +322,7 @@ public class MinecraftGLSurface extends View implements GrabListener, GamepadEna
             Log.w("MGLSurface", "Attempt to refresh size on null surface");
             return;
         }
+        JREUtils.configureRenderspecDisplay(windowWidth, windowHeight, (int) mSurface.getDisplay().getRefreshRate());
         mSurfaceProvider.updateSize();
     }
 

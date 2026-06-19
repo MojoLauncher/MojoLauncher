@@ -14,7 +14,7 @@
 #define TAG __FILE_NAME__
 #include <log.h>
 
-
+extern bool apiRequiresHints();
 
 // Java 21 style hook
 typedef jboolean (*NativeLibraries_load)(JNIEnv *env, jclass cls, jobject lib, jstring name, jboolean isBuiltin, jboolean throwExceptionIfFail);
@@ -43,36 +43,30 @@ static void library_preload_hook(JNIEnv *env, const char* name) {
     }
 }
 
+#define NATIVES_HOOK(CALLTHROUGH, RESULT, RESULT_RETURN) \
+do { \
+    const char *name_n = (*env)->GetStringUTFChars(env, name, NULL); \
+    library_preload_hook(env, name_n); \
+    const bool hintsRequired = apiRequiresHints(); \
+    hinter_t hinter; \
+    if (hintsRequired) hinter_process(&hinter, name_n); \
+    (*env)->ReleaseStringUTFChars(env, name, name_n); \
+    RESULT CALLTHROUGH; \
+    if (hintsRequired) hinter_free(&hinter); \
+    RESULT_RETURN \
+} while(0);
+
+
 static jboolean hook_NativeLibraries_load(JNIEnv *env, jclass cls, jobject lib, jstring name, jboolean isBuiltin, jboolean throwExceptionIfFail) {
-    const char* name_n = (*env)->GetStringUTFChars(env, name, NULL);
-    library_preload_hook(env, name_n);
-    hinter_t hinter;
-    hinter_process(&hinter, name_n);
-    (*env)->ReleaseStringUTFChars(env, name, name_n);
-    jboolean result = original_func.j21(env, cls, lib, name, isBuiltin, throwExceptionIfFail);
-    hinter_free(&hinter);
-    return result;
+    NATIVES_HOOK(original_func.j21(env, cls, lib, name, isBuiltin, throwExceptionIfFail), jboolean result =, return result;)
 }
 
 static jboolean hook_j17_NativeLibraries_load(JNIEnv *env, jclass cls, jobject lib, jstring name, jboolean isBuiltin, jboolean isJNI, jboolean throwExceptionIfFail) {
-    const char* name_n = (*env)->GetStringUTFChars(env, name, NULL);
-    library_preload_hook(env, name_n);
-    hinter_t hinter;
-    hinter_process(&hinter, name_n);
-    (*env)->ReleaseStringUTFChars(env, name, name_n);
-    jboolean result = original_func.j17(env, cls, lib, name, isBuiltin, isJNI, throwExceptionIfFail);
-    hinter_free(&hinter);
-    return result;
+    NATIVES_HOOK(original_func.j17(env, cls, lib, name, isBuiltin, isJNI, throwExceptionIfFail), jboolean result =, return result;)
 }
 
 static void hook_ClassLoader_00024NativeLibrary_load(JNIEnv *env, jobject this, jstring name, jboolean isBuiltin) {
-    const char* name_n = (*env)->GetStringUTFChars(env, name, NULL);
-    library_preload_hook(env, name_n);
-    hinter_t hinter;
-    hinter_process(&hinter, name_n);
-    (*env)->ReleaseStringUTFChars(env, name, name_n);
-    original_func.j8(env, this, name, isBuiltin);
-    hinter_free(&hinter);
+    NATIVES_HOOK(original_func.j8(env, this, name, isBuiltin),,)
 }
 
 static bool testMethod(JNIEnv *vm_env, jclass hookClass, const char* sign, JNINativeMethod* hookMethod) {

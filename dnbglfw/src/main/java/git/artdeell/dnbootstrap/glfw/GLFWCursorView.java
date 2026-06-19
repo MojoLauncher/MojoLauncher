@@ -16,6 +16,7 @@ public class GLFWCursorView extends View implements CursorImplementor {
     private Drawable cursorDrawable;
     private final Paint customCursorPaint = new Paint();
     private boolean noDraw = false;
+    private float mouseScale = 1f;
 
     public GLFWCursorView(Context context, AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
@@ -46,10 +47,10 @@ public class GLFWCursorView extends View implements CursorImplementor {
         if(noDraw) return;
         canvas.translate((int)(GLFW.cursorX * getWidth()), (int)(GLFW.cursorY * getHeight()));
         GLFWCursor cursor = GLFW.getCursor();
+        canvas.scale(mouseScale, mouseScale);
         if(cursor == null) {
             cursorDrawable.draw(canvas);
         }else {
-            canvas.scale(1.15f, 1.15f);
             canvas.drawBitmap(cursor.bitmap, -cursor.hotX, -cursor.hotY, customCursorPaint);
         }
     }
@@ -68,5 +69,9 @@ public class GLFWCursorView extends View implements CursorImplementor {
     public void onGrabState(boolean isGrabbing) {
         noDraw = isGrabbing;
         invalidate();
+    }
+
+    public void setCursorScale(float scale){
+        this.mouseScale = scale;
     }
 }

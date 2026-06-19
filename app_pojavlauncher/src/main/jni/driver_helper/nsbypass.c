@@ -24,7 +24,11 @@
 #include <log.h>
 
 /* Library search path */
+#ifdef PLATFORM_64
 #define SEARCH_PATH "/system/lib64"
+#else
+#define SEARCH_PATH "/system/lib"
+#endif
 
 static struct android_namespace_t* driver_namespace = NULL;
 
@@ -42,7 +46,7 @@ bool linker_ns_load(const char* lib_search_path) {
                                                       full_path,
                                                       full_path,
                                                       3 /* TYPE_SHAFED | TYPE_ISOLATED */,
-                                                      "/system/:/data/:/vendor/:/apex/", NULL);
+                                                      "/system/:/system_ext/:/data/:/vendor/:/apex/", NULL);
     // THIS IS VERY IMPORTANT and how I trolled FoldCraft:
     // You need to link the new driver_namespace with NULL and and add ld-android.so
     // in the link list, to pass through the driver_namespace correctly.

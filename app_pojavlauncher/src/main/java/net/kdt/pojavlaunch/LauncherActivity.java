@@ -166,7 +166,6 @@ public class LauncherActivity extends BaseActivity {
         setContentView(R.layout.activity_pojav_launcher);
 
         try {
-            Os.setenv("POJAV_NATIVEDIR", Tools.NATIVE_LIB_DIR, true);
             Os.setenv("TMPDIR", Tools.DIR_CACHE.getAbsolutePath(), true);
          }
         catch (Exception e) {

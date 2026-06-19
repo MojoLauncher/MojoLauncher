@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedInputStream;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -80,7 +81,7 @@ public class LayoutBitmaps {
             try {
                 ZipInputStream zipIn = new ZipInputStream(bufferedIn);
                 isZip = zipIn.getNextEntry() != null;
-            } catch (ZipException e) {
+            } catch (ZipException | EOFException e) {
                 isZip = false;
             } catch (IOException e) {
                 throw e;

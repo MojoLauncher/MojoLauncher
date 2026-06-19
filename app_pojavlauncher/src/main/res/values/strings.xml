@@ -212,7 +212,9 @@
     <string name="preference_force_vsync_title">Force enable VSync</string>
     <string name="preference_force_vsync_description">Limit thermal throttling by limiting peak performance.</string>
     <string name="preference_use_angle_title">Use ANGLE</string>
-    <string name="preference_use_angle_description">Allows using ANGLE instead of the system driver for LTW. Can fix graphical issues with mods on some GPUs</string>
+    <string name="preference_force_legacy_zink_title">Use legacy Zink</string>
+    <string name="preference_force_legacy_zink_description">Forcefully use legacy Zink instead of selecting it depending on the current device. Might fix some graphical issues. Disable if the game became slow.</string>
+    <string name="preference_use_angle_description">Allows using ANGLE instead of the system driver. Can fix graphical issues with mods on some GPUs</string>
     <string name="preference_force_english_title">Force language to English</string>
     <string name="preference_force_english_description">Allows you to see original strings, as intended by developers. Requires a restart.</string>
     <string name="preference_edit_controls_title">Edit custom controls</string>
@@ -488,4 +490,7 @@
     <string name="import_local_modpack">Import local modpack</string>
     <string name="preference_sysmem_title">Force rendering into the system memory</string>
     <string name="preference_sysmem_summary">Forces Freedreno to render directly into the system memory. Enable if performance is low or you experience rendering issues</string>
+    <string name="preference_category_keyboard">Keyboard settings</string>
+    <string name="preference_keyboard_autopan_title">Enable keyboard panning</string>
+    <string name="preference_keyboard_autopan_summary">Allows on-screen keyboard to move the game window instead of overlapping it if the last touch was below the visible zone. Has no effect on custom control layout buttons with the same function</string>
 </resources>

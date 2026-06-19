@@ -310,8 +310,8 @@ public class MinecraftDownloader extends Downloader {
         );
     }
 
-    private File submitArtifact(MinecraftLibraryArtifact artifact) throws IOException {
-        File artifactPath = new File(Tools.DIR_HOME_LIBRARY, artifact.path);
+    private File submitArtifact(MinecraftLibraryArtifact artifact, String subPath) throws IOException {
+        File artifactPath = new File(Tools.DIR_HOME_LIBRARY, subPath);
         if(!mClassPath.add(artifactPath)) {
             Log.w("MinecraftDownloader", "Repeated classpath entry " + artifact.path +" skipped");
             return null;
@@ -340,7 +340,10 @@ public class MinecraftDownloader extends Downloader {
         MinecraftLibraryArtifact artifact = library.downloads.classifiers.get(libraryClassifier);
         if(artifact == null) throw new IOException("library "+library.name +" is missing required classifier "+ libraryClassifier);
 
-        File artifactPath = submitArtifact(artifact);
+        String subPath = artifact.path;
+        if(subPath == null) subPath = MavenNameUtils.mavenNameToPath(library.name, libraryClassifier);
+
+        File artifactPath = submitArtifact(artifact, subPath);
         if(library.extract != null && artifactPath != null) {
             mDeclaredNatives.add(new NativeLibraryExtractable(artifactPath, library.extract));
         }
@@ -348,7 +351,13 @@ public class MinecraftDownloader extends Downloader {
 
     private void processLibraryWithDownloads(DependentLibrary library) throws IOException {
         DependentLibrary.LibraryDownloads downloads = library.downloads;
-        if(downloads.artifact != null) submitArtifact(downloads.artifact);
+        if(downloads.artifact != null) {
+
+            String subPath = downloads.artifact.path;
+            if(subPath == null) subPath = MavenNameUtils.mavenNameToPath(library.name);
+
+            submitArtifact(downloads.artifact, subPath);
+        }
         if(library.natives != null && downloads.classifiers != null) processNatives(library);
     }
 
