@@ -104,7 +104,8 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     private GameService.LocalBinder mServiceBinder;
 
     private QuickSettingSideDialog mQuickSettingSideDialog;
-    private static boolean mDoPanning = false;
+
+    public static boolean mDoPanning = false;
     public static int mImeHeight = 0;
 
     @Override
