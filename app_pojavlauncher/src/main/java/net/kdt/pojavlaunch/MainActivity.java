@@ -166,7 +166,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             int translationY;
             // Autopanning (if keyboardPan wasn't clicked)
             if(!mDoPanning) {
-                int cursorY = (int) (GLFW.cursorY * minecraftGLView.mSurface.getHeight());
+                int cursorY = (int) (GLFW.cursorY * minecraftGLView.mSurface.getHeight()) + 100;
                 translationY = Tools.getTranslationFromCursorY(
                         cursorY,
                         minecraftGLView.mSurface.getHeight(),
