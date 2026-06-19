@@ -148,7 +148,7 @@
     <string name="memory_warning_msg">目前可用記憶體 (%d) 低於已配置記憶體 (%d)，這可能會導致遊戲崩潰。如果遊戲崩潰，請變更記憶體配置設定。</string>
     <string name="address_memory_warning_msg">目前可用的可定址記憶體空間 (%d) 低於已配置的記憶體 (%d) ，這將導致遊戲崩潰。如果遊戲崩潰，請變更記憶體配置設定。</string>
     <string name="mcl_memory_allocation">記憶體配置</string>
-    <string name="mcl_memory_allocation_subtitle">控制配置給 Minecraft 的記憶體容量。</string>
+
     <string name="multirt_runtime_corrupt">Java 執行環境毀損</string>
     <string name="multirt_runtime_incompatiblearch">不相容的架構：%s</string>
     <string name="multirt_config_title">Java 執行環境</string>
@@ -217,12 +217,12 @@
     <string name="main_add_account">新增帳號</string>
     <string name="tasks_ongoing">程式執行中，請稍候</string>
     <string name="no_saved_accounts">無已儲存帳號</string>
-    <string name="mc_download_failed">Minecraft 下載失敗！可能導致失敗的原因有：不穩定的網路連線、位置不正確的檔案等</string>
+
     <string name="xerr_unknown">未知的 Xbox Live API 錯誤 %d</string>
-    <string name="xerr_no_account">你似乎沒有 Xbox Live 帳號。請先登入 https://minecraft.net/ 後再試一次。</string>
+
     <string name="xerr_adult_verification">需要成年人驗證你的帳號。</string>
     <string name="xerr_child">因為你的 Xbox 帳號未成年，若要登入，請將此帳號加入 Microsoft 家庭</string>
-    <string name="minecraft_not_owned">看起來這個帳號沒有 Minecraft 個人檔案。如果你有 Xbox Game Pass，請前往 https://minecraft.net/ 並設定它。</string>
+
     <string name="xerr_not_available">Xbox Live 在你的國家/地區無法使用</string>
     <string name="preference_enable_gyro_title">啟用陀螺儀控制</string>
     <string name="preference_enable_gyro_description">啟用此功能將允許你透過轉動手機來在遊戲中轉動視角。</string>
@@ -252,7 +252,7 @@
     <string name="preference_deadzone_scale_title">搖桿死區比例</string>
     <string name="preference_deadzone_scale_description">如果搖桿飄移，請增加此值。</string>
     <string name="preference_force_big_core_title">強制渲染器在大核心上執行</string>
-    <string name="preference_force_big_core_desc">強制 Minecraft 繪製執行緒在最高頻率的核心執行。</string>
+
     <string name="version_select_hint">選擇版本</string>
     <string name="forge_dl_progress">正在下載 %s 的安裝程式</string>
     <string name="forge_dl_searching">正在搜尋 Forge 版本號</string>
@@ -261,7 +261,7 @@
     <string name="forge_dl_select_version">選擇 Forge 版本</string>
     <string name="fabric_dl_progress">正在下載 %s 載入器中繼資料</string>
     <string name="fabric_dl_loader_version">%s 載入器版本</string>
-    <string name="fabric_dl_game_version">Minecraft 版本</string>
+
     <string name="fabric_dl_install">安裝</string>
     <string name="fabric_dl_cant_read_meta">讀取 %s 載入器中繼資料失敗，請稍後再試。</string>
     <string name="create_profile_vanilla_like_versions">類原版版本</string>

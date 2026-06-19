@@ -217,12 +217,12 @@
     <string name="main_add_account">添加账户</string>
     <string name="tasks_ongoing">任务正在执行中，请稍候…</string>
     <string name="no_saved_accounts">没有已保存的账户</string>
-    <string name="mc_download_failed">下载 Minecraft 失败！这可能是由于网络连接不良、文件放置错误等造成的。</string>
+
     <string name="xerr_unknown">未知的 Xbox Live API 错误 %d</string>
-    <string name="xerr_no_account">您似乎没有 Xbox Live 账户，请在 https://minecraft.net/ 上登录一次，然后重试。</string>
+
     <string name="xerr_adult_verification">需要成年人验证您的账户。</string>
     <string name="xerr_child">您的账户是儿童账户，需要添加到家庭中方能登录。</string>
-    <string name="minecraft_not_owned">这个账户似乎没有 Minecraft 配置文件。如果您有 Xbox Game Pass，请登录 https://minecraft.net/ 并进行设置。</string>
+
     <string name="xerr_not_available">Xbox Live 在您所在的国家/地区不可用。</string>
     <string name="preference_enable_gyro_title">启用陀螺仪控制</string>
     <string name="preference_enable_gyro_description">启用此功能将允许您通过转动手机来在游戏中转动视角。</string>
@@ -252,7 +252,7 @@
     <string name="preference_deadzone_scale_title">摇杆死区比例</string>
     <string name="preference_deadzone_scale_description">若摇杆偏移，请调高此选项。</string>
     <string name="preference_force_big_core_title">强制渲染器在大核上运行</string>
-    <string name="preference_force_big_core_desc">强制 Minecraft 渲染线程在大核以最大的频率运行。</string>
+
     <string name="version_select_hint">选择版本</string>
     <string name="forge_dl_progress">正在下载 %s 的安装程序</string>
     <string name="forge_dl_searching">正在搜索 Forge 版本号</string>
@@ -261,7 +261,7 @@
     <string name="forge_dl_select_version">选择 Forge 版本</string>
     <string name="fabric_dl_progress">正在下载 %s 加载器元数据</string>
     <string name="fabric_dl_loader_version">%s 加载器版本</string>
-    <string name="fabric_dl_game_version">Minecraft 版本</string>
+
     <string name="fabric_dl_install">安装</string>
     <string name="fabric_dl_cant_read_meta">读取 %s 加载器元数据失败！请稍后重试。</string>
     <string name="create_profile_vanilla_like_versions">类原版版本</string>

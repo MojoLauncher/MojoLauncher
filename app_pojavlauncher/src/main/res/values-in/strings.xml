@@ -148,7 +148,7 @@
     <string name="memory_warning_msg">Jumlah RAM kosong saat ini (%d) lebih rendah dari RAM yang dialokasikan (%d), yang dapat menyebabkan crash. Ubah alokasi jika game crash.</string>
     <string name="address_memory_warning_msg">Jumlah RAM kosong saat ini (%d) lebih rendah dari RAM yang dialokasikan (%d), yang dapat menyebabkan crash. Ubah alokasi jika game crash.</string>
     <string name="mcl_memory_allocation">Alokasi Memori</string>
-    <string name="mcl_memory_allocation_subtitle">Kontrol seberapa banyak memori yang diberikan untuk Minecraft.</string>
+
     <string name="multirt_runtime_corrupt">Java Runtime Rusak</string>
     <string name="multirt_runtime_incompatiblearch">Architecture tidak kompatibel: %s</string>
     <string name="multirt_config_title">Runtime Java</string>
@@ -217,12 +217,12 @@
     <string name="main_add_account">Tambah akun</string>
     <string name="tasks_ongoing">Ada tugas yang sedang berjalan, mohon menunggu</string>
     <string name="no_saved_accounts">Tidak ada akun yang tersimpan</string>
-    <string name="mc_download_failed">Gagal mengunduh Minecraft! Ini mungkin karena jaringan yang buruk, file yang salah ditempatkan, dll..</string>
+
     <string name="xerr_unknown">Kesalahan API Xbox Live yang tidak diketahui %d</string>
-    <string name="xerr_no_account">Kamu sepertinya tidak memiliki akun Xbox Live. Tolong login ke https://minecraft.net/ dan ulang kembali.</string>
+
     <string name="xerr_adult_verification">Orang tua perlu memverifikasikan akunmu.</string>
     <string name="xerr_child">Akunmu adalah akun anak, dan perlu ditambahkan ke keluarga agar dapat masuk.</string>
-    <string name="minecraft_not_owned">Sepertinya akun ini tidak mempunyai profil Minecraft. Jika kamu memiliki Xbox Game Pass, tolong login ke https://minecraft.net/ dan mengaturnya.</string>
+
     <string name="xerr_not_available">Xbox Live tidak tersedia dinegaramu</string>
     <string name="preference_enable_gyro_title">Hidupkan kontrol giroskop</string>
     <string name="preference_enable_gyro_description">Mengaktifkan ini dapat memperbolehkan anda untuk berputar dengan cara memutar ponsel anda.</string>
@@ -252,7 +252,7 @@
     <string name="preference_deadzone_scale_title">Skala Joystick deadzone</string>
     <string name="preference_deadzone_scale_description">Tingkatkan jika terjadi \"joystick drift\".</string>
     <string name="preference_force_big_core_title">Paksa renderer untuk berjalan di big core</string>
-    <string name="preference_force_big_core_desc">Paksa thread rendernya Minecraft untuk berjalan di core dengan frekuensi maksimal.</string>
+
     <string name="version_select_hint">Pilih sebuah versi</string>
     <string name="forge_dl_progress">Mengunduh installer dalam %s</string>
     <string name="forge_dl_searching">Mencari nomor versi Forge</string>
@@ -261,7 +261,7 @@
     <string name="forge_dl_select_version">Pilih versi Forge</string>
     <string name="fabric_dl_progress">Mengunduh metadata loader %s</string>
     <string name="fabric_dl_loader_version">Versi loader %s</string>
-    <string name="fabric_dl_game_version">Versi Minecraft</string>
+
     <string name="fabric_dl_install">Pasang</string>
     <string name="fabric_dl_cant_read_meta">Gagal membaca metadata loader %s. Mohon coba lagi nanti.</string>
     <string name="create_profile_vanilla_like_versions">Seperti Versi Vanilla</string>

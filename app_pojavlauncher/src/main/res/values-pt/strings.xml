@@ -144,7 +144,7 @@
     <string name="customctrl_absolute_tracking">Rastreamento absoluto do dedo</string>
     <string name="memory_warning_msg">A quantidade atual de memória RAM livre (%d) é menor do que a memória RAM alocada (%d), o que pode levar a falhas. Altera a alocação se o jogo falhar.</string>
     <string name="mcl_memory_allocation">Alocação de memória</string>
-    <string name="mcl_memory_allocation_subtitle">Controla quanta memória é delegada ao Minecraft.</string>
+
     <string name="multirt_runtime_corrupt">Runtime do Java corrompida</string>
     <string name="multirt_runtime_incompatiblearch">Arquitetura incompatível: %s</string>
     <string name="multirt_config_title">Runtimes Java</string>

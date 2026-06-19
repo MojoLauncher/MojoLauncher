@@ -144,7 +144,7 @@
     <string name="customctrl_absolute_tracking">Absolute vingertracking</string>
     <string name="memory_warning_msg">De huidige hoeveelheid vrije RAM (%d) is lager dan toegewezen RAM (%d), wat kan leiden tot crashes. Verander de toewijzing als het spel crasht.</string>
     <string name="mcl_memory_allocation">Geheugen toewijzen</string>
-    <string name="mcl_memory_allocation_subtitle">Bepaalt hoeveel werkgeheugen er aan Minecraft wordt gegeven.</string>
+
     <string name="multirt_runtime_corrupt">Corrupte Java Runtime</string>
     <string name="multirt_runtime_incompatiblearch">Incompatibele architectuur: %s</string>
     <string name="multirt_config_title">Java Runtimes</string>
@@ -208,12 +208,12 @@
     <string name="main_add_account">Account toevoegen</string>
     <string name="tasks_ongoing">Taken zijn bezig, even geduld alstublieft</string>
     <string name="no_saved_accounts">Geen opgeslagen accounts</string>
-    <string name="mc_download_failed">Het downloaden van Minecraft is mislukt! Dit kan worden veroorzaakt door een slechte netwerkverbinding, verkeerd geplaatste bestanden, enz..</string>
+
     <string name="xerr_unknown">Onbekende Xbox Live API fout %d</string>
-    <string name="xerr_no_account">Het lijkt erop dat je geen Xbox Live-account hebt. Log een keer in op https://minecraft.net/ en probeer het opnieuw.</string>
+
     <string name="xerr_adult_verification">Een volwassene moet je account verifiëren.</string>
     <string name="xerr_child">Je account is een kind account en moet worden toegevoegd aan een Familie om in te loggen.</string>
-    <string name="minecraft_not_owned">Het lijkt erop dat deze account geen Minecraft-profiel heeft. Als je Xbox Game Pass hebt, log dan in op https://minecraft.net/ en stel het in.</string>
+
     <string name="xerr_not_available">Xbox Live is niet beschikbaar in jouw land</string>
     <string name="preference_enable_gyro_title">Zet gyroscoop besturing aan</string>
     <string name="preference_enable_gyro_description">Door dit in te schakelen kan je in-game inschakelen door je telefoon om te draaien.</string>

@@ -189,10 +189,10 @@
     <string name="no_saved_accounts">保存されたアカウントはありません</string>
     <string name="mc_download_failed">マインクラフトのダウンロードに失敗しました！ネットワークの接続が悪い、ファイルが正しく配置されていない等の可能性があります。</string>
     <string name="xerr_unknown">原因不明のXbox Live APIエラー %d</string>
-    <string name="xerr_no_account">Java版マインクラフトのアカウントをお持ちでないようです。https://minecraft.net/ で一度ログインして、再度お試しください。</string>
+
     <string name="xerr_adult_verification">大人の方がアカウントを確認する必要があります。</string>
     <string name="xerr_child">このアカウントは、お子さんのアカウントであり、ログインするためにはファミリーに追加する必要があります。</string>
-    <string name="minecraft_not_owned">このアカウントにはMinecraftのプロファイルがないようです。Xbox Game Passをお持ちの方は、https://minecraft.net/ からログインして設定してください。</string>
+
     <string name="xerr_not_available">お住まいの国ではXbox Liveをご利用になれません。</string>
     <string name="preference_enable_gyro_title">ジャイロコントロールをオンにする</string>
     <string name="preference_gyro_sensitivity_title">ジャイロコントロールの感度</string>
@@ -211,7 +211,7 @@
     <string name="preference_deadzone_scale_title">ジョイスティックの無反応範囲</string>
     <string name="version_select_hint">バージョン選択</string>
     <string name="forge_dl_select_version">Forge のバージョンを選択</string>
-    <string name="fabric_dl_game_version">Minecraft バージョン</string>
+
     <string name="fabric_dl_install">インストール</string>
     <string name="fabric_dl_loader_title">バージョンの選択</string>
     <string name="of_dl_select_version">OptiFine のバージョンを選択</string>

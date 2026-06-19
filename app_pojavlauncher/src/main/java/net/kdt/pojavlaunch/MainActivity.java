@@ -142,9 +142,9 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         // Make keyboard pan the activity so the user sees what they're typing
         ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (view, insets) -> {
-            if(minecraftGLView.mSurface == null)
+            if(launcherGLView.mSurface == null)
                 return insets;
-            ViewPropertyAnimator animSurface = minecraftGLView.mSurface.animate()
+            ViewPropertyAnimator animSurface = launcherGLView.mSurface.animate()
                     .setDuration(100);
             ViewPropertyAnimator animCursor = cursor.animate()
                     .setDuration(100);
@@ -166,10 +166,10 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             int translationY;
             // Autopanning (if keyboardPan wasn't clicked)
             if(!mForceFullPanning) {
-                int cursorY = (int) (GLFW.cursorY * minecraftGLView.mSurface.getHeight()) + 100;
+                int cursorY = (int) (GLFW.cursorY * launcherGLView.mSurface.getHeight()) + 100;
                 translationY = Tools.getTranslationFromCursorY(
                         cursorY,
-                        minecraftGLView.mSurface.getHeight(),
+                        launcherGLView.mSurface.getHeight(),
                         mImeHeight,
                         0
                 );

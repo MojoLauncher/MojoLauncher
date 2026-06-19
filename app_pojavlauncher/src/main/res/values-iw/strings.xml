@@ -199,12 +199,12 @@
     <string name="main_add_account">הוסף חשבון</string>
     <string name="tasks_ongoing">משימות בתהליך, אנא המתן.</string>
     <string name="no_saved_accounts">לא נשמר חשבון</string>
-    <string name="mc_download_failed">כשל בהורדת Minecraft! זה עלול להיות כתוצאה מקשר רשת לקוי, קבצים שלא הונחו נכון, וכו\'.</string>
+
     <string name="xerr_unknown">שגיאה לא ידועה בממשק ה API של Xbox Live: %d</string>
-    <string name="xerr_no_account">נראה שאין לך חשבון Xbox Live. אנא התחבר פעם אחת ב- https://minecraft.net/ ונסה שוב.</string>
+
     <string name="xerr_adult_verification">אדם בוגר צריך לאמת את חשבונך.</string>
     <string name="xerr_child">חשבון שלך הוא חשבון ילדים וצריך להיכנס למשפחה על מנת להיכנס.</string>
-    <string name="minecraft_not_owned">נראה שאין לחשבון הזה פרופיל Minecraft. אם יש לך Xbox Game Pass, אנא התחבר ל- https://minecraft.net/ והגדר אותו.</string>
+
     <string name="xerr_not_available">Xbox Live אינו זמין במדינה שלך</string>
     <string name="preference_enable_gyro_title">אפשר את בקרי הג\'יירוסקופ</string>
     <string name="preference_enable_gyro_description">הפעלת זה יאפשר לך להסתובב במשחק על ידי סיבוב הטלפון.</string>
@@ -232,7 +232,7 @@
     <string name="preference_deadzone_scale_title">סולם אזור מת של ג\'ויסטיק</string>
     <string name="preference_deadzone_scale_description">הגדל את הערך אם הג\'ויסטיק נסחף.</string>
     <string name="preference_force_big_core_title">כפה על מנוע הרינדור לפעול על הליבה הגדולה.</string>
-    <string name="preference_force_big_core_desc">מאלץ על תהליכון הרינדור של Minecraft לפעול על הליבה עם תדר הפעולה המרבי הגבוה ביותר.</string>
+
     <string name="version_select_hint">בחר גרסה</string>
     <string name="forge_dl_progress">מוריד מתקין עבור %s</string>
     <string name="forge_dl_searching">מחפש מספר גרסה של Forge</string>

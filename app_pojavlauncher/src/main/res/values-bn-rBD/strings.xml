@@ -255,12 +255,12 @@
     <string name="main_add_account">অ্যাকাউন্ট যোগ করুন</string>
     <string name="tasks_ongoing">কাজ চলছে, অনুগ্রহ করে অপেক্ষা করুন</string>
     <string name="no_saved_accounts">কোনো সংরক্ষিত অ্যাকাউন্ট নেই</string>
-    <string name="mc_download_failed">Minecraft ডাউনলোড ব্যর্থ! সম্ভবত নেটওয়ার্ক সমস্যা বা ফাইলের অবস্থান ভুল।</string>
+
     <string name="xerr_unknown">অজানা Xbox Live API ত্রুটি %d</string>
-    <string name="xerr_no_account">আপনার Xbox Live অ্যাকাউন্ট নেই মনে হচ্ছে। অনুগ্রহ করে https://minecraft.net এ লগইন করুন এবং আবার চেষ্টা করুন।</string>
+
     <string name="xerr_adult_verification">আপনার অ্যাকাউন্ট যাচাইয়ের জন্য একজন প্রাপ্তবয়স্কের প্রয়োজন।</string>
     <string name="xerr_child">আপনার অ্যাকাউন্ট শিশু অ্যাকাউন্ট, লগইন করতে Family তে যোগ করতে হবে।</string>
-    <string name="minecraft_not_owned">এই অ্যাকাউন্টে Minecraft প্রোফাইল নেই। যদি আপনার Xbox Game Pass থাকে, অনুগ্রহ করে https://minecraft.net এ লগইন করে সেট করুন।</string>
+
     <string name="xerr_not_available">আপনার দেশে Xbox Live উপলব্ধ নয়</string>
     <string name="preference_enable_gyro_title">জাইরোস্কোপ কন্ট্রোল চালু করুন</string>
     <string name="preference_enable_gyro_description">এটি চালু করলে ফোন ঘুরিয়ে ইন-গেমে ঘুরতে পারবেন।</string>
@@ -291,7 +291,7 @@
     <string name="preference_deadzone_scale_title">জয়স্টিক ডেডজোন স্কেল</string>
     <string name="preference_deadzone_scale_description">জয়স্টিক ড্রিফট করলে এটি বাড়ান।</string>
     <string name="preference_force_big_core_title">রেন্ডারারকে বিগ কোরে চালাতে বাধ্য করুন</string>
-    <string name="preference_force_big_core_desc">Minecraft রেন্ডার থ্রেডকে সর্বোচ্চ ফ্রিকোয়েন্সির কোরে চালায়।</string>
+
     <string name="version_select_hint">ভার্সন নির্বাচন করুন</string>
     <string name="forge_dl_progress">%s এর জন্য ইনস্টলার ডাউনলোড হচ্ছে</string>
     <string name="forge_dl_searching">Forge ভার্সন খোঁজা হচ্ছে</string>
@@ -300,7 +300,7 @@
     <string name="forge_dl_select_version">Forge ভার্সন নির্বাচন করুন</string>
     <string name="fabric_dl_progress">%s লোডার মেটাডেটা ডাউনলোড হচ্ছে</string>
     <string name="fabric_dl_loader_version">%s লোডার ভার্সন</string>
-    <string name="fabric_dl_game_version">Minecraft ভার্সন</string>
+
     <string name="fabric_dl_install">ইনস্টল করুন</string>
     <string name="fabric_dl_cant_read_meta">%s লোডার মেটাডেটা পড়তে ব্যর্থ। পরে আবার চেষ্টা করুন।</string>
     <string name="fabric_dl_cant_read_meta2">Fabric লোডার মেটাডেটা পড়তে ব্যর্থ। পরে আবার চেষ্টা করুন।</string>

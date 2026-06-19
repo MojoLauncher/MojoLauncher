@@ -145,7 +145,7 @@
     <string name="customctrl_absolute_tracking">Абсолютне відстеження пальців</string>
     <string name="memory_warning_msg">Поточна кількість вільної оперативної пам\'яті (%d) менша, ніж виділена оперативна пам\'ять (%d), що може призвести до збоїв. Змініть кількість оперативної пам\'яті, якщо гра вилетить.</string>
     <string name="mcl_memory_allocation">Виділення пам\'яті</string>
-    <string name="mcl_memory_allocation_subtitle">Контролює, скільки пам’яті надається Minecraft.</string>
+
     <string name="multirt_runtime_corrupt">Java Runtime пошкоджено</string>
     <string name="multirt_runtime_incompatiblearch">Несумісна архітектура: %s</string>
     <string name="multirt_config_title">Середовища виконання Java</string>
@@ -214,12 +214,12 @@
     <string name="main_add_account">Додати обл. запис</string>
     <string name="tasks_ongoing">Завдання виконуються, зачекайте</string>
     <string name="no_saved_accounts">Немає збережених обл. записів</string>
-    <string name="mc_download_failed">Не вдалося завантажити Minecraft! Це може траплятися у випадку поганого зв\'язку з мережею, неправильно розміщеними файлами, тощо</string>
+
     <string name="xerr_unknown">Невідома помилка Xbox Live API! %d</string>
-    <string name="xerr_no_account">Схоже у вас немає Xbox Live аккаунту. Будь ласка, увійдіть ще раз на https://minecraft.net та спробуйте знову.</string>
+
     <string name="xerr_adult_verification">Доросла людина має підтвердити ваш обліковий запис.</string>
     <string name="xerr_child">Ваш обліковий запис є обліковим записом для дитини, і для входу в нього потрібно додати його до сім’ї.</string>
-    <string name="minecraft_not_owned">Схоже, цей обліковий запис не має купленої гри Minecraft. Якщо у вас є Xbox Game Pass, будь ласка, увійдіть на https://minecraft.net/ і налаштуйте його.</string>
+
     <string name="xerr_not_available">Xbox Live недоступний у вашому регіоні</string>
     <string name="preference_enable_gyro_title">Увімкнути гіроскоп</string>
     <string name="preference_enable_gyro_description">Увімкнувши цю функцію, ви зможете повертатися в грі, просто повернувши телефон.</string>
@@ -250,7 +250,7 @@
     <string name="preference_deadzone_scale_title">Розмір мертвої зони джойстика</string>
     <string name="preference_deadzone_scale_description">Якщо джойтик зміщується, збільште її.</string>
     <string name="preference_force_big_core_title">Змусити візуалізатор працювати на великому ядрі</string>
-    <string name="preference_force_big_core_desc">Змушує потік візуалізації Minecraft працювати на ядрі з найвищою макс. частотою.</string> <!-- Max reference!?!?!? -->
+
     <string name="version_select_hint">Оберіть версію</string>
     <string name="forge_dl_progress">Завантаження інсталятора для %s</string>
     <string name="forge_dl_searching">Пошук номера версії Forge</string>
@@ -261,7 +261,7 @@
     <string name="neoforge_dl_select_version">Вибір версії Neoforge</string>
     <string name="fabric_dl_progress">Завантаження %s інсталятора</string>
     <string name="fabric_dl_loader_version">Версія лоадера %s</string>
-    <string name="fabric_dl_game_version">Версія Minecraft</string>
+
     <string name="fabric_dl_install">Встановити</string>
     <string name="fabric_dl_cant_read_meta">Не вдалося зчитати метадані лоадера %s. Будь ласка, повторіть спробу пізніше.</string>
     <string name="fabric_dl_cant_read_meta2">Не вдалося зчитати метадані Fabric\'а</string>

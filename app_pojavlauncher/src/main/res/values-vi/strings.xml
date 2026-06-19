@@ -171,7 +171,7 @@
     <string name="memory_warning_msg">Số lượng RAM trống hiện tại (%d) thấp hơn số lượng RAM được phân bổ (%d), có thể dẫn đến sự cố. Thay đổi số lượng phân bổ nếu trò chơi bị sập.</string>
     <string name="address_memory_warning_msg">Bộ nhớ trống hiện có (%d) thấp hơn bộ nhớ được phân bổ (%d), điều này có thể gây ra sự cố. Thay đổi lượng bộ nhớ được phân bổ nếu trò chơi bị văng.</string>
     <string name="mcl_memory_allocation">Phân bổ bộ nhớ</string>
-    <string name="mcl_memory_allocation_subtitle">Điều khiển lượng bộ nhớ tạm được đưa vào Minecraft.</string>
+
     <string name="multirt_runtime_corrupt">Java đã gặp xung đột</string>
     <string name="multirt_runtime_incompatiblearch">Kiến trúc không tương thích: %s</string>
     <string name="multirt_config_title">Các hệ thống thời gian chạy Java</string>
@@ -247,12 +247,12 @@
     <string name="main_add_account">Thêm tài khoản</string>
     <string name="tasks_ongoing">Các tác vụ đang chạy, vui lòng chờ</string>
     <string name="no_saved_accounts">Không có tài khoản nào được lưu</string>
-    <string name="mc_download_failed">Không thể tải Minecraft! Điều này có thể do kết nối mạng kém, tệp được đặt sai vị trí, …</string>
+
     <string name="xerr_unknown">Lỗi API Xbox Live chưa rõ, mã %d</string>
-    <string name="xerr_no_account">Có vẻ như bạn chưa có một tài khoản Xbox Live. Đăng nhập vào https://minecraft.net/ một lần và thử lại.</string>
+
     <string name="xerr_adult_verification">Tài khoản của bạn cần được xác thực bởi người lớn.</string>
     <string name="xerr_child">Tài khoản của bạn là tài khoản trẻ em, và phải được thêm vào một Gia đình để có thể đăng nhập.</string>
-    <string name="minecraft_not_owned">Có vẻ như tài khoản của bạn chưa có hồ sơ Minecraft. Nếu bạn có Xbox Game Pass, đăng nhập vào https://minecraft.net/ và thiết lập hồ sơ.</string>
+
     <string name="xerr_not_available">Xbox Live không có sẵn ở quốc gia của bạn</string>
     <string name="preference_enable_gyro_title">Bật con quay hồi chuyển</string>
     <string name="preference_enable_gyro_description">Bật cái này sẽ cho phép bạn quay trong trò chơi bằng cách quay điện thoại của bạn.</string>
@@ -285,7 +285,7 @@
 
 
     <string name="preference_force_big_core_title">Buộc trình kết xuất chạy trên lõi lớn</string>
-    <string name="preference_force_big_core_desc">Buộc luồng kết xuất của Minecraft chạy trên lõi có tần số cao nhất.</string>
+
     <string name="version_select_hint">Chọn phiên bản</string>
     <string name="forge_dl_progress">Đang tải xuống %s</string>
     <string name="forge_dl_searching">Đang tìm số phiên bản của Forge</string>
@@ -294,7 +294,7 @@
     <string name="forge_dl_select_version">Chọn phiên bản Forge</string>
     <string name="fabric_dl_progress">Đang tải siêu dữ liệu cho trình %s</string>
     <string name="fabric_dl_loader_version">Phiên bản trình %s</string>
-    <string name="fabric_dl_game_version">Phiên bản Minecraft</string>
+
     <string name="fabric_dl_install">Cài đặt</string>
     <string name="fabric_dl_cant_read_meta">Không đọc được siêu dữ liệu trình %s. Vui lòng thử lại sau.</string>
     <string name="modloader_dl_install_fabric_instance">Tạo phiên bản Fabric mới</string>

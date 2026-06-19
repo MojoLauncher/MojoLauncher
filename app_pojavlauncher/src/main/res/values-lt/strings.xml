@@ -188,11 +188,11 @@
     <string name="main_add_account">Pridėti accounta</string>
     <string name="tasks_ongoing">Užduotis vykdoma, prašome palaukti</string>
     <string name="no_saved_accounts">Nėra išsaugotų paskyrų</string>
-    <string name="mc_download_failed">Klaida parsisiunčiant Minecraft! Tai gali būti dėl to, kad blogas interneto ryšys, ne taip sudėti failai,..</string>
+
     <string name="xerr_unknown">Nežinomas Xbox Live API klaida %d</string>
-    <string name="xerr_no_account">Atrodo kad tu neturi Xbox Live accounta. Prašau prisijungti kartą į https://minecraft.net/ ir pabandyt dar kartą.</string>
+
     <string name="xerr_adult_verification">Suaugęs turi patvirtinti jūsų paskyrą.</string>
-    <string name="minecraft_not_owned">Rodosi ši paskyrą neturi Minecraft profilio. Jeigu turi Xbox Game Pass, prašome prisijungti į https://minecraft.net/ ir nustatyti.</string>
+
     <string name="xerr_not_available">Xbox Live nėra jūsų šalyje</string>
     <string name="preference_enable_gyro_title">Įjungti gyroskopo kontroles</string>
     <string name="preference_enable_gyro_description">Įjungus leis pasisukti žaidime pasukant telefoną.</string>
@@ -210,7 +210,7 @@
     <string name="version_select_hint">Pasirinkti versiją</string>
     <string name="modloader_dl_failed_to_load_list">Klaida kraunant versijų sąrašą!</string>
     <string name="forge_dl_select_version">Pasirinkite Forge versiją</string>
-    <string name="fabric_dl_game_version">Minecraft versija</string>
+
     <string name="fabric_dl_install">Instaliuoti</string>
     <string name="create_profile_modded_versions">Modifikuotos versijos</string>
     <string name="fabric_dl_loader_title">Pasirinkti versiją</string>

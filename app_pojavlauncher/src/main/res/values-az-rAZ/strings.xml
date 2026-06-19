@@ -144,7 +144,7 @@
     <string name="customctrl_absolute_tracking">Mütləq barmaq izləmə</string>
     <string name="memory_warning_msg">Boş RAM-ın cari miqdarı (%d) ayrılmış RAM-dan (%d) azdır və bu, çökmələrə səbəb ola bilər. Oyun qəzaya uğrayarsa, yeri dəyişdirin.</string>
     <string name="mcl_memory_allocation">Yaddaşın ayrılması</string>
-    <string name="mcl_memory_allocation_subtitle">Minecraft-a nə qədər yaddaş verildiyinə nəzarət edir.</string>
+
     <string name="multirt_runtime_corrupt">Zədələnmiş Java Runtime</string>
     <string name="multirt_runtime_incompatiblearch">Uyğun olmayan arxitektura: %s</string>
     <string name="multirt_config_title">Java Runtimes</string>
@@ -212,12 +212,12 @@
     <string name="main_add_account">Hesab əlavə edin</string>
     <string name="tasks_ongoing">Tapşırıqlar icra olunur, lütfən gözləyin</string>
     <string name="no_saved_accounts">Saxlanmış hesab yoxdur</string>
-    <string name="mc_download_failed">Minecraftı yükləmək alınmadı! Buna, pis şəbəkə bağlantısı, səhv yerləşdirilmiş fayllar və s. səbəb ola bilər..</string>
+
     <string name="xerr_unknown">Naməlum Xbox Live API xətası %d</string>
-    <string name="xerr_no_account">Görünür, sizin Xbox Live hesabınız yoxdur. Lütfən, https://minecraft.net/ saytında bir dəfə daxil olun və yenidən cəhd edin.</string>
+
     <string name="xerr_adult_verification">Yetkin şəxs hesabınızı təsdiqləməlidir.</string>
     <string name="xerr_child">Hesabınız uşaq hesabıdır və daxil olmaq üçün Ailəyə əlavə edilməlidir.</string>
-    <string name="minecraft_not_owned">Deyəsən bu hesabda Minecraft profili yoxdur. Əgər sizdə Xbox Game Pass varsa, lütfən, https://minecraft.net/ saytında daxil olun və onu quraşdırın.</string>
+
     <string name="xerr_not_available">Xbox Live ölkənizdə mövcud deyil</string>
     <string name="preference_enable_gyro_title">Gyroskop nəzarətlərini aktivləşdirin</string>
     <string name="preference_enable_gyro_description">Bunu aktivləşdirmək sizə telefonunuzu çevirərək oyundaxili dönmə eməyə imkan verəcək.</string>
@@ -246,7 +246,7 @@
     <string name="preference_deadzone_scale_title">Joystick deadzone şkalası</string>
     <string name="preference_deadzone_scale_description">Joystik sürüşürsə, onu artırın.</string>
     <string name="preference_force_big_core_title">Rendereri böyük nüvədə işləməyə məcbur edin</string>
-    <string name="preference_force_big_core_desc">Minecraft render ipini ən yüksək maksimum tezliklə nüvədə işləməyə məcbur edir.</string>
+
     <string name="version_select_hint">Bir versiya seçin</string>
     <string name="forge_dl_progress">%s üçün quraşdırıcı endirilir</string>
     <string name="forge_dl_searching">Forge versiya nömrəsi axtarılır</string>
@@ -255,7 +255,7 @@
     <string name="forge_dl_select_version">Forge versiyasını seçin</string>
     <string name="fabric_dl_progress">%s yükləyici metadatası endirilir</string>
     <string name="fabric_dl_loader_version">%s yükləyici versiyası</string>
-    <string name="fabric_dl_game_version">Minecraft versiyası</string>
+
     <string name="fabric_dl_install">Quraşdır</string>
     <string name="fabric_dl_cant_read_meta">%s yükləyici metadatasını oxumaq alınmadı. Zəhmət olmasa bir az sonra yenə cəhd edin.</string>
     <string name="create_profile_vanilla_like_versions">Vanilla kimi versiyalar</string>

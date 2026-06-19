@@ -165,12 +165,12 @@
     <string name="main_add_account">Adăugați un cont</string>
     <string name="tasks_ongoing">Sarcinile sunt în desfășurare, vă rugăm așteptați</string>
     <string name="no_saved_accounts">Niciun cont salvat</string>
-    <string name="mc_download_failed">Descărcarea Minecraft a eșuat! Acest lucru s-ar putea datora conexiunii de rețea incorecte, fișierelor plasate incorect etc..</string>
+
     <string name="xerr_unknown">Xbox Live API eroare necunoscută %d</string>
-    <string name="xerr_no_account">Se pare că nu ai un cont Xbox live. Te rugăm să te autentifici o dată pe https://minecraft.net/ și să încerci din nou.</string>
+
     <string name="xerr_adult_verification">Un adult trebuie să-ți verifice contul.</string>
     <string name="xerr_child">Contul tau este un cont de copil si trebuie sa fie adaugat intr-o familie pentru a se autentifica.</string>
-    <string name="minecraft_not_owned">Se pare că acest cont nu are un profil de Minecraft. Dacă aveți Xbox Game Pass, vă rugăm să vă autentificați pe https://minecraft.net/ și să-l configurați.</string>
+
     <string name="xerr_not_available">Xbox Live nu este disponibil în ţara dumneavoastră</string>
     <string name="preference_enable_gyro_title">Permite controalele gyroscopului</string>
     <string name="preference_gyro_sensitivity_title">Controalele tiroscopului controlează sensibilitatea</string>

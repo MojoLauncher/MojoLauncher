@@ -145,7 +145,7 @@
     <string name="customctrl_absolute_tracking">Mutlak parmak takibi</string>
     <string name="memory_warning_msg">Şuanki boş bellek (%d) verilecek bellekten (%d) daha az, bu durum çökmelere sebep olabilir. Eğer oyun çökerse verilen belleği değiştirin.</string>
     <string name="mcl_memory_allocation">Bellek ayırma</string>
-    <string name="mcl_memory_allocation_subtitle">Minecraft\'a ne kadar bellek verileceğini kontrol eder.</string>
+
     <string name="multirt_runtime_corrupt">Bozuk Java Runtime</string>
     <string name="multirt_runtime_incompatiblearch">Uyumsuz mimari: %s</string>
     <string name="multirt_config_title">Java Runtime\'lar</string>
@@ -213,12 +213,12 @@
     <string name="main_add_account">Hesap Ekle</string>
     <string name="tasks_ongoing">Görevler devam etmekte, lütfen bekleyin</string>
     <string name="no_saved_accounts">Kayıtlı hesap yok</string>
-    <string name="mc_download_failed">Minecraft\'ı indirmek başarısız oldu! Bu kötü internet bağlantısı, yanlış yerleştirilmiş dosyalar vb… sebebiyle olabilir.</string>
+
     <string name="xerr_unknown">Bilinmeyen XBOX Live API hatası %d</string>
-    <string name="xerr_no_account">Bir Xbox Live hesabına sahip olmadığınız görünüyor. Lütfen bir kereliğine https://minecraft.net/ \'da giriş yapın ve tekrar deneyin.</string>
+
     <string name="xerr_adult_verification">Bir yetişkinin hesabınızı onaylaması gerekiyor.</string>
     <string name="xerr_child">Hesabınız bir çocuk hesabı ve giriş yapabilmek için bir aileye eklenmesi gerekiyor.</string>
-    <string name="minecraft_not_owned">Görünüşe göre bu hesap bir Minecraft profiline sahip değil. Eğer Xbox Game Pass\'e sahip iseniz, lütfen https://minecraft.net/ \'den giriş yapın ve ayarlayın.</string>
+
     <string name="xerr_not_available">Xbox Live ülkenizde mevcut değil</string>
     <string name="preference_enable_gyro_title">Jiroskop kontrollerini etkinleştir</string>
     <string name="preference_enable_gyro_description">Bunu etkinleştirmek, telefonunuzu çevirerek oyun içi dönüş yapmanızı sağlayacaktır.</string>
@@ -247,7 +247,7 @@
     <string name="preference_deadzone_scale_title">Joystick ölü bölge ölçeği</string>
     <string name="preference_deadzone_scale_description">Joystick kayıyorsa artırın.</string>
     <string name="preference_force_big_core_title">İşleyiciyi ana çekirdekte çalışmaya zorla</string>
-    <string name="preference_force_big_core_desc">Minecraft işleme bölümünün en yüksek frekansta çalışan çekirdekte çalışmasına zorlar.</string>
+
     <string name="version_select_hint">Bir Sürüm Seçin</string>
     <string name="forge_dl_progress">%s için yükleyici indiriliyor</string>
     <string name="forge_dl_searching">Forge sürüm numarası aranıyor</string>
@@ -256,7 +256,7 @@
     <string name="forge_dl_select_version">Forge sürümünü seç</string>
     <string name="fabric_dl_progress">%s yükleyici meta verileri indiriliyor</string>
     <string name="fabric_dl_loader_version">%s yükleyici sürümü</string>
-    <string name="fabric_dl_game_version">Minecraft sürümü</string>
+
     <string name="fabric_dl_install">Yükle</string>
     <string name="fabric_dl_cant_read_meta">%s yükleyici meta verileri okunamadı. Lütfen daha sonra tekrar deneyin.</string>
     <string name="create_profile_vanilla_like_versions">Vanilla usülü sürümler</string>

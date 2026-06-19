@@ -139,7 +139,7 @@
     <string name="main_login_done">Керү үтәлде</string>
     <string name="main_add_account">Аккаунт өстәү</string>
     <string name="no_saved_accounts">Сакланган аккаунтлар юк</string>
-    <string name="mc_download_failed">Minecraft йөкләнеп булмады! Бу акрын тоташу яки файл урнашуда хаталар аркасында туа ала торган.</string>
+
     <string name="percent_format">%d%%</string>
     <string name="customctrl_editor_exit_title">Чыгумы?</string>
     <string name="global_save_and_exit">Саклау һәм чыгу</string>
@@ -148,7 +148,7 @@
     <string name="version_select_hint">Версия сайлагыз</string>
     <string name="forge_dl_select_version">Forge версиясе сайлау</string>
     <string name="fabric_dl_loader_version">%s йөкләүчесенең версиясе</string>
-    <string name="fabric_dl_game_version">Minecraft версиясе</string>
+
     <string name="fabric_dl_install">Утырту</string>
     <string name="of_dl_progress">%s йөкләтүе</string>
     <string name="generic_install">Утырту</string>

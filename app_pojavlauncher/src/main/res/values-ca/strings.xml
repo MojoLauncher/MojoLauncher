@@ -160,12 +160,12 @@
     <string name="main_add_account">Afegeix compte</string>
     <string name="tasks_ongoing">Les tasques estan en progrés, espereu si us plau</string>
     <string name="no_saved_accounts">No h han comptes guardats</string>
-    <string name="mc_download_failed">No s\'ha pogut descarregar el Minecraft! Açò pot ser a causa d\'una mala connexió a internet, arxius col·locats incorrectament, etc..</string>
+
     <string name="xerr_unknown">Error desconegut de l\'API del Xbox Live %d</string>
-    <string name="xerr_no_account">Pareix que no tens cap compte del Xbox Live! Si us plau, inicieu sessió a https://minecraft.net/ i torneu-ho a intentar.</string>
+
     <string name="xerr_adult_verification">Un adult necessita verificar el teu compte.</string>
     <string name="xerr_child">El teu compte és un compte d\'infants, i s\'ha d\'afegir a una Família per poder iniciar la sessió.</string>
-    <string name="minecraft_not_owned">Pareix que aquest compte no té cap perfil del Minecraft. Si tens el Xbox Game Pass, si us plau, inicieu sessió a https://minecraft.net/ i torneu a provar.</string>
+
     <string name="xerr_not_available">El Xbox Live no està disponible al seu país</string>
     <string name="preference_enable_gyro_title">Activa els controls del giroscopi</string>
     <string name="preference_enable_gyro_description">Activar açò permetrà girar-se en el joc girant el telèfon.</string>

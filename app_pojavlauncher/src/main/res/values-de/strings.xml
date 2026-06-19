@@ -148,7 +148,7 @@
     <string name="memory_warning_msg">Die aktuelle Menge an freiem RAM (%d) ist niedriger als zugewiesener RAM (%d), was zu Abstürzen führen kann. Ändere die Zuordnung, wenn das Spiel abstürzt.</string>
     <string name="address_memory_warning_msg">Der aktuelle freie adressierbare RAM-Speicherplatz (%d) ist niedriger als der zugewiesene RAM (%d), was zu Abstürzen führen wird. Sollte das Spiel abstürzen, ändere die Zuweisung.</string>
     <string name="mcl_memory_allocation">Zugewiesener RAM</string>
-    <string name="mcl_memory_allocation_subtitle">Legt fest, wie viel Arbeitsspeicher Minecraft zugewiesen wird.</string>
+
     <string name="multirt_runtime_corrupt">Beschädigte Java-Runtime</string>
     <string name="multirt_runtime_incompatiblearch">Inkompatible Architektur: %s</string>
     <string name="multirt_config_title">Java Laufzeitumgebung</string>
@@ -217,12 +217,12 @@
     <string name="main_add_account">Konto hinzufügen</string>
     <string name="tasks_ongoing">Mehrere Aufgaben im Gange, bitte warten</string>
     <string name="no_saved_accounts">Keine eingespeicherten Konten</string>
-    <string name="mc_download_failed">Fehler beim Herunterladen von Minecraft! Dies kann aufgrund einer schlechten Netzwerkverbindung, falsch platzierter Dateien, etc. passiert sein..</string>
+
     <string name="xerr_unknown">Unbekannter Xbox-Live-API-Fehler %d</string>
-    <string name="xerr_no_account">Du scheinst kein Xbox-Live-Konto zu haben. Bitte melde dich einmal auf https://minecraft.net/ an und versuche es erneut.</string>
+
     <string name="xerr_adult_verification">Ein Erwachsener muss dein Konto verifizieren.</string>
     <string name="xerr_child">Dein Konto ist ein Kinderkonto und muss in einer Familie hinzugefügt werden, um sich anzumelden.</string>
-    <string name="minecraft_not_owned">Es scheint, als hätte dieses Konto kein Minecraft-Profil. Wenn du den Xbox-Game-Pass hast, logge dich bitte auf https://minecraft.net/ ein und stelle ihn ein.</string>
+
     <string name="xerr_not_available">Xbox-Live ist in deinem Land nicht verfügbar</string>
     <string name="preference_enable_gyro_title">Aktiviere Gyroskop-Steuerung</string>
     <string name="preference_enable_gyro_description">Aktiviert das Umschauen im Spiel durch das Bewegen des Gerätes.</string>
@@ -252,7 +252,7 @@
     <string name="preference_deadzone_scale_title">Joystick Deadzone Skala</string>
     <string name="preference_deadzone_scale_description">Erhöhen, falls der Joystick driftet.</string>
     <string name="preference_force_big_core_title">Ausführung des Renderers auf dem Haupt-Core erzwingen</string>
-    <string name="preference_force_big_core_desc">Zwingt den Minecraft-Renderthread auf dem Kern mit der höchsten maximalen Frequenz zu laufen.</string>
+
     <string name="version_select_hint">Wähle eine Version</string>
     <string name="forge_dl_progress">Installer für %s wird heruntergeladen</string>
     <string name="forge_dl_searching">Suche nach Forge-Versionsnummer</string>
@@ -261,7 +261,7 @@
     <string name="forge_dl_select_version">Forge-Version auswählen</string>
     <string name="fabric_dl_progress">Lade %s-Loader Metadaten herunter</string>
     <string name="fabric_dl_loader_version">%s-Loader-Version</string>
-    <string name="fabric_dl_game_version">Minecraft-Version</string>
+
     <string name="fabric_dl_install">Installieren</string>
     <string name="fabric_dl_cant_read_meta">Fehler beim Lesen der %s-Loader Metadaten. Bitte versuche es später erneut.</string>
     <string name="create_profile_vanilla_like_versions">Vanilla-ähnliche Versionen</string>

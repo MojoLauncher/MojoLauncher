@@ -286,7 +286,7 @@ public class MicrosoftBackgroundLogin implements BackgroundLogin{
         }else{
             Log.i("MicrosoftLogin","It seems that this Microsoft Account does not own the game.");
             doesOwnGame = false;
-            throw new PresentedException(new RuntimeException(conn.getResponseMessage()), R.string.minecraft_not_owned);
+            throw new PresentedException(new RuntimeException(conn.getResponseMessage()), R.string.mc_not_owned);
             //throwResponseError(conn);
         }
     }

@@ -136,7 +136,7 @@
     <string name="global_no">Ei</string>
     <string name="version_select_hint">Vali versioon</string>
     <string name="forge_dl_select_version">Vali Forge\'i versioon</string>
-    <string name="fabric_dl_game_version">Minecrafti versioon</string>
+
     <string name="fabric_dl_install">Paigalda</string>
     <string name="create_profile_vanilla_like_versions">Vanilli-laadsed versioonid</string>
     <string name="create_profile_modded_versions">Moditud versioonid</string>

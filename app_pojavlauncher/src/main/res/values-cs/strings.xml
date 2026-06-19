@@ -148,7 +148,7 @@
     <string name="memory_warning_msg">Aktuální množství volné paměti RAM (%d) je nižší než přidělená paměť RAM (%d), což může vést k pádu. Spadne-li hra, snižte přidělení paměti.</string>
     <string name="address_memory_warning_msg">Aktuální množství volné přístupné paměti RAM (%d) je nižší než přidělená paměť RAM (%d), což povede k pádu. Spadne-li hra, sniž přidělení paměti.</string>
     <string name="mcl_memory_allocation">Přidělení paměti</string>
-    <string name="mcl_memory_allocation_subtitle">Určuje množství paměti přidělené Minecraftu.</string>
+
     <string name="multirt_runtime_corrupt">Poškozená Java Runtime</string>
     <string name="multirt_runtime_incompatiblearch">Nekompatibilní architektura: %s</string>
     <string name="multirt_config_title">Verze Javy</string>
@@ -217,12 +217,12 @@
     <string name="main_add_account">Přidat účet</string>
     <string name="tasks_ongoing">Probíhají úkoly, počkejte, prosím</string>
     <string name="no_saved_accounts">Žádné přihlášené účty</string>
-    <string name="mc_download_failed">Selhalo stahování Minecraftu! Mohlo se tak stát kvůli špatnému internetovému připojení, nesprávně umístěným souborům apod.</string>
+
     <string name="xerr_unknown">Neznámá Chyba API Xbox Live %d</string>
-    <string name="xerr_no_account">Zdá se že nemáte účet Xbox Live. Jednou se přihlašte na https://minecraft.net/ a zkuste to znovu.</string>
+
     <string name="xerr_adult_verification">Váš účet musí být ověřen dospělým.</string>
     <string name="xerr_child">Váš účet je dětský, tudíž je potřeba jej přidat do Family pro přihlášení.</string>
-    <string name="minecraft_not_owned">Tento účet nejspíše nemá profil Minecraftu. Máte-li Xbox Game Pass, přihlašte se na https://minecraft.net/ a nastavte jej.</string>
+
     <string name="xerr_not_available">Xbox Live není ve vaší zemi dostupné</string>
     <string name="preference_enable_gyro_title">Zapnout gyroskopové ovládání</string>
     <string name="preference_enable_gyro_description">Zapnutí vám umožní se otáčet ve hře otáčením telefonu.</string>
@@ -252,7 +252,7 @@
     <string name="preference_deadzone_scale_title">Měřítko mrtvé zóny joysticku</string>
     <string name="preference_deadzone_scale_description">Zvětšte ujíždí-li joystick.</string>
     <string name="preference_force_big_core_title">Vynutit běh vykreslovače na velkém jádře</string>
-    <string name="preference_force_big_core_desc">Donutí vlákno vykreslovače Minecraftu běžet na jádře s nejvyšší maximální frekvencí.</string>
+
     <string name="version_select_hint">Vyberte verzi</string>
     <string name="forge_dl_progress">Stahování instalátoru pro %s</string>
     <string name="forge_dl_searching">Hledání čísla verze Forge</string>
@@ -261,7 +261,7 @@
     <string name="forge_dl_select_version">Vyberte verzi Forge</string>
     <string name="fabric_dl_progress">Stahování %s metadat načítače</string>
     <string name="fabric_dl_loader_version">Verze načítače %s</string>
-    <string name="fabric_dl_game_version">Verze Minecraftu</string>
+
     <string name="fabric_dl_install">Instalovat</string>
     <string name="fabric_dl_cant_read_meta">Nepodařilo se přečísti metadata načítače %s. Zkuste to prosím znovu později.</string>
     <string name="create_profile_vanilla_like_versions">Verze podobné Vanille</string>
