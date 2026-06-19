@@ -918,4 +918,11 @@ public final class Tools {
         waitOnObj();
         throw new RuntimeException();
     }
+
+    public static int getTranslationFromCursorY(int cursorY, int viewHeight, int imeHeight, int padding){
+        int visibleHeight = viewHeight - imeHeight;
+        if(cursorY < visibleHeight)
+            return 0;
+        return Math.min(imeHeight, cursorY - visibleHeight + padding);
+    }
 }

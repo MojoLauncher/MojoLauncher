@@ -166,6 +166,14 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/preference_category_keyboard">
+        <SwitchPreference
+            android:key="keyboardAutoPanning"
+            android:title="@string/preference_keyboard_autopan_title"
+            android:summary="@string/preference_keyboard_autopan_summary"
+            />
+    </PreferenceCategory>
+
 
 
 

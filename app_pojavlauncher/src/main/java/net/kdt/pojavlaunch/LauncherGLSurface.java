@@ -145,7 +145,27 @@ public class LauncherGLSurface extends View implements GrabListener, GamepadEnab
             return true; //mouse event handled successfully
         }
         if (mIngameProcessor == null || mInGUIProcessor == null) return true;
-        return mCurrentTouchProcessor.processTouchEvent(e);
+        boolean ret = mCurrentTouchProcessor.processTouchEvent(e);
+        // Keep cursor on screen if panning with IME inset
+        if(LauncherPreferences.PREF_KEYBOARD_AUTOPANNING && MainActivity.mImeHeight > 0){
+            int translationY = Tools.getTranslationFromCursorY(
+                    (int)(GLFW.cursorY * mSurface.getHeight() + 100),
+                    mSurface.getHeight(),
+                    MainActivity.mImeHeight,
+                    0
+            );
+            // If the view was force panned (KeyboardPan keycode) apply an animation instead of immediate override
+            // This fixes weird jumps when the user moves the cursor first time after pressing that keycode
+            if(MainActivity.mForceFullPanning) {
+                mSurface.animate().setDuration(100).translationY(-translationY).start();
+                mTouchpad.animate().setDuration(100).translationY(-translationY).start();
+                MainActivity.mForceFullPanning = false;
+            } else {
+                mSurface.setTranslationY(-translationY);
+                mTouchpad.setTranslationY(-translationY);
+            }
+        }
+        return ret;
     }
 
     private void createGamepad(InputDevice inputDevice) {

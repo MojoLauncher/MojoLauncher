@@ -441,4 +441,7 @@
     <string name="preference_sysmem_summary">Принуждает Turnip/Freedreno отрисовывать графику только в системную память. Включите, если игра работает медленно или вы наблюдаете проблемы отрисовки.</string>
     <string name="preference_microphone_access_title">Запросить доступ к микрофону</string>
     <string name="preference_microphone_access_description">Запрашивает у системы доступ к микрофону устройства в игре</string>
+    <string name="preference_category_keyboard">Настройки клавиатуры</string>
+    <string name="preference_keyboard_autopan_title">Разрешить перемещение окна клавиатурой</string>
+    <string name="preference_keyboard_autopan_summary">Разрешает экранной клавиатуре перемещать окно игры, а не перекрывать его, если последнее касание было в зоне появления клавиатуры. Не влияет на явный вызов с перемещением в раскладках.</string>
 </resources>

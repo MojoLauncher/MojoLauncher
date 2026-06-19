@@ -223,7 +223,11 @@ public class ControlButton extends TextView implements ControlInterface {
     private void sendSpecialKey(int keycode, boolean isDown){
         switch (keycode) {
             case ControlData.SPECIALBTN_KEYBOARD:
-                if(isDown) MainActivity.switchKeyboardState();
+                if(isDown) MainActivity.switchKeyboardState(false);
+                break;
+
+            case ControlData.SPECIALBTN_KEYBOARDPAN:
+                if(isDown) MainActivity.switchKeyboardState(true);
                 break;
 
             case ControlData.SPECIALBTN_TOGGLECTRL:
