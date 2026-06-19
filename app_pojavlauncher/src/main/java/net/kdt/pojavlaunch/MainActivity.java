@@ -24,6 +24,8 @@ import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -32,6 +34,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.kdt.LoggerView;
@@ -99,6 +103,9 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
 
     private QuickSettingSideDialog mQuickSettingSideDialog;
 
+    public static boolean mForceFullPanning = false;
+    public static int mImeHeight = 0;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,6 +134,51 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         // Set the sustained performance mode for available APIs
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
             getWindow().setSustainedPerformanceMode(PREF_SUSTAINED_PERFORMANCE);
+
+        // This is required on Android 10 for the insets listener
+        // https://issuetracker.google.com/issues/266331465
+        boolean androidCompat = Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q;
+        if(androidCompat)
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        // Make keyboard pan the activity so the user sees what they're typing
+        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (view, insets) -> {
+            if(minecraftGLView.mSurface == null)
+                return insets;
+            ViewPropertyAnimator animSurface = minecraftGLView.mSurface.animate()
+                    .setDuration(100);
+            ViewPropertyAnimator animCursor = cursor.animate()
+                    .setDuration(100);
+            if(!insets.isVisible(WindowInsetsCompat.Type.ime())){
+                animSurface.translationY(0).start();
+                animCursor.translationY(0).start();
+                mImeHeight = 0;
+                if(androidCompat) {
+                    // AndroidX keeps SystemUI visible for some reason after IME session
+                    view.postDelayed(() -> {
+                        view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN);
+                    }, 150);
+                }
+                return insets;
+            }
+            if(!mForceFullPanning && !LauncherPreferences.PREF_KEYBOARD_AUTOPANNING)
+                return insets;
+            mImeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
+            int translationY;
+            // Autopanning (if keyboardPan wasn't clicked)
+            if(!mForceFullPanning) {
+                int cursorY = (int) (GLFW.cursorY * minecraftGLView.mSurface.getHeight()) + 100;
+                translationY = Tools.getTranslationFromCursorY(
+                        cursorY,
+                        minecraftGLView.mSurface.getHeight(),
+                        mImeHeight,
+                        0
+                );
+            } else
+                translationY = mImeHeight;
+            animSurface.translationY(-translationY).start();
+            animCursor.translationY(-translationY).start();
+            return insets;
+        });
 
         ingameControlsEditorArrayAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu_customcontrol));
@@ -436,8 +488,11 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         return handleEvent;
     }
 
-    public static void switchKeyboardState() {
-        if(touchCharInput != null) touchCharInput.switchKeyboardState();
+    public static void switchKeyboardState(boolean panning) {
+        if(touchCharInput != null) {
+            touchCharInput.switchKeyboardState();
+            MainActivity.mForceFullPanning = panning;
+        }
     }
 
     @Override
