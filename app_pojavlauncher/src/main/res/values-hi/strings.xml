@@ -10,6 +10,7 @@
     <!-- Login strings -->
     <string name="login_online_username_hint">यूज़रनेम</string>
     <string name="login_online_login_label">लॉगिन</string>
+
     <!-- Hint -->
     <string name="hint_control_mapping">"संदर्भ मेनू खोलने के लिए ऊपर बीच वाले कॉगव्हील ⚙ को स्पर्श करें।
 कस्टमाइज़ करने के लिए किसी बटन को टैप करें: उसे एडिट करें, उसका आकार बदलें, हटाएँ या उसकी कीबाइंड्स बदलें।"</string>
@@ -21,7 +22,7 @@
     <string name="alerttitle_installmod">मॉड इंस्टॉलर को चुने</string>
 
     <!-- Error messages -->
-    <string name="error_fatal">MJLauncher अप्रत्याशित रूप से क्रैश हो गया है</string>
+    <string name="error_fatal">MJLauncher अप्रत्याशित क्रैश हो गया है</string>
     <string name="error_no_version">कोई संस्करण नहीं!</string>
     <string name="error_show_more">ज्यादा दिखाएँ </string>
     <string name="error_show_less">कम दिखाएँ</string>
@@ -173,7 +174,8 @@
     <string name="memory_warning_msg">मौजूदा उपलब्ध RAM (%d) आवंटित RAM (%d) से कम है, जिससे गेम क्रैश हो सकता है। यदि गेम क्रैश होता है, तो आवंटन बदलें।</string>
     <string name="address_memory_warning_msg">मौजूदा उपलब्ध एड्रेसेबल RAM स्पेस (%d) आवंटित RAM (%d) से कम है, जिससे गेम क्रैश हो जाएगा। यदि गेम क्रैश होता है, तो आवंटन बदलें।</string>
     <string name="mcl_memory_allocation">मेमोरी आवंटन</string>
-    <string name="mcl_memory_allocation_subtitle">नियंत्रित करता है कि Java रनटाइम को कितनी मेमोरी दी जाती है।</string>
+        <string name="mcl_memory_allocation_subtitle">नियंत्रित करता है कि Java रनटाइम को कितनी मेमोरी दी जाती है।</string>
+
     <string name="multirt_runtime_corrupt">खराब जावा रनटाइम</string>
     <string name="multirt_runtime_incompatiblearch">असंगत आर्किटेक्चर: %s</string>
     <string name="multirt_config_title">जावा रनटाइम</string>
@@ -236,7 +238,8 @@
     <string name="color_default_hex" translatable="false">FFFF0000</string>
     <string name="notif_channel_name">सामान्य</string>
     <string name="notif_channel_id" translatable="false">channel_id</string>
-    <string name="lazy_service_default_title">MJ फोरग्राउंड सर्विस</string>
+        <string name="lazy_service_default_title">MJ फोरग्राउंड सर्विस</string>
+
     <string name="mcl_setting_veroption_installed">इंस्टॉल किया गया</string>
     <string name="use_global_default">(ग्लोबल डिफ़ॉल्ट का उपयोग करें)</string>
     <string name="default_control">डिफ़ॉल्ट कंट्रोलमैप</string>
@@ -251,12 +254,14 @@
     <string name="main_add_account">अकाउंट जोड़ें</string>
     <string name="tasks_ongoing">कार्य प्रगति पर हैं, कृपया प्रतीक्षा करें</string>
     <string name="no_saved_accounts">कोई सेव किए गए अकाउंट नहीं</string>
-    <string name="mc_download_failed">गेम डाउनलोड करने में विफल! यह खराब नेटवर्क कनेक्शन, गलत तरीके से रखी गई फ़ाइलों, आदि के कारण हो सकता है।</string>
+        <string name="mc_download_failed">गेम डाउनलोड करने में विफल! यह खराब नेटवर्क कनेक्शन, गलत तरीके से रखी गई फ़ाइलों, आदि के कारण हो सकता है।</string>
+        
     <string name="xerr_unknown">अज्ञात Xbox Live API त्रुटि %d</string>
-
+    <string name="xerr_no_account">आपके पास कोई Xbox Live अकाउंट नहीं लगता। कृपया https://minecraft.net/ पर एक बार लॉगिन करें और फिर से प्रयास करें।</string>
     <string name="xerr_adult_verification">आपके अकाउंट को किसी वयस्क द्वारा सत्यापित किया जाना ज़रूरी है।</string>
     <string name="xerr_child">आपका अकाउंट एक चाइल्ड अकाउंट है, और लॉगिन करने के लिए इसे एक फैमिली में जोड़ा जाना चाहिए।</string>
-    <string name="mc_not_owned">लगता है इस अकाउंट में कोई MC प्रोफ़ाइल नहीं है। अगर आपके पास Xbox Game Pass है, तो कृपया गेम की वेबसाइट पर लॉगिन करें और अपनी प्रोफ़ाइल सेट करें।</string>
+        <string name="mc_not_owned">लगता है इस अकाउंट में कोई MC प्रोफ़ाइल नहीं है। अगर आपके पास Xbox Game Pass है, तो कृपया गेम की वेबसाइट पर लॉगिन करें और अपनी प्रोफ़ाइल सेट करें।</string>
+
     <string name="xerr_not_available">Xbox Live आपके देश में उपलब्ध नहीं है</string>
     <string name="preference_enable_gyro_title">गाइरोस्कोप कंट्रोल्स सक्षम करें</string>
     <string name="preference_enable_gyro_description">इसे सक्षम करने से आप अपने फ़ोन को मोड़कर गेम में घूम सकेंगे।</string>
@@ -266,7 +271,8 @@
     <string name="preference_gyro_sample_rate_title">गाइरोस्कोप सैंपलिंग रेट</string>
     <string name="preference_gyro_sample_rate_description">अगर आपको गाइरोस्कोप कंट्रोल्स के साथ प्रदर्शन संबंधी समस्याएँ आती हैं, तो इसे बढ़ाएँ।</string>
     <string name="microsoft_login_retry_later">बहुत ज़्यादा रिक्वेस्ट हैं, कृपया बाद में फिर से प्रयास करें।</string>
-    <string name="storage_required">MJLauncher को बाहरी स्टोरेज अटैच होना ज़रूरी है। कृपया इसे फिर से कनेक्ट करें और ऐप रीस्टार्ट करें।</string>
+        <string name="storage_required">MJLauncher को बाहरी स्टोरेज अटैच होना ज़रूरी है। कृपया इसे फिर से कनेक्ट करें और ऐप रीस्टार्ट करें।</string>
+
     <string name="mcl_setting_title_buttonallcaps">बटन लेबल में केवल बड़े अक्षरों का उपयोग करें</string>
     <string name="mcl_setting_subtitle_buttonallcaps">यदि आप अपने कंट्रोल्स में छोटे अक्षरों का उपयोग करना चाहते हैं तो इसे डिसेबल करें।</string>
     <string name="create_instance">नया इंस्टेंस बनाएँ</string>
@@ -290,8 +296,8 @@
 
 
     <string name="preference_force_big_core_title">रेंडरर को बड़े कोर पर चलाने के लिए बल दें</string>
+        <string name="preference_force_big_core_desc">गेम के रेंडर थ्रेड को सबसे ज़्यादा अधिकतम फ़्रीक्वेंसी वाले कोर पर चलने के लिए बाध्य करता है।</string>
 
-    <string name="preference_force_big_core_desc">गेम के रेंडर थ्रेड को सबसे ज़्यादा अधिकतम फ़्रीक्वेंसी वाले कोर पर चलने के लिए बाध्य करता है।</string>
     <string name="version_select_hint">एक संस्करण चुनें</string>
     <string name="forge_dl_progress">%s के लिए इंस्टॉलर डाउनलोड हो रहा है</string>
     <string name="forge_dl_searching">Forge संस्करण नंबर खोजा जा रहा है</string>
@@ -300,8 +306,8 @@
     <string name="forge_dl_select_version">Forge संस्करण चुनें</string>
     <string name="fabric_dl_progress">%s लोडर मेटाडेटा डाउनलोड हो रहा है</string>
     <string name="fabric_dl_loader_version">%s लोडर संस्करण</string>
+        <string name="fabric_dl_game_version">गेम संस्करण</string>
 
-    <string name="fabric_dl_game_version">गेम संस्करण</string>
     <string name="fabric_dl_install">इंस्टॉल करें</string>
     <string name="fabric_dl_cant_read_meta">%s लोडर मेटाडेटा पढ़ने में विफल। कृपया बाद में फिर से प्रयास करें।</string>
     <string name="fabric_dl_cant_read_meta2">Fabric लोडर मेटाडेटा पढ़ने में विफल। कृपया बाद में फिर से प्रयास करें।</string>
@@ -335,7 +341,8 @@
     <string name="modpack_download_downloading_mods">मॉड्स डाउनलोड हो रहे हैं (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">मॉड्स डाउनलोड हो रहे हैं (फ़ाइल %d/%d)</string>
     <string name="modpack_download_applying_overrides">ओवरराइड्स लागू हो रहे हैं (%d/%d)</string>
-    <string name="modpack_install_notification_title">MJ मॉडपैक इंस्टॉलर</string>
+        <string name="modpack_install_notification_title">MJ मॉडपैक इंस्टॉलर</string>
+
     <string name="modpack_install_notification_success">मॉडपैक इंस्टॉलेशन पूरा करने के लिए यहां क्लिक करें</string>
     <string name="modpack_install_notification_data_not_available">मॉड लोडर जानकारी डाउनलोड करने में विफल</string>
     <string name="modpack_install_modloader_download_failed">मॉड लोडर फ़ाइलें डाउनलोड करने में विफल</string>
@@ -364,7 +371,8 @@
     <string name="preference_category_miscellaneous">अन्य सेटिंग्स</string>
     <string name="preference_category_video">वीडियो सेटिंग्स</string>
     <string name="notification_permission_dialog_title">अनुमति अनुरोध</string>
-    <string name="notification_permission_dialog_text">जब आप ऐप से बाहर निकलते हैं तो गेम/मॉडपैक डाउनलोड्स को रुकने से रोकने के लिए MJLauncher को नोटिफिकेशन्स पोस्ट करने की अनुमति चाहिए। इस अनुमति के बिना, जब आप MJLauncher को बैकग्राउंड मोड में डालते हैं तो Android आपके डाउनलोड्स को बंद कर सकता है।</string>
+        <string name="notification_permission_dialog_text">जब आप ऐप से बाहर निकलते हैं तो गेम/मॉडपैक डाउनलोड्स को रुकने से रोकने के लिए MJLauncher को नोटिफिकेशन्स पोस्ट करने की अनुमति चाहिए। इस अनुमति के बिना, जब आप MJLauncher को बैकग्राउंड मोड में डालते हैं तो Android आपके डाउनलोड्स को बंद कर सकता है।</string>
+
     <string name="notification_permission_toast">आप सेटिंग्स में जाकर बाद में कभी भी अपना मन बदल सकते हैं।</string>
     <string name="preference_ask_for_notification_title">नोटिफिकेशन्स की अनुमति दें</string>
     <string name="preference_ask_for_notification_description">नोटिफिकेशन अनुमति को फिर से रिक्वेस्ट करने के लिए क्लिक करें, गेम/मॉडपैक बैकग्राउंड डाउनलोड्स के सही ढंग से काम करने के लिए इसकी आवश्यकता है।</string>
@@ -484,15 +492,12 @@
     <string name="import_local_modpack">लोकल मॉडपैक इंपोर्ट करें</string>
     <string name="preference_sysmem_title">सिस्टम मेमोरी में रेंडरिंग के लिए बाध्य करें</string>
     <string name="preference_sysmem_summary">Freedreno को सीधे सिस्टम मेमोरी में रेंडर करने के लिए बाध्य करता है। यदि प्रदर्शन कम है या आपको रेंडरिंग समस्याओं का अनुभव होता है तो इसे सक्षम करें</string>
-    <string name="mcl_setting_title_buttonscale">कंट्रोल बटन्स स्केलिंग</string>
+        <string name="mcl_setting_title_buttonscale">कंट्रोल बटन्स स्केलिंग</string>
     <string name="mcn_abort_title">एप्लिकेशन/गेम रद्द कर दिया गया, अधिक जानकारी के लिए latestlog.txt देखें।</string>
     <string name="preference_force_legacy_zink_title">Legacy Zink का उपयोग करें</string>
     <string name="preference_force_legacy_zink_description">वर्तमान डिवाइस के अनुसार चुनने के बजाय बलपूर्वक Legacy Zink का उपयोग करें। यह कुछ ग्राफिकल समस्याओं को ठीक कर सकता है। यदि गेम धीमा हो जाए तो इसे बंद कर दें।</string>
     <string name="preference_category_keyboard">कीबोर्ड सेटिंग्स</string>
     <string name="preference_keyboard_autopan_title">कीबोर्ड पैनिंग सक्षम करें</string>
     <string name="preference_keyboard_autopan_summary">यदि आपका आखिरी टच स्क्रीन के निचले हिस्से में था, तो यह ऑन-स्क्रीन कीबोर्ड को गेम विंडो के ऊपर आने के बजाय उसे खिसकाने की अनुमति देता है। समान फ़ंक्शन वाले कस्टम कंट्रोल लेआउट बटन्स पर इसका कोई प्रभाव नहीं पड़ता।</string>
-    <string name="mcl_memory_allocation_subtitle">एियंत्रित करता है कि Java रनटाइ। को कितनी मेमोरी ही जाती हैक</string>
-    <string name="mc_not_owned">लगता है ेस ोकादंी ।लं कगई MC ह्रोफ़ाउल नहीं हई। अगर आपके पास Xbox Game Pass है, तो कृपया गेम कआ वेहसाइट पर यगमिन वरेब सर ापनइ पटरोॉ़िइल ंेअ नरें।</string>
-    <string name="preference_force_big_core_desc">गेम के रेंडर थ्रेड कइ सबसे ट़्यांा अरडकोम फ़्ेीक्वेंसी वधिे कोर मर फल़े के ल्ं साी्य करपा चन।</string>
-    <string name="fabric_dl_game_version">गेम बंस्करय</string>
+    
 </resources>
