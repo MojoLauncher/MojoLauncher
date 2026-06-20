@@ -1,26 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <!-- App name part -->
     <string name="app_name">MojoLauncher (Minecraft: Java Edition Android के लिए )</string>
     <string name="app_short_name">MojoLauncher</string>
+
+    <!-- Action bar part -->
+
+    <!-- Languages list part -->
+
+    <!-- Login strings -->
     <string name="login_online_username_hint">यूज़रनेम</string>
     <string name="login_online_login_label">लॉगिन</string>
-    <string name="hint_control_mapping">&quot;संदर्भ मेनू खोलने के लिए ऊपर बीच वाले कॉगव्हील ⚙ को स्पर्श करें।
-कस्टमाइज़ करने के लिए किसी बटन को टैप करें: उसे एडिट करें, उसका आकार बदलें, हटाएँ या उसकी कीबाइंड्स बदलें।&quot;</string>
+
+    <!-- Hint -->
+    <string name="hint_control_mapping">"संदर्भ मेनू खोलने के लिए ऊपर बीच वाले कॉगव्हील ⚙ को स्पर्श करें।
+कस्टमाइज़ करने के लिए किसी बटन को टैप करें: उसे एडिट करें, उसका आकार बदलें, हटाएँ या उसकी कीबाइंड्स बदलें।"</string>
+
+    <!-- Warnings -->
     <string name="warning_remove_account">यह खाता हटा दिया जाएगा!</string>
+
+    <!-- AlertDialog title -->
     <string name="alerttitle_installmod">मॉड इंस्टॉलर को चुने</string>
+
+    <!-- Error messages -->
     <string name="error_fatal">मोजो लांचर अप्रत्याशित क्रैश हो गया है</string>
     <string name="error_no_version">कोई संस्करण नहीं!</string>
     <string name="error_show_more">ज्यादा दिखाएँ </string>
     <string name="error_show_less">कम दिखाएँ</string>
+
+    <!-- Toast messages -->
     <string name="toast_permission_denied">भंडारण अनुमति आवश्यक है। कृपया पढ़ने और लिखने की अनुमति दें</string>
     <string name="toast_optifine_success">सफलतापूर्वक स्थापित किया गया</string>
+    <!--
+    <string name="toast_3">Exit</string>
+    -->
+
+    <!-- MCLauncherActivity: Tabs -->
     <string name="mcl_tab_wiki">Wiki</string>
+
+    <!-- MCLauncherActivity: Account status -->
+
+    <!-- MCLauncherActivity: Strings -->
     <string name="mcl_launch_cleancache">कैशे फ़ाइलों की सफाई</string>
     <string name="mcl_launch_downloading">डाउनलोड हो रहा है %s</string>
-    <string name="mcl_launch_downloading_progress">&quot;%s डाउनलोड हो रहा है (%.2f MB / %.2f MB)&quot;</string>
+    <string name="mcl_launch_downloading_progress">"%s डाउनलोड हो रहा है (%.2f MB / %.2f MB)"</string>
     <string name="mcl_launch_download_assets">संसाधन डाउनलोड करने की तैयारी हो रही है</string>
+
     <string name="mcl_options">विकल्प</string>
     <string name="mcl_option_customcontrol">अनुकूलित नियंत्रण</string>
+
+
     <string name="mcl_setting_title_use_surface_view">वैकल्पिक सरफेस रेंडरिंग का उपयोग करें</string>
     <string name="mcl_setting_subtitle_use_surface_view">यह GPU-बाधित स्थितियों में प्रदर्शन को बेहतर बनाने में मदद कर सकता है।</string>
     <string name="mcl_setting_title_ignore_notch">नॉच को अनदेखा करें</string>
@@ -29,7 +58,6 @@
     <string name="mcl_setting_subtitle_resolution_scaler">यह गेम के रिज़ॉल्यूशन को कम करने की अनुमति देता है। 100% पूर्ण रिज़ॉल्यूशन है।</string>
     <string name="mcl_setting_title_longpresstrigger">लॉन्ग प्रेस ट्रिगर डिले</string>
     <string name="mcl_setting_subtitle_longpresstrigger">ब्लॉक तोड़ने और आइटम गिराने के लिए लॉन्ग प्रेस ट्रिगर डिले बदलें।</string>
-    <string name="mcl_setting_title_buttonscale">कंट्रोल बटन्स स्केलिंग</string>
     <string name="mcl_setting_subtitle_buttonscale">बटन बहुत छोटे होने पर उन्हें बड़ा करें।</string>
     <string name="mcl_setting_title_mousescale">माउस स्केलिंग</string>
     <string name="mcl_setting_subtitle_mousescale">वर्चुअल माउस का आकार बदलें।</string>
@@ -38,7 +66,6 @@
     <string name="mcl_setting_category_renderer">रेंडरर</string>
     <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (सभी संस्करण, तेज़)</string>
     <string name="mcl_setting_renderer_vulkan_zink">ज़िंक (वल्कन) - (सभी संस्करण, मध्यम)</string>
-    <string name="mcl_setting_renderer_freedreno_kgsl">Freedreno - सभी versions, fast, सिर्फ Adreno</string>
     <string name="mcl_setting_renderer_ltw">LTW (ओपनजीएल ईएस 3) - केवल 1.17+</string>
     <string name="mcl_setting_veroption_release">रीलीज़</string>
     <string name="mcl_setting_veroption_snapshot">स्नैपशॉट</string>
@@ -47,6 +74,8 @@
     <string name="mcl_setting_java_sandbox">सैंडबॉक्स .jar निष्पादन</string>
     <string name="mcl_setting_java_sandbox_subtitle">फ़ाइल निष्पादित करते समय सैंडबॉक्स सुरक्षा मैनेजर की उपलब्धता को नियंत्रित करें।</string>
     <string name="mcl_version_clone">क्लोन</string>
+
+    <!-- Global strings -->
     <string name="global_edit">एडिट करें </string>
     <string name="global_error">गड़बड़ी</string>
     <string name="global_load">लोड करें</string>
@@ -61,10 +90,13 @@
     <string name="global_select">चुनें</string>
     <string name="global_retry">पुनः प्रयास करें</string>
     <string name="global_default">डिफ़ॉल्ट</string>
+
+    <!-- MainActivity: strings -->
     <string name="mcn_exit_title">एप्लिकेशन/गेम कोड %d के साथ बंद हो गया, अधिक जानकारी के लिए latestlog.txt देखें।</string>
-    <string name="mcn_abort_title">एप्लिकेशन/गेम रद्द कर दिया गया, अधिक जानकारी के लिए latestlog.txt देखें।</string>
     <string name="mcn_exit_confirm">क्या आप वाकई ज़बरदस्ती बंद करना चाहते हैं?</string>
     <string name="mcn_check_fail_vulkan_support">ज़िंक (वल्कन) रेंडरर इस डिवाइस पर समर्थित नहीं/नहीं चलेगा  है!</string>
+
+    <!-- MainActivity: Control buttons -->
     <string name="control_chat">Chat</string>
     <string name="control_debug">Debug</string>
     <string name="control_primary">Pri</string>
@@ -79,20 +111,30 @@
     <string name="control_thirdperson">3rd</string>
     <string name="control_listplayers">Tab</string>
     <string name="control_mouse">Mouse</string>
-    <string name="control_mouseoff">Mouse: बंद</string>
-    <string name="control_mouseon">Mouse: चालू</string>
+    <string name="control_mouseoff">Mouse: off</string>
+    <string name="control_mouseon">Mouse: on </string>
+
+    <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">ज़बरदस्ती बंद करें</string>
     <string name="control_viewout">लॉग आउटपुट</string>
     <string name="control_adebug">इनपुट डीबग</string>
     <string name="control_customkey">कस्टम कीकोड भेजें</string>
+
+    <!-- ImportControlActivity Strings -->
     <string name="import_control_label">कंट्रोल्स इंपोर्ट करें</string>
     <string name="import_control_invalid_file">अवैध या दूषित फ़ाइल</string>
     <string name="import_control_import_button">कंट्रोल्स इंपोर्ट करें</string>
     <string name="import_control_verifying_file">फ़ाइल सत्यापित की जा रही है, कृपया प्रतीक्षा करें और पुनः प्रयास करें…</string>
     <string name="import_control_invalid_name">अवैध नाम या फ़ाइल पहले से मौजूद है</string>
     <string name="import_control_done">इंपोर्ट पूरा हुआ</string>
+    <!--
+    <string name="control_more3"></string>
+    <string name="control_more4"></string>
+-->
+
     <string name="customctrl_toggle">टॉगल करने योग्य</string>
     <string name="customctrl_size">आकार</string>
+
     <string name="customctrl_mapping">मैपिंग</string>
     <string name="customctrl_orientation">ओरिएंटेशन</string>
     <string name="customctrl_background_bitmap">बैकग्राउंड इमेज</string>
@@ -101,20 +143,23 @@
     <string name="customctrl_corner_radius">कॉर्नर रेडियस</string>
     <string name="customctrl_stroke_width">स्ट्रोक चौड़ाई</string>
     <string name="customctrl_stroke_color">स्ट्रोक रंग</string>
+
     <string name="customctrl_button_opacity">बटन अपारदर्शिता</string>
+
     <string name="customctrl_addbutton">बटन जोड़ें</string>
     <string name="customctrl_addbutton_drawer">बटन ड्रॉअर जोड़ें</string>
     <string name="customctrl_addbutton_joystick">जॉयस्टिक जोड़ें</string>
     <string name="customctrl_addsubbutton">सब-बटन जोड़ें</string>
+
     <string name="customctrl_selectdefault">डिफ़ॉल्ट कंट्रोलमैप चुनें</string>
     <string name="customctrl_export">कंट्रोलमैप एक्सपोर्ट करें</string>
+
     <string name="main_share_logs">लॉग फ़ाइल साझा करें</string>
     <string name="main_install_jar_file"> एक .jar निष्पादित करें</string>
     <string name="main_play">खेले</string>
     <string name="autoram_info_msg">मेमोरी %d MB पर सेट है</string>
     <string name="mcl_setting_check_libraries"> डाउनलोड करने के बाद लाइब्रेरीज़ जाँचें</string>
     <string name="mcl_setting_check_libraries_subtitle">यह विकल्प लॉन्चर को उपलब्ध होने पर लाइब्रेरी हैश की जाँच करने के लिए बाध्य करता है। यह टूटे हुए डाउनलोड्स को रोकता है।</string>
-    <string name="dl_library_sha_fail">Library %s ख़राब हो गई है और इसे फिर से डाउनलोड किया जाएगा।</string>
     <string name="dl_library_sha_unknown">लाइब्रेरी %s की जाँच नहीं की जा सकती, इसे सही माना जाएगा</string>
     <string name="dl_library_sha_pass">लाइब्रेरी %s ठीक है और उपयोग करने योग्य है</string>
     <string name="mcl_disable_gestures">जेस्चर डिसेबल करें</string>
@@ -146,6 +191,7 @@
     <string name="multirt_delete_runtime">रनटाइम डिलीट करें</string>
     <string name="pvc_gameDirectory">गेम डायरेक्टरी</string>
     <string name="pvc_jvmArgs">JVM आर्ग्यूमेंट्स</string>
+
     <string name="preference_mouse_start_title">वर्चुअल माउस ऑन करके शुरू करें</string>
     <string name="preference_mouse_start_description">यह विकल्प ऑन होने पर वर्चुअल माउस स्टार्टअप पर दिखाई देता है।</string>
     <string name="preference_video_title">वीडियो और रेंडरर</string>
@@ -162,22 +208,21 @@
     <string name="preference_sustained_performance_description">पीक प्रदर्शन को सीमित करके थर्मल थ्रॉटलिंग को सीमित करें।</string>
     <string name="preference_force_vsync_title">VSync को बलपूर्वक सक्षम करें</string>
     <string name="preference_force_vsync_description">पीक प्रदर्शन को सीमित करके थर्मल थ्रॉटलिंग को सीमित करें।</string>
-    <string name="preference_use_angle_title">ANGLE का उपयोग करें</string>
-    <string name="preference_force_legacy_zink_title">Legacy Zink का उपयोग करें</string>
-    <string name="preference_force_legacy_zink_description">वर्तमान डिवाइस के अनुसार चुनने के बजाय बलपूर्वक Legacy Zink का उपयोग करें। यह कुछ ग्राफिकल समस्याओं को ठीक कर सकता है। यदि गेम धीमा हो जाए तो इसे बंद कर दें।</string>
-    <string name="preference_use_angle_description">LTW के लिए सिस्टम ड्राइवर के बजाय ANGLE का उपयोग करने की अनुमति देता है। कुछ GPUs पर मॉड्स के साथ ग्राफिकल समस्याओं को ठीक कर सकता है।</string>
     <string name="preference_force_english_title">भाषा को बलपूर्वक अंग्रेज़ी में करें</string>
     <string name="preference_force_english_description">यह आपको मूल स्ट्रिंग्स देखने की अनुमति देता है, जैसा कि डेवलपर्स का इरादा था। रीस्टार्ट आवश्यक है।</string>
     <string name="preference_edit_controls_title">कस्टम कंट्रोल्स एडिट करें</string>
     <string name="preference_edit_controls_summary">अपनी ज़रूरतों के अनुसार कंट्रोल स्कीम को बदलें।</string>
+
     <string name="preference_category_gyro_controls">गाइरोस्कोप कंट्रोल्स</string>
     <string name="preference_category_virtual_mouse">वर्चुअल माउस</string>
+
     <string name="preference_gyro_invert_x_axis">X-अक्ष उलटा करें</string>
     <string name="preference_gyro_invert_y_axis">Y-अक्ष उलटा करें</string>
     <string name="preference_gyro_invert_x_axis_description">क्षैतिज अक्ष को उलटा करें।</string>
     <string name="preference_gyro_invert_y_axis_description">ऊर्ध्वाधर अक्ष को उलटा करें।</string>
     <string name="preference_gyro_smoothing_title">गाइरोस्कोप स्मूथिंग सक्षम करें</string>
     <string name="preference_gyro_smoothing_description">लेटेंसी के बदले जिटर कम करें।</string>
+
     <string name="preference_back_title">पिछली स्क्रीन पर वापस जाएँ</string>
     <string name="unnamed">अनाम</string>
     <string name="profiles_latest_snapshot">नवीनतम स्नैपशॉट</string>
@@ -190,9 +235,9 @@
     <string name="global_delete">डिलीट करें</string>
     <string name="pedit_java_runtime">जावा रनटाइम</string>
     <string name="pedit_renderer">रेंडरर</string>
-    <string name="color_default_hex">FFFF0000</string>
+    <string name="color_default_hex" translatable="false">FFFF0000</string>
     <string name="notif_channel_name">सामान्य</string>
-    <string name="notif_channel_id">channel_id</string>
+    <string name="notif_channel_id" translatable="false">channel_id</string>
     <string name="lazy_service_default_title">मोजो फोरग्राउंड सर्विस</string>
     <string name="mcl_setting_veroption_installed">इंस्टॉल किया गया</string>
     <string name="use_global_default">(ग्लोबल डिफ़ॉल्ट का उपयोग करें)</string>
@@ -237,14 +282,15 @@
     <string name="global_save_and_exit">सेव करें और बाहर निकलें</string>
     <string name="global_yes">हाँ</string>
     <string name="global_no">नहीं</string>
+
     <string name="preference_controller_map_wiped">कंट्रोलर कॉन्फ़िग मिटा दिया गया है।</string>
-    <string name="preference_category_controller_settings">कंट्रोलर सेटिंग्स </string>
+      <string name="preference_category_controller_settings">कंट्रोलर सेटिंग्स </string>
     <string name="preference_wipe_controller_title">कंट्रोलर मैपिंग रीसेट करें</string>
     <string name="preference_wipe_controller_description">यह आपको कंट्रोलर बटन को फिर से मैप करने की अनुमति देता है।</string>
     <string name="preference_deadzone_scale_title">जॉयस्टिक डेडज़ोन स्केल</string>
     <string name="preference_deadzone_scale_description">अगर जॉयस्टिक ड्रिफ्ट करती है तो इसे बढ़ाएँ।</string>
-    <string name="preference_microphone_access_title">माइक्रोफ़ोन एक्सेस की अनुमति का अनुरोध करें</string>
-    <string name="preference_microphone_access_description">गेम के लिए डिवाइस माइक्रोफ़ोन का एक्सेस देने के लिए सिस्टम से अनुरोध करता है।</string>
+
+
     <string name="preference_force_big_core_title">रेंडरर को बड़े कोर पर चलाने के लिए बल दें</string>
     <string name="preference_force_big_core_desc">Minecraft रेंडर थ्रेड को सबसे ज़्यादा अधिकतम फ़्रीक्वेंसी वाले कोर पर चलने के लिए बाध्य करता है।</string>
     <string name="version_select_hint">एक संस्करण चुनें</string>
@@ -253,8 +299,6 @@
     <string name="modloader_dl_failed_to_load_list">संस्करण सूची लोड करने में विफल!</string>
     <string name="forge_dl_no_installer">माफ़ करें, लेकिन Forge के इस संस्करण में इंस्टॉलर नहीं है, जो अभी तक समर्थित नहीं है।</string>
     <string name="forge_dl_select_version">Forge संस्करण चुनें</string>
-    <string name="neoforge_dl_no_installer">माफ़ करें, लेकिन NeoForge के इस संस्करण में इंस्टॉलर नहीं है, जो अभी तक समर्थित नहीं है।</string>
-    <string name="neoforge_dl_select_version">NeoForge वर्ज़न चुनें</string>
     <string name="fabric_dl_progress">%s लोडर मेटाडेटा डाउनलोड हो रहा है</string>
     <string name="fabric_dl_loader_version">%s लोडर संस्करण</string>
     <string name="fabric_dl_game_version">Minecraft संस्करण</string>
@@ -264,7 +308,6 @@
     <string name="modloader_dl_install_fabric_instance">Fabric इंस्टेंस बनाएँ</string>
     <string name="modloader_dl_install_quilt_instance">Quilt इंस्टेंस बनाएँ</string>
     <string name="modloader_dl_install_forge_instance">Forge इंस्टेंस बनाएँ</string>
-    <string name="modloader_dl_install_neoforge_instance">NeoForge इंस्टेंस बनाएँ</string>
     <string name="create_instance_vanilla">वैनिला इंस्टेंस बनाएँ</string>
     <string name="create_profile_vanilla_like_versions">वैनिला जैसी संस्करण</string>
     <string name="create_profile_modded_versions">मॉड की गई संस्करण</string>
@@ -273,15 +316,21 @@
     <string name="of_dl_failed_to_scrape">OptiFine इंस्टॉलेशन के लिए डेटा एकत्र करने में विफल।</string>
     <string name="of_dl_progress">%s डाउनलोड हो रहा है</string>
     <string name="mod_dl_install_optifine">OptiFine इंस्टॉल करें</string>
+
+
     <string name="hint_search_modpack">मॉडपैक खोजें</string>
+
     <string name="preference_vulkan_driver_system_title">सिस्टम वल्कन ड्राइवर का उपयोग करें</string>
     <string name="preference_vulkan_driver_system_description">लॉन्चर को एड्रेनो GPU पर टर्निप के बजाय सिस्टम वल्कन ड्राइवर का उपयोग करने के लिए बाध्य करें। यह केवल ज़िंक और वल्कन का उपयोग करने वाले मॉड्स को प्रभावित करता है।</string>
+
     <string name="generic_install">इंस्टॉल करें</string>
     <string name="generic_apply">लागू करें</string>
     <string name="generic_debug">डीबग करें</string>
+
     <string name="search_modpack_no_result">कोई मॉडपैक नहीं मिला</string>
     <string name="search_modpack_error">मॉडपैक खोजने में विफल</string>
     <string name="search_modpack_download_error">मॉडपैक मेटाडेटा डाउनलोड करने में विफल</string>
+
     <string name="modpack_download_downloading_metadata">मॉडपैक मेटाडेटा डाउनलोड हो रहा है (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods">मॉड्स डाउनलोड हो रहे हैं (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">मॉड्स डाउनलोड हो रहे हैं (फ़ाइल %d/%d)</string>
@@ -292,11 +341,12 @@
     <string name="modpack_install_modloader_download_failed">मॉड लोडर फ़ाइलें डाउनलोड करने में विफल</string>
     <string name="modpack_install_download_failed">मॉडपैक फ़ाइलें डाउनलोड करने में विफल</string>
     <string name="modpack_install_instance_button">मॉडपैक इंस्टेंस बनाएँ</string>
+
     <string name="notif_error_occured">एक त्रुटि हुई है</string>
     <string name="notif_error_occured_desc">अधिक जानकारी देखने के लिए क्लिक करें</string>
     <string name="fabric_dl_only_stable">केवल स्थिर संस्करण दिखाएँ</string>
     <string name="dl_tampered_manifest_title">फ़ाइल सत्यापन चेतावनी</string>
-    <string name="dl_tampered_manifest">मिरर पर गेम संस्करण मैनिफेस्ट आधिकारिक Mojang संस्करण मैनिफेस्ट से मेल नहीं खाता है, जिसका अर्थ है कि इसमें छेड़छाड़ की गई हो सकती है।&lt;br/&gt;&lt;b&gt;यह सुरक्षित नहीं है। यदि आप जारी रखते हैं तो आपकी व्यक्तिगत जानकारी खतरे में पड़ सकती है।&lt;/b&gt;&lt;br/&gt;यदि आप अभी भी मिरर का उपयोग करना चाहते हैं, तो &quot;मैनिफेस्ट जांच बंद करें&quot; दबाएं और डाउनलोड फिर से शुरू करें।&lt;br/&gt;यदि आप आधिकारिक डाउनलोड स्रोत का उपयोग करना चाहते हैं, तो &quot;आधिकारिक साइट पर स्विच करें&quot; दबाएं और डाउनलोड फिर से शुरू करें।&lt;br/&gt;
+    <string name="dl_tampered_manifest"><![CDATA[मिरर पर गेम संस्करण मैनिफेस्ट आधिकारिक Mojang संस्करण मैनिफेस्ट से मेल नहीं खाता है, जिसका अर्थ है कि इसमें छेड़छाड़ की गई हो सकती है।<br/><b>यह सुरक्षित नहीं है। यदि आप जारी रखते हैं तो आपकी व्यक्तिगत जानकारी खतरे में पड़ सकती है।</b><br/>यदि आप अभी भी मिरर का उपयोग करना चाहते हैं, तो "मैनिफेस्ट जांच बंद करें" दबाएं और डाउनलोड फिर से शुरू करें।<br/>यदि आप आधिकारिक डाउनलोड स्रोत का उपयोग करना चाहते हैं, तो "आधिकारिक साइट पर स्विच करें" दबाएं और डाउनलोड फिर से शुरू करें।<br/>]]>
     </string>
     <string name="dl_turn_off_manifest_checks">मैनिफेस्ट जांच बंद करें</string>
     <string name="dl_switch_to_official_site">आधिकारिक साइट पर स्विच करें</string>
@@ -367,26 +417,35 @@
     <string name="preference_remap_controller_title">कंट्रोलर की बाइंडिंग बदलें</string>
     <string name="preference_remap_controller_description">यह आपको प्रत्येक कंट्रोलर बटन से बाउंड कीबोर्ड कुंजियों को संशोधित करने की अनुमति देता है</string>
     <string name="mcl_button_social_media">डिस्कॉर्ड</string>
-    <string name="ltw_render_distance_warning_msg">आपका GPU सोडियम या अन्य समान मॉड्स के बिना 7 से ज़्यादा रेंडर दूरी पर रेंडर करने में सक्षम नहीं है। जब आप &quot;ठीक है&quot; पर क्लिक करेंगे तो रेंडर दूरी अपने आप कम हो जाएगी।</string>
+    <string name="ltw_render_distance_warning_msg">आपका GPU सोडियम या अन्य समान मॉड्स के बिना 7 से ज़्यादा रेंडर दूरी पर रेंडर करने में सक्षम नहीं है। जब आप "ठीक है" पर क्लिक करेंगे तो रेंडर दूरी अपने आप कम हो जाएगी।</string>
     <string name="mcl_button_open_directory">गेम डायरेक्टरी खोलें</string>
-    <string name="social_media_invite">https://discord.gg/VHdwQFsaGX</string>
     <string name="local_login_bad_username_title">अनुपयुक्त यूज़रनेम</string>
     <string name="local_login_bad_username_text">यूज़रनेम 3–16 अक्षरों का होना चाहिए, और इसमें केवल लैटिन अक्षर, 0–9 अंक और अंडरस्कोर होने चाहिए।</string>
     <string name="quick_setting_title">त्वरित सेटिंग्स</string>
-    <string name="create_bta_instance">\&quot;बेटर दैन एडवेंचर!\&quot; इंस्टेंस बनाएँ</string>
-    <string name="select_bta_version">\&quot;बेटर दैन एडवेंचर!\&quot; संस्करण चुनें</string>
+    <string name="create_bta_instance">\"बेटर दैन एडवेंचर!\" इंस्टेंस बनाएँ</string>
+    <string name="select_bta_version">\"बेटर दैन एडवेंचर!\" संस्करण चुनें</string>
     <string name="bta_installer_available_versions">समर्थित BTA संस्करण</string>
     <string name="bta_installer_untested_versions">अपरिक्षित BTA संस्करण</string>
     <string name="bta_installer_nightly_versions">नाइटली BTA संस्करण</string>
     <string name="newdl_extracting_native_libraries">नेटिव लाइब्रेरीज़ निकाली जा रही हैं (%d/%d)</string>
     <string name="compat_version_not_supported">आपका डिवाइस यह संस्करण नहीं चला सकता क्योंकि LTW आपके डिवाइस पर समर्थित नहीं है।</string>
-    <string name="compat_sodium_not_supported">आपका डिवाइस इस वर्ज़न पर Sodium नहीं चला सकता क्योंकि LTW आपके डिवाइस पर समर्थित नहीं है।</string>
     <string name="oauth_unknown_error">अज्ञात प्रमाणीकरण त्रुटि</string>
     <string name="oauth_web_complete">प्रमाणीकरण हो रहा है…</string>
     <string name="auth_select_microsoft">माइक्रोसॉफ्ट अकाउंट</string>
     <string name="auth_select_elyby">Ely.by अकाउंट</string>
     <string name="auth_select_local">स्थानीय अकाउंट</string>
     <string name="instance_dir_missing">इंस्टेंस गायब है</string>
+    <string name="mcl_setting_renderer_freedreno_kgsl">Freedreno - सभी versions, fast, सिर्फ Adreno</string>
+    <string name="dl_library_sha_fail">Library %s ख़राब हो गई है और इसे फिर से डाउनलोड किया जाएगा।</string>
+    <string name="preference_use_angle_title">ANGLE का उपयोग करें</string>
+    <string name="preference_use_angle_description">LTW के लिए सिस्टम ड्राइवर के बजाय ANGLE का उपयोग करने की अनुमति देता है। कुछ GPUs पर मॉड्स के साथ ग्राफिकल समस्याओं को ठीक कर सकता है।</string>
+    <string name="preference_microphone_access_title">माइक्रोफ़ोन एक्सेस की अनुमति का अनुरोध करें</string>
+    <string name="preference_microphone_access_description">गेम के लिए डिवाइस माइक्रोफ़ोन का एक्सेस देने के लिए सिस्टम से अनुरोध करता है।</string>
+    <string name="neoforge_dl_no_installer">माफ़ करें, लेकिन NeoForge के इस संस्करण में इंस्टॉलर नहीं है, जो अभी तक समर्थित नहीं है।</string>
+    <string name="neoforge_dl_select_version">NeoForge वर्ज़न चुनें</string>
+    <string name="modloader_dl_install_neoforge_instance">NeoForge इंस्टेंस बनाएँ</string>
+    <string name="compat_sodium_not_supported">आपका डिवाइस इस वर्ज़न पर Sodium नहीं चला सकता क्योंकि LTW आपके डिवाइस पर समर्थित नहीं है।</string>
+
     <string name="gamedir_open_failed">गेम डायरेक्टरी खोलने में विफल</string>
     <string name="newerdl_inserting_metadata">फ़ाइल मेटाडेटा खोजा जा रहा है…</string>
     <string name="newerdl_inserting_metadata_count">फ़ाइल मेटाडेटा खोजा जा रहा है… (%d/%d)</string>
@@ -412,7 +471,7 @@
     <string name="vml_err_exists">VM पहले से ही लोड है</string>
     <string name="vml_err_inval">अमान्य आर्ग्यूमेंट्स</string>
     <string name="gr_err_renderer_load_Failed">रेंडरर लाइब्रेरी लोड करने में विफल</string>
-    <string name="ltw_4x_msaa_warning_msg">ऐसा लगता है कि आपने डेवलपर सेटिंग्स में &quot;Force 4x MSAA&quot; ऑन कर दिया है। रेंडरिंग समस्याओं से बचने के लिए कृपया इसे बंद करें।</string>
+    <string name="ltw_4x_msaa_warning_msg">ऐसा लगता है कि आपने डेवलपर सेटिंग्स में "Force 4x MSAA" ऑन कर दिया है। रेंडरिंग समस्याओं से बचने के लिए कृपया इसे बंद करें।</string>
     <string name="no_instance">कोई इंस्टेंस नहीं चुना गया है। कृपया एक इंस्टेंस बनाएँ या चुनें।</string>
     <string name="downloading_java_runtime_uni">रनटाइम डाउनलोड हो रहा है, चरण 1/2 (%.2f/%.2f MB)</string>
     <string name="downloading_java_runtime_platform">रनटाइम डाउनलोड हो रहा है, चरण 2/2 (%.2f/%.2f MB)</string>
@@ -425,7 +484,4 @@
     <string name="import_local_modpack">लोकल मॉडपैक इंपोर्ट करें</string>
     <string name="preference_sysmem_title">सिस्टम मेमोरी में रेंडरिंग के लिए बाध्य करें</string>
     <string name="preference_sysmem_summary">Freedreno को सीधे सिस्टम मेमोरी में रेंडर करने के लिए बाध्य करता है। यदि प्रदर्शन कम है या आपको रेंडरिंग समस्याओं का अनुभव होता है तो इसे सक्षम करें</string>
-    <string name="preference_category_keyboard">कीबोर्ड सेटिंग्स</string>
-    <string name="preference_keyboard_autopan_title">कीबोर्ड पैनिंग सक्षम करें</string>
-    <string name="preference_keyboard_autopan_summary">यदि आपका आखिरी टच स्क्रीन के निचले हिस्से में था, तो यह ऑन-स्क्रीन कीबोर्ड को गेम विंडो के ऊपर आने के बजाय उसे खिसकाने की अनुमति देता है। समान फ़ंक्शन वाले कस्टम कंट्रोल लेआउट बटन्स पर इसका कोई प्रभाव नहीं पड़ता।</string>
 </resources>
