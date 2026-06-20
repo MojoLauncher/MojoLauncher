@@ -29,7 +29,7 @@
         android:hasFragileUserData="true"
         android:icon="@mipmap/ic_launcher"
         android:isGame="true"
-        android:label="@string/app_name"
+        android:label="@string/app_short_name"
         android:process=":launcher"
         android:resizeableActivity="true"
         android:roundIcon="@mipmap/ic_launcher_round"

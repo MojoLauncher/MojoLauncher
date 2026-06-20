@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition para Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -13,7 +12,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Seleciona um Instalador de mods</string>
     <!-- Error messages -->
-    <string name="error_fatal">O MojoLauncher falhou inesperadamente</string>
+    <string name="error_fatal">O MJLauncher falhou inesperadamente</string>
     <string name="error_no_version">Não existem versões!</string>
     <string name="error_show_more">Mostrar mais</string>
     <string name="error_show_less">Mostrar menos</string>
@@ -145,7 +144,7 @@
     <string name="customctrl_absolute_tracking">Rastreamento absoluto do dedo</string>
     <string name="memory_warning_msg">A quantidade atual de memória RAM livre (%d) é menor do que a memória RAM alocada (%d), o que pode levar a falhas. Altera a alocação se o jogo falhar.</string>
     <string name="mcl_memory_allocation">Alocação de memória</string>
-    <string name="mcl_memory_allocation_subtitle">Controla quanta memória é delegada ao Minecraft.</string>
+
     <string name="multirt_runtime_corrupt">Runtime do Java corrompida</string>
     <string name="multirt_runtime_incompatiblearch">Arquitetura incompatível: %s</string>
     <string name="multirt_config_title">Runtimes Java</string>

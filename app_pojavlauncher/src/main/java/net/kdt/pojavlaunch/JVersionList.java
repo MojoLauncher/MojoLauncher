@@ -6,7 +6,7 @@ import net.kdt.pojavlaunch.value.*;
 
 @Keep
 @SuppressWarnings("unused") // all unused fields here are parts of JSON structures
-public class JMinecraftVersionList {
+public class JVersionList {
     public Map<String, String> latest;
     public Version[] versions;
 
@@ -23,7 +23,7 @@ public class JMinecraftVersionList {
         public AssetIndex assetIndex;
 
         public String assets;
-        public Map<String, MinecraftClientInfo> downloads;
+        public Map<String, ClientInfo> downloads;
         public String inheritsFrom;
         public JavaVersionInfo javaVersion;
         public DependentLibrary[] libraries;

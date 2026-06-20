@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition skirta Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -13,7 +12,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Pasirinkite modifikacijų įdiegimui</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher netikėtai išsijungė arba užlužo</string>
+    <string name="error_fatal">MJLauncher netikėtai išsijungė arba užlužo</string>
     <string name="error_no_version">Nėra versijos!</string>
     <string name="error_show_more">Rodyti daugiau</string>
     <string name="error_show_less">Rodyti mažiau</string>
@@ -177,7 +176,7 @@
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Vaizdo generatorius</string>
     <string name="notif_channel_name">Pagrindinis</string>
-    <string name="lazy_service_default_title">Mojo foninis servisas</string>
+    <string name="lazy_service_default_title">MJ foninis servisas</string>
     <string name="mcl_setting_veroption_installed">Instaliuota</string>
     <string name="notification_terminate">Nutraukti</string>
     <string name="notification_game_runs">Žaidimas bėga!</string>
@@ -189,11 +188,11 @@
     <string name="main_add_account">Pridėti accounta</string>
     <string name="tasks_ongoing">Užduotis vykdoma, prašome palaukti</string>
     <string name="no_saved_accounts">Nėra išsaugotų paskyrų</string>
-    <string name="mc_download_failed">Klaida parsisiunčiant Minecraft! Tai gali būti dėl to, kad blogas interneto ryšys, ne taip sudėti failai,..</string>
+
     <string name="xerr_unknown">Nežinomas Xbox Live API klaida %d</string>
-    <string name="xerr_no_account">Atrodo kad tu neturi Xbox Live accounta. Prašau prisijungti kartą į https://minecraft.net/ ir pabandyt dar kartą.</string>
+
     <string name="xerr_adult_verification">Suaugęs turi patvirtinti jūsų paskyrą.</string>
-    <string name="minecraft_not_owned">Rodosi ši paskyrą neturi Minecraft profilio. Jeigu turi Xbox Game Pass, prašome prisijungti į https://minecraft.net/ ir nustatyti.</string>
+
     <string name="xerr_not_available">Xbox Live nėra jūsų šalyje</string>
     <string name="preference_enable_gyro_title">Įjungti gyroskopo kontroles</string>
     <string name="preference_enable_gyro_description">Įjungus leis pasisukti žaidime pasukant telefoną.</string>
@@ -211,7 +210,7 @@
     <string name="version_select_hint">Pasirinkti versiją</string>
     <string name="modloader_dl_failed_to_load_list">Klaida kraunant versijų sąrašą!</string>
     <string name="forge_dl_select_version">Pasirinkite Forge versiją</string>
-    <string name="fabric_dl_game_version">Minecraft versija</string>
+
     <string name="fabric_dl_install">Instaliuoti</string>
     <string name="create_profile_modded_versions">Modifikuotos versijos</string>
     <string name="fabric_dl_loader_title">Pasirinkti versiją</string>
@@ -227,7 +226,7 @@
     <string name="search_modpack_error">Nepavyksta rasti modpacks</string>
     <string name="modpack_download_downloading_mods_fc">Atsiunčiamos modifikacijos (Failas %d iš %d)</string>
     <string name="modpack_download_applying_overrides">Taikyti perašymus (%d/%d)</string>
-    <string name="modpack_install_notification_title">Mojo Modpack diegėjas</string>
+    <string name="modpack_install_notification_title">MJ Modpack diegėjas</string>
     <string name="modpack_install_notification_success">Paspausk čia norint pabaigti Modpack instaliaciją</string>
     <string name="modpack_install_notification_data_not_available">Klaida atsiunčiant modifikacijų paleidėjo informaciją</string>
     <string name="notif_error_occured">Įvyko klaida</string>

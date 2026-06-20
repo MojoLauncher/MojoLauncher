@@ -16,7 +16,7 @@ import net.kdt.pojavlaunch.authenticator.BackgroundLogin;
 import net.kdt.pojavlaunch.authenticator.accounts.Accounts;
 import net.kdt.pojavlaunch.authenticator.listener.LoginListener;
 import net.kdt.pojavlaunch.authenticator.model.OAuthTokenResponse;
-import net.kdt.pojavlaunch.authenticator.accounts.MinecraftAccount;
+import net.kdt.pojavlaunch.authenticator.accounts.Account;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -79,10 +79,10 @@ public class MicrosoftBackgroundLogin implements BackgroundLogin{
                 notifyProgress(loginListener, 3);
                 String[] xsts = acquireXsts(xboxLiveToken);
                 notifyProgress(loginListener, 4);
-                String mcToken = acquireMinecraftToken(xsts[0], xsts[1]);
+                String token = acquireToken(xsts[0], xsts[1]);
                 notifyProgress(loginListener, 5);
-                fetchOwnedItems(mcToken);
-                checkMcProfile(mcToken);
+                fetchOwnedItems(token);
+                checkProfile(token);
                 msXsts  = xsts[0];
                 continuation.call();
             }catch (Exception e){
@@ -94,7 +94,7 @@ public class MicrosoftBackgroundLogin implements BackgroundLogin{
         });
     }
 
-    private void fillAccount(MinecraftAccount acc) {
+    private void fillAccount(Account acc) {
         acc.xuid = msXsts;
         acc.accessToken = mcToken;
         acc.username = mcName;
@@ -108,14 +108,14 @@ public class MicrosoftBackgroundLogin implements BackgroundLogin{
     @Override
     public void createAccount(@NonNull LoginListener loginListener, String code) {
         acquireAccountDetails(loginListener, ()->{
-            MinecraftAccount account = Accounts.create(this::fillAccount);
+            Account account = Accounts.create(this::fillAccount);
             Tools.runOnUiThread(() -> loginListener.onLoginDone(account));
             return null;
         }, code, false);
     }
 
     @Override
-    public void refreshAccount(@NonNull LoginListener loginListener, MinecraftAccount account) {
+    public void refreshAccount(@NonNull LoginListener loginListener, Account account) {
         acquireAccountDetails(loginListener, ()->{
             if(doesOwnGame) fillAccount(account);
             account.save();
@@ -217,7 +217,7 @@ public class MicrosoftBackgroundLogin implements BackgroundLogin{
         }
     }
 
-    private String acquireMinecraftToken(String xblUhs, String xblXsts) throws IOException, JSONException {
+    private String acquireToken(String xblUhs, String xblXsts) throws IOException, JSONException {
         URL url = new URL(mcLoginUrl);
 
         JSONObject data = new JSONObject();
@@ -260,7 +260,7 @@ public class MicrosoftBackgroundLogin implements BackgroundLogin{
         // as it does not indicate whether the user owns the game through Game Pass.
     }
 
-    private void checkMcProfile(String mcAccessToken) throws IOException, JSONException {
+    private void checkProfile(String mcAccessToken) throws IOException, JSONException {
         URL url = new URL(mcProfileUrl);
 
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -280,13 +280,13 @@ public class MicrosoftBackgroundLogin implements BackgroundLogin{
             );
             doesOwnGame = true;
             Log.i("MicrosoftLogin","UserName = " + name);
-            Log.i("MicrosoftLogin","Uuid Minecraft = " + uuidDashes);
+            Log.i("MicrosoftLogin","Uuid = " + uuidDashes);
             mcName=name;
             mcUuid=uuidDashes;
         }else{
             Log.i("MicrosoftLogin","It seems that this Microsoft Account does not own the game.");
             doesOwnGame = false;
-            throw new PresentedException(new RuntimeException(conn.getResponseMessage()), R.string.minecraft_not_owned);
+            throw new PresentedException(new RuntimeException(conn.getResponseMessage()), R.string.mc_not_owned);
             //throwResponseError(conn);
         }
     }

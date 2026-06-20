@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher（适用于 Android 的《Minecraft：Java版》）</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -15,7 +14,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">选择模组安装器</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher 意外崩溃</string>
+    <string name="error_fatal">MJLauncher 意外崩溃</string>
     <string name="error_no_version">无版本！</string>
     <string name="error_show_more">显示详情</string>
     <string name="error_show_less">隐藏细节</string>
@@ -203,7 +202,7 @@
     <string name="pedit_java_runtime">Java 运行环境</string>
     <string name="pedit_renderer">渲染器</string>
     <string name="notif_channel_name">常规</string>
-    <string name="lazy_service_default_title">Mojo 前台服务</string>
+    <string name="lazy_service_default_title">MJ 前台服务</string>
     <string name="mcl_setting_veroption_installed">已安装</string>
     <string name="use_global_default">（使用全局默认设置）</string>
     <string name="default_control">默认控制键布局</string>
@@ -218,12 +217,12 @@
     <string name="main_add_account">添加账户</string>
     <string name="tasks_ongoing">任务正在执行中，请稍候…</string>
     <string name="no_saved_accounts">没有已保存的账户</string>
-    <string name="mc_download_failed">下载 Minecraft 失败！这可能是由于网络连接不良、文件放置错误等造成的。</string>
+
     <string name="xerr_unknown">未知的 Xbox Live API 错误 %d</string>
-    <string name="xerr_no_account">您似乎没有 Xbox Live 账户，请在 https://minecraft.net/ 上登录一次，然后重试。</string>
+
     <string name="xerr_adult_verification">需要成年人验证您的账户。</string>
     <string name="xerr_child">您的账户是儿童账户，需要添加到家庭中方能登录。</string>
-    <string name="minecraft_not_owned">这个账户似乎没有 Minecraft 配置文件。如果您有 Xbox Game Pass，请登录 https://minecraft.net/ 并进行设置。</string>
+
     <string name="xerr_not_available">Xbox Live 在您所在的国家/地区不可用。</string>
     <string name="preference_enable_gyro_title">启用陀螺仪控制</string>
     <string name="preference_enable_gyro_description">启用此功能将允许您通过转动手机来在游戏中转动视角。</string>
@@ -233,7 +232,7 @@
     <string name="preference_gyro_sample_rate_title">陀螺仪采样率</string>
     <string name="preference_gyro_sample_rate_description">如果您在陀螺仪控制上遇到性能问题，请增加此值。</string>
     <string name="microsoft_login_retry_later">您的操作过于频繁，请稍后重试。</string>
-    <string name="storage_required">MojoLauncher 需要连接外部存储，请重新连接并重启应用。</string>
+    <string name="storage_required">MJLauncher 需要连接外部存储，请重新连接并重启应用。</string>
     <string name="mcl_setting_title_buttonallcaps">在按钮标签中仅使用大写字母</string>
     <string name="mcl_setting_subtitle_buttonallcaps">如果您想在按键中显示小写字母，请关闭此设置。</string>
     <string name="preference_shader_dump_title">启用着色器输出</string>
@@ -253,7 +252,7 @@
     <string name="preference_deadzone_scale_title">摇杆死区比例</string>
     <string name="preference_deadzone_scale_description">若摇杆偏移，请调高此选项。</string>
     <string name="preference_force_big_core_title">强制渲染器在大核上运行</string>
-    <string name="preference_force_big_core_desc">强制 Minecraft 渲染线程在大核以最大的频率运行。</string>
+
     <string name="version_select_hint">选择版本</string>
     <string name="forge_dl_progress">正在下载 %s 的安装程序</string>
     <string name="forge_dl_searching">正在搜索 Forge 版本号</string>
@@ -262,7 +261,7 @@
     <string name="forge_dl_select_version">选择 Forge 版本</string>
     <string name="fabric_dl_progress">正在下载 %s 加载器元数据</string>
     <string name="fabric_dl_loader_version">%s 加载器版本</string>
-    <string name="fabric_dl_game_version">Minecraft 版本</string>
+
     <string name="fabric_dl_install">安装</string>
     <string name="fabric_dl_cant_read_meta">读取 %s 加载器元数据失败！请稍后重试。</string>
     <string name="create_profile_vanilla_like_versions">类原版版本</string>
@@ -284,7 +283,7 @@
     <string name="modpack_download_downloading_mods">正在下载模组（%.2fMB / %.2fMB）</string>
     <string name="modpack_download_downloading_mods_fc">正在下载模组（文件 %d 中的 %d）</string>
     <string name="modpack_download_applying_overrides">正在覆盖文件（%d/%d）</string>
-    <string name="modpack_install_notification_title">Mojo 整合包安装器</string>
+    <string name="modpack_install_notification_title">MJ 整合包安装器</string>
     <string name="modpack_install_notification_success">点击此处完成整合包安装</string>
     <string name="modpack_install_notification_data_not_available">模组加载器信息下载失败！</string>
     <string name="modpack_install_modloader_download_failed">模组加载器文件下载失败！</string>
@@ -313,7 +312,7 @@
     <string name="preference_category_miscellaneous">其他设置</string>
     <string name="preference_category_video">视频设置</string>
     <string name="notification_permission_dialog_title">权限请求</string>
-    <string name="notification_permission_dialog_text">MojoLauncher 需要获得通知权限，以防止在您离开应用时停止游戏或模组包的下载。没有这个权限，Android 可能会在您将 MojoLauncher 置于后台模式时关闭您的下载。</string>
+    <string name="notification_permission_dialog_text">MJLauncher 需要获得通知权限，以防止在您离开应用时停止游戏或模组包的下载。没有这个权限，Android 可能会在您将 MJLauncher 置于后台模式时关闭您的下载。</string>
     <string name="notification_permission_toast">您可以随时进入设置来更改您的意愿</string>
     <string name="preference_ask_for_notification_title">允许通知</string>
     <string name="preference_ask_for_notification_description">请点击重新请求通知权限，以确保游戏或整合包的后台下载正常工作。</string>

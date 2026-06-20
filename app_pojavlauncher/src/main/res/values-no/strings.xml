@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition for Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -13,7 +12,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Velg en mod installasjonprogram</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher har uventet krasjet</string>
+    <string name="error_fatal">MJLauncher har uventet krasjet</string>
     <string name="error_no_version">Ingen versjon!</string>
     <string name="error_show_more">Vis mer</string>
     <string name="error_show_less">Vis mindre</string>

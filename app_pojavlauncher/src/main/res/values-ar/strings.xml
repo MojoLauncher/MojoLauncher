@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition for Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -15,7 +14,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">حدد مشغل مودات لتثبيته</string>
     <!-- Error messages -->
-    <string name="error_fatal">لقد توقف MojoLauncher بشكل غير متوقع</string>
+    <string name="error_fatal">لقد توقف MJLauncher بشكل غير متوقع</string>
     <string name="error_no_version">لا يوجد إصدار!</string>
     <string name="error_show_more">اظهر المزيد</string>
     <string name="error_show_less">أظهِر أقل</string>
@@ -149,7 +148,7 @@
     <string name="memory_warning_msg">الكَمَيَّة الحالية من ذاكرة الوصول العشوائي المتاحة للاستخدام (%d) أقل من ذاكرة الوصول العشوائي المحددة (%d)، مما قد يؤدي إلى حدوث أعطال. غير الذاكرة المخصصة إذا توقفت اللعبة.</string>
     <string name="address_memory_warning_msg">الكَمَيَّة الحالية من ذاكرة الوصول العشوائي المتاحة للاستخدام (%d) أقل من ذاكرة الوصول العشوائي المحددة (%d)، مما قد يؤدي إلى حدوث أعطال. غير الذاكرة المخصصة إذا توقفت اللعبة.</string>
     <string name="mcl_memory_allocation">الذاكرة المخصصة للاستخدام</string>
-    <string name="mcl_memory_allocation_subtitle">يتحكم في كَمَيَّة الذاكرة المعطاة لـ Minecraft.</string>
+
     <string name="multirt_runtime_corrupt">بيئة تشغيل Java تالفة</string>
     <string name="multirt_runtime_incompatiblearch">بنية غير متوافقة: %s</string>
     <string name="multirt_config_title">بيئة تشغيل Java</string>
@@ -203,7 +202,7 @@
     <string name="pedit_java_runtime">بيئة تشغيل Java</string>
     <string name="pedit_renderer">عارض الرسوميات</string>
     <string name="notif_channel_name">عام</string>
-    <string name="lazy_service_default_title">خدمة Mojo في المقدمة</string>
+    <string name="lazy_service_default_title">خدمة MJ في المقدمة</string>
     <string name="mcl_setting_veroption_installed">مثبت</string>
     <string name="use_global_default">(استخدم الافتراضي العام)</string>
     <string name="default_control">مخطط التحكم الأفتراضي</string>
@@ -218,12 +217,12 @@
     <string name="main_add_account">أضف حساباً</string>
     <string name="tasks_ongoing">المهام قيد التقدم، يرجى الانتظار</string>
     <string name="no_saved_accounts">لا توجد حسابات محفوظة</string>
-    <string name="mc_download_failed">فشل تنزيل Minecraft! قد يكون ذلك بسبب سوء اتصال الشبكة، الملفات التي تم وضعها بشكل خاطئ، الخ..</string>
+
     <string name="xerr_unknown">خطأ Xbox Live API غير معروف %d</string>
-    <string name="xerr_no_account">لا يبدو أن لديك حساب Xbox Live. الرجاء تسجيل الدخول مرة واحدة على https://minecraft.net/ وحاول مرة أخرى.</string>
+
     <string name="xerr_adult_verification">يحتاج الشخص البالغ إلى التحقق من حسابك.</string>
     <string name="xerr_child">حسابك هو حساب طفل، ويجب إضافته إلى العائلة لتسجيل الدخول.</string>
-    <string name="minecraft_not_owned">يبدو أن هذا الحساب ليس لديه ملف تعريف Minecraft. إذا كان لديك Xbox Game Pass، يرجى تسجيل الدخول على https://minecraft.net/ و إعداده.</string>
+
     <string name="xerr_not_available">Xbox Live غير متوفر في بلدك</string>
     <string name="preference_enable_gyro_title">تمكين التحكم بالجيروسكوب</string>
     <string name="preference_enable_gyro_description">هذا الخيار سيجعلك تتحرك باللعبة عن طريق تحريك هاتفك.</string>
@@ -233,7 +232,7 @@
     <string name="preference_gyro_sample_rate_title">معدل أخذ العينات من الجايرسكوب</string>
     <string name="preference_gyro_sample_rate_description">اذا كان لديك مشاكل أداء في الجايروسكوب، زد هذا الخيار.</string>
     <string name="microsoft_login_retry_later">طلبات كثيرة جداً، الرجاء المحاولة مرة أخرى لاحقاً.</string>
-    <string name="storage_required">يتطلب MojoLauncher أن تكون وحدة التخزين الخارجية متصلة. الرجاء إعادة الاتصال بها وإعادة تشغيل التطبيق.</string>
+    <string name="storage_required">يتطلب MJLauncher أن تكون وحدة التخزين الخارجية متصلة. الرجاء إعادة الاتصال بها وإعادة تشغيل التطبيق.</string>
     <string name="mcl_setting_title_buttonallcaps">استخدم الأحرف الكبيرة فقط في اسماء الأزرار</string>
     <string name="mcl_setting_subtitle_buttonallcaps">عطل هذا اذا كنت تريد إستخدام الأحرف الصغيرة.</string>
     <string name="preference_shader_dump_title">تمكين افراغ الشادر</string>
@@ -253,7 +252,7 @@
     <string name="preference_deadzone_scale_title">مقياس كمية تحرك عصا التحكم</string>
     <string name="preference_deadzone_scale_description">قم بالزيادة إذا انحدرت عصا التحكم.</string>
     <string name="preference_force_big_core_title">إجبار عارض الرسوميات على تشغيل النواة الكبيرة</string>
-    <string name="preference_force_big_core_desc">يجبر عارض رسوميات Minecraft للعمل على نواة ذات التردد الأعلى على اقصى تردد لها.</string>
+
     <string name="version_select_hint">إختر إصدار</string>
     <string name="forge_dl_progress">تنزيل المثبت ل %s</string>
     <string name="forge_dl_searching">البحث عن رقم إصدار Forge</string>
@@ -262,7 +261,7 @@
     <string name="forge_dl_select_version">إختر إصدار Forge</string>
     <string name="fabric_dl_progress">تنزيل البيانات التعريفية لمحمل %s</string>
     <string name="fabric_dl_loader_version">%s إصدار المحمل</string>
-    <string name="fabric_dl_game_version">إصدار Minecraft</string>
+
     <string name="fabric_dl_install">تثبيت</string>
     <string name="fabric_dl_cant_read_meta">فشل قراءة البيانات التعريفية ل%s. الرجاء المحاولة في وقت لاحق.</string>
     <string name="create_profile_vanilla_like_versions">الإصدارات الشبيهة بالVanilla</string>
@@ -284,7 +283,7 @@
     <string name="modpack_download_downloading_mods">تحميل المودات (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">تحميل المودات (الملف %d من %d)</string>
     <string name="modpack_download_applying_overrides">تطبيق التجاوزات (%d/%d)</string>
-    <string name="modpack_install_notification_title">Mojo Modpack Installerⁿ</string>
+    <string name="modpack_install_notification_title">MJ Modpack Installerⁿ</string>
     <string name="modpack_install_notification_success">انقر هنا لإنهاء تثبيت modpack</string>
     <string name="modpack_install_notification_data_not_available">Не удалось загрузить информацию о загрузчике модов</string>
     <string name="modpack_install_modloader_download_failed">فشل تنزيل ملفات محمل المودات</string>
@@ -310,7 +309,7 @@
     <string name="preference_category_miscellaneous">أعدادات متنوعة</string>
     <string name="preference_category_video">إعدادات الفيديو</string>
     <string name="notification_permission_dialog_title">طلب السماح</string>
-    <string name="notification_permission_dialog_text">MojoLauncher requires a permission to post notifications to prevent game/modpack downloads from stopping when you leave the app. Without this permission, Android may shut down your downloads when you put MojoLauncher in background mode.</string>
+    <string name="notification_permission_dialog_text">MJLauncher requires a permission to post notifications to prevent game/modpack downloads from stopping when you leave the app. Without this permission, Android may shut down your downloads when you put MJLauncher in background mode.</string>
     <string name="notification_permission_toast">O</string>
     <string name="preference_ask_for_notification_title">السماح بالإشعارات</string>
     <string name="preference_ask_for_notification_description">.</string>

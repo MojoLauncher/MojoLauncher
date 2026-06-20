@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition для Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -14,7 +13,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Вибрати інсталятор моду</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher був зупинений у результаті збою</string>
+    <string name="error_fatal">MJLauncher був зупинений у результаті збою</string>
     <string name="error_no_version">Версію не знайдено!</string>
     <string name="error_show_more">Розгорнути</string>
     <string name="error_show_less">Згорнути</string>
@@ -146,7 +145,7 @@
     <string name="customctrl_absolute_tracking">Абсолютне відстеження пальців</string>
     <string name="memory_warning_msg">Поточна кількість вільної оперативної пам\'яті (%d) менша, ніж виділена оперативна пам\'ять (%d), що може призвести до збоїв. Змініть кількість оперативної пам\'яті, якщо гра вилетить.</string>
     <string name="mcl_memory_allocation">Виділення пам\'яті</string>
-    <string name="mcl_memory_allocation_subtitle">Контролює, скільки пам’яті надається Minecraft.</string>
+
     <string name="multirt_runtime_corrupt">Java Runtime пошкоджено</string>
     <string name="multirt_runtime_incompatiblearch">Несумісна архітектура: %s</string>
     <string name="multirt_config_title">Середовища виконання Java</string>
@@ -200,7 +199,7 @@
     <string name="pedit_java_runtime">Середовище Java</string>
     <string name="pedit_renderer">Візуалізатор</string>
     <string name="notif_channel_name">Загальне</string>
-    <string name="lazy_service_default_title">Фонова Служба Mojo</string>
+    <string name="lazy_service_default_title">Фонова Служба MJ</string>
     <string name="mcl_setting_veroption_installed">Встановлено</string>
     <string name="use_global_default">(Використовувати за стандартом)</string>
     <string name="default_control">Стандартне керування</string>
@@ -215,12 +214,12 @@
     <string name="main_add_account">Додати обл. запис</string>
     <string name="tasks_ongoing">Завдання виконуються, зачекайте</string>
     <string name="no_saved_accounts">Немає збережених обл. записів</string>
-    <string name="mc_download_failed">Не вдалося завантажити Minecraft! Це може траплятися у випадку поганого зв\'язку з мережею, неправильно розміщеними файлами, тощо</string>
+
     <string name="xerr_unknown">Невідома помилка Xbox Live API! %d</string>
-    <string name="xerr_no_account">Схоже у вас немає Xbox Live аккаунту. Будь ласка, увійдіть ще раз на https://minecraft.net та спробуйте знову.</string>
+
     <string name="xerr_adult_verification">Доросла людина має підтвердити ваш обліковий запис.</string>
     <string name="xerr_child">Ваш обліковий запис є обліковим записом для дитини, і для входу в нього потрібно додати його до сім’ї.</string>
-    <string name="minecraft_not_owned">Схоже, цей обліковий запис не має купленої гри Minecraft. Якщо у вас є Xbox Game Pass, будь ласка, увійдіть на https://minecraft.net/ і налаштуйте його.</string>
+
     <string name="xerr_not_available">Xbox Live недоступний у вашому регіоні</string>
     <string name="preference_enable_gyro_title">Увімкнути гіроскоп</string>
     <string name="preference_enable_gyro_description">Увімкнувши цю функцію, ви зможете повертатися в грі, просто повернувши телефон.</string>
@@ -230,7 +229,7 @@
     <string name="preference_gyro_sample_rate_title">Частота оновлення гіроскопа</string>
     <string name="preference_gyro_sample_rate_description">Якщо у вас виникають проблеми з гіроскопом, збільште цей параметр.</string>
     <string name="microsoft_login_retry_later">Занадто багато запитів, спробуйте пізніше.</string>
-    <string name="storage_required">MojoLauncher потрібен дозвіл для доступу в сховище, дайте цей доступ та перезапустіть лаунчер</string>
+    <string name="storage_required">MJLauncher потрібен дозвіл для доступу в сховище, дайте цей доступ та перезапустіть лаунчер</string>
     <string name="mcl_setting_title_buttonallcaps">Використовувати лише великі літери в назвах кнопок</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Вимкніть, якщо бажаєте використовувати малі літери в елементах керування.</string>
     <string name="create_instance">Створити нову версію</string>
@@ -251,7 +250,7 @@
     <string name="preference_deadzone_scale_title">Розмір мертвої зони джойстика</string>
     <string name="preference_deadzone_scale_description">Якщо джойтик зміщується, збільште її.</string>
     <string name="preference_force_big_core_title">Змусити візуалізатор працювати на великому ядрі</string>
-    <string name="preference_force_big_core_desc">Змушує потік візуалізації Minecraft працювати на ядрі з найвищою макс. частотою.</string> <!-- Max reference!?!?!? -->
+
     <string name="version_select_hint">Оберіть версію</string>
     <string name="forge_dl_progress">Завантаження інсталятора для %s</string>
     <string name="forge_dl_searching">Пошук номера версії Forge</string>
@@ -262,7 +261,7 @@
     <string name="neoforge_dl_select_version">Вибір версії Neoforge</string>
     <string name="fabric_dl_progress">Завантаження %s інсталятора</string>
     <string name="fabric_dl_loader_version">Версія лоадера %s</string>
-    <string name="fabric_dl_game_version">Версія Minecraft</string>
+
     <string name="fabric_dl_install">Встановити</string>
     <string name="fabric_dl_cant_read_meta">Не вдалося зчитати метадані лоадера %s. Будь ласка, повторіть спробу пізніше.</string>
     <string name="fabric_dl_cant_read_meta2">Не вдалося зчитати метадані Fabric\'а</string>
@@ -321,7 +320,7 @@
     <string name="preference_category_miscellaneous">Інші параметри</string>
     <string name="preference_category_video">Налаштування відео</string>
     <string name="notification_permission_dialog_title">Запит на дозвіл</string>
-    <string name="notification_permission_dialog_text">MojoLauncher попросить дозвіл на сповіщення, це потрібно щоб Android не закривав лаунчер у фоновому режимі, щоб не перервати завантаження.</string>
+    <string name="notification_permission_dialog_text">MJLauncher попросить дозвіл на сповіщення, це потрібно щоб Android не закривав лаунчер у фоновому режимі, щоб не перервати завантаження.</string>
     <string name="notification_permission_toast">Ви завжди зможете змінити це в налаштуваннях</string>
     <string name="preference_ask_for_notification_title">Дозволити сповіщення</string>
     <string name="preference_ask_for_notification_description">Натисніть, щоб повторно запитати дозвіл на сповіщення, необхідний для коректної роботи фонових завантажень гри/модпаку.</string>
@@ -379,7 +378,7 @@
     <string name="mcl_button_social_media">Telegram</string>
     <string name="ltw_render_distance_warning_msg">Ваше відеоядро не може візуалізовувати більше 7 чанків без Sodium чи йому подібних модів. Дистанція промальовкий</string>
     <string name="mcl_button_open_directory">Відкрити папку гри</string>
-    <string name="social_media_invite">https://t.me/mojolauncher</string>
+    <string name="social_media_invite">https://t.me/MJLauncher</string>
     <string name="local_login_bad_username_title">Недопустиме ім\'я користувача</string>
     <string name="local_login_bad_username_text">Ім\'я користувача має мати як мінімум від 3-х до 16 символів, і має мати лише латинські літери, цифри 0-9 і нижнє підкреслення</string>
     <string name="quick_setting_title">Швидкі налаштування</string>

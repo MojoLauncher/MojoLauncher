@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition для Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -15,7 +14,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Выберите установщик мода</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher был остановлен в результате сбоя</string>
+    <string name="error_fatal">MJLauncher был остановлен в результате сбоя</string>
     <string name="error_no_version">Нет версий!</string>
     <string name="error_show_more">Развернуть</string>
     <string name="error_show_less">Свернуть</string>
@@ -214,7 +213,7 @@
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Визуализатор</string>
     <string name="notif_channel_name">Общее</string>
-    <string name="lazy_service_default_title">Активная служба Mojo</string>
+    <string name="lazy_service_default_title">Активная служба MJ</string>
     <string name="mcl_setting_veroption_installed">Установленные</string>
     <string name="use_global_default">(Как везде)</string>
     <string name="default_control">Раскладка управления</string>
@@ -229,12 +228,12 @@
     <string name="main_add_account">Добавить учётную запись</string>
     <string name="tasks_ongoing">Производится подготовка, подождите…</string>
     <string name="no_saved_accounts">Нет сохранённых учётных записей</string>
-    <string name="mc_download_failed">Не удалось загрузить Minecraft! Это может возникать из-за медленного интернет-соединения или ошибок в размещении файлов.</string>
+
     <string name="xerr_unknown">Неизвестная ошибка API Xbox Live %d</string>
-    <string name="xerr_no_account">Похоже, у вас нет учётной записи Xbox Live. Единожды войдите на https://minecraft.net и попробуйте ещё раз.</string>
+
     <string name="xerr_adult_verification">Вашу учётную запись должен подтвердить взрослый представитель.</string>
     <string name="xerr_child">Для входа в игру учётная запись ребёнка должна быть добавлена в семью.</string>
-    <string name="minecraft_not_owned">Похоже, к вашей учётной записи не привязан профиль Minecraft с лицензией. Если у вас есть подписка Xbox Game Pass, войдите на https://minecraft.net и настройте её.</string>
+
     <string name="xerr_not_available">Xbox Live недоступен в вашей стране</string>
     <string name="preference_enable_gyro_title">Управление наклоном</string>
     <string name="preference_enable_gyro_description">Позволяет управлять положением камеры в игре путём вращения устройства.</string>
@@ -244,7 +243,7 @@
     <string name="preference_gyro_sample_rate_title">Интервал опроса гироскопа</string>
     <string name="preference_gyro_sample_rate_description">Увеличьте, если управление наклоном снижает производительность.</string>
     <string name="microsoft_login_retry_later">Слишком много запросов, попробуйте ещё раз позже.</string>
-    <string name="storage_required">MojoLauncher требует подключения к внешнему хранилищу. Переподключите его и перезапустите приложение.</string>
+    <string name="storage_required">MJLauncher требует подключения к внешнему хранилищу. Переподключите его и перезапустите приложение.</string>
     <string name="mcl_setting_title_buttonallcaps">Заглавные буквы на кнопках</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Отключите, если хотите использовать строчные буквы в своей раскладке управления.</string>
     <string name="create_instance">Создать новую установку</string>
@@ -300,7 +299,7 @@
     <string name="modpack_download_downloading_mods">Загрузка модов (%.2f МБ / %.2f МБ)</string>
     <string name="modpack_download_downloading_mods_fc">Загрузка модов (файл %d из %d)</string>
     <string name="modpack_download_applying_overrides">Перезапись параметров (%d/%d)</string>
-    <string name="modpack_install_notification_title">Установка сборки MojoLauncher</string>
+    <string name="modpack_install_notification_title">Установка сборки MJLauncher</string>
     <string name="modpack_install_notification_success">Нажмите для завершения установки сборки</string>
     <string name="modpack_install_notification_data_not_available">Не удалось загрузить информацию о загрузчике модов</string>
     <string name="modpack_install_modloader_download_failed">Не удалось загрузить файлы загрузчика модов</string>
@@ -330,7 +329,7 @@
     <string name="preference_category_miscellaneous">Другие настройки</string>
     <string name="preference_category_video">Настройки графики</string>
     <string name="notification_permission_dialog_title">Запрос разрешения</string>
-    <string name="notification_permission_dialog_text">Лаунчеру требуется разрешение на отправку уведомлений, чтобы предотвратить остановку игры/загрузки её данных при сворачивании приложения. Без этого разрешения Android может принудительно завершить работу MojoLauncher при переходе в фоновый режим.</string>
+    <string name="notification_permission_dialog_text">Лаунчеру требуется разрешение на отправку уведомлений, чтобы предотвратить остановку игры/загрузки её данных при сворачивании приложения. Без этого разрешения Android может принудительно завершить работу MJLauncher при переходе в фоновый режим.</string>
     <string name="notification_permission_toast">Выбор можно изменить позже, перейдя в настройки.</string>
     <string name="preference_ask_for_notification_title">Разрешить уведомления</string>
     <string name="preference_ask_for_notification_description">Нажмите, чтобы ещё раз запросить разрешение на вывод уведомлений. Они нужны для правильной загрузки игры и сборок модов в фоне.</string>
@@ -398,7 +397,7 @@
     <string name="modloader_dl_install_fabric_instance">Установка с Fabric</string>
     <string name="modloader_dl_install_quilt_instance">Установка с Quilt</string>
     <string name="modloader_dl_install_forge_instance">Установка с Forge</string>
-    <string name="social_media_invite" translatable="false">https://t.me/mojolauncher</string>
+    <string name="social_media_invite" translatable="false">https://t.me/MJLauncher</string>
     <string name="compat_version_not_supported">Ваше устройство не может запустить эту версию поскольку LTW не поддерживается</string>
     <string name="compat_sodium_not_supported">Ваше устройство не может запустить Sodium на этой версии поскольку LTW не поддерживается</string>
     <string name="oauth_unknown_error">Неизвестная ошибка авторизации</string>

@@ -2,7 +2,7 @@ package net.kdt.pojavlaunch.utils;
 
 import android.util.Log;
 
-import net.kdt.pojavlaunch.JMinecraftVersionList;
+import net.kdt.pojavlaunch.JVersionList;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
@@ -15,7 +15,7 @@ public class OldVersionsUtils {
     /** Lower minecraft versions fare better with opengl 1
      * @param version The version about to be launched
      */
-    public static void selectOpenGlVersion(JMinecraftVersionList.Version version){
+    public static void selectOpenGlVersion(JVersionList.Version version){
         // 1309989600 is 2011-07-07  2011-07-07T22:00:00+00:00
         String creationTime = version.time;
         if(!Tools.isValidString(creationTime)){

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition για Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -14,7 +13,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Επιλέξτε ένα πρόγραμμα εγκατάστασης mod</string>
     <!-- Error messages -->
-    <string name="error_fatal">Ο MojoLauncher κατέρρευσε απροσδόκητα</string>
+    <string name="error_fatal">Ο MJLauncher κατέρρευσε απροσδόκητα</string>
     <string name="error_no_version">Καμία έκδοση!</string>
     <string name="error_show_more">Εμφάνιση περισσότερων</string>
     <string name="error_show_less">Εμφάνιση λιγότερων</string>
@@ -146,7 +145,7 @@
     <string name="customctrl_absolute_tracking">Απόλυτη παρακολούθηση δακτύλων</string>
     <string name="memory_warning_msg">Το τρέχον ποσό της διαθέσιμης μνήμης RAM (%d) είναι μικρότερο από την κατανεμημένη RAM (%d), το οποίο μπορεί να οδηγήσει σε καταρρεύσεις. Αλλάξτε την κατανομή αν το παιχνίδι καταρρεύσει.</string>
     <string name="mcl_memory_allocation">Κατανομή μνήμης</string>
-    <string name="mcl_memory_allocation_subtitle">Ελέγχει πόση μνήμη δίνεται στο Minecraft.</string>
+
     <string name="multirt_runtime_corrupt">Κατεστραμμένο Java Runtime</string>
     <string name="multirt_runtime_incompatiblearch">Ασυμβατότητα μικροαρχιτεκτονικής: %s</string>
     <string name="multirt_config_title">Έκδοση Java</string>
@@ -199,7 +198,7 @@
     <string name="pedit_java_runtime">Έκδοση Java</string>
     <string name="pedit_renderer">Απόδοση</string>
     <string name="notif_channel_name">Γενικά</string>
-    <string name="lazy_service_default_title">Υπηρεσία Προσκήνιου Mojo</string>
+    <string name="lazy_service_default_title">Υπηρεσία Προσκήνιου MJ</string>
     <string name="mcl_setting_veroption_installed">Εγκατεστημένο</string>
     <string name="use_global_default">(Χρήση της γενικής προεπιλογής)</string>
     <string name="default_control">Προεπιλεγμένος χάρτης ελέγχου</string>
@@ -214,12 +213,12 @@
     <string name="main_add_account">Προσθήκη λογαριασμού</string>
     <string name="tasks_ongoing">Οι εργασίες είναι σε εξέλιξη, παρακαλώ περιμένετε</string>
     <string name="no_saved_accounts">Δεν υπάρχουν αποθηκευμένοι λογαριασμοί</string>
-    <string name="mc_download_failed">Αποτυχία λήψης του Minecraft! Αυτό μπορεί να οφείλεται σε κακή σύνδεση δικτύου, εσφαλμένα τοποθετημένα αρχεία, κλπ..</string>
+
     <string name="xerr_unknown">Άγνωστο σφάλμα Xbox Live API %d</string>
-    <string name="xerr_no_account">Δεν φαίνεται να έχετε λογαριασμό Xbox Live. Παρακαλούμε συνδεθείτε μία φορά στο https://minecraft.net/ και προσπαθήστε ξανά.</string>
+
     <string name="xerr_adult_verification">Ένας ενήλικας πρέπει να επαληθεύσει τον λογαριασμό σας.</string>
     <string name="xerr_child">Ο λογαριασμός σας είναι ένας λογαριασμός παιδιού, και πρέπει να προστεθεί σε μια οικογένεια για να συνδεθείτε.</string>
-    <string name="minecraft_not_owned">Φαίνεται ότι αυτός ο λογαριασμός δεν έχει προφίλ Minecraft. Αν έχετε το Xbox Game Pass, παρακαλώ συνδεθείτε στο https://minecraft.net/ και ρυθμίστε το.</string>
+
     <string name="xerr_not_available">Το Xbox Live δεν είναι διαθέσιμο στη χώρα σας</string>
     <string name="preference_enable_gyro_title">Ενεργοποίηση εξομάλυνσης γυροσκοπίου</string>
     <string name="preference_enable_gyro_description">Ενεργοποιώντας το, θα σας επιτρέψει να γυρίσετε τον χαρακτήρα σας μέσα στο παιχνίδι γυρίζοντας το τηλέφωνό σας.</string>
@@ -229,7 +228,7 @@
     <string name="preference_gyro_sample_rate_title">Ρυθμός δειγματοληψίας γυροσκοπίου</string>
     <string name="preference_gyro_sample_rate_description">Εάν έχετε προβλήματα απόδοσης με τους ελέγχους γυροσκοπίου, αυξήστε αυτό.</string>
     <string name="microsoft_login_retry_later">Πάρα πολλά αιτήματα, παρακαλώ προσπαθήστε ξανά αργότερα.</string>
-    <string name="storage_required">Το MojoLauncher απαιτεί την προσάρτηση εξωτερικού χώρου. Παρακαλώ επανασυνδέστε το και επανεκκινήστε την εφαρμογή.</string>
+    <string name="storage_required">Το MJLauncher απαιτεί την προσάρτηση εξωτερικού χώρου. Παρακαλώ επανασυνδέστε το και επανεκκινήστε την εφαρμογή.</string>
     <string name="mcl_setting_title_buttonallcaps">Χρησιμοποιήστε μόνο κεφαλαία γράμματα σε ετικέτες κουμπιών</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Απενεργοποιήστε το αν θέλετε να χρησιμοποιήσετε πεζά γράμματα στα χειριστήριά σας.</string>
     <string name="preference_shader_dump_title">Ενεργοποίηση shader dumping</string>
@@ -248,7 +247,7 @@
     <string name="preference_deadzone_scale_title">Κλίμακα νεκρών ζωνών Joystick</string>
     <string name="preference_deadzone_scale_description">Αυξήστε το αν το joystick παρασύρεται.</string>
     <string name="preference_force_big_core_title">Εξαναγκασμός του renderer να τρέξει στον μεγάλο πυρήνα</string>
-    <string name="preference_force_big_core_desc">Εξαναγκάζει το νήμα Minecraft να εκτελείται στον πυρήνα με την υψηλότερη μέγιστη συχνότητα.</string>
+
     <string name="version_select_hint">Επιλέξτε μια έκδοση</string>
     <string name="forge_dl_progress">Λήψη εγκαταστάτη για %s</string>
     <string name="forge_dl_searching">Αναζήτηση αριθμού έκδοσης του Forge</string>
@@ -257,7 +256,7 @@
     <string name="forge_dl_select_version">Επιλέξτε έκδοση Forge</string>
     <string name="fabric_dl_progress">Λήψη μεταδεδομένων φορτωτή %s</string>
     <string name="fabric_dl_loader_version">Έκδοση φορτωτή %s</string>
-    <string name="fabric_dl_game_version">Έκδοση Minecraft</string>
+
     <string name="fabric_dl_install">Εγκατάσταση</string>
     <string name="fabric_dl_cant_read_meta">Αποτυχία ανάγνωσης μεταδεδομένων φορτωτή %s. Παρακαλώ προσπαθήστε ξανά αργότερα.</string>
     <string name="create_profile_vanilla_like_versions">Σχεδόν κανονικές εκδόσεις</string>
@@ -279,7 +278,7 @@
     <string name="modpack_download_downloading_mods">Λήψη mods (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Λήψη mods (Αρχείο %d από %d)</string>
     <string name="modpack_download_applying_overrides">Εφαρμογή παρακάμψεων (%d/%d)</string>
-    <string name="modpack_install_notification_title">Mojo Modpack Installer</string>
+    <string name="modpack_install_notification_title">MJ Modpack Installer</string>
     <string name="modpack_install_notification_success">Κάντε κλικ εδώ για να ολοκληρώσετε την εγκατάσταση modpack</string>
     <string name="modpack_install_notification_data_not_available">Αποτυχία λήψης πληροφοριών για το mod loader</string>
     <string name="modpack_install_modloader_download_failed">Αποτυχία λήψης των αρχείων του mod loader</string>
@@ -308,7 +307,7 @@
     <string name="preference_category_miscellaneous">Διάφορες ρυθμίσεις</string>
     <string name="preference_category_video">Ρυθμίσεις βίντεο</string>
     <string name="notification_permission_dialog_title">Αίτημα άδειας</string>
-    <string name="notification_permission_dialog_text">Το MojoLauncher απαιτεί την άδεια να δημοσιεύει ειδοποιήσεις για να αποτρέψει τη διακοπή λήψεων παιχνιδιού/modpacks όταν φεύγετε από την εφαρμογή. Χωρίς αυτήν την άδεια, το Android μπορεί να τερματίσει τις λήψεις σας όταν βάζετε το MojoLauncher στη λειτουργία παρασκηνίου.</string>
+    <string name="notification_permission_dialog_text">Το MJLauncher απαιτεί την άδεια να δημοσιεύει ειδοποιήσεις για να αποτρέψει τη διακοπή λήψεων παιχνιδιού/modpacks όταν φεύγετε από την εφαρμογή. Χωρίς αυτήν την άδεια, το Android μπορεί να τερματίσει τις λήψεις σας όταν βάζετε το MJLauncher στη λειτουργία παρασκηνίου.</string>
     <string name="notification_permission_toast">Μπορείτε πάντα να αλλάξετε γνώμη αργότερα πηγαίνοντας στις Ρυθμίσεις</string>
     <string name="preference_ask_for_notification_title">Επιτροπή ειδοποιήσεων</string>
     <string name="preference_ask_for_notification_description">Κάντε κλικ για να ζητήσετε ξανά την άδεια ειδοποίησης, που απαιτείται για να λειτουργούν σωστά οι λήψεις παιχνιδιού/modpack.</string>

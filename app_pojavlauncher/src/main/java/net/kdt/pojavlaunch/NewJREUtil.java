@@ -150,7 +150,7 @@ public class NewJREUtil {
     }
 
 
-    public static void installNewJreIfNeeded(AssetManager assetManager, JMinecraftVersionList.Version versionInfo) throws IOException, RuntimeSelectionException {
+    public static void installNewJreIfNeeded(AssetManager assetManager, JVersionList.Version versionInfo) throws IOException, RuntimeSelectionException {
         //Now we have the reliable information to check if our runtime settings are good enough
         if (versionInfo.javaVersion == null || versionInfo.javaVersion.component.equalsIgnoreCase("jre-legacy")) return;
 

@@ -61,7 +61,7 @@ import net.kdt.pojavlaunch.services.GameService;
 import net.kdt.pojavlaunch.tasks.AsyncAssetManager;
 import net.kdt.pojavlaunch.utils.JREUtils;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
-import net.kdt.pojavlaunch.authenticator.accounts.MinecraftAccount;
+import net.kdt.pojavlaunch.authenticator.accounts.Account;
 import net.kdt.pojavlaunch.utils.RendererCompatUtil;
 import net.kdt.pojavlaunch.utils.jre.GameRunner;
 
@@ -76,11 +76,11 @@ import git.artdeell.dnbootstrap.glfw.GLFWCursorView;
 import git.artdeell.mojo.R;
 
 public class MainActivity extends BaseActivity implements ControlButtonMenuListener, EditorExitable, ServiceConnection {
-    public static final String INTENT_MINECRAFT_VERSION = "intent_version";
-    public static final String INTENT_MINECRAFT_CLASSPATH = "intent_classpath";
+    public static final String INTENT_LAUNCH_VERSION = "intent_version";
+    public static final String INTENT_LAUNCH_CLASSPATH = "intent_classpath";
 
     public static TouchCharInput touchCharInput;
-    private MinecraftGLSurface minecraftGLView;
+    private LauncherGLSurface launcherGLView;
     private static WeakReference<GLFWCursorView> weakCursor;
     private GLFWCursorView cursor;
     private LoggerView loggerView;
@@ -93,7 +93,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     private volatile AndroidClipboardProvider mClipboardProvider;
 
     Instance instance;
-    MinecraftAccount minecraftAccount;
+    Account account;
 
     private ArrayAdapter<String> gameActionArrayAdapter;
     private AdapterView.OnItemClickListener gameActionClickListener;
@@ -110,7 +110,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         instance = Instances.loadSelectedInstance();
-        minecraftAccount = Accounts.getCurrent();
+        account = Accounts.getCurrent();
         if(instance == null) {
             Toast.makeText(this, R.string.instance_dir_missing, Toast.LENGTH_LONG).show();
             finish();
@@ -123,7 +123,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         // Start the service a bit early
         ContextCompat.startForegroundService(this, gameServiceIntent);
         initLayout(R.layout.activity_basemain);
-        GLFW.addGrabListener(minecraftGLView);
+        GLFW.addGrabListener(launcherGLView);
 
         mGyroControl = new GyroControl(this);
 
@@ -142,9 +142,9 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         // Make keyboard pan the activity so the user sees what they're typing
         ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (view, insets) -> {
-            if(minecraftGLView.mSurface == null)
+            if(launcherGLView.mSurface == null)
                 return insets;
-            ViewPropertyAnimator animSurface = minecraftGLView.mSurface.animate()
+            ViewPropertyAnimator animSurface = launcherGLView.mSurface.animate()
                     .setDuration(100);
             ViewPropertyAnimator animCursor = cursor.animate()
                     .setDuration(100);
@@ -166,10 +166,10 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             int translationY;
             // Autopanning (if keyboardPan wasn't clicked)
             if(!mForceFullPanning) {
-                int cursorY = (int) (GLFW.cursorY * minecraftGLView.mSurface.getHeight()) + 100;
+                int cursorY = (int) (GLFW.cursorY * launcherGLView.mSurface.getHeight()) + 100;
                 translationY = Tools.getTranslationFromCursorY(
                         cursorY,
-                        minecraftGLView.mSurface.getHeight(),
+                        launcherGLView.mSurface.getHeight(),
                         mImeHeight,
                         0
                 );
@@ -227,10 +227,10 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             touchCharInput.setCharacterSender(new LwjglCharSender());
 
             Bundle extras = Objects.requireNonNull(getIntent().getExtras());
-            String version = extras.getString(INTENT_MINECRAFT_VERSION);
-            File[] classpath = (File[]) extras.getSerializable(INTENT_MINECRAFT_CLASSPATH);
+            String version = extras.getString(INTENT_LAUNCH_VERSION);
+            File[] classpath = (File[]) extras.getSerializable(INTENT_LAUNCH_CLASSPATH);
 
-            setTitle("Minecraft " + version);
+            setTitle("MojoLauncher (" + version + ")");
 
             // Menu
             gameActionArrayAdapter = new ArrayAdapter<>(this,
@@ -249,7 +249,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             navDrawer.setOnItemClickListener(gameActionClickListener);
             drawerLayout.closeDrawers();
 
-            minecraftGLView.setSurfaceReadyListener(() -> {
+            launcherGLView.setSurfaceReadyListener(() -> {
                 try {
                     Tools.runOnUiThread(() -> { if(PREF_VIRTUAL_MOUSE_START) cursor.setVisibility(View.VISIBLE); });
                     runCraft(version, classpath);
@@ -292,7 +292,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     /** Boilerplate binding */
     private void bindValues(){
         mControlLayout = findViewById(R.id.main_control_layout);
-        minecraftGLView = findViewById(R.id.main_game_render_view);
+        launcherGLView = findViewById(R.id.main_game_render_view);
         cursor = findViewById(R.id.main_touchpad);
         weakCursor = new WeakReference<>(cursor);
         drawerLayout = findViewById(R.id.main_drawer_options);
@@ -356,7 +356,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         mControlLayout.requestLayout();
         mControlLayout.post(()->{
             // Child of mControlLayout, so refreshing size here is correct
-            minecraftGLView.refreshSize();
+            launcherGLView.refreshSize();
             mControlLayout.refreshControlButtonPositions();
         });
     }
@@ -364,8 +364,8 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        if(minecraftGLView != null)  // Useful when backing out of the app
-            Tools.MAIN_HANDLER.postDelayed(() -> minecraftGLView.refreshSize(), 500);
+        if(launcherGLView != null)  // Useful when backing out of the app
+            Tools.MAIN_HANDLER.postDelayed(() -> launcherGLView.refreshSize(), 500);
     }
 
     @Override
@@ -397,7 +397,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         Logger.appendToLog("--------- Starting game with Launcher Debug!");
         Tools.printLauncherInfo(versionId, instance.getLaunchArgs(), renderer);
         JREUtils.redirectAndPrintJRELog();
-        GameRunner.launchMinecraft(this, minecraftAccount, instance, versionId, classpath, renderer);
+        GameRunner.launchGame(this, account, instance, versionId, classpath, renderer);
         //Note that we actually stall in the above function, even if the game crashes. But let's be safe.
         Tools.runOnUiThread(()-> mServiceBinder.isActive = false);
     }
@@ -429,7 +429,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             mQuickSettingSideDialog = new QuickSettingSideDialog(this, mControlLayout) {
                 @Override
                 public void onResolutionChanged() {
-                    minecraftGLView.refreshSize();
+                    launcherGLView.refreshSize();
                     mHotbarView.onResolutionChanged();
                 }
 
@@ -478,7 +478,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             return super.dispatchKeyEvent(event);
         }
         boolean handleEvent;
-        if(!(handleEvent = minecraftGLView.processKeyEvent(event))) {
+        if(!(handleEvent = launcherGLView.processKeyEvent(event))) {
             if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && !touchCharInput.isEnabled()) {
                 if(event.getAction() != KeyEvent.ACTION_UP) return true; // We eat it anyway
                 CallbackBridge.sendKeyPress(LwjglGlfwKeycode.GLFW_KEY_ESCAPE);
@@ -522,7 +522,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     public void onServiceConnected(ComponentName name, IBinder service) {
         GameService.LocalBinder localBinder = (GameService.LocalBinder) service;
         mServiceBinder = localBinder;
-        minecraftGLView.start(localBinder.isActive, cursor);
+        launcherGLView.start(localBinder.isActive, cursor);
         localBinder.isActive = true;
     }
 
@@ -549,7 +549,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     @Override
     public boolean dispatchTrackballEvent(MotionEvent ev) {
         if(Tools.isAndroid8OrHigher() && checkCaptureDispatchConditions(ev))
-            return minecraftGLView.dispatchCapturedPointerEvent(ev);
+            return launcherGLView.dispatchCapturedPointerEvent(ev);
         else return super.dispatchTrackballEvent(ev);
     }
 }

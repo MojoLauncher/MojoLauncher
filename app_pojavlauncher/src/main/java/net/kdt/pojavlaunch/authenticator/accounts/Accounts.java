@@ -18,10 +18,10 @@ import java.util.UUID;
 public class Accounts {
 	private static final String PROFILE_PREF_FILE = "selected_account_file";
 
-	public final List<MinecraftAccount> accounts;
+	public final List<Account> accounts;
 	public final int selectionIndex;
 
-	private Accounts(List<MinecraftAccount> accounts, int selectionIndex) {
+	private Accounts(List<Account> accounts, int selectionIndex) {
         this.accounts = accounts;
         this.selectionIndex = selectionIndex;
     }
@@ -34,10 +34,10 @@ public class Accounts {
 		File[] accountFiles = accountsDir.listFiles();
 		if(accountFiles == null) throw new IOException("Failed to create account directory");
 		String selectedAccount = getSelectedAccount();
-		ArrayList<MinecraftAccount> accounts = new ArrayList<>(accountFiles.length);
+		ArrayList<Account> accounts = new ArrayList<>(accountFiles.length);
 		int selectedAccountIdx = 0;
 		for(File accFile : accountFiles) {
-			MinecraftAccount account = loadAccount(accFile);
+			Account account = loadAccount(accFile);
 			if(account == null) continue;
 			accounts.add(account);
 			if(accFile.getName().equals(selectedAccount)) {
@@ -48,10 +48,10 @@ public class Accounts {
 		return new Accounts(Collections.unmodifiableList(accounts), selectedAccountIdx);
 	}
 
-	private static MinecraftAccount loadAccount(File source) {
-		MinecraftAccount acc;
+	private static Account loadAccount(File source) {
+		Account acc;
 		try {
-			acc = JSONUtils.readFromFile(source, MinecraftAccount.class);
+			acc = JSONUtils.readFromFile(source, Account.class);
 		}catch (Exception e) {
 			Log.w("Accounts", "Failed to load account", e);
 			return null;
@@ -81,7 +81,7 @@ public class Accounts {
 		return LauncherPreferences.DEFAULT_PREF.getString(PROFILE_PREF_FILE, "");
 	}
 
-    public static MinecraftAccount getCurrent() {
+    public static Account getCurrent() {
 		String selectedAccount = getSelectedAccount();
 		return loadAccount(new File(Tools.DIR_ACCOUNT_NEW, selectedAccount));
     }
@@ -95,25 +95,25 @@ public class Accounts {
 		return profilePath;
 	}
 
-	public static MinecraftAccount create(Setter setter) throws IOException {
-		MinecraftAccount minecraftAccount = new MinecraftAccount();
-		setter.writeAccount(minecraftAccount);
-		minecraftAccount.mSaveLocation = pickAccountPath();
-		minecraftAccount.save();
-		return minecraftAccount;
+	public static Account create(Setter setter) throws IOException {
+		Account account = new Account();
+		setter.writeAccount(account);
+		account.mSaveLocation = pickAccountPath();
+		account.save();
+		return account;
 	}
 
-	public static void setCurrent(MinecraftAccount minecraftAccount) {
+	public static void setCurrent(Account account) {
 		LauncherPreferences.DEFAULT_PREF
-				.edit().putString(PROFILE_PREF_FILE, minecraftAccount.mSaveLocation.getName())
+				.edit().putString(PROFILE_PREF_FILE, account.mSaveLocation.getName())
 				.apply();
 	}
 
-	public static void delete(MinecraftAccount minecraftAccount) {
-		boolean ignored = minecraftAccount.mSaveLocation.delete();
+	public static void delete(Account account) {
+		boolean ignored = account.mSaveLocation.delete();
 	}
 
 	public interface Setter {
-		void writeAccount(MinecraftAccount minecraftAccount) throws IOException;
+		void writeAccount(Account account) throws IOException;
 	}
 }

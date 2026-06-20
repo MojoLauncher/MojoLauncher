@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition pre Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -13,7 +12,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Vybrať installer módu</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher neočakávane spadol</string>
+    <string name="error_fatal">MJLauncher neočakávane spadol</string>
     <string name="error_no_version">Žiadne verzie!</string>
     <string name="error_show_more">Zobraziť viac</string>
     <string name="error_show_less">Zobraziť menej</string>
@@ -145,7 +144,7 @@
     <string name="customctrl_absolute_tracking">Absolútne nasledovanie prsta</string>
     <string name="memory_warning_msg">Aktuálne množstvo voľnej RAM (%d) je nižšia ako pridelená RAM (%d), čo môže viesť k pádu. Zmeňte alokáciu, ak hra spadne.</string>
     <string name="mcl_memory_allocation">Pridelenie pamäte</string>
-    <string name="mcl_memory_allocation_subtitle">Určite, koľko pamäti bude dané Minecraftu.</string>
+
     <string name="multirt_runtime_corrupt">Poškodená Java Runtime</string>
     <string name="multirt_runtime_incompatiblearch">Nekompatibilná architektúra: %s</string>
     <string name="multirt_config_title">Inštalácie Javy</string>
@@ -197,7 +196,7 @@
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Vykresľovač</string>
     <string name="notif_channel_name">Všeobecné nastavenia notifikácií</string>
-    <string name="lazy_service_default_title">Mojo Foreground Service</string>
+    <string name="lazy_service_default_title">MJ Foreground Service</string>
     <string name="use_global_default">(Použiť predvolené nastavenie)</string>
     <string name="default_control">Predvolené kontrolky</string>
     <string name="progresslayout_tasks_in_progress">Počet prebiehajúcich operácií: %d</string>
@@ -211,12 +210,12 @@
     <string name="main_add_account">Pridať účet</string>
     <string name="tasks_ongoing">Operácie stále prebiehajú, prosím počkajte</string>
     <string name="no_saved_accounts">Žiadne prihlásené účty</string>
-    <string name="mc_download_failed">Nepodarilo sa stiahnuť Minecraft. Pre viac informácií klikni \"Zobraziť viac\".</string>
+
     <string name="xerr_unknown">Xbox Live API Error %d</string>
-    <string name="xerr_no_account">Zdá sa, že nemáš Xbox Live účet. Prosím, prihlás sa do https://minecraft.net/ a skús to znova.</string>
-    <string name="xerr_adult_verification">Váš Minecraft účet musí overiť dospelá osoba.</string>
+
+
     <string name="xerr_child">Vaše konto je detské konto a na prihlásenie je potrebné pridať ho do rodiny v rámci Microsoftu.</string>
-    <string name="minecraft_not_owned">Zdá sa, že toto konto nemá profil Minecraft. Ak máte službu Xbox Game Pass, prihláste sa na stránke https://minecraft.net/ a nastavte si účet.</string>
+
     <string name="xerr_not_available">Služba Xbox Live nie je dostupná vo vašej krajine</string>
     <string name="preference_enable_gyro_title">Ovládanie gyroskopom</string>
     <string name="preference_enable_gyro_description">Povolením tohto sa budete môcť otáčať v hre otáčaním mobilu.</string>
@@ -226,7 +225,7 @@
     <string name="preference_gyro_sample_rate_title">Obnovovacia frekvencia gyroskopu</string>
     <string name="preference_gyro_sample_rate_description">Ak máte problémy s výkonom pri používaní ovládania gyroskopom, zvýšte toto.</string>
     <string name="microsoft_login_retry_later">Príliš veľa žiadostí. Skúste to neskôr, prosím.</string>
-    <string name="storage_required">MojoLauncher vyžaduje pripojené externé úložisko. Pripojte ho a reštartujte aplikáciu.</string>
+    <string name="storage_required">MJLauncher vyžaduje pripojené externé úložisko. Pripojte ho a reštartujte aplikáciu.</string>
     <string name="mcl_setting_title_buttonallcaps">V označeniach tlačidiel používať len veľké písmená</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Ak chcete v ovládacích prvkoch používať malé písmená, vypnite toto.</string>
     <string name="preference_shader_dump_title">Povolenie shader dumpingu</string>
@@ -245,7 +244,7 @@
     <string name="preference_deadzone_scale_title">Nulová zóna joysticku</string>
     <string name="preference_deadzone_scale_description">Zvýšte ju, ak sa joystick posúva sám od seba.</string>
     <string name="preference_force_big_core_title">Vynútiť, aby vykresľovač bežal na najrýchlejšom jadre</string>
-    <string name="preference_force_big_core_desc">Núti vykresľovací proces Minecraftu, aby bežal na jadre s najväčšou frekvenciou.</string>
+
     <string name="version_select_hint">Vyberte verziu</string>
     <string name="forge_dl_progress">Sťahuje sa inštalačný súbor pre %s</string>
     <string name="forge_dl_searching">Hľadajú sa čísla verzií Forge</string>
@@ -254,7 +253,7 @@
     <string name="forge_dl_select_version">Vyberte verziu Forge</string>
     <string name="fabric_dl_progress">Sťahovanie metadát pre loader %s</string>
     <string name="fabric_dl_loader_version">%s verzia loaderu</string>
-    <string name="fabric_dl_game_version">Verzia Minecraftu</string>
+
     <string name="fabric_dl_install">Inštalovať</string>
     <string name="fabric_dl_cant_read_meta">Nepodarilo sa prečítať %s metadáta loaderu. Skúste to neskôr prosím.</string>
     <string name="create_profile_vanilla_like_versions">Vanilla verzie</string>
@@ -276,7 +275,7 @@
     <string name="modpack_download_downloading_mods">Sťahujú sa módy (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Sťahujú sa módy (Súbor %d z %d)</string>
     <string name="modpack_download_applying_overrides">Aplikovanie overridov (%d/%d)</string>
-    <string name="modpack_install_notification_title">Mojo inštalátor modpackov</string>
+    <string name="modpack_install_notification_title">MJ inštalátor modpackov</string>
     <string name="modpack_install_notification_success">Ťuknite sem na dokončenie inštalácie modpacku</string>
     <string name="modpack_install_notification_data_not_available">Nebolo možné stiahnuť informácie o mod loaderi</string>
     <string name="modpack_install_modloader_download_failed">Nebolo možné stiahnuť súbory mod loaderu</string>
@@ -305,7 +304,7 @@
     <string name="preference_category_miscellaneous">Iné nastavenia</string>
     <string name="preference_category_video">Video a vykresľovač</string>
     <string name="notification_permission_dialog_title">Vyžaduje sa povolenie</string>
-    <string name="notification_permission_dialog_text">MojoLauncher vyžaduje povolenie na ukazovanie upozornení, aby sa zabránilo zastaveniu sťahovania hry/modpackov, keď opustíte aplikáciu. Bez tohto povolenia môže Android zastaviť sťahovanie, keď pošlete MojoLauncher do pozadia.</string>
+    <string name="notification_permission_dialog_text">MJLauncher vyžaduje povolenie na ukazovanie upozornení, aby sa zabránilo zastaveniu sťahovania hry/modpackov, keď opustíte aplikáciu. Bez tohto povolenia môže Android zastaviť sťahovanie, keď pošlete MJLauncher do pozadia.</string>
     <string name="notification_permission_toast">Toto povolenie môžete kedykoľvek zmeniť v nastaveniach</string>
     <string name="preference_ask_for_notification_title">Povoliť upozornenia</string>
     <string name="preference_ask_for_notification_description">Kliknutím znova požiadate o povolenie upozornení, ktoré je potrebné na správne fungovanie sťahovania hier/modpackov na pozadí.</string>

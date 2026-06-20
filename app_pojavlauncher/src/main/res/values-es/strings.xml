@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition para Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -14,7 +13,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Seleccione un instalador de modificaciones</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher se ha detenido de forma inesperada</string>
+    <string name="error_fatal">MJLauncher se ha detenido de forma inesperada</string>
     <string name="error_no_version">¡No hay versiones!</string>
     <string name="error_show_more">Mostrar más</string>
     <string name="error_show_less">Mostrar menos</string>
@@ -148,7 +147,7 @@
     <string name="memory_warning_msg">La cantidad actual de memoria RAM libre (%d) es menor que la memoria RAM asignada (%d), lo que puede provocar cierres forzados. Cambia la asignación si el juego se cierra.</string>
     <string name="address_memory_warning_msg">La cantidad actual de RAM libre (%d) es menor que la RAM asignada (%d), lo cual puede causar cierres forzados. Cambie la cantidad asignada si el juego se cierra.</string>
     <string name="mcl_memory_allocation">Asignación de memoria</string>
-    <string name="mcl_memory_allocation_subtitle">Controla cuánta memoria se le da a Minecraft.</string>
+
     <string name="multirt_runtime_corrupt">Java Runtime Corrupto</string>
     <string name="multirt_runtime_incompatiblearch">Arquitectura incompatible: %s</string>
     <string name="multirt_config_title">Runtimes de Java</string>
@@ -202,7 +201,7 @@
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Renderizador</string>
     <string name="notif_channel_name">General</string>
-    <string name="lazy_service_default_title">Servicio de primer plano de MojoLauncher</string>
+    <string name="lazy_service_default_title">Servicio de primer plano de MJLauncher</string>
     <string name="mcl_setting_veroption_installed">Instalada</string>
     <string name="use_global_default">(Usar predeterminado global)</string>
     <string name="default_control">Controles por defecto</string>
@@ -217,12 +216,12 @@
     <string name="main_add_account">Añadir cuenta</string>
     <string name="tasks_ongoing">Tareas en curso, por favor espere</string>
     <string name="no_saved_accounts">No hay cuentas guardadas</string>
-    <string name="mc_download_failed">¡Error al descargar Minecraft! Esto podría deberse a una mala conexión de red, archivos mal colocados, etc..</string>
+
     <string name="xerr_unknown">Error desconocido de la API de Xbox Live %d</string>
-    <string name="xerr_no_account">Parece que no tienes una cuenta de Xbox Live. Por favor, inicia sesión una vez en https://minecraft.net/ e inténtalo de nuevo.</string>
+
     <string name="xerr_adult_verification">Un adulto debe verificar tu cuenta.</string>
     <string name="xerr_child">Su cuenta es una cuenta de menor y necesita ser añadida a una Familia para poder iniciar sesión.</string>
-    <string name="minecraft_not_owned">Parece que esta cuenta no tiene un perfil Minecraft. Si tienes el Xbox Game Pass, por favor inicia sesión en https://minecraft.net/ y configurarlo.</string>
+
     <string name="xerr_not_available">Xbox Live no está disponible en su país</string>
     <string name="preference_enable_gyro_title">Habilitar controles de giroscopio</string>
     <string name="preference_enable_gyro_description">Activar esto te permitirá mover la cámara al girar tu teléfono.</string>
@@ -232,7 +231,7 @@
     <string name="preference_gyro_sample_rate_title">Tasa de muestreo del giroscopio</string>
     <string name="preference_gyro_sample_rate_description">Si tienes problemas de rendimiento con el giroscopio, sube esto.</string>
     <string name="microsoft_login_retry_later">Demasiadas solicitudes, inténtalo de nuevo más tarde.</string>
-    <string name="storage_required">MojoLauncher necesita que el almacenamiento externo esté conectado, por favor reconéctalo y reinicia la aplicación.</string>
+    <string name="storage_required">MJLauncher necesita que el almacenamiento externo esté conectado, por favor reconéctalo y reinicia la aplicación.</string>
     <string name="mcl_setting_title_buttonallcaps">Usa únicamente letras mayúsculas en las etiquetas de los botones</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Desactiva esta opción si quieres usar letras minúsculas en tus controles.</string>
     <string name="preference_shader_dump_title">Activar dumpeo de shaders</string>
@@ -252,19 +251,19 @@
     <string name="preference_deadzone_scale_title">Escala de la zona muerta del Joystick</string>
     <string name="preference_deadzone_scale_description">Auméntalo si el joystick tiene drift.</string>
     <string name="preference_force_big_core_title">Fuerza al juego para que use el núcleo más rápido</string>
-    <string name="preference_force_big_core_desc">Fuerza el hilo de renderizado de Minecraft a correr en el núcleo con la mayor frecuencia máxima.</string>
+
     <string name="version_select_hint">Elige una versión</string>
     <string name="forge_dl_progress">Descargando instalador para %s</string>
     <string name="forge_dl_searching">Buscando el número de la versión de Forge</string>
     <string name="modloader_dl_failed_to_load_list">Oh no, ¡Ocurrió un error cargando la lista de versiones!</string>
-    <string name="forge_dl_no_installer">Lo siento, pero esta versión de Forge no tiene un instalador, lo cúal aún no esta soportado por Mojo.</string>
+    <string name="forge_dl_no_installer">Lo siento, pero esta versión de Forge no tiene un instalador, lo cúal aún no esta soportado por MJ.</string>
     <string name="forge_dl_select_version">Elige la versión de Forge</string>
     <string name="fabric_dl_progress">Descargando metadatos del cargador %s</string>
     <string name="fabric_dl_loader_version">Versión del cargador %s</string>
-    <string name="fabric_dl_game_version">Versión de Minecraft</string>
+
     <string name="fabric_dl_install">Instalar</string>
     <string name="fabric_dl_cant_read_meta">Error al leer los metadatos del cargador %s. Intente de nuevo más tarde.</string>
-    <string name="create_profile_vanilla_like_versions">Versiones de Minecraft Vanilla</string>
+
     <string name="create_profile_modded_versions">Versiones modificadas</string>
     <string name="fabric_dl_loader_title">Elige versiones</string>
     <string name="of_dl_select_version">Seleciona la versión de OptiFine</string>
@@ -312,7 +311,7 @@
     <string name="preference_category_miscellaneous">Ajustes varios</string>
     <string name="preference_category_video">Ajustes de video</string>
     <string name="notification_permission_dialog_title">Permiso requerido</string>
-    <string name="notification_permission_dialog_text">MojoLauncher necesita un permiso para enviar notificaciones para evitar que las descargas del juego o modpacks se detengan cuando minimizes la aplicación. Sin este permiso, Android puede cancelar tus descargas cuando MojoLauncher esté en segundo plano.</string>
+    <string name="notification_permission_dialog_text">MJLauncher necesita un permiso para enviar notificaciones para evitar que las descargas del juego o modpacks se detengan cuando minimizes la aplicación. Sin este permiso, Android puede cancelar tus descargas cuando MJLauncher esté en segundo plano.</string>
     <string name="notification_permission_toast">Siempre puedes cambiar de opinión más tarde yendo a Ajustes</string>
     <string name="preference_ask_for_notification_title">Permitir notificaciones</string>
     <string name="preference_ask_for_notification_description">Haz clic para volver a solicitar el permiso de notificaciones, necesario para qué las descargas en segundo plano del juego/modpack funcionen correctamente.</string>

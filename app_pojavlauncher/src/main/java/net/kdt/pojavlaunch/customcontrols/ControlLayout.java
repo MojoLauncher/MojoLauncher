@@ -25,7 +25,7 @@ import com.google.gson.JsonSyntaxException;
 import com.kdt.pickafile.FileListView;
 import com.kdt.pickafile.FileSelectedListener;
 
-import net.kdt.pojavlaunch.MinecraftGLSurface;
+import net.kdt.pojavlaunch.LauncherGLSurface;
 
 import git.artdeell.dnbootstrap.glfw.GLFW;
 import git.artdeell.mojo.R;
@@ -49,7 +49,7 @@ import java.util.List;
 public class ControlLayout extends FrameLayout {
 	protected CustomControls mLayout;
 	/* Accessible when inside the game by ControlInterface implementations, cached for perf. */
-	private MinecraftGLSurface mGameSurface = null;
+	private LauncherGLSurface mGameSurface = null;
 
 	/* Cache to buttons for performance purposes */
 	private List<ControlInterface> mButtons;
@@ -478,7 +478,7 @@ public class ControlLayout extends FrameLayout {
 	}
 
 	/** Cached getter for perf purposes */
-	public MinecraftGLSurface getGameSurface(){
+	public LauncherGLSurface getGameSurface(){
 		if(mGameSurface == null){
 			mGameSurface = findViewById(R.id.main_game_render_view);
 		}

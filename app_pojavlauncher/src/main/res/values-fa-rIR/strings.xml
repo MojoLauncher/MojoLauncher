@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">پوجاو لانچر (ماینکرفت: جاوا ادیشن برای اندروید)</string>
     <string name="app_short_name">پوجاو لانچر</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
@@ -191,7 +190,7 @@
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">رندر کننده</string>
     <string name="notif_channel_name">عمومی</string>
-    <string name="lazy_service_default_title">سرویس پیش‌زمینه Mojo</string>
+    <string name="lazy_service_default_title">سرویس پیش‌زمینه MJ</string>
     <string name="mcl_setting_veroption_installed">نصب شد</string>
     <string name="use_global_default">(از پیش‌فرض استفاده کنید)</string>
     <string name="progresslayout_tasks_in_progress">%d وظیفه در حال انجام</string>
@@ -203,12 +202,12 @@
     <string name="main_add_account">اضافه کردن حساب کاربری</string>
     <string name="tasks_ongoing">وظایف درحال انجام است، لطفا صبر کنید</string>
     <string name="no_saved_accounts">هیچ حساب ذخیره شده ای وجود ندارد</string>
-    <string name="mc_download_failed">دانلود Minecraft انجام نشد! این می تواند به دلیل عدم اتصال به اینترنت، فایل های خراب دانلود شده و غیره باشد</string>
+
     <string name="xerr_unknown">خطای ناشناخته API ایکس باکس لایو %d</string>
-    <string name="xerr_no_account">به نظر می رسد که شما حساب Xbox Live ندارید. لطفا در https://minecraft.net/ وارد شوید و دوباره امتحان کنید.</string>
+
     <string name="xerr_adult_verification">یک بزرگسال باید حساب شما را تأیید کند.</string>
     <string name="xerr_child">حساب شما یک حساب کودک است و برای ورود به سیستم باید به حساب خانواده اضافه شود.</string>
-    <string name="minecraft_not_owned">به نظر می رسد این اکانت، پروفایلِ ماینکرفت ندارد. اگر گیم پسِ ایکس باکس دارید، لطفاً در https://minecraft.net/ وارد شوید و آن را تنظیم کنید.</string>
+
     <string name="xerr_not_available">ما تو ایرانیم. تحریمیم. با فیلترشکن دوباره وارد شو</string>
     <string name="preference_enable_gyro_title">فعال کردن کنترل های ژیروسکوپ</string>
     <string name="preference_gyro_sensitivity_title">حساسیت کنترلر های ژیروسکوپ</string>

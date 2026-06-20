@@ -8,7 +8,7 @@ import android.view.ViewTreeObserver;
 
 import androidx.annotation.RequiresApi;
 
-import net.kdt.pojavlaunch.MinecraftGLSurface;
+import net.kdt.pojavlaunch.LauncherGLSurface;
 import net.kdt.pojavlaunch.Tools;
 
 import net.kdt.pojavlaunch.CallbackBridge;
@@ -106,9 +106,9 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
             case MotionEvent.ACTION_MOVE:
                 return true;
             case MotionEvent.ACTION_BUTTON_PRESS:
-                return MinecraftGLSurface.sendMouseButtonUnconverted(event.getActionButton(), true);
+                return LauncherGLSurface.sendMouseButtonUnconverted(event.getActionButton(), true);
             case MotionEvent.ACTION_BUTTON_RELEASE:
-                return MinecraftGLSurface.sendMouseButtonUnconverted(event.getActionButton(), false);
+                return LauncherGLSurface.sendMouseButtonUnconverted(event.getActionButton(), false);
             case MotionEvent.ACTION_SCROLL:
                 CallbackBridge.sendScroll(
                         event.getAxisValue(MotionEvent.AXIS_HSCROLL),
