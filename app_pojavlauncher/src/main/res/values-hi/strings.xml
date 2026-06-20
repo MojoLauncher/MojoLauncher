@@ -485,7 +485,7 @@
     <string name="vml_err_exists">VM पहले से ही लोड है</string>
     <string name="vml_err_inval">अमान्य आर्ग्यूमेंट्स</string>
     <string name="gr_err_renderer_load_Failed">रेंडरर लाइब्रेरी लोड करने में विफल</string>
-    <string name="ltw_4x_msaa_warning_msg">ऐसा लगता है कि आपने डेवलपर सेटिंग्स में "Force 4x MSAA" ऑन कर दिया है। रेंडरिंग समस्याओं से बचने के लिए कृपया इसे बंद करें।</string>
+    <string name="ltw_4x_msaa_warning_msg">ऐसा लगता है कि आपने डेवलपर सेटिंग्स में \"Force 4x MSAA\" ऑन कर दिया है। रेंडरिंग समस्याओं से बचने के लिए कृपया इसे बंद करें।</string>
     <string name="no_instance">कोई इंस्टेंस नहीं चुना गया है। कृपया एक इंस्टेंस बनाएँ या चुनें।</string>
     <string name="downloading_java_runtime_uni">रनटाइम डाउनलोड हो रहा है, चरण 1/2 (%.2f/%.2f MB)</string>
     <string name="downloading_java_runtime_platform">रनटाइम डाउनलोड हो रहा है, चरण 2/2 (%.2f/%.2f MB)</string>
@@ -505,4 +505,8 @@
     <string name="preference_category_keyboard">कीबोर्ड सेटिंग्स</string>
     <string name="preference_keyboard_autopan_title">कीबोर्ड पैनिंग सक्षम करें</string>
     <string name="preference_keyboard_autopan_summary">यदि आपका आखिरी टच स्क्रीन के निचले हिस्से में था, तो यह ऑन-स्क्रीन कीबोर्ड को गेम विंडो के ऊपर आने के बजाय उसे खिसकाने की अनुमति देता है। समान फ़ंक्शन वाले कस्टम कंट्रोल लेआउट बटन्स पर इसका कोई प्रभाव नहीं पड़ता।</string>
+    <string name="mcl_memory_allocation_subtitle">एियंत्रित करता है कि Java रनटाइ। को कितनी मेमोरी ही जाती हैक</string>
+    <string name="mc_not_owned">लगता है ेस ोकादंी ।लं कगई MC ह्रोफ़ाउल नहीं हई। अगर आपके पास Xbox Game Pass है, तो कृपया गेम कआ वेहसाइट पर यगमिन वरेब सर ापनइ पटरोॉ़िइल ंेअ नरें।</string>
+    <string name="preference_force_big_core_desc">गेम के रेंडर थ्रेड कइ सबसे ट़्यांा अरडकोम फ़्ेीक्वेंसी वधिे कोर मर फल़े के ल्ं साी्य करपा चन।</string>
+    <string name="fabric_dl_game_version">गेम बंस्करय</string>
 </resources>
