@@ -13,8 +13,14 @@
 
 #define TAG __FILE_NAME__
 #include <log.h>
+#include <libgen.h>
 
 extern bool apiRequiresHints();
+
+const char* additional_natives_dir = NULL;
+
+const char* replacements = "libimgui-moulberry92-java64.so";
+
 
 // Java 21 style hook
 typedef jboolean (*NativeLibraries_load)(JNIEnv *env, jclass cls, jobject lib, jstring name, jboolean isBuiltin, jboolean throwExceptionIfFail);
@@ -43,10 +49,29 @@ static void library_preload_hook(JNIEnv *env, const char* name) {
     }
 }
 
+static jstring library_override_hook(JNIEnv* env, jstring original_name, const char* name){
+    if(!additional_natives_dir) return original_name;
+    char* _name = strdup(name);
+    char* base = basename(_name);
+    if(strstr(replacements, base) == NULL) {
+        free(_name);
+        return original_name;
+    }
+    uint32_t buf_size = strlen(additional_natives_dir) + strlen(base) + 3;
+    char* buf = malloc(buf_size);
+    snprintf(buf, buf_size, "%s/%s", additional_natives_dir, base);
+    printf("Overriding library load: %s -> %s\n", name, buf);
+    jstring new = (*env)->NewStringUTF(env, buf);
+    free(_name);
+    free(buf);
+    return new;
+}
+
 #define NATIVES_HOOK(CALLTHROUGH, RESULT, RESULT_RETURN) \
 do { \
     const char *name_n = (*env)->GetStringUTFChars(env, name, NULL); \
     library_preload_hook(env, name_n); \
+    name = library_override_hook(env, name, name_n); \
     const bool hintsRequired = apiRequiresHints(); \
     hinter_t hinter; \
     if (hintsRequired) hinter_process(&hinter, name_n); \
@@ -118,4 +143,12 @@ bool installClassLoaderHooks(JNIEnv *env, JNIEnv* vm_env) {
     err:
     throwException(env, STAGE_FIND_HOOKS, JNI_ERR, "Cannot find hook target.");
     return false;
+}
+
+JNIEXPORT void JNICALL
+Java_net_kdt_pojavlaunch_utils_JREUtils_setExtraNativeLibraryPath(JNIEnv *env, jclass clazz,
+                                                                  jstring path) {
+    const char* _path = (*env)->GetStringUTFChars(env, path, NULL);
+    additional_natives_dir = strdup(_path);
+    (*env)->ReleaseStringUTFChars(env, path, _path);
 }

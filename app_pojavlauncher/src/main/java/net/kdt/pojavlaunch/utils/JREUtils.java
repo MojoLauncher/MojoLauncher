@@ -283,6 +283,7 @@ public class JREUtils {
     public static native int chdir(String path);
 
     public static native void setLdLibraryPath(String ldLibraryPath);
+    public static native void setExtraNativeLibraryPath(String path);
     public static native boolean configureRenderspec(String eglPath, boolean useLoaderBypass, boolean useGles, int glesVersion);
     public static native void configureRenderspecDisplay(int width, int height, int refreshRate);
     private static native void nsetRendererLibraryPath(String path);
