@@ -15,6 +15,7 @@ import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.LifecycleAwareAlertDialog;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.Runtime;
+import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.DateUtils;
 import net.kdt.pojavlaunch.utils.FileUtils;
@@ -237,11 +238,17 @@ public class GameRunner {
             javaArgList.add("-Dlog4j.configurationFile=" + configFile);
         }
 
+        // This allows some mods to use additional libs provided via plugin so we don't need to bloat our app with uncommon stuff
+        LibraryPlugin natives = LibraryPlugin.discoverPlugin(activity, LibraryPlugin.ID_NATIVES_PLUGIN);
+        String additionalNativesDir = natives != null ? (':' + natives.getLibraryPath()) : "";
+
         File versionSpecificNativesDir = new File(Tools.DIR_CACHE, "natives/"+versionId);
         if(versionSpecificNativesDir.exists()) {
             String dirPath = versionSpecificNativesDir.getAbsolutePath();
-            javaArgList.add("-Djava.library.path="+dirPath+":"+Tools.NATIVE_LIB_DIR);
+            javaArgList.add("-Djava.library.path="+dirPath+":"+Tools.NATIVE_LIB_DIR+additionalNativesDir);
             javaArgList.add("-Djna.boot.library.path="+dirPath);
+        } else {
+            javaArgList.add("-Djava.library.path="+Tools.NATIVE_LIB_DIR+additionalNativesDir);
         }
 
         File lwjglExtractDir = new File(Tools.DIR_CACHE, "lwjgl_native/"+versionId);
