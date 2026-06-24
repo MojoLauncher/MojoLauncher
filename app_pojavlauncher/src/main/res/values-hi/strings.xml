@@ -63,9 +63,9 @@
     <string name="mcl_setting_title_javaargs">JVM लॉन्च आर्ग्यूमेंट्स</string>
     <string name="mcl_setting_subtitle_javaargs">सावधान रहें, ज्ञान के बिना संशोधित करने पर गेम क्रैश हो सकता है।</string>
     <string name="mcl_setting_category_renderer">रेंडरर</string>
-    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (सभी संस्करण, तेज़)</string>
+    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (1.21.4 तक के सभी संस्करण, तेज़़)</string>
     <string name="mcl_setting_renderer_vulkan_zink">ज़िंक (वल्कन) - (सभी संस्करण, मध्यम)</string>
-    <string name="mcl_setting_renderer_ltw">LTW (ओपनजीएल ईएस 3) - केवल 1.17+</string>
+    <string name="mcl_setting_renderer_ltw">LTW (OpenGL ES 3) - केवल 1.17+, तेज़</string>
     <string name="mcl_setting_veroption_release">रीलीज़</string>
     <string name="mcl_setting_veroption_snapshot">स्नैपशॉट</string>
     <string name="mcl_setting_veroption_oldalpha">ओल्ड-अल्फा</string>
@@ -446,7 +446,7 @@
     <string name="mcl_setting_renderer_freedreno_kgsl">Freedreno - सभी versions, fast, सिर्फ Adreno</string>
     <string name="dl_library_sha_fail">Library %s ख़राब हो गई है और इसे फिर से डाउनलोड किया जाएगा।</string>
     <string name="preference_use_angle_title">ANGLE का उपयोग करें</string>
-    <string name="preference_use_angle_description">LTW के लिए सिस्टम ड्राइवर के बजाय ANGLE का उपयोग करने की अनुमति देता है। कुछ GPUs पर मॉड्स के साथ ग्राफिकल समस्याओं को ठीक कर सकता है।</string>
+        <string name="preference_use_angle_description">सिस्टम ड्राइवर के बजाय ANGLE का उपयोग करने की अनुमति देता है। कुछ GPUs पर मॉड्स के साथ ग्राफिकल समस्याओं को ठीक कर सकता है।</string>
     <string name="preference_microphone_access_title">माइक्रोफ़ोन एक्सेस की अनुमति का अनुरोध करें</string>
     <string name="preference_microphone_access_description">गेम के लिए डिवाइस माइक्रोफ़ोन का एक्सेस देने के लिए सिस्टम से अनुरोध करता है।</string>
     <string name="neoforge_dl_no_installer">माफ़ करें, लेकिन NeoForge के इस संस्करण में इंस्टॉलर नहीं है, जो अभी तक समर्थित नहीं है।</string>
@@ -499,5 +499,6 @@
     <string name="preference_category_keyboard">कीबोर्ड सेटिंग्स</string>
     <string name="preference_keyboard_autopan_title">कीबोर्ड पैनिंग सक्षम करें</string>
     <string name="preference_keyboard_autopan_summary">यदि आपका आखिरी टच स्क्रीन के निचले हिस्से में था, तो यह ऑन-स्क्रीन कीबोर्ड को गेम विंडो के ऊपर आने के बजाय उसे खिसकाने की अनुमति देता है। समान फ़ंक्शन वाले कस्टम कंट्रोल लेआउट बटन्स पर इसका कोई प्रभाव नहीं पड़ता।</string>
-    
+        <string name="social_media_invite" translatable="false">https://discord.gg/VHdwQFsaGX</string>
+        
 </resources>
