@@ -40,6 +40,7 @@ public class DriverManager {
     public static boolean isSupportedByDevice(){
         return supported == null ?
                 // Custom drivers are viable only on API 28+ ARM64. Not sure if A5XX supports anything.
+                // TODO: check the custom driver viability on Xclipse devices
                 (supported = GLInfoUtils.getGlInfo().isAdreno() && Build.VERSION.SDK_INT >= 28 && Architecture.getDeviceArchitecture() == Architecture.ARCH_ARM64)
                 : supported;
     }
@@ -114,6 +115,7 @@ public class DriverManager {
      * @param driver A driver to set
      */
     public static void setPreferredDriver(Driver driver){
+        if(driver == null) driver = DEFAULT_DRIVER;
         LauncherPreferences.PREF_VULKAN_PACKAGE = !driver.isDefault() ? driver.getHash() : null;
         LauncherPreferences.DEFAULT_PREF.edit().putString("vulkanPackage", LauncherPreferences.PREF_VULKAN_PACKAGE).apply();
     }
@@ -224,7 +226,6 @@ public class DriverManager {
     public static AdrenoDriver installDriver(File path, boolean overwrite){
         ensureRootExists();
         try(ZipFile zf = new ZipFile(path)){
-
             AdrenoDriver driver = AdrenoDriver.fromJson(ZipUtils.getEntryStream(zf, METADATA_FILENAME));
             String hash = driver.getHash();
             if(driverExists(hash)){
@@ -259,6 +260,7 @@ public class DriverManager {
             return false;
         try {
             FileUtils.deleteDirectory(path);
+            setPreferredDriver(null);
             return true;
         } catch (IOException e) {
             Log.e(TAG, "Unable to remove driver package " + name);
