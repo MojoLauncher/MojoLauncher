@@ -30,7 +30,7 @@
 			android:layout_alignParentRight="true"
 			android:text="@string/hint_control_mapping"
 			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintTop_toTopOf="parent" />
+			app:layout_constraintTop_toBottomOf="@id/drawer_button" />
 
 		<net.kdt.pojavlaunch.customcontrols.ControlLayout
 			android:id="@+id/customctrl_controllayout"

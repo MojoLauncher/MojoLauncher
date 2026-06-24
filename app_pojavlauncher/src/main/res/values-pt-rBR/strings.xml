@@ -8,7 +8,6 @@
     <string name="login_online_username_hint">Nome de Usuário</string>
     <string name="login_online_login_label">Iniciar sessão</string>
     <!-- Hint -->
-    <string name="hint_control_mapping">"Toque na engrenagem no topo da tela para abrir as configurações ⚙️\nToque em algum botão para customizar: editar, redimensionar, deletar, ou alterar o mapeamento."</string>
     <!-- Warnings -->
     <string name="warning_remove_account">Esta conta será removida!</string>
     <!-- AlertDialog title -->

@@ -8,7 +8,7 @@
     <string name="login_online_username_hint">Uživatelské jméno</string>
     <string name="login_online_login_label">Přihlásit se</string>
     <!-- Hint -->
-    <string name="hint_control_mapping">"Klikněte na ikonu ozubeného kolečka nahoře uprostřed pro otevření menu ⚙\nKlikněte na tlačítko pro přizpůsobení: editaci, škálu, odstranění či změnu kláves."</string>
+    <string name="hint_control_mapping">Klikněte na ikonu ozubeného kolečka pro otevření menu ⚙\nKlikněte na tlačítko pro přizpůsobení: editaci, škálu, odstranění či změnu kláves.</string>
     <!-- Warnings -->
     <string name="warning_remove_account">Tento účet bude odstraněn!</string>
     <!-- AlertDialog title -->
