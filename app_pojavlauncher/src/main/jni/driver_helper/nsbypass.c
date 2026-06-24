@@ -24,8 +24,11 @@
 #include <log.h>
 
 /* Library search path */
+#ifdef PLATFORM_64
 #define SEARCH_PATH "/system/lib64"
-#define VENDOR_SEARCH_PATH "/vendor/lib64"
+#else
+#define SEARCH_PATH "/system/lib"
+#endif
 
 static struct android_namespace_t* driver_namespace = NULL;
 
@@ -37,13 +40,13 @@ bool linker_ns_load(const char* lib_search_path) {
     }
 
     // assemble the full path search path
-    char full_path[strlen(SEARCH_PATH) + strlen(VENDOR_SEARCH_PATH) + strlen(lib_search_path) + 3 + 1];
-    sprintf(full_path, "%s:%s:%s", lib_search_path, SEARCH_PATH, VENDOR_SEARCH_PATH);
+    char full_path[strlen(SEARCH_PATH) + strlen(lib_search_path) + 2 + 1];
+    sprintf(full_path, "%s:%s", SEARCH_PATH, lib_search_path);
     driver_namespace = ldfuncs.create_namespace("pojav-driver",
                                                       full_path,
                                                       full_path,
                                                       3 /* TYPE_SHAFED | TYPE_ISOLATED */,
-                                                      "/system/:/data/:/vendor/:/apex/", NULL);
+                                                      "/system/:/system_ext/:/data/:/vendor/:/apex/", NULL);
     // THIS IS VERY IMPORTANT and how I trolled FoldCraft:
     // You need to link the new driver_namespace with NULL and and add ld-android.so
     // in the link list, to pass through the driver_namespace correctly.

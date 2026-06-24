@@ -1,4 +1,4 @@
-<H1 align="center">MojoLauncher</H1>
+<H1 align="center">MojoLauncher (a.k.a. MJLauncher)</H1>
 
 <a href="./README_RU.md">Readme на русском</a>
 
@@ -33,7 +33,7 @@ You can get MojoLauncher via four methods:
 1. You can get the prebuilt app from the [releases section](http://github.com/mojolauncher/mojolauncher/releases).
 
 2. You can get it from Google Play by clicking on this badge:
-[![Google Play](https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=git.artdeell.mojo)
+[![Google Play](https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=git.artdeell.mjlaunch)
 
 3. You can get early builds from [Github Actions](http://github.com/mojolauncher/mojolauncher/actions).
 
@@ -54,8 +54,7 @@ You can get MojoLauncher via four methods:
 - [ ] LTW: switch to a color-renderable format for framebuffers
 - [ ] Modpack/mod management tool
 - [ ] MMC-compatible instance import
-- [ ] Patch-on-dlopen for mod native libraries
-- [ ] Replace Holy-GL4ES 1.1.5 with KW (maybe? need to figure out requirements)
+- [ ] Implement common native library standard
 
 ## Known Issues
 - Some physical mice may have very slow mouse speed
@@ -71,13 +70,15 @@ Contributions are welcome! We welcome any type of contribution, not only code. F
 
 Any code change to this repository should be submitted as a pull request. The description should explain what the code does and give steps to execute it.
 
-## Credits & Third party components and their licenses (if available)
+## Third party components, licenses and sources (when applicable)
 - [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher): [GNU LGPLv3 License](https://github.com/PojavLauncherTeam/PojavLauncher/blob/v3_openjdk/LICENSE)
 - [Boardwalk](https://github.com/zhuowei/Boardwalk) (JVM Launcher): Unknown License/[Apache License 2.0](https://github.com/zhuowei/Boardwalk/blob/master/LICENSE) or GNU GPLv2.
 - Android Support Libraries: [Apache License 2.0](https://android.googlesource.com/platform/prebuilts/maven_repo/android/+/master/NOTICE.txt).
-- [GL4ES](https://github.com/PojavLauncherTeam/gl4es): [MIT License](https://github.com/ptitSeb/gl4es/blob/master/LICENSE).<br>
+- [Holy GL4ES](https://github.com/artdeell/gl4es_extra_extra/): [MIT License](https://github.com/ptitSeb/gl4es/blob/master/LICENSE).<br>
 - [OpenJDK](https://github.com/PojavLauncherTeam/openjdk-multiarch-jdk8u): [GNU GPLv2 License](https://openjdk.java.net/legal/gplv2+ce.html).<br>
-- [LWJGL3](https://github.com/MojoLauncher/lwjgl3): [BSD-3 License](https://github.com/LWJGL/lwjgl3/blob/master/LICENSE.md).
+- [GLFW](https://github.com/MojoLauncher/glfw): [zlib license](https://github.com/MojoLauncher/glfw/blob/glfw34/LICENSE.md)
+- [LWJGL2-GLFW](https://github.com/MojoLauncher/lwjgl2-glfw): 3-Clause BSD license
+- [LWJGL3](https://github.com/LWJGL/lwjgl3): [BSD-3 License](https://github.com/LWJGL/lwjgl3/blob/master/LICENSE.md).
 - [Mesa 3D Graphics Library](https://gitlab.freedesktop.org/mesa/mesa): [MIT License](https://docs.mesa3d.org/license.html).
 - [pro-grade](https://github.com/pro-grade/pro-grade) (Java sandboxing security manager): [Apache License 2.0](https://github.com/pro-grade/pro-grade/blob/master/LICENSE.txt).
 - [bhook](https://github.com/bytedance/bhook) (Used for exit code trapping): [MIT license](https://github.com/bytedance/bhook/blob/main/LICENSE).

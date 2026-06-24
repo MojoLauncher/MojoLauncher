@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition for Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -14,7 +13,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Mod インストーラーを選択</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher が異常終了しました</string>
+    <string name="error_fatal">MJLauncher が異常終了しました</string>
     <string name="error_no_version">バージョンがありません</string>
     <string name="error_show_more">詳細を表示</string>
     <string name="error_show_less">詳細を閉じる</string>
@@ -174,7 +173,7 @@
     <string name="pedit_java_runtime">Javaランタイム</string>
     <string name="pedit_renderer">レンダラー</string>
     <string name="notif_channel_name">一般</string>
-    <string name="lazy_service_default_title">Mojo フォアグラウンドサービス</string>
+    <string name="lazy_service_default_title">MJ フォアグラウンドサービス</string>
     <string name="mcl_setting_veroption_installed">インストール済み</string>
     <string name="use_global_default">(グローバル既定値を使用する)</string>
     <string name="progresslayout_tasks_in_progress">%d タスクが進行中</string>
@@ -190,10 +189,10 @@
     <string name="no_saved_accounts">保存されたアカウントはありません</string>
     <string name="mc_download_failed">マインクラフトのダウンロードに失敗しました！ネットワークの接続が悪い、ファイルが正しく配置されていない等の可能性があります。</string>
     <string name="xerr_unknown">原因不明のXbox Live APIエラー %d</string>
-    <string name="xerr_no_account">Java版マインクラフトのアカウントをお持ちでないようです。https://minecraft.net/ で一度ログインして、再度お試しください。</string>
+
     <string name="xerr_adult_verification">大人の方がアカウントを確認する必要があります。</string>
     <string name="xerr_child">このアカウントは、お子さんのアカウントであり、ログインするためにはファミリーに追加する必要があります。</string>
-    <string name="minecraft_not_owned">このアカウントにはMinecraftのプロファイルがないようです。Xbox Game Passをお持ちの方は、https://minecraft.net/ からログインして設定してください。</string>
+
     <string name="xerr_not_available">お住まいの国ではXbox Liveをご利用になれません。</string>
     <string name="preference_enable_gyro_title">ジャイロコントロールをオンにする</string>
     <string name="preference_gyro_sensitivity_title">ジャイロコントロールの感度</string>
@@ -212,7 +211,7 @@
     <string name="preference_deadzone_scale_title">ジョイスティックの無反応範囲</string>
     <string name="version_select_hint">バージョン選択</string>
     <string name="forge_dl_select_version">Forge のバージョンを選択</string>
-    <string name="fabric_dl_game_version">Minecraft バージョン</string>
+
     <string name="fabric_dl_install">インストール</string>
     <string name="fabric_dl_loader_title">バージョンの選択</string>
     <string name="of_dl_select_version">OptiFine のバージョンを選択</string>

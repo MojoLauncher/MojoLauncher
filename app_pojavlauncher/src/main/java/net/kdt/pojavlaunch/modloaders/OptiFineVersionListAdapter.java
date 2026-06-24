@@ -19,7 +19,7 @@ public class OptiFineVersionListAdapter extends BaseExpandableListAdapter implem
 
     @Override
     public int getGroupCount() {
-        return mOptiFineVersions.minecraftVersions.size();
+        return mOptiFineVersions.gameVersions.size();
     }
 
     @Override
@@ -29,7 +29,7 @@ public class OptiFineVersionListAdapter extends BaseExpandableListAdapter implem
 
     @Override
     public Object getGroup(int i) {
-        return mOptiFineVersions.minecraftVersions.get(i);
+        return mOptiFineVersions.gameVersions.get(i);
     }
 
     @Override

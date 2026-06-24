@@ -1,7 +1,7 @@
 package net.kdt.pojavlaunch.lifecycle;
 
-import static net.kdt.pojavlaunch.MainActivity.INTENT_MINECRAFT_CLASSPATH;
-import static net.kdt.pojavlaunch.MainActivity.INTENT_MINECRAFT_VERSION;
+import static net.kdt.pojavlaunch.MainActivity.INTENT_LAUNCH_CLASSPATH;
+import static net.kdt.pojavlaunch.MainActivity.INTENT_LAUNCH_VERSION;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,12 +11,12 @@ import net.kdt.pojavlaunch.MainActivity;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
-import net.kdt.pojavlaunch.tasks.AsyncMinecraftDownloader;
+import net.kdt.pojavlaunch.tasks.MoJsonExtras;
 import net.kdt.pojavlaunch.utils.NotificationUtils;
 
 import java.io.File;
 
-public class ContextAwareDoneListener implements AsyncMinecraftDownloader.DoneListener, ContextExecutorTask {
+public class ContextAwareDoneListener implements MoJsonExtras.DoneListener, ContextExecutorTask {
     private final String mErrorString;
     private final String mNormalizedVersionid;
     private File[] classpath;
@@ -28,8 +28,8 @@ public class ContextAwareDoneListener implements AsyncMinecraftDownloader.DoneLi
 
     private Intent createGameStartIntent(Context context) {
         Intent mainIntent = new Intent(context, MainActivity.class);
-        mainIntent.putExtra(INTENT_MINECRAFT_VERSION, mNormalizedVersionid);
-        mainIntent.putExtra(INTENT_MINECRAFT_CLASSPATH, classpath);
+        mainIntent.putExtra(INTENT_LAUNCH_VERSION, mNormalizedVersionid);
+        mainIntent.putExtra(INTENT_LAUNCH_CLASSPATH, classpath);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         return mainIntent;
     }

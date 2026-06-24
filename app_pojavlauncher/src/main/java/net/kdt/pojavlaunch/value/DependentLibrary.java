@@ -17,13 +17,13 @@ public class DependentLibrary {
 
     @Keep
 	public static class LibraryDownloads {
-		public MinecraftLibraryArtifact artifact;
+		public LibraryArtifact artifact;
         public LibraryClassifierMap classifiers;
-		public LibraryDownloads(MinecraftLibraryArtifact artifact) {
+		public LibraryDownloads(LibraryArtifact artifact) {
 			this.artifact = artifact;
 		}
 	}
 
-    public static class LibraryClassifierMap extends HashMap<String, MinecraftLibraryArtifact> {}
+    public static class LibraryClassifierMap extends HashMap<String, LibraryArtifact> {}
 }
 

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition per Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -13,7 +12,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Selecciona un mod per afegir</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher s’ha parat inesperadament</string>
+    <string name="error_fatal">MJLauncher s’ha parat inesperadament</string>
     <string name="error_no_version">Cap versio!</string>
     <string name="error_show_more">Mostra més</string>
     <string name="error_show_less">Mostrar menys</string>
@@ -147,7 +146,7 @@
     <string name="pedit_java_runtime">Runtime de Java</string>
     <string name="pedit_renderer">Renderitzador</string>
     <string name="notif_channel_name">General</string>
-    <string name="lazy_service_default_title">Servei de primer plà del Mojo</string>
+    <string name="lazy_service_default_title">Servei de primer plà del MJ</string>
     <string name="use_global_default">(Usa el valor global per defecte)</string>
     <string name="default_control">Mapa de control per defecte</string>
     <string name="progresslayout_tasks_in_progress">%d tasques en procés</string>
@@ -161,12 +160,12 @@
     <string name="main_add_account">Afegeix compte</string>
     <string name="tasks_ongoing">Les tasques estan en progrés, espereu si us plau</string>
     <string name="no_saved_accounts">No h han comptes guardats</string>
-    <string name="mc_download_failed">No s\'ha pogut descarregar el Minecraft! Açò pot ser a causa d\'una mala connexió a internet, arxius col·locats incorrectament, etc..</string>
+
     <string name="xerr_unknown">Error desconegut de l\'API del Xbox Live %d</string>
-    <string name="xerr_no_account">Pareix que no tens cap compte del Xbox Live! Si us plau, inicieu sessió a https://minecraft.net/ i torneu-ho a intentar.</string>
+
     <string name="xerr_adult_verification">Un adult necessita verificar el teu compte.</string>
     <string name="xerr_child">El teu compte és un compte d\'infants, i s\'ha d\'afegir a una Família per poder iniciar la sessió.</string>
-    <string name="minecraft_not_owned">Pareix que aquest compte no té cap perfil del Minecraft. Si tens el Xbox Game Pass, si us plau, inicieu sessió a https://minecraft.net/ i torneu a provar.</string>
+
     <string name="xerr_not_available">El Xbox Live no està disponible al seu país</string>
     <string name="preference_enable_gyro_title">Activa els controls del giroscopi</string>
     <string name="preference_enable_gyro_description">Activar açò permetrà girar-se en el joc girant el telèfon.</string>
@@ -176,12 +175,12 @@
     <string name="preference_gyro_sample_rate_title">Tassa d\'actualització del giroscopi</string>
     <string name="preference_gyro_sample_rate_description">Si tens problemes de rendiment amb el giroscopi, puja aquest valor.</string>
     <string name="microsoft_login_retry_later">Massa peticions, si us plau, torneu-ho a intentar més tard.</string>
-    <string name="storage_required">El MojoLauncher requereix que hi hagi emmagatzemament extern connectat. Si us plau, reconnecteu-ho i reinicieu l\'app.</string>
+    <string name="storage_required">El MJLauncher requereix que hi hagi emmagatzemament extern connectat. Si us plau, reconnecteu-ho i reinicieu l\'app.</string>
     <string name="of_dl_progress">Downloading %s</string>
     <string name="generic_debug">Debug</string>
     <string name="modpack_download_downloading_mods_fc">Baixant mods (Fitxer %d de %d)</string>
     <string name="modpack_download_applying_overrides">Aplicant anul·lacions (%d/%d)</string>
-    <string name="modpack_install_notification_title">Instal·lador de Modpacks del Mojo</string>
+    <string name="modpack_install_notification_title">Instal·lador de Modpacks del MJ</string>
     <string name="modpack_install_notification_success">Prem ací per acabar la instal·lació del modpack</string>
     <string name="modpack_install_notification_data_not_available">No s\'ha pogut baixar la informació del carregador de mods</string>
     <string name="modpack_install_modloader_download_failed">No s\'ha pogut baixar els fitxers del carregador de mods</string>

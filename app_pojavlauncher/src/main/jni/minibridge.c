@@ -16,6 +16,7 @@ static jclass class_CallbackBridge;
 static jmethodID method_openLink;
 
 static pojavexec_renderspec_t renderspec = {0};
+static const char* native_dir;
 
 void openLink(const char* link) {
     JNIEnv *attachedEnv = get_attached_env(dalivk);
@@ -48,8 +49,6 @@ Java_net_kdt_pojavlaunch_utils_JREUtils_configureRenderspec(JNIEnv *env, jclass 
         (*env)->ReleaseStringUTFChars(env, eglPath, egl_path);
         if(!renderspec.egl_path) return false;
         if(use_loader_bypass) {
-            const char* native_dir = getenv("POJAV_NATIVEDIR");
-            if(!native_dir) return false;
             if(!linker_ns_load(native_dir)) {
                 printf("linker_ns_load failed\n");
                 return false;
@@ -72,8 +71,26 @@ Java_net_kdt_pojavlaunch_utils_JREUtils_configureRenderspec(JNIEnv *env, jclass 
     return true;
 }
 
+JNIEXPORT void JNICALL
+Java_net_kdt_pojavlaunch_utils_JREUtils_configureRenderspecDisplay(JNIEnv *env, jclass clazz,
+                                                                   jint width, jint height,
+                                                                   jint refresh_rate) {
+    renderspec.disp_width = width;
+    renderspec.disp_height = height;
+    renderspec.disp_hz = refresh_rate;
+}
+
 const pojavexec_renderspec_t* pojavexec_getRenderSpec() {
     return &renderspec;
 }
+const char* pojavexec_getNativeDirectory(){
+    return native_dir;
+}
 
-
+JNIEXPORT void JNICALL
+Java_net_kdt_pojavlaunch_utils_JREUtils_nsetRendererLibraryPath(JNIEnv *env, jclass clazz,
+                                                               jstring path) {
+    const char* library_path = (*env)->GetStringUTFChars(env, path, NULL);
+    native_dir = strdup(library_path);
+    (*env)->ReleaseStringUTFChars(env, path, library_path);
+}

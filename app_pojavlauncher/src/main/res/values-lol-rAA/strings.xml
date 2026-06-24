@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">pajaw launcher (Mc4Android)</string>
     <string name="app_short_name">Punjabi launcher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
@@ -197,7 +196,7 @@
     <string name="pedit_java_runtime">Java runtime</string>
     <string name="pedit_renderer">Renderer</string>
     <string name="notif_channel_name">Geneal</string>
-    <string name="lazy_service_default_title">Mojo background police</string>
+    <string name="lazy_service_default_title">MJ background police</string>
     <string name="use_global_default">(Use Base Normal)</string>
     <string name="default_control">Default controlmap</string>
     <string name="progresslayout_tasks_in_progress">%d taskz in progress</string>
@@ -211,12 +210,12 @@
     <string name="main_add_account">Add block game account</string>
     <string name="tasks_ongoing">Taskz are in da zone, be patient</string>
     <string name="no_saved_accounts">No saved accounts for block game need help</string>
-    <string name="mc_download_failed">Failed to download minecraft! Dis could be due to bad network connection, incorrectly placed filez, etc..</string>
+
     <string name="xerr_unknown">Unknown xbox live api error %d</string>
-    <string name="xerr_no_account">Yu don\'t seem to have an xbox live account. Pleez log in once on https://minecraft.net/ an try again when the sun is able to walk.</string>
+
     <string name="xerr_adult_verification">An adult needz to verify yor account.</string>
     <string name="xerr_child">yor account iz a child account, an needz to be added into a family in ordur to log in.</string>
-    <string name="minecraft_not_owned">it seemz like dis account doez not hav a minecraft profile. if yu haz xbox game pass, purrlease log in on https://minecraft.net/ an set it up.</string>
+
     <string name="xerr_not_available">xbox live iz not available in yur country sowyy</string>
     <string name="preference_enable_gyro_title">enable gyroscopz controlz like a pro gamer</string>
     <string name="preference_enable_gyro_description">enablin\' dis will allow yu to turn in-game by turnin\' yor phone.</string>
@@ -245,7 +244,7 @@
     <string name="preference_deadzone_scale_title">joystick deadzone like headshot MVP</string>
     <string name="preference_deadzone_scale_description">increase it if da joystick drifts.</string>
     <string name="preference_force_big_core_title">force da renderer to run on da big core like big boy core</string>
-    <string name="preference_force_big_core_desc">forcez da minecraft render thread to run on da core wid da highest maximum frequency for max fps like pro gamer.</string>
+
     <string name="version_select_hint">Selcts a version of block game</string>
     <string name="forge_dl_progress">Downloading more ram installer for %s</string>
     <string name="forge_dl_searching">searchin\' for forge version numbur</string>
@@ -276,7 +275,7 @@
     <string name="modpack_download_downloading_mods">Downloading mods (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Downloading mods (File %d out of %d)</string>
     <string name="modpack_download_applying_overrides">Applying overrides (%d/%d)</string>
-    <string name="modpack_install_notification_title">Mojo Modpack Installer really gud</string>
+    <string name="modpack_install_notification_title">MJ Modpack Installer really gud</string>
     <string name="modpack_install_notification_success">Click here to finish modpack installation</string>
     <string name="modpack_install_notification_data_not_available">Failed to download mod loader information please stay like a sigma 😎😎</string>
     <string name="modpack_install_modloader_download_failed">Failed to download the mod loader files</string>

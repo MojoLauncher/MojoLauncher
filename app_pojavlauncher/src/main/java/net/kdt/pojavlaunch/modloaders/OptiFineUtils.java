@@ -22,7 +22,7 @@ public class OptiFineUtils {
     }
 
     public static InstanceInstaller createInstaller(OptiFineVersion version) {
-        int installerHash = Objects.hash(version.versionName, version.minecraftVersion);
+        int installerHash = Objects.hash(version.versionName, version.gameVersion);
         File installerLocation = new File(Tools.DIR_CACHE, "optifine-installer-"+installerHash+".jar");
         InstanceInstaller instanceInstaller = new InstanceInstaller();
         instanceInstaller.installerUrlTransformer = "optifine";
@@ -33,11 +33,11 @@ public class OptiFineUtils {
     }
 
     public static class OptiFineVersions {
-        public List<String> minecraftVersions;
+        public List<String> gameVersions;
         public List<List<OptiFineVersion>> optifineVersions;
     }
     public static class OptiFineVersion {
-        public String minecraftVersion;
+        public String gameVersion;
         public String versionName;
         public String downloadUrl;
     }

@@ -11,11 +11,11 @@ import java.util.List;
 public class OptiFineScraper implements DownloadUtils.ParseCallback<OptiFineUtils.OptiFineVersions> {
     private final OptiFineUtils.OptiFineVersions mOptiFineVersions;
     private List<OptiFineUtils.OptiFineVersion> mListInProgress;
-    private String mMinecraftVersion;
+    private String mGameVersion;
 
     public OptiFineScraper() {
         mOptiFineVersions = new OptiFineUtils.OptiFineVersions();
-        mOptiFineVersions.minecraftVersions = new ArrayList<>();
+        mOptiFineVersions.gameVersions = new ArrayList<>();
         mOptiFineVersions.optifineVersions = new ArrayList<>();
     }
 
@@ -26,14 +26,14 @@ public class OptiFineScraper implements DownloadUtils.ParseCallback<OptiFineUtil
         traverseTagNode(tagNode);
         insertVersionContent(null);
         if(mOptiFineVersions.optifineVersions.size() < 1 ||
-            mOptiFineVersions.minecraftVersions.size() < 1) throw new DownloadUtils.ParseException(null);
+            mOptiFineVersions.gameVersions.size() < 1) throw new DownloadUtils.ParseException(null);
         return mOptiFineVersions;
     }
 
     public void traverseTagNode(TagNode tagNode) {
-        if(isDownloadLine(tagNode) && mMinecraftVersion != null) {
+        if(isDownloadLine(tagNode) && mGameVersion != null) {
             traverseDownloadLine(tagNode);
-        } else if(isMinecraftVersionTag(tagNode)) {
+        } else if(isGameVersionTag(tagNode)) {
            insertVersionContent(tagNode);
         } else {
             for(TagNode tagNodes : tagNode.getChildTags()) {
@@ -48,14 +48,14 @@ public class OptiFineScraper implements DownloadUtils.ParseCallback<OptiFineUtil
                 tagNode.getAttributeByName("class").startsWith("downloadLine");
     }
 
-    private boolean isMinecraftVersionTag(TagNode tagNode) {
+    private boolean isGameVersionTag(TagNode tagNode) {
         return tagNode.getName().equals("h2") &&
                 tagNode.getText().toString().startsWith("Minecraft ");
     }
 
     private void traverseDownloadLine(TagNode tagNode) {
         OptiFineUtils.OptiFineVersion optiFineVersion = new OptiFineUtils.OptiFineVersion();
-        optiFineVersion.minecraftVersion = mMinecraftVersion;
+        optiFineVersion.gameVersion = mGameVersion;
         for(TagNode subNode : tagNode.getChildTags()) {
             if(!subNode.getName().equals("td")) continue;
             switch(subNode.getAttributeByName("class")) {
@@ -78,12 +78,12 @@ public class OptiFineScraper implements DownloadUtils.ParseCallback<OptiFineUtil
     }
 
     private void insertVersionContent(TagNode tagNode) {
-        if(mListInProgress != null && mMinecraftVersion != null) {
-            mOptiFineVersions.minecraftVersions.add(mMinecraftVersion);
+        if(mListInProgress != null && mGameVersion != null) {
+            mOptiFineVersions.gameVersions.add(mGameVersion);
             mOptiFineVersions.optifineVersions.add(mListInProgress);
         }
         if(tagNode != null) {
-            mMinecraftVersion = tagNode.getText().toString();
+            mGameVersion = tagNode.getText().toString();
             mListInProgress = new ArrayList<>();
         }
     }
