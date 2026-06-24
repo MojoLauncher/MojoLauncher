@@ -100,10 +100,10 @@ jobs:
       - name: Upload onto the Google Play testing track
         continue-on-error: true
         if: github.repository_owner == 'MojoLauncher' && github.ref_name == 'v3_openjdk'
-        uses: r0adkll/upload-google-play@v1.1.2
+        uses: r0adkll/upload-google-play@v1.1.5
         with:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_JSON }}
-          packageName: git.artdeell.mojo
+          packageName: git.artdeell.mjlaunch
           releaseFiles: out/app-gplay.aab
           track: internal
           inAppUpdatePriority: 5

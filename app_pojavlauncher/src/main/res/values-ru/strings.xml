@@ -397,7 +397,7 @@
     <string name="modloader_dl_install_fabric_instance">Установка с Fabric</string>
     <string name="modloader_dl_install_quilt_instance">Установка с Quilt</string>
     <string name="modloader_dl_install_forge_instance">Установка с Forge</string>
-    <string name="social_media_invite" translatable="false">https://t.me/MJLauncher</string>
+    <string name="social_media_invite" translatable="false">https://t.me/MojoLauncher</string>
     <string name="compat_version_not_supported">Ваше устройство не может запустить эту версию поскольку LTW не поддерживается</string>
     <string name="compat_sodium_not_supported">Ваше устройство не может запустить Sodium на этой версии поскольку LTW не поддерживается</string>
     <string name="oauth_unknown_error">Неизвестная ошибка авторизации</string>
