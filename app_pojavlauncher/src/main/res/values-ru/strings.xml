@@ -444,4 +444,6 @@
     <string name="preference_category_keyboard">Настройки клавиатуры</string>
     <string name="preference_keyboard_autopan_title">Разрешить перемещение окна клавиатурой</string>
     <string name="preference_keyboard_autopan_summary">Разрешает экранной клавиатуре перемещать окно игры, а не перекрывать его, если последнее касание было в зоне появления клавиатуры. Не влияет на явный вызов с перемещением в раскладках.</string>
+    <string name="preference_alsoft_opensl_title">Принудительно использовать OpenSL для аудио</string>
+    <string name="preference_alsoft_opensl_summary">Включает принудительное использование OpenSL вместо Oboe для ALSoft. Может исправить проблемы с записью звука на некоторых устройствах. Выключите если вы наблюдаете проблемы с записью или воспроизведением звука.</string>
 </resources>

@@ -74,6 +74,7 @@ public class LauncherPreferences {
 
     public static boolean PREF_FREEDRENO_SYSMEM = false;
     public static boolean PREF_KEYBOARD_AUTOPANNING = true;
+    public static boolean PREF_ALSOFT_FORCE_OPENSL = false;
 
 
     public static void loadPreferences(Context ctx) {
@@ -121,6 +122,7 @@ public class LauncherPreferences {
         PREF_KEYBOARD_AUTOPANNING = DEFAULT_PREF.getBoolean("keyboardAutoPanning", true);
 
         PREF_ZINK_FORCE_LEGACY = DEFAULT_PREF.getBoolean("zinkForceLegacy", false);
+        PREF_ALSOFT_FORCE_OPENSL = DEFAULT_PREF.getBoolean("alsoftForceOpenSL", false);
 
         String argLwjglLibname = "-Dorg.lwjgl.opengl.libname=";
         for (String arg : JREUtils.parseJavaArguments(PREF_CUSTOM_JAVA_ARGS)) {
