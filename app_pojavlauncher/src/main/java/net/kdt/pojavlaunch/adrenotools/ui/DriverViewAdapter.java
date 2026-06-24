@@ -5,6 +5,7 @@ import static net.kdt.pojavlaunch.PojavApplication.sExecutorService;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,7 @@ public class DriverViewAdapter extends RecyclerView.Adapter<DriverViewAdapter.Dr
 
     @Override
     public void onBindViewHolder(@NonNull DriverViewHolder holder, int position) {
-        final List<Driver> drivers = DriverManager.getDrivers();
+        final List<String> drivers = DriverManager.getDriverPaths();
         holder.bindDriver(drivers.get(position), position);
     }
 
@@ -105,7 +106,7 @@ public class DriverViewAdapter extends RecyclerView.Adapter<DriverViewAdapter.Dr
             });
 
             mDeleteButton.setOnClickListener(v -> {
-                if (mCurrentDriver == null || mCurrentDriver.isDefault()) return;
+                if (mCurrentDriver != null && mCurrentDriver.isDefault()) return;
 
 
                 sExecutorService.execute(() -> {
@@ -124,28 +125,31 @@ public class DriverViewAdapter extends RecyclerView.Adapter<DriverViewAdapter.Dr
         }
 
         @SuppressLint("SetTextI18n")
-        public void bindDriver(Driver driver, int pos) {
-            Log.i(DriverManager.TAG, "Binding driver " + driver.getName());
-            mCurrentDriver = driver;
+        public void bindDriver(String driverPath, int pos) {
             mCurrentPosition = pos;
-            if(driver.isDefault()){
-                mDriverNameTextView.setText(R.string.driver_default_name);
-                mDriverExtraNameTextView.setText(R.string.driver_default_extra_name);
+            if((mCurrentDriver = DriverManager.loadDriver(driverPath)) == null){
+                Log.w(DriverManager.TAG, "Driver " + driverPath + " is corrupted");
+                mDriverNameTextView.setText("");
+                mDriverExtraNameTextView.setText(R.string.driver_config_corrupted);
+                mDriverExtraNameTextView.setTextColor(Color.parseColor("#FF0000"));
+                mSetDefaultButton.setEnabled(false);
+                mSetDefaultButton.setVisibility(View.GONE);
             } else {
-                mDriverNameTextView.setText(driver.getName());
-                AdrenoDriver adr = (AdrenoDriver) driver;
-                mDriverExtraNameTextView.setText(adr.getAuthor() + " - " + adr.getDriverVersion());
+                if(mCurrentDriver.isDefault()){
+                    mDriverNameTextView.setText(R.string.driver_default_name);
+                    mDriverExtraNameTextView.setText(R.string.driver_default_extra_name);
+                    mDeleteButton.setVisibility(View.GONE);
+                    mDeleteButton.setClickable(false);
+                } else {
+                    mDriverNameTextView.setText(mCurrentDriver.getName());
+                    AdrenoDriver adr = (AdrenoDriver) mCurrentDriver;
+                    mDriverExtraNameTextView.setText(adr.getAuthor() + " - " + adr.getDriverVersion());
+                }
+                boolean isPreferred = isDefault(mCurrentDriver);
+                mSetDefaultButton.setEnabled(!isPreferred);
+                mSetDefaultButton.setText(isPreferred ? R.string.driver_config_already_used : R.string.driver_config_use);
             }
-            boolean isPreferred = isDefault(driver);
-            mSetDefaultButton.setEnabled(!isPreferred);
-            // TODO: Abstract this
-            mSetDefaultButton.setText(isPreferred ? R.string.driver_config_already_used : R.string.driver_config_use);
             updateButtonsVisibility();
-            if(driver.isDefault()){
-                mDeleteButton.setVisibility(View.GONE);
-                mDeleteButton.setClickable(false);
-            }
-            // TODO: Check for driver validness
         }
 
         private void updateButtonsVisibility(){

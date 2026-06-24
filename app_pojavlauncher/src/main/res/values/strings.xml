@@ -500,6 +500,7 @@
     <string name="driver_config_import_failed">Failed to add the selected driver!</string>
     <string name="driver_config_import_invalid">Incorrect or corrupted driver package, try another</string>
     <string name="driver_config_import_notify">Select a valid AdrenoTools driver package</string>
+    <string name="driver_config_corrupted">Invalid or corrupted driver</string>
     <string name="preference_sysmem_title">Force rendering into the system memory</string>
     <string name="preference_sysmem_summary">Forces Freedreno to render directly into the system memory. Enable if performance is low or you experience rendering issues</string>
 </resources>
