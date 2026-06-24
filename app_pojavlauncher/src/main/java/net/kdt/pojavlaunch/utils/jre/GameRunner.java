@@ -239,9 +239,12 @@ public class GameRunner {
         }
 
         // This allows some mods to use additional libs provided via plugin so we don't need to bloat our app with uncommon stuff
-        LibraryPlugin natives = LibraryPlugin.discoverPlugin(activity, LibraryPlugin.ID_NATIVES_PLUGIN);
-        String additionalNativesDir = natives != null ? (':' + natives.getLibraryPath()) : "";
-        JREUtils.setExtraNativeLibraryPath(natives.getLibraryPath());
+        String additionalNativesDir;
+        LibraryPlugin natives;
+        if((natives = LibraryPlugin.discoverPlugin(activity, LibraryPlugin.ID_NATIVES_PLUGIN)) != null){
+            additionalNativesDir = natives.getLibraryPath();
+            JREUtils.setRedirectLibraryPath(additionalNativesDir);
+        } else additionalNativesDir = "";
 
         File versionSpecificNativesDir = new File(Tools.DIR_CACHE, "natives/"+versionId);
         if(versionSpecificNativesDir.exists()) {
