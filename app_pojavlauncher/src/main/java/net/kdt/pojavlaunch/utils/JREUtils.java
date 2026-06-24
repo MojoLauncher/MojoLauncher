@@ -138,7 +138,10 @@ public class JREUtils {
         // Init mesa renderers
         MesaUtils.initEnvironment(context, renderer, envMap);
 
-        setRendererLibraryPath(Tools.NATIVE_LIB_DIR, MesaUtils.getCustomZinkLibraryPath());
+        if(!PREF_ZINK_PREFER_SYSTEM_DRIVER && DriverManager.isSupportedByDevice()){
+            setRendererLibraryPath(Tools.NATIVE_LIB_DIR, MesaUtils.getCustomZinkLibraryPath(), DriverManager.getPreferredDriverRootPath());
+            loadVulkanLibrary(DriverManager.getPreferredDriverLibraryPath());
+        } else setRendererLibraryPath(Tools.NATIVE_LIB_DIR, MesaUtils.getCustomZinkLibraryPath());
         envMap.put("POJAV_NATIVEDIR", Tools.NATIVE_LIB_DIR);
 
         if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
@@ -273,10 +276,20 @@ public class JREUtils {
     public static int getDetectedVersion() {
         return GLInfoUtils.getGlInfo().glesMajorVersion;
     }
-    public static void setRendererLibraryPath(String mainPath, String additionalPath){
-        if(additionalPath != null)
-            mainPath = additionalPath + ":" + mainPath;
-        nsetRendererLibraryPath(mainPath);
+
+    /**
+     * Set library path for the renderer library
+     * @param mainPath main launcher natives
+     * @param additionalPaths additional natives located outside of the launcher. Prepended to mainPath
+     */
+    public static void setRendererLibraryPath(String mainPath, String... additionalPaths){
+        StringBuilder path = new StringBuilder();
+        for(String s : additionalPaths){
+            if(s == null) continue;
+            path.append(s).append(":");
+        }
+        path.append(mainPath);
+        nsetRendererLibraryPath(path.toString());
     }
     public static native int chdir(String path);
 
@@ -284,8 +297,7 @@ public class JREUtils {
     public static native boolean configureRenderspec(String eglPath, boolean useLoaderBypass, boolean useGles, int glesVersion);
     public static native void configureRenderspecDisplay(int width, int height, int refreshRate);
     private static native void nsetRendererLibraryPath(String path);
-    public static native void preloadVulkan();
-    public static native void setVulkanPath(String vulkanLibrary, String libraryPath);
+    public static native void loadVulkanLibrary(String absolutePath);
     //public static native void initializeHooks();
     // Obtain AWT screen pixels to render on Android SurfaceView
     public static native boolean renderAWTScreenFrame(ByteBuffer tempBuffer);

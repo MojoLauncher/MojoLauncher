@@ -15,20 +15,19 @@
 #include <android/dlext.h>
 #include <pojavexec.h>
 
-static bool turnip_enabled = false;
+static bool driver_loaded = false;
 
 #ifdef ENABLE_TURNIP_LOADER
-bool load_turnip_vulkan() {
-    static bool driver_loaded = false;
-    if(driver_loaded) return true;
-
+void load_turnip_vulkan(const char* custom_path) {
+    if(driver_loaded || !custom_path) return;
     const char* cache_dir = getenv("TMPDIR");
-    if(!linker_ns_load(pojavexec_getNativeDirectory())) return NULL;
+    if(!linker_ns_load(pojavexec_getNativeDirectory())) return;
     void* linkerhook = linker_ns_dlopen("liblinkerhook.so", RTLD_LOCAL | RTLD_NOW);
-    if(linkerhook == NULL) return NULL;
-    void* turnip_driver_handle = linker_ns_dlopen("libvulkan_freedreno.so", RTLD_LOCAL | RTLD_NOW);
+    if(linkerhook == NULL) return;
+    printf("DriverHook: opening vulkan library at %s...\n", custom_path);
+    void* turnip_driver_handle = linker_ns_dlopen(custom_path, RTLD_LOCAL | RTLD_NOW);
     if(turnip_driver_handle == NULL) {
-        printf("DriverHook: Failed to load Turnip!\n%s\n", dlerror());
+        printf("DriverHook: Failed to load custom Vulkan library!\n%s\n", dlerror());
         goto fail_l;
     }
 
@@ -45,19 +44,18 @@ bool load_turnip_vulkan() {
     printf("DriverHook: Loaded mjlvlk, ptr=%p\n", libvulkan);
     if(libvulkan) {
         driver_loaded = true;
-        return true;
     }
     fail_d: dlclose(dl_android);
     fail_t: dlclose(turnip_driver_handle);
     fail_l: dlclose(linkerhook);
-    return false;
 }
 #endif
 
-void* pojavexec_loadVulkanDriver() {
+void* pojavexec_loadVulkanDriver(const char* custom_path) {
 #ifdef ENABLE_TURNIP_LOADER
     if(android_get_device_api_level() >= 28) { // the loader does not support below that
-        if(turnip_enabled && load_turnip_vulkan())
+        if(custom_path) load_turnip_vulkan(custom_path);
+        if(driver_loaded)
             // Reference the vulkan driver separately to avoid weirdness from libraries calling dlclose
             return linker_ns_dlopen("libmjlvlk.so", RTLD_LOCAL);
     }
@@ -67,18 +65,11 @@ void* pojavexec_loadVulkanDriver() {
     return vulkan_ptr;
 }
 
-// Does nothing if Turnip is unsupported - Mesa will load system driver automatically
 JNIEXPORT void JNICALL
-Java_net_kdt_pojavlaunch_utils_JREUtils_preloadVulkan(JNIEnv *env, jclass clazz) {
-#ifdef ENABLE_TURNIP_LOADER
-    if(!turnip_enabled) return;
-    if(!load_turnip_vulkan()) {
-        printf("Failed to preload Turnip!\n");
-    }
-#endif
-}
-
-JNIEXPORT void JNICALL
-Java_net_kdt_pojavlaunch_utils_JREUtils_setUseTurnip(JNIEnv *env, jclass clazz, jboolean enable) {
-    turnip_enabled = enable;
+Java_net_kdt_pojavlaunch_utils_JREUtils_loadVulkanLibrary(JNIEnv *env, jclass clazz,
+                                                          jstring absolute_path) {
+    if(absolute_path == NULL) return;
+    const char* _absolute_path = (*env)->GetStringUTFChars(env, absolute_path, NULL);
+    pojavexec_loadVulkanDriver(_absolute_path);
+    (*env)->ReleaseStringUTFChars(env, absolute_path, _absolute_path);
 }

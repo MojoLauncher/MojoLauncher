@@ -17,7 +17,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.adrenotools.AdrenoDriver;
 import net.kdt.pojavlaunch.adrenotools.DriverManager;
 import net.kdt.pojavlaunch.adrenotools.Driver;
@@ -43,8 +42,13 @@ public class DriverViewAdapter extends RecyclerView.Adapter<DriverViewAdapter.Dr
 
     @Override
     public void onBindViewHolder(@NonNull DriverViewHolder holder, int position) {
-        final List<String> drivers = DriverManager.getDriverPaths();
-        holder.bindDriver(drivers.get(position), position);
+        // Always bind the default driver first
+        if(position == 0)
+            holder.bindDriver(null, 0);
+        else {
+            List<String> drivers = DriverManager.getDriverPaths();
+            holder.bindDriver(drivers.get(position - 1), position);
+        }
     }
 
     @Override
@@ -127,7 +131,8 @@ public class DriverViewAdapter extends RecyclerView.Adapter<DriverViewAdapter.Dr
         @SuppressLint("SetTextI18n")
         public void bindDriver(String driverPath, int pos) {
             mCurrentPosition = pos;
-            if((mCurrentDriver = DriverManager.loadDriver(driverPath)) == null){
+            updateButtonsVisibility();
+            if((mCurrentDriver = driverPath != null ? DriverManager.loadDriver(driverPath) : DriverManager.DEFAULT_DRIVER) == null){
                 Log.w(DriverManager.TAG, "Driver " + driverPath + " is corrupted");
                 mDriverNameTextView.setText("");
                 mDriverExtraNameTextView.setText(R.string.driver_config_corrupted);
@@ -149,7 +154,6 @@ public class DriverViewAdapter extends RecyclerView.Adapter<DriverViewAdapter.Dr
                 mSetDefaultButton.setEnabled(!isPreferred);
                 mSetDefaultButton.setText(isPreferred ? R.string.driver_config_already_used : R.string.driver_config_use);
             }
-            updateButtonsVisibility();
         }
 
         private void updateButtonsVisibility(){

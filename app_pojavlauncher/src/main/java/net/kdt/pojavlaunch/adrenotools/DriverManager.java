@@ -25,9 +25,9 @@ import java.util.zip.ZipInputStream;
  * AdrenoTools driver package manager
  */
 public class DriverManager {
-    public static final String METADATA_FILENAME = "meta.json";
+    private static final String METADATA_FILENAME = "meta.json";
     public static final String TAG = "AdrenoTools";
-    private static final DefaultDriver DEFAULT_DRIVER = new DefaultDriver();
+    public static final DefaultDriver DEFAULT_DRIVER = new DefaultDriver();
     // Must be in the exec place, /sdcard/... is noexec
     private static File packagesPath = new File(Tools.DIR_DATA, "vulkan");
     private static Boolean supported = null;
