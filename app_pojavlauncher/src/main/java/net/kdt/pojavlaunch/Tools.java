@@ -541,7 +541,6 @@ public final class Tools {
         GLInfoUtils.GLInfo info = GLInfoUtils.getGlInfo();
         Logger.appendToLog("Info: Total RAM on device: " + getTotalDeviceMemory(ctx) + " Mb");
         Logger.appendToLog("Info: RAM allocated: " + LauncherPreferences.PREF_RAM_ALLOCATION + " Mb");
-        Logger.appendToLog("Info: RAM available: " + getFreeDeviceMemory(ctx) + " Mb");
         Logger.appendToLog("Info: Graphics device: "+info.vendor+ " "+info.renderer+" (OpenGL ES "+info.glesMajorVersion+")");
         Logger.appendToLog("Info: Selected renderer: " + renderer);
     }
