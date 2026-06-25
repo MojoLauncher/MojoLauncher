@@ -421,7 +421,7 @@
     <string name="vml_fail_find_hooks">Не найдены нужные методы. Проверьте latestlog.txt</string>
     <string name="vml_fail_insert_hooks">Не возможно зарегистрировать методы: %s</string>
     <string name="vml_fail_load_classpath">Ошибка загрузки списка библиотек. Проверьте latestlog.txt</string>
-    <string name="vml_fail_run_main">Ошибка запуска основоного класса. Проверьте latestlog.txt</string>
+    <string name="vml_fail_run_main">Ошибка запуска основного класса. Проверьте latestlog.txt</string>
     <string name="vml_huh">\???</string>
     <string name="vml_err_ok">Успешно</string>
     <string name="vml_err_unknown">Неизвестная ошибка</string>
