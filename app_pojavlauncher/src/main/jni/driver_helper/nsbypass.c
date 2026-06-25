@@ -27,7 +27,7 @@
 #ifdef PLATFORM_64
 #define SEARCH_PATH "/system/lib64"
 #else
-#define SEARCH_PATH "/system/lib"
+#define SEARCH_PATH "/system/lib:/system_ext/lib:/vendor/lib"
 #endif
 
 static struct android_namespace_t* driver_namespace = NULL;
