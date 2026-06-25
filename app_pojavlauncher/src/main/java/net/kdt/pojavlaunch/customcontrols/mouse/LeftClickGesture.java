@@ -1,6 +1,6 @@
 package net.kdt.pojavlaunch.customcontrols.mouse;
 
-import static org.lwjgl.glfw.CallbackBridge.sendMouseButton;
+import static net.kdt.pojavlaunch.CallbackBridge.sendMouseButton;
 
 import android.os.Handler;
 
@@ -9,22 +9,23 @@ import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.MathUtils;
 
-import org.lwjgl.glfw.CallbackBridge;
-
-public class LeftClickGesture extends ValidatorGesture {
+public class LeftClickGesture extends DistanceGesture {
     public static final int FINGER_STILL_THRESHOLD = (int) Tools.dpToPx(9);
-    private float mGestureStartX, mGestureStartY, mGestureEndX, mGestureEndY;
+
     private boolean mMouseActivated;
 
     public LeftClickGesture(Handler handler) {
         super(handler);
     }
 
-    public final void inputEvent() {
-        if(submit()) {
-            mGestureStartX = mGestureEndX = CallbackBridge.mouseX;
-            mGestureStartY = mGestureEndY = CallbackBridge.mouseY;
-        }
+    @Override
+    void onGestureSubmitted() {
+
+    }
+
+    @Override
+    boolean shouldSubmitGesture() {
+        return true;
     }
 
     @Override
@@ -34,7 +35,7 @@ public class LeftClickGesture extends ValidatorGesture {
 
     @Override
     public boolean checkAndTrigger() {
-        boolean fingerStill = LeftClickGesture.isFingerStill(mGestureStartX, mGestureStartY, mGestureEndX, mGestureEndY, FINGER_STILL_THRESHOLD);
+        boolean fingerStill = travelBelowThreshold(LeftClickGesture.FINGER_STILL_THRESHOLD);
         // If the finger is still, fire the gesture.
         if(fingerStill) {
             sendMouseButton(LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_LEFT, true);
@@ -50,26 +51,6 @@ public class LeftClickGesture extends ValidatorGesture {
             sendMouseButton(LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_LEFT, false);
             mMouseActivated = false;
         }
-    }
-
-    public void setMotion(float deltaX, float deltaY) {
-        mGestureEndX += deltaX;
-        mGestureEndY += deltaY;
-    }
-
-    /**
-     * Check if the finger is still when compared to mouseX/mouseY in CallbackBridge.
-     * @param startX the starting X of the gesture
-     * @param startY the starting Y of the gesture
-     * @return whether the finger's position counts as "still" or not
-     */
-    public static boolean isFingerStill(float startX, float startY, float threshold) {
-        return MathUtils.dist(
-                CallbackBridge.mouseX,
-                CallbackBridge.mouseY,
-                startX,
-                startY
-        ) <= threshold;
     }
 
     public static boolean isFingerStill(float startX, float startY, float endX, float endY, float threshold) {

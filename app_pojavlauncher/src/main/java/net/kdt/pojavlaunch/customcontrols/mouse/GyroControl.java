@@ -10,17 +10,17 @@ import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.WindowManager;
 
-import net.kdt.pojavlaunch.GrabListener;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
-
-import org.lwjgl.glfw.CallbackBridge;
 
 import java.util.Arrays;
 
+import git.artdeell.dnbootstrap.glfw.GLFW;
+import git.artdeell.dnbootstrap.glfw.GrabListener;
+
 public class GyroControl implements SensorEventListener, GrabListener {
     /* How much distance has to be moved before taking into account the gyro */
-    private static final float SINGLE_AXIS_LOW_PASS_THRESHOLD = 1.13F;
-    private static final float MULTI_AXIS_LOW_PASS_THRESHOLD = 1.3F;
+    private static final float SINGLE_AXIS_LOW_PASS_THRESHOLD = 0.00113F;
+    private static final float MULTI_AXIS_LOW_PASS_THRESHOLD = 0.0013F;
     // Warmup period of 2 since the first read from the sensor seems to produce a bogus value,
     // which creates a far too large of a difference on the Y axis once actual sensor data comes in
     private static final int ROTATION_VECTOR_WARMUP_PERIOD = 2;
@@ -70,8 +70,9 @@ public class GyroControl implements SensorEventListener, GrabListener {
         mWarmup = ROTATION_VECTOR_WARMUP_PERIOD;
         mSensorManager.registerListener(this, mSensor, 1000 * LauncherPreferences.PREF_GYRO_SAMPLE_RATE);
         mCorrectionListener.enable();
-        mShouldHandleEvents = CallbackBridge.isGrabbing();
-        CallbackBridge.addGrabListener(this);
+        // Avoid going through the JNI each time.
+        mShouldHandleEvents = GLFW.isGrabbing();
+        GLFW.addGrabListener(this);
     }
 
     public void disable() {
@@ -80,7 +81,6 @@ public class GyroControl implements SensorEventListener, GrabListener {
         mCorrectionListener.disable();
         mStoredX = mStoredY = 0;
         resetDamper();
-        CallbackBridge.removeGrabListener(this);
     }
 
     @Override
@@ -97,35 +97,35 @@ public class GyroControl implements SensorEventListener, GrabListener {
         }
         SensorManager.getAngleChange(mAngleDifference, mCurrentRotation, mPreviousRotation);
         damperValue(mAngleDifference);
-        mStoredX += xAverage * 1000 * LauncherPreferences.PREF_GYRO_SENSITIVITY;
-        mStoredY += yAverage * 1000 * LauncherPreferences.PREF_GYRO_SENSITIVITY;
+        mStoredX += xAverage * LauncherPreferences.PREF_GYRO_SENSITIVITY;
+        mStoredY += yAverage * LauncherPreferences.PREF_GYRO_SENSITIVITY;
 
         boolean updatePosition = false;
         float absX = Math.abs(mStoredX);
         float absY = Math.abs(mStoredY);
 
         if(absX + absY > MULTI_AXIS_LOW_PASS_THRESHOLD) {
-            CallbackBridge.mouseX -= ((mSwapXY ? mStoredY : mStoredX) * xFactor);
-            CallbackBridge.mouseY += ((mSwapXY ? mStoredX : mStoredY) * yFactor);
+            GLFW.cursorX -= ((mSwapXY ? mStoredY : mStoredX) * xFactor);
+            GLFW.cursorY += ((mSwapXY ? mStoredX : mStoredY) * yFactor);
             mStoredX = 0;
             mStoredY = 0;
             updatePosition = true;
         } else {
             if(Math.abs(mStoredX) > SINGLE_AXIS_LOW_PASS_THRESHOLD){
-                CallbackBridge.mouseX -= ((mSwapXY ? mStoredY : mStoredX) * xFactor);
+                GLFW.cursorX -= ((mSwapXY ? mStoredY : mStoredX) * xFactor);
                 mStoredX = 0;
                 updatePosition = true;
             }
 
             if(Math.abs(mStoredY) > SINGLE_AXIS_LOW_PASS_THRESHOLD) {
-                CallbackBridge.mouseY += ((mSwapXY ? mStoredX : mStoredY) * yFactor);
+                GLFW.cursorY += ((mSwapXY ? mStoredX : mStoredY) * yFactor);
                 mStoredY = 0;
                 updatePosition = true;
             }
         }
 
         if(updatePosition){
-            CallbackBridge.sendCursorPos(CallbackBridge.mouseX, CallbackBridge.mouseY);
+            GLFW.sendMousePos();
         }
     }
 

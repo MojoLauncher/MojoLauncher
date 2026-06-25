@@ -16,8 +16,8 @@ public class AwtCharSender implements CharacterSenderStrategy {
     }
 
     @Override
-    public void sendChar(char character) {
-        AWTInputBridge.sendChar(character);
+    public void sendChars(CharSequence chars) {
+        for(int i = 0; i < chars.length(); i++) AWTInputBridge.sendChar(chars.charAt(i));
     }
 
 }

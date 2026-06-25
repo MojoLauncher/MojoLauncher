@@ -17,6 +17,7 @@ jmethodID method_ReceiveInput;
 jclass class_MainActivity;
 jmethodID method_OpenLink;
 jmethodID method_OpenPath;
+jclass class_JavaGUILauncherActivity;
 jmethodID method_QuerySystemClipboard;
 jmethodID method_PutClipboardData;
 
@@ -38,11 +39,12 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
         dalvikJavaVMPtr = vm;
         JNIEnv *env = NULL;
         (*vm)->GetEnv(vm, (void**)&env, JNI_VERSION_1_4);
-        class_MainActivity = (*env)->NewGlobalRef(env,(*env)->FindClass(env, "net/kdt/pojavlaunch/MainActivity"));
+        class_MainActivity = (*env)->NewGlobalRef(env,(*env)->FindClass(env, "net/kdt/pojavlaunch/CallbackBridge"));
         method_OpenLink= (*env)->GetStaticMethodID(env, class_MainActivity, "openLink", "(Ljava/lang/String;)V");
         method_OpenPath= (*env)->GetStaticMethodID(env, class_MainActivity, "openLink", "(Ljava/lang/String;)V");
-        method_QuerySystemClipboard = (*env)->GetStaticMethodID(env, class_MainActivity, "querySystemClipboard", "()V");
-        method_PutClipboardData = (*env)->GetStaticMethodID(env, class_MainActivity, "putClipboardData", "(Ljava/lang/String;Ljava/lang/String;)V");
+        class_JavaGUILauncherActivity = (*env)->NewGlobalRef(env, (*env)->FindClass(env, "net/kdt/pojavlaunch/JavaGUILauncherActivity"));
+        method_QuerySystemClipboard = (*env)->GetStaticMethodID(env, class_JavaGUILauncherActivity, "querySystemClipboard", "()V");
+        method_PutClipboardData = (*env)->GetStaticMethodID(env, class_JavaGUILauncherActivity, "putClipboardData", "(Ljava/lang/String;Ljava/lang/String;)V");
     } else if (dalvikJavaVMPtr != vm) {
         runtimeJavaVMPtr = vm;
     }
@@ -132,7 +134,7 @@ JNIEXPORT void JNICALL Java_net_java_openjdk_cacio_ctc_CTCClipboard_nQuerySystem
         class_CTCClipboard = (*env)->NewGlobalRef(env, clazz);
         method_SystemClipboardDataReceived = (*env)->GetStaticMethodID(env, clazz, "systemClipboardDataReceived", "(Ljava/lang/String;Ljava/lang/String;)V");
     }
-    (*dalvikEnv)->CallStaticVoidMethod(dalvikEnv, class_MainActivity, method_QuerySystemClipboard);
+    (*dalvikEnv)->CallStaticVoidMethod(dalvikEnv, class_JavaGUILauncherActivity, method_QuerySystemClipboard);
     if(detachable) (*dalvikJavaVMPtr)->DetachCurrentThread(dalvikJavaVMPtr);
 }
 
@@ -145,7 +147,7 @@ JNIEXPORT void JNICALL Java_net_java_openjdk_cacio_ctc_CTCClipboard_nPutClipboar
 
     const char* dataChars = (*env)->GetStringUTFChars(env, clipboardData, NULL);
     const char* mimeChars = (*env)->GetStringUTFChars(env, clipboardDataMime, NULL);
-    (*dalvikEnv)->CallStaticVoidMethod(dalvikEnv, class_MainActivity, method_PutClipboardData,
+    (*dalvikEnv)->CallStaticVoidMethod(dalvikEnv, class_JavaGUILauncherActivity, method_PutClipboardData,
                                        (*dalvikEnv)->NewStringUTF(dalvikEnv, dataChars),
                                        (*dalvikEnv)->NewStringUTF(dalvikEnv, mimeChars));
     (*env)->ReleaseStringUTFChars(env, clipboardData, dataChars);

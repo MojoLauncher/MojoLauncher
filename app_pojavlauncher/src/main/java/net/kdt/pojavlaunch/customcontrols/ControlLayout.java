@@ -2,8 +2,6 @@ package net.kdt.pojavlaunch.customcontrols;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
-import static org.lwjgl.glfw.CallbackBridge.isGrabbing;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Insets;
@@ -27,7 +25,9 @@ import com.google.gson.JsonSyntaxException;
 import com.kdt.pickafile.FileListView;
 import com.kdt.pickafile.FileSelectedListener;
 
-import net.kdt.pojavlaunch.MinecraftGLSurface;
+import net.kdt.pojavlaunch.LauncherGLSurface;
+
+import git.artdeell.dnbootstrap.glfw.GLFW;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.customcontrols.buttons.ControlButton;
@@ -49,7 +49,7 @@ import java.util.List;
 public class ControlLayout extends FrameLayout {
 	protected CustomControls mLayout;
 	/* Accessible when inside the game by ControlInterface implementations, cached for perf. */
-	private MinecraftGLSurface mGameSurface = null;
+	private LauncherGLSurface mGameSurface = null;
 
 	/* Cache to buttons for performance purposes */
 	private List<ControlInterface> mButtons;
@@ -260,7 +260,9 @@ public class ControlLayout extends FrameLayout {
 
 		mControlVisible = isVisible;
 		for(ControlInterface button : getButtonChildren()){
-			button.setVisible(((button.getProperties().displayInGame && isGrabbing()) || (button.getProperties().displayInMenu && !isGrabbing())) && isVisible);
+            // Avoid going through the JNI each time.
+            // Avoid going through the JNI each time.
+            button.setVisible(((button.getProperties().displayInGame && GLFW.isGrabbing()) || (button.getProperties().displayInMenu && !GLFW.isGrabbing())) && isVisible);
 		}
 	}
 
@@ -476,7 +478,7 @@ public class ControlLayout extends FrameLayout {
 	}
 
 	/** Cached getter for perf purposes */
-	public MinecraftGLSurface getGameSurface(){
+	public LauncherGLSurface getGameSurface(){
 		if(mGameSurface == null){
 			mGameSurface = findViewById(R.id.main_game_render_view);
 		}

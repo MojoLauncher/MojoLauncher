@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition untuk Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
     <string name="login_online_username_hint">Username</string>
     <string name="login_online_login_label">Login</string>
     <!-- Hint -->
-    <string name="hint_control_mapping">"Sentuh roda gigi diatas tengah untuk membuka menu konteks ⚙️\nSentuh sebuah tombol untuk menyesuaikan: edit, ubah ukuran, atau ubah tombol pintasannya."</string>
     <!-- Warnings -->
     <string name="warning_remove_account">Akun ini akan dihapus!</string>
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Pilih sebuah instaler mod</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher tiba-tiba crash tanpa diduga</string>
+    <string name="error_fatal">MJLauncher tiba-tiba crash tanpa diduga</string>
     <string name="error_no_version">Versi tidak ada!</string>
     <string name="error_show_more">Selengkapnya</string>
     <string name="error_show_less">Tampilkan Sedikit</string>
@@ -149,7 +147,7 @@
     <string name="memory_warning_msg">Jumlah RAM kosong saat ini (%d) lebih rendah dari RAM yang dialokasikan (%d), yang dapat menyebabkan crash. Ubah alokasi jika game crash.</string>
     <string name="address_memory_warning_msg">Jumlah RAM kosong saat ini (%d) lebih rendah dari RAM yang dialokasikan (%d), yang dapat menyebabkan crash. Ubah alokasi jika game crash.</string>
     <string name="mcl_memory_allocation">Alokasi Memori</string>
-    <string name="mcl_memory_allocation_subtitle">Kontrol seberapa banyak memori yang diberikan untuk Minecraft.</string>
+
     <string name="multirt_runtime_corrupt">Java Runtime Rusak</string>
     <string name="multirt_runtime_incompatiblearch">Architecture tidak kompatibel: %s</string>
     <string name="multirt_config_title">Runtime Java</string>
@@ -203,7 +201,7 @@
     <string name="pedit_java_runtime">Runtime Java</string>
     <string name="pedit_renderer">Renderer</string>
     <string name="notif_channel_name">Umum</string>
-    <string name="lazy_service_default_title">Mojo Foreground Service</string>
+    <string name="lazy_service_default_title">MJ Foreground Service</string>
     <string name="mcl_setting_veroption_installed">Terpasang</string>
     <string name="use_global_default">(Gunakan global bawaan)</string>
     <string name="default_control">Kontrol bawaan</string>
@@ -218,12 +216,12 @@
     <string name="main_add_account">Tambah akun</string>
     <string name="tasks_ongoing">Ada tugas yang sedang berjalan, mohon menunggu</string>
     <string name="no_saved_accounts">Tidak ada akun yang tersimpan</string>
-    <string name="mc_download_failed">Gagal mengunduh Minecraft! Ini mungkin karena jaringan yang buruk, file yang salah ditempatkan, dll..</string>
+
     <string name="xerr_unknown">Kesalahan API Xbox Live yang tidak diketahui %d</string>
-    <string name="xerr_no_account">Kamu sepertinya tidak memiliki akun Xbox Live. Tolong login ke https://minecraft.net/ dan ulang kembali.</string>
+
     <string name="xerr_adult_verification">Orang tua perlu memverifikasikan akunmu.</string>
     <string name="xerr_child">Akunmu adalah akun anak, dan perlu ditambahkan ke keluarga agar dapat masuk.</string>
-    <string name="minecraft_not_owned">Sepertinya akun ini tidak mempunyai profil Minecraft. Jika kamu memiliki Xbox Game Pass, tolong login ke https://minecraft.net/ dan mengaturnya.</string>
+
     <string name="xerr_not_available">Xbox Live tidak tersedia dinegaramu</string>
     <string name="preference_enable_gyro_title">Hidupkan kontrol giroskop</string>
     <string name="preference_enable_gyro_description">Mengaktifkan ini dapat memperbolehkan anda untuk berputar dengan cara memutar ponsel anda.</string>
@@ -233,7 +231,7 @@
     <string name="preference_gyro_sample_rate_title">Tingkat pengambilan sampel giroskop</string>
     <string name="preference_gyro_sample_rate_description">Jika anda memiliki masalah perfoma dengan kontrol giroskop, tingkatkan ini.</string>
     <string name="microsoft_login_retry_later">Terlalu banyak permintaan, coba lagi nanti.</string>
-    <string name="storage_required">MojoLauncher membutuhkan penyimpanan eksternal. Mohon untuk dipasang kembali dan merestart aplikasi.</string>
+    <string name="storage_required">MJLauncher membutuhkan penyimpanan eksternal. Mohon untuk dipasang kembali dan merestart aplikasi.</string>
     <string name="mcl_setting_title_buttonallcaps">Hanya gunakan huruf kapital di label tombol</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Matikan ini jika kamu ingin menggunakan huruf kecil di kontrol.</string>
     <string name="preference_shader_dump_title">Aktifkan shader dumping</string>
@@ -253,7 +251,7 @@
     <string name="preference_deadzone_scale_title">Skala Joystick deadzone</string>
     <string name="preference_deadzone_scale_description">Tingkatkan jika terjadi \"joystick drift\".</string>
     <string name="preference_force_big_core_title">Paksa renderer untuk berjalan di big core</string>
-    <string name="preference_force_big_core_desc">Paksa thread rendernya Minecraft untuk berjalan di core dengan frekuensi maksimal.</string>
+
     <string name="version_select_hint">Pilih sebuah versi</string>
     <string name="forge_dl_progress">Mengunduh installer dalam %s</string>
     <string name="forge_dl_searching">Mencari nomor versi Forge</string>
@@ -262,7 +260,7 @@
     <string name="forge_dl_select_version">Pilih versi Forge</string>
     <string name="fabric_dl_progress">Mengunduh metadata loader %s</string>
     <string name="fabric_dl_loader_version">Versi loader %s</string>
-    <string name="fabric_dl_game_version">Versi Minecraft</string>
+
     <string name="fabric_dl_install">Pasang</string>
     <string name="fabric_dl_cant_read_meta">Gagal membaca metadata loader %s. Mohon coba lagi nanti.</string>
     <string name="create_profile_vanilla_like_versions">Seperti Versi Vanilla</string>
@@ -284,7 +282,7 @@
     <string name="modpack_download_downloading_mods">Mengunduh mod-mod (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Mengunduh mod-mod (Berkas %d dari %d)</string>
     <string name="modpack_download_applying_overrides">Menerapkan pergantian-pergantian paksa (%d/%d)</string>
-    <string name="modpack_install_notification_title">Pemasang Modpack Mojo</string>
+    <string name="modpack_install_notification_title">Pemasang Modpack MJ</string>
     <string name="modpack_install_notification_success">Pencet ini untuk menyelesaikan pemasangan modpack</string>
     <string name="modpack_install_notification_data_not_available">Gagal mengunduh informasi loader mod</string>
     <string name="modpack_install_modloader_download_failed">Gagal mengunduh berkas-berkas loader mod</string>
@@ -313,7 +311,7 @@
     <string name="preference_category_miscellaneous">Pengaturan lain-lain</string>
     <string name="preference_category_video">Pengaturan video</string>
     <string name="notification_permission_dialog_title">Permintaan izin</string>
-    <string name="notification_permission_dialog_text">Mojo launcher memperlukan izin untuk post notifikasi untuk mencegah download game/modpack berhenti ketika keluar dari aplikasi. Tanpa izin ini, android mungkin membatalkan unduhan ketita menempatkan MojoLaunher dalam mode latar belakang.</string>
+    <string name="notification_permission_dialog_text">MJ launcher memperlukan izin untuk post notifikasi untuk mencegah download game/modpack berhenti ketika keluar dari aplikasi. Tanpa izin ini, android mungkin membatalkan unduhan ketita menempatkan MJLaunher dalam mode latar belakang.</string>
     <string name="notification_permission_toast">kamu selalu dapat berubah pikiran nanti dengan masuk ke Pengaturan</string>
     <string name="preference_ask_for_notification_title">Izinkan notifikasi</string>
     <string name="preference_ask_for_notification_description">Tekan untuk meminta kembali izin notifikasi, dibutuhkan untuk pengunduhan latar belakang permainan/modpack untuk berjalan dengan benar.</string>

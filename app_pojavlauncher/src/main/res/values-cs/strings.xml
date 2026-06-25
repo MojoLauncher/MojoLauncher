@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition pro Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
     <string name="login_online_username_hint">Uživatelské jméno</string>
     <string name="login_online_login_label">Přihlásit se</string>
     <!-- Hint -->
-    <string name="hint_control_mapping">"Klikněte na ikonu ozubeného kolečka nahoře uprostřed pro otevření menu ⚙\nKlikněte na tlačítko pro přizpůsobení: editaci, škálu, odstranění či změnu kláves."</string>
+    <string name="hint_control_mapping">Klikněte na ikonu ozubeného kolečka pro otevření menu ⚙\nKlikněte na tlačítko pro přizpůsobení: editaci, škálu, odstranění či změnu kláves.</string>
     <!-- Warnings -->
     <string name="warning_remove_account">Tento účet bude odstraněn!</string>
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Vyberte instalátor módů</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher neočekávaně spadl</string>
+    <string name="error_fatal">MJLauncher neočekávaně spadl</string>
     <string name="error_no_version">Žádná verze!</string>
     <string name="error_show_more">Zobrazit více</string>
     <string name="error_show_less">Zobrazit méně</string>
@@ -149,7 +148,7 @@
     <string name="memory_warning_msg">Aktuální množství volné paměti RAM (%d) je nižší než přidělená paměť RAM (%d), což může vést k pádu. Spadne-li hra, snižte přidělení paměti.</string>
     <string name="address_memory_warning_msg">Aktuální množství volné přístupné paměti RAM (%d) je nižší než přidělená paměť RAM (%d), což povede k pádu. Spadne-li hra, sniž přidělení paměti.</string>
     <string name="mcl_memory_allocation">Přidělení paměti</string>
-    <string name="mcl_memory_allocation_subtitle">Určuje množství paměti přidělené Minecraftu.</string>
+
     <string name="multirt_runtime_corrupt">Poškozená Java Runtime</string>
     <string name="multirt_runtime_incompatiblearch">Nekompatibilní architektura: %s</string>
     <string name="multirt_config_title">Verze Javy</string>
@@ -203,7 +202,7 @@
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Vykreslovač</string>
     <string name="notif_channel_name">Všeobecné</string>
-    <string name="lazy_service_default_title">Služba Popředí Mojou</string>
+    <string name="lazy_service_default_title">Služba Popředí MJu</string>
     <string name="mcl_setting_veroption_installed">Nainstalováno</string>
     <string name="use_global_default">(Užít globální výchozí nastavení)</string>
     <string name="default_control">Výchozí ovládání</string>
@@ -218,12 +217,12 @@
     <string name="main_add_account">Přidat účet</string>
     <string name="tasks_ongoing">Probíhají úkoly, počkejte, prosím</string>
     <string name="no_saved_accounts">Žádné přihlášené účty</string>
-    <string name="mc_download_failed">Selhalo stahování Minecraftu! Mohlo se tak stát kvůli špatnému internetovému připojení, nesprávně umístěným souborům apod.</string>
+
     <string name="xerr_unknown">Neznámá Chyba API Xbox Live %d</string>
-    <string name="xerr_no_account">Zdá se že nemáte účet Xbox Live. Jednou se přihlašte na https://minecraft.net/ a zkuste to znovu.</string>
+
     <string name="xerr_adult_verification">Váš účet musí být ověřen dospělým.</string>
     <string name="xerr_child">Váš účet je dětský, tudíž je potřeba jej přidat do Family pro přihlášení.</string>
-    <string name="minecraft_not_owned">Tento účet nejspíše nemá profil Minecraftu. Máte-li Xbox Game Pass, přihlašte se na https://minecraft.net/ a nastavte jej.</string>
+
     <string name="xerr_not_available">Xbox Live není ve vaší zemi dostupné</string>
     <string name="preference_enable_gyro_title">Zapnout gyroskopové ovládání</string>
     <string name="preference_enable_gyro_description">Zapnutí vám umožní se otáčet ve hře otáčením telefonu.</string>
@@ -233,7 +232,7 @@
     <string name="preference_gyro_sample_rate_title">Vzorkovací kmitočet gyroskopu</string>
     <string name="preference_gyro_sample_rate_description">Zvyšte toto, máte-li problém s výkonem užívajíce gyroskopového ovládání.</string>
     <string name="microsoft_login_retry_later">Příliš mnoho požadavků, zkuste to znovu později.</string>
-    <string name="storage_required">MojoLauncher vyžaduje přípojené externí úložiště. Připojte jej prosím znovu a restartujte tuto aplikaci.</string>
+    <string name="storage_required">MJLauncher vyžaduje přípojené externí úložiště. Připojte jej prosím znovu a restartujte tuto aplikaci.</string>
     <string name="mcl_setting_title_buttonallcaps">Zobrazovat pouze velká písmena na popiscích tlačítek</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Vypněte toto, chcete-li užívat malá písmena ve vlastních ovládání.</string>
     <string name="preference_shader_dump_title">Povolit vyhazování shaderů</string>
@@ -253,7 +252,7 @@
     <string name="preference_deadzone_scale_title">Měřítko mrtvé zóny joysticku</string>
     <string name="preference_deadzone_scale_description">Zvětšte ujíždí-li joystick.</string>
     <string name="preference_force_big_core_title">Vynutit běh vykreslovače na velkém jádře</string>
-    <string name="preference_force_big_core_desc">Donutí vlákno vykreslovače Minecraftu běžet na jádře s nejvyšší maximální frekvencí.</string>
+
     <string name="version_select_hint">Vyberte verzi</string>
     <string name="forge_dl_progress">Stahování instalátoru pro %s</string>
     <string name="forge_dl_searching">Hledání čísla verze Forge</string>
@@ -262,7 +261,7 @@
     <string name="forge_dl_select_version">Vyberte verzi Forge</string>
     <string name="fabric_dl_progress">Stahování %s metadat načítače</string>
     <string name="fabric_dl_loader_version">Verze načítače %s</string>
-    <string name="fabric_dl_game_version">Verze Minecraftu</string>
+
     <string name="fabric_dl_install">Instalovat</string>
     <string name="fabric_dl_cant_read_meta">Nepodařilo se přečísti metadata načítače %s. Zkuste to prosím znovu později.</string>
     <string name="create_profile_vanilla_like_versions">Verze podobné Vanille</string>
@@ -284,7 +283,7 @@
     <string name="modpack_download_downloading_mods">Stahování módů (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Stahování módů (Soubor %d z %d)</string>
     <string name="modpack_download_applying_overrides">Provádení přepisů (%d/%d)</string>
-    <string name="modpack_install_notification_title">Instalátor Modpacků Mojou</string>
+    <string name="modpack_install_notification_title">Instalátor Modpacků MJu</string>
     <string name="modpack_install_notification_success">Klikněte zde k dokončení instalace modpacku</string>
     <string name="modpack_install_notification_data_not_available">Stahování informací načítače módů selhalo</string>
     <string name="modpack_install_modloader_download_failed">Stahování souborů načítače módů selhalo</string>
@@ -313,7 +312,7 @@
     <string name="preference_category_miscellaneous">Jiná nastavení</string>
     <string name="preference_category_video">Nastavení videa</string>
     <string name="notification_permission_dialog_title">Žádost o oprávnění</string>
-    <string name="notification_permission_dialog_text">MojoLauncher vyžaduje oprávnění k odesílání oznámení, aby se zabránilo zastavení stahování hry/modpacku při opuštění aplikace. Bez tohoto oprávnění může Android přerušit vaše stahování, když přepnete MojoLauncher do režimu na pozadí.</string>
+    <string name="notification_permission_dialog_text">MJLauncher vyžaduje oprávnění k odesílání oznámení, aby se zabránilo zastavení stahování hry/modpacku při opuštění aplikace. Bez tohoto oprávnění může Android přerušit vaše stahování, když přepnete MJLauncher do režimu na pozadí.</string>
     <string name="notification_permission_toast">Později si můžete změnit svůj názor v nastavení</string>
     <string name="preference_ask_for_notification_title">Povolit oznámení</string>
     <string name="preference_ask_for_notification_description">Kliknutím znovu požádáte o oprávnění pro posílání oznámení, které je vyžadováno pro správné fungování stahování hry/modpacku na pozadí.</string>

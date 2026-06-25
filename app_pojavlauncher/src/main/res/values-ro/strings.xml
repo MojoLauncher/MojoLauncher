@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition pentru Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -13,7 +12,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Selectează un instalator de mod</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher s-a oprit neașteptat</string>
+    <string name="error_fatal">MJLauncher s-a oprit neașteptat</string>
     <string name="error_no_version">Fără versiune!</string>
     <string name="error_show_more">Arată mai mult</string>
     <string name="error_show_less">Arată mai puțin</string>
@@ -154,7 +153,7 @@
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Randator</string>
     <string name="notif_channel_name">General</string>
-    <string name="lazy_service_default_title">Serviciu Mojo prim-plan</string>
+    <string name="lazy_service_default_title">Serviciu MJ prim-plan</string>
     <string name="mcl_setting_veroption_installed">Instalat</string>
     <string name="use_global_default">(Utilizare implicită globală)</string>
     <string name="progresslayout_tasks_in_progress">%d sarcini în curs</string>
@@ -166,12 +165,12 @@
     <string name="main_add_account">Adăugați un cont</string>
     <string name="tasks_ongoing">Sarcinile sunt în desfășurare, vă rugăm așteptați</string>
     <string name="no_saved_accounts">Niciun cont salvat</string>
-    <string name="mc_download_failed">Descărcarea Minecraft a eșuat! Acest lucru s-ar putea datora conexiunii de rețea incorecte, fișierelor plasate incorect etc..</string>
+
     <string name="xerr_unknown">Xbox Live API eroare necunoscută %d</string>
-    <string name="xerr_no_account">Se pare că nu ai un cont Xbox live. Te rugăm să te autentifici o dată pe https://minecraft.net/ și să încerci din nou.</string>
+
     <string name="xerr_adult_verification">Un adult trebuie să-ți verifice contul.</string>
     <string name="xerr_child">Contul tau este un cont de copil si trebuie sa fie adaugat intr-o familie pentru a se autentifica.</string>
-    <string name="minecraft_not_owned">Se pare că acest cont nu are un profil de Minecraft. Dacă aveți Xbox Game Pass, vă rugăm să vă autentificați pe https://minecraft.net/ și să-l configurați.</string>
+
     <string name="xerr_not_available">Xbox Live nu este disponibil în ţara dumneavoastră</string>
     <string name="preference_enable_gyro_title">Permite controalele gyroscopului</string>
     <string name="preference_gyro_sensitivity_title">Controalele tiroscopului controlează sensibilitatea</string>

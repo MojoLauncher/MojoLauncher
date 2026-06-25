@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class JSONUtils {
@@ -22,6 +24,12 @@ public class JSONUtils {
             valueInserted = valueInserted.replace("${" + keyValue.getKey() + "}", keyValue.getValue() == null ? "" : keyValue.getValue());
         }
         return valueInserted;
+    }
+
+    public static <T> T readFromStream(InputStream file, Class<T> clazs) throws IOException {
+        try(InputStreamReader streamReader = new InputStreamReader(file)) {
+            return Tools.GLOBAL_GSON.fromJson(streamReader, clazs);
+        }
     }
 
     public static void writeToFile(File file, Object target) throws IOException {

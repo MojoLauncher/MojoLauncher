@@ -1,16 +1,13 @@
 #pragma once
 
 #include <stdbool.h>
-
-#define CLIPBOARD_COPY 2000
-#define CLIPBOARD_PASTE 2001
-#define CLIPBOARD_OPEN 2002
+#include <jni.h>
 
 const char** convert_to_char_array(JNIEnv *env, jobjectArray jstringArray);
 jobjectArray convert_from_char_array(JNIEnv *env, const char **charArray, jint num_rows);
 void free_char_array(JNIEnv *env, jobjectArray jstringArray, const char **charArray);
+void openLink(const char* link);
 jstring convertStringJVM(JNIEnv* srcEnv, JNIEnv* dstEnv, jstring srcStr);
 
 JNIEnv* get_attached_env(JavaVM* jvm);
-JNIEXPORT jstring JNICALL Java_org_lwjgl_glfw_CallbackBridge_nativeClipboard(JNIEnv* env, jclass clazz, jint action, jbyteArray copySrc);
 

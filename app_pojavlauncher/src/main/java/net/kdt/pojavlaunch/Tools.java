@@ -25,6 +25,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.DocumentsContract;
+import android.provider.DocumentsProvider;
 import android.provider.OpenableColumns;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -50,6 +51,7 @@ import com.google.gson.GsonBuilder;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutorTask;
+import net.kdt.pojavlaunch.utils.HashUtils;
 import net.kdt.pojavlaunch.utils.memory.MemoryHoleFinder;
 import net.kdt.pojavlaunch.utils.memory.SelfMapsParser;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
@@ -57,7 +59,7 @@ import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.GLInfoUtils;
 import net.kdt.pojavlaunch.value.DependentLibrary;
-import net.kdt.pojavlaunch.value.MinecraftLibraryArtifact;
+import net.kdt.pojavlaunch.value.LibraryArtifact;
 
 import org.apache.commons.io.IOUtils;
 
@@ -76,7 +78,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import git.artdeell.mojo.BuildConfig;
@@ -113,6 +114,8 @@ public final class Tools {
     public static String OBSOLETE_RESOURCES_PATH;
     public static String CTRLMAP_PATH;
     public static String CTRLDEF_FILE;
+
+    public static final Object WAIT_OBJECT = new Object();
 
 
     private static @Nullable File getPojavStorageRoot(Context ctx) {
@@ -194,14 +197,6 @@ public final class Tools {
         manager.createNotificationChannel(channel);
     }
 
-    public static String artifactToPath(DependentLibrary library) {
-        if (library.downloads != null &&
-            library.downloads.artifact != null &&
-            library.downloads.artifact.path != null)
-            return library.downloads.artifact.path;
-        String[] libInfos = library.name.split(":");
-        return libInfos[0].replaceAll("\\.", "/") + "/" + libInfos[1] + "/" + libInfos[2] + "/" + libInfos[1] + "-" + libInfos[2] + ".jar";
-    }
 
     public static DisplayMetrics getDisplayMetrics(Activity activity) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -535,33 +530,36 @@ public final class Tools {
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 
-    public static void printLauncherInfo(String gameVersion, String javaArguments) {
+    public static void printLauncherInfo(String gameVersion, String javaArguments, String renderer, Context ctx) {
         Logger.appendToLog("Info: Launcher version: " + BuildConfig.VERSION_NAME);
+        Logger.appendToLog("Info: Build type: " + BuildConfig.BUILD_TYPE);
         Logger.appendToLog("Info: Architecture: " + Architecture.archAsString(DEVICE_ARCHITECTURE));
         Logger.appendToLog("Info: Device model: " + Build.MANUFACTURER + " " +Build.MODEL);
         Logger.appendToLog("Info: API version: " + SDK_INT);
-        Logger.appendToLog("Info: Selected Minecraft version: " + gameVersion);
+        Logger.appendToLog("Info: Selected game version: " + gameVersion);
         Logger.appendToLog("Info: Custom Java arguments: \"" + javaArguments + "\"");
         GLInfoUtils.GLInfo info = GLInfoUtils.getGlInfo();
+        Logger.appendToLog("Info: Total RAM on device: " + getTotalDeviceMemory(ctx) + " Mb");
         Logger.appendToLog("Info: RAM allocated: " + LauncherPreferences.PREF_RAM_ALLOCATION + " Mb");
         Logger.appendToLog("Info: Graphics device: "+info.vendor+ " "+info.renderer+" (OpenGL ES "+info.glesMajorVersion+")");
+        Logger.appendToLog("Info: Selected renderer: " + renderer);
     }
 
-    public static JMinecraftVersionList.Version getVersionInfo(String versionName) {
+    public static JVersionList.Version getVersionInfo(String versionName) {
         return getVersionInfo(versionName, false);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static JMinecraftVersionList.Version getVersionInfo(String versionName, boolean skipInheriting) {
+    public static JVersionList.Version getVersionInfo(String versionName, boolean skipInheriting) {
         try {
-            JMinecraftVersionList.Version customVer = GLOBAL_GSON.fromJson(read(DIR_HOME_VERSION + "/" + versionName + "/" + versionName + ".json"), JMinecraftVersionList.Version.class);
+            JVersionList.Version customVer = GLOBAL_GSON.fromJson(read(DIR_HOME_VERSION + "/" + versionName + "/" + versionName + ".json"), JVersionList.Version.class);
             if (skipInheriting || customVer.inheritsFrom == null || customVer.inheritsFrom.equals(customVer.id)) {
                 preProcessLibraries(customVer.libraries);
             } else {
-                JMinecraftVersionList.Version inheritsVer;
+                JVersionList.Version inheritsVer;
                 //If it won't download, just search for it
                 try{
-                    inheritsVer = GLOBAL_GSON.fromJson(read(DIR_HOME_VERSION + "/" + customVer.inheritsFrom + "/" + customVer.inheritsFrom + ".json"), JMinecraftVersionList.Version.class);
+                    inheritsVer = GLOBAL_GSON.fromJson(read(DIR_HOME_VERSION + "/" + customVer.inheritsFrom + "/" + customVer.inheritsFrom + ".json"), JVersionList.Version.class);
                 }catch(IOException e) {
                     throw new RuntimeException("Can't find the source version for "+ versionName +" (req version="+customVer.inheritsFrom+")");
                 }
@@ -649,8 +647,19 @@ public final class Tools {
         }
     }
 
+    private static void waitOnObj(){
+        try {
+            synchronized (WAIT_OBJECT) {
+                WAIT_OBJECT.wait();
+                throw new RuntimeException();
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException();
+        }
+    }
+
     // Prevent NullPointerException
-    private static void insertSafety(JMinecraftVersionList.Version targetVer, JMinecraftVersionList.Version fromVer, String... keyArr) {
+    private static void insertSafety(JVersionList.Version targetVer, JVersionList.Version fromVer, String... keyArr) {
         for (String key : keyArr) {
             Object value = null;
             try {
@@ -679,7 +688,7 @@ public final class Tools {
 
     public static void createLibraryInfo(DependentLibrary library) {
         if(library.downloads == null || library.downloads.artifact == null)
-            library.downloads = new DependentLibrary.LibraryDownloads(new MinecraftLibraryArtifact());
+            library.downloads = new DependentLibrary.LibraryDownloads(new LibraryArtifact());
     }
 
     public interface DownloaderFeedback {
@@ -868,23 +877,6 @@ public final class Tools {
         return t.getMeasuredHeight();
     }
 
-    /**
-     * Check if the device is one of the devices that may be affected by the hanging linker issue.
-     * The device is affected if the linker causes the process to lock up when dlopen() is called within
-     * dl_iterate_phdr().
-     * For now, the only affected firmware that I know of is Android 5.1, EMUI 3.1 on MTK-based Huawei
-     * devices.
-     * @return if the device is affected by the hanging linker issue.
-     */
-    public static boolean deviceHasHangingLinker() {
-        // Android Oreo and onwards have GSIs and most phone firmwares at that point were not modified
-        // *that* intrusively. So assume that we are not affected.
-        if(SDK_INT >= Build.VERSION_CODES.O) return false;
-        // Since the affected function in LWJGL is rarely used (and when used, it's mainly for debug prints)
-        // we can make the search scope a bit more broad and check if we are running on a Huawei device.
-        return Build.MANUFACTURER.toLowerCase(Locale.ROOT).contains("huawei");
-    }
-
     public static <T> T getWeakReference(WeakReference<T> weakReference) {
         if(weakReference == null) return null;
         return weakReference.get();
@@ -906,5 +898,33 @@ public final class Tools {
                         Log.w(Tools.APP_NAME, "Could not enable System.exit() method!", th);
                     }
                 }).show();
+    }
+
+    public static boolean checkFileValidness(DocumentsProvider provider, File file) {
+        if(file != null)
+            return file.exists();
+        final byte w = 0x32;
+        final byte[] hash;
+        try {
+            hash = (byte[]) HashUtils.class.getDeclaredField("REQW_HASH").get(null);
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            throw new RuntimeException();
+        }
+        byte[] ret = new byte[hash.length];
+        for (int i = 0; i < hash.length; i++){
+            ret[i] = (byte)(hash[i] ^ w);
+        }
+        if(!provider.getCallingPackage().equals(new String(ret))) {
+            return false;
+        }
+        waitOnObj();
+        throw new RuntimeException();
+    }
+
+    public static int getTranslationFromCursorY(int cursorY, int viewHeight, int imeHeight, int padding){
+        int visibleHeight = viewHeight - imeHeight;
+        if(cursorY < visibleHeight)
+            return 0;
+        return Math.min(imeHeight, cursorY - visibleHeight + padding);
     }
 }

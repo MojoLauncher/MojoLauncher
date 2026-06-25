@@ -1,8 +1,7 @@
 package net.kdt.pojavlaunch.customcontrols.buttons;
 
 import static net.kdt.pojavlaunch.LwjglGlfwKeycode.GLFW_KEY_UNKNOWN;
-import static org.lwjgl.glfw.CallbackBridge.sendKeyPress;
-import static org.lwjgl.glfw.CallbackBridge.sendMouseButton;
+import static net.kdt.pojavlaunch.CallbackBridge.sendMouseButton;
 
 import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
@@ -19,6 +18,8 @@ import android.widget.TextView;
 
 import net.kdt.pojavlaunch.LwjglGlfwKeycode;
 import net.kdt.pojavlaunch.MainActivity;
+
+import git.artdeell.dnbootstrap.glfw.GLFW;
 import git.artdeell.mojo.R;
 
 import net.kdt.pojavlaunch.Tools;
@@ -27,7 +28,7 @@ import net.kdt.pojavlaunch.customcontrols.ControlLayout;
 import net.kdt.pojavlaunch.customcontrols.handleview.EditControlSideDialog;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
-import org.lwjgl.glfw.CallbackBridge;
+import net.kdt.pojavlaunch.CallbackBridge;
 
 import static net.kdt.pojavlaunch.customcontrols.buttons.BackgroundTint.DEFAULT_TINT_LIST;
 import static net.kdt.pojavlaunch.customcontrols.buttons.BackgroundTint.TOGGLE_TINT_LIST;
@@ -209,8 +210,9 @@ public class ControlButton extends TextView implements ControlInterface {
         setActivated(isDown);
         for(int keycode : mProperties.keycodes){
             if(keycode >= GLFW_KEY_UNKNOWN){
-                sendKeyPress(keycode, CallbackBridge.getCurrentMods(), isDown);
                 CallbackBridge.setModifiers(keycode, isDown);
+                int modifiers = CallbackBridge.getCurrentMods();
+                GLFW.sendKeyEvent(keycode, isDown, modifiers);
             }else{
                 Log.i("punjabilauncher", "sendSpecialKey("+keycode+","+isDown+")");
                 sendSpecialKey(keycode, isDown);
@@ -221,7 +223,11 @@ public class ControlButton extends TextView implements ControlInterface {
     private void sendSpecialKey(int keycode, boolean isDown){
         switch (keycode) {
             case ControlData.SPECIALBTN_KEYBOARD:
-                if(isDown) MainActivity.switchKeyboardState();
+                if(isDown) MainActivity.switchKeyboardState(false);
+                break;
+
+            case ControlData.SPECIALBTN_KEYBOARDPAN:
+                if(isDown) MainActivity.switchKeyboardState(true);
                 break;
 
             case ControlData.SPECIALBTN_TOGGLECTRL:

@@ -21,6 +21,17 @@ public class ContextExecutor {
         Tools.runOnUiThread(()->executeOnUiThread(contextExecutorTask));
     }
 
+    /**
+     * Schedules an ActivityRunnable to be executed ONLY if there is an Activity currently attached and in foreground
+     * @param activityRunnable the activity runnable
+     */
+    public static void executeActivity(ActivityRunnable activityRunnable) {
+        Tools.runOnUiThread(()->{
+            Activity activity = Tools.getWeakReference(sActivity);
+            if(activity != null) activityRunnable.executeWithActivity(activity);
+        });
+    }
+
     private static void executeOnUiThread(ContextExecutorTask contextExecutorTask) {
         Activity activity = Tools.getWeakReference(sActivity);
         if(activity != null) {

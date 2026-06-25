@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">মোজোলঞ্চার (মাইনক্রাফট: জাভা এডিশন আ্যন্ডরয়েডের জন্য)</string>
     <string name="app_short_name">মোজোলঞ্চার </string>
 
     <!-- Action bar part -->
@@ -13,8 +12,7 @@
     <string name="login_online_login_label">লগইন</string>
 
     <!-- Hint -->
-    <string name="hint_control_mapping">"উপরের মাঝখানের গিয়ার আইকনে স্পর্শ করুন যাতে কনটেক্সট মেনু খুলে ⚙
-একটি বোতামে ট্যাপ করুন কাস্টমাইজ করতে: সম্পাদনা, আকার পরিবর্তন, অপসারণ, অথবা এর কী-বাইন্ড পরিবর্তন করুন।"</string>
+    <string name="hint_control_mapping">গিয়ার আইকনে স্পর্শ করুন যাতে কনটেক্সট মেনু খুলে ⚙\nএকটি বোতামে ট্যাপ করুন কাস্টমাইজ করতে: সম্পাদনা, আকার পরিবর্তন, অপসারণ, অথবা কী-বাইন্ড পরিবর্তন করুন।</string>
 
     <!-- Warnings -->
     <string name="warning_remove_account">এই একাউন্টটি মুছে যাবে!</string>
@@ -23,7 +21,7 @@
     <string name="alerttitle_installmod">একটি মোড ইনস্টলার নির্বাচন করুন</string>
 
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher অপ্রত্যাশিতভাবে ক্র্যাশ করেছে</string>
+    <string name="error_fatal">MJLauncher অপ্রত্যাশিতভাবে ক্র্যাশ করেছে</string>
     <string name="error_no_version">>কোন ভার্সন নেই!</string>
     <string name="error_show_more">আরো দেখুন</string>
     <string name="error_show_less">কম দেখান</string>
@@ -241,7 +239,7 @@
     <string name="pedit_java_runtime">জাভা রানটাইম</string>
     <string name="pedit_renderer">রেন্ডারার</string>
     <string name="notif_channel_name">সাধারণ</string>
-    <string name="lazy_service_default_title">Mojo ফোরগ্রাউন্ড সার্ভিস</string>
+    <string name="lazy_service_default_title">MJ ফোরগ্রাউন্ড সার্ভিস</string>
     <string name="mcl_setting_veroption_installed">ইনস্টলকৃত</string>
     <string name="use_global_default">(গ্লোবাল ডিফল্ট ব্যবহার করুন)</string>
     <string name="default_control">ডিফল্ট কন্ট্রোলম্যাপ</string>
@@ -256,12 +254,12 @@
     <string name="main_add_account">অ্যাকাউন্ট যোগ করুন</string>
     <string name="tasks_ongoing">কাজ চলছে, অনুগ্রহ করে অপেক্ষা করুন</string>
     <string name="no_saved_accounts">কোনো সংরক্ষিত অ্যাকাউন্ট নেই</string>
-    <string name="mc_download_failed">Minecraft ডাউনলোড ব্যর্থ! সম্ভবত নেটওয়ার্ক সমস্যা বা ফাইলের অবস্থান ভুল।</string>
+
     <string name="xerr_unknown">অজানা Xbox Live API ত্রুটি %d</string>
-    <string name="xerr_no_account">আপনার Xbox Live অ্যাকাউন্ট নেই মনে হচ্ছে। অনুগ্রহ করে https://minecraft.net এ লগইন করুন এবং আবার চেষ্টা করুন।</string>
+
     <string name="xerr_adult_verification">আপনার অ্যাকাউন্ট যাচাইয়ের জন্য একজন প্রাপ্তবয়স্কের প্রয়োজন।</string>
     <string name="xerr_child">আপনার অ্যাকাউন্ট শিশু অ্যাকাউন্ট, লগইন করতে Family তে যোগ করতে হবে।</string>
-    <string name="minecraft_not_owned">এই অ্যাকাউন্টে Minecraft প্রোফাইল নেই। যদি আপনার Xbox Game Pass থাকে, অনুগ্রহ করে https://minecraft.net এ লগইন করে সেট করুন।</string>
+
     <string name="xerr_not_available">আপনার দেশে Xbox Live উপলব্ধ নয়</string>
     <string name="preference_enable_gyro_title">জাইরোস্কোপ কন্ট্রোল চালু করুন</string>
     <string name="preference_enable_gyro_description">এটি চালু করলে ফোন ঘুরিয়ে ইন-গেমে ঘুরতে পারবেন।</string>
@@ -271,7 +269,7 @@
     <string name="preference_gyro_sample_rate_title">জাইরোস্কোপ স্যাম্পলিং রেট</string>
     <string name="preference_gyro_sample_rate_description">জাইরোস্কোপ কন্ট্রোলে পারফরম্যান্স সমস্যা হলে এটি বাড়ান।</string>
     <string name="microsoft_login_retry_later">অনেক অনুরোধ করা হয়েছে, অনুগ্রহ করে পরে চেষ্টা করুন।</string>
-    <string name="storage_required">MojoLauncher চালানোর জন্য এক্সটার্নাল স্টোরেজ সংযুক্ত করতে হবে। পুনরায় সংযুক্ত করে অ্যাপ রিস্টার্ট করুন।</string>
+    <string name="storage_required">MJLauncher চালানোর জন্য এক্সটার্নাল স্টোরেজ সংযুক্ত করতে হবে। পুনরায় সংযুক্ত করে অ্যাপ রিস্টার্ট করুন।</string>
     <string name="mcl_setting_title_buttonallcaps">বোতামের লেবেলে কেবল বড় হাতের অক্ষর ব্যবহার করুন</string>
     <string name="mcl_setting_subtitle_buttonallcaps">ছোট হাতের অক্ষর ব্যবহার করতে এটি বন্ধ করুন।</string>
     <string name="create_instance">নতুন ইনস্ট্যান্স তৈরি করুন</string>
@@ -292,7 +290,7 @@
     <string name="preference_deadzone_scale_title">জয়স্টিক ডেডজোন স্কেল</string>
     <string name="preference_deadzone_scale_description">জয়স্টিক ড্রিফট করলে এটি বাড়ান।</string>
     <string name="preference_force_big_core_title">রেন্ডারারকে বিগ কোরে চালাতে বাধ্য করুন</string>
-    <string name="preference_force_big_core_desc">Minecraft রেন্ডার থ্রেডকে সর্বোচ্চ ফ্রিকোয়েন্সির কোরে চালায়।</string>
+
     <string name="version_select_hint">ভার্সন নির্বাচন করুন</string>
     <string name="forge_dl_progress">%s এর জন্য ইনস্টলার ডাউনলোড হচ্ছে</string>
     <string name="forge_dl_searching">Forge ভার্সন খোঁজা হচ্ছে</string>
@@ -301,7 +299,7 @@
     <string name="forge_dl_select_version">Forge ভার্সন নির্বাচন করুন</string>
     <string name="fabric_dl_progress">%s লোডার মেটাডেটা ডাউনলোড হচ্ছে</string>
     <string name="fabric_dl_loader_version">%s লোডার ভার্সন</string>
-    <string name="fabric_dl_game_version">Minecraft ভার্সন</string>
+
     <string name="fabric_dl_install">ইনস্টল করুন</string>
     <string name="fabric_dl_cant_read_meta">%s লোডার মেটাডেটা পড়তে ব্যর্থ। পরে আবার চেষ্টা করুন।</string>
     <string name="fabric_dl_cant_read_meta2">Fabric লোডার মেটাডেটা পড়তে ব্যর্থ। পরে আবার চেষ্টা করুন।</string>
@@ -329,7 +327,7 @@
     <string name="modpack_download_downloading_mods">মডগুলি ডাউনলোড হচ্ছে (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">মডগুলি ডাউনলোড হচ্ছে (ফাইল %d / %d)</string>
     <string name="modpack_download_applying_overrides">ওভাররাইড প্রয়োগ হচ্ছে (%d/%d)</string>
-    <string name="modpack_install_notification_title">Mojo Modpack ইনস্টলার</string>
+    <string name="modpack_install_notification_title">MJ Modpack ইনস্টলার</string>
     <string name="modpack_install_notification_success">মডপ্যাক ইনস্টলেশন সম্পূর্ণ করতে এখানে ক্লিক করুন</string>
     <string name="modpack_install_notification_data_not_available">মড লোডার তথ্য ডাউনলোড ব্যর্থ</string>
     <string name="modpack_install_modloader_download_failed">মড লোডার ফাইল ডাউনলোড করতে ব্যর্থ</string>
@@ -360,7 +358,7 @@
     <string name="preference_category_miscellaneous">বিবিধ সেটিংস</string>
     <string name="preference_category_video">ভিডিও সেটিংস</string>
     <string name="notification_permission_dialog_title">অনুমতির অনুরোধ</string>
-    <string name="notification_permission_dialog_text">MojoLauncher-কে নোটিফিকেশন অনুমতি দিতে হবে যাতে অ্যাপ ছেড়ে গেলে গেম/মডপ্যাক ডাউনলোড বন্ধ না হয়। অনুমতি ছাড়া, Android ব্যাকগ্রাউন্ডে ডাউনলোড বন্ধ করে দিতে পারে।</string>
+    <string name="notification_permission_dialog_text">MJLauncher-কে নোটিফিকেশন অনুমতি দিতে হবে যাতে অ্যাপ ছেড়ে গেলে গেম/মডপ্যাক ডাউনলোড বন্ধ না হয়। অনুমতি ছাড়া, Android ব্যাকগ্রাউন্ডে ডাউনলোড বন্ধ করে দিতে পারে।</string>
     <string name="notification_permission_toast">আপনি পরে সেটিংস থেকে এটি পরিবর্তন করতে পারবেন</string>
     <string name="preference_ask_for_notification_title">নোটিফিকেশন অনুমোদন দিন</string>
     <string name="preference_ask_for_notification_description">গেম/মডপ্যাক ব্যাকগ্রাউন্ড ডাউনলোডের জন্য প্রয়োজনীয় নোটিফিকেশন অনুমতি পুনরায় অনুরোধ করতে ক্লিক করুন।</string>

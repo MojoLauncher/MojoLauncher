@@ -27,7 +27,7 @@ def getVersionName = {
     }else {
         def branchName = currentBranch.getName()
         def commitAbbreviation = latestCommit.abbreviatedId
-        return "hebe-${dateToday}-${commitAbbreviation}-${branchName}"
+        return "iris-${dateToday}-${commitAbbreviation}-${branchName}"
     }
 }
 
@@ -66,13 +66,13 @@ android {
             keyPassword "android"
         }
         googlePlayBuild {
-            storeFile file("mojo_upload.jks")
+            storeFile file("mojo_upload_next.jks")
             storePassword System.getenv("UPLOAD_KEYSTORE_PASSWORD")
             keyAlias "key0"
             keyPassword System.getenv("UPLOAD_KEYSTORE_PASSWORD")
         }
         publicBuild {
-            storeFile file("mojo_pub.jks")
+            storeFile file("mojo_release_next.jks")
             storePassword System.getenv("MOJOPUB_KEYSTORE_PASSWORD")
             keyAlias "key0"
             keyPassword System.getenv("MOJOPUB_KEYSTORE_PASSWORD")
@@ -80,7 +80,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "git.artdeell.mojo"
+        applicationId "git.artdeell.mjlaunch"
         minSdkVersion 21
         targetSdkVersion 36
         versionCode getDateSeconds()
@@ -109,8 +109,8 @@ android {
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.customDebug
-            resValue 'string', 'application_package', 'git.artdeell.mojo.debug'
-            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mojo.scoped.gamefolder.debug'
+            resValue 'string', 'application_package', 'git.artdeell.mjlaunch.debug'
+            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mjlaunch.scoped.gamefolder.debug'
         }
         proguard {
             initWith debug
@@ -129,8 +129,8 @@ android {
             // defaultConfig already set
             // multiDexEnabled = true
             // debuggable = true
-            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mojo.scoped.gamefolder'
-            resValue 'string', 'application_package', 'git.artdeell.mojo'
+            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mjlaunch.scoped.gamefolder'
+            resValue 'string', 'application_package', 'git.artdeell.mjlaunch'
         }
         gplay {
             initWith release
@@ -138,18 +138,15 @@ android {
         }
         pubRelease {
             initWith release
-            signingConfig signingConfigs.customDebug // WIP, changeme
-            applicationIdSuffix '.pub'
-            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mojo.pub.scoped.gamefolder'
-            resValue 'string', 'application_package', 'git.artdeell.mojo.pub'
+            signingConfig signingConfigs.publicBuild
         }
     }
 
-    ndkVersion = "28.2.13676358"
+    ndkVersion "29.0.14206865"
 
     externalNativeBuild {
-        ndkBuild {
-            path file('src/main/jni/Android.mk')
+        cmake {
+            path file('src/main/jni/CMakeLists.txt')
         }
     }
 
@@ -172,7 +169,6 @@ android {
     }
 
     buildFeatures {
-        prefab true
         buildConfig true
     }
 }
@@ -297,7 +293,6 @@ afterEvaluate {
         registrar.setVariant(variant)
 
         registrar.projectJarDependency project(":forge_installer"), "components/forge_installer"
-        registrar.projectJarDependency project(":jre_lwjgl3glfw"), "components/lwjgl3"
 
 		if (variant.getName().toLowerCase().contains("full")) {
             registrar.jreRuntimeDependency 8, "components/jre"
@@ -341,6 +336,8 @@ dependencies {
     implementation 'com.bytedance:bytehook:1.1.1'
 
     implementation 'com.github.MojoLauncher:alsoft-android-aar:f369161d5f'
+
+    implementation project(":dnbglfw")
 
     // implementation 'net.sourceforge.streamsupport:streamsupport-cfuture:1.7.0'
 

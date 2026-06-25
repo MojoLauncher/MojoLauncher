@@ -16,6 +16,10 @@ public class MathUtils {
         return (float) Math.hypot(x, y);
     }
 
+    public static float dist(float dx, float dy) {
+        return (float) Math.hypot(dx, dy);
+    }
+
     /**
      * Find the object T with the closest (or higher) value compared to targetValue
      * @param targetValue the target value

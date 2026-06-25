@@ -1,6 +1,7 @@
 package net.kdt.pojavlaunch;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.Keep;
 import androidx.appcompat.app.AlertDialog;
 
 import com.kdt.LoggerView;
@@ -46,6 +48,7 @@ import git.artdeell.mojo.R;
 
 public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouchListener {
 
+    private static volatile ClipboardManager CLIPBOARD;
     private AWTCanvasView mTextureView;
     private LoggerView mLoggerView;
     private TouchCharInput mTouchCharInput;
@@ -71,7 +74,8 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         }catch (IOException e) {
             Tools.showError(this, e, true);
         }
-        MainActivity.GLOBAL_CLIPBOARD = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+
+        CLIPBOARD = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         mTouchCharInput = findViewById(R.id.awt_touch_char);
         mTouchCharInput.setCharacterSender(new AwtCharSender());
 
@@ -419,5 +423,40 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
     public static int classVersionToJavaVersion(int majorVersion) {
         if(majorVersion < 46) return 2; // there isn't even an arm64 port of jre 1.1 (or anything before 1.8 in fact)
         return majorVersion - 44;
+    }
+
+
+    @Keep
+    public static void querySystemClipboard() {
+        Tools.runOnUiThread(()->{
+            ClipData clipData = CLIPBOARD.getPrimaryClip();
+            if(clipData == null) {
+                AWTInputBridge.nativeClipboardReceived(null, null);
+                return;
+            }
+            ClipData.Item firstClipItem = clipData.getItemAt(0);
+            //TODO: coerce to HTML if the clip item is styled
+            CharSequence clipItemText = firstClipItem.getText();
+            if(clipItemText == null) {
+                AWTInputBridge.nativeClipboardReceived(null, null);
+                return;
+            }
+            AWTInputBridge.nativeClipboardReceived(clipItemText.toString(), "plain");
+        });
+    }
+
+    @Keep
+    public static void putClipboardData(String data, String mimeType) {
+        Tools.runOnUiThread(()-> {
+            ClipData clipData = null;
+            switch(mimeType) {
+                case "text/plain":
+                    clipData = ClipData.newPlainText("AWT Paste", data);
+                    break;
+                case "text/html":
+                    clipData = ClipData.newHtmlText("AWT Paste", data, data);
+            }
+            if(clipData != null) CLIPBOARD.setPrimaryClip(clipData);
+        });
     }
 }

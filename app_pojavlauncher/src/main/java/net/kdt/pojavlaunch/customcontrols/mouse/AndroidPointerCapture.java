@@ -8,16 +8,18 @@ import android.view.ViewTreeObserver;
 
 import androidx.annotation.RequiresApi;
 
-import net.kdt.pojavlaunch.MinecraftGLSurface;
+import net.kdt.pojavlaunch.LauncherGLSurface;
 import net.kdt.pojavlaunch.Tools;
+
+import net.kdt.pojavlaunch.CallbackBridge;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
-import org.lwjgl.glfw.CallbackBridge;
+import git.artdeell.dnbootstrap.glfw.GLFW;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChangeListener, View.OnCapturedPointerListener {
     private static final float TOUCHPAD_SCROLL_THRESHOLD = 1;
-    private final AbstractTouchpad mTouchpad;
+    private final View mTouchpadView;
     private final View mHostView;
     private final float mMousePrescale = Tools.dpToPx(1);
     private final PointerTracker mPointerTracker = new PointerTracker();
@@ -27,15 +29,15 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
     private int mInputDeviceIdentifier;
     private boolean mDeviceSupportsRelativeAxis;
 
-    public AndroidPointerCapture(AbstractTouchpad touchpad, View hostView) {
-        this.mTouchpad = touchpad;
+    public AndroidPointerCapture(View touchpad, View hostView) {
+        this.mTouchpadView = touchpad;
         this.mHostView = hostView;
         hostView.setOnCapturedPointerListener(this);
         hostView.getViewTreeObserver().addOnWindowFocusChangeListener(this);
     }
 
     private void enableTouchpadIfNecessary() {
-        if(!mTouchpad.getDisplayState()) mTouchpad.enable(true);
+        if(mTouchpadView.getVisibility() != View.VISIBLE) mTouchpadView.setVisibility(View.VISIBLE);
     }
 
     public void handleAutomaticCapture() {
@@ -82,32 +84,31 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
             // The relative position will already be written down into the mVector variable.
         }
 
-        if(!CallbackBridge.isGrabbing()) {
+        // Avoid going through the JNI each time.
+        if(!GLFW.isGrabbing()) {
             enableTouchpadIfNecessary();
             // Yes, if the user's touchpad is multi-touch we will also receive events for that.
             // So, handle the scrolling gesture ourselves.
             mVector[0] *= mMousePrescale;
             mVector[1] *= mMousePrescale;
             if(event.getPointerCount() < 2) {
-                mTouchpad.applyMotionVector(mVector);
+                applyMotionVector(view, LauncherPreferences.PREF_MOUSESPEED);
                 mScroller.resetScrollOvershoot();
             } else {
                 mScroller.performScroll(mVector);
             }
         } else {
             // Position is updated by many events, hence it is send regardless of the event value
-            CallbackBridge.mouseX += (mVector[0] * LauncherPreferences.PREF_SCALE_FACTOR);
-            CallbackBridge.mouseY += (mVector[1] * LauncherPreferences.PREF_SCALE_FACTOR);
-            CallbackBridge.sendCursorPos(CallbackBridge.mouseX, CallbackBridge.mouseY);
+            applyMotionVector(view, 1);
         }
 
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_MOVE:
                 return true;
             case MotionEvent.ACTION_BUTTON_PRESS:
-                return MinecraftGLSurface.sendMouseButtonUnconverted(event.getActionButton(), true);
+                return LauncherGLSurface.sendMouseButtonUnconverted(event.getActionButton(), true);
             case MotionEvent.ACTION_BUTTON_RELEASE:
-                return MinecraftGLSurface.sendMouseButtonUnconverted(event.getActionButton(), false);
+                return LauncherGLSurface.sendMouseButtonUnconverted(event.getActionButton(), false);
             case MotionEvent.ACTION_SCROLL:
                 CallbackBridge.sendScroll(
                         event.getAxisValue(MotionEvent.AXIS_HSCROLL),
@@ -120,6 +121,12 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
             default:
                 return false;
         }
+    }
+
+    private void applyMotionVector(View view, float speed) {
+        GLFW.cursorX += mVector[0] * speed / view.getWidth();
+        GLFW.cursorY += mVector[1] * speed / view.getHeight();
+        GLFW.sendMousePos();
     }
 
     private void checkSameDevice(InputDevice inputDevice) {

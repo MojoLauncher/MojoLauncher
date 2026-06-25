@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition para Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
     <string name="login_online_username_hint">Nome de Usuário</string>
     <string name="login_online_login_label">Iniciar sessão</string>
     <!-- Hint -->
-    <string name="hint_control_mapping">"Toque na engrenagem no topo da tela para abrir as configurações ⚙️\nToque em algum botão para customizar: editar, redimensionar, deletar, ou alterar o mapeamento."</string>
     <!-- Warnings -->
     <string name="warning_remove_account">Esta conta será removida!</string>
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Selecione um instalador de mod</string>
     <!-- Error messages -->
-    <string name="error_fatal">O MojoLauncher parou de funcionar inesperadamente</string>
+    <string name="error_fatal">O MJLauncher parou de funcionar inesperadamente</string>
     <string name="error_no_version">Nenhuma versão!</string>
     <string name="error_show_more">Mostrar mais</string>
     <string name="error_show_less">Mostrar menos</string>
@@ -149,7 +147,7 @@
     <string name="memory_warning_msg">A quantidade atual de RAM livre (%d) é menor que a RAM alocada (%d), no qual pode causar falhas. Altere a quantidade se o jogo apresentar alguma falha.</string>
     <string name="address_memory_warning_msg">A quantidade atual de RAM livre (%d) é menor que a RAM alocada (%d), no qual pode causar falhas. Altere a quantidade se o jogo apresentar alguma falha.</string>
     <string name="mcl_memory_allocation">Alocação de memória</string>
-    <string name="mcl_memory_allocation_subtitle">Controla o quanto de RAM será disponibilizado para o Minecraft.</string>
+
     <string name="multirt_runtime_corrupt">Java Runtime corrompido</string>
     <string name="multirt_runtime_incompatiblearch">Arquitetura incompatível: %s</string>
     <string name="multirt_config_title">Java Runtimes</string>
@@ -218,12 +216,12 @@
     <string name="main_add_account">Adicionar conta</string>
     <string name="tasks_ongoing">Tarefas em andamento, por favor aguarde</string>
     <string name="no_saved_accounts">Não há contas salvas</string>
-    <string name="mc_download_failed">Falha ao baixar o Minecraft! Isso pode ser devido a uma conexão de rede ruim, arquivos colocados incorretamente, etc..</string>
+
     <string name="xerr_unknown">Erro desconhecido na API do Xbox Live %d</string>
-    <string name="xerr_no_account">Parece que você não tem uma conta Xbox Live. Por favor, faça login em https://minecraft.net/ e tente novamente.</string>
+
     <string name="xerr_adult_verification">Um adulto precisa verificar sua conta.</string>
     <string name="xerr_child">Sua conta é uma conta de criança, e precisa ser colocada em uma família para poder entrar.</string>
-    <string name="minecraft_not_owned">Parece que esta conta não tem um perfil do Minecraft. Se você tiver o Xbox Game Pass, faça login em https://minecraft.net/ e configure-o.</string>
+
     <string name="xerr_not_available">Xbox Live não está disponível em seu país</string>
     <string name="preference_enable_gyro_title">Habilitar controles por giroscópio</string>
     <string name="preference_enable_gyro_description">Habilitar isto permite que você rotacione do jogo, rotacionando seu celular.</string>
@@ -233,7 +231,7 @@
     <string name="preference_gyro_sample_rate_title">Taxa de amostragem do giroscópio</string>
     <string name="preference_gyro_sample_rate_description">Se você tiver problemas de desempenho com os controles por giroscópio, aumente isto.</string>
     <string name="microsoft_login_retry_later">Você fez muitas solicitações. Por favor, tente novamente mais tarde.</string>
-    <string name="storage_required">O MojoLauncher requer que o armazenamento externo seja conectado. Por favor, reconecte-o e reinicie o aplicativo.</string>
+    <string name="storage_required">O MJLauncher requer que o armazenamento externo seja conectado. Por favor, reconecte-o e reinicie o aplicativo.</string>
     <string name="mcl_setting_title_buttonallcaps">Somente use letras maiúsculas em rótulos de botões</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Desative isso se você quiser usar letras minúsculas em seus controles.</string>
     <string name="preference_shader_dump_title">Habilitar despejo de shader</string>
@@ -253,7 +251,7 @@
     <string name="preference_deadzone_scale_title">Escala de zona morta do controle de videogame</string>
     <string name="preference_deadzone_scale_description">Aumente isto se o joystick estiver com drift.</string>
     <string name="preference_force_big_core_title">Forçar o renderizador a rodar no núcleo mais potente (Big Core)</string>
-    <string name="preference_force_big_core_desc">Força a renderização do Minecraft a rodar no núcleo com frequência mais alta.</string>
+
     <string name="version_select_hint">Selecione uma versão</string>
     <string name="forge_dl_progress">Baixando instalador %s</string>
     <string name="forge_dl_searching">Procurando pelo número da versão do Forge</string>
@@ -262,7 +260,7 @@
     <string name="forge_dl_select_version">Selecione a versão do Forge</string>
     <string name="fabric_dl_progress">Baixando metadados do carregador %s</string>
     <string name="fabric_dl_loader_version">Versão do carregador %s</string>
-    <string name="fabric_dl_game_version">Versão do Minecraft</string>
+
     <string name="fabric_dl_install">Instalar</string>
     <string name="fabric_dl_cant_read_meta">Falha ao ler os metadados do carregador %s. Por favor, tente novamente mais tarde.</string>
     <string name="create_profile_vanilla_like_versions">Versões vanilla</string>
@@ -284,7 +282,7 @@
     <string name="modpack_download_downloading_mods">Baixando mods (%.2f MB /%.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Baixando mods (Arquivo %d de %d)</string>
     <string name="modpack_download_applying_overrides">Aplicando substituições (%d/%d)</string>
-    <string name="modpack_install_notification_title">Instalador de Modpack do Mojo</string>
+    <string name="modpack_install_notification_title">Instalador de Modpack do MJ</string>
     <string name="modpack_install_notification_success">Clique aqui para finalizar a instalação do modpack</string>
     <string name="modpack_install_notification_data_not_available">Falha ao baixar informações do mod loader</string>
     <string name="modpack_install_modloader_download_failed">Falha ao baixar os arquivos do mod loader</string>
@@ -313,7 +311,7 @@
     <string name="preference_category_miscellaneous">Configurações diversas</string>
     <string name="preference_category_video">Configurações de vídeo</string>
     <string name="notification_permission_dialog_title">Solicitação de permissão</string>
-    <string name="notification_permission_dialog_text">O MojoLauncher requer a permissão de mandar notificações para impedir que o download do jogo/modpack pare quando você sair do aplicativo. Sem essa permissão, o Android pode cancelar seus downloads quando você colocar o MojoLauncher em segundo plano.</string>
+    <string name="notification_permission_dialog_text">O MJLauncher requer a permissão de mandar notificações para impedir que o download do jogo/modpack pare quando você sair do aplicativo. Sem essa permissão, o Android pode cancelar seus downloads quando você colocar o MJLauncher em segundo plano.</string>
     <string name="notification_permission_toast">Você sempre pode mudar de ideia mais tarde entrando em Configurações</string>
     <string name="preference_ask_for_notification_title">Permitir notificações</string>
     <string name="preference_ask_for_notification_description">Clique para solicitar novamente a permissão de notificação necessária para que os downloads em segundo plano de jogo/modpack funcionem corretamente.</string>

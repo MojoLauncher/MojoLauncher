@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Android용 Minecraft 자바 에디션 버전 구동기)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
     <string name="login_online_username_hint">사용자명</string>
     <string name="login_online_login_label">로그인</string>
     <!-- Hint -->
-    <string name="hint_control_mapping">"상단 중앙 톱니바퀴 아이콘을 탭하여 상황에 맞는 메뉴를 엽니다. ⚙\n버튼을 탭하여 키바인드를 편집, 크기 조정, 삭제, 사용자 지정합니다"</string>
     <!-- Warnings -->
     <string name="warning_remove_account">이 계정이 제거될 거예요!</string>
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">모드 설치기를 선택하세요</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher에 예기치 못한 충돌이 발생했어요</string>
+    <string name="error_fatal">MJLauncher에 예기치 못한 충돌이 발생했어요</string>
     <string name="error_no_version">버전이 없습니다!</string>
     <string name="error_show_more">더 보기</string>
     <string name="error_show_less">간략히 보기</string>
@@ -200,7 +198,7 @@
     <string name="pedit_java_runtime">Java 런타임</string>
     <string name="pedit_renderer">렌더러</string>
     <string name="notif_channel_name">일반</string>
-    <string name="lazy_service_default_title">Mojo 포그라운드 서비스</string>
+    <string name="lazy_service_default_title">MJ 포그라운드 서비스</string>
     <string name="mcl_setting_veroption_installed">이미 설치되어 있는 버전입니다.</string>
     <string name="use_global_default">(글로벌 기본값 사용)</string>
     <string name="default_control">기본 조작</string>
@@ -217,11 +215,10 @@
     <string name="no_saved_accounts">저장된 계정 없음</string>
     <string name="mc_download_failed">마인크래프트 다운로드에 실패했습니다! 이것은 안좋은 네트워크 연결, 잘못 배치된 파일 등으로 인한 것일 수 있습니다.</string>
     <string name="xerr_unknown">알 수 없는 Xbox Live API 오류 %d</string>
-    <string name="xerr_no_account">Xbox Live 계정이 없는 것 같습니다. https://minecraft.net/에서 한 번 로그인하고 다시 시도해주세요.</string>
+
     <string name="xerr_adult_verification">당신의 계정을 인증하기 위해 성인의 도움이 필요합니다.</string>
     <string name="xerr_child">당신의 계정은 아동 계정입니다. 가족 구성원으로 추가되어야 로그인할 수 있습니다.</string>
-    <string name="minecraft_not_owned">이 계정은 마인크래프트를 소유하고 있지 않은 것 같습니다.
-만약 Xbox Game Pass를 소유하고 있다면 https://minecraft.net/ 여기에 로그인하여 설정하세요.</string>
+
     <string name="xerr_not_available">Xbox Live는 당신의 국가에서 사용할 수 없습니다.</string>
     <string name="preference_enable_gyro_title">자이로스코프 컨트롤 활성화</string>
     <string name="preference_enable_gyro_description">이것을 활성화하면 휴대폰을 움직여 게임을 돌릴 수 있습니다.</string>
@@ -231,7 +228,7 @@
     <string name="preference_gyro_sample_rate_title">자이로스코프 샘플링 속도</string>
     <string name="preference_gyro_sample_rate_description">자이로스코프 컨트롤을 사용할때 성능 문제가 발생한다면 이것을 높이세요.</string>
     <string name="microsoft_login_retry_later">요청이 너무 많습니다. 잠시후 다시 시도해 주세요.</string>
-    <string name="storage_required">MojoLuancher를 사용하려면 외부 저장소를 연결해야합니다. 다시 연결한 후 앱을 다시 시작하세요.</string>
+    <string name="storage_required">MJLuancher를 사용하려면 외부 저장소를 연결해야합니다. 다시 연결한 후 앱을 다시 시작하세요.</string>
     <string name="mcl_setting_title_buttonallcaps">컨트롤 버튼 문자에 대문자만 사용</string>
     <string name="mcl_setting_subtitle_buttonallcaps">컨트롤 버튼 문자에 소문자를 사용하려면 이것을 비활성화하세요.</string>
     <string name="preference_shader_dump_title">쉐이더 덤핑 활성화</string>
@@ -310,7 +307,7 @@
     <string name="preference_category_miscellaneous">기타 설정</string>
     <string name="preference_category_video">비디오 설정</string>
     <string name="notification_permission_dialog_title">권한 요청</string>
-    <string name="notification_permission_dialog_text">MojoLuancher는 앱을 종료할 때 게임/모드팩 다운로드가 중지되는 것을 방지하기 위해 알림을 게시할 수 있는 권한이 필요합니다. 이 권한이 없으면 MojoLauncher를 백그라운드 모드로 전환할 때 Android에서 다운로드를 종료할 수 있습니다.</string>
+    <string name="notification_permission_dialog_text">MJLuancher는 앱을 종료할 때 게임/모드팩 다운로드가 중지되는 것을 방지하기 위해 알림을 게시할 수 있는 권한이 필요합니다. 이 권한이 없으면 MJLauncher를 백그라운드 모드로 전환할 때 Android에서 다운로드를 종료할 수 있습니다.</string>
     <string name="notification_permission_toast">추후에 설정에서 언제든지 변경 가능합니다</string>
     <string name="preference_ask_for_notification_title">알람 허용</string>
     <string name="preference_ask_for_notification_description">게임/모드팩 백그라운드 다운로드가 제대로 작동하는 데 필요한 알림 권한을 다시 요청하려면 클릭하세요.</string>

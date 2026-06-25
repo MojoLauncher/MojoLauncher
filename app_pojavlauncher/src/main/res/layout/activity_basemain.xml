@@ -20,21 +20,22 @@
 			android:layout_width="match_parent"
 			android:layout_height="match_parent">
 
-			<net.kdt.pojavlaunch.MinecraftGLSurface
+			<net.kdt.pojavlaunch.LauncherGLSurface
 				android:id="@+id/main_game_render_view"
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
 				android:defaultFocusHighlightEnabled="false"
                 tools:ignore="UnusedAttribute" />
 
-			<net.kdt.pojavlaunch.customcontrols.mouse.Touchpad
+			<git.artdeell.dnbootstrap.glfw.GLFWCursorView
 				android:layout_height="match_parent"
 				android:layout_width="match_parent"
 				android:orientation="vertical"
 				android:id="@+id/main_touchpad"
 				android:focusable="false"
 				android:translationZ="1dp"
-				android:visibility="gone"/>
+				android:visibility="gone"
+                app:defaultCursorDrawable="@drawable/ic_mouse_pointer"/>
 
 
 			<net.kdt.pojavlaunch.customcontrols.keyboard.TouchCharInput

@@ -10,8 +10,6 @@
 
 typedef void (*android_update_LD_LIBRARY_PATH_t)(const char*);
 
-long shared_awt_surface;
-
 const char** convert_to_char_array(JNIEnv *env, jobjectArray jstringArray) {
 	int num_rows = (*env)->GetArrayLength(env, jstringArray);
 	const char **cArray = (const char **) malloc(num_rows * sizeof(char*));
@@ -71,28 +69,6 @@ jstring convertStringJVM(JNIEnv* srcEnv, JNIEnv* dstEnv, jstring srcStr) {
     return dstStr;
 }
 
-JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_setupBridgeSurfaceAWT(JNIEnv *env, jclass clazz, jlong surface) {
-	shared_awt_surface = surface;
-}
-
-JNIEXPORT jlong JNICALL Java_android_view_Surface_nativeGetBridgeSurfaceAWT(JNIEnv *env, jclass clazz) {
-	return (jlong) shared_awt_surface;
-}
-
-JNIEXPORT jint JNICALL Java_android_os_OpenJDKNativeRegister_nativeRegisterNatives(JNIEnv *env, jclass clazz, jstring registerSymbol) {
-	const char *register_symbol_c = (*env)->GetStringUTFChars(env, registerSymbol, 0);
-	void *symbol = dlsym(RTLD_DEFAULT, register_symbol_c);
-	if (symbol == NULL) {
-		printf("dlsym %s failed: %s\n", register_symbol_c, dlerror());
-		return -1;
-	}
-	
-	int (*registerNativesForClass)(JNIEnv*) = symbol;
-	int result = registerNativesForClass(env);
-	(*env)->ReleaseStringUTFChars(env, registerSymbol, register_symbol_c);
-	
-	return (jint) result;
-}
 
 JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_setLdLibraryPath(JNIEnv *env, jclass clazz, jstring ldLibraryPath) {
 	// jclass exception_cls = (*env)->FindClass(env, "java/lang/UnsatisfiedLinkError");
@@ -118,17 +94,6 @@ JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_setLdLibraryPath(
 	(*env)->ReleaseStringUTFChars(env, ldLibraryPath, ldLibPathUtf);
 }
 
-JNIEXPORT jboolean JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_dlopen(JNIEnv *env, jclass clazz, jstring name) {
-	const char *nameUtf = (*env)->GetStringUTFChars(env, name, 0);
-	void* handle = dlopen(nameUtf, RTLD_GLOBAL | RTLD_LAZY);
-	if (!handle) {
-		LOGE("dlopen %s failed: %s", nameUtf, dlerror());
-	} else {
-		LOGD("dlopen %s success", nameUtf);
-	}
-	(*env)->ReleaseStringUTFChars(env, name, nameUtf);
-	return handle != NULL;
-}
 
 JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_chdir(JNIEnv *env, jclass clazz, jstring nameStr) {
 	const char *name = (*env)->GetStringUTFChars(env, nameStr, NULL);
@@ -141,7 +106,7 @@ JNIEnv* get_attached_env(JavaVM* jvm) {
     JNIEnv *jvm_env = NULL;
     jint env_result = (*jvm)->GetEnv(jvm, (void**)&jvm_env, JNI_VERSION_1_4);
     if(env_result == JNI_EDETACHED) {
-        env_result = (*jvm)->AttachCurrentThread(jvm, &jvm_env, NULL);
+        env_result = (*jvm)->AttachCurrentThreadAsDaemon(jvm, &jvm_env, NULL);
     }
     if(env_result != JNI_OK) {
         printf("get_attached_env failed: %i\n", env_result);

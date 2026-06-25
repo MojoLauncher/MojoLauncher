@@ -11,13 +11,15 @@ import android.view.ViewParent;
 
 import androidx.annotation.Nullable;
 
-import net.kdt.pojavlaunch.GrabListener;
 import net.kdt.pojavlaunch.LwjglGlfwKeycode;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
 import net.kdt.pojavlaunch.utils.MathUtils;
 
-import org.lwjgl.glfw.CallbackBridge;
+import net.kdt.pojavlaunch.CallbackBridge;
+
+import git.artdeell.dnbootstrap.glfw.GLFW;
+import git.artdeell.dnbootstrap.glfw.GrabListener;
 
 public class HotbarView extends View implements MCOptionUtils.MCOptionListener, View.OnLayoutChangeListener, Runnable {
     private final TapDetector mDoubleTapDetector = new TapDetector(2, TapDetector.DETECTION_METHOD_DOWN);
@@ -75,13 +77,7 @@ public class HotbarView extends View implements MCOptionUtils.MCOptionListener, 
         }
         mGuiScale = MCOptionUtils.getMcScale();
         repositionView();
-        CallbackBridge.addGrabListener(mGrabListener);
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        CallbackBridge.removeGrabListener(mGrabListener);
+        GLFW.addGrabListener(mGrabListener);
     }
 
     private void repositionView() {
@@ -101,7 +97,8 @@ public class HotbarView extends View implements MCOptionUtils.MCOptionListener, 
     @SuppressWarnings("ClickableViewAccessibility") // performClick does not report coordinates.
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if(!CallbackBridge.isGrabbing()) return false;
+        // Avoid going through the JNI each time.
+        if(!GLFW.isGrabbing()) return false;
         boolean hasDoubleTapped = mDoubleTapDetector.onTouchEvent(event);
 
         // Check if we need to cancel the drop event

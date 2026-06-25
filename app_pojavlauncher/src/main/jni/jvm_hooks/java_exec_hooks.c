@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <dlfcn.h>
 
-#include "environ/environ.h"
 #include "utils.h"
 
 static jint (*orig_ProcessImpl_forkAndExec)(JNIEnv *env, jobject process, jint mode, jbyteArray helperpath, jbyteArray prog, jbyteArray argBlock, jint argc, jbyteArray envBlock, jint envc, jbyteArray dir, jintArray std_fds, jboolean redirectErrorStream);
@@ -51,7 +50,9 @@ static jint hooked_ProcessImpl_forkAndExec(JNIEnv *env, jobject process, jint mo
 
     if(strcmp(prog_basename, "xdg-open") == 0) {
         // When invoking xdg-open, send the open URL into Android
-        Java_org_lwjgl_glfw_CallbackBridge_nativeClipboard(env, NULL, CLIPBOARD_OPEN, argBlock);
+        jbyte* elements = (*env)->GetByteArrayElements(env, argBlock, NULL);
+        openLink((const char*) elements);
+        (*env)->ReleaseByteArrayElements(env, argBlock, elements, JNI_ABORT);
         return 0;
     }else if(strcmp(prog_basename, "ffmpeg") == 0) {
         // When invoking ffmpeg, always replace the program path with the path to ffmpeg from the plugin.

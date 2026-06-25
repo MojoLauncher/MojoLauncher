@@ -8,7 +8,7 @@ import android.widget.ExpandableListView;
 
 import androidx.appcompat.app.AlertDialog;
 
-import net.kdt.pojavlaunch.JMinecraftVersionList;
+import net.kdt.pojavlaunch.JVersionList;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 
@@ -17,10 +17,10 @@ public class VersionSelectorDialog {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         ExpandableListView expandableListView = (ExpandableListView) LayoutInflater.from(context)
                 .inflate(R.layout.dialog_expendable_list_view , null);
-        JMinecraftVersionList jMinecraftVersionList = (JMinecraftVersionList) getValue(ExtraConstants.RELEASE_TABLE);
-        JMinecraftVersionList.Version[] versionArray;
-        if(jMinecraftVersionList == null || jMinecraftVersionList.versions == null) versionArray = new JMinecraftVersionList.Version[0];
-        else versionArray = jMinecraftVersionList.versions;
+        JVersionList jVersionList = (JVersionList) getValue(ExtraConstants.RELEASE_TABLE);
+        JVersionList.Version[] versionArray;
+        if(jVersionList == null || jVersionList.versions == null) versionArray = new JVersionList.Version[0];
+        else versionArray = jVersionList.versions;
         VersionListAdapter adapter = new VersionListAdapter(versionArray, hideCustomVersions, context);
 
         expandableListView.setAdapter(adapter);

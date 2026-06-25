@@ -12,7 +12,7 @@ import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.authenticator.AuthType;
 import net.kdt.pojavlaunch.authenticator.BackgroundLogin;
 import net.kdt.pojavlaunch.authenticator.accounts.Accounts;
-import net.kdt.pojavlaunch.authenticator.accounts.MinecraftAccount;
+import net.kdt.pojavlaunch.authenticator.accounts.Account;
 import net.kdt.pojavlaunch.authenticator.listener.LoginListener;
 import net.kdt.pojavlaunch.authenticator.model.OAuthTokenResponse;
 
@@ -55,7 +55,7 @@ public class ElyByBackgroundLogin implements BackgroundLogin {
         });
     }
 
-    private void fillAccount(MinecraftAccount acc) {
+    private void fillAccount(Account acc) {
         acc.expiresAt = mExpiresAt;
         acc.authType = AuthType.ELY_BY;
         acc.accessToken = mOAuthData.accessToken;
@@ -69,14 +69,14 @@ public class ElyByBackgroundLogin implements BackgroundLogin {
     @Override
     public void createAccount(@NonNull LoginListener loginListener, String code) {
         acquireAccountDetails(loginListener, ()->{
-            MinecraftAccount account = Accounts.create(this::fillAccount);
+            Account account = Accounts.create(this::fillAccount);
             Tools.runOnUiThread(() -> loginListener.onLoginDone(account));
             return null;
         }, code, false);
     }
 
     @Override
-    public void refreshAccount(@NonNull LoginListener loginListener, MinecraftAccount account) {
+    public void refreshAccount(@NonNull LoginListener loginListener, Account account) {
         acquireAccountDetails(loginListener, ()->{
             fillAccount(account);
             account.save();

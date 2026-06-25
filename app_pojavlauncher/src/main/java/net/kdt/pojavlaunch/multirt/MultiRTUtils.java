@@ -12,6 +12,7 @@ import com.kdt.mcgui.ProgressLayout;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.utils.MathUtils;
+import net.kdt.pojavlaunch.utils.jre.JavaRunner;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class MultiRTUtils {
 
@@ -86,17 +88,20 @@ public class MultiRTUtils {
     public static void postPrepare(String name) throws IOException {
         File dest = new File(RUNTIME_FOLDER,"/" + name);
         if(!dest.exists()) return;
+
         Runtime runtime = read(name);
-        String libFolder = "lib";
-        if(new File(dest,libFolder + "/" + runtime.arch).exists()) libFolder = libFolder + "/" + runtime.arch;
-        File ftIn = new File(dest, libFolder + "/libfreetype.so.6");
-        File ftOut = new File(dest, libFolder + "/libfreetype.so");
+        File vmPath = JavaRunner.findVmPath(dest, runtime.arch);
+        if(vmPath == null) throw new IOException("Could not find libjvm.so after extraction");
+        File libDir = Objects.requireNonNull(vmPath.getParentFile()).getParentFile();
+
+        File ftIn = new File(libDir, "libfreetype.so.6");
+        File ftOut = new File(libDir,  "libfreetype.so");
         if (ftIn.exists() && (!ftOut.exists() || ftIn.length() != ftOut.length())) {
             if(!ftIn.renameTo(ftOut)) throw new IOException("Failed to rename freetype");
         }
 
         // Refresh libraries
-        copyDummyNativeLib("libawt_xawt.so", dest, libFolder);
+        copyDummyNativeLib("libawt_xawt.so", libDir);
     }
 
     public static void installRuntimeNamedBinpack(InputStream universalFileInputStream, InputStream platformBinsInputStream, String name, String binpackVersion) throws IOException {
@@ -222,8 +227,8 @@ public class MultiRTUtils {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private static void copyDummyNativeLib(String name, File dest, String libFolder) throws IOException {
-        File fileLib = new File(dest, "/"+libFolder + "/" + name);
+    private static void copyDummyNativeLib(String name, File dest) throws IOException {
+        File fileLib = new File(dest, name);
         FileInputStream is = new FileInputStream(new File(NATIVE_LIB_DIR, name));
         FileOutputStream os = new FileOutputStream(fileLib);
         IOUtils.copy(is, os);

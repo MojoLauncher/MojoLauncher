@@ -50,7 +50,7 @@ public class LayoutConverter {
             }
             return null;
         } catch (JSONException e) {
-            throw new JsonSyntaxException("Failed to load", e);
+            throw new JsonSyntaxException("Failed to load the layout. Maybe it's corrupted?", e);
         }
     }
 

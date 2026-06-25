@@ -11,6 +11,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import net.kdt.pojavlaunch.AWTCanvasView;
+import net.kdt.pojavlaunch.Architecture;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.Runtime;
@@ -110,17 +111,16 @@ public class JavaRunner {
                 "-Duser.timezone=" + TimeZone.getDefault().getID(),
 
                 "-Dorg.lwjgl.vulkan.libname=libvulkan.so",
+                "-Dorg.lwjgl.spvc.libname=spirv-cross-c-shared",
+                "-Dorg.lwjgl.system.allocator=system",
                 //LWJGL 3 DEBUG FLAGS
                 //"-Dorg.lwjgl.util.Debug=true",
                 //"-Dorg.lwjgl.util.DebugFunctions=true",
                 //"-Dorg.lwjgl.util.DebugLoader=true",
-                // GLFW Stub width height
-                "-Dglfwstub.initEgl=false",
                 "-Dext.net.resolvPath=" +resolvFile,
                 "-Dlog4j2.formatMsgNoLookups=true", //Log4j RCE mitigation
                 "-Dfml.earlyprogresswindow=false", //Forge 1.14+ workaround
                 "-Dloader.disable_forked_guis=true",
-                "-Dsodium.checks.issue2561=false",
                 "-Djdk.lang.Process.launchMechanism=FORK" // Default is POSIX_SPAWN which requires starting jspawnhelper, which doesn't work on Android
         ));
         List<String> additionalArguments = new ArrayList<>();
@@ -156,7 +156,7 @@ public class JavaRunner {
         return null;
     }
 
-    private static File findVmPath(File runtimeHomeDir, String runtimeArch) {
+    public static File findVmPath(File runtimeHomeDir, String runtimeArch) {
         File finalPath;
         if((finalPath = findVmForArch(runtimeHomeDir, null)) != null) return finalPath;
         switch (runtimeArch) {
@@ -199,7 +199,7 @@ public class JavaRunner {
 
     private static void setImmutableEnvVars(File jreHome) {
         try {
-            Os.setenv("POJAV_NATIVEDIR", NATIVE_LIB_DIR, true);
+            Os.setenv("POJAV_NATIVEDIR", Tools.NATIVE_LIB_DIR, true);
             Os.setenv("JAVA_HOME", jreHome.getAbsolutePath(), true);
             Os.setenv("HOME", Tools.DIR_GAME_HOME, true);
             Os.setenv("TMPDIR", Tools.DIR_CACHE.getAbsolutePath(), true);
@@ -245,6 +245,15 @@ public class JavaRunner {
         return hasJavaAgent;
     }
 
+    private static void addx86SignalWorkaround(List<String> args) {
+        if(Build.VERSION.SDK_INT != 23) return;
+        if(Architecture.getDeviceArchitecture() != Architecture.ARCH_X86) return;
+        // On Marshmallow x86, something related to signal handling is broken inside of ART/sigchain library
+        // is broken, causing unclaimed signals to be sent into the sigchain. This drops the whole launcher into an abort.
+        // Enabling -Xrs prevents the VM from sending those signals (
+        args.add("-Xrs");
+    }
+
     /**
      * Start the Java(tm) Virtual Machine.
      * @param runtime the Runtime that we're starting.
@@ -268,6 +277,7 @@ public class JavaRunner {
 
 
         runtimeArgs.add("-XX:ActiveProcessorCount=" + java.lang.Runtime.getRuntime().availableProcessors());
+        addx86SignalWorkaround(runtimeArgs);
         StringBuilder classpathBuilder = new StringBuilder().append("-Djava.class.path=");
         boolean first = true;
         for(String entry : classpathEntries) {
@@ -277,7 +287,7 @@ public class JavaRunner {
         }
         runtimeArgs.add(classpathBuilder.toString());
 
-        JREUtils.initializeHooks();
+        //JREUtils.initializeHooks();
 
         setImmutableEnvVars(runtimeHomeDir);
         relocateLdLibPath(vmPath, null);

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition cho Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
 
     <!-- Action bar part -->
 
@@ -13,7 +12,6 @@
     <string name="login_online_login_label">Đăng nhập</string>
 
     <!-- Hint -->
-    <string name="hint_control_mapping">"Chạm phím bánh răng ở giữa cạnh trên màn hình để mở menu ⚙\nChạm vào các phím để tùy chỉnh chúng: chỉnh sửa, thay đổi kích thước, xoá, hoặc thay đổi liên kết phím."</string>
 
     <!-- Warnings -->
     <string name="warning_remove_account">Tài khoản này sẽ bị xoá!</string>
@@ -22,7 +20,7 @@
     <string name="alerttitle_installmod">Chọn một trình cài đặt mod</string>
 
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher đã bất ngờ bị sập</string>
+    <string name="error_fatal">MJLauncher đã bất ngờ bị sập</string>
     <string name="error_no_version">Không có phiên bản nào!</string>
     <string name="error_show_more">Hiển thị thêm</string>
     <string name="error_show_less">Hiển thị ít hơn</string>
@@ -172,7 +170,7 @@
     <string name="memory_warning_msg">Số lượng RAM trống hiện tại (%d) thấp hơn số lượng RAM được phân bổ (%d), có thể dẫn đến sự cố. Thay đổi số lượng phân bổ nếu trò chơi bị sập.</string>
     <string name="address_memory_warning_msg">Bộ nhớ trống hiện có (%d) thấp hơn bộ nhớ được phân bổ (%d), điều này có thể gây ra sự cố. Thay đổi lượng bộ nhớ được phân bổ nếu trò chơi bị văng.</string>
     <string name="mcl_memory_allocation">Phân bổ bộ nhớ</string>
-    <string name="mcl_memory_allocation_subtitle">Điều khiển lượng bộ nhớ tạm được đưa vào Minecraft.</string>
+
     <string name="multirt_runtime_corrupt">Java đã gặp xung đột</string>
     <string name="multirt_runtime_incompatiblearch">Kiến trúc không tương thích: %s</string>
     <string name="multirt_config_title">Các hệ thống thời gian chạy Java</string>
@@ -233,7 +231,7 @@
     <string name="color_default_hex" translatable="false">FFFF0000</string>
     <string name="notif_channel_name">Chung</string>
     <string name="notif_channel_id" translatable="false">channel_id</string>
-    <string name="lazy_service_default_title">Dịch vụ tiền cảnh Mojo</string>
+    <string name="lazy_service_default_title">Dịch vụ tiền cảnh MJ</string>
     <string name="mcl_setting_veroption_installed">Đã cài đặt</string>
     <string name="use_global_default">(Sử dụng mặc định chung)</string>
     <string name="default_control">Bố cục bố cục điều khiển mặc định</string>
@@ -248,12 +246,12 @@
     <string name="main_add_account">Thêm tài khoản</string>
     <string name="tasks_ongoing">Các tác vụ đang chạy, vui lòng chờ</string>
     <string name="no_saved_accounts">Không có tài khoản nào được lưu</string>
-    <string name="mc_download_failed">Không thể tải Minecraft! Điều này có thể do kết nối mạng kém, tệp được đặt sai vị trí, …</string>
+
     <string name="xerr_unknown">Lỗi API Xbox Live chưa rõ, mã %d</string>
-    <string name="xerr_no_account">Có vẻ như bạn chưa có một tài khoản Xbox Live. Đăng nhập vào https://minecraft.net/ một lần và thử lại.</string>
+
     <string name="xerr_adult_verification">Tài khoản của bạn cần được xác thực bởi người lớn.</string>
     <string name="xerr_child">Tài khoản của bạn là tài khoản trẻ em, và phải được thêm vào một Gia đình để có thể đăng nhập.</string>
-    <string name="minecraft_not_owned">Có vẻ như tài khoản của bạn chưa có hồ sơ Minecraft. Nếu bạn có Xbox Game Pass, đăng nhập vào https://minecraft.net/ và thiết lập hồ sơ.</string>
+
     <string name="xerr_not_available">Xbox Live không có sẵn ở quốc gia của bạn</string>
     <string name="preference_enable_gyro_title">Bật con quay hồi chuyển</string>
     <string name="preference_enable_gyro_description">Bật cái này sẽ cho phép bạn quay trong trò chơi bằng cách quay điện thoại của bạn.</string>
@@ -263,7 +261,7 @@
     <string name="preference_gyro_sample_rate_title">Tốc độ lấy mẫu con quay hồi chuyển</string>
     <string name="preference_gyro_sample_rate_description">..</string>
     <string name="microsoft_login_retry_later">Có quá nhiều yêu cầu, vui lòng thử lại sau.</string>
-    <string name="storage_required">MojoLauncher cần kho dữ liệu bên ngoài để gắn vào. Vui lòng kết nối lại và khởi động lại ứng dụng.</string>
+    <string name="storage_required">MJLauncher cần kho dữ liệu bên ngoài để gắn vào. Vui lòng kết nối lại và khởi động lại ứng dụng.</string>
     <string name="mcl_setting_title_buttonallcaps">Chỉ được dùng những chữ cái in hoa trong các nhãn nút</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Tắt đi nếu bạn muốn sử dụng chữ cái thường trong mục điều khiển.</string>
     <string name="preference_shader_dump_title">Kích hoạt đổ bóng</string>
@@ -286,7 +284,7 @@
 
 
     <string name="preference_force_big_core_title">Buộc trình kết xuất chạy trên lõi lớn</string>
-    <string name="preference_force_big_core_desc">Buộc luồng kết xuất của Minecraft chạy trên lõi có tần số cao nhất.</string>
+
     <string name="version_select_hint">Chọn phiên bản</string>
     <string name="forge_dl_progress">Đang tải xuống %s</string>
     <string name="forge_dl_searching">Đang tìm số phiên bản của Forge</string>
@@ -295,7 +293,7 @@
     <string name="forge_dl_select_version">Chọn phiên bản Forge</string>
     <string name="fabric_dl_progress">Đang tải siêu dữ liệu cho trình %s</string>
     <string name="fabric_dl_loader_version">Phiên bản trình %s</string>
-    <string name="fabric_dl_game_version">Phiên bản Minecraft</string>
+
     <string name="fabric_dl_install">Cài đặt</string>
     <string name="fabric_dl_cant_read_meta">Không đọc được siêu dữ liệu trình %s. Vui lòng thử lại sau.</string>
     <string name="modloader_dl_install_fabric_instance">Tạo phiên bản Fabric mới</string>
@@ -360,7 +358,7 @@
     <string name="preference_category_miscellaneous">Các cài đặt khác</string>
     <string name="preference_category_video">Cài Đặt Đồ Họa</string>
     <string name="notification_permission_dialog_title">Yêu Cầu Quyền Truy Cập</string>
-    <string name="notification_permission_dialog_text">MojoLauncher yêu cầu quyền để gửi thông báo để ngăn chặn việc tải xuống trò chơi/modpacks dừng lại khi bạn rời khỏi ứng dụng. Nếu không cấp quyền, Android có thể ngắt quá trình tải khi bạn để MojoLauncher ở chế độ nền.</string>
+    <string name="notification_permission_dialog_text">MJLauncher yêu cầu quyền để gửi thông báo để ngăn chặn việc tải xuống trò chơi/modpacks dừng lại khi bạn rời khỏi ứng dụng. Nếu không cấp quyền, Android có thể ngắt quá trình tải khi bạn để MJLauncher ở chế độ nền.</string>
     <string name="notification_permission_toast">Bạn luôn có thể thay đổi ý định của mình bằng cách vào Cài đặt</string>
     <string name="preference_ask_for_notification_title">Cho phép Gửi thông báo</string>
     <string name="preference_ask_for_notification_description">Nhấp để yêu cầu lại quyền thông báo, điều này là cần thiết để trò chơi/gói tích hợp tải xuống bình thường ở chế độ nền.</string>

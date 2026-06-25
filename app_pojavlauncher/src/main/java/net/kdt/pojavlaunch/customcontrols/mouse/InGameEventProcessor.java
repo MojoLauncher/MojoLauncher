@@ -2,14 +2,12 @@ package net.kdt.pojavlaunch.customcontrols.mouse;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
-import org.lwjgl.glfw.CallbackBridge;
-
-public class InGameEventProcessor implements TouchEventProcessor {
+public class InGameEventProcessor extends TouchEventProcessor {
     private final Handler mGestureHandler = new Handler(Looper.getMainLooper());
     private final double mSensitivity;
     private boolean mEventTransitioned = true;
@@ -17,7 +15,8 @@ public class InGameEventProcessor implements TouchEventProcessor {
     private final LeftClickGesture mLeftClickGesture = new LeftClickGesture(mGestureHandler);
     private final RightClickGesture mRightClickGesture = new RightClickGesture(mGestureHandler);
 
-    public InGameEventProcessor(double sensitivity) {
+    public InGameEventProcessor(View hostView, double sensitivity) {
+        super(hostView);
         mSensitivity = sensitivity;
     }
 
@@ -37,9 +36,7 @@ public class InGameEventProcessor implements TouchEventProcessor {
                 float deltaY = (float) (motionVector[1] * mSensitivity);
                 mLeftClickGesture.setMotion(deltaX, deltaY);
                 mRightClickGesture.setMotion(deltaX, deltaY);
-                CallbackBridge.mouseX += deltaX;
-                CallbackBridge.mouseY += deltaY;
-                CallbackBridge.sendCursorPos(CallbackBridge.mouseX, CallbackBridge.mouseY);
+                applyMoveVector(deltaX, deltaY);
                 if(LauncherPreferences.PREF_DISABLE_GESTURES) break;
                 checkGestures();
                 break;

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Android için Minecraft: Java Edition)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -14,7 +13,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Bir mod yükleyicisi seç</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher beklenmedik bir sebepten dolayı çöktü</string>
+    <string name="error_fatal">MJLauncher beklenmedik bir sebepten dolayı çöktü</string>
     <string name="error_no_version">Sürüm yok!</string>
     <string name="error_show_more">Daha fazla göster</string>
     <string name="error_show_less">Daha az göster</string>
@@ -146,7 +145,7 @@
     <string name="customctrl_absolute_tracking">Mutlak parmak takibi</string>
     <string name="memory_warning_msg">Şuanki boş bellek (%d) verilecek bellekten (%d) daha az, bu durum çökmelere sebep olabilir. Eğer oyun çökerse verilen belleği değiştirin.</string>
     <string name="mcl_memory_allocation">Bellek ayırma</string>
-    <string name="mcl_memory_allocation_subtitle">Minecraft\'a ne kadar bellek verileceğini kontrol eder.</string>
+
     <string name="multirt_runtime_corrupt">Bozuk Java Runtime</string>
     <string name="multirt_runtime_incompatiblearch">Uyumsuz mimari: %s</string>
     <string name="multirt_config_title">Java Runtime\'lar</string>
@@ -199,7 +198,7 @@
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Görüntü İşleyici</string>
     <string name="notif_channel_name">Genel</string>
-    <string name="lazy_service_default_title">Mojo Önplan Hizmeti</string>
+    <string name="lazy_service_default_title">MJ Önplan Hizmeti</string>
     <string name="mcl_setting_veroption_installed">Kuruldu</string>
     <string name="use_global_default">(Genel varsayılanı kullan)</string>
     <string name="default_control">Varsayılan kontroller</string>
@@ -214,12 +213,12 @@
     <string name="main_add_account">Hesap Ekle</string>
     <string name="tasks_ongoing">Görevler devam etmekte, lütfen bekleyin</string>
     <string name="no_saved_accounts">Kayıtlı hesap yok</string>
-    <string name="mc_download_failed">Minecraft\'ı indirmek başarısız oldu! Bu kötü internet bağlantısı, yanlış yerleştirilmiş dosyalar vb… sebebiyle olabilir.</string>
+
     <string name="xerr_unknown">Bilinmeyen XBOX Live API hatası %d</string>
-    <string name="xerr_no_account">Bir Xbox Live hesabına sahip olmadığınız görünüyor. Lütfen bir kereliğine https://minecraft.net/ \'da giriş yapın ve tekrar deneyin.</string>
+
     <string name="xerr_adult_verification">Bir yetişkinin hesabınızı onaylaması gerekiyor.</string>
     <string name="xerr_child">Hesabınız bir çocuk hesabı ve giriş yapabilmek için bir aileye eklenmesi gerekiyor.</string>
-    <string name="minecraft_not_owned">Görünüşe göre bu hesap bir Minecraft profiline sahip değil. Eğer Xbox Game Pass\'e sahip iseniz, lütfen https://minecraft.net/ \'den giriş yapın ve ayarlayın.</string>
+
     <string name="xerr_not_available">Xbox Live ülkenizde mevcut değil</string>
     <string name="preference_enable_gyro_title">Jiroskop kontrollerini etkinleştir</string>
     <string name="preference_enable_gyro_description">Bunu etkinleştirmek, telefonunuzu çevirerek oyun içi dönüş yapmanızı sağlayacaktır.</string>
@@ -229,7 +228,7 @@
     <string name="preference_gyro_sample_rate_title">Jiroskop örnekleme oranı</string>
     <string name="preference_gyro_sample_rate_description">Eğer jiroskop kontrolleriyle performans probleminiz varsa bunu arttırın.</string>
     <string name="microsoft_login_retry_later">Çok fazla istek, Lütfen daha sonra tekrar deneyin.</string>
-    <string name="storage_required">MojoLauncher harici depolama biriminin bağlı olmasını gerektirir. Lütfen yeniden bağlayın ve uygulamayı yeniden başlatın.</string>
+    <string name="storage_required">MJLauncher harici depolama biriminin bağlı olmasını gerektirir. Lütfen yeniden bağlayın ve uygulamayı yeniden başlatın.</string>
     <string name="mcl_setting_title_buttonallcaps">Düğme etiketlerinde yalnızca büyük harfler kullanın</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Kontrollerinizde küçük harfler kullanmak istiyorsanız bunu devre dışı bırakın.</string>
     <string name="preference_shader_dump_title">Gölgelendirici bilgi göstergesini etkinleştir</string>
@@ -248,7 +247,7 @@
     <string name="preference_deadzone_scale_title">Joystick ölü bölge ölçeği</string>
     <string name="preference_deadzone_scale_description">Joystick kayıyorsa artırın.</string>
     <string name="preference_force_big_core_title">İşleyiciyi ana çekirdekte çalışmaya zorla</string>
-    <string name="preference_force_big_core_desc">Minecraft işleme bölümünün en yüksek frekansta çalışan çekirdekte çalışmasına zorlar.</string>
+
     <string name="version_select_hint">Bir Sürüm Seçin</string>
     <string name="forge_dl_progress">%s için yükleyici indiriliyor</string>
     <string name="forge_dl_searching">Forge sürüm numarası aranıyor</string>
@@ -257,7 +256,7 @@
     <string name="forge_dl_select_version">Forge sürümünü seç</string>
     <string name="fabric_dl_progress">%s yükleyici meta verileri indiriliyor</string>
     <string name="fabric_dl_loader_version">%s yükleyici sürümü</string>
-    <string name="fabric_dl_game_version">Minecraft sürümü</string>
+
     <string name="fabric_dl_install">Yükle</string>
     <string name="fabric_dl_cant_read_meta">%s yükleyici meta verileri okunamadı. Lütfen daha sonra tekrar deneyin.</string>
     <string name="create_profile_vanilla_like_versions">Vanilla usülü sürümler</string>
@@ -279,7 +278,7 @@
     <string name="modpack_download_downloading_mods">Modlar indiriliyor (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Modlar indiriliyor (%d dosyadan %d tanesi)</string>
     <string name="modpack_download_applying_overrides">Geçersiz kılmalar uygulanıyor (%d/%d)</string>
-    <string name="modpack_install_notification_title">Mojo Mod Paketi Yükleyicisi</string>
+    <string name="modpack_install_notification_title">MJ Mod Paketi Yükleyicisi</string>
     <string name="modpack_install_notification_success">Modpack kurulumunu tamamlamak için buraya tıklayın</string>
     <string name="modpack_install_notification_data_not_available">Mod yükleyici bilgileri indirilemedi</string>
     <string name="modpack_install_modloader_download_failed">Mod yükleyici dosyaları indirilemedi</string>
@@ -308,7 +307,7 @@
     <string name="preference_category_miscellaneous">Çeşitli ayarlar</string>
     <string name="preference_category_video">Video ayarları</string>
     <string name="notification_permission_dialog_title">İzin isteği</string>
-    <string name="notification_permission_dialog_text">MojoLauncher, uygulamadan ayrıldığınızda oyun/mod paketi indirmelerinin durmasını önlemek için bildirim gönderme izni gerektirir. Bu izin olmadan, Android MojoLauncher\'ı arka plan moduna aldığınızda indirmelerinizi kapatabilir.</string>
+    <string name="notification_permission_dialog_text">MJLauncher, uygulamadan ayrıldığınızda oyun/mod paketi indirmelerinin durmasını önlemek için bildirim gönderme izni gerektirir. Bu izin olmadan, Android MJLauncher\'ı arka plan moduna aldığınızda indirmelerinizi kapatabilir.</string>
     <string name="notification_permission_toast">Fikrinizi daha sonra Ayarlar\'a girerek her zaman değiştirebilirsiniz</string>
     <string name="preference_ask_for_notification_title">Bildirimlere izin ver</string>
     <string name="preference_ask_for_notification_description">Oyun/mod paketi arka plan indirmelerinin düzgün çalışması için gerekli olan bildirim iznini yeniden istemek için tıklayın.</string>

@@ -1,16 +1,17 @@
 package net.kdt.pojavlaunch.modloaders;
 
-import net.kdt.pojavlaunch.JMinecraftVersionList;
-import net.kdt.pojavlaunch.tasks.AsyncMinecraftDownloader;
-import net.kdt.pojavlaunch.tasks.MinecraftDownloader;
+import net.kdt.pojavlaunch.JVersionList;
+import net.kdt.pojavlaunch.tasks.MoJsonExtras;
+import net.kdt.pojavlaunch.tasks.MoJsonDownloader;
 
+import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class OptiFineDownloadTask implements AsyncMinecraftDownloader.DoneListener {
-    private static final Pattern sMcVersionPattern = Pattern.compile("([0-9]+)\\.([0-9]+)\\.?([0-9]+)?");
+public class OptiFineDownloadTask implements MoJsonExtras.DoneListener {
+    private static final Pattern sGameVersionPattern = Pattern.compile("([0-9]+)\\.([0-9]+)\\.?([0-9]+)?");
     private final OptiFineUtils.OptiFineVersion mOptiFineVersion;
-    private final Object mMinecraftDownloadLock = new Object();
+    private final Object mDownloadLock = new Object();
     private Throwable mDownloaderThrowable;
 
     public OptiFineDownloadTask(OptiFineUtils.OptiFineVersion mOptiFineVersion) {
@@ -18,9 +19,9 @@ public class OptiFineDownloadTask implements AsyncMinecraftDownloader.DoneListen
     }
 
     public void prepareForInstall() throws Exception {
-        String minecraftVersion = determineMinecraftVersion();
-        if(minecraftVersion == null) return;
-        if(!downloadMinecraft(minecraftVersion)) {
+        String gameVersion = determineGameVersion();
+        if(gameVersion == null) return;
+        if(!downloadGame(gameVersion)) {
             if(mDownloaderThrowable instanceof Exception) {
                 throw (Exception) mDownloaderThrowable;
             }else {
@@ -29,8 +30,8 @@ public class OptiFineDownloadTask implements AsyncMinecraftDownloader.DoneListen
         }
     }
 
-    public String determineMinecraftVersion() {
-        Matcher matcher = sMcVersionPattern.matcher(mOptiFineVersion.minecraftVersion);
+    public String determineGameVersion() {
+        Matcher matcher = sGameVersionPattern.matcher(mOptiFineVersion.gameVersion);
         if(matcher.find()) {
             StringBuilder mcVersionBuilder = new StringBuilder();
             mcVersionBuilder.append(matcher.group(1));
@@ -47,14 +48,14 @@ public class OptiFineDownloadTask implements AsyncMinecraftDownloader.DoneListen
         }
     }
 
-    public boolean downloadMinecraft(String minecraftVersion) {
+    public boolean downloadGame(String gameVersion) {
         // the string is always normalized
-        JMinecraftVersionList.Version minecraftJsonVersion = AsyncMinecraftDownloader.getListedVersion(minecraftVersion);
-        if(minecraftJsonVersion == null) return false;
+        JVersionList.Version versionMeta = MoJsonExtras.getListedVersion(gameVersion);
+        if(versionMeta == null) return false;
         try {
-            synchronized (mMinecraftDownloadLock) {
-                new MinecraftDownloader().start(null, minecraftJsonVersion, minecraftVersion, this);
-                mMinecraftDownloadLock.wait();
+            synchronized (mDownloadLock) {
+                new MoJsonDownloader().start(null, versionMeta, gameVersion, this);
+                mDownloadLock.wait();
             }
         }catch (InterruptedException e) {
             e.printStackTrace();
@@ -63,18 +64,18 @@ public class OptiFineDownloadTask implements AsyncMinecraftDownloader.DoneListen
     }
 
     @Override
-    public void onDownloadDone() {
-        synchronized (mMinecraftDownloadLock) {
+    public void onDownloadDone(File[] classpath) {
+        synchronized (mDownloadLock) {
             mDownloaderThrowable = null;
-            mMinecraftDownloadLock.notifyAll();
+            mDownloadLock.notifyAll();
         }
     }
 
     @Override
     public void onDownloadFailed(Throwable throwable) {
-        synchronized (mMinecraftDownloadLock) {
+        synchronized (mDownloadLock) {
             mDownloaderThrowable = throwable;
-            mMinecraftDownloadLock.notifyAll();
+            mDownloadLock.notifyAll();
         }
     }
 }

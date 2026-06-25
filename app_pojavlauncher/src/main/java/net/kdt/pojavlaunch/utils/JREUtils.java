@@ -98,7 +98,6 @@ public class JREUtils {
         if(ffmpeg == null) return;
         envMap.put("POJAV_FFMPEG_PATH", ffmpeg.resolveAbsolutePath("libffmpeg.so"));
     }
-
     public static void setEnviroimentForGame(Context context, String renderer) throws Throwable {
         Map<String, String> envMap = new ArrayMap<>();
         envMap.put("LIBGL_MIPMAP", "3");
@@ -116,16 +115,9 @@ public class JREUtils {
             envMap.put("LIBGL_VGPU_DUMP", "1");
         if(PREF_VSYNC_IN_ZINK)
             envMap.put("POJAV_VSYNC_IN_ZINK", "1");
-        if(Tools.deviceHasHangingLinker())
-            envMap.put("POJAV_EMUI_ITERATOR_MITIGATE", "1");
-
 
         // The OPEN GL version is changed according
         envMap.put("LIBGL_ES", (String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION));
-
-	    // HACK: GLSL version override for Mesa-based renderers (i.e. Zink)
-	    // Required to run the game properly on some mobile Vulkan drivers (Minecraft fails to compile shaders without)
-        envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
 
         envMap.put("FORCE_VSYNC", String.valueOf(LauncherPreferences.PREF_FORCE_VSYNC));
 
@@ -140,21 +132,25 @@ public class JREUtils {
 		}
 		envMap.put("MOD_ANDROID_RUNTIME", modRuntimeDir.getAbsolutePath());
 
-        if(!renderer.equals("opengles2")) { // Don't enable ANGLE for GL4ES for now (it's currently broken)
-            setupAngleEnv(context, envMap);
-        }
+        setupAngleEnv(context, envMap);
         setupFfmpegEnv(context, envMap);
+        // Init mesa renderers
+        MesaUtils.initEnvironment(context, renderer, envMap);
 
-        envMap.put("MOJO_RENDERER", renderer);
-
-        if(renderer.equals("opengles3_ltw")) {
-            envMap.put("POJAVEXEC_EGL","libltw.so");
-        }
+        setRendererLibraryPath(Tools.NATIVE_LIB_DIR, MesaUtils.getCustomZinkLibraryPath());
+        envMap.put("POJAV_NATIVEDIR", Tools.NATIVE_LIB_DIR);
 
         if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
 
         if(GLInfoUtils.getGlInfo().isAdreno() && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
-            envMap.put("POJAV_LOAD_TURNIP", "1");
+            setUseTurnip(true);
+        }
+
+        if(LauncherPreferences.PREF_FREEDRENO_SYSMEM) {
+            // We could also apply the FD_MESA_DEBUG only if freedreno is active but why making things complicated?
+            Logger.appendToLog("Will use sysmem rendering for Turnip/Freedreno");
+            envMap.put("FD_MESA_DEBUG", "sysmem");
+            envMap.put("TU_DEBUG", "sysmem");
         }
 
         overrideEnvVars(envMap);
@@ -239,40 +235,63 @@ public class JREUtils {
      */
     public static String loadGraphicsLibrary(String renderer){
         String renderLibrary;
+        boolean useGles;
+        boolean bypassNamespace = false;
+        boolean preloadVk = true;
+        int glesVersion;
         switch (renderer){
+            case "freedreno_kgsl":
+                preloadVk = false;
+            case "vulkan_zink":
+                renderLibrary = MesaUtils.getPreferredEGL();
+                useGles = false;
+                bypassNamespace = true; // Mesa is linked to a bunch of libraries not available in the pojavexec namespace
+                glesVersion = 3;
+                if(preloadVk) preloadVulkan(); // Zink requires Vulkan library to be preloaded
+                break;
+            case "opengles3_ltw" :
+                renderLibrary = "libltw.so";
+                useGles = true;
+                glesVersion = 3;
+                break;
             case "opengles2":
             case "opengles2_5":
             case "opengles3":
-                renderLibrary = "libgl4es_114.so"; break;
-            case "vulkan_zink": renderLibrary = "libOSMesa.so"; break;
-            case "opengles3_ltw" : renderLibrary = "libltw.so"; break;
             default:
-                Log.w("RENDER_LIBRARY", "No renderer selected, defaulting to opengles2");
                 renderLibrary = "libgl4es_114.so";
+                useGles = true;
+                glesVersion = Integer.parseInt((String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION));
                 break;
         }
 
-        if (!dlopen(renderLibrary)) {
+        if (!configureRenderspec(renderLibrary, bypassNamespace, useGles, glesVersion)) {
             Log.e("RENDER_LIBRARY","Failed to load renderer " + renderLibrary );
             return null;
         }
+        MesaUtils.destroyZink(); // Not needed anymore
         return renderLibrary;
     }
 
     public static int getDetectedVersion() {
         return GLInfoUtils.getGlInfo().glesMajorVersion;
     }
+    public static void setRendererLibraryPath(String mainPath, String additionalPath){
+        if(additionalPath != null)
+            mainPath = additionalPath + ":" + mainPath;
+        nsetRendererLibraryPath(mainPath);
+    }
     public static native int chdir(String path);
-    public static native boolean dlopen(String libPath);
+
     public static native void setLdLibraryPath(String ldLibraryPath);
-    public static native void setupBridgeWindow(Object surface);
-    public static native void releaseBridgeWindow();
-    public static native void applyWindowSize();
-    public static native void initializeHooks();
+    public static native boolean configureRenderspec(String eglPath, boolean useLoaderBypass, boolean useGles, int glesVersion);
+    public static native void configureRenderspecDisplay(int width, int height, int refreshRate);
+    private static native void nsetRendererLibraryPath(String path);
+    public static native void preloadVulkan();
+    public static native void setUseTurnip(boolean enable);
+    //public static native void initializeHooks();
     // Obtain AWT screen pixels to render on Android SurfaceView
     public static native boolean renderAWTScreenFrame(ByteBuffer tempBuffer);
     static {
-        System.loadLibrary("exithook");
         System.loadLibrary("pojavexec");
         System.loadLibrary("pojavexec_awt");
     }

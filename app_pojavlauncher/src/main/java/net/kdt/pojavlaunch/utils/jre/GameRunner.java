@@ -8,9 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import net.kdt.pojavlaunch.Architecture;
-import net.kdt.pojavlaunch.JMinecraftVersionList;
+import net.kdt.pojavlaunch.JVersionList;
 import net.kdt.pojavlaunch.Tools;
-import net.kdt.pojavlaunch.authenticator.accounts.MinecraftAccount;
+import net.kdt.pojavlaunch.authenticator.accounts.Account;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.LifecycleAwareAlertDialog;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
@@ -25,9 +25,6 @@ import net.kdt.pojavlaunch.utils.JSONUtils;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
 import net.kdt.pojavlaunch.utils.OldVersionsUtils;
 import net.kdt.pojavlaunch.utils.RendererCompatUtil;
-import net.kdt.pojavlaunch.value.DependentLibrary;
-
-import org.lwjgl.glfw.CallbackBridge;
 
 import java.io.File;
 import java.io.IOException;
@@ -87,13 +84,18 @@ public class GameRunner {
 
      * @return whether the GPU is affected by the Large Thin Wrapper render distance issue on vanilla
      */
-    private static boolean affectedByRenderDistanceIssue() {
+
+    private static boolean affectedByRenderDistanceIssue(JVersionList.Version version) throws ParseException {
+        if(LauncherPreferences.PREF_USE_ANGLE) return false;
         GLInfoUtils.GLInfo info = GLInfoUtils.getGlInfo();
-        return info.isAdreno() && info.glesMajorVersion >= 3;
+        return info.isAdreno() &&
+                info.glesMajorVersion >= 3 &&
+                // 1.21.5 fixes the RD issue, released on march 25 2025
+                DateUtils.dateBefore(DateUtils.getOriginalReleaseDate(version), 2025, 2, 25);
     }
 
-    private static boolean checkRenderDistance(File gamedir) {
-        if(!affectedByRenderDistanceIssue()) return false;
+    private static boolean checkRenderDistance(JVersionList.Version version, File gamedir) throws ParseException {
+        if(!affectedByRenderDistanceIssue(version)) return false;
         if(hasSodium(gamedir)) return false;
         try {
             MCOptionUtils.load();
@@ -106,11 +108,11 @@ public class GameRunner {
         return renderDistance > 7;
     }
 
-    private static boolean isGl4esCompatible(JMinecraftVersionList.Version version) throws Exception{
+    private static boolean isGl4esCompatible(JVersionList.Version version) throws Exception{
         return DateUtils.dateBefore(DateUtils.getOriginalReleaseDate(version), 2025, 1, 7);
     }
 
-    private static boolean isCompatContext(JMinecraftVersionList.Version version) throws Exception{
+    private static boolean isCompatContext(JVersionList.Version version) throws Exception{
         // Day before the release date of 21w10a, the first OpenGL 3 Core Minecraft version
         return DateUtils.dateBefore(DateUtils.getOriginalReleaseDate(version), 2021, 3, 9);
     }
@@ -137,8 +139,8 @@ public class GameRunner {
         }
     }
 
-    public static void launchMinecraft(final AppCompatActivity activity, MinecraftAccount minecraftAccount,
-                                       Instance instance, String versionId, String rendererName) throws Throwable {
+    public static void launchGame(final AppCompatActivity activity, Account account,
+                                  Instance instance, String versionId, File[] classpath, String rendererName) throws Throwable {
         int freeDeviceMemory = Tools.getFreeDeviceMemory(activity);
         int localeString;
         int freeAddressSpace = Architecture.is32BitsDevice() ? Tools.getMaxContinuousAddressSpaceSize() : -1;
@@ -163,7 +165,7 @@ public class GameRunner {
             }
         }
         File gamedir = instance.getGameDirectory();
-        JMinecraftVersionList.Version versionInfo = Tools.getVersionInfo(versionId);
+        JVersionList.Version versionInfo = Tools.getVersionInfo(versionId);
 
         // Switch renderer to GL4ES when running a compat context version on LTW
         if(isCompatContext(versionInfo) && !hasAngelica(gamedir) && rendererName.equals("opengles3_ltw")) {
@@ -186,7 +188,7 @@ public class GameRunner {
 
         boolean isLtw = rendererName.equals("opengles3_ltw");
 
-        if(isLtw && checkRenderDistance(gamedir)) {
+        if(isLtw && checkRenderDistance(versionInfo, gamedir)) {
             if(showDialog(activity, R.string.ltw_render_distance_warning_msg)) return;
             // If the code goes here, it means that the user clicked "OK". Fix the render distance.
             try {
@@ -206,19 +208,24 @@ public class GameRunner {
         int requiredJavaVersion = 8;
         if(versionInfo.javaVersion != null) requiredJavaVersion = versionInfo.javaVersion.majorVersion;
 
-        // Minecraft 1.13+
-        CallbackBridge.nativeSetUseInputStackQueue(versionInfo.arguments != null);
-
         Runtime runtime = MultiRTUtils.forceReread(pickRuntime(instance, requiredJavaVersion));
 
         // Pre-process specific files
         disableSplash(gamedir);
-        List<String> launchArgs = getMinecraftClientArgs(minecraftAccount, versionInfo, gamedir);
+        List<String> launchArgs = getMoJsonClientArgs(account, versionInfo, gamedir);
 
         // Select the appropriate openGL version
         OldVersionsUtils.selectOpenGlVersion(versionInfo);
 
-        List<String> launchClassPath = generateLaunchClassPath(versionInfo, versionId);
+        ArrayList<String> launchClassPath = new ArrayList<>(classpath.length);
+        for(File classpathEntry : classpath) {
+            String entryPath = classpathEntry.getAbsolutePath();
+            if(!classpathEntry.exists()) {
+                Log.w("GameRunner", "Skipped classpath entry " + entryPath + " because it is missing");
+            }
+            launchClassPath.add(entryPath);
+        }
+        launchClassPath.trimToSize();
 
         List<String> javaArgList = new ArrayList<>();
 
@@ -237,9 +244,13 @@ public class GameRunner {
             javaArgList.add("-Djna.boot.library.path="+dirPath);
         }
 
-        addAuthlibInjectorArgs(javaArgList, minecraftAccount);
+        File lwjglExtractDir = new File(Tools.DIR_CACHE, "lwjgl_native/"+versionId);
+        FileUtils.ensureDirectory(lwjglExtractDir);
+        javaArgList.add("-Dorg.lwjgl.system.SharedLibraryExtractPath="+lwjglExtractDir.getAbsolutePath());
 
-        javaArgList.addAll(getMinecraftJVMArgs(versionId));
+        addAuthlibInjectorArgs(javaArgList, account);
+
+        javaArgList.addAll(getMoJsonJvmArgs(versionId));
 
         javaArgList.addAll(JREUtils.parseJavaArguments(instance.getLaunchArgs()));
 
@@ -256,10 +267,12 @@ public class GameRunner {
             if(showDialog(activity, R.string.gr_err_renderer_load_Failed)) return;
             System.exit(0);
         }
-        javaArgList.add("-Dorg.lwjgl.opengl.libname="+rendererLibrary);
+        javaArgList.add("-Dorg.lwjgl.opengl.libname=libGLMojo.so");
         javaArgList.add("-Dorg.lwjgl.freetype.libname="+ Tools.NATIVE_LIB_DIR+"/libfreetype.so");
 
         activity.runOnUiThread(() -> Toast.makeText(activity, activity.getString(R.string.autoram_info_msg,LauncherPreferences.PREF_RAM_ALLOCATION), Toast.LENGTH_SHORT).show());
+
+        Log.i("GameRunner", "Running with "+ launchArgs.toString());
 
         try {
             JavaRunner.nativeSetupExit(activity);
@@ -297,14 +310,14 @@ public class GameRunner {
         }
     }
 
-    private static void addAuthlibInjectorArgs(List<String> javaArgList, MinecraftAccount minecraftAccount) {
-        String injectorUrl = minecraftAccount.authType.injectorUrl;
+    private static void addAuthlibInjectorArgs(List<String> javaArgList, Account account) {
+        String injectorUrl = account.authType.injectorUrl;
         if(injectorUrl == null) return;
         javaArgList.add("-javaagent:"+Tools.DIR_DATA+"/authlib-injector/authlib-injector.jar="+injectorUrl);
     }
 
-    private static List<String> getMinecraftJVMArgs(String versionName) {
-        JMinecraftVersionList.Version versionInfo = Tools.getVersionInfo(versionName, true);
+    private static List<String> getMoJsonJvmArgs(String versionName) {
+        JVersionList.Version versionInfo = Tools.getVersionInfo(versionName, true);
         // Parse Forge 1.17+ additional JVM Arguments
         if (versionInfo.inheritsFrom == null || versionInfo.arguments == null || versionInfo.arguments.jvm == null) {
             return Collections.emptyList();
@@ -316,18 +329,18 @@ public class GameRunner {
         varArgMap.put("version_name", versionInfo.id);
         varArgMap.put("natives_directory", Tools.NATIVE_LIB_DIR);
 
-        List<String> minecraftArgs = new ArrayList<>();
+        List<String> clientVmArgs = new ArrayList<>();
         if (versionInfo.arguments != null) {
             for (Object arg : versionInfo.arguments.jvm) {
                 if (arg instanceof String) {
-                    minecraftArgs.add((String) arg);
+                    clientVmArgs.add((String) arg);
                 } //TODO: implement (?maybe?)
             }
         }
-        return JSONUtils.insertJSONValueList(minecraftArgs, varArgMap);
+        return JSONUtils.insertJSONValueList(clientVmArgs, varArgMap);
     }
 
-    private static List<String> getMinecraftClientArgs(MinecraftAccount profile, JMinecraftVersionList.Version versionInfo, File gameDir) {
+    private static List<String> getMoJsonClientArgs(Account profile, JVersionList.Version versionInfo, File gameDir) {
         String username = profile.username;
         String versionName = versionInfo.id;
         if (versionInfo.inheritsFrom != null) {
@@ -363,19 +376,19 @@ public class GameRunner {
         varArgMap.put("version_name", versionName);
         varArgMap.put("version_type", versionInfo.type);
 
-        List<String> minecraftArgs = new ArrayList<>();
+        List<String> clientArgs = new ArrayList<>();
         if (versionInfo.arguments != null && versionInfo.arguments.game != null) {
             // Support Minecraft 1.13+
             for (Object arg : versionInfo.arguments.game) {
                 if (arg instanceof String) {
-                    minecraftArgs.add((String) arg);
+                    clientArgs.add((String) arg);
                 } //TODO: implement else clause
             }
         }
         if(versionInfo.minecraftArguments != null){
-            minecraftArgs.addAll(splitAndFilterEmpty(versionInfo.minecraftArguments));
+            clientArgs.addAll(splitAndFilterEmpty(versionInfo.minecraftArguments));
         }
-        return JSONUtils.insertJSONValueList(minecraftArgs, varArgMap);
+        return JSONUtils.insertJSONValueList(clientArgs, varArgMap);
     }
 
     private static List<String> splitAndFilterEmpty(String argStr) {
@@ -386,81 +399,6 @@ public class GameRunner {
             }
         }
         return strList;
-    }
-
-    private static String getClientClasspath(String version) {
-        return Tools.DIR_HOME_VERSION + "/" + version + "/" + version + ".jar";
-    }
-
-    private static List<String> generateLaunchClassPath(JMinecraftVersionList.Version info, String actualname) {
-        File lwjgl3Folder = new File(Tools.DIR_GAME_HOME, "lwjgl3");
-        File glfwFatJar = new File(lwjgl3Folder, "lwjgl-glfw-classes.jar");
-        File lwjglxJar = new File(lwjgl3Folder, "lwjgl-lwjglx.jar");
-        if(!glfwFatJar.exists() || !lwjglxJar.exists()) throw new RuntimeException("Required LWJGL3 files not found");
-
-        ArrayList<String> classpath = new ArrayList<>(info.libraries.length + 3);
-        // LWJGL3 comes first - must override any custom LWJGL3 on the classpath
-        classpath.add(glfwFatJar.getAbsolutePath());
-        // Custom version libraries are inbetween
-        boolean usesLWJGL3 = generateLibClasspath(info, classpath);
-        // Client is last before LWJGL2 - all libraries must have higher precedence than it.
-        classpath.add(getClientClasspath(actualname));
-        // Don't add LWJGLX when the client doesn't use LWJGL2
-        if(!usesLWJGL3) {
-            // LWJGLX (custom LWJGL2) comes last - anything in the client or libs should override it
-            classpath.add(lwjglxJar.getAbsolutePath());
-        }
-        classpath.trimToSize();
-        return classpath;
-    }
-
-    private static boolean checkRules(JMinecraftVersionList.Arguments.ArgValue.ArgRules[] rules) {
-        if(rules == null) return true; // always allow
-        for (JMinecraftVersionList.Arguments.ArgValue.ArgRules rule : rules) {
-            if (rule.action.equals("allow") && rule.os != null && rule.os.name.equals("osx")) {
-                return false; //disallow
-            }
-        }
-        return true; // allow if none match
-    }
-
-    /**
-     * "Carve out" the version out of a Maven library name
-     * @param fullMavenName the full library name
-     * @return the library name without the version
-     */
-    private static String trimLibVersion(String fullMavenName) {
-        int first = fullMavenName.indexOf(':');
-        if(first == -1) return fullMavenName;
-        int second = fullMavenName.indexOf(':', first + 1);
-        if(second == -1) return fullMavenName;
-        int third = fullMavenName.indexOf(':', second + 1);
-        if(third != -1) {
-            return fullMavenName.substring(0, second + 1) + fullMavenName.substring(third);
-        } else {
-            return fullMavenName.substring(0, second + 1);
-        }
-    }
-
-    /** @return true when LWJGL3 is in use **/
-    public static boolean generateLibClasspath(JMinecraftVersionList.Version info, List<String> target) {
-        ArrayMap<String, String> libraries = new ArrayMap<>();
-        boolean usesLWJGL3 = false;
-        for (DependentLibrary libItem : info.libraries) {
-            if(libItem.name.startsWith("org.lwjgl:lwjgl:3.")) usesLWJGL3 = true;
-            if(!checkRules(libItem.rules) || Tools.shouldSkipLibrary(libItem)) continue;
-            File library = new File(Tools.DIR_HOME_LIBRARY, Tools.artifactToPath(libItem));
-            if(!library.exists()) continue;
-            String name = trimLibVersion(libItem.name);
-            // If the lib list has both asm-all and normal asm, something is either terribly wrong
-            // or it's just babric. Let's hope for the latter
-            if(name.equals("org.ow2.asm:asm:")) {
-                libraries.remove("org.ow2.asm:asm-all:");
-            }
-            libraries.put(name, library.getAbsolutePath());
-        }
-        target.addAll(libraries.values());
-        return usesLWJGL3;
     }
 
     public static @NonNull String pickRuntime(Instance instance, int targetJavaVersion) {

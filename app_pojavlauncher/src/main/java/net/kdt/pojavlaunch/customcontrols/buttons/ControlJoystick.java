@@ -21,8 +21,9 @@ import net.kdt.pojavlaunch.customcontrols.ControlLayout;
 import net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick;
 import net.kdt.pojavlaunch.customcontrols.handleview.EditControlSideDialog;
 
-import org.lwjgl.glfw.CallbackBridge;
+import net.kdt.pojavlaunch.CallbackBridge;
 
+import git.artdeell.dnbootstrap.glfw.GLFW;
 import io.github.controlwear.virtual.joystick.android.JoystickView;
 
 @SuppressLint("ViewConstructor")
@@ -44,7 +45,8 @@ public class ControlJoystick extends JoystickView implements ControlInterface {
 
     private static void sendInput(int[] keys, boolean isDown) {
         for (int key : keys) {
-            CallbackBridge.sendKeyPress(key, CallbackBridge.getCurrentMods(), isDown);
+            int modifiers = CallbackBridge.getCurrentMods();
+            GLFW.sendKeyEvent(key, isDown, modifiers);
         }
     }
 

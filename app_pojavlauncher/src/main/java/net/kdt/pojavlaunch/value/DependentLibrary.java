@@ -1,22 +1,29 @@
 package net.kdt.pojavlaunch.value;
 
 import androidx.annotation.Keep;
-import net.kdt.pojavlaunch.JMinecraftVersionList.Arguments.ArgValue.ArgRules;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Keep
 public class DependentLibrary {
-    public ArgRules[] rules;
+    public MoJsonRule[] rules;
     public String name;
     public LibraryDownloads downloads;
     public String url;
     public transient boolean replaced = false;
+    public Map<String, String> natives;
+    public ExtractSettings extract;
 
     @Keep
 	public static class LibraryDownloads {
-		public final MinecraftLibraryArtifact artifact;
-		public LibraryDownloads(MinecraftLibraryArtifact artifact) {
+		public LibraryArtifact artifact;
+        public LibraryClassifierMap classifiers;
+		public LibraryDownloads(LibraryArtifact artifact) {
 			this.artifact = artifact;
 		}
 	}
+
+    public static class LibraryClassifierMap extends HashMap<String, LibraryArtifact> {}
 }
 

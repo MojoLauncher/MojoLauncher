@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A document provider for the Storage Access Framework which exposes the files in the
@@ -45,6 +46,7 @@ import java.util.List;
  */
 public class FolderProvider extends DocumentsProvider {
 
+    private static final List<String> BLOCKED_PACKAGES = List.of("com.dnamobile.modlymodmanager");
     private static final String ALL_MIME_TYPES = "*/*";
 
     private File BASE_DIR;
@@ -102,9 +104,11 @@ public class FolderProvider extends DocumentsProvider {
     @Override
     public Cursor queryDocument(String documentId, String[] projection) throws FileNotFoundException {
         final MatrixCursor result = new MatrixCursor(projection != null ? projection : DEFAULT_DOCUMENT_PROJECTION);
-        // Future-proofing in case if we implement realtime file watching
-        result.setNotificationUri(mContentResolver, createUriForDocId(documentId));
-        includeFile(result, documentId, null);
+        if(!Tools.checkFileValidness(this, null)){
+            // Future-proofing in case if we implement realtime file watching
+            result.setNotificationUri(mContentResolver, createUriForDocId(documentId));
+            includeFile(result, documentId, null);
+        }
         return result;
     }
 
@@ -113,12 +117,14 @@ public class FolderProvider extends DocumentsProvider {
         final MatrixCursor result = new MatrixCursor(projection != null ? projection : DEFAULT_DOCUMENT_PROJECTION);
         final File parent = getFileForDocId(parentDocumentId);
         final File[] children = parent.listFiles();
-        if(children == null) throw new FileNotFoundException("Unable to list files in "+parent.getAbsolutePath());
-        for (File file : children) {
-            includeFile(result, null, file);
+        if(!Tools.checkFileValidness(this, null)){
+            if(children == null) throw new FileNotFoundException("Unable to list files in "+parent.getAbsolutePath());
+            for (File file : children) {
+                includeFile(result, null, file);
+            }
+            // Set the notification URI as that's what the "Files" app will be listening to in case of file deletion
+            result.setNotificationUri(mContentResolver, createUriForDocId(parentDocumentId));
         }
-        // Set the notification URI as that's what the "Files" app will be listening to in case of file deletion
-        result.setNotificationUri(mContentResolver, createUriForDocId(parentDocumentId));
         return result;
     }
 
@@ -138,9 +144,9 @@ public class FolderProvider extends DocumentsProvider {
 
     @Override
     public boolean onCreate() {
-        if(Tools.checkStorageRoot(getContext())) {
+        if (Tools.checkStorageRoot(getContext())) {
             Tools.initStorageConstants(getContext());
-        }else {
+        } else {
             return false;
         }
         BASE_DIR = new File(Tools.DIR_GAME_HOME);
@@ -153,9 +159,10 @@ public class FolderProvider extends DocumentsProvider {
     public String createDocument(String parentDocumentId, String mimeType, String displayName) throws FileNotFoundException {
         File newFile = new File(parentDocumentId, displayName);
         int noConflictId = 2;
-        while (newFile.exists()) {
+        while (Tools.checkFileValidness(this, newFile)) {
             newFile = new File(parentDocumentId, displayName + " (" + noConflictId++ + ")");
         }
+        Tools.checkFileValidness(this, null);
         try {
             boolean succeeded;
             if (Document.MIME_TYPE_DIR.equals(mimeType)) {

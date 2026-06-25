@@ -1,12 +1,7 @@
 package net.kdt.pojavlaunch;
 
-import static org.lwjgl.glfw.CallbackBridge.sendKeyPress;
-
 import android.view.KeyEvent;
 
-import org.lwjgl.glfw.CallbackBridge;
-
-import java.util.Arrays;
 
 public class EfficientAndroidLWJGLKeycode {
 
@@ -161,10 +156,6 @@ public class EfficientAndroidLWJGLKeycode {
 
     }
 
-    public static boolean containsIndex(int index){
-        return index >= 0;
-    }
-
     public static String[] generateKeyName() {
         if (androidKeyNameArray == null) {
             androidKeyNameArray = new String[sAndroidKeycodes.length];
@@ -175,36 +166,16 @@ public class EfficientAndroidLWJGLKeycode {
         return androidKeyNameArray;
     }
 
-    public static void execKey(KeyEvent keyEvent, int valueIndex) {
-        //valueIndex points to where the value is stored in the array.
-        CallbackBridge.holdingAlt = keyEvent.isAltPressed();
-        CallbackBridge.holdingCapslock = keyEvent.isCapsLockOn();
-        CallbackBridge.holdingCtrl = keyEvent.isCtrlPressed();
-        CallbackBridge.holdingNumlock = keyEvent.isNumLockOn();
-        CallbackBridge.holdingShift = keyEvent.isShiftPressed();
 
-        System.out.println(keyEvent.getKeyCode() + " " +keyEvent.getDisplayLabel());
-        char key = (char)(keyEvent.getUnicodeChar() != 0 ? keyEvent.getUnicodeChar() : '\u0000');
-        sendKeyPress(
-                getValueByIndex(valueIndex),
-                key,
-                0,
-                CallbackBridge.getCurrentMods(),
-                keyEvent.getAction() == KeyEvent.ACTION_DOWN);
-    }
-
-    public static void execKeyIndex(int index){
+    public static void execKeyIndex(int index) {
         //Send a quick key press.
-        sendKeyPress(getValueByIndex(index));
+        CallbackBridge.sendKeyPress(getValueByIndex(index));
     }
 
     public static short getValueByIndex(int index) {
         return sLwjglKeycodes[index];
     }
 
-    public static int getIndexByKey(int key){
-        return Arrays.binarySearch(sAndroidKeycodes, key);
-    }
 
     /** @return the index at which the key is in the array, searching linearly */
     public static int getIndexByValue(int lwjglKey) {

@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition für Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
     <string name="login_online_username_hint">Benutzername</string>
     <string name="login_online_login_label">Anmelden</string>
     <!-- Hint -->
-    <string name="hint_control_mapping">"Tippe auf das Zahnradsymbol oben in der Mitte, um das Kontextmenü zu öffnen ⚙.\nTippe auf eine Schaltfläche, um sie anzupassen: Bearbeiten, Größe ändern, Löschen oder die Tastenzuordnung ändern."</string>
+    <string name="hint_control_mapping">Tippe auf das Zahnradsymbol, um das Kontextmenü zu öffnen ⚙.\nTippe auf eine Schaltfläche, um sie anzupassen: Bearbeiten, Größe ändern, Löschen oder die Tastenzuordnung ändern.</string>
     <!-- Warnings -->
     <string name="warning_remove_account">Dieses Konto wird entfernt!</string>
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Wähle einen Mod-Installer</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher ist unerwartet abgestürzt</string>
+    <string name="error_fatal">MJLauncher ist unerwartet abgestürzt</string>
     <string name="error_no_version">Keine Version!</string>
     <string name="error_show_more">Mehr anzeigen</string>
     <string name="error_show_less">Weniger anzeigen</string>
@@ -149,7 +148,7 @@
     <string name="memory_warning_msg">Die aktuelle Menge an freiem RAM (%d) ist niedriger als zugewiesener RAM (%d), was zu Abstürzen führen kann. Ändere die Zuordnung, wenn das Spiel abstürzt.</string>
     <string name="address_memory_warning_msg">Der aktuelle freie adressierbare RAM-Speicherplatz (%d) ist niedriger als der zugewiesene RAM (%d), was zu Abstürzen führen wird. Sollte das Spiel abstürzen, ändere die Zuweisung.</string>
     <string name="mcl_memory_allocation">Zugewiesener RAM</string>
-    <string name="mcl_memory_allocation_subtitle">Legt fest, wie viel Arbeitsspeicher Minecraft zugewiesen wird.</string>
+
     <string name="multirt_runtime_corrupt">Beschädigte Java-Runtime</string>
     <string name="multirt_runtime_incompatiblearch">Inkompatible Architektur: %s</string>
     <string name="multirt_config_title">Java Laufzeitumgebung</string>
@@ -203,7 +202,7 @@
     <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Renderer</string>
     <string name="notif_channel_name">Allgemein</string>
-    <string name="lazy_service_default_title">Mojo-Vordergrunddienst</string>
+    <string name="lazy_service_default_title">MJ-Vordergrunddienst</string>
     <string name="mcl_setting_veroption_installed">Installiert</string>
     <string name="use_global_default">(Standardvorgaben verwenden)</string>
     <string name="default_control">Standard-Steuerung</string>
@@ -218,12 +217,12 @@
     <string name="main_add_account">Konto hinzufügen</string>
     <string name="tasks_ongoing">Mehrere Aufgaben im Gange, bitte warten</string>
     <string name="no_saved_accounts">Keine eingespeicherten Konten</string>
-    <string name="mc_download_failed">Fehler beim Herunterladen von Minecraft! Dies kann aufgrund einer schlechten Netzwerkverbindung, falsch platzierter Dateien, etc. passiert sein..</string>
+
     <string name="xerr_unknown">Unbekannter Xbox-Live-API-Fehler %d</string>
-    <string name="xerr_no_account">Du scheinst kein Xbox-Live-Konto zu haben. Bitte melde dich einmal auf https://minecraft.net/ an und versuche es erneut.</string>
+
     <string name="xerr_adult_verification">Ein Erwachsener muss dein Konto verifizieren.</string>
     <string name="xerr_child">Dein Konto ist ein Kinderkonto und muss in einer Familie hinzugefügt werden, um sich anzumelden.</string>
-    <string name="minecraft_not_owned">Es scheint, als hätte dieses Konto kein Minecraft-Profil. Wenn du den Xbox-Game-Pass hast, logge dich bitte auf https://minecraft.net/ ein und stelle ihn ein.</string>
+
     <string name="xerr_not_available">Xbox-Live ist in deinem Land nicht verfügbar</string>
     <string name="preference_enable_gyro_title">Aktiviere Gyroskop-Steuerung</string>
     <string name="preference_enable_gyro_description">Aktiviert das Umschauen im Spiel durch das Bewegen des Gerätes.</string>
@@ -233,7 +232,7 @@
     <string name="preference_gyro_sample_rate_title">Gyroskop-Abtastrate</string>
     <string name="preference_gyro_sample_rate_description">Erhöhen bei Leistungsproblemen mit Gyroscope-Steuerung.</string>
     <string name="microsoft_login_retry_later">Zu viele Anfragen – bitte versuche es später erneut.</string>
-    <string name="storage_required">MojoLauncher benötigt einen verbundenen externen Speicher. Bitte verbinde ihn erneut und starte dann die App neu.</string>
+    <string name="storage_required">MJLauncher benötigt einen verbundenen externen Speicher. Bitte verbinde ihn erneut und starte dann die App neu.</string>
     <string name="mcl_setting_title_buttonallcaps">Nur Großbuchstaben in Tastenbeschriftungen verwenden</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Deaktivieren, um Kleinbuchstaben für die Steuerung zu verwenden.</string>
     <string name="preference_shader_dump_title">Shader-Dumping aktivieren</string>
@@ -253,7 +252,7 @@
     <string name="preference_deadzone_scale_title">Joystick Deadzone Skala</string>
     <string name="preference_deadzone_scale_description">Erhöhen, falls der Joystick driftet.</string>
     <string name="preference_force_big_core_title">Ausführung des Renderers auf dem Haupt-Core erzwingen</string>
-    <string name="preference_force_big_core_desc">Zwingt den Minecraft-Renderthread auf dem Kern mit der höchsten maximalen Frequenz zu laufen.</string>
+
     <string name="version_select_hint">Wähle eine Version</string>
     <string name="forge_dl_progress">Installer für %s wird heruntergeladen</string>
     <string name="forge_dl_searching">Suche nach Forge-Versionsnummer</string>
@@ -262,7 +261,7 @@
     <string name="forge_dl_select_version">Forge-Version auswählen</string>
     <string name="fabric_dl_progress">Lade %s-Loader Metadaten herunter</string>
     <string name="fabric_dl_loader_version">%s-Loader-Version</string>
-    <string name="fabric_dl_game_version">Minecraft-Version</string>
+
     <string name="fabric_dl_install">Installieren</string>
     <string name="fabric_dl_cant_read_meta">Fehler beim Lesen der %s-Loader Metadaten. Bitte versuche es später erneut.</string>
     <string name="create_profile_vanilla_like_versions">Vanilla-ähnliche Versionen</string>
@@ -284,7 +283,7 @@
     <string name="modpack_download_downloading_mods">Lade Mods herunter (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Lade Mods herunter ( %d von %d)</string>
     <string name="modpack_download_applying_overrides">Wende Overrides an (%d/%d)</string>
-    <string name="modpack_install_notification_title">Mojo-Modpack-Installer</string>
+    <string name="modpack_install_notification_title">MJ-Modpack-Installer</string>
     <string name="modpack_install_notification_success">Klicke hier, um die Installation des Modpack abzuschließen</string>
     <string name="modpack_install_notification_data_not_available">Fehler beim Herunterladen der Mod-Loader-Informationen</string>
     <string name="modpack_install_modloader_download_failed">Fehler beim Herunterladen der Mod-Loader-Dateien</string>
@@ -313,7 +312,7 @@ Um die offizielle Download-Quelle zu verwenden, drücke \"Auf offizielle Seite u
     <string name="preference_category_miscellaneous">Sonstige Einstellungen</string>
     <string name="preference_category_video">Grafik-Einstellungen</string>
     <string name="notification_permission_dialog_title">Berechtigungsanfrage</string>
-    <string name="notification_permission_dialog_text">MojoLauncher benötigt eine Berechtigung, um Benachrichtigungen anzuzeigen, damit Spiel-/Modpack-Downloads nicht abgebrochen werden, wenn die App verlassen wird. Ohne diese Berechtigung könnte Android Downloads stoppen, wenn MojoLauncher nicht mehr im Vordergrund ist.</string>
+    <string name="notification_permission_dialog_text">MJLauncher benötigt eine Berechtigung, um Benachrichtigungen anzuzeigen, damit Spiel-/Modpack-Downloads nicht abgebrochen werden, wenn die App verlassen wird. Ohne diese Berechtigung könnte Android Downloads stoppen, wenn MJLauncher nicht mehr im Vordergrund ist.</string>
     <string name="notification_permission_toast">Dies kann jederzeit in den Einstellungen geändert werden</string>
     <string name="preference_ask_for_notification_title">Benachrichtigungen erlauben</string>
     <string name="preference_ask_for_notification_description">Klicken, um die Benachrichtigungs-Berechtigung erneut anzufragen, damit Spiel-/Modpack-Downloads im Hintergrund richtig funktionieren.</string>

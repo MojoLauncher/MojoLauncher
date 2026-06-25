@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition Android-hoz)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -130,7 +129,7 @@ mcl_indítás_letöltés_folyamatban"</string>
     <string name="dl_library_sha_fail">Könyvtár %s sérült és újra le lesz töltve</string>
     <string name="memory_warning_msg">A jelenlegi szabad memória (%d) kevesebb a kiosztottnál (%d), ami kifagyásokhoz vezethet. Változtass a kiosztáson ha ez történik.</string>
     <string name="mcl_memory_allocation">Memória kiosztás</string>
-    <string name="mcl_memory_allocation_subtitle">Szabályozza mennyi memória legyen kiosztva a Minecraft nak.</string>
+
     <string name="multirt_runtime_corrupt">Sérült Java Runtime</string>
     <string name="multirt_runtime_incompatiblearch">Nem kompatibilis architektúra: %s</string>
     <string name="multirt_config_title">Java Futási idők</string>

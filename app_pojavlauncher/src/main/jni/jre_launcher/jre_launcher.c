@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <linux/futex.h>
+#include "../jvm_hooks/jvm_hooks.h"
 #include "utils.h"
 #include "load_stages.h"
 #include "elf_hinter.h"
@@ -30,7 +31,7 @@ extern void setup_abort_wait();
 extern _Noreturn void abort_call(int code, bool is_signal);
 
 // Android 7+ requires the hinter to to provide proper library load paths.
-static bool apiRequiresHints() {
+bool apiRequiresHints() {
     static bool reqHints, reqReady = false;
     if(!reqReady) {
         reqHints = android_get_device_api_level() >= 24;
@@ -202,9 +203,10 @@ Java_net_kdt_pojavlaunch_utils_jre_JavaRunner_nativeLoadJVM(JNIEnv *env, jclass 
     prepareSignalHandlers();
     if(!initializeJavaVM(&java_vm, env, vmpath, java_args, hasJavaAgents)) return JNI_FALSE;
     JNIEnv *vm_env = java_vm.vm_env;
-    if(apiRequiresHints()) {
-        if(!installClassLoaderHooks(env, vm_env)) return JNI_FALSE;
-    }
+    if(!installClassLoaderHooks(env, vm_env)) return JNI_FALSE;
+
+
+    hookExec(vm_env);
 
     jint numAppArgs = (*env)->GetArrayLength(env, appArgs);
     const char** appArgsChar = convert_to_char_array(env, appArgs);

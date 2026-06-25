@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: รุ่น Java สำหรับ Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_short_name">MJLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -14,7 +13,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">เลือกตัวติดตั้งม็อด</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher ได้ขัดข้องโดยไม่คาดคิด</string>
+    <string name="error_fatal">MJLauncher ได้ขัดข้องโดยไม่คาดคิด</string>
     <string name="error_no_version">ไม่มีเวอร์ชัน!</string>
     <string name="error_show_more">แสดงเพิ่มเติม</string>
     <string name="error_show_less">แสดงน้อยลง</string>
@@ -146,7 +145,7 @@
     <string name="customctrl_absolute_tracking">การตรวจจับนั้วเเบบสมบูรณ์</string>
     <string name="memory_warning_msg">ขณะนี้เเรมที่เหลือในเครืองของคุณ (%d) น้อยกว่าเเรมที่ตั้งไว้ (%d) อาจะทำให้เด้งได้ ปรับค่าเเรมที่ต้องการเมื่อเกมเด้ง</string>
     <string name="mcl_memory_allocation">การจัดสรรหน่วยความจำ</string>
-    <string name="mcl_memory_allocation_subtitle">ควบคุมจำนวนหน่วยความจำที่มอบให้กับ Minecraft</string>
+
     <string name="multirt_runtime_corrupt">ตัวรันไทม์จาวาเสียหาย</string>
     <string name="multirt_runtime_incompatiblearch">ไม่รองรับสถานปัตกรรมนี้: %s</string>
     <string name="multirt_config_title">รันไทม์ Java</string>
@@ -216,10 +215,10 @@
     <string name="no_saved_accounts">ไม่มีบัญชีที่เชฟไว้</string>
     <string name="mc_download_failed">ไม่สามารถดาวน์โหลดมายคราฟ อาจะมีหลากหลายสาเหตุ เช่น เน็ดอาจหลุด/เน็ตเเย่, วางตำแหน่งไฟล์ผิด เเละอีกหลายปัจจัย</string>
     <string name="xerr_unknown">ข้อผิดพลาดของเอ็กซ์บอกเอพิไอ %d</string>
-    <string name="xerr_no_account">เหมือนคุณยังไม่มีบัญชีเอ็กบอก โปรดล็อกอินบน https://minecraft.net/ เเล้วลองอีกครั้ง</string>
+
     <string name="xerr_adult_verification">ผู้ใหญ่ควรยืนยันบัญชีก่อน</string>
     <string name="xerr_child">บัญชีของคุณคือบัญชีเด็ก, เเล้วต้องเพื่มลงระบบครอบครัวเพื่อล็อกอิน</string>
-    <string name="minecraft_not_owned">ดูเหมือนว่าบัญชีนี้จะไม่มีโปรไฟล์ Minecraft หากคุณมี Xbox Game Pass โปรดเข้าสู่ระบบที่ https://minecraft.net/ และตั้งค่า</string>
+
     <string name="xerr_not_available">เอ็กบอดไลฟ์ ไม่มีที่อยู่ของคุณ</string>
     <string name="preference_enable_gyro_title">เปิดใช้งานการควบคุมไจโรสโคป</string>
     <string name="preference_enable_gyro_description">การเปิดใช้งานนี้จะช่วยให้คุณสามารถเปิดเกมได้โดยการหมุนโทรศัพท์ของคุณ</string>
@@ -229,7 +228,7 @@
     <string name="preference_gyro_sample_rate_title">อัตราการสุ่มตัวอย่างไจโร</string>
     <string name="preference_gyro_sample_rate_description">หากคุณมีปัญหาด้านประสิทธิภาพกับการควบคุมไจโรสโคป ให้เพิ่มสิ่งนี้</string>
     <string name="microsoft_login_retry_later">ส่งคำขอบ่อยเกินไป, กรุณาลองอีกครั้งภายหลัง</string>
-    <string name="storage_required">MojoLauncher จำเป็นต้องแนบที่จัดเก็บข้อมูลภายนอก โปรดเชื่อมต่อใหม่และรีสตาร์ทแอป</string>
+    <string name="storage_required">MJLauncher จำเป็นต้องแนบที่จัดเก็บข้อมูลภายนอก โปรดเชื่อมต่อใหม่และรีสตาร์ทแอป</string>
     <string name="mcl_setting_title_buttonallcaps">ใช้อักษรตัวพิมพ์ใหญ่ในป้ายปุ่มเท่านั้น</string>
     <string name="mcl_setting_subtitle_buttonallcaps">ปิดการใช้งานนี้หากคุณต้องการใช้อักษรตัวพิมพ์เล็กในการควบคุมของคุณ</string>
     <string name="preference_shader_dump_title">เปิดใช้งานบันทึกข้อมูลเชเดอร์</string>
@@ -248,7 +247,7 @@
     <string name="preference_deadzone_scale_title">สเกลเดดโซนของจอยสติ๊ก</string>
     <string name="preference_deadzone_scale_description">เพิ่มขึ้นหากจอยสติ๊กลอย</string>
     <string name="preference_force_big_core_title">บังคับให้ตัวแสดงผลทำงานบนคอร์ขนาดใหญ่</string>
-    <string name="preference_force_big_core_desc">บังคับให้เธรดการแสดงผล Minecraft ทำงานบนคอร์ด้วยความถี่สูงสุดสูงสุด</string>
+
     <string name="version_select_hint">เลือกเวอร์ชัน</string>
     <string name="forge_dl_progress">กำลังดาวน์โหลดตัวติดตั้งสำหรับ %s</string>
     <string name="forge_dl_searching">กำลังค้นหาหมายเลขเวอร์ชัน Forge</string>
@@ -279,7 +278,7 @@
     <string name="modpack_download_downloading_mods">กำลังดาวน์โหลดม็อด (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">กำลังดาวน์โหลดม็อด (ไฟล์ %d ออกจาก %d)</string>
     <string name="modpack_download_applying_overrides">กำลังใช้การแทนที่ (%d/%d)</string>
-    <string name="modpack_install_notification_title">ตัวติดตั้ง Mojo Modpack</string>
+    <string name="modpack_install_notification_title">ตัวติดตั้ง MJ Modpack</string>
     <string name="modpack_install_notification_success">คลิกที่นี่เพื่อเสร็จสิ้นการติดตั้ง modpack</string>
     <string name="modpack_install_notification_data_not_available">ดาวน์โหลดข้อมูลตัวโหลด mod ไม่สำเร็จ</string>
     <string name="modpack_install_modloader_download_failed">ไม่สามารถดาวน์โหลดไฟล์ mod loader ได้</string>
@@ -308,7 +307,7 @@
     <string name="preference_category_miscellaneous">การตั้งค่าเบ็ดเตล็ด</string>
     <string name="preference_category_video">การตั้งค่าวิดีโอ</string>
     <string name="notification_permission_dialog_title">ขออนุญาต</string>
-    <string name="notification_permission_dialog_text">MojoLauncher ต้องได้รับอนุญาตในการโพสต์การแจ้งเตือนเพื่อป้องกันไม่ให้การดาวน์โหลดเกม/modpack หยุดเมื่อคุณออกจากแอป หากไม่ได้รับอนุญาตนี้ Android อาจปิดการดาวน์โหลดของคุณเมื่อคุณให้ MojoLauncher อยู่ในโหมดเบื้องหลัง</string>
+    <string name="notification_permission_dialog_text">MJLauncher ต้องได้รับอนุญาตในการโพสต์การแจ้งเตือนเพื่อป้องกันไม่ให้การดาวน์โหลดเกม/modpack หยุดเมื่อคุณออกจากแอป หากไม่ได้รับอนุญาตนี้ Android อาจปิดการดาวน์โหลดของคุณเมื่อคุณให้ MJLauncher อยู่ในโหมดเบื้องหลัง</string>
     <string name="notification_permission_toast">คุณสามารถเปลี่ยนใจในภายหลังได้ตลอดเวลาโดยไปที่การตั้งค่า</string>
     <string name="preference_ask_for_notification_title">อนุญาตการแจ้งเตือน</string>
     <string name="preference_ask_for_notification_description">คลิกเพื่อขอสิทธิ์การแจ้งเตือนอีกครั้ง ซึ่งจำเป็นสำหรับการดาวน์โหลดเกม/modpack พื้นหลังเพื่อให้ทำงานได้อย่างถูกต้อง</string>
