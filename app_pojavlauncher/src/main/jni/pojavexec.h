@@ -18,7 +18,7 @@ typedef struct {
     int disp_hz;
 } pojavexec_renderspec_t;
 
-void* pojavexec_loadVulkanDriver();
+void* pojavexec_loadVulkanDriver(const char* custom_library_path);
 const char* pojavexec_getNativeDirectory();
 const pojavexec_renderspec_t* pojavexec_getRenderSpec();
 

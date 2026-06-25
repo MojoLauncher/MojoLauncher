@@ -18,10 +18,6 @@ public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceF
     public void onCreatePreferences(Bundle b, String str) {
         mVisibilityUpdater = this::updateVisibility;
         addPreferencesFromResource(R.xml.pref_misc);
-        Preference driverPreference = requirePreference("zinkPreferSystemDriver");
-        PackageManager packageManager = driverPreference.getContext().getPackageManager();
-        boolean supportsTurnip = RendererCompatUtil.checkVulkanSupport(packageManager) && GLInfoUtils.getGlInfo().isAdreno();
-        driverPreference.setVisible(supportsTurnip);
         setupMicrophoneRequestPreference();
     }
 

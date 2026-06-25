@@ -437,6 +437,20 @@
     <string name="instance_delete">Удалить установку</string>
     <string name="instance_delete_confirmation">Вы уверены что хотите удалить установку? Ваши миры, моды, ресурсы и иные данные находящиеся в папке установки будут удалены. Данное действие не может быть отменено!</string>
     <string name="import_local_modpack">Импорт локальной сборки</string>
+
+    <string name="driver_default_name">Встроенный драйвер</string>
+    <string name="driver_default_extra_name">MojoLauncher</string>
+    <string name="driver_config_title">Установленные драйверы</string>
+    <string name="driver_config_pref_title">Драйвер Vulkan</string>
+    <string name="driver_config_pref_subtitle">Управление установленными драйверами AdrenoTools</string>
+    <string name="driver_config_import">Добавить</string>
+    <string name="driver_config_delete">Удалить</string>
+    <string name="driver_config_use">Использовать</string>
+    <string name="driver_config_already_used">Используется</string>
+    <string name="driver_config_select">Выбрать</string>
+    <string name="driver_config_import_failed">Не удалось добавить выбранный драйвер</string>
+    <string name="driver_config_import_invalid">Неверный или повреждённый пакет драйвера, попробуйте выбрать другой</string>
+    <string name="driver_config_import_notify">Выберите пакет драйвера AdrenoTools</string>
     <string name="preference_sysmem_title">Включить принудительную отрисовку в системную память</string>
     <string name="preference_sysmem_summary">Принуждает Turnip/Freedreno отрисовывать графику только в системную память. Включите, если игра работает медленно или вы наблюдаете проблемы отрисовки.</string>
     <string name="preference_microphone_access_title">Запросить доступ к микрофону</string>

@@ -29,7 +29,7 @@ static jlong ndlopen_bugfix(__attribute__((unused)) JNIEnv *env,
     // Oveeride vulkan loading to let us load vulkan ourselves
     if(strstr(filename, "libvulkan.so") == filename) {
         printf("LWJGL linkerhook: replacing load for libvulkan.so with custom driver\n");
-        return (jlong) pojavexec_loadVulkanDriver();
+        return (jlong) pojavexec_loadVulkanDriver(NULL); // The custom driver might be already loaded at this point
     }
     // Load renderer using egl_acquire
     if(strstr(filename, "libGLMojo.so") == filename) {
