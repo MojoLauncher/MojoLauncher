@@ -26,7 +26,7 @@ public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceF
     private final ActivityResultLauncher<Uri> mMigrateLauncher = registerForActivityResult(
             new ActivityResultContracts.OpenDocumentTree(), (uri) -> {
                 if(uri != null) {
-                    Tools.migrateData(getActivity(), uri);
+                    Tools.migrateData(getLauncherActivity(), uri);
                 }
             }
     );
