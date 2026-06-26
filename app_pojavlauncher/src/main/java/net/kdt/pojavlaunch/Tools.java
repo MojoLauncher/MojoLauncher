@@ -41,12 +41,14 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.kdt.mcgui.ProgressLayout;
 
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
@@ -921,10 +923,72 @@ public final class Tools {
         throw new RuntimeException();
     }
 
+    private static void copyFileTree(Activity activity, DocumentFile source, File dest, boolean isRoot){
+        // Check if instances directory is present
+        int progress = 0;
+        int step = source.listFiles().length > 0 ? 100 / source.listFiles().length : 0;
+        if(isRoot){
+            boolean mojo = false;
+            for(DocumentFile child : source.listFiles()){
+                if(child.getName().equals("instances")) mojo = true;
+            }
+            if(!mojo)
+                throw new IllegalArgumentException("Tried to import non Mojo directory tree. It should have instances subdirectory!");
+        }
+        for(DocumentFile child : source.listFiles()){
+            ProgressLayout.setProgress(ProgressLayout.DATA_MIGRATION, progress, "Copying " + child.getName());
+            progress += step;
+            if(child.isDirectory()){
+                File destDir = new File(dest, child.getName());
+                if(!destDir.exists()) destDir.mkdirs();
+                copyFileTree(activity, child, destDir, false);
+                continue;
+            }
+            if(child.isFile()){
+                copyFile(activity, child, dest);
+            }
+        }
+    }
+
+    private static void copyFile(Activity activity, DocumentFile source, File dest){
+        File destFile = new File(dest, source.getName());
+        try(InputStream is = activity.getContentResolver().openInputStream(source.getUri())){
+            FileOutputStream fos = new FileOutputStream(destFile);
+            byte[] buf = new byte[4096];
+            int len;
+            while((len = is.read(buf)) > 0) {
+                fos.write(buf, 0, len);
+            }
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            Log.e("DataMigration", "Failed to copy file " + source.getUri() + "!!");
+            Log.e("DataMigration", e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
     public static int getTranslationFromCursorY(int cursorY, int viewHeight, int imeHeight, int padding){
         int visibleHeight = viewHeight - imeHeight;
         if(cursorY < visibleHeight)
             return 0;
         return Math.min(imeHeight, cursorY - visibleHeight + padding);
+    }
+
+    public static void migrateData(Activity activity, Uri uri){
+        activity.getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        DocumentFile source = DocumentFile.fromTreeUri(activity, uri);
+        File root = new File(Tools.DIR_GAME_HOME);
+        Log.i("DataMigration", "Begin data migration!");
+        ProgressLayout.setProgress(ProgressLayout.DATA_MIGRATION, 0, "Analyzing root directory...");
+        sExecutorService.submit(() -> {
+            try {
+                copyFileTree(activity, source, root, true);
+            } catch (IllegalArgumentException e){
+
+            }
+            Log.i("DataMigration", "End data migration!");
+            ProgressLayout.clearProgress(ProgressLayout.DATA_MIGRATION);
+        });
     }
 }

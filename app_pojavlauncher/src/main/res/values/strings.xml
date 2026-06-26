@@ -492,4 +492,6 @@
     <string name="preference_category_keyboard">Keyboard settings</string>
     <string name="preference_keyboard_autopan_title">Enable keyboard panning</string>
     <string name="preference_keyboard_autopan_summary">Allows on-screen keyboard to move the game window instead of overlapping it if the last touch was below the visible zone. Has no effect on custom control layout buttons with the same function</string>
+    <string name="preference_data_migration_title">Import old installation</string>
+    <string name="preference_data_migration_summary">Begin importing data (instances, libraries) from the old launcher installation directory</string>
 </resources>
