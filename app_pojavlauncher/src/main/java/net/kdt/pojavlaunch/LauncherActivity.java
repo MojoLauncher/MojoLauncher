@@ -311,4 +311,8 @@ public class LauncherActivity extends BaseActivity {
         mSettingsButton = findViewById(R.id.setting_button);
         mProgressLayout = findViewById(R.id.progress_layout);
     }
+
+    public boolean hasActiveProcesses(){
+        return mProgressLayout.hasProcesses();
+    }
 }

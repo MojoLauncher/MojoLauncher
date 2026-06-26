@@ -10,6 +10,7 @@ import android.app.NotificationManager;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -35,6 +36,7 @@ import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -68,6 +70,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -523,6 +526,16 @@ public final class Tools {
     public static void write(String path, String content) throws IOException {
         write(new File(path), content);
     }
+    public static void write(InputStream source, File dest) throws IOException {
+        FileOutputStream fos = new FileOutputStream(dest);
+        byte[] buf = new byte[65535];
+        int len;
+        while((len = source.read(buf)) > 0) {
+            fos.write(buf, 0, len);
+        }
+        fos.flush();
+        fos.close();
+    }
 
     public static boolean isAndroid8OrHigher() {
         return SDK_INT >= 26;
@@ -923,50 +936,60 @@ public final class Tools {
         throw new RuntimeException();
     }
 
-    private static void copyFileTree(Activity activity, DocumentFile source, File dest, boolean isRoot){
-        // Check if instances directory is present
+    private static void copyFileTree(Activity activity, Uri source, File dest, boolean isRoot) {
         int progress = 0;
-        int step = source.listFiles().length > 0 ? 100 / source.listFiles().length : 0;
-        if(isRoot){
+        ContentResolver cr = activity.getContentResolver();
+        String[] projection = {
+                DocumentsContract.Document.COLUMN_DISPLAY_NAME,
+                DocumentsContract.Document.COLUMN_MIME_TYPE,
+                DocumentsContract.Document.COLUMN_DOCUMENT_ID,
+        };
+        Cursor cursor = cr.query(source, projection, null, null, null);
+        if (cursor == null) throw new IllegalArgumentException();
+        int count = cursor.getCount();
+        Log.i("DataMigration", "Query count: " + count);
+        int step = count > 0 ? 100 / count : 0;
+        // Check if instances directory is present (will do once if root directory)
+        if (isRoot) {
+            ProgressLayout.setProgress(ProgressLayout.DATA_MIGRATION, 0, R.string.migration_progress_checking);
             boolean mojo = false;
-            for(DocumentFile child : source.listFiles()){
-                if(child.getName().equals("instances")) mojo = true;
+            cursor.moveToPosition(-1);
+            while (cursor.moveToNext()) {
+                Log.i("DataMigration", cursor.getString(cursor.getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_DISPLAY_NAME)));
+                if (cursor.getString(cursor.getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_DISPLAY_NAME)).equals("instances"))
+                    mojo = true;
             }
-            if(!mojo)
+            if (!mojo)
                 throw new IllegalArgumentException("Tried to import non Mojo directory tree. It should have instances subdirectory!");
         }
-        for(DocumentFile child : source.listFiles()){
-            ProgressLayout.setProgress(ProgressLayout.DATA_MIGRATION, progress, "Copying " + child.getName());
+        cursor.moveToPosition(-1);
+        while (cursor.moveToNext()) {
+            String file = cursor.getString(cursor.getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_DISPLAY_NAME));
+            String type = cursor.getString(cursor.getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_MIME_TYPE));
+            String id = cursor.getString(cursor.getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_DOCUMENT_ID));
+            ProgressLayout.setProgress(ProgressLayout.DATA_MIGRATION, progress, file);
             progress += step;
-            if(child.isDirectory()){
-                File destDir = new File(dest, child.getName());
-                if(!destDir.exists()) destDir.mkdirs();
+            Uri child = DocumentsContract.buildChildDocumentsUriUsingTree(source, id);
+            if (type.equals(DocumentsContract.Document.MIME_TYPE_DIR)) {
+                File destDir = new File(dest, file);
+                if (!destDir.exists()) destDir.mkdirs();
                 copyFileTree(activity, child, destDir, false);
-                continue;
             }
-            if(child.isFile()){
-                copyFile(activity, child, dest);
+            // Assuming file
+            else {
+                try {
+                    write(cr.openInputStream(child), new File(dest, file));
+                } catch (IOException e) {
+                    Log.e("DataMigration", "Failed to copy file " + source + "!!");
+                    Log.e("DataMigration", e.getMessage());
+                    cursor.close();
+                    throw new RuntimeException(e);
+                }
             }
         }
+        cursor.close();
     }
 
-    private static void copyFile(Activity activity, DocumentFile source, File dest){
-        File destFile = new File(dest, source.getName());
-        try(InputStream is = activity.getContentResolver().openInputStream(source.getUri())){
-            FileOutputStream fos = new FileOutputStream(destFile);
-            byte[] buf = new byte[4096];
-            int len;
-            while((len = is.read(buf)) > 0) {
-                fos.write(buf, 0, len);
-            }
-            fos.flush();
-            fos.close();
-        } catch (IOException e) {
-            Log.e("DataMigration", "Failed to copy file " + source.getUri() + "!!");
-            Log.e("DataMigration", e.getMessage());
-            throw new RuntimeException(e);
-        }
-    }
 
     public static int getTranslationFromCursorY(int cursorY, int viewHeight, int imeHeight, int padding){
         int visibleHeight = viewHeight - imeHeight;
@@ -975,20 +998,34 @@ public final class Tools {
         return Math.min(imeHeight, cursorY - visibleHeight + padding);
     }
 
+    /**
+     * Migrate data from other MojoLauncher installations. Must contain "instances" subdirectory.
+     * @param activity Activity
+     * @param uri Uri to the external root directory of the launcher (i.e. /sdcard/Android/data/git.artdeell.../). Must have "files" subdir
+     */
     public static void migrateData(Activity activity, Uri uri){
         activity.getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        DocumentFile source = DocumentFile.fromTreeUri(activity, uri);
         File root = new File(Tools.DIR_GAME_HOME);
         Log.i("DataMigration", "Begin data migration!");
-        ProgressLayout.setProgress(ProgressLayout.DATA_MIGRATION, 0, "Analyzing root directory...");
+        Uri sourceUri = DocumentsContract.buildDocumentUriUsingTree(uri, DocumentsContract.getTreeDocumentId(uri));
+        ProgressLayout.setProgress(ProgressLayout.DATA_MIGRATION, 0);
         sExecutorService.submit(() -> {
-            try {
-                copyFileTree(activity, source, root, true);
-            } catch (IllegalArgumentException e){
-
+            // Extract files subdirectory not to confuse copyFileTree
+            String[] projection = {DocumentsContract.Document.COLUMN_DOCUMENT_ID};
+            String[] to = {"files"};
+            try (Cursor cursor = activity.getContentResolver().query(sourceUri, projection, null, to, null)) {
+                if (cursor == null) throw new IllegalArgumentException();
+                cursor.moveToFirst();
+                copyFileTree(activity, DocumentsContract.buildChildDocumentsUriUsingTree(sourceUri, cursor.getString(0)), root, true);
+            } catch (IllegalArgumentException e) {
+                runOnUiThread(() -> Toast.makeText(activity, R.string.migration_progress_foreign, Toast.LENGTH_LONG).show());
+            } catch (Exception e) {
+                Log.e("DataMigration", "Failed to import data from the launcher: " + e.getMessage());
+                runOnUiThread(() -> Toast.makeText(activity, R.string.migration_progress_failed, Toast.LENGTH_LONG).show());
+            } finally {
+                ProgressLayout.clearProgress(ProgressLayout.DATA_MIGRATION);
+                Log.i("DataMigration", "End data migration!");
             }
-            Log.i("DataMigration", "End data migration!");
-            ProgressLayout.clearProgress(ProgressLayout.DATA_MIGRATION);
         });
     }
 }

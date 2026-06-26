@@ -5,15 +5,19 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.preference.Preference;
 
+import com.kdt.mcgui.ProgressLayout;
+
 import git.artdeell.mojo.R;
 
 import net.kdt.pojavlaunch.LauncherActivity;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.utils.GLInfoUtils;
 import net.kdt.pojavlaunch.utils.RendererCompatUtil;
 
@@ -37,6 +41,10 @@ public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceF
         driverPreference.setVisible(supportsTurnip);
         Preference importPreference = requirePreference("runDataMigration");
         importPreference.setOnPreferenceClickListener(preference -> {
+            if(getLauncherActivity().hasActiveProcesses()) {
+                Toast.makeText(getContext(), R.string.migration_progress_busy, Toast.LENGTH_SHORT).show();
+                return true;
+            }
             mMigrateLauncher.launch(null);
             return true;
         });
