@@ -9,15 +9,13 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.preference.Preference;
-
-import com.kdt.mcgui.ProgressLayout;
 
 import git.artdeell.mojo.R;
 
 import net.kdt.pojavlaunch.LauncherActivity;
 import net.kdt.pojavlaunch.Tools;
-import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.utils.GLInfoUtils;
 import net.kdt.pojavlaunch.utils.RendererCompatUtil;
 
@@ -26,7 +24,12 @@ public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceF
     private final ActivityResultLauncher<Uri> mMigrateLauncher = registerForActivityResult(
             new ActivityResultContracts.OpenDocumentTree(), (uri) -> {
                 if(uri != null) {
-                    Tools.migrateData(getLauncherActivity(), uri);
+                    new AlertDialog.Builder(getLauncherActivity())
+                            .setTitle(R.string.migration_progress_warning_title)
+                            .setMessage(R.string.migration_progress_warning_summary)
+                            .setPositiveButton(android.R.string.ok, (d, w) -> Tools.migrateData(getLauncherActivity(), uri))
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .show();
                 }
             }
     );

@@ -943,6 +943,7 @@ public final class Tools {
                 DocumentsContract.Document.COLUMN_DISPLAY_NAME,
                 DocumentsContract.Document.COLUMN_MIME_TYPE,
                 DocumentsContract.Document.COLUMN_DOCUMENT_ID,
+                DocumentsContract.Document.COLUMN_SIZE
         };
         Cursor cursor = cr.query(source, projection, null, null, null);
         if (cursor == null) throw new IllegalArgumentException();
@@ -967,6 +968,7 @@ public final class Tools {
             String file = cursor.getString(cursor.getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_DISPLAY_NAME));
             String type = cursor.getString(cursor.getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_MIME_TYPE));
             String id = cursor.getString(cursor.getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_DOCUMENT_ID));
+            long size = cursor.getLong(cursor.getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_SIZE));
             ProgressLayout.setProgress(ProgressLayout.DATA_MIGRATION, progress, file);
             progress += step;
             Uri child = DocumentsContract.buildChildDocumentsUriUsingTree(source, id);
@@ -977,8 +979,11 @@ public final class Tools {
             }
             // Assuming file
             else {
+                File destFile = new File(dest, file);
+                // Ignore files with the same size
+                if(destFile.length() == size) continue;
                 try {
-                    write(cr.openInputStream(child), new File(dest, file));
+                    write(cr.openInputStream(child), destFile);
                 } catch (IOException e) {
                     Log.e("DataMigration", "Failed to copy file " + source + "!!");
                     Log.e("DataMigration", e.getMessage());
@@ -1017,10 +1022,13 @@ public final class Tools {
                 if (cursor == null) throw new IllegalArgumentException();
                 cursor.moveToFirst();
                 copyFileTree(activity, DocumentsContract.buildChildDocumentsUriUsingTree(sourceUri, cursor.getString(0)), root, true);
+                runOnUiThread(() -> {
+                    Toast.makeText(activity, R.string.migration_progress_finish, Toast.LENGTH_LONG).show();
+                });
             } catch (IllegalArgumentException e) {
                 runOnUiThread(() -> Toast.makeText(activity, R.string.migration_progress_foreign, Toast.LENGTH_LONG).show());
             } catch (Exception e) {
-                Log.e("DataMigration", "Failed to import data from the launcher: " + e.getMessage());
+                Log.e("DataMigration", "Failed to import data to the launcher: " + e.getMessage());
                 runOnUiThread(() -> Toast.makeText(activity, R.string.migration_progress_failed, Toast.LENGTH_LONG).show());
             } finally {
                 ProgressLayout.clearProgress(ProgressLayout.DATA_MIGRATION);
