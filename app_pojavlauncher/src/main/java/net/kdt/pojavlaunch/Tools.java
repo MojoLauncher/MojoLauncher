@@ -974,6 +974,9 @@ public final class Tools {
             Uri child = DocumentsContract.buildChildDocumentsUriUsingTree(source, id);
             if (type.equals(DocumentsContract.Document.MIME_TYPE_DIR)) {
                 File destDir = new File(dest, file);
+                // Prevent instance collisions
+                if(destDir.exists() && dest.getName().equals("instances"))
+                    continue;
                 if (!destDir.exists()) destDir.mkdirs();
                 copyFileTree(activity, child, destDir, false);
             }
@@ -1022,9 +1025,7 @@ public final class Tools {
                 if (cursor == null) throw new IllegalArgumentException();
                 cursor.moveToFirst();
                 copyFileTree(activity, DocumentsContract.buildChildDocumentsUriUsingTree(sourceUri, cursor.getString(0)), root, true);
-                runOnUiThread(() -> {
-                    Toast.makeText(activity, R.string.migration_progress_finish, Toast.LENGTH_LONG).show();
-                });
+                runOnUiThread(() -> Toast.makeText(activity, R.string.migration_progress_finish, Toast.LENGTH_LONG).show());
             } catch (IllegalArgumentException e) {
                 runOnUiThread(() -> Toast.makeText(activity, R.string.migration_progress_foreign, Toast.LENGTH_LONG).show());
             } catch (Exception e) {
