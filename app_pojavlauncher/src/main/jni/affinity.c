@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <sched.h>
 #include <string.h>
+#include <jni.h>
 
 static _Thread_local bool big_core_affine = false;
 
@@ -64,4 +65,9 @@ void make_big_core_affine() {
         printf("bigcore: forced current thread onto big core\n");
         big_core_affine = true;
     }
+}
+
+JNIEXPORT void JNICALL
+Java_net_kdt_pojavlaunch_utils_JREUtils_makeBigCoreAffine(JNIEnv *env, jclass clazz) {
+    make_big_core_affine();
 }

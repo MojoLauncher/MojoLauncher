@@ -140,8 +140,6 @@ public class JREUtils {
         setRendererLibraryPath(Tools.NATIVE_LIB_DIR, MesaUtils.getCustomZinkLibraryPath());
         envMap.put("POJAV_NATIVEDIR", Tools.NATIVE_LIB_DIR);
 
-        if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
-
         if(GLInfoUtils.getGlInfo().isAdreno() && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
             setUseTurnip(true);
         }
@@ -288,6 +286,7 @@ public class JREUtils {
     private static native void nsetRendererLibraryPath(String path);
     public static native void preloadVulkan();
     public static native void setUseTurnip(boolean enable);
+    public static native void makeBigCoreAffine();
     //public static native void initializeHooks();
     // Obtain AWT screen pixels to render on Android SurfaceView
     public static native boolean renderAWTScreenFrame(ByteBuffer tempBuffer);
