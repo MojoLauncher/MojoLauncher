@@ -948,7 +948,6 @@ public final class Tools {
         Cursor cursor = cr.query(source, projection, null, null, null);
         if (cursor == null) throw new IllegalArgumentException();
         int count = cursor.getCount();
-        Log.i("DataMigration", "Query count: " + count);
         int step = count > 0 ? 100 / count : 0;
         // Check if instances directory is present (will do once if root directory)
         if (isRoot) {
@@ -956,7 +955,6 @@ public final class Tools {
             boolean mojo = false;
             cursor.moveToPosition(-1);
             while (cursor.moveToNext()) {
-                Log.i("DataMigration", cursor.getString(cursor.getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_DISPLAY_NAME)));
                 if (cursor.getString(cursor.getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_DISPLAY_NAME)).equals("instances"))
                     mojo = true;
             }
