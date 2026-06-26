@@ -1012,12 +1012,19 @@ public final class Tools {
      * @param uri Uri to the external root directory of the launcher (i.e. /sdcard/Android/data/git.artdeell.../). Must have "files" subdir
      */
     public static void migrateData(Activity activity, Uri uri){
-        activity.getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        File root = new File(Tools.DIR_GAME_HOME);
         Log.i("DataMigration", "Begin data migration!");
-        Uri sourceUri = DocumentsContract.buildDocumentUriUsingTree(uri, DocumentsContract.getTreeDocumentId(uri));
+
         ProgressLayout.setProgress(ProgressLayout.DATA_MIGRATION, 0);
         sExecutorService.submit(() -> {
+            activity.getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            File root = new File(Tools.DIR_GAME_HOME);
+            Uri sourceUri = DocumentsContract.buildDocumentUriUsingTree(uri, DocumentsContract.getTreeDocumentId(uri));
+            String authority = activity.getResources().getString(R.string.storageProviderAuthorities);
+            if(sourceUri.getAuthority() != null && sourceUri.getAuthority().contains(authority)){
+                runOnUiThread(() -> Toast.makeText(activity, R.string.migration_progress_self, Toast.LENGTH_LONG).show());
+                ProgressLayout.clearProgress(ProgressLayout.DATA_MIGRATION);
+                return;
+            }
             // Extract files subdirectory not to confuse copyFileTree
             String[] projection = {DocumentsContract.Document.COLUMN_DOCUMENT_ID};
             String[] to = {"files"};

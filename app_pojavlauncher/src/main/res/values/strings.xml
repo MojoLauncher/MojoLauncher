@@ -499,6 +499,7 @@
     <string name="migration_progress_failed">Failed to migrate data!</string>
     <string name="migration_progress_busy">Wait till all launcher tasks finish!</string>
     <string name="migration_progress_finish">Data migration finished!</string>
+    <string name="migration_progress_self">You cannot import data from the same app!</string>
     <string name="migration_progress_warning_title">Data Migration</string>
     <string name="migration_progress_warning_summary">You\'re going to launch a data migration process. This process will copy all selected launcher instances and data to the current launcher installation. All conflicting files will be OVERWRITTEN! Consider creating backups if you have already used this installation. You have been warned.</string>
 </resources>
