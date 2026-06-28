@@ -45,7 +45,7 @@ public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceF
         Preference importPreference = requirePreference("runDataMigration");
         importPreference.setOnPreferenceClickListener(preference -> {
             if(getLauncherActivity().hasActiveProcesses()) {
-                Toast.makeText(getContext(), R.string.migration_progress_busy, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.tasks_ongoing, Toast.LENGTH_SHORT).show();
                 return true;
             }
             mMigrateLauncher.launch(null);
