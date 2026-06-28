@@ -493,11 +493,11 @@
     <string name="preference_keyboard_autopan_title">Enable keyboard panning</string>
     <string name="preference_keyboard_autopan_summary">Allows on-screen keyboard to move the game window instead of overlapping it if the last touch was below the visible zone. Has no effect on custom control layout buttons with the same function</string>
     <string name="preference_data_migration_title">Import old app data</string>
-    <string name="preference_data_migration_summary">Begin importing data (instances, libraries) from the old launcher installation directory</string>
+    <string name="preference_data_migration_summary">Begin importing data (instances, control maps) from the old app installation</string>
     <string name="migration_progress_foreign">Provide a correct old installation!</string>
     <string name="migration_progress_failed">Failed to migrate data!</string>
     <string name="migration_progress_finish">Data migration finished!</string>
     <string name="migration_progress_self">You cannot import data from the same app!</string>
     <string name="migration_progress_warning_title">Data Migration</string>
-    <string name="migration_progress_warning_summary">You\'re going to launch a data migration process. This process will copy all selected launcher instances and libraries to the current launcher installation. All conflicting files will be OVERWRITTEN! Consider creating backups if you have already used this installation. You have been warned.</string>
+    <string name="migration_progress_warning_summary">You\'re going to launch a data migration process. This process will copy all selected launcher\'s instances and control maps to the current app installation. All conflicting files will be OVERWRITTEN! Consider making backups if you have already used current app. You have been warned.</string>
 </resources>

@@ -444,4 +444,12 @@
     <string name="preference_category_keyboard">Настройки клавиатуры</string>
     <string name="preference_keyboard_autopan_title">Разрешить перемещение окна клавиатурой</string>
     <string name="preference_keyboard_autopan_summary">Разрешает экранной клавиатуре перемещать окно игры, а не перекрывать его, если последнее касание было в зоне появления клавиатуры. Не влияет на явный вызов с перемещением в раскладках.</string>
+    <string name="preference_data_migration_title">Импортировать данные из старого приложения</string>
+    <string name="preference_data_migration_summary">Начать перенос данных (раскладок управления, установок) из старой установки приложения</string>
+    <string name="migration_progress_foreign">Укажите правильную становку старого приложения!</string>
+    <string name="migration_progress_failed">Не удалось перенести данные!</string>
+    <string name="migration_progress_finish">Перенос данных успешно завершён!</string>
+    <string name="migration_progress_self">Вы не можете импортировать данные из этого же приложения</string>
+    <string name="migration_progress_warning_title">Перенос данных</string>
+    <string name="migration_progress_warning_summary">Вы собираетесь начать процесс переноса данных. Данный процесс скопирует все установки и раскладки управления в текущую установку приложения. Все конфликтующие файлы будут ПЕРЕЗАПИСАНЫ. Рекомендуется сделать резервную копию, если вы уже использовали текущее приложение. Вы были предупреждены.</string>
 </resources>
