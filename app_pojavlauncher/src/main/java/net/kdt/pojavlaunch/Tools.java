@@ -936,8 +936,19 @@ public final class Tools {
         throw new RuntimeException();
     }
 
-    private static void copyFileTree(Activity activity, Uri source, File dest) {
-        int progress = 0;
+
+    // Copy a file tree into the home directory
+    // The progress bar here works easy & dumb: each entry is a portion of initial 100 percents
+    // Each file will increment the progress by this portion, each directory will receive the portion
+    // to further divide it by files/folders amount in this directory
+    // both files in the end will increment the progress bar by the portion this call received
+    // Folder1(100%)
+    //          -> Folder2(50%), File2(50%)
+    //                  -> Folder3(25%), File3(25%)
+    //                          -> (File4(12,5%), File5(12,5%)
+    // Surprisingly no LLM model told me about this algorithm lol
+    private static double progress;
+    private static void copyFileTree(Activity activity, Uri source, File dest, double progressPortion) {
         ContentResolver cr = activity.getContentResolver();
         String[] projection = {
                 DocumentsContract.Document.COLUMN_DISPLAY_NAME,
@@ -948,15 +959,13 @@ public final class Tools {
         Cursor cursor = cr.query(source, projection, null, null, null);
         if (cursor == null) throw new IllegalArgumentException();
         int count = cursor.getCount();
-        int step = count > 0 ? 100 / count : 0;
+        double step = progressPortion / (double) count;
         cursor.moveToPosition(-1);
         while (cursor.moveToNext()) {
             String file = cursor.getString(cursor.getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_DISPLAY_NAME));
             String type = cursor.getString(cursor.getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_MIME_TYPE));
             String id = cursor.getString(cursor.getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_DOCUMENT_ID));
             long size = cursor.getLong(cursor.getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_SIZE));
-            ProgressLayout.setProgress(ProgressLayout.DATA_MIGRATION, progress, file);
-            progress += step;
             Uri child = DocumentsContract.buildChildDocumentsUriUsingTree(source, id);
             if (type.equals(DocumentsContract.Document.MIME_TYPE_DIR)) {
                 File destDir = new File(dest, file);
@@ -964,7 +973,7 @@ public final class Tools {
                 if(destDir.exists() && dest.getName().equals("instances"))
                     continue;
                 if (!destDir.exists()) destDir.mkdirs();
-                copyFileTree(activity, child, destDir);
+                copyFileTree(activity, child, destDir, step);
             }
             // Assuming file
             else {
@@ -981,6 +990,8 @@ public final class Tools {
                     throw new RuntimeException(e);
                 }
             }
+            progress += step;
+            ProgressLayout.setProgress(ProgressLayout.DATA_MIGRATION, (int) progress, file);
         }
         cursor.close();
     }
@@ -1022,7 +1033,7 @@ public final class Tools {
             try (Cursor cursor = activity.getContentResolver().query(sourceUri, projection, null, to, null)) {
                 if (cursor == null) throw new IllegalArgumentException();
                 cursor.moveToFirst();
-                copyFileTree(activity, DocumentsContract.buildChildDocumentsUriUsingTree(sourceUri, cursor.getString(0)), root);
+                copyFileTree(activity, DocumentsContract.buildChildDocumentsUriUsingTree(sourceUri, cursor.getString(0)), root, 100);
                 runOnUiThread(() -> Toast.makeText(activity, R.string.migration_progress_finish, Toast.LENGTH_LONG).show());
             } catch (Exception e) {
                 Log.e("DataMigration", "Failed to import data to the launcher: " + e.getMessage());
@@ -1030,6 +1041,7 @@ public final class Tools {
                 Tools.showErrorRemote(e);
             } finally {
                 ProgressLayout.clearProgress(ProgressLayout.DATA_MIGRATION);
+                progress = 0;
                 Log.i("DataMigration", "End data migration!");
             }
         });
