@@ -15,7 +15,7 @@ import androidx.preference.Preference;
 import git.artdeell.mojo.R;
 
 import net.kdt.pojavlaunch.LauncherActivity;
-import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.tasks.DataMigrator;
 import net.kdt.pojavlaunch.utils.GLInfoUtils;
 import net.kdt.pojavlaunch.utils.RendererCompatUtil;
 
@@ -27,7 +27,7 @@ public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceF
                     new AlertDialog.Builder(getLauncherActivity())
                             .setTitle(R.string.migration_progress_warning_title)
                             .setMessage(R.string.migration_progress_warning_summary)
-                            .setPositiveButton(android.R.string.ok, (d, w) -> Tools.migrateData(getLauncherActivity(), uri))
+                            .setPositiveButton(android.R.string.ok, (d, w) -> new DataMigrator(getLauncherActivity(), uri).migrateData())
                             .setNegativeButton(android.R.string.cancel, null)
                             .show();
                 }
