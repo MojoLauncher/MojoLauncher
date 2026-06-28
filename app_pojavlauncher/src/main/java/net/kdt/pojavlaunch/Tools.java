@@ -936,7 +936,7 @@ public final class Tools {
         throw new RuntimeException();
     }
 
-    private static void copyFileTree(Activity activity, Uri source, File dest, boolean isRoot) {
+    private static void copyFileTree(Activity activity, Uri source, File dest) {
         int progress = 0;
         ContentResolver cr = activity.getContentResolver();
         String[] projection = {
@@ -949,18 +949,6 @@ public final class Tools {
         if (cursor == null) throw new IllegalArgumentException();
         int count = cursor.getCount();
         int step = count > 0 ? 100 / count : 0;
-        // Check if instances directory is present (will do once if root directory)
-        if (isRoot) {
-            ProgressLayout.setProgress(ProgressLayout.DATA_MIGRATION, 0, R.string.migration_progress_checking);
-            boolean mojo = false;
-            cursor.moveToPosition(-1);
-            while (cursor.moveToNext()) {
-                if (cursor.getString(cursor.getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_DISPLAY_NAME)).equals("instances"))
-                    mojo = true;
-            }
-            if (!mojo)
-                throw new IllegalArgumentException("Tried to import non Mojo directory tree. It should have instances subdirectory!");
-        }
         cursor.moveToPosition(-1);
         while (cursor.moveToNext()) {
             String file = cursor.getString(cursor.getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_DISPLAY_NAME));
@@ -976,12 +964,13 @@ public final class Tools {
                 if(destDir.exists() && dest.getName().equals("instances"))
                     continue;
                 if (!destDir.exists()) destDir.mkdirs();
-                copyFileTree(activity, child, destDir, false);
+                copyFileTree(activity, child, destDir);
             }
             // Assuming file
             else {
                 File destFile = new File(dest, file);
                 // Ignore files with the same size
+                // I mean this check may trigger for non-equal files, but this is designed only for clean import anyway
                 if(destFile.length() == size) continue;
                 try {
                     write(cr.openInputStream(child), destFile);
@@ -1005,37 +994,40 @@ public final class Tools {
     }
 
     /**
-     * Migrate data from other MojoLauncher installations. Must contain "instances" subdirectory.
+     * Migrate data from other MojoLauncher installations.
      * @param activity Activity
-     * @param uri Uri to the external root directory of the launcher (i.e. /sdcard/Android/data/git.artdeell.../). Must have "files" subdir
+     * @param uri Uri to the external root directory of the source installation (i.e. /sdcard/Android/data/git.artdeell.../). Must have "files" subdir
      */
     public static void migrateData(Activity activity, Uri uri){
+        String authority = uri.getAuthority();
+        if(authority == null) return;
+        if(!authority.contains(activity.getString(R.string.group_id))) {
+            Toast.makeText(activity, R.string.migration_progress_foreign, Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(authority.equals(activity.getString(R.string.storageProviderAuthorities))){
+            Toast.makeText(activity, R.string.migration_progress_self, Toast.LENGTH_LONG).show();
+            return;
+        }
         Log.i("DataMigration", "Begin data migration!");
-
         ProgressLayout.setProgress(ProgressLayout.DATA_MIGRATION, 0);
         sExecutorService.submit(() -> {
             activity.getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             File root = new File(Tools.DIR_GAME_HOME);
             Uri sourceUri = DocumentsContract.buildDocumentUriUsingTree(uri, DocumentsContract.getTreeDocumentId(uri));
-            String authority = activity.getResources().getString(R.string.storageProviderAuthorities);
-            if(sourceUri.getAuthority() != null && sourceUri.getAuthority().contains(authority)){
-                runOnUiThread(() -> Toast.makeText(activity, R.string.migration_progress_self, Toast.LENGTH_LONG).show());
-                ProgressLayout.clearProgress(ProgressLayout.DATA_MIGRATION);
-                return;
-            }
             // Extract files subdirectory not to confuse copyFileTree
+            // Actually it shouldn't confuse anymore, but we copy files directly into "files" subdir already
             String[] projection = {DocumentsContract.Document.COLUMN_DOCUMENT_ID};
             String[] to = {"files"};
             try (Cursor cursor = activity.getContentResolver().query(sourceUri, projection, null, to, null)) {
                 if (cursor == null) throw new IllegalArgumentException();
                 cursor.moveToFirst();
-                copyFileTree(activity, DocumentsContract.buildChildDocumentsUriUsingTree(sourceUri, cursor.getString(0)), root, true);
+                copyFileTree(activity, DocumentsContract.buildChildDocumentsUriUsingTree(sourceUri, cursor.getString(0)), root);
                 runOnUiThread(() -> Toast.makeText(activity, R.string.migration_progress_finish, Toast.LENGTH_LONG).show());
-            } catch (IllegalArgumentException e) {
-                runOnUiThread(() -> Toast.makeText(activity, R.string.migration_progress_foreign, Toast.LENGTH_LONG).show());
             } catch (Exception e) {
                 Log.e("DataMigration", "Failed to import data to the launcher: " + e.getMessage());
                 runOnUiThread(() -> Toast.makeText(activity, R.string.migration_progress_failed, Toast.LENGTH_LONG).show());
+                Tools.showErrorRemote(e);
             } finally {
                 ProgressLayout.clearProgress(ProgressLayout.DATA_MIGRATION);
                 Log.i("DataMigration", "End data migration!");
