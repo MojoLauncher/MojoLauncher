@@ -991,7 +991,7 @@ public final class Tools {
                 }
             }
             progress += step;
-            ProgressLayout.setProgress(ProgressLayout.DATA_MIGRATION, Math.min(100, (int) progress), file);
+            ProgressLayout.setProgress(ProgressLayout.DATA_MIGRATION, Math.min(100, (int) progress), activity.getString(R.string.migration_progress_copying, file));
         }
         cursor.close();
     }

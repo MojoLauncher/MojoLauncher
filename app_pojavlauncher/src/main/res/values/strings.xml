@@ -498,6 +498,7 @@
     <string name="migration_progress_failed">Failed to migrate data!</string>
     <string name="migration_progress_finish">Data migration finished!</string>
     <string name="migration_progress_self">You cannot import data from the same app!</string>
+    <string name="migration_progress_copying">Copying %1s</string>
     <string name="migration_progress_warning_title">Data Migration</string>
     <string name="migration_progress_warning_summary">You\'re going to launch a data migration process. This process will copy all selected launcher\'s instances and control maps to the current app installation. All conflicting files will be OVERWRITTEN! Consider making backups. You have been warned.</string>
 </resources>
