@@ -317,7 +317,6 @@ dependencies {
     implementation 'androidx.drawerlayout:drawerlayout:1.2.0'
     implementation 'androidx.viewpager2:viewpager2:1.1.0'
     implementation 'androidx.annotation:annotation:1.9.1'
-    implementation "androidx.documentfile:documentfile:1.1.0"
 
     implementation "androidx.constraintlayout:constraintlayout:2.2.1"
 
