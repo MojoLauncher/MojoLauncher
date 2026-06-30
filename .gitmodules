@@ -1,3 +1,0 @@
-[submodule "dnbglfw/src/main/cpp/glfw"]
-	path = dnbglfw/src/main/cpp/glfw
-	url = https://github.com/MojoLauncher/glfw
