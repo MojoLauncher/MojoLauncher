@@ -12,7 +12,8 @@
     <string name="login_online_login_label">लॉगिन</string>
 
     <!-- Hint -->
-    <string name="hint_control_mapping">संदर्भ मेनू खोलने के लिए कॉगव्हील आइकन ⚙ को स्पर्श करें।\nकस्टमाइज़ करने के लिए किसी बटन को टैप करें: एडिट करें, आकार बदलें, हटाएँ, या कीबाइंड्स बदलें।</string>
+        <string name="hint_control_mapping">संदर्भ मेनू खोलने के लिए कॉगव्हील ⚙ आइकन को स्पर्श करें।\nकस्टमाइज़ करने के लिए किसी बटन को टैप करें: उसे एडिट करें, उसका आकार बदलें, हटाएँ या उसकी कीबाइंड्स बदलें।</string>
+
 
     <!-- Warnings -->
     <string name="warning_remove_account">यह खाता हटा दिया जाएगा!</string>
@@ -21,7 +22,7 @@
     <string name="alerttitle_installmod">मॉड इंस्टॉलर को चुने</string>
 
     <!-- Error messages -->
-    <string name="error_fatal">मोजो लांचर अप्रत्याशित क्रैश हो गया है</string>
+    <string name="error_fatal">MJLauncher अप्रत्याशित क्रैश हो गया है</string>
     <string name="error_no_version">कोई संस्करण नहीं!</string>
     <string name="error_show_more">ज्यादा दिखाएँ </string>
     <string name="error_show_less">कम दिखाएँ</string>
@@ -62,9 +63,9 @@
     <string name="mcl_setting_title_javaargs">JVM लॉन्च आर्ग्यूमेंट्स</string>
     <string name="mcl_setting_subtitle_javaargs">सावधान रहें, ज्ञान के बिना संशोधित करने पर गेम क्रैश हो सकता है।</string>
     <string name="mcl_setting_category_renderer">रेंडरर</string>
-    <string name="mcl_setting_renderer_gles2_4">होली GL4ES - (सभी संस्करण, तेज़)</string>
+    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (1.21.4 तक के सभी संस्करण, तेज़़)</string>
     <string name="mcl_setting_renderer_vulkan_zink">ज़िंक (वल्कन) - (सभी संस्करण, मध्यम)</string>
-    <string name="mcl_setting_renderer_ltw">LTW (ओपनजीएल ईएस 3) - केवल 1.17+</string>
+    <string name="mcl_setting_renderer_ltw">LTW (OpenGL ES 3) - केवल 1.17+, तेज़</string>
     <string name="mcl_setting_veroption_release">रीलीज़</string>
     <string name="mcl_setting_veroption_snapshot">स्नैपशॉट</string>
     <string name="mcl_setting_veroption_oldalpha">ओल्ड-अल्फा</string>
@@ -173,6 +174,7 @@
     <string name="memory_warning_msg">मौजूदा उपलब्ध RAM (%d) आवंटित RAM (%d) से कम है, जिससे गेम क्रैश हो सकता है। यदि गेम क्रैश होता है, तो आवंटन बदलें।</string>
     <string name="address_memory_warning_msg">मौजूदा उपलब्ध एड्रेसेबल RAM स्पेस (%d) आवंटित RAM (%d) से कम है, जिससे गेम क्रैश हो जाएगा। यदि गेम क्रैश होता है, तो आवंटन बदलें।</string>
     <string name="mcl_memory_allocation">मेमोरी आवंटन</string>
+        <string name="mcl_memory_allocation_subtitle">नियंत्रित करता है कि Java रनटाइम को कितनी मेमोरी दी जाती है।</string>
 
     <string name="multirt_runtime_corrupt">खराब जावा रनटाइम</string>
     <string name="multirt_runtime_incompatiblearch">असंगत आर्किटेक्चर: %s</string>
@@ -236,7 +238,8 @@
     <string name="color_default_hex" translatable="false">FFFF0000</string>
     <string name="notif_channel_name">सामान्य</string>
     <string name="notif_channel_id" translatable="false">channel_id</string>
-    <string name="lazy_service_default_title">मोजो फोरग्राउंड सर्विस</string>
+        <string name="lazy_service_default_title">MJ फोरग्राउंड सर्विस</string>
+
     <string name="mcl_setting_veroption_installed">इंस्टॉल किया गया</string>
     <string name="use_global_default">(ग्लोबल डिफ़ॉल्ट का उपयोग करें)</string>
     <string name="default_control">डिफ़ॉल्ट कंट्रोलमैप</string>
@@ -251,11 +254,13 @@
     <string name="main_add_account">अकाउंट जोड़ें</string>
     <string name="tasks_ongoing">कार्य प्रगति पर हैं, कृपया प्रतीक्षा करें</string>
     <string name="no_saved_accounts">कोई सेव किए गए अकाउंट नहीं</string>
-    <string name="mc_download_failed">यह खराब नेटवर्क कनेक्शन, गलत तरीके से रखी गई फ़ाइलों, आदि के कारण हो सकता है। </string>
+        <string name="mc_download_failed">गेम डाउनलोड करने में विफल! यह खराब नेटवर्क कनेक्शन, गलत तरीके से रखी गई फ़ाइलों, आदि के कारण हो सकता है।</string>
+        
     <string name="xerr_unknown">अज्ञात Xbox Live API त्रुटि %d</string>
-
+    <string name="xerr_no_account">आपके पास कोई Xbox Live अकाउंट नहीं लगता। कृपया https://minecraft.net/ पर एक बार लॉगिन करें और फिर से प्रयास करें।</string>
     <string name="xerr_adult_verification">आपके अकाउंट को किसी वयस्क द्वारा सत्यापित किया जाना ज़रूरी है।</string>
     <string name="xerr_child">आपका अकाउंट एक चाइल्ड अकाउंट है, और लॉगिन करने के लिए इसे एक फैमिली में जोड़ा जाना चाहिए।</string>
+        <string name="mc_not_owned">लगता है इस अकाउंट में कोई MC प्रोफ़ाइल नहीं है। अगर आपके पास Xbox Game Pass है, तो कृपया गेम की वेबसाइट पर लॉगिन करें और अपनी प्रोफ़ाइल सेट करें।</string>
 
     <string name="xerr_not_available">Xbox Live आपके देश में उपलब्ध नहीं है</string>
     <string name="preference_enable_gyro_title">गाइरोस्कोप कंट्रोल्स सक्षम करें</string>
@@ -266,7 +271,8 @@
     <string name="preference_gyro_sample_rate_title">गाइरोस्कोप सैंपलिंग रेट</string>
     <string name="preference_gyro_sample_rate_description">अगर आपको गाइरोस्कोप कंट्रोल्स के साथ प्रदर्शन संबंधी समस्याएँ आती हैं, तो इसे बढ़ाएँ।</string>
     <string name="microsoft_login_retry_later">बहुत ज़्यादा रिक्वेस्ट हैं, कृपया बाद में फिर से प्रयास करें।</string>
-    <string name="storage_required">मोजो लॉन्चर को बाहरी स्टोरेज अटैच होना ज़रूरी है। कृपया इसे फिर से कनेक्ट करें और ऐप रीस्टार्ट करें।</string>
+        <string name="storage_required">MJLauncher को बाहरी स्टोरेज अटैच होना ज़रूरी है। कृपया इसे फिर से कनेक्ट करें और ऐप रीस्टार्ट करें।</string>
+
     <string name="mcl_setting_title_buttonallcaps">बटन लेबल में केवल बड़े अक्षरों का उपयोग करें</string>
     <string name="mcl_setting_subtitle_buttonallcaps">यदि आप अपने कंट्रोल्स में छोटे अक्षरों का उपयोग करना चाहते हैं तो इसे डिसेबल करें।</string>
     <string name="create_instance">नया इंस्टेंस बनाएँ</string>
@@ -290,30 +296,32 @@
 
 
     <string name="preference_force_big_core_title">रेंडरर को बड़े कोर पर चलाने के लिए बल दें</string>
+        <string name="preference_force_big_core_desc">गेम के रेंडर थ्रेड को सबसे ज़्यादा अधिकतम फ़्रीक्वेंसी वाले कोर पर चलने के लिए बाध्य करता है।</string>
 
     <string name="version_select_hint">एक संस्करण चुनें</string>
     <string name="forge_dl_progress">%s के लिए इंस्टॉलर डाउनलोड हो रहा है</string>
-    <string name="forge_dl_searching">फोर्ज संस्करण नंबर खोजा जा रहा है</string>
+    <string name="forge_dl_searching">Forge संस्करण नंबर खोजा जा रहा है</string>
     <string name="modloader_dl_failed_to_load_list">संस्करण सूची लोड करने में विफल!</string>
-    <string name="forge_dl_no_installer">माफ़ करें, लेकिन फोर्ज के इस संस्करण में इंस्टॉलर नहीं है, जो अभी तक समर्थित नहीं है।</string>
-    <string name="forge_dl_select_version">फोर्ज संस्करण चुनें</string>
+    <string name="forge_dl_no_installer">माफ़ करें, लेकिन Forge के इस संस्करण में इंस्टॉलर नहीं है, जो अभी तक समर्थित नहीं है।</string>
+    <string name="forge_dl_select_version">Forge संस्करण चुनें</string>
     <string name="fabric_dl_progress">%s लोडर मेटाडेटा डाउनलोड हो रहा है</string>
     <string name="fabric_dl_loader_version">%s लोडर संस्करण</string>
+        <string name="fabric_dl_game_version">गेम संस्करण</string>
 
     <string name="fabric_dl_install">इंस्टॉल करें</string>
     <string name="fabric_dl_cant_read_meta">%s लोडर मेटाडेटा पढ़ने में विफल। कृपया बाद में फिर से प्रयास करें।</string>
-    <string name="fabric_dl_cant_read_meta2">फैब्रिक लोडर मेटाडेटा पढ़ने में विफल। कृपया बाद में फिर से प्रयास करें।</string>
-    <string name="modloader_dl_install_fabric_instance">फैब्रिक इंस्टेंस बनाएँ</string>
-    <string name="modloader_dl_install_quilt_instance">क्विल्ट इंस्टेंस बनाएँ</string>
-    <string name="modloader_dl_install_forge_instance">फोर्ज इंस्टेंस बनाएँ</string>
+    <string name="fabric_dl_cant_read_meta2">Fabric लोडर मेटाडेटा पढ़ने में विफल। कृपया बाद में फिर से प्रयास करें।</string>
+    <string name="modloader_dl_install_fabric_instance">Fabric इंस्टेंस बनाएँ</string>
+    <string name="modloader_dl_install_quilt_instance">Quilt इंस्टेंस बनाएँ</string>
+    <string name="modloader_dl_install_forge_instance">Forge इंस्टेंस बनाएँ</string>
     <string name="create_instance_vanilla">वैनिला इंस्टेंस बनाएँ</string>
     <string name="create_profile_vanilla_like_versions">वैनिला जैसी संस्करण</string>
     <string name="create_profile_modded_versions">मॉड की गई संस्करण</string>
     <string name="fabric_dl_loader_title">संस्करण चुनें</string>
-    <string name="of_dl_select_version">ऑप्टिफाइन संस्करण चुनें</string>
-    <string name="of_dl_failed_to_scrape">ऑप्टिफाइन इंस्टॉलेशन के लिए डेटा एकत्र करने में विफल।</string>
+    <string name="of_dl_select_version">OptiFine संस्करण चुनें</string>
+    <string name="of_dl_failed_to_scrape">OptiFine इंस्टॉलेशन के लिए डेटा एकत्र करने में विफल।</string>
     <string name="of_dl_progress">%s डाउनलोड हो रहा है</string>
-    <string name="mod_dl_install_optifine">ऑप्टिफाइन इंस्टॉल करें</string>
+    <string name="mod_dl_install_optifine">OptiFine इंस्टॉल करें</string>
 
 
     <string name="hint_search_modpack">मॉडपैक खोजें</string>
@@ -333,7 +341,8 @@
     <string name="modpack_download_downloading_mods">मॉड्स डाउनलोड हो रहे हैं (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">मॉड्स डाउनलोड हो रहे हैं (फ़ाइल %d/%d)</string>
     <string name="modpack_download_applying_overrides">ओवरराइड्स लागू हो रहे हैं (%d/%d)</string>
-    <string name="modpack_install_notification_title">मोजो मॉडपैक इंस्टॉलर</string>
+        <string name="modpack_install_notification_title">MJ मॉडपैक इंस्टॉलर</string>
+
     <string name="modpack_install_notification_success">मॉडपैक इंस्टॉलेशन पूरा करने के लिए यहां क्लिक करें</string>
     <string name="modpack_install_notification_data_not_available">मॉड लोडर जानकारी डाउनलोड करने में विफल</string>
     <string name="modpack_install_modloader_download_failed">मॉड लोडर फ़ाइलें डाउनलोड करने में विफल</string>
@@ -344,7 +353,7 @@
     <string name="notif_error_occured_desc">अधिक जानकारी देखने के लिए क्लिक करें</string>
     <string name="fabric_dl_only_stable">केवल स्थिर संस्करण दिखाएँ</string>
     <string name="dl_tampered_manifest_title">फ़ाइल सत्यापन चेतावनी</string>
-    <string name="dl_tampered_manifest"><![CDATA[मिरर पर गेम संस्करण मैनिफेस्ट आधिकारिक मोजांग संस्करण मैनिफेस्ट से मेल नहीं खाता है, जिसका अर्थ है कि इसमें छेड़छाड़ की गई हो सकती है।<br/><b>यह सुरक्षित नहीं है। यदि आप जारी रखते हैं तो आपकी व्यक्तिगत जानकारी खतरे में पड़ सकती है।</b><br/>यदि आप अभी भी मिरर का उपयोग करना चाहते हैं, तो "मैनिफेस्ट जांच बंद करें" दबाएं और डाउनलोड फिर से शुरू करें।<br/>यदि आप आधिकारिक डाउनलोड स्रोत का उपयोग करना चाहते हैं, तो "आधिकारिक साइट पर स्विच करें" दबाएं और डाउनलोड फिर से शुरू करें।<br/>]]>
+    <string name="dl_tampered_manifest"><![CDATA[मिरर पर गेम संस्करण मैनिफेस्ट आधिकारिक Mojang संस्करण मैनिफेस्ट से मेल नहीं खाता है, जिसका अर्थ है कि इसमें छेड़छाड़ की गई हो सकती है।<br/><b>यह सुरक्षित नहीं है। यदि आप जारी रखते हैं तो आपकी व्यक्तिगत जानकारी खतरे में पड़ सकती है।</b><br/>यदि आप अभी भी मिरर का उपयोग करना चाहते हैं, तो "मैनिफेस्ट जांच बंद करें" दबाएं और डाउनलोड फिर से शुरू करें।<br/>यदि आप आधिकारिक डाउनलोड स्रोत का उपयोग करना चाहते हैं, तो "आधिकारिक साइट पर स्विच करें" दबाएं और डाउनलोड फिर से शुरू करें।<br/>]]>
     </string>
     <string name="dl_turn_off_manifest_checks">मैनिफेस्ट जांच बंद करें</string>
     <string name="dl_switch_to_official_site">आधिकारिक साइट पर स्विच करें</string>
@@ -362,7 +371,8 @@
     <string name="preference_category_miscellaneous">अन्य सेटिंग्स</string>
     <string name="preference_category_video">वीडियो सेटिंग्स</string>
     <string name="notification_permission_dialog_title">अनुमति अनुरोध</string>
-    <string name="notification_permission_dialog_text">जब आप ऐप से बाहर निकलते हैं तो गेम/मॉडपैक डाउनलोड्स को रुकने से रोकने के लिए मोजो लॉन्चर को नोटिफिकेशन्स पोस्ट करने की अनुमति चाहिए। इस अनुमति के बिना, जब आप मोजो लॉन्चर को बैकग्राउंड मोड में डालते हैं तो Android आपके डाउनलोड्स को बंद कर सकता है।</string>
+        <string name="notification_permission_dialog_text">जब आप ऐप से बाहर निकलते हैं तो गेम/मॉडपैक डाउनलोड्स को रुकने से रोकने के लिए MJLauncher को नोटिफिकेशन्स पोस्ट करने की अनुमति चाहिए। इस अनुमति के बिना, जब आप MJLauncher को बैकग्राउंड मोड में डालते हैं तो Android आपके डाउनलोड्स को बंद कर सकता है।</string>
+
     <string name="notification_permission_toast">आप सेटिंग्स में जाकर बाद में कभी भी अपना मन बदल सकते हैं।</string>
     <string name="preference_ask_for_notification_title">नोटिफिकेशन्स की अनुमति दें</string>
     <string name="preference_ask_for_notification_description">नोटिफिकेशन अनुमति को फिर से रिक्वेस्ट करने के लिए क्लिक करें, गेम/मॉडपैक बैकग्राउंड डाउनलोड्स के सही ढंग से काम करने के लिए इसकी आवश्यकता है।</string>
@@ -420,8 +430,8 @@
     <string name="local_login_bad_username_title">अनुपयुक्त यूज़रनेम</string>
     <string name="local_login_bad_username_text">यूज़रनेम 3–16 अक्षरों का होना चाहिए, और इसमें केवल लैटिन अक्षर, 0–9 अंक और अंडरस्कोर होने चाहिए।</string>
     <string name="quick_setting_title">त्वरित सेटिंग्स</string>
-    <string name="create_bta_instance">बेटर दैन एडवेंचर!" इंस्टेंस बनाएँ!"</string>
-    <string name="select_bta_version">बेटर दैन एडवेंचर!" संस्करण चुनें</string>
+    <string name="create_bta_instance">\"बेटर दैन एडवेंचर!\" इंस्टेंस बनाएँ</string>
+    <string name="select_bta_version">\"बेटर दैन एडवेंचर!\" संस्करण चुनें</string>
     <string name="bta_installer_available_versions">समर्थित BTA संस्करण</string>
     <string name="bta_installer_untested_versions">अपरिक्षित BTA संस्करण</string>
     <string name="bta_installer_nightly_versions">नाइटली BTA संस्करण</string>
@@ -433,4 +443,62 @@
     <string name="auth_select_elyby">Ely.by अकाउंट</string>
     <string name="auth_select_local">स्थानीय अकाउंट</string>
     <string name="instance_dir_missing">इंस्टेंस गायब है</string>
+    <string name="mcl_setting_renderer_freedreno_kgsl">Freedreno - सभी versions, fast, सिर्फ Adreno</string>
+    <string name="dl_library_sha_fail">Library %s ख़राब हो गई है और इसे फिर से डाउनलोड किया जाएगा।</string>
+    <string name="preference_use_angle_title">ANGLE का उपयोग करें</string>
+        <string name="preference_use_angle_description">सिस्टम ड्राइवर के बजाय ANGLE का उपयोग करने की अनुमति देता है। कुछ GPUs पर मॉड्स के साथ ग्राफिकल समस्याओं को ठीक कर सकता है।</string>
+    <string name="preference_microphone_access_title">माइक्रोफ़ोन एक्सेस की अनुमति का अनुरोध करें</string>
+    <string name="preference_microphone_access_description">गेम के लिए डिवाइस माइक्रोफ़ोन का एक्सेस देने के लिए सिस्टम से अनुरोध करता है।</string>
+    <string name="neoforge_dl_no_installer">माफ़ करें, लेकिन NeoForge के इस संस्करण में इंस्टॉलर नहीं है, जो अभी तक समर्थित नहीं है।</string>
+    <string name="neoforge_dl_select_version">NeoForge वर्ज़न चुनें</string>
+    <string name="modloader_dl_install_neoforge_instance">NeoForge इंस्टेंस बनाएँ</string>
+    <string name="compat_sodium_not_supported">आपका डिवाइस इस वर्ज़न पर Sodium नहीं चला सकता क्योंकि LTW आपके डिवाइस पर समर्थित नहीं है।</string>
+
+    <string name="gamedir_open_failed">गेम डायरेक्टरी खोलने में विफल</string>
+    <string name="newerdl_inserting_metadata">फ़ाइल मेटाडेटा खोजा जा रहा है…</string>
+    <string name="newerdl_inserting_metadata_count">फ़ाइल मेटाडेटा खोजा जा रहा है… (%d/%d)</string>
+    <string name="newerdl_downloading_files_count">फ़ाइलें डाउनलोड हो रही हैं… (%d/%d, %.2f MB/s)</string>
+    <string name="newerdl_downloading_files_size">फ़ाइलें डाउनलोड हो रही हैं… (%.2f/%.2f MB, %.2f MB/s)</string>
+    <string name="preference_verify_game_files_title">गेम फ़ाइलें सत्यापित करें</string>
+    <string name="preference_verify_game_files_description">मेटाडेटा में सेट किए गए चेकसम और आकार के विरुद्ध डाउनलोड की गई गेम फ़ाइलों को सत्यापित करें। मेटाडेटा JSON फ़ाइलें इस सेटिंग की परवाह किए बिना सत्यापित की जाती हैं।</string>
+    <string name="preference_go_vroom_title">तेज़ गेम स्टार्टअप</string>
+    <string name="preference_go_vroom_description">क्रमिक रीस्टार्ट पर फ़ाइल चेकसम को सत्यापित न करें। इससे गेम बहुत तेज़ी से शुरू होता है।</string>
+    <string name="vml_fail_load_runtime">Java वर्चुअल मशीन लोड करने में विफल: %s</string>
+    <string name="vml_fail_create_runtime">Java वर्चुअल मशीन बनाने में विफल: %s</string>
+    <string name="vml_fail_find_hooks_native">नेटिव हुक्स खोजने में विफल।</string>
+    <string name="vml_fail_find_hooks">हुक लक्ष्य खोजने में विफल। विवरण के लिए latestlog.txt देखें</string>
+    <string name="vml_fail_insert_hooks">हुक्स इंस्टॉल करने में विफल: %s</string>
+    <string name="vml_fail_load_classpath">क्लासपाथ लोड करने में विफल। विवरण के लिए latestlog.txt देखें</string>
+    <string name="vml_fail_run_main">मुख्य क्लास शुरू करने में विफल। विवरण के लिए latestlog.txt देखें</string>
+    <string name="vml_huh">\???</string>
+    <string name="vml_err_ok">सफलता</string>
+    <string name="vml_err_unknown">अज्ञात त्रुटि</string>
+    <string name="vml_err_detached">थ्रेड Java VM से अलग हो गया है</string>
+    <string name="vml_err_version">असंगत JNI संस्करण</string>
+    <string name="vml_err_nomem">RAM खत्म हो गई है</string>
+    <string name="vml_err_exists">VM पहले से ही लोड है</string>
+    <string name="vml_err_inval">अमान्य आर्ग्यूमेंट्स</string>
+    <string name="gr_err_renderer_load_Failed">रेंडरर लाइब्रेरी लोड करने में विफल</string>
+    <string name="ltw_4x_msaa_warning_msg">ऐसा लगता है कि आपने डेवलपर सेटिंग्स में \"Force 4x MSAA\" ऑन कर दिया है। रेंडरिंग समस्याओं से बचने के लिए कृपया इसे बंद करें।</string>
+    <string name="no_instance">कोई इंस्टेंस नहीं चुना गया है। कृपया एक इंस्टेंस बनाएँ या चुनें।</string>
+    <string name="downloading_java_runtime_uni">रनटाइम डाउनलोड हो रहा है, चरण 1/2 (%.2f/%.2f MB)</string>
+    <string name="downloading_java_runtime_platform">रनटाइम डाउनलोड हो रहा है, चरण 2/2 (%.2f/%.2f MB)</string>
+    <string name="runtime_error_title">रनटाइम उपलब्ध नहीं है</string>
+    <string name="runtime_error_missing">Java %d अभी तक इंस्टॉल नहीं हुआ है। कृपया कोई अन्य संगत रनटाइम चुनें या इसे स्वचालित रूप से इंस्टॉल करने के लिए इंटरनेट से कनेक्ट करें।</string>
+    <string name="runtime_error_install_failed">Java %d इंस्टॉल करने में विफल। कृपया अपना इंटरनेट कनेक्शन जांचें और पुनः प्रयास करें।</string>
+    <string name="modloader_dl_install_legacy_fabric_instance">Legacy Fabric इंस्टेंस बनाएँ</string>
+    <string name="instance_delete">इंस्टेंस डिलीट करें</string>
+    <string name="instance_delete_confirmation">क्या आप वाकई इंस्टेंस डिलीट करना चाहते हैं? यह इंस्टेंस डायरेक्टरी में मौजूद सभी वर्ल्ड्स, मॉड्स, रिसोर्सेज और किसी भी अन्य डेटा को स्थायी रूप से हटा देगा। यह क्रिया पूर्ववत नहीं की जा सकती!</string>
+    <string name="import_local_modpack">लोकल मॉडपैक इंपोर्ट करें</string>
+    <string name="preference_sysmem_title">सिस्टम मेमोरी में रेंडरिंग के लिए बाध्य करें</string>
+    <string name="preference_sysmem_summary">Freedreno को सीधे सिस्टम मेमोरी में रेंडर करने के लिए बाध्य करता है। यदि प्रदर्शन कम है या आपको रेंडरिंग समस्याओं का अनुभव होता है तो इसे सक्षम करें</string>
+        <string name="mcl_setting_title_buttonscale">कंट्रोल बटन्स स्केलिंग</string>
+    <string name="mcn_abort_title">एप्लिकेशन/गेम रद्द कर दिया गया, अधिक जानकारी के लिए latestlog.txt देखें।</string>
+    <string name="preference_force_legacy_zink_title">Legacy Zink का उपयोग करें</string>
+    <string name="preference_force_legacy_zink_description">वर्तमान डिवाइस के अनुसार चुनने के बजाय बलपूर्वक Legacy Zink का उपयोग करें। यह कुछ ग्राफिकल समस्याओं को ठीक कर सकता है। यदि गेम धीमा हो जाए तो इसे बंद कर दें।</string>
+    <string name="preference_category_keyboard">कीबोर्ड सेटिंग्स</string>
+    <string name="preference_keyboard_autopan_title">कीबोर्ड पैनिंग सक्षम करें</string>
+    <string name="preference_keyboard_autopan_summary">यदि आपका आखिरी टच स्क्रीन के निचले हिस्से में था, तो यह ऑन-स्क्रीन कीबोर्ड को गेम विंडो के ऊपर आने के बजाय उसे खिसकाने की अनुमति देता है। समान फ़ंक्शन वाले कस्टम कंट्रोल लेआउट बटन्स पर इसका कोई प्रभाव नहीं पड़ता।</string>
+        <string name="social_media_invite" translatable="false">https://discord.gg/VHdwQFsaGX</string>
+        
 </resources>
