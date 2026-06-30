@@ -201,6 +201,7 @@ public class LauncherActivity extends BaseActivity {
         mProgressLayout.observe(ProgressLayout.AUTHENTICATE);
         mProgressLayout.observe(ProgressLayout.DOWNLOAD_VERSION_LIST);
         mProgressLayout.observe(ProgressLayout.INSTANCE_INSTALL);
+        mProgressLayout.observe(ProgressLayout.DATA_MIGRATION);
     }
 
     @Override
@@ -309,5 +310,9 @@ public class LauncherActivity extends BaseActivity {
         mFragmentView = findViewById(R.id.container_fragment);
         mSettingsButton = findViewById(R.id.setting_button);
         mProgressLayout = findViewById(R.id.progress_layout);
+    }
+
+    public boolean hasActiveProcesses(){
+        return mProgressLayout.hasProcesses();
     }
 }

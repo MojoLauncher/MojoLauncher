@@ -521,6 +521,16 @@ public final class Tools {
     public static void write(String path, String content) throws IOException {
         write(new File(path), content);
     }
+    public static void write(InputStream source, File dest) throws IOException {
+        FileOutputStream fos = new FileOutputStream(dest);
+        byte[] buf = new byte[65535];
+        int len;
+        while((len = source.read(buf)) > 0) {
+            fos.write(buf, 0, len);
+        }
+        fos.flush();
+        fos.close();
+    }
 
     public static boolean isAndroid8OrHigher() {
         return SDK_INT >= 26;

@@ -87,6 +87,7 @@ android {
         versionName getVersionName()
         multiDexEnabled false //important
         resValue 'string', 'curseforge_api_key', getCFApiKey()
+        resValue 'string', 'group_id', 'git.artdeell'
     }
 
     flavorDimensions  = ["runtime"]

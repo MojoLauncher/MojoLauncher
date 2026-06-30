@@ -45,6 +45,11 @@
             android:icon="@drawable/ic_microphone"
             android:title="@string/preference_microphone_access_title"
             android:summary="@string/preference_microphone_access_description" />
+        <Preference
+            android:key="runDataMigration"
+            android:icon="@drawable/ic_px_data_import"
+            android:title="@string/preference_data_migration_title"
+            android:summary="@string/preference_data_migration_summary" />
 
     </PreferenceCategory>
 
