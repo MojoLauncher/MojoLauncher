@@ -18,4 +18,4 @@ rootProject.name='PojavLauncher'
 include ':app_pojavlauncher'
 
 include ':forge_installer'
-include ':dnbglfw'
+include ':glfw:android-gradle'

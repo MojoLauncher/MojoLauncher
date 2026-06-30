@@ -116,6 +116,7 @@ android {
             initWith debug
             minifyEnabled true
             shrinkResources true
+            matchingFallbacks += List.of("debug")
         }
         proguardNoDebug {
             initWith proguard
@@ -135,10 +136,12 @@ android {
         gplay {
             initWith release
             signingConfig signingConfigs.googlePlayBuild
+            matchingFallbacks += List.of("release")
         }
         pubRelease {
             initWith release
             signingConfig signingConfigs.publicBuild
+            matchingFallbacks += List.of("release")
         }
     }
 
@@ -337,7 +340,7 @@ dependencies {
 
     implementation 'com.github.MojoLauncher:alsoft-android-aar:f369161d5f'
 
-    implementation project(":dnbglfw")
+    implementation project(":glfw:android-gradle")
 
     // implementation 'net.sourceforge.streamsupport:streamsupport-cfuture:1.7.0'
 

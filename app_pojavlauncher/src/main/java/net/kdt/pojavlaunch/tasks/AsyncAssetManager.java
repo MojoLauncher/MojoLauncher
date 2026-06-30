@@ -80,10 +80,8 @@ public class AsyncAssetManager {
         sExecutorService.execute(() -> {
             tryUnpackComponent(ctx, "caciocavallo", false);
             tryUnpackComponent(ctx, "caciocavallo17", false);
-            //tryUnpackComponent(ctx, "lwjgl3", false);
 
             tryUnpackComponent(ctx, "security", true);
-            tryUnpackComponent(ctx, "arc_dns_injector", true);
             tryUnpackComponent(ctx, "forge_installer", true);
             tryUnpackComponent(ctx, "authlib-injector", true);
             ProgressLayout.clearProgress(ProgressLayout.EXTRACT_COMPONENTS);
