@@ -50,7 +50,7 @@ configurations {
 }
 
 android {
-    namespace 'git.artdeell.mojo'
+    namespace 'com.xl.launcher'
 
     compileSdk = 36
 
@@ -80,7 +80,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "git.artdeell.mjlaunch"
+        applicationId "com.xl.launcher"
         minSdkVersion 21
         targetSdkVersion 36
         versionCode getDateSeconds()
@@ -109,8 +109,8 @@ android {
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.customDebug
-            resValue 'string', 'application_package', 'git.artdeell.mjlaunch.debug'
-            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mjlaunch.scoped.gamefolder.debug'
+            resValue 'string', 'application_package', 'com.xl.launcher.debug'
+            resValue 'string', 'storageProviderAuthorities', 'com.xl.launcher.scoped.gamefolder.debug'
         }
         proguard {
             initWith debug
@@ -130,8 +130,8 @@ android {
             // defaultConfig already set
             // multiDexEnabled = true
             // debuggable = true
-            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mjlaunch.scoped.gamefolder'
-            resValue 'string', 'application_package', 'git.artdeell.mjlaunch'
+            resValue 'string', 'storageProviderAuthorities', 'com.xl.launcher.scoped.gamefolder'
+            resValue 'string', 'application_package', 'com.xl.launcher'
         }
         gplay {
             initWith release
@@ -238,7 +238,7 @@ class AssetTaskRegistrar {
     }
 
     def onlineZipDependency(String downloadUrl, String name, String relativePath) {
-	    mergeAssetsTask.dependsOn(onlineUnzipTask downloadUrl, name, assetDestination(relativePath))
+    	mergeAssetsTask.dependsOn(onlineUnzipTask downloadUrl, name, assetDestination(relativePath))
     }
 
     def projectJarDependency(Project project, String relativePath) {
