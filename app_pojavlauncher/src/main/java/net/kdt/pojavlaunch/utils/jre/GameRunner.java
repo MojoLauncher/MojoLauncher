@@ -257,6 +257,8 @@ public class GameRunner {
         JREUtils.setEnviroimentForGame(activity, rendererName);
         JREUtils.chdir(instance.getGameDirectory().getAbsolutePath());
 
+        if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) JREUtils.makeBigCoreAffine();
+
         String rendererLibrary = JREUtils.loadGraphicsLibrary(rendererName);
         if(rendererLibrary == null) {
             Log.i("GameRunner", "Falling back to GL4ES 1.1.4");
