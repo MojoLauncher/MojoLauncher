@@ -1,36 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <!-- App name part -->
+<resources>
+    <!-- <string name="control_more3"></string>
+      <string name="control_more4"></string> -->
     <string name="app_short_name">MJLauncher</string>
-    <!-- Action bar part -->
-    <!-- Languages list part -->
-    <!-- Login strings -->
     <string name="login_online_username_hint">Имя пользователя</string>
     <string name="login_online_login_label">Войти</string>
-    <!-- Hint -->
     <string name="hint_control_mapping">Нажмите на иконку шестерёнки ⚙, чтобы открыть меню действий.\nВыберите кнопку, чтобы удалить её или скопировать;\nизменить её свойства, размер или привязанные клавиши.</string>
-    <!-- Warnings -->
     <string name="warning_remove_account">Эта учётная запись будет удалена!</string>
-    <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Выберите установщик мода</string>
-    <!-- Error messages -->
     <string name="error_fatal">MJLauncher был остановлен в результате сбоя</string>
     <string name="error_no_version">Нет версий!</string>
     <string name="error_show_more">Развернуть</string>
     <string name="error_show_less">Свернуть</string>
-    <!-- Toast messages -->
     <string name="toast_permission_denied">Требуется разрешение на чтение/запись в хранилище!</string>
     <string name="toast_optifine_success">Установка прошла успешно</string>
-    <!--
-    <string name="toast_3">Exit</string>
-    -->
-    <!-- MCLauncherActivity: Tabs -->
     <string name="mcl_tab_wiki">Вики</string>
-    <!-- MCLauncherActivity: Account status -->
-    <!-- MCLauncherActivity: Strings -->
     <string name="mcl_launch_cleancache">Очистка файлов кэша</string>
     <string name="mcl_launch_downloading">Загрузка %s</string>
-    <string name="mcl_launch_downloading_progress">"Загрузка %s (%.2f Мбайт / %.2f Мбайт)"</string>
+    <string name="mcl_launch_downloading_progress">&quot;Загрузка %s (%.2f Мбайт / %.2f Мбайт)&quot;</string>
     <string name="mcl_launch_download_assets">Подготовка к загрузке ресурсов</string>
     <string name="mcl_options">Опции</string>
     <string name="mcl_option_customcontrol">Раскладка управления</string>
@@ -60,12 +47,11 @@
     <string name="mcl_setting_java_sandbox">Безопасное выполнение .jar</string>
     <string name="mcl_setting_java_sandbox_subtitle">Управляет доступностью менеджера безопасной среды Java при выполнении .jar-файла.</string>
     <string name="mcl_version_clone">Копировать</string>
-    <!-- Global strings -->
     <string name="global_edit">Редактировать</string>
     <string name="global_error">Ошибка</string>
     <string name="global_load">Загрузить</string>
     <string name="global_name">Имя</string>
-    <string name="global_remove">  Удалить  </string>
+    <string name="global_remove">Удалить</string>
     <string name="global_clone">Копировать</string>
     <string name="global_restart">Перезапуск</string>
     <string name="global_save">Сохранить</string>
@@ -75,12 +61,10 @@
     <string name="global_select">Выбрать</string>
     <string name="global_retry">Обновить</string>
     <string name="global_default">По умолчанию</string>
-    <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Произошёл собой приложения/игры с кодом %d. Проверьте latestlog.txt, чтобы получить больше информации.</string>
     <string name="mcn_abort_title">Произошла аварийноая остановка приложения. Проверьте latestlog.txt для получения дополнительной информации</string>
     <string name="mcn_exit_confirm">Вы уверены, что хотите принудительно завершить игру?</string>
-    <string name="mcn_check_fail_vulkan_support">Визуализатор Zink (Vulkan) не поддерживается на вашем устройстве.</string>
-    <!-- MainActivity: Control buttons -->
+    <string name="mcn_check_fail_vulkan_support">Визуализатор Zink (Vulkan) не поддерживается на вашем устройстве!</string>
     <string name="control_chat">Чат</string>
     <string name="control_debug">Отладка</string>
     <string name="control_primary">ЛКМ</string>
@@ -96,23 +80,17 @@
     <string name="control_listplayers">Tab</string>
     <string name="control_mouse">Мышь</string>
     <string name="control_mouseoff">Мышь: Выкл</string>
-    <string name="control_mouseon">Мышь: Вкл </string>
-    <!-- MainActivity: Menu advanced controls -->
+    <string name="control_mouseon">Мышь: Вкл</string>
     <string name="control_forceclose">Завершить процесс</string>
     <string name="control_viewout">Журнал</string>
     <string name="control_adebug">Отладка ввода</string>
     <string name="control_customkey">Нажать клавишу</string>
-    <!-- ImportControlActivity Strings -->
     <string name="import_control_label">Импортирование управления</string>
     <string name="import_control_invalid_file">Недопустимый или повреждённый файл</string>
     <string name="import_control_import_button">импортировать раскладку</string>
     <string name="import_control_verifying_file">Идёт проверка файла. Подождите и попробуйте еще раз.</string>
     <string name="import_control_invalid_name">Недопустимое имя файла или файл с таким именем уже существует</string>
     <string name="import_control_done">Импортирование завершено</string>
-    <!--
-    <string name="control_more3"></string>
-    <string name="control_more4"></string>
--->
     <string name="customctrl_toggle">Переключать касанием</string>
     <string name="customctrl_size">Размер</string>
     <string name="customctrl_mapping">Клавиши</string>
@@ -210,7 +188,7 @@
     <string name="instance_shared_data_on">Хранить данные игры в общей папке</string>
     <string name="instance_shared_data_off">Хранить данные игры в папке установки</string>
     <string name="global_delete">Удалить</string>
-    <string name="pedit_java_runtime">Java Runtime</string>
+    <string name="pedit_java_runtime">Среда выполнения Java</string>
     <string name="pedit_renderer">Визуализатор</string>
     <string name="notif_channel_name">Общее</string>
     <string name="lazy_service_default_title">Активная служба MJ</string>
@@ -228,12 +206,12 @@
     <string name="main_add_account">Добавить учётную запись</string>
     <string name="tasks_ongoing">Производится подготовка, подождите…</string>
     <string name="no_saved_accounts">Нет сохранённых учётных записей</string>
-
+    <string name="mc_download_failed">Не удалось загрузить Minecraft! Это может возникать из-за медленного интернет-соединения или ошибок в размещении файлов.</string>
     <string name="xerr_unknown">Неизвестная ошибка API Xbox Live %d</string>
-
+    <string name="xerr_no_account">Похоже, у вас нет учётной записи Xbox Live. Единожды войдите на https://minecraft.net и попробуйте ещё раз.</string>
     <string name="xerr_adult_verification">Вашу учётную запись должен подтвердить взрослый представитель.</string>
     <string name="xerr_child">Для входа в игру учётная запись ребёнка должна быть добавлена в семью.</string>
-
+    <string name="mc_not_owned">Похоже что данный аккаунт не имеет профиля MC. Если у вас активен Xbox Game Pass, пожалуйста перейдите на сайт игры и настройте ваш профиль</string>
     <string name="xerr_not_available">Xbox Live недоступен в вашей стране</string>
     <string name="preference_enable_gyro_title">Управление наклоном</string>
     <string name="preference_enable_gyro_description">Позволяет управлять положением камеры в игре путём вращения устройства.</string>
@@ -263,6 +241,8 @@
     <string name="preference_wipe_controller_description">Позволяет переназначить кнопки контроллера.</string>
     <string name="preference_deadzone_scale_title">Компенсация износа джойстика</string>
     <string name="preference_deadzone_scale_description">Увеличьте, если стики самопроизвольно срабатывают.</string>
+    <string name="preference_microphone_access_title">Запросить доступ к микрофону</string>
+    <string name="preference_microphone_access_description">Запрашивает у системы доступ к микрофону устройства в игре</string>
     <string name="preference_force_big_core_title">Запускать визуализатор на мощном ядре</string>
     <string name="preference_force_big_core_desc">Принудительно запускать поток графического движка на ядре ЦП с наибольшей тактовой частотой.</string>
     <string name="version_select_hint">Выберите версию</string>
@@ -271,12 +251,17 @@
     <string name="modloader_dl_failed_to_load_list">Не удалось загрузить список версий.</string>
     <string name="forge_dl_no_installer">К сожалению, у этой версии Forge отсутствует поддерживаемый установщик.</string>
     <string name="forge_dl_select_version">Выбор версии Forge</string>
+    <string name="neoforge_dl_no_installer">К сожалению, у этой версии NeoForge отсутствует поддерживаемый установщик.</string>
     <string name="neoforge_dl_select_version">Выбор версии NeoForge</string>
     <string name="fabric_dl_progress">Загрузка метаданных %s</string>
     <string name="fabric_dl_loader_version">Версия загрузчика %s</string>
     <string name="fabric_dl_game_version">Версия игры</string>
     <string name="fabric_dl_install">Установить</string>
     <string name="fabric_dl_cant_read_meta">Не удалось прочитать метаданные %s. Повторите попытку позже.</string>
+    <string name="fabric_dl_cant_read_meta2">Ошибка чтения метаданных Fabric</string>
+    <string name="modloader_dl_install_fabric_instance">Установка с Fabric</string>
+    <string name="modloader_dl_install_quilt_instance">Установка с Quilt</string>
+    <string name="modloader_dl_install_forge_instance">Установка с Forge</string>
     <string name="modloader_dl_install_neoforge_instance">Установка с NeoForge</string>
     <string name="create_instance_vanilla">Немодифицированная версия</string>
     <string name="create_profile_vanilla_like_versions">Стандартные версии</string>
@@ -309,10 +294,10 @@
     <string name="notif_error_occured_desc">Нажмите для получения дополнительных сведений</string>
     <string name="fabric_dl_only_stable">Только стабильные версии</string>
     <string name="dl_tampered_manifest_title">Предупреждение о проверке файла</string>
-    <string name="dl_tampered_manifest"><![CDATA[Манифест версии игры с зеркала не совпадает с манифестом официальной версии от Mojang, что сигнализирует о возможной подделке данных.<br/>
-        <b>Это небезопасно. Если продолжить, ваши персональные данные могут оказаться под угрозой.</b><br/>
-        Если вы всё же хотите продолжить загрузку с зеркала, нажмите «Отключить проверку манифеста» и попробуйте снова.<br/>
-        Если вы хотите использовать загрузку с официального источника, нажмите «Перейти на официальный источник» и попробуйте снова.<br/>]]></string>
+    <string name="dl_tampered_manifest">Манифест версии игры с зеркала не совпадает с манифестом официальной версии от Mojang, что сигнализирует о возможной подделке данных.&lt;br/&gt;
+        &lt;b&gt;Это небезопасно. Если продолжить, ваши персональные данные могут оказаться под угрозой.&lt;/b&gt;&lt;br/&gt;
+        Если вы всё же хотите продолжить загрузку с зеркала, нажмите «Отключить проверку манифеста» и попробуйте снова.&lt;br/&gt;
+        Если вы хотите использовать загрузку с официального источника, нажмите «Перейти на официальный источник» и попробуйте снова.&lt;br/&gt;</string>
     <string name="dl_turn_off_manifest_checks">Отключить проверку манифеста</string>
     <string name="dl_switch_to_official_site">Перейти на официальный источник</string>
     <string name="preference_download_source_title">Источник загрузки файлов игры</string>
@@ -387,17 +372,12 @@
     <string name="local_login_bad_username_title">Неподходящее имя пользователя</string>
     <string name="local_login_bad_username_text">Имя пользователя должно быть от 3 до 16 символов в длину и содержать только латинские символы, цифры 0–9 или нижние подчёркивания.</string>
     <string name="quick_setting_title">Быстрые настройки</string>
-    <string name="create_bta_instance">Создать установку \"Better than Adventure!\"</string>
-    <string name="select_bta_version">Выбрать версию \"Better than Adventure!\"</string>
+    <string name="create_bta_instance">Создать установку \&quot;Better than Adventure!\&quot;</string>
+    <string name="select_bta_version">Выбрать версию \&quot;Better than Adventure!\&quot;</string>
     <string name="bta_installer_available_versions">Поддерживаемые версии BTA</string>
     <string name="bta_installer_untested_versions">Нетестированные версии BTA</string>
     <string name="bta_installer_nightly_versions">Экспериментальные версии BTA</string>
     <string name="newdl_extracting_native_libraries">Распаковка дополнительных библиотек… (%d/%d)</string>
-    <string name="fabric_dl_cant_read_meta2">Ошибка чтения метаданных Fabric</string>
-    <string name="modloader_dl_install_fabric_instance">Установка с Fabric</string>
-    <string name="modloader_dl_install_quilt_instance">Установка с Quilt</string>
-    <string name="modloader_dl_install_forge_instance">Установка с Forge</string>
-    <string name="social_media_invite" translatable="false">https://t.me/MojoLauncher</string>
     <string name="compat_version_not_supported">Ваше устройство не может запустить эту версию поскольку LTW не поддерживается</string>
     <string name="compat_sodium_not_supported">Ваше устройство не может запустить Sodium на этой версии поскольку LTW не поддерживается</string>
     <string name="oauth_unknown_error">Неизвестная ошибка авторизации</string>
@@ -421,7 +401,7 @@
     <string name="vml_fail_find_hooks">Не найдены нужные методы. Проверьте latestlog.txt</string>
     <string name="vml_fail_insert_hooks">Не возможно зарегистрировать методы: %s</string>
     <string name="vml_fail_load_classpath">Ошибка загрузки списка библиотек. Проверьте latestlog.txt</string>
-    <string name="vml_fail_run_main">Ошибка запуска основоного класса. Проверьте latestlog.txt</string>
+    <string name="vml_fail_run_main">Ошибка запуска основного класса. Проверьте latestlog.txt</string>
     <string name="vml_huh">\???</string>
     <string name="vml_err_ok">Успешно</string>
     <string name="vml_err_unknown">Неизвестная ошибка</string>
@@ -431,16 +411,19 @@
     <string name="vml_err_exists">Виртуальная машина уже загружена</string>
     <string name="vml_err_inval">Неверные аргументы</string>
     <string name="gr_err_renderer_load_Failed">Ошибка загрузки визуализатора</string>
-    <string name="ltw_4x_msaa_warning_msg">Похоже, вы включили настройку \"Включить 4x MSAA\" в разделе \"Для разработчиков\". Пожалуйста отключите её чтобы избежать проблем с визуализацией.</string>
-    <string name="no_instance">Не выбрано установки. Пожалуйста создайте установку или выберите существующую.</string>
+    <string name="ltw_4x_msaa_warning_msg">Похоже, вы включили настройку \&quot;Включить 4x MSAA\&quot; в разделе \&quot;Для разработчиков\&quot;. Пожалуйста отключите её чтобы избежать проблем с визуализацией.</string>
+    <string name="no_instance">Не выбрана установка. Пожалуйста создайте установку или выберите существующую.</string>
+    <string name="downloading_java_runtime_uni">Загрузка Java, стадия 1/2 (%.2f/%.2f МБ)</string>
+    <string name="downloading_java_runtime_platform">Загрузка Java, стадия 2/2 (%.2f/%.2f МБ)</string>
+    <string name="runtime_error_title">Среда выполнения недоступна</string>
+    <string name="runtime_error_missing">Java %d ещё не установлена. Пожалуйста выберете другую совместимую среду выполнения или подключитесь к интернету, чтобы загрузить автоматически</string>
+    <string name="runtime_error_install_failed">Не удалось установить Java %d. Проверьте ваше интернет-соединение и попробуйте снвоа.</string>
     <string name="modloader_dl_install_legacy_fabric_instance">Установка с Legacy Fabric</string>
     <string name="instance_delete">Удалить установку</string>
     <string name="instance_delete_confirmation">Вы уверены что хотите удалить установку? Ваши миры, моды, ресурсы и иные данные находящиеся в папке установки будут удалены. Данное действие не может быть отменено!</string>
     <string name="import_local_modpack">Импорт локальной сборки</string>
     <string name="preference_sysmem_title">Включить принудительную отрисовку в системную память</string>
     <string name="preference_sysmem_summary">Принуждает Turnip/Freedreno отрисовывать графику только в системную память. Включите, если игра работает медленно или вы наблюдаете проблемы отрисовки.</string>
-    <string name="preference_microphone_access_title">Запросить доступ к микрофону</string>
-    <string name="preference_microphone_access_description">Запрашивает у системы доступ к микрофону устройства в игре</string>
     <string name="preference_category_keyboard">Настройки клавиатуры</string>
     <string name="preference_keyboard_autopan_title">Разрешить перемещение окна клавиатурой</string>
     <string name="preference_keyboard_autopan_summary">Разрешает экранной клавиатуре перемещать окно игры, а не перекрывать его, если последнее касание было в зоне появления клавиатуры. Не влияет на явный вызов с перемещением в раскладках.</string>
