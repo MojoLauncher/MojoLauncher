@@ -435,6 +435,14 @@ public final class Tools {
                 .show();
     }
 
+    public static void dialog(final Context context, final int title, final int message) {
+        new AlertDialog.Builder(context)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
+    }
+
     public static void openURL(Activity act, String url) {
         try {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
