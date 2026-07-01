@@ -65,7 +65,7 @@ You can get MojoLauncher via four methods:
 - MojoLauncher is licensed under [GNU LGPLv3](https://github.com/MojoLauncher/MojoLauncher/blob/v3_openjdk/LICENSE).
 
 ## Contributing
-Contributions are welcome! We welcome any type of contribution, not only code. For example, you can help the wiki shape up. You can help the [translation](https://crowdin.com/project/pojavlauncher) too!
+Contributions are welcome! We welcome any type of contribution, not only code. For example, you can help the wiki shape up. You can help the [translation](https://mojolauncher.ru/translate/translator.html) too!
 
 
 Any code change to this repository should be submitted as a pull request. The description should explain what the code does and give steps to execute it.
