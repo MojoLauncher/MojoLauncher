@@ -23,6 +23,7 @@
         <SwitchPreference
             android:defaultValue="false"
             android:key="alsoftForceOpenSL"
+            android:icon="@drawable/ic_px_dynamic"
             android:title="@string/preference_alsoft_opensl_title"
             android:summary="@string/preference_alsoft_opensl_summary"
             />
