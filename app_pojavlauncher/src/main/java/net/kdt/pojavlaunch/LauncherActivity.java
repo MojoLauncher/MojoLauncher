@@ -293,15 +293,17 @@ public class LauncherActivity extends BaseActivity {
     }
 
     private void checkPreviousInstalls(){
-        final String[] packages = {"git.artdeell.mojo", "git.artdeell.mojo.debug", "git.artdeell.mojo.pub"};
         if(LauncherPreferences.PREF_MIGRATION_NOTICE){
-            for(String s : packages){
-                Intent i = getPackageManager().getLaunchIntentForPackage(s);
-                if(i != null){
-                    Tools.dialog(this, R.string.migration_progress_warning_title, R.string.migration_notice);
-                    break;
+            PojavApplication.sExecutorService.submit(() -> {
+                final String[] packages = {"git.artdeell.mojo", "git.artdeell.mojo.debug", "git.artdeell.mojo.pub"};
+                for(String s : packages){
+                    Intent i = getPackageManager().getLaunchIntentForPackage(s);
+                    if(i != null){
+                        Tools.dialogOnUiThread(this, R.string.migration_progress_warning_title, R.string.migration_notice);
+                        break;
+                    }
                 }
-            }
+            });
         }
         LauncherPreferences.DEFAULT_PREF.edit().putBoolean("migrationNotice", false).apply();
     }

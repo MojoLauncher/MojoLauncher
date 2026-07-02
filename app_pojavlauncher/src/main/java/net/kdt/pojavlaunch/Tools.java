@@ -427,6 +427,10 @@ public final class Tools {
         activity.runOnUiThread(()->dialog(activity, title, message));
     }
 
+    public static void dialogOnUiThread(final Activity activity, final int title, final int message) {
+        activity.runOnUiThread(()->dialog(activity, title, message));
+    }
+
     public static void dialog(final Context context, final CharSequence title, final CharSequence message) {
         new AlertDialog.Builder(context)
                 .setTitle(title)
