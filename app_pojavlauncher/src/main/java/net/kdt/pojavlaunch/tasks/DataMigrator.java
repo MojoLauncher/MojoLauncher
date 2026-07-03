@@ -7,6 +7,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.StatFs;
 import android.provider.DocumentsContract;
 import android.util.Log;
 import android.widget.Toast;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 import com.kdt.mcgui.ProgressLayout;
 
 import net.kdt.pojavlaunch.Tools;
+
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +30,7 @@ public class DataMigrator {
     private final Uri uri;
     private final Activity activity;
     private double progress;
+    private static final int MIN_FREE_SPACE = 2048; // required free space in megabytes
     private static final String[] TREE_PROJECTION = {
                 DocumentsContract.Document.COLUMN_DISPLAY_NAME,
                 DocumentsContract.Document.COLUMN_MIME_TYPE,
@@ -59,13 +63,22 @@ public class DataMigrator {
     }
 
     private void executeMigrate(){
+        File root = new File(Tools.DIR_GAME_HOME);
+        StatFs stat = new StatFs(root.getAbsolutePath());
+        long space = stat.getAvailableBytes();
+        if(MIN_FREE_SPACE > space){
+            Tools.dialogOnUiThread(activity, activity.getString(R.string.migration_progress_warning_title),
+                    activity.getString(R.string.migration_progress_space, MIN_FREE_SPACE - space));
+            return;
+        }
         Log.i("DataMigration", "Begin data migration!");
         ProgressLayout.setProgress(ProgressLayout.DATA_MIGRATION, 0);
-        File root = new File(Tools.DIR_GAME_HOME);
         try {
             activity.getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             copyFileTree(activity, getFilesUri(DocumentsContract.buildDocumentUriUsingTree(uri, DocumentsContract.getTreeDocumentId(uri))), root, 100);
             Tools.runOnUiThread(() -> Toast.makeText(activity, R.string.migration_progress_finish, Toast.LENGTH_LONG).show());
+        } catch (RuntimeException e) {
+            // Already handled in copyFileTree
         } catch (Exception e) {
             Log.e("DataMigration", "Failed to import data to the launcher: " + e.getMessage());
             Tools.runOnUiThread(() -> Toast.makeText(activity, R.string.migration_progress_failed, Toast.LENGTH_LONG).show());
@@ -132,6 +145,13 @@ public class DataMigrator {
                     // Ignore files with the same size
                     // I mean this check may trigger for non-equal files, but this is designed only for clean import anyway
                     if(destFile.length() == size) continue;
+                    long required = size + 1000;
+                    long usable = destFile.getUsableSpace();
+                    if(usable < required){
+                        Tools.dialogOnUiThread(activity, activity.getString(R.string.migration_progress_warning_title),
+                                activity.getString(R.string.migration_progress_space, required + MIN_FREE_SPACE));
+                        throw new RuntimeException("Ran out of space!");
+                    }
                     Tools.write(cr.openInputStream(child), destFile);
                 }
                 updateProgress(step, file);
