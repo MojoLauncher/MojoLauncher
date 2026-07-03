@@ -77,8 +77,6 @@ public class DataMigrator {
             activity.getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             copyFileTree(activity, getFilesUri(DocumentsContract.buildDocumentUriUsingTree(uri, DocumentsContract.getTreeDocumentId(uri))), root, 100);
             Tools.runOnUiThread(() -> Toast.makeText(activity, R.string.migration_progress_finish, Toast.LENGTH_LONG).show());
-        } catch (RuntimeException e) {
-            // Already handled in copyFileTree
         } catch (Exception e) {
             Log.e("DataMigration", "Failed to import data to the launcher: " + e.getMessage());
             Tools.runOnUiThread(() -> Toast.makeText(activity, R.string.migration_progress_failed, Toast.LENGTH_LONG).show());
@@ -145,13 +143,6 @@ public class DataMigrator {
                     // Ignore files with the same size
                     // I mean this check may trigger for non-equal files, but this is designed only for clean import anyway
                     if(destFile.length() == size) continue;
-                    long required = size + 1000;
-                    long usable = destFile.getUsableSpace();
-                    if(usable < required){
-                        Tools.dialogOnUiThread(activity, activity.getString(R.string.migration_progress_warning_title),
-                                activity.getString(R.string.migration_progress_space, required + MIN_FREE_SPACE));
-                        throw new RuntimeException("Ran out of space!");
-                    }
                     Tools.write(cr.openInputStream(child), destFile);
                 }
                 updateProgress(step, file);
