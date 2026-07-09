@@ -4,6 +4,8 @@ import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 import android.Manifest;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -182,6 +184,8 @@ public class LauncherActivity extends BaseActivity {
                 }
         );
         checkNotificationPermission();
+        checkPreviousInstalls();
+
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         ProgressKeeper.addTaskCountListener(mDoubleLaunchPreventionListener);
         ProgressKeeper.addTaskCountListener((mProgressServiceKeeper = new ProgressServiceKeeper(this)));
@@ -286,6 +290,22 @@ public class LauncherActivity extends BaseActivity {
             return;
         }
         showNotificationPermissionReasoning();
+    }
+
+    private void checkPreviousInstalls(){
+        if(LauncherPreferences.PREF_MIGRATION_NOTICE){
+            PojavApplication.sExecutorService.submit(() -> {
+                final String[] packages = {"git.artdeell.mojo", "git.artdeell.mojo.debug", "git.artdeell.mojo.pub"};
+                for(String s : packages){
+                    Intent i = getPackageManager().getLaunchIntentForPackage(s);
+                    if(i != null){
+                        Tools.dialogOnUiThread(this, R.string.migration_progress_warning_title, R.string.migration_notice);
+                        break;
+                    }
+                }
+            });
+        }
+        LauncherPreferences.DEFAULT_PREF.edit().putBoolean("migrationNotice", false).apply();
     }
 
     private void showNotificationPermissionReasoning() {
