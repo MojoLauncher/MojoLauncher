@@ -299,13 +299,19 @@ public class LauncherActivity extends BaseActivity {
                 for(String s : packages){
                     Intent i = getPackageManager().getLaunchIntentForPackage(s);
                     if(i != null){
-                        Tools.dialogOnUiThread(this, R.string.migration_progress_warning_title, R.string.migration_notice);
+                        Tools.runOnUiThread(() -> {
+                            new AlertDialog.Builder(this)
+                                    .setTitle(R.string.migration_progress_warning_title)
+                                    .setMessage(R.string.migration_notice)
+                                    .setPositiveButton(android.R.string.ok, (d, button) -> {
+                                        LauncherPreferences.DEFAULT_PREF.edit().putBoolean("migrationNotice", false).apply();
+                                    }).show();
+                        });
                         break;
                     }
                 }
             });
         }
-        LauncherPreferences.DEFAULT_PREF.edit().putBoolean("migrationNotice", false).apply();
     }
 
     private void showNotificationPermissionReasoning() {
