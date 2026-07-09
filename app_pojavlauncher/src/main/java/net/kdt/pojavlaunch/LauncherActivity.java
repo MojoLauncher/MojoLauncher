@@ -184,7 +184,8 @@ public class LauncherActivity extends BaseActivity {
                 }
         );
         checkNotificationPermission();
-        checkPreviousInstalls();
+        if(LauncherPreferences.PREF_MIGRATION_NOTICE)
+            PojavApplication.sExecutorService.submit(this::checkPreviousInstalls);
 
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         ProgressKeeper.addTaskCountListener(mDoubleLaunchPreventionListener);
@@ -292,27 +293,23 @@ public class LauncherActivity extends BaseActivity {
         showNotificationPermissionReasoning();
     }
 
+    // Call async
     private void checkPreviousInstalls(){
-        if(LauncherPreferences.PREF_MIGRATION_NOTICE){
-            PojavApplication.sExecutorService.submit(() -> {
-                final String[] packages = {"git.artdeell.mojo", "git.artdeell.mojo.debug", "git.artdeell.mojo.pub"};
-                for(String s : packages){
-                    Intent i = getPackageManager().getLaunchIntentForPackage(s);
-                    if(i != null){
-                        Tools.runOnUiThread(() -> {
-                            new AlertDialog.Builder(this)
-                                    .setTitle(R.string.migration_progress_warning_title)
-                                    .setMessage(R.string.migration_notice)
-                                    .setPositiveButton(android.R.string.ok, (d, button) -> {
-                                        LauncherPreferences.DEFAULT_PREF.edit().putBoolean("migrationNotice", false).apply();
-                                    }).show();
-                        });
-                        break;
-                    }
-                }
-            });
+        final String[] packages = {"git.artdeell.mojo", "git.artdeell.mojo.debug", "git.artdeell.mojo.pub"};
+        for(String s : packages){
+            Intent i = getPackageManager().getLaunchIntentForPackage(s);
+            if(i == null) continue;
+            Tools.runOnUiThread(() ->
+                    new AlertDialog.Builder(this)
+                        .setTitle(R.string.migration_progress_warning_title)
+                        .setMessage(R.string.migration_notice)
+                        .setPositiveButton(android.R.string.ok,
+                                (d, button) ->
+                                        LauncherPreferences.DEFAULT_PREF.edit()
+                                                .putBoolean("migrationNotice", false).apply()).show());
+            break;
         }
-    }
+}
 
     private void showNotificationPermissionReasoning() {
         new AlertDialog.Builder(this)
