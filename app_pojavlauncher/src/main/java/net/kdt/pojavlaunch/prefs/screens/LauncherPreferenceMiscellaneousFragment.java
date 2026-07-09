@@ -15,6 +15,7 @@ import androidx.preference.Preference;
 import git.artdeell.mojo.R;
 
 import net.kdt.pojavlaunch.LauncherActivity;
+import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
 import net.kdt.pojavlaunch.tasks.DataMigrator;
 import net.kdt.pojavlaunch.utils.GLInfoUtils;
 import net.kdt.pojavlaunch.utils.RendererCompatUtil;
@@ -44,7 +45,7 @@ public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceF
         driverPreference.setVisible(supportsTurnip);
         Preference importPreference = requirePreference("runDataMigration");
         importPreference.setOnPreferenceClickListener(preference -> {
-            if(getLauncherActivity().hasActiveProcesses()) {
+            if(ProgressKeeper.getTaskCount() > 0) {
                 Toast.makeText(getContext(), R.string.tasks_ongoing, Toast.LENGTH_SHORT).show();
                 return true;
             }
