@@ -303,13 +303,12 @@ public class LauncherActivity extends BaseActivity {
                     new AlertDialog.Builder(this)
                         .setTitle(R.string.migration_progress_warning_title)
                         .setMessage(R.string.migration_notice)
-                        .setPositiveButton(android.R.string.ok,
-                                (d, button) ->
-                                        LauncherPreferences.DEFAULT_PREF.edit()
-                                                .putBoolean("migrationNotice", false).apply()).show());
+                        .setPositiveButton(android.R.string.ok, (d, button) -> LauncherPreferences.DEFAULT_PREF.edit().putBoolean("migrationNotice", false).apply())
+                        .setOnDismissListener(d -> LauncherPreferences.PREF_MIGRATION_NOTICE = false)
+                        .show());
             break;
         }
-}
+    }
 
     private void showNotificationPermissionReasoning() {
         new AlertDialog.Builder(this)
