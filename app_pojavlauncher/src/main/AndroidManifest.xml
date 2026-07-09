@@ -137,5 +137,6 @@
         <package android:name="git.mojo.ffmpeg"/>
         <package android:name="git.mojo.angle"/>
         <package android:name="git.mojo.zink"/>
+        <package android:name="git.mojo.natives"/>
     </queries>
 </manifest>
