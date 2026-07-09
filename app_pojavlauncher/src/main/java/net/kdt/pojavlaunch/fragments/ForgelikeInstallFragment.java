@@ -11,6 +11,7 @@ import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.modloaders.ForgelikeUtils;
 import net.kdt.pojavlaunch.modloaders.ForgelikeVersionListAdapter;
 import net.kdt.pojavlaunch.modloaders.ModloaderListenerProxy;
+import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,6 +51,9 @@ public abstract class ForgelikeInstallFragment extends ModVersionListFragment<Li
                 instance.name = mUtils.getName();
                 instance.icon = mUtils.getIconName();
                 instance.installer = instanceInstaller;
+                // Switch the instance renderer to LTW to workaround early window brokeness on GL4ES
+                // Won't affect versions early than 1.17
+                if(instance.getLaunchRenderer().equals("opengles2")) instance.renderer = "opengles3_ltw";
             }, selectedVersion);
             ProgressLayout.clearProgress(ProgressLayout.INSTALL_MODPACK);
             instanceInstaller.start();
