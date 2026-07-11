@@ -34,8 +34,6 @@ public class JavaRunner {
         javaArgList.add("-Dcacio.managed.screensize=" + AWTCanvasView.AWT_CANVAS_WIDTH + "x" + AWTCanvasView.AWT_CANVAS_HEIGHT);
         javaArgList.add("-Dcacio.font.fontmanager=sun.awt.X11FontManager");
         javaArgList.add("-Dcacio.font.fontscaler=sun.font.FreetypeFontScaler");
-
-javaArgList.add("-Duser.language=en");
         javaArgList.add("-Dswing.defaultlaf=javax.swing.plaf.metal.MetalLookAndFeel");
         if (isJava8) {
             javaArgList.add("-Dawt.toolkit=net.java.openjdk.cacio.ctc.CTCToolkit");
@@ -68,7 +66,6 @@ javaArgList.add("-Duser.language=en");
             javaArgList.add("--add-opens=java.desktop/sun.font=ALL-UNNAMED");
             javaArgList.add("--add-opens=java.desktop/sun.java2d=ALL-UNNAMED");
             javaArgList.add("--add-opens=java.base/java.lang.reflect=ALL-UNNAMED");
-javaArgList.add("-Duser.language=en");
             return true;
         }
     }
@@ -106,7 +103,7 @@ javaArgList.add("-Duser.language=en");
                 "-Djava.io.tmpdir=" + Tools.DIR_CACHE.getAbsolutePath(),
                 "-Djna.boot.library.path=" + NATIVE_LIB_DIR,
                 "-Duser.home=" + Tools.DIR_GAME_HOME,
-                "-Duser.language=" + System.getProperty("user.language"),
+                "-Duser.language=en",
                 "-Dos.name=Linux",
                 "-Dos.version=Android-" + Build.VERSION.RELEASE,
                 "-Dpojav.path.minecraft=" + Tools.DIR_GAME_NEW,
