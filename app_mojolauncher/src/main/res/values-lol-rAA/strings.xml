@@ -225,7 +225,7 @@
     <string name="preference_gyro_sample_rate_title">Gyroscope sampling rate</string>
     <string name="preference_gyro_sample_rate_description">if yu hav purrformance issuez wid gyroscopz controlz, increase dis.</string>
     <string name="microsoft_login_retry_later">too many requestz, purrlease try again later.</string>
-    <string name="storage_required">pojavlauncher requirez external storage to be attached. purrlease reconnect it an restart da app.</string>
+    <string name="storage_required">mojavlauncher requirez external storage to be attached. purrlease reconnect it an restart da app.</string>
     <string name="mcl_setting_title_buttonallcaps">only use capital letterz in button labelz</string>
     <string name="mcl_setting_subtitle_buttonallcaps">disable dis if yu want to use lowurcase letturz in yor controlz.</string>
     <string name="preference_shader_dump_title">Enable shader dumping</string>
@@ -257,7 +257,7 @@
     <string name="fabric_dl_install">Install like a pro gamer</string>
     <string name="fabric_dl_cant_read_meta">failed to read %s loader metadata. purrlease try again laturr.</string>
     <string name="create_profile_vanilla_like_versions">Normal block game like versions</string>
-    <string name="create_profile_modded_versions">Mod game version 2024 pojavlauncher</string>
+    <string name="create_profile_modded_versions">Mod game version 2026 mojavlauncher</string>
     <string name="fabric_dl_loader_title">Select versions</string>
     <string name="of_dl_select_version">Select optfine version</string>
     <string name="of_dl_failed_to_scrape">failed to collect data for optifine installashun</string>

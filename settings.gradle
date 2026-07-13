@@ -14,8 +14,8 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name='PojavLauncher'
-include ':app_pojavlauncher'
+rootProject.name='MojoLauncher'
+include ':app_mojolauncher'
 
 include ':forge_installer'
 include ':glfw:android-gradle'

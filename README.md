@@ -2,7 +2,7 @@
 
 <a href="./README_RU.md">Readme на русском</a>
 
-<img src="./app_pojavlauncher/src/main/assets/pojavlauncher.png" align="left" width="150" height="150" alt="MojoLauncher logo">
+<img src="./app_mojolauncher/src/main/assets/mjlauncher.png" align="left" width="150" height="150" alt="MojoLauncher logo">
 
 [![Android CI](https://github.com/MojoLauncher/MojoLauncher/workflows/Android%20CI/badge.svg)](https://github.com/MojoLauncher/MojoLauncher/actions)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/MojoLauncher/MojoLauncher)](https://github.com/MojoLauncher/MojoLauncher/actions)
@@ -41,7 +41,7 @@ You can get MojoLauncher via four methods:
 ## Building   
 * Build the launcher (it will automatically download all required components)
 ```
-./gradlew :app_pojavlauncher:assembleDebug
+./gradlew :app_mojolauncher:assembleDebug
 ```
 (Replace `./gradlew` with `.\gradlew.bat` if you are building on Windows).
 

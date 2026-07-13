@@ -88,7 +88,7 @@ public final class Tools {
     public static final String MAVEN_CENTRAL = "https://maven-central-eu.storage-download.googleapis.com/maven2/";
     public  static final float BYTE_TO_MB = 1024 * 1024;
     public static final Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
-    public static String APP_NAME = "PojavLauncher";
+    public static String APP_NAME = "MojoLauncher";
 
     public static final Gson GLOBAL_GSON = new GsonBuilder().setPrettyPrinting().create();
 
@@ -124,6 +124,7 @@ public final class Tools {
         }
         File externalStorageDirectory = Environment.getExternalStorageDirectory();
         if(externalStorageDirectory == null) return null;
+        // Will use old Pojav root dir not to confuse old installations
         File launcherRoot = new File(externalStorageDirectory,"games/PojavLauncher");
         if(!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState(launcherRoot))) return null;
         return launcherRoot;
