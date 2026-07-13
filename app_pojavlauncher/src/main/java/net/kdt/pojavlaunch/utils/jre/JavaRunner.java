@@ -103,7 +103,7 @@ public class JavaRunner {
                 "-Djava.io.tmpdir=" + Tools.DIR_CACHE.getAbsolutePath(),
                 "-Djna.boot.library.path=" + NATIVE_LIB_DIR,
                 "-Duser.home=" + Tools.DIR_GAME_HOME,
-                "-Duser.language=en",
+                "-Duser.language=en_US",
                 "-Dos.name=Linux",
                 "-Dos.version=Android-" + Build.VERSION.RELEASE,
                 "-Dpojav.path.minecraft=" + Tools.DIR_GAME_NEW,
