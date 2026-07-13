@@ -17,7 +17,7 @@
     <string name="mcl_tab_wiki">Вики</string>
     <string name="mcl_launch_cleancache">Очистка файлов кэша</string>
     <string name="mcl_launch_downloading">Загрузка %s</string>
-    <string name="mcl_launch_downloading_progress">&quot;Загрузка %s (%.2f Мбайт / %.2f Мбайт)&quot;</string>
+    <string name="mcl_launch_downloading_progress">Загрузка %s (%.2f Мбайт / %.2f Мбайт)</string>
     <string name="mcl_launch_download_assets">Подготовка к загрузке ресурсов</string>
     <string name="mcl_options">Опции</string>
     <string name="mcl_option_customcontrol">Раскладка управления</string>
@@ -294,10 +294,10 @@
     <string name="notif_error_occured_desc">Нажмите для получения дополнительных сведений</string>
     <string name="fabric_dl_only_stable">Только стабильные версии</string>
     <string name="dl_tampered_manifest_title">Предупреждение о проверке файла</string>
-    <string name="dl_tampered_manifest">Манифест версии игры с зеркала не совпадает с манифестом официальной версии от Mojang, что сигнализирует о возможной подделке данных.&lt;br/&gt;
-        &lt;b&gt;Это небезопасно. Если продолжить, ваши персональные данные могут оказаться под угрозой.&lt;/b&gt;&lt;br/&gt;
-        Если вы всё же хотите продолжить загрузку с зеркала, нажмите «Отключить проверку манифеста» и попробуйте снова.&lt;br/&gt;
-        Если вы хотите использовать загрузку с официального источника, нажмите «Перейти на официальный источник» и попробуйте снова.&lt;br/&gt;</string>
+    <string name="dl_tampered_manifest"><![CDATA[Манифест версии игры с зеркала не совпадает с манифестом официальной версии от Mojang, что сигнализирует о возможной подделке данных.<br/>
+        <b>Это небезопасно. Если продолжить, ваши персональные данные могут оказаться под угрозой.</b><br/>
+        Если вы всё же хотите продолжить загрузку с зеркала, нажмите «Отключить проверку манифеста» и попробуйте снова.<br/>
+        Если вы хотите использовать загрузку с официального источника, нажмите «Перейти на официальный источник» и попробуйте снова.<br/>]]></string>
     <string name="dl_turn_off_manifest_checks">Отключить проверку манифеста</string>
     <string name="dl_switch_to_official_site">Перейти на официальный источник</string>
     <string name="preference_download_source_title">Источник загрузки файлов игры</string>
@@ -417,7 +417,7 @@
     <string name="downloading_java_runtime_platform">Загрузка Java, стадия 2/2 (%.2f/%.2f МБ)</string>
     <string name="runtime_error_title">Среда выполнения недоступна</string>
     <string name="runtime_error_missing">Java %d ещё не установлена. Пожалуйста выберете другую совместимую среду выполнения или подключитесь к интернету, чтобы загрузить автоматически</string>
-    <string name="runtime_error_install_failed">Не удалось установить Java %d. Проверьте ваше интернет-соединение и попробуйте снвоа.</string>
+    <string name="runtime_error_install_failed">Не удалось установить Java %d. Проверьте ваше интернет-соединение и попробуйте снова.</string>
     <string name="modloader_dl_install_legacy_fabric_instance">Установка с Legacy Fabric</string>
     <string name="instance_delete">Удалить установку</string>
     <string name="instance_delete_confirmation">Вы уверены что хотите удалить установку? Ваши миры, моды, ресурсы и иные данные находящиеся в папке установки будут удалены. Данное действие не может быть отменено!</string>
