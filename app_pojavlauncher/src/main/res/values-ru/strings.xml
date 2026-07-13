@@ -372,8 +372,8 @@
     <string name="local_login_bad_username_title">Неподходящее имя пользователя</string>
     <string name="local_login_bad_username_text">Имя пользователя должно быть от 3 до 16 символов в длину и содержать только латинские символы, цифры 0–9 или нижние подчёркивания.</string>
     <string name="quick_setting_title">Быстрые настройки</string>
-    <string name="create_bta_instance">Создать установку \&quot;Better than Adventure!\&quot;</string>
-    <string name="select_bta_version">Выбрать версию \&quot;Better than Adventure!\&quot;</string>
+    <string name="create_bta_instance">Создать установку \"Better than Adventure!\"</string>
+    <string name="select_bta_version">Выбрать версию \"Better than Adventure!\"</string>
     <string name="bta_installer_available_versions">Поддерживаемые версии BTA</string>
     <string name="bta_installer_untested_versions">Нетестированные версии BTA</string>
     <string name="bta_installer_nightly_versions">Экспериментальные версии BTA</string>
@@ -411,7 +411,7 @@
     <string name="vml_err_exists">Виртуальная машина уже загружена</string>
     <string name="vml_err_inval">Неверные аргументы</string>
     <string name="gr_err_renderer_load_Failed">Ошибка загрузки визуализатора</string>
-    <string name="ltw_4x_msaa_warning_msg">Похоже, вы включили настройку \&quot;Включить 4x MSAA\&quot; в разделе \&quot;Для разработчиков\&quot;. Пожалуйста отключите её чтобы избежать проблем с визуализацией.</string>
+    <string name="ltw_4x_msaa_warning_msg">Похоже, вы включили настройку \"Включить 4x MSAA\" в разделе \"Для разработчиков\". Пожалуйста отключите её чтобы избежать проблем с визуализацией.</string>
     <string name="no_instance">Не выбрана установка. Пожалуйста создайте установку или выберите существующую.</string>
     <string name="downloading_java_runtime_uni">Загрузка Java, стадия 1/2 (%.2f/%.2f МБ)</string>
     <string name="downloading_java_runtime_platform">Загрузка Java, стадия 2/2 (%.2f/%.2f МБ)</string>
