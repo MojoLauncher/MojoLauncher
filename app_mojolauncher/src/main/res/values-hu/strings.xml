@@ -12,7 +12,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Select a mod installer</string>
     <!-- Error messages -->
-    <string name="error_fatal">A pojavlauncher váratlanul kicrashelt</string>
+    <string name="error_fatal">A MJLauncher váratlanul kicrashelt</string>
     <string name="error_no_version">Nincs verzió!</string>
     <string name="error_show_more">Mutass többet</string>
     <string name="error_show_less">Mutass kevesebbet</string>
