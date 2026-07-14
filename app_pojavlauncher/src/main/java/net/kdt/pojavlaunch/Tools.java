@@ -16,6 +16,9 @@ import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Insets;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.net.Uri;
@@ -41,6 +44,9 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.pm.ShortcutInfoCompat;
+import androidx.core.content.pm.ShortcutManagerCompat;
+import androidx.core.graphics.drawable.IconCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -49,6 +55,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import net.kdt.pojavlaunch.instances.Instance;
+import net.kdt.pojavlaunch.instances.InstanceIconProvider;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutorTask;
 import net.kdt.pojavlaunch.utils.HashUtils;
@@ -948,5 +955,34 @@ public final class Tools {
         if(cursorY < visibleHeight)
             return 0;
         return Math.min(imeHeight, cursorY - visibleHeight + padding);
+    }
+
+    // TODO: split
+    public static void createInstanceShortcut(Instance instance, Context context){
+        if(!ShortcutManagerCompat.isRequestPinShortcutSupported(context))
+            return;
+        String uuid = instance.getInstanceRoot().getName();
+        String label = Tools.validOrNullString(instance.name);
+        if(label == null) label = instance.versionId;
+        label = "MJ - " + label;
+        Drawable drawable = InstanceIconProvider.fetchIcon(context.getResources(), instance);
+        IconCompat ic;
+        if(drawable instanceof BitmapDrawable){
+            ic = IconCompat.createWithBitmap(((BitmapDrawable) drawable).getBitmap());
+        } else {
+            ic = null;
+        }
+        Intent target = new Intent(context, TestStorageActivity.class)
+                .setAction(Intent.ACTION_MAIN)
+                .addCategory(Intent.CATEGORY_LAUNCHER)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra("instance", uuid);
+        ShortcutInfoCompat shortcut = new ShortcutInfoCompat.Builder(context, uuid)
+                .setShortLabel(label)
+                .setIcon(ic)
+                .setLongLabel(instance.versionId)
+                .setIntent(target)
+                .build();
+        ShortcutManagerCompat.requestPinShortcut(context, shortcut, null);
     }
 }

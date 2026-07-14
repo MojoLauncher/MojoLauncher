@@ -36,10 +36,10 @@
             <ImageView
                 android:layout_width="@dimen/_14sdp"
                 android:layout_height="@dimen/_14sdp"
-                android:src="@drawable/ic_px_edit"
                 android:background="@drawable/background_icon_edit"
+                android:src="@drawable/ic_px_edit"
                 app:layout_constraintBottom_toBottomOf="@+id/vprof_editor_instance_icon"
-                app:layout_constraintEnd_toEndOf="@+id/vprof_editor_instance_icon"/>
+                app:layout_constraintEnd_toEndOf="@+id/vprof_editor_instance_icon" />
 
             <TextView
                 android:id="@+id/vprof_editor_profile_name_sub"
@@ -55,12 +55,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_large"
                 android:background="@drawable/background_line"
-                android:textSize="@dimen/_13ssp"
-
                 android:ems="10"
+
                 android:hint="@string/unnamed"
                 android:inputType="textPersonName"
                 android:paddingHorizontal="@dimen/padding_heavy"
+                android:textSize="@dimen/_13ssp"
                 app:layout_constraintTop_toBottomOf="@id/vprof_editor_instance_icon" />
 
 
@@ -143,7 +143,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/instance_shared_data"
                 app:layout_constraintBottom_toTopOf="@+id/vprof_editor_data_checkbox_container"
-                app:layout_constraintStart_toStartOf="@+id/vprof_editor_data_checkbox_container"/>
+                app:layout_constraintStart_toStartOf="@+id/vprof_editor_data_checkbox_container" />
 
             <CheckBox
                 android:id="@+id/vprof_editor_data_checkbox_container"
@@ -151,12 +151,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:background="@drawable/background_line"
-                android:paddingHorizontal="@dimen/padding_heavy"
                 android:button="@null"
+                android:paddingHorizontal="@dimen/padding_heavy"
                 android:text="@string/instance_shared_data_off"
                 android:textColor="@color/checkbox_text_color"
                 app:layout_constraintTop_toBottomOf="@+id/vprof_editor_ctrl_spinner"
-                tools:layout_editor_absoluteX="22dp"/>
+                tools:layout_editor_absoluteX="22dp" />
 
 
             <TextView
@@ -193,9 +193,9 @@
                 android:id="@+id/vprof_editor_spinner_runtime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
                 android:background="@drawable/background_line"
                 android:paddingVertical="0px"
-                android:layout_marginTop="32dp"
                 app:layout_constraintTop_toBottomOf="@id/vprof_editor_jre_args"
                 tools:paddingVertical="@dimen/_12sdp" />
 
@@ -230,6 +230,7 @@
 
 
                 app:layout_constraintTop_toBottomOf="@+id/vprof_editor_spinner_runtime"
+                tools:layout_editor_absoluteX="13dp"
                 tools:paddingVertical="@dimen/_12sdp" />
 
             <ImageView
@@ -243,9 +244,20 @@
                 app:layout_constraintEnd_toEndOf="@id/vprof_editor_instance_renderer"
                 app:layout_constraintTop_toTopOf="@id/vprof_editor_instance_renderer" />
 
+            <Button
+                android:id="@+id/vprof_editor_pinshortcut_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="Create shortcut"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/vprof_editor_instance_renderer"
+                tools:layout_editor_absoluteX="13dp" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -269,4 +281,5 @@
             android:layout_marginStart="@dimen/padding_medium"
             android:text="@string/global_delete" />
     </LinearLayout>
+
 </LinearLayout>

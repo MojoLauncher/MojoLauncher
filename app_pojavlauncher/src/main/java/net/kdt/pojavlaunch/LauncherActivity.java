@@ -7,9 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.opengl.Visibility;
 import android.os.Build;
 import android.os.Bundle;
 import android.system.Os;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -108,7 +110,9 @@ public class LauncherActivity extends BaseActivity {
             return false;
         }
 
-        Instance selectedInstance = Instances.loadSelectedInstance();
+        // If we got instance from shortcut use it instead of the selected
+        String autolaunchInstance = getIntent().getStringExtra("instance");
+        Instance selectedInstance = autolaunchInstance == null ? Instances.loadSelectedInstance() : Instances.getInstance(autolaunchInstance, Instance.class);
 
         if(selectedInstance == null) {
             Toast.makeText(this, R.string.no_instance, Toast.LENGTH_LONG).show();
@@ -130,6 +134,7 @@ public class LauncherActivity extends BaseActivity {
             ExtraCore.setValue(ExtraConstants.SELECT_AUTH_METHOD, true);
             return false;
         }
+
         String normalizedVersionId = MoJsonExtras.normalizeVersionId(selectedInstance.versionId);
         JVersionList.Version mcVersion = MoJsonExtras.getListedVersion(normalizedVersionId);
         new MoJsonDownloader().start(
@@ -175,8 +180,14 @@ public class LauncherActivity extends BaseActivity {
 
         IconCacheJanitor.runJanitor();
 
-        getWindow().setBackgroundDrawable(null);
+        String instance = getIntent().getStringExtra("instance");
+
         bindViews();
+        // Hide main launcher UI when launching from shortcut. Progress bar will be still there for tracking launch progress
+        if(instance != null){
+            mFragmentView.setVisibility(View.GONE);
+            mSettingsButton.setVisibility(View.GONE);
+        } else getWindow().setBackgroundDrawable(null);
         mRequestPermissionLauncher = this.registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(),
                 isAllowed -> {
@@ -207,6 +218,11 @@ public class LauncherActivity extends BaseActivity {
         mProgressLayout.observe(ProgressLayout.DOWNLOAD_VERSION_LIST);
         mProgressLayout.observe(ProgressLayout.INSTANCE_INSTALL);
         mProgressLayout.observe(ProgressLayout.DATA_MIGRATION);
+
+        if(instance != null){
+            Log.i("LauncherActivity", "Autolaunching instance " + instance);
+            ProgressKeeper.waitUntilDone(() -> ExtraCore.setValue(ExtraConstants.LAUNCH_GAME, true));
+        }
     }
 
     @Override

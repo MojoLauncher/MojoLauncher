@@ -36,6 +36,9 @@ public class Instances {
             return null;
         }
     }
+    public static <T extends DisplayInstance> T getInstance(String uuid, Class<T> tClass){
+        return read(new File(sInstancePath, uuid), tClass);
+    }
 
     protected static File metadataLocation(File instanceDir) {
         return new File(instanceDir, "mojo_instance.json");
