@@ -307,11 +307,16 @@ public class LauncherGLSurface extends View implements GrabListener, GamepadEnab
             post(this::refreshSize);
             return;
         }
+
         // Use the width and height of the View instead of display dimensions to avoid
         // getting squiched/stretched due to inconsistencies between the layout and
         // screen dimensions.
-        int newWidth = Tools.getDisplayFriendlyRes(getWidth(), LauncherPreferences.PREF_SCALE_FACTOR);
-        int newHeight = Tools.getDisplayFriendlyRes(getHeight(), LauncherPreferences.PREF_SCALE_FACTOR);
+        // Applies only when not using custom resolutions
+        int width = LauncherPreferences.PREF_CUSTOM_RESOLUTION ? Integer.parseInt(LauncherPreferences.PREF_CUSTOM_RES_WIDTH) : getWidth();
+        int height = LauncherPreferences.PREF_CUSTOM_RESOLUTION ? Integer.parseInt(LauncherPreferences.PREF_CUSTOM_RES_HEIGHT) : getHeight();
+
+        int newWidth = Tools.getDisplayFriendlyRes(width, LauncherPreferences.PREF_SCALE_FACTOR);
+        int newHeight = Tools.getDisplayFriendlyRes(height, LauncherPreferences.PREF_SCALE_FACTOR);
         if (newHeight < 1 || newWidth < 1) {
             Log.e("MGLSurface", String.format("Impossible resolution : %dx%d", newWidth, newHeight));
             return;
