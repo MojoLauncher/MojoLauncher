@@ -54,10 +54,11 @@ public class BTADownloadTask implements Runnable {
         int[] intVersion; try {
             intVersion = BTAUtils.parseBTAVersion(mBtaVersion);
         } catch (NumberFormatException e){
-            intVersion = new int[]{0, 0};
+            intVersion = new int[]{7, 3, 0};
         }
         // BTA 7.3+ requires LWJGL3
-        String btaJson = intVersion[0] >= 7 && intVersion[1] >= 3 ?
+        Log.i("BTADownloadTask", "Installing BTA " + intVersion[0] + "." + intVersion[1] + "." + intVersion[2] + ", nightly: " + BTAUtils.isNightlyVersion(mBtaVersion));
+        String btaJson = (intVersion[0] >= 7 && intVersion[1] >= 3) || BTAUtils.isNightlyVersion(mBtaVersion) ?
                 String.format(BASE_JSON_LWJGL3, mBtaVersion.versionName, mBtaVersion.downloadUrl, btaVersionId, LWJGL3_VERSION) :
                 String.format(BASE_JSON, mBtaVersion.versionName, mBtaVersion.downloadUrl, btaVersionId);
         File jsonDir = new File(Tools.DIR_HOME_VERSION, btaVersionId);

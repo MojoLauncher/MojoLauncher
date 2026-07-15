@@ -114,13 +114,29 @@ public class BTAUtils {
     }
 
     public static int[] parseBTAVersion(BTAVersion version) throws NumberFormatException {
-        String semver = version.versionName.replace('v', '\0').replace('_', '.').trim();
-        String[] semverParts = semver.split("\\.");
         int[] ver = new int[3];
-        ver[0] = Integer.parseInt(semverParts[0]); // major
-        ver[1] = Integer.parseInt(semverParts[1]); // minor
-        ver[2] = Integer.parseInt(semverParts[2]); // patch
+        // Release versions always start with "v"
+        if(!isNightlyVersion(version)){
+            String semver = version.versionName.replace('v', '\0').replace('_', '.').trim();
+            String[] semverParts = semver.split("\\.");
+            ver[0] = Integer.parseInt(semverParts[0]); // major
+            ver[1] = Integer.parseInt(semverParts[1]); // minor
+            ver[2] = Integer.parseInt(semverParts[2]); // patch
+        }
+        // Nighties are in format YYYY-MM-DD so let's handle them too
+        else {
+            String[] semverParts = version.versionName.split("-");
+            if(semverParts.length < 3)
+                return ver;
+            ver[0] = Integer.parseInt(semverParts[0]); // major
+            ver[1] = Integer.parseInt(semverParts[1]); // minor
+            ver[2] = Integer.parseInt(semverParts[2]); // patch
+        }
         return ver;
+    }
+    public static boolean isNightlyVersion(BTAVersion version){
+        // Nightly versions do not use generic semver format (v7.3), we can use this
+        return !version.versionName.startsWith("v");
     }
 
     private static class BTAVersionsManifest {
