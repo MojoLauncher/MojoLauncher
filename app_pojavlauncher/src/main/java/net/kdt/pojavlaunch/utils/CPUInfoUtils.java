@@ -21,6 +21,7 @@ public class CPUInfoUtils {
         BRAND_MAP.put("SM8550", "Snapdragon(TM) 8 Gen 2");
         BRAND_MAP.put("SM8450", "Snapdragon(TM) 8 Gen 1");
         BRAND_MAP.put("SM7550", "Snapdragon(TM) 7 Gen 3");
+        BRAND_MAP.put("SM8850", "Snapdragon(TM) 8 Elite Gen 5");
         BRAND_MAP.put("MT6897Z_A/ZA", "Dimensity 8300");
         // same
     }
