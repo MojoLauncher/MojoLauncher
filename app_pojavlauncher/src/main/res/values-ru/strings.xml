@@ -440,4 +440,8 @@
     <string name="migration_progress_space">На вашем устройстве недостаточно места для переноса данных. Освободите как минимум $%1l МБ или больше чтобы продолжить</string>
     <string name="preference_alsoft_opensl_title">Принудительно использовать OpenSL для аудио</string>
     <string name="preference_alsoft_opensl_summary">Включает принудительное использование OpenSL вместо Oboe для ALSoft. Может исправить проблемы с записью звука на некоторых устройствах. Выключите если вы наблюдаете проблемы с записью или воспроизведением звука.</string>
+    <string name="preference_custom_resolution_title">Использовать пользовательское разрешение</string>
+    <string name="preference_custom_resolution_summary">Позволяет ввести пользовательский размер экрана для игры. В случае несоответствия соотношения сторон окно игры будет растянуто</string>
+    <string name="preference_custom_resolution_width">Ширина экрана</string>
+    <string name="preference_custom_resolution_height">Высота экрана</string>
 </resources>

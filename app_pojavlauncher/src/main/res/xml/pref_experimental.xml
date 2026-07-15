@@ -27,5 +27,22 @@
             android:title="@string/preference_alsoft_opensl_title"
             android:summary="@string/preference_alsoft_opensl_summary"
             />
+        <EditTextPreference
+            android:key="customResWidth"
+            android:title="@string/preference_custom_resolution_width"
+            android:defaultValue="320               "
+            android:inputType="number" />
+        <EditTextPreference
+            android:key="customResHeight"
+            android:title="@string/preference_custom_resolution_height"
+            android:defaultValue="240"
+            android:inputType="number" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="customResolution"
+            android:title="@string/preference_custom_resolution_title"
+            android:summary="@string/preference_custom_resolution_summary"
+            />
+
     </PreferenceCategory>
 </PreferenceScreen>

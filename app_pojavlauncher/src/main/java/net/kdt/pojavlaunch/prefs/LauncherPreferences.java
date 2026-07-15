@@ -76,6 +76,9 @@ public class LauncherPreferences {
     public static boolean PREF_KEYBOARD_AUTOPANNING = true;
     public static boolean PREF_MIGRATION_NOTICE = true;
     public static boolean PREF_ALSOFT_FORCE_OPENSL = false;
+    public static boolean PREF_CUSTOM_RESOLUTION = false;
+    public static String PREF_CUSTOM_RES_WIDTH = "";
+    public static String PREF_CUSTOM_RES_HEIGHT = "";
 
 
     public static void loadPreferences(Context ctx) {
@@ -124,6 +127,9 @@ public class LauncherPreferences {
         PREF_ZINK_FORCE_LEGACY = DEFAULT_PREF.getBoolean("zinkForceLegacy", false);
         PREF_MIGRATION_NOTICE = DEFAULT_PREF.getBoolean("migrationNotice", true);
         PREF_ALSOFT_FORCE_OPENSL = DEFAULT_PREF.getBoolean("alsoftForceOpenSL", false);
+        PREF_CUSTOM_RESOLUTION = DEFAULT_PREF.getBoolean("customResolution", false);
+        PREF_CUSTOM_RES_WIDTH = DEFAULT_PREF.getString("customResWidth", "");
+        PREF_CUSTOM_RES_HEIGHT = DEFAULT_PREF.getString("customResHeight", "");
 
         String argLwjglLibname = "-Dorg.lwjgl.opengl.libname=";
         for (String arg : JREUtils.parseJavaArguments(PREF_CUSTOM_JAVA_ARGS)) {
