@@ -24,6 +24,7 @@ public class Instance extends DisplayInstance {
     public InstanceInstaller installer;
     public String renderer;
     public String jvmArgs;
+    public String serverAddress;
     public int argsMode;
     public String selectedRuntime;
     public String controlLayout;
@@ -103,6 +104,9 @@ public class Instance extends DisplayInstance {
             default:
                 throw new RuntimeException("Unknown value for argsMode: "+argsMode);
         }
+    }
+    public String getAutoConnectServer(){
+        return this.serverAddress;
     }
 
     public String getLaunchControls() {
