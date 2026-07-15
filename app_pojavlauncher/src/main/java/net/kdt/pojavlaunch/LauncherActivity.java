@@ -5,6 +5,7 @@ import android.Manifest;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.opengl.Visibility;
@@ -57,6 +58,7 @@ public class LauncherActivity extends BaseActivity {
     public static final String SETTING_FRAGMENT_TAG = "SETTINGS_FRAGMENT";
 
     private FragmentContainerView mFragmentView;
+    private View mAccountSpinnerView;
     private ImageButton mSettingsButton;
     private ProgressLayout mProgressLayout;
     private ProgressServiceKeeper mProgressServiceKeeper;
@@ -110,9 +112,7 @@ public class LauncherActivity extends BaseActivity {
             return false;
         }
 
-        // If we got instance from shortcut use it instead of the selected
-        String autolaunchInstance = getIntent().getStringExtra("instance");
-        Instance selectedInstance = autolaunchInstance == null ? Instances.loadSelectedInstance() : Instances.getInstance(autolaunchInstance, Instance.class);
+        Instance selectedInstance = Instances.loadSelectedInstance();
 
         if(selectedInstance == null) {
             Toast.makeText(this, R.string.no_instance, Toast.LENGTH_LONG).show();
@@ -136,6 +136,35 @@ public class LauncherActivity extends BaseActivity {
         }
 
         String normalizedVersionId = MoJsonExtras.normalizeVersionId(selectedInstance.versionId);
+        JVersionList.Version mcVersion = MoJsonExtras.getListedVersion(normalizedVersionId);
+        new MoJsonDownloader().start(
+                this.getAssets(),
+                mcVersion,
+                normalizedVersionId,
+                new ContextAwareDoneListener(this, normalizedVersionId)
+        );
+        return false;
+    };
+
+    private final ExtraListener<Boolean> mShortcutLaunchListener = (k, v) -> {
+        Instance current = Instances.getInstance(getIntent().getStringExtra("instance"), Instance.class);
+        if(current == null || current.installer != null || !Tools.isValidString(current.versionId)){
+            new AlertDialog.Builder(this)
+                    .setMessage(R.string.shortcut_no_instance)
+                    .setPositiveButton(android.R.string.ok, (d, w) -> {})
+                    .setOnDismissListener(d -> Tools.fullyExit())
+                    .show();
+            return false;
+        }
+        if(Accounts.getCurrent() == null) {
+            new AlertDialog.Builder(this)
+                    .setMessage(R.string.shortcut_no_account)
+                    .setPositiveButton(android.R.string.ok, (d, w) -> {})
+                    .setOnDismissListener(d -> Tools.fullyExit())
+                    .show();
+            return false;
+        }
+        String normalizedVersionId = MoJsonExtras.normalizeVersionId(current.versionId);
         JVersionList.Version mcVersion = MoJsonExtras.getListedVersion(normalizedVersionId);
         new MoJsonDownloader().start(
                 this.getAssets(),
@@ -187,6 +216,7 @@ public class LauncherActivity extends BaseActivity {
         if(instance != null){
             mFragmentView.setVisibility(View.GONE);
             mSettingsButton.setVisibility(View.GONE);
+            mAccountSpinnerView.setVisibility(View.GONE);
         } else getWindow().setBackgroundDrawable(null);
         mRequestPermissionLauncher = this.registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(),
@@ -207,7 +237,7 @@ public class LauncherActivity extends BaseActivity {
         ExtraCore.addExtraListener(ExtraConstants.BACK_PREFERENCE, mBackPreferenceListener);
         ExtraCore.addExtraListener(ExtraConstants.SELECT_AUTH_METHOD, mSelectAuthMethod);
 
-        ExtraCore.addExtraListener(ExtraConstants.LAUNCH_GAME, mLaunchGameListener);
+        ExtraCore.addExtraListener(ExtraConstants.LAUNCH_GAME, instance == null ? mLaunchGameListener : mShortcutLaunchListener);
 
         new AsyncVersionList().getVersionList(versions -> ExtraCore.setValue(ExtraConstants.RELEASE_TABLE, versions));
 
@@ -348,5 +378,6 @@ public class LauncherActivity extends BaseActivity {
         mFragmentView = findViewById(R.id.container_fragment);
         mSettingsButton = findViewById(R.id.setting_button);
         mProgressLayout = findViewById(R.id.progress_layout);
+        mAccountSpinnerView = findViewById(R.id.account_spinner);
     }
 }

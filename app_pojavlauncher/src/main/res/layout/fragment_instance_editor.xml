@@ -249,7 +249,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                android:text="Create shortcut"
+                android:text="@string/pedit_shortcut"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/vprof_editor_instance_renderer"
                 tools:layout_editor_absoluteX="13dp" />
