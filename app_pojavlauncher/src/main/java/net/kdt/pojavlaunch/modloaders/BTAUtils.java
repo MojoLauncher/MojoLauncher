@@ -109,6 +109,16 @@ public class BTAUtils {
         }
     }
 
+    public static int[] parseBTAVersion(BTAVersion version) throws NumberFormatException {
+        String semver = version.versionName.replace('v', '\0').replace('_', '.').trim();
+        String[] semverParts = semver.split("\\.");
+        int[] ver = new int[3];
+        ver[0] = Integer.parseInt(semverParts[0]); // major
+        ver[1] = Integer.parseInt(semverParts[1]); // minor
+        ver[2] = Integer.parseInt(semverParts[2]); // patch
+        return ver;
+    }
+
     private static class BTAVersionsManifest {
         @Keep
         public List<String> versions;

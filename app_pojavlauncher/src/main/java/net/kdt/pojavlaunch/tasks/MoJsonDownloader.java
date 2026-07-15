@@ -257,11 +257,7 @@ public class MoJsonDownloader extends Downloader {
             // Infinite inheritance !?! :noway:
             downloadAndProcessMetadata(assetManager, inheritedVersion, verInfo.inheritsFrom);
         }
-        if(verInfo.excludedLibraries != null){
-            for(String lib : verInfo.excludedLibraries){
-                mAllLibraries.remove(lib);
-            }
-        }
+
 
         JAssets assets = downloadAssetsIndex(verInfo);
         if(assets != null) scheduleAssetDownloads(assets);

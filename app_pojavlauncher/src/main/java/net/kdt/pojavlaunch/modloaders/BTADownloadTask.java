@@ -19,6 +19,8 @@ import java.net.URL;
 
 public class BTADownloadTask implements Runnable {
     private static final String BASE_JSON = "{\"inheritsFrom\":\"b1.7.3\",\"mainClass\":\"net.minecraft.client.Minecraft\",\"libraries\":[{\"name\":\"bta-client:bta-client:%1$s\",\"downloads\":{\"artifact\":{\"path\":\"bta-client/bta-client-%1$s.jar\",\"url\":\"%2$s\"}}}],\"id\":\"%3$s\"}";
+    private static final String BASE_JSON_LWJGL3 = "{\"inheritsFrom\":\"b1.7.3\",\"mainClass\":\"net.minecraft.client.Minecraft\",\"excludedLibraries\":[\"org.lwjgl.lwjgl:lwjgl\",\"org.lwjgl.lwjgl:lwjgl_util\",\"org.lwjgl.lwjgl:lwjgl-platform\"],\"libraries\":[{\"name\":\"bta-client:bta-client:%1$s\",\"downloads\":{\"artifact\":{\"path\":\"bta-client/bta-client-%1$s.jar\",\"url\":\"%2$s\"}}},{\"name\":\"org.lwjgl:lwjgl:%4$s\",\"natives\":{\"android-arm\":\"natives-linux-arm32\",\"android-arm64\":\"natives-linux-arm64\",\"android-x86\":\"natives-linux-x86\",\"android-x86_64\":\"natives-linux\"}},{\"name\":\"org.lwjgl:lwjgl-glfw:%4$s\"},{\"name\":\"org.lwjgl:lwjgl-openal:%4$s\"},{\"name\":\"org.lwjgl:lwjgl-opengl:%4$s\",\"natives\":{\"android-arm\":\"natives-linux-arm32\",\"android-arm64\":\"natives-linux-arm64\",\"android-x86\":\"natives-linux-x86\",\"android-x86_64\":\"natives-linux\"}},{\"name\":\"org.lwjgl:lwjgl-stb:%4$s\",\"natives\":{\"android-arm\":\"natives-linux-arm32\",\"android-arm64\":\"natives-linux-arm64\",\"android-x86\":\"natives-linux-x86\",\"android-x86_64\":\"natives-linux\"}},{\"name\":\"org.lwjgl:lwjgl-tinyfd:%4$s\",\"natives\":{\"android-arm\":\"natives-linux-arm32\",\"android-arm64\":\"natives-linux-arm64\",\"android-x86\":\"natives-linux-x86\",\"android-x86_64\":\"natives-linux\"}}],\"id\":\"%3$s\"}";
+    private static final String LWJGL3_VERSION = "3.3.3";
     private final ModloaderDownloadListener mListener;
     private final BTAUtils.BTAVersion mBtaVersion;
 
@@ -49,7 +51,12 @@ public class BTADownloadTask implements Runnable {
     }
 
     private void createJson(String btaVersionId) throws IOException {
-        String btaJson = String.format(BASE_JSON, mBtaVersion.versionName, mBtaVersion.downloadUrl, btaVersionId);
+        int[] intVersion = BTAUtils.parseBTAVersion(mBtaVersion);
+        // BTA 7.3+ requires LWJGL3
+        Log.i("BTADownloadTask", "BTA Version: " + intVersion[0] + "." + intVersion[1] + "." + intVersion[2]);
+        String btaJson = intVersion[0] >= 7 && intVersion[1] >= 3 ?
+                String.format(BASE_JSON_LWJGL3, mBtaVersion.versionName, mBtaVersion.downloadUrl, btaVersionId, LWJGL3_VERSION) :
+                String.format(BASE_JSON, mBtaVersion.versionName, mBtaVersion.downloadUrl, btaVersionId);
         File jsonDir = new File(Tools.DIR_HOME_VERSION, btaVersionId);
         File jsonFile = new File(jsonDir, btaVersionId+".json");
         FileUtils.ensureDirectory(jsonDir);
