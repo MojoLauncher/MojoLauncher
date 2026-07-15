@@ -24,6 +24,10 @@ public class BTAUtils {
     private static final String BUILD_TYPE_NIGHTLY = "nightly";
     private static final List<String> BTA_TESTED_VERSIONS = new ArrayList<>();
     static {
+        BTA_TESTED_VERSIONS.add("v7.3_04");
+        BTA_TESTED_VERSIONS.add("v7.3_03");
+        BTA_TESTED_VERSIONS.add("v7.3_02");
+        BTA_TESTED_VERSIONS.add("v7.3_01");
         BTA_TESTED_VERSIONS.add("v7.3");
         BTA_TESTED_VERSIONS.add("v7.2_01");
         BTA_TESTED_VERSIONS.add("v7.2");
