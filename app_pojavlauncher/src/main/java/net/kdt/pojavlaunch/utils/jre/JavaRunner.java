@@ -16,6 +16,7 @@ import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.Runtime;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.utils.CPUInfoUtils;
 import net.kdt.pojavlaunch.utils.JREUtils;
 
 import java.io.File;
@@ -109,6 +110,7 @@ public class JavaRunner {
                 "-Dpojav.path.minecraft=" + Tools.DIR_GAME_NEW,
                 "-Dpojav.path.private.account=" + Tools.DIR_ACCOUNT_NEW,
                 "-Duser.timezone=" + TimeZone.getDefault().getID(),
+                "-Dmojo.cpu.brand=" + CPUInfoUtils.getFullString(),
 
                 "-Dorg.lwjgl.vulkan.libname=libvulkan.so",
                 "-Dorg.lwjgl.spvc.libname=spirv-cross-c-shared",

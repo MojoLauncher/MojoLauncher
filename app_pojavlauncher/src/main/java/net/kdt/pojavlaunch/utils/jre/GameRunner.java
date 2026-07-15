@@ -249,6 +249,7 @@ public class GameRunner {
         javaArgList.add("-Dorg.lwjgl.system.SharedLibraryExtractPath="+lwjglExtractDir.getAbsolutePath());
 
         addAuthlibInjectorArgs(javaArgList, account);
+        addOshiPatcherArgs(javaArgList, versionInfo);
 
         javaArgList.addAll(getMoJsonJvmArgs(versionId));
 
@@ -314,6 +315,14 @@ public class GameRunner {
         String injectorUrl = account.authType.injectorUrl;
         if(injectorUrl == null) return;
         javaArgList.add("-javaagent:"+Tools.DIR_DATA+"/authlib-injector/authlib-injector.jar="+injectorUrl);
+    }
+
+    private static void addOshiPatcherArgs(List<String> javaArgList, JVersionList.Version version){
+        // For now: just check if arch isn't x86 (on x86 CPU is detected by OSHI correctly)
+        if(Architecture.isx86Device()) return;
+        File agent = new File(Tools.DIR_DATA, "oshi-patcher/oshi-patcher.jar");
+        if(!agent.exists()) return;
+        javaArgList.add("-javaagent:" + agent.getAbsolutePath());
     }
 
     private static List<String> getMoJsonJvmArgs(String versionName) {
