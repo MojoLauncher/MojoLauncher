@@ -244,10 +244,11 @@
                 app:layout_constraintEnd_toEndOf="@id/vprof_editor_instance_renderer"
                 app:layout_constraintTop_toTopOf="@id/vprof_editor_instance_renderer" />
 
-            <Button
+            <com.kdt.mcgui.MineButton
                 android:id="@+id/vprof_editor_pinshortcut_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
 
                 android:text="@string/pedit_shortcut"
                 app:layout_constraintBottom_toBottomOf="parent"
