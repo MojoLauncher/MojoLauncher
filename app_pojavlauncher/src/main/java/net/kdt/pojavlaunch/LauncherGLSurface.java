@@ -29,11 +29,12 @@ import net.kdt.pojavlaunch.customcontrols.mouse.AndroidPointerCapture;
 import net.kdt.pojavlaunch.customcontrols.mouse.InGUIEventProcessor;
 import net.kdt.pojavlaunch.customcontrols.mouse.InGameEventProcessor;
 import net.kdt.pojavlaunch.customcontrols.mouse.TouchEventProcessor;
+import net.kdt.pojavlaunch.platform.Platform;
+import net.kdt.pojavlaunch.platform.SDLPlatform;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.render.SurfaceProvider;
 import net.kdt.pojavlaunch.render.SurfaceViewSurfaceProvider;
 import net.kdt.pojavlaunch.render.TextureViewSurfaceProvider;
-import net.kdt.pojavlaunch.utils.JREUtils;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
 
 import fr.spse.gamepad_remapper.GamepadHandler;
@@ -84,6 +85,7 @@ public class LauncherGLSurface extends View implements GrabListener, GamepadEnab
     private AndroidPointerCapture mPointerCapture;
     private View mTouchpad;
     private boolean mLastGrabState = false;
+    private Platform mPlatform = new SDLPlatform();
 
     public LauncherGLSurface(Context context) {
         this(context, null);
@@ -92,7 +94,7 @@ public class LauncherGLSurface extends View implements GrabListener, GamepadEnab
     public LauncherGLSurface(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         setFocusable(true);
-        GLFW.setGamepadEnableHandler(this);
+        mPlatform.setGamepadEnableHandler(this);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -139,10 +141,10 @@ public class LauncherGLSurface extends View implements GrabListener, GamepadEnab
 
             // Mouse found
             // Avoid going through the JNI each time.
-            if(GLFW.isGrabbing()) return false;
-            GLFW.cursorX = e.getX(i) / getWidth();
-            GLFW.cursorY = e.getY(i) / getHeight();
-            GLFW.sendMousePos();
+            if(mPlatform.isGrabbing()) return false;
+            mPlatform.setCursorX(e.getX(i) / getWidth());
+            mPlatform.setCursorY(e.getY(i) / getHeight());
+            mPlatform.sendMousePos();
             return true; //mouse event handled successfully
         }
         if (mIngameProcessor == null || mInGUIProcessor == null) return true;
@@ -150,7 +152,7 @@ public class LauncherGLSurface extends View implements GrabListener, GamepadEnab
         // Keep cursor on screen if panning with IME inset
         if(LauncherPreferences.PREF_KEYBOARD_AUTOPANNING && MainActivity.mImeHeight > 0){
             int translationY = Tools.getTranslationFromCursorY(
-                    (int)(GLFW.cursorY * mSurface.getHeight() + 100),
+                    (int)(mPlatform.getCursorY() * mSurface.getHeight() + 100),
                     mSurface.getHeight(),
                     MainActivity.mImeHeight,
                     0
@@ -174,7 +176,7 @@ public class LauncherGLSurface extends View implements GrabListener, GamepadEnab
             mGamepadHandler = new DirectGamepad();
             // Only send this if there was a gamepad event, to avoid forcing users without gamepads through
             // Controlify calibration
-            GLFW.nativeNotifyGamepadConnected();
+           // GLFW.nativeNotifyGamepadConnected();
         }else {
             mGamepadHandler = new Gamepad(inputDevice, DefaultDataProvider.INSTANCE, mTouchpad);
         }
@@ -209,9 +211,9 @@ public class LauncherGLSurface extends View implements GrabListener, GamepadEnab
 
         switch(event.getActionMasked()) {
             case MotionEvent.ACTION_HOVER_MOVE:
-                GLFW.cursorX = (event.getX(mouseCursorIndex) / getWidth());
-                GLFW.cursorY = (event.getY(mouseCursorIndex) / getHeight());
-                GLFW.sendMousePos();
+                mPlatform.setCursorX(event.getX(mouseCursorIndex) / getWidth());
+                mPlatform.setCursorY(event.getY(mouseCursorIndex) / getHeight());
+                mPlatform.sendMousePos();
                 return true;
             case MotionEvent.ACTION_SCROLL:
                 CallbackBridge.sendScroll(event.getAxisValue(MotionEvent.AXIS_HSCROLL), event.getAxisValue(MotionEvent.AXIS_VSCROLL));
@@ -372,7 +374,7 @@ public class LauncherGLSurface extends View implements GrabListener, GamepadEnab
 
     @Override
     public void onSurfaceAvailable(Surface surface) {
-        GLFW.nativeSurfaceCreated(surface);
+        mPlatform.surfaceCreated(surface);
         if(mRefreshOnly) return;
         realStart();
         mRefreshOnly = true;
@@ -380,12 +382,12 @@ public class LauncherGLSurface extends View implements GrabListener, GamepadEnab
 
     @Override
     public void onSurfaceResized() {
-        GLFW.nativeSurfaceUpdated();
+        mPlatform.surfaceUpdated();
     }
 
     @Override
     public void onSurfaceDestroyed() {
-        GLFW.nativeSurfaceDestroyed();
+        mPlatform.surfaceDestroyed();
     }
 
     @Override

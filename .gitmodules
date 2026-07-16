@@ -4,3 +4,6 @@
 [submodule "mojoexec"]
 	path = mojoexec
 	url = https://github.com/MojoLauncher/mojoexec
+[submodule "sdl"]
+	path = sdl
+	url = https://github.com/whitebelyash/MojoSDL
