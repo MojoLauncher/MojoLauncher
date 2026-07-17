@@ -1,5 +1,7 @@
 package net.kdt.pojavlaunch;
 
+import static net.kdt.pojavlaunch.platform.PlatformLibrary.PLATFORM;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.view.Choreographer;
@@ -41,11 +43,11 @@ public class CallbackBridge {
     }
 
     public static void sendMouseKeycode(int button, int modifiers, boolean isDown) {
-        GLFW.sendMouseEvent(button, isDown ? 1 : 0, modifiers);
+        PLATFORM.sendMouseEvent(button, isDown ? 1 : 0, modifiers);
     }
 
     public static void sendScroll(double xoffset, double yoffset) {
-        GLFW.sendScrollEvent(xoffset, yoffset);
+        PLATFORM.sendScrollEvent(xoffset, yoffset);
     }
 
     public static int getCurrentMods() {

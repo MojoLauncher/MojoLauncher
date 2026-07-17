@@ -9,7 +9,7 @@ import git.artdeell.dnbootstrap.glfw.GamepadEnableHandler;
 /*
 Static provider for GLFW
  */
-public class GLFWPlatform implements Platform {
+public class GLFWImpl extends PlatformLibrary{
 
     @Override
     public void surfaceCreated(Surface surface) {
@@ -27,32 +27,19 @@ public class GLFWPlatform implements Platform {
     }
 
     @Override
-    public double getCursorX() {
-        return GLFW.cursorX;
+    public void sendMousePosition() {
+        GLFW.cursorX = PlatformLibrary.cursorX;
+        GLFW.cursorY = PlatformLibrary.cursorY;
+        GLFW.sendMousePos();
     }
 
     @Override
-    public double getCursorY() {
-        return GLFW.cursorY;
+    public void sendMouseEvent(int key, int state, int mods) {
+        GLFW.sendMouseEvent(key, state, mods);
     }
 
     @Override
-    public void setCursorX(double x) {
-        GLFW.cursorX = x;
-    }
-
-    @Override
-    public void setCursorY(double y) {
-        GLFW.cursorY = y;
-    }
-
-    @Override
-    public void sendMousePos() {
-
-    }
-
-    @Override
-    public void sendMouseEvent(int key) {
+    public void sendKeyEvent(int key, int state, int mods, char codepoint) {
 
     }
 

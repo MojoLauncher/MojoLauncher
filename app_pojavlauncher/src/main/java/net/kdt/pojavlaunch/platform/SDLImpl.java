@@ -7,8 +7,7 @@ import git.mojo.sdl.SDLActivity;
 
 import git.artdeell.dnbootstrap.glfw.GamepadEnableHandler;
 
-public class SDLPlatform implements Platform {
-
+public class SDLImpl extends PlatformLibrary {
     static {
         SDL.initialize();
         SDL.setupJNI();
@@ -31,32 +30,13 @@ public class SDLPlatform implements Platform {
     }
 
     @Override
-    public double getCursorX() {
-        return 0;
-    }
-
-    @Override
-    public double getCursorY() {
-        return 0;
-    }
-
-    @Override
-    public void setCursorX(double x) {
+    public void sendMousePosition() {
 
     }
 
-    @Override
-    public void setCursorY(double y) {
-
-    }
 
     @Override
-    public void sendMousePos() {
-
-    }
-
-    @Override
-    public void sendMouseEvent(int key) {
+    public void sendMouseEvent(int key, int state, int mods) {
 
     }
 
