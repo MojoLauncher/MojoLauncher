@@ -2,11 +2,19 @@ package net.kdt.pojavlaunch.platform;
 
 import android.view.Surface;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import git.artdeell.dnbootstrap.glfw.GamepadEnableHandler;
 
 public abstract class PlatformLibrary {
 
     public static PlatformLibrary PLATFORM = null;
+    private static List<PlatformGrabListener> grabListeners = new ArrayList<>();
+    static {
+        grabListeners.add(grabbing -> isGrabbing = grabbing);
+    }
+    private static boolean isGrabbing = false;
     public static double cursorX;
     public static double cursorY;
 
@@ -21,8 +29,20 @@ public abstract class PlatformLibrary {
     public abstract void sendKeyEvent(int key, int state, int mods);
     public abstract void sendKeyEvent(int key, boolean state, int mods);
     public abstract void sendScrollEvent(double x, double y);
-    public abstract boolean isGrabbing();
+    public abstract void sendBulkUnicodeEvent(String text, int mods);
+    public static boolean isGrabbing(){
+        return isGrabbing;
+    }
+
+    static void executeGrabbingListeners(boolean grabbing){
+        for(PlatformGrabListener listener : grabListeners){
+            listener.onGrabState(grabbing);
+        }
+    }
     public abstract void setGamepadEnableHandler(GamepadEnableHandler handler);
+    public static void addGrabListener(PlatformGrabListener pgl){
+        grabListeners.add(pgl);
+    }
 
     public static void setPlatformLibrary(PlatformLibrary library){
         PLATFORM = library;

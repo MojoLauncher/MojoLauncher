@@ -14,15 +14,14 @@ import android.view.ViewParent;
 
 import androidx.annotation.Nullable;
 
-import net.kdt.pojavlaunch.LwjglGlfwKeycode;
+import net.kdt.pojavlaunch.platform.PlatformGrabListener;
+import net.kdt.pojavlaunch.platform.PlatformLibrary;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
 import net.kdt.pojavlaunch.utils.MathUtils;
 
 import net.kdt.pojavlaunch.CallbackBridge;
 
-import git.artdeell.dnbootstrap.glfw.GLFW;
-import git.artdeell.dnbootstrap.glfw.GrabListener;
 
 public class HotbarView extends View implements MCOptionUtils.MCOptionListener, View.OnLayoutChangeListener, Runnable {
     private final TapDetector mDoubleTapDetector = new TapDetector(2, TapDetector.DETECTION_METHOD_DOWN);
@@ -32,7 +31,7 @@ public class HotbarView extends View implements MCOptionUtils.MCOptionListener, 
             KeyEvent.KEYCODE_4, KeyEvent.KEYCODE_5,   KeyEvent.KEYCODE_6,
             KeyEvent.KEYCODE_7, KeyEvent.KEYCODE_8, KeyEvent.KEYCODE_9};
     private final DropGesture mDropGesture = new DropGesture(new Handler(Looper.getMainLooper()));
-    private final GrabListener mGrabListener = new GrabListener() {
+    private final PlatformGrabListener mGrabListener = new PlatformGrabListener() {
         @Override
         public void onGrabState(boolean isGrabbing) {
             mLastIndex = -1;
@@ -80,7 +79,7 @@ public class HotbarView extends View implements MCOptionUtils.MCOptionListener, 
         }
         mGuiScale = MCOptionUtils.getMcScale();
         repositionView();
-        GLFW.addGrabListener(mGrabListener);
+        PlatformLibrary.addGrabListener(mGrabListener);
     }
 
     private void repositionView() {

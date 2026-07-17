@@ -17,9 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.kdt.pojavlaunch.EfficientAndroidLWJGLKeycode;
 
-import git.artdeell.dnbootstrap.glfw.GrabListener;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.platform.PlatformGrabListener;
 
 import android.widget.TextView;
 
@@ -31,7 +31,7 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
     private GamepadEmulatedButton[] mRealButtons;
     private final ArrayAdapter<String> mKeyAdapter;
     private final int mSpecialKeycodeCount;
-    private GrabListener mGamepadGrabListener;
+    private PlatformGrabListener mGamepadGrabListener;
     private boolean mGrabState = false;
     private boolean mOldState = false;
 
@@ -321,7 +321,7 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
     }
 
     @Override
-    public void attachGrabListener(GrabListener grabListener) {
+    public void attachGrabListener(PlatformGrabListener grabListener) {
         mGamepadGrabListener = grabListener;
         grabListener.onGrabState(mGrabState);
     }

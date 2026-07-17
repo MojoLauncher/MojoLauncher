@@ -29,9 +29,10 @@ import net.kdt.pojavlaunch.customcontrols.mouse.AndroidPointerCapture;
 import net.kdt.pojavlaunch.customcontrols.mouse.InGUIEventProcessor;
 import net.kdt.pojavlaunch.customcontrols.mouse.InGameEventProcessor;
 import net.kdt.pojavlaunch.customcontrols.mouse.TouchEventProcessor;
-import net.kdt.pojavlaunch.platform.GLFWImpl;
+import net.kdt.pojavlaunch.platform.PlatformGrabListener;
 import net.kdt.pojavlaunch.platform.PlatformLibrary;
 
+import net.kdt.pojavlaunch.platform.SDLImpl;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.render.SurfaceProvider;
 import net.kdt.pojavlaunch.render.SurfaceViewSurfaceProvider;
@@ -43,7 +44,6 @@ import fr.spse.gamepad_remapper.RemapperManager;
 import fr.spse.gamepad_remapper.RemapperView;
 import git.artdeell.dnbootstrap.glfw.GLFW;
 import git.artdeell.dnbootstrap.glfw.GamepadEnableHandler;
-import git.artdeell.dnbootstrap.glfw.GrabListener;
 import git.artdeell.mojoexec.MojoExec;
 
 import static net.kdt.pojavlaunch.platform.PlatformLibrary.PLATFORM;
@@ -51,7 +51,7 @@ import static net.kdt.pojavlaunch.platform.PlatformLibrary.PLATFORM;
 /**
  * Class dealing with showing minecraft surface and taking inputs to dispatch them to minecraft
  */
-public class LauncherGLSurface extends View implements GrabListener, GamepadEnableHandler, SurfaceProvider.SurfaceCallback {
+public class LauncherGLSurface extends View implements PlatformGrabListener, GamepadEnableHandler, SurfaceProvider.SurfaceCallback {
     /* Gamepad object for gamepad inputs, instantiated on need */
     private GamepadHandler mGamepadHandler;
     /* The RemapperView.Builder object allows you to set which buttons to remap */
@@ -95,7 +95,7 @@ public class LauncherGLSurface extends View implements GrabListener, GamepadEnab
 
     public LauncherGLSurface(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-        PlatformLibrary.setPlatformLibrary(new GLFWImpl());
+        PlatformLibrary.setPlatformLibrary(new SDLImpl());
         setFocusable(true);
         PLATFORM.setGamepadEnableHandler(this);
     }
@@ -337,7 +337,12 @@ public class LauncherGLSurface extends View implements GrabListener, GamepadEnab
 
     @Override
     public void onGrabState(boolean isGrabbing) {
-        post(()->updateGrabState(isGrabbing));
+        if(mLastGrabState != isGrabbing) {
+            Log.i("MGLSurface", "Grabbing state changed! " + mLastGrabState + " -> " + isGrabbing);
+            mCurrentTouchProcessor.cancelPendingActions();
+            mCurrentTouchProcessor = pickEventProcessor(isGrabbing);
+            mLastGrabState = isGrabbing;
+        }
     }
 
     private TouchEventProcessor pickEventProcessor(boolean isGrabbing) {
@@ -345,11 +350,7 @@ public class LauncherGLSurface extends View implements GrabListener, GamepadEnab
     }
 
     private void updateGrabState(boolean isGrabbing) {
-        if(mLastGrabState != isGrabbing) {
-            mCurrentTouchProcessor.cancelPendingActions();
-            mCurrentTouchProcessor = pickEventProcessor(isGrabbing);
-            mLastGrabState = isGrabbing;
-        }
+
     }
 
     @Override
@@ -391,5 +392,11 @@ public class LauncherGLSurface extends View implements GrabListener, GamepadEnab
             mSurfaceReadyListener = listener;
             mSurfaceReadyListenerLock.notifyAll();
         }
+    }
+    public static int getWindowWidth(){
+        return windowWidth;
+    }
+    public static int getWindowHeight(){
+        return windowHeight;
     }
 }

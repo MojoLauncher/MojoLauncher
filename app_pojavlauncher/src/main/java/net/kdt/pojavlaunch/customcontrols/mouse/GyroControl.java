@@ -12,15 +12,14 @@ import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.WindowManager;
 
+import net.kdt.pojavlaunch.platform.PlatformGrabListener;
 import net.kdt.pojavlaunch.platform.PlatformLibrary;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 import java.util.Arrays;
 
-import git.artdeell.dnbootstrap.glfw.GLFW;
-import git.artdeell.dnbootstrap.glfw.GrabListener;
 
-public class GyroControl implements SensorEventListener, GrabListener {
+public class GyroControl implements SensorEventListener, PlatformGrabListener {
     /* How much distance has to be moved before taking into account the gyro */
     private static final float SINGLE_AXIS_LOW_PASS_THRESHOLD = 0.00113F;
     private static final float MULTI_AXIS_LOW_PASS_THRESHOLD = 0.0013F;
@@ -75,7 +74,7 @@ public class GyroControl implements SensorEventListener, GrabListener {
         mCorrectionListener.enable();
         // Avoid going through the JNI each time.
         mShouldHandleEvents = PLATFORM.isGrabbing();
-        GLFW.addGrabListener(this);
+        PlatformLibrary.addGrabListener(this);
     }
 
     public void disable() {

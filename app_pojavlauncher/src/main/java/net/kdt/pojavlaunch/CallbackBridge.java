@@ -14,8 +14,6 @@ import net.kdt.pojavlaunch.platform.PlatformLibrary;
 
 import java.io.File;
 
-import git.artdeell.dnbootstrap.glfw.GLFW;
-
 public class CallbackBridge {
     public static final Choreographer sChoreographer = Choreographer.getInstance();
 
@@ -25,7 +23,7 @@ public class CallbackBridge {
 
     public static void performClick(int button) {
         double ox = PlatformLibrary.cursorX, oy = PlatformLibrary.cursorY;
-        GLFW.sendMouseEvent(button, 1, CallbackBridge.getCurrentMods());
+        PLATFORM.sendMouseEvent(button, 1, CallbackBridge.getCurrentMods());
         sChoreographer.postFrameCallbackDelayed(l -> {
             PlatformLibrary.cursorX = ox;
             PlatformLibrary.cursorY = oy;

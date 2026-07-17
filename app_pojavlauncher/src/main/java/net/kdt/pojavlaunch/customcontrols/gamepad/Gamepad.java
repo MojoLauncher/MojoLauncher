@@ -16,11 +16,9 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
-import net.kdt.pojavlaunch.LwjglGlfwKeycode;
-
-import git.artdeell.dnbootstrap.glfw.GLFW;
 
 import net.kdt.pojavlaunch.CallbackBridge;
+import net.kdt.pojavlaunch.platform.PlatformGrabListener;
 import net.kdt.pojavlaunch.platform.PlatformLibrary;
 
 import static net.kdt.pojavlaunch.Tools.currentDisplayMetrics;
@@ -43,7 +41,7 @@ import fr.spse.gamepad_remapper.GamepadHandler;
 import fr.spse.gamepad_remapper.Settings;
 import git.artdeell.dnbootstrap.glfw.GrabListener;
 
-public class Gamepad implements GrabListener, GamepadHandler {
+public class Gamepad implements PlatformGrabListener, GamepadHandler {
 
     /* Sensitivity, adjusted according to screen size */
     private final double mSensitivityFactor = (1.4 * (1080f/ currentDisplayMetrics.heightPixels));

@@ -3,8 +3,9 @@ package net.kdt.pojavlaunch.customcontrols.gamepad;
 
 import static net.kdt.pojavlaunch.platform.PlatformLibrary.PLATFORM;
 
-import git.artdeell.dnbootstrap.glfw.GLFW;
-import git.artdeell.dnbootstrap.glfw.GrabListener;
+import net.kdt.pojavlaunch.platform.PlatformGrabListener;
+import net.kdt.pojavlaunch.platform.PlatformLibrary;
+
 
 public class DefaultDataProvider implements GamepadDataProvider {
     public static final DefaultDataProvider INSTANCE = new DefaultDataProvider();
@@ -30,7 +31,7 @@ public class DefaultDataProvider implements GamepadDataProvider {
     }
 
     @Override
-    public void attachGrabListener(GrabListener grabListener) {
-        GLFW.addGrabListener(grabListener);
+    public void attachGrabListener(PlatformGrabListener grabListener) {
+        PlatformLibrary.addGrabListener(grabListener);
     }
 }

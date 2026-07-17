@@ -5,6 +5,7 @@ import android.view.KeyEvent;
 import net.kdt.pojavlaunch.LwjglGlfwKeycode;
 
 import net.kdt.pojavlaunch.CallbackBridge;
+import net.kdt.pojavlaunch.platform.PlatformLibrary;
 
 import git.artdeell.dnbootstrap.glfw.GLFW;
 
@@ -22,6 +23,6 @@ public class LwjglCharSender implements CharacterSenderStrategy {
 
     @Override
     public void sendChars(CharSequence chars) {
-        GLFW.sendBulkUnicodeEvent(chars.toString(), CallbackBridge.getCurrentMods());
+        PlatformLibrary.PLATFORM.sendBulkUnicodeEvent(chars.toString(), CallbackBridge.getCurrentMods());
     }
 }

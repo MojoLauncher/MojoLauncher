@@ -124,7 +124,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         // Start the service a bit early
         ContextCompat.startForegroundService(this, gameServiceIntent);
         initLayout(R.layout.activity_basemain);
-        GLFW.addGrabListener(launcherGLView);
+        PlatformLibrary.addGrabListener(launcherGLView);
 
         mGyroControl = new GyroControl(this);
 

@@ -5,6 +5,7 @@ import android.view.MotionEvent;
 import android.view.Surface;
 
 import net.kdt.pojavlaunch.LwjglGlfwKeycode;
+import net.kdt.pojavlaunch.Tools;
 
 import git.artdeell.dnbootstrap.glfw.GLFW;
 import git.artdeell.dnbootstrap.glfw.GamepadEnableHandler;
@@ -13,6 +14,12 @@ import git.artdeell.dnbootstrap.glfw.GamepadEnableHandler;
 Static provider for GLFW
  */
 public class GLFWImpl extends PlatformLibrary{
+
+    static {
+        GLFW.addGrabListener(isGrabbing -> {
+            Tools.runOnUiThread(() -> PlatformLibrary.executeGrabbingListeners(isGrabbing));
+        });
+    }
 
     @Override
     public void surfaceCreated(Surface surface) {
@@ -69,8 +76,8 @@ public class GLFWImpl extends PlatformLibrary{
     }
 
     @Override
-    public boolean isGrabbing() {
-        return GLFW.isGrabbing();
+    public void sendBulkUnicodeEvent(String text, int mods) {
+        GLFW.sendBulkUnicodeEvent(text, mods);
     }
 
     @Override
