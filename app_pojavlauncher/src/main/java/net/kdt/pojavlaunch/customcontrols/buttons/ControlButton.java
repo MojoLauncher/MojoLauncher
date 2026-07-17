@@ -241,15 +241,15 @@ public class ControlButton extends TextView implements ControlInterface {
                 break;
 
             case ControlData.SPECIALBTN_MOUSEPRI:
-                sendMouseButton(LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_LEFT, isDown);
+                sendMouseButton(MotionEvent.BUTTON_PRIMARY, isDown);
                 break;
 
             case ControlData.SPECIALBTN_MOUSEMID:
-                sendMouseButton(LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_MIDDLE, isDown);
+                sendMouseButton(MotionEvent.BUTTON_TERTIARY, isDown);
                 break;
 
             case ControlData.SPECIALBTN_MOUSESEC:
-                sendMouseButton(LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_RIGHT, isDown);
+                sendMouseButton(MotionEvent.BUTTON_SECONDARY, isDown);
                 break;
 
             case ControlData.SPECIALBTN_SCROLLDOWN:

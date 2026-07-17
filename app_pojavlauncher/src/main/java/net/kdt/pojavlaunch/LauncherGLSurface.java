@@ -221,10 +221,8 @@ public class LauncherGLSurface extends View implements GrabListener, GamepadEnab
             case MotionEvent.ACTION_SCROLL:
                 CallbackBridge.sendScroll(event.getAxisValue(MotionEvent.AXIS_HSCROLL), event.getAxisValue(MotionEvent.AXIS_VSCROLL));
                 return true;
-            case MotionEvent.ACTION_BUTTON_PRESS:
-                return sendMouseButtonUnconverted(event.getActionButton(),true);
-            case MotionEvent.ACTION_BUTTON_RELEASE:
-                return sendMouseButtonUnconverted(event.getActionButton(),false);
+            case MotionEvent.ACTION_BUTTON_PRESS: sendMouseButton(event.getActionButton(),true); return true;
+            case MotionEvent.ACTION_BUTTON_RELEASE: sendMouseButton(event.getActionButton(),false); return true;
             default:
                 return false;
         }
@@ -261,7 +259,7 @@ public class LauncherGLSurface extends View implements GrabListener, GamepadEnab
                 ||   (event.getSource() & InputDevice.SOURCE_MOUSE) == InputDevice.SOURCE_MOUSE)  ){
 
             if(eventKeycode == KeyEvent.KEYCODE_BACK){
-                sendMouseButton(LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_RIGHT, event.getAction() == KeyEvent.ACTION_DOWN);
+                sendMouseButton(MotionEvent.BUTTON_SECONDARY, event.getAction() == KeyEvent.ACTION_DOWN);
                 return true;
             }
         }
@@ -279,27 +277,6 @@ public class LauncherGLSurface extends View implements GrabListener, GamepadEnab
 
         // Some events will be generated an infinite number of times when no consumed
         return (event.getFlags() & KeyEvent.FLAG_FALLBACK) == KeyEvent.FLAG_FALLBACK;
-    }
-
-    /** Convert the mouse button, then send it
-     * @return Whether the event was processed
-     */
-    public static boolean sendMouseButtonUnconverted(int button, boolean status) {
-        int glfwButton = -256;
-        switch (button) {
-            case MotionEvent.BUTTON_PRIMARY:
-                glfwButton = LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_LEFT;
-                break;
-            case MotionEvent.BUTTON_TERTIARY:
-                glfwButton = LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_MIDDLE;
-                break;
-            case MotionEvent.BUTTON_SECONDARY:
-                glfwButton = LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_RIGHT;
-                break;
-        }
-        if(glfwButton == -256) return false;
-        sendMouseButton(glfwButton, status);
-        return true;
     }
 
     /** Called when the size need to be set at any point during the surface lifecycle **/

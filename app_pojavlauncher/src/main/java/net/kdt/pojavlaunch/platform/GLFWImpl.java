@@ -1,7 +1,10 @@
 package net.kdt.pojavlaunch.platform;
 
 
+import android.view.MotionEvent;
 import android.view.Surface;
+
+import net.kdt.pojavlaunch.LwjglGlfwKeycode;
 
 import git.artdeell.dnbootstrap.glfw.GLFW;
 import git.artdeell.dnbootstrap.glfw.GamepadEnableHandler;
@@ -34,8 +37,17 @@ public class GLFWImpl extends PlatformLibrary{
     }
 
     @Override
-    public void sendMouseEvent(int key, int state, int mods) {
-        GLFW.sendMouseEvent(key, state, mods);
+    public void sendMouseEvent(int button, int action, int mods) {
+        int glfwButton;
+        switch (button) {
+            case MotionEvent.BUTTON_PRIMARY:    glfwButton = LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_LEFT; break;
+            case MotionEvent.BUTTON_SECONDARY:  glfwButton = LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_RIGHT; break;
+            case MotionEvent.BUTTON_TERTIARY:   glfwButton = LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_MIDDLE; break;
+            // TODO: back/forward buttons from MotionEvent, are they even used?
+            default:
+                glfwButton = 0;
+        }
+        GLFW.sendMouseEvent(glfwButton, action, mods);
     }
 
     @Override

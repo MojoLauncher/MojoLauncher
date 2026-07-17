@@ -69,7 +69,7 @@ public class InGUIEventProcessor extends TouchEventProcessor {
 
                 // Handle single tap on gestures
                 if((!LauncherPreferences.PREF_DISABLE_GESTURES || touchpadDisplayed()) && !mIsMouseDown && singleTap) {
-                    CallbackBridge.performClick(LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_LEFT);
+                    CallbackBridge.performClick(MotionEvent.BUTTON_PRIMARY);
                 }
 
                 if(mIsMouseDown) disableMouse();
@@ -89,12 +89,12 @@ public class InGUIEventProcessor extends TouchEventProcessor {
     }
 
     private void enableMouse() {
-        CallbackBridge.sendMouseButton(LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_LEFT, true);
+        CallbackBridge.sendMouseButton(MotionEvent.BUTTON_PRIMARY, true);
         mIsMouseDown = true;
     }
 
     private void disableMouse() {
-        CallbackBridge.sendMouseButton(LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_LEFT, false);
+        CallbackBridge.sendMouseButton(MotionEvent.BUTTON_PRIMARY, false);
         mIsMouseDown = false;
     }
 

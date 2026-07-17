@@ -108,10 +108,8 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_MOVE:
                 return true;
-            case MotionEvent.ACTION_BUTTON_PRESS:
-                return LauncherGLSurface.sendMouseButtonUnconverted(event.getActionButton(), true);
-            case MotionEvent.ACTION_BUTTON_RELEASE:
-                return LauncherGLSurface.sendMouseButtonUnconverted(event.getActionButton(), false);
+            case MotionEvent.ACTION_BUTTON_PRESS: CallbackBridge.sendMouseButton(event.getActionButton(), true); return true;
+            case MotionEvent.ACTION_BUTTON_RELEASE: CallbackBridge.sendMouseButton(event.getActionButton(), false); return true;
             case MotionEvent.ACTION_SCROLL:
                 CallbackBridge.sendScroll(
                         event.getAxisValue(MotionEvent.AXIS_HSCROLL),
