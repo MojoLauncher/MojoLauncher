@@ -19,6 +19,15 @@ add_subdirectory(glfw)
 
 target_compile_options(glfw PRIVATE -Wno-nullability-completeness)
 
+# ------   SDL   ------
+
+set(SDL_SHARED       ON CACHE BOOL "" FORCE)
+set(SDL_VIDEO        ON CACHE BOOL "" FORCE)
+set(SDL_STATIC       OFF CACHE BOOL "" FORCE)
+set(SDL3_MAINPROJECT OFF CACHE BOOL "" FORCE)
+add_subdirectory(sdl)
+target_link_libraries(SDL3-shared PRIVATE mojoexec)
+
 # ----------------------
 
 project("MojoLauncher")
