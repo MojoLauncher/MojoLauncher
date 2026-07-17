@@ -15,7 +15,8 @@ Static provider for GLFW
  */
 public class GLFWImpl extends PlatformLibrary{
 
-    static {
+
+    public static void initialize() {
         GLFW.addGrabListener(isGrabbing -> {
             Tools.runOnUiThread(() -> PlatformLibrary.executeGrabbingListeners(isGrabbing));
         });

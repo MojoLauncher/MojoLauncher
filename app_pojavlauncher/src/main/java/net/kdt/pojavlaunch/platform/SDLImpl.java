@@ -13,7 +13,7 @@ import git.artdeell.dnbootstrap.glfw.GamepadEnableHandler;
 import git.mojo.sdl.SDLInputConnection;
 
 public class SDLImpl extends PlatformLibrary {
-    static {
+    public static void initialize() {
         SDL.initialize();
         SDL.setupJNI();
         SDLActivity.addGrabListener(isGrabbing -> {

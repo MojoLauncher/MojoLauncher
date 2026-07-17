@@ -117,6 +117,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             finish();
             return;
         }
+        PlatformLibrary.initializeCallbacks();
         AsyncAssetManager.extractDefaultSettings(this, instance.getGameDirectory());
         MCOptionUtils.load(instance.getGameDirectory().getAbsolutePath());
 
@@ -124,7 +125,6 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         // Start the service a bit early
         ContextCompat.startForegroundService(this, gameServiceIntent);
         initLayout(R.layout.activity_basemain);
-        PlatformLibrary.addGrabListener(launcherGLView);
 
         mGyroControl = new GyroControl(this);
 

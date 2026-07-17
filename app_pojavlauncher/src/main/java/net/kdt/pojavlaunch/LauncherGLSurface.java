@@ -95,9 +95,8 @@ public class LauncherGLSurface extends View implements PlatformGrabListener, Gam
 
     public LauncherGLSurface(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-        PlatformLibrary.setPlatformLibrary(new SDLImpl());
-        setFocusable(true);
-        PLATFORM.setGamepadEnableHandler(this);
+            setFocusable(true);
+        //PLATFORM.setGamepadEnableHandler(this);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -355,7 +354,8 @@ public class LauncherGLSurface extends View implements PlatformGrabListener, Gam
 
     @Override
     public void onSurfaceAvailable(Surface surface) {
-        PLATFORM.surfaceCreated(surface);
+        PlatformLibrary.addGrabListener(this);
+        PlatformLibrary.setPendingSurface(surface);
         if(mRefreshOnly) return;
         realStart();
         mRefreshOnly = true;
@@ -363,12 +363,14 @@ public class LauncherGLSurface extends View implements PlatformGrabListener, Gam
 
     @Override
     public void onSurfaceResized() {
-        PLATFORM.surfaceUpdated();
+        if(PLATFORM != null)
+            PLATFORM.surfaceUpdated();
     }
 
     @Override
     public void onSurfaceDestroyed() {
-        PLATFORM.surfaceDestroyed();
+        if(PLATFORM != null)
+            PLATFORM.surfaceDestroyed();
     }
 
     @Override

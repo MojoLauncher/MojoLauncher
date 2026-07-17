@@ -5,9 +5,17 @@ import android.view.Surface;
 import java.util.ArrayList;
 import java.util.List;
 
+import git.artdeell.dnbootstrap.glfw.GLFW;
 import git.artdeell.dnbootstrap.glfw.GamepadEnableHandler;
+import git.mojo.sdl.SDLActivity;
 
 public abstract class PlatformLibrary {
+    public static void initializeCallbacks(){
+        GLFW.setInitCallback(() -> setPlatformLibrary(new GLFWImpl()));
+        SDLActivity.setInitCallback(() -> setPlatformLibrary(new SDLImpl()));
+        GLFWImpl.initialize();
+        SDLImpl.initialize();
+    }
 
     public static PlatformLibrary PLATFORM = null;
     private static List<PlatformGrabListener> grabListeners = new ArrayList<>();
@@ -17,6 +25,8 @@ public abstract class PlatformLibrary {
     private static boolean isGrabbing = false;
     public static double cursorX;
     public static double cursorY;
+    private static Surface mPendingSurface;
+
 
 
     public abstract void surfaceCreated(Surface surface);
@@ -33,6 +43,9 @@ public abstract class PlatformLibrary {
     public static boolean isGrabbing(){
         return isGrabbing;
     }
+    public static void setPendingSurface(Surface surface){
+        mPendingSurface = surface;
+    }
 
     static void executeGrabbingListeners(boolean grabbing){
         for(PlatformGrabListener listener : grabListeners){
@@ -46,6 +59,8 @@ public abstract class PlatformLibrary {
 
     public static void setPlatformLibrary(PlatformLibrary library){
         PLATFORM = library;
+        if(mPendingSurface != null)
+            PLATFORM.surfaceCreated(mPendingSurface);
     }
 
 }
