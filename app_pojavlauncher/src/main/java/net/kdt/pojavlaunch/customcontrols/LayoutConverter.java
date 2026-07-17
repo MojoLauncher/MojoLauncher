@@ -45,6 +45,9 @@ public class LayoutConverter {
                     return convertV6_7Layout(layoutJobj);
                 }
                 else if (version == 8) {
+                    return convertV8Layout(Tools.GLOBAL_GSON.fromJson(jsonLayoutData, CustomControls.class));
+                }
+                else if(version == 9) {
                     return Tools.GLOBAL_GSON.fromJson(jsonLayoutData, CustomControls.class);
                 }
             }
@@ -184,6 +187,41 @@ public class LayoutConverter {
         empty.scaledAt = (float) oldLayoutJson.getDouble("scaledAt");
         empty.version = 3;
         return empty;
+    }
+
+    private static CustomControls convertV8Layout(CustomControls layout){
+        if(layout.version != 8)
+            return layout;
+        if(layout.mControlDataList != null){
+            for(ControlData data : layout.mControlDataList){
+                convertKeycodes(data.keycodes);
+            }
+        }
+        if(layout.mDrawerDataList != null){
+            for(ControlDrawerData drawerData : layout.mDrawerDataList){
+                convertKeycodes(drawerData.properties.keycodes);
+                if(drawerData.buttonProperties != null){
+                    for(ControlData data : drawerData.buttonProperties){
+                        convertKeycodes(data.keycodes);
+                    }
+                }
+            }
+        }
+        if(layout.mJoystickDataList != null){
+            for(ControlJoystickData data : layout.mJoystickDataList){
+                convertKeycodes(data.keycodes);
+            }
+        }
+        layout.version = 9;
+        return layout;
+    }
+
+    private static int[] convertKeycodes(int[] keycodes){
+        for(int i = 0; i < keycodes.length; i++){
+            if(keycodes[i] > 0)
+                keycodes[i] = Tools.KeyCodeFromGLFW(keycodes[i]);
+        }
+        return keycodes;
     }
 
 

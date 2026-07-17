@@ -1,5 +1,7 @@
 package net.kdt.pojavlaunch.customcontrols.mouse;
 
+import static net.kdt.pojavlaunch.platform.PlatformLibrary.PLATFORM;
+
 import android.os.Build;
 import android.view.InputDevice;
 import android.view.MotionEvent;
@@ -12,6 +14,7 @@ import net.kdt.pojavlaunch.LauncherGLSurface;
 import net.kdt.pojavlaunch.Tools;
 
 import net.kdt.pojavlaunch.CallbackBridge;
+import net.kdt.pojavlaunch.platform.PlatformLibrary;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 import git.artdeell.dnbootstrap.glfw.GLFW;
@@ -85,7 +88,7 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
         }
 
         // Avoid going through the JNI each time.
-        if(!GLFW.isGrabbing()) {
+        if(!PLATFORM.isGrabbing()) {
             enableTouchpadIfNecessary();
             // Yes, if the user's touchpad is multi-touch we will also receive events for that.
             // So, handle the scrolling gesture ourselves.
@@ -124,9 +127,9 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
     }
 
     private void applyMotionVector(View view, float speed) {
-        GLFW.cursorX += mVector[0] * speed / view.getWidth();
-        GLFW.cursorY += mVector[1] * speed / view.getHeight();
-        GLFW.sendMousePos();
+        PlatformLibrary.cursorX += mVector[0] * speed / view.getWidth();
+        PlatformLibrary.cursorY += mVector[1] * speed / view.getHeight();
+        PLATFORM.sendMousePosition();
     }
 
     private void checkSameDevice(InputDevice inputDevice) {

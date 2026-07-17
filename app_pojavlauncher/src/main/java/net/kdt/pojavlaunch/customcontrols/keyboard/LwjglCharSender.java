@@ -1,5 +1,7 @@
 package net.kdt.pojavlaunch.customcontrols.keyboard;
 
+import android.view.KeyEvent;
+
 import net.kdt.pojavlaunch.LwjglGlfwKeycode;
 
 import net.kdt.pojavlaunch.CallbackBridge;
@@ -10,12 +12,12 @@ import git.artdeell.dnbootstrap.glfw.GLFW;
 public class LwjglCharSender implements CharacterSenderStrategy {
     @Override
     public void sendBackspace() {
-        CallbackBridge.sendKeyPress(LwjglGlfwKeycode.GLFW_KEY_BACKSPACE);
+        CallbackBridge.sendKeyPress(KeyEvent.KEYCODE_DEL);
     }
 
     @Override
     public void sendEnter() {
-        CallbackBridge.sendKeyPress(LwjglGlfwKeycode.GLFW_KEY_ENTER);
+        CallbackBridge.sendKeyPress(KeyEvent.KEYCODE_ENTER);
     }
 
     @Override

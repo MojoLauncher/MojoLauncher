@@ -41,6 +41,26 @@ public class SDLImpl extends PlatformLibrary {
     }
 
     @Override
+    public void sendKeyEvent(int key, int state, int mods, char codepoint) {
+
+    }
+
+    @Override
+    public void sendKeyEvent(int key, int state, int mods) {
+
+    }
+
+    @Override
+    public void sendKeyEvent(int key, boolean state, int mods) {
+
+    }
+
+    @Override
+    public void sendScrollEvent(double x, double y) {
+
+    }
+
+    @Override
     public boolean isGrabbing() {
         return false;
     }

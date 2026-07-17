@@ -18,6 +18,8 @@ public abstract class PlatformLibrary {
     public abstract void sendMousePosition();
     public abstract void sendMouseEvent(int key, int state, int mods);
     public abstract void sendKeyEvent(int key, int state, int mods, char codepoint);
+    public abstract void sendKeyEvent(int key, int state, int mods);
+    public abstract void sendKeyEvent(int key, boolean state, int mods);
     public abstract void sendScrollEvent(double x, double y);
     public abstract boolean isGrabbing();
     public abstract void setGamepadEnableHandler(GamepadEnableHandler handler);

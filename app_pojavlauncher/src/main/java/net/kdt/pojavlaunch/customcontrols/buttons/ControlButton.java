@@ -12,6 +12,7 @@ import android.graphics.PorterDuff;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -32,6 +33,7 @@ import net.kdt.pojavlaunch.CallbackBridge;
 
 import static net.kdt.pojavlaunch.customcontrols.buttons.BackgroundTint.DEFAULT_TINT_LIST;
 import static net.kdt.pojavlaunch.customcontrols.buttons.BackgroundTint.TOGGLE_TINT_LIST;
+import static net.kdt.pojavlaunch.platform.PlatformLibrary.PLATFORM;
 
 @SuppressLint({"ViewConstructor", "AppCompatCustomView"})
 public class ControlButton extends TextView implements ControlInterface {
@@ -209,10 +211,10 @@ public class ControlButton extends TextView implements ControlInterface {
     public void sendKeyPresses(boolean isDown){
         setActivated(isDown);
         for(int keycode : mProperties.keycodes){
-            if(keycode >= GLFW_KEY_UNKNOWN){
+            if(keycode >= KeyEvent.KEYCODE_UNKNOWN){
                 CallbackBridge.setModifiers(keycode, isDown);
                 int modifiers = CallbackBridge.getCurrentMods();
-                GLFW.sendKeyEvent(keycode, isDown, modifiers);
+                PLATFORM.sendKeyEvent(keycode, isDown ? 1 : 0, modifiers);
             }else{
                 Log.i("punjabilauncher", "sendSpecialKey("+keycode+","+isDown+")");
                 sendSpecialKey(keycode, isDown);

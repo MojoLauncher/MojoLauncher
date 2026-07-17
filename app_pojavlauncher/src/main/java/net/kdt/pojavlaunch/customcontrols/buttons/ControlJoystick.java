@@ -9,8 +9,10 @@ import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTI
 import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTION_SOUTH_EAST;
 import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTION_SOUTH_WEST;
 import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTION_WEST;
+import static net.kdt.pojavlaunch.platform.PlatformLibrary.PLATFORM;
 
 import android.annotation.SuppressLint;
+import android.view.KeyEvent;
 import android.view.View;
 
 import net.kdt.pojavlaunch.LwjglGlfwKeycode;
@@ -30,11 +32,11 @@ import io.github.controlwear.virtual.joystick.android.JoystickView;
 public class ControlJoystick extends JoystickView implements ControlInterface {
     public final static int DIRECTION_FORWARD_LOCK = 8;
     // Directions keycode
-    private final int[] mDirectionForwardLock = new int[]{LwjglGlfwKeycode.GLFW_KEY_LEFT_CONTROL};
-    private final int[] mDirectionForward = new int[]{LwjglGlfwKeycode.GLFW_KEY_W};
-    private final int[] mDirectionRight = new int[]{LwjglGlfwKeycode.GLFW_KEY_D};
-    private final int[] mDirectionBackward = new int[]{LwjglGlfwKeycode.GLFW_KEY_S};
-    private final int[] mDirectionLeft = new int[]{LwjglGlfwKeycode.GLFW_KEY_A};
+    private final int[] mDirectionForwardLock = new int[]{KeyEvent.KEYCODE_CTRL_LEFT};
+    private final int[] mDirectionForward = new int[]{KeyEvent.KEYCODE_W};
+    private final int[] mDirectionRight = new int[]{KeyEvent.KEYCODE_D};
+    private final int[] mDirectionBackward = new int[]{KeyEvent.KEYCODE_S};
+    private final int[] mDirectionLeft = new int[]{KeyEvent.KEYCODE_A};
     private ControlJoystickData mControlData;
     private int mLastDirectionInt = GamepadJoystick.DIRECTION_NONE;
     private int mCurrentDirectionInt = GamepadJoystick.DIRECTION_NONE;
@@ -46,7 +48,7 @@ public class ControlJoystick extends JoystickView implements ControlInterface {
     private static void sendInput(int[] keys, boolean isDown) {
         for (int key : keys) {
             int modifiers = CallbackBridge.getCurrentMods();
-            GLFW.sendKeyEvent(key, isDown, modifiers);
+            PLATFORM.sendKeyEvent(key, isDown, modifiers);
         }
     }
 

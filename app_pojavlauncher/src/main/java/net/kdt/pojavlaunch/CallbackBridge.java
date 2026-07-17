@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import androidx.annotation.Keep;
 
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
+import net.kdt.pojavlaunch.platform.PlatformLibrary;
 
 import java.io.File;
 
@@ -23,19 +24,19 @@ public class CallbackBridge {
             holdingNumlock, holdingShift;
 
     public static void performClick(int button) {
-        double ox = GLFW.cursorX, oy = GLFW.cursorY;
+        double ox = PlatformLibrary.cursorX, oy = PlatformLibrary.cursorY;
         GLFW.sendMouseEvent(button, 1, CallbackBridge.getCurrentMods());
         sChoreographer.postFrameCallbackDelayed(l -> {
-            GLFW.cursorX = ox;
-            GLFW.cursorY = oy;
-            GLFW.sendMouseEvent(button, 0, CallbackBridge.getCurrentMods());
+            PlatformLibrary.cursorX = ox;
+            PlatformLibrary.cursorY = oy;
+            PLATFORM.sendMouseEvent(button, 0, CallbackBridge.getCurrentMods());
         }, 33);
     }
 
 
     public static void sendKeyPress(int keyCode) {
-        GLFW.sendKeyEvent(keyCode, true, getCurrentMods());
-        GLFW.sendKeyEvent(keyCode, false, getCurrentMods());
+        PLATFORM.sendKeyEvent(keyCode, true, getCurrentMods());
+        PLATFORM.sendKeyEvent(keyCode, false, getCurrentMods());
     }
 
     public static void sendMouseButton(int button, boolean status) {
@@ -76,23 +77,23 @@ public class CallbackBridge {
 
     public static void setModifiers(int keyCode, boolean isDown){
         switch (keyCode){
-            case LwjglGlfwKeycode.GLFW_KEY_LEFT_SHIFT:
+            case KeyEvent.KEYCODE_SHIFT_LEFT:
                 CallbackBridge.holdingShift = isDown;
                 return;
 
-            case LwjglGlfwKeycode.GLFW_KEY_LEFT_CONTROL:
+            case KeyEvent.KEYCODE_CTRL_LEFT:
                 CallbackBridge.holdingCtrl = isDown;
                 return;
 
-            case LwjglGlfwKeycode.GLFW_KEY_LEFT_ALT:
+            case KeyEvent.KEYCODE_ALT_LEFT:
                 CallbackBridge.holdingAlt = isDown;
                 return;
 
-            case LwjglGlfwKeycode.GLFW_KEY_CAPS_LOCK:
+            case KeyEvent.KEYCODE_CAPS_LOCK:
                 CallbackBridge.holdingCapslock = isDown;
                 return;
 
-            case LwjglGlfwKeycode.GLFW_KEY_NUM_LOCK:
+            case KeyEvent.KEYCODE_NUM_LOCK:
                 CallbackBridge.holdingNumlock = isDown;
         }
     }

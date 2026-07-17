@@ -21,6 +21,7 @@ import net.kdt.pojavlaunch.LwjglGlfwKeycode;
 import git.artdeell.dnbootstrap.glfw.GLFW;
 
 import net.kdt.pojavlaunch.CallbackBridge;
+import net.kdt.pojavlaunch.platform.PlatformLibrary;
 
 import static net.kdt.pojavlaunch.Tools.currentDisplayMetrics;
 import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTION_EAST;
@@ -33,6 +34,7 @@ import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTI
 import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTION_SOUTH_WEST;
 import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTION_WEST;
 import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.isJoystickEvent;
+import static net.kdt.pojavlaunch.platform.PlatformLibrary.PLATFORM;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_DEADZONE_SCALE;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_SCALE_FACTOR;
 import static net.kdt.pojavlaunch.CallbackBridge.sendMouseButton;
@@ -97,8 +99,8 @@ public class Gamepad implements GrabListener, GamepadHandler {
         mMapProvider = mapProvider;
         mTouchpadView = touchpadView;
 
-        GLFW.cursorX = GLFW.cursorY = 0.5;
-        GLFW.sendMousePos();
+        PlatformLibrary.cursorX = PlatformLibrary.cursorY = 0.5;
+        PLATFORM.sendMousePosition();
 
         enableTouchpadIfNecessary();
 
@@ -116,7 +118,7 @@ public class Gamepad implements GrabListener, GamepadHandler {
         mCurrentMap = mGameMap;
         // Force state refresh
         // Avoid going through the JNI each time.
-        boolean currentGrab = GLFW.isGrabbing();
+        boolean currentGrab = PLATFORM.isGrabbing();
         isGrabbing = !currentGrab;
         onGrabState(currentGrab);
     }
@@ -154,7 +156,7 @@ public class Gamepad implements GrabListener, GamepadHandler {
 
                 default:
                     CallbackBridge.setModifiers(keycode, isDown);
-                    GLFW.sendKeyEvent(keycode, isDown, CallbackBridge.getCurrentMods());
+                    PLATFORM.sendKeyEvent(keycode, isDown, CallbackBridge.getCurrentMods());
                     break;
             }
         }
@@ -192,11 +194,11 @@ public class Gamepad implements GrabListener, GamepadHandler {
             deltaX *= deltaTimeScale;
             deltaY *= deltaTimeScale;
 
-            GLFW.cursorX += deltaX / 1000;
-            GLFW.cursorY -= deltaY / 1000;
+            PlatformLibrary.cursorX += deltaX / 1000;
+            PlatformLibrary.cursorY -= deltaY / 1000;
 
             //Send the mouse to the game
-            GLFW.sendMousePos();
+            PLATFORM.sendMousePosition();
         }
 
         // Update last nano time
@@ -407,7 +409,7 @@ public class Gamepad implements GrabListener, GamepadHandler {
 
             default:
                 int modifiers = CallbackBridge.getCurrentMods();
-                GLFW.sendKeyEvent(LwjglGlfwKeycode.GLFW_KEY_SPACE, isKeyEventDown, modifiers);
+                PLATFORM.sendKeyEvent(KeyEvent.KEYCODE_SPACE, isKeyEventDown, modifiers);
                 break;
         }
     }

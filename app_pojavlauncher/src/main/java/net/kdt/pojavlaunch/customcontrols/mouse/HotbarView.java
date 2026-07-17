@@ -1,9 +1,12 @@
 package net.kdt.pojavlaunch.customcontrols.mouse;
 
+import static net.kdt.pojavlaunch.platform.PlatformLibrary.PLATFORM;
+
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +28,9 @@ public class HotbarView extends View implements MCOptionUtils.MCOptionListener, 
     private final TapDetector mDoubleTapDetector = new TapDetector(2, TapDetector.DETECTION_METHOD_DOWN);
     private View mParentView;
     private static final int[] HOTBAR_KEYS = {
-            LwjglGlfwKeycode.GLFW_KEY_1, LwjglGlfwKeycode.GLFW_KEY_2,   LwjglGlfwKeycode.GLFW_KEY_3,
-            LwjglGlfwKeycode.GLFW_KEY_4, LwjglGlfwKeycode.GLFW_KEY_5,   LwjglGlfwKeycode.GLFW_KEY_6,
-            LwjglGlfwKeycode.GLFW_KEY_7, LwjglGlfwKeycode.GLFW_KEY_8, LwjglGlfwKeycode.GLFW_KEY_9};
+            KeyEvent.KEYCODE_1, KeyEvent.KEYCODE_2,   KeyEvent.KEYCODE_3,
+            KeyEvent.KEYCODE_4, KeyEvent.KEYCODE_5,   KeyEvent.KEYCODE_6,
+            KeyEvent.KEYCODE_7, KeyEvent.KEYCODE_8, KeyEvent.KEYCODE_9};
     private final DropGesture mDropGesture = new DropGesture(new Handler(Looper.getMainLooper()));
     private final GrabListener mGrabListener = new GrabListener() {
         @Override
@@ -98,7 +101,7 @@ public class HotbarView extends View implements MCOptionUtils.MCOptionListener, 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Avoid going through the JNI each time.
-        if(!GLFW.isGrabbing()) return false;
+        if(!PLATFORM.isGrabbing()) return false;
         boolean hasDoubleTapped = mDoubleTapDetector.onTouchEvent(event);
 
         // Check if we need to cancel the drop event
@@ -117,7 +120,7 @@ public class HotbarView extends View implements MCOptionUtils.MCOptionListener, 
         // Check if the slot changed and we need to make a key press
         if(hotbarIndex == mLastIndex) {
             // Only check for doubletapping if the slot has not changed
-            if(hasDoubleTapped && !LauncherPreferences.PREF_DISABLE_SWAP_HAND) CallbackBridge.sendKeyPress(LwjglGlfwKeycode.GLFW_KEY_F);
+            if(hasDoubleTapped && !LauncherPreferences.PREF_DISABLE_SWAP_HAND) CallbackBridge.sendKeyPress(KeyEvent.KEYCODE_F);
             return true;
         }
         mLastIndex = hotbarIndex;

@@ -210,7 +210,7 @@ public class LauncherGLSurface extends View implements GrabListener, GamepadEnab
 
         // Make sure we grabbed the mouse if necessary
         // Avoid going through the JNI each time.
-        updateGrabState(GLFW.isGrabbing());
+        updateGrabState(PLATFORM.isGrabbing());
 
         switch(event.getActionMasked()) {
             case MotionEvent.ACTION_HOVER_MOVE:

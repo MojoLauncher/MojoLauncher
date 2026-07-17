@@ -1,5 +1,7 @@
 package net.kdt.pojavlaunch.customcontrols.mouse;
 
+import static net.kdt.pojavlaunch.platform.PlatformLibrary.PLATFORM;
+
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
@@ -10,6 +12,7 @@ import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.WindowManager;
 
+import net.kdt.pojavlaunch.platform.PlatformLibrary;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 import java.util.Arrays;
@@ -71,7 +74,7 @@ public class GyroControl implements SensorEventListener, GrabListener {
         mSensorManager.registerListener(this, mSensor, 1000 * LauncherPreferences.PREF_GYRO_SAMPLE_RATE);
         mCorrectionListener.enable();
         // Avoid going through the JNI each time.
-        mShouldHandleEvents = GLFW.isGrabbing();
+        mShouldHandleEvents = PLATFORM.isGrabbing();
         GLFW.addGrabListener(this);
     }
 
@@ -105,27 +108,27 @@ public class GyroControl implements SensorEventListener, GrabListener {
         float absY = Math.abs(mStoredY);
 
         if(absX + absY > MULTI_AXIS_LOW_PASS_THRESHOLD) {
-            GLFW.cursorX -= ((mSwapXY ? mStoredY : mStoredX) * xFactor);
-            GLFW.cursorY += ((mSwapXY ? mStoredX : mStoredY) * yFactor);
+            PlatformLibrary.cursorX -= ((mSwapXY ? mStoredY : mStoredX) * xFactor);
+            PlatformLibrary.cursorY += ((mSwapXY ? mStoredX : mStoredY) * yFactor);
             mStoredX = 0;
             mStoredY = 0;
             updatePosition = true;
         } else {
             if(Math.abs(mStoredX) > SINGLE_AXIS_LOW_PASS_THRESHOLD){
-                GLFW.cursorX -= ((mSwapXY ? mStoredY : mStoredX) * xFactor);
+                PlatformLibrary.cursorX -= ((mSwapXY ? mStoredY : mStoredX) * xFactor);
                 mStoredX = 0;
                 updatePosition = true;
             }
 
             if(Math.abs(mStoredY) > SINGLE_AXIS_LOW_PASS_THRESHOLD) {
-                GLFW.cursorY += ((mSwapXY ? mStoredX : mStoredY) * yFactor);
+                PlatformLibrary.cursorY += ((mSwapXY ? mStoredX : mStoredY) * yFactor);
                 mStoredY = 0;
                 updatePosition = true;
             }
         }
 
         if(updatePosition){
-            GLFW.sendMousePos();
+            PLATFORM.sendMousePosition();
         }
     }
 

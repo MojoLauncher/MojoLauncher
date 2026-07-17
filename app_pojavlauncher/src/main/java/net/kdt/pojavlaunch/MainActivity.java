@@ -55,6 +55,7 @@ import net.kdt.pojavlaunch.customcontrols.mouse.HotbarView;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
+import net.kdt.pojavlaunch.platform.PlatformLibrary;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.prefs.QuickSettingSideDialog;
 import net.kdt.pojavlaunch.services.GameService;
@@ -166,7 +167,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             int translationY;
             // Autopanning (if keyboardPan wasn't clicked)
             if(!mForceFullPanning) {
-                int cursorY = (int) (GLFW.cursorY * launcherGLView.mSurface.getHeight()) + 100;
+                int cursorY = (int) (PlatformLibrary.cursorY * launcherGLView.mSurface.getHeight()) + 100;
                 translationY = Tools.getTranslationFromCursorY(
                         cursorY,
                         launcherGLView.mSurface.getHeight(),
@@ -317,7 +318,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         mGyroControl.disable();
         // Avoid going through the JNI each time.
         if (GLFW.isGrabbing()){
-            CallbackBridge.sendKeyPress(LwjglGlfwKeycode.GLFW_KEY_ESCAPE);
+            CallbackBridge.sendKeyPress(KeyEvent.KEYCODE_ESCAPE);
         }
         if(mQuickSettingSideDialog != null) {
             mQuickSettingSideDialog.cancel();
@@ -481,7 +482,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         if(!(handleEvent = launcherGLView.processKeyEvent(event))) {
             if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && !touchCharInput.isEnabled()) {
                 if(event.getAction() != KeyEvent.ACTION_UP) return true; // We eat it anyway
-                CallbackBridge.sendKeyPress(LwjglGlfwKeycode.GLFW_KEY_ESCAPE);
+                CallbackBridge.sendKeyPress(KeyEvent.KEYCODE_ESCAPE);
                 return true;
             }
         }

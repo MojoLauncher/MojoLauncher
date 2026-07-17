@@ -2,6 +2,8 @@ package net.kdt.pojavlaunch.customcontrols;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
+import static net.kdt.pojavlaunch.platform.PlatformLibrary.PLATFORM;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Insets;
@@ -262,7 +264,7 @@ public class ControlLayout extends FrameLayout {
 		for(ControlInterface button : getButtonChildren()){
             // Avoid going through the JNI each time.
             // Avoid going through the JNI each time.
-            button.setVisible(((button.getProperties().displayInGame && GLFW.isGrabbing()) || (button.getProperties().displayInMenu && !GLFW.isGrabbing())) && isVisible);
+            button.setVisible(((button.getProperties().displayInGame && PLATFORM.isGrabbing()) || (button.getProperties().displayInMenu && !PLATFORM.isGrabbing())) && isVisible);
 		}
 	}
 
