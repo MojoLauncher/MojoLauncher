@@ -8,8 +8,8 @@ import git.mojo.sdl.SDLActivity;
 import git.artdeell.dnbootstrap.glfw.GamepadEnableHandler;
 
 public class SDLPlatform implements Platform {
-    @Override
-    public void initialize() {
+
+    static {
         SDL.initialize();
         SDL.setupJNI();
     }

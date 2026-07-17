@@ -5,7 +5,6 @@ import android.view.Surface;
 import git.artdeell.dnbootstrap.glfw.GamepadEnableHandler;
 
 public interface Platform {
-    void initialize();
     void surfaceCreated(Surface surface);
     void surfaceUpdated();
     void surfaceDestroyed();

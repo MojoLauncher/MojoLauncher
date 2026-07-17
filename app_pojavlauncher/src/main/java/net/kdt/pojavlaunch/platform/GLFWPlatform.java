@@ -11,12 +11,6 @@ Static provider for GLFW
  */
 public class GLFWPlatform implements Platform {
 
-
-    @Override
-    public void initialize() {
-        GLFW.initialize();
-    }
-
     @Override
     public void surfaceCreated(Surface surface) {
         GLFW.nativeSurfaceCreated(surface);
