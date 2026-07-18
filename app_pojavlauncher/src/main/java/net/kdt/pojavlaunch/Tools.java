@@ -915,6 +915,7 @@ public final class Tools {
                 .setNegativeButton(android.R.string.cancel, null)
                 .setPositiveButton(android.R.string.ok, (p1, p2) -> {
                     try {
+                        Tools.restartLauncherActivity(ctx);
                         Tools.fullyExit();
                     } catch (Throwable th) {
                         Log.w(Tools.APP_NAME, "Could not enable System.exit() method!", th);
@@ -948,5 +949,11 @@ public final class Tools {
         if(cursorY < visibleHeight)
             return 0;
         return Math.min(imeHeight, cursorY - visibleHeight + padding);
+    }
+
+    public static void restartLauncherActivity(Context context){
+        Intent intent = new Intent(context, LauncherActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.getApplicationContext().startActivity(intent);
     }
 }
