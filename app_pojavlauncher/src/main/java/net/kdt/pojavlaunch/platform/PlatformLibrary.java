@@ -17,7 +17,7 @@ public abstract class PlatformLibrary {
         SDLImpl.initialize();
     }
 
-    public static PlatformLibrary PLATFORM = null;
+    public static PlatformLibrary PLATFORM = new NullImpl(); // Initialize a dummy platform - the game will initialize correct one later
     private static List<PlatformGrabListener> grabListeners = new ArrayList<>();
     static {
         grabListeners.add(grabbing -> isGrabbing = grabbing);
