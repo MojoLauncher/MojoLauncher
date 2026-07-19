@@ -62,6 +62,46 @@
 
 		</net.kdt.pojavlaunch.customcontrols.ControlLayout>
 
+		<FrameLayout
+			android:id="@+id/main_loading_screen"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:background="#BB000000"
+			android:visibility="visible"
+			>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="16dp"
+				android:layout_gravity="center"
+				android:gravity="center"
+				android:orientation="vertical">
+
+				<ProgressBar
+					android:id="@+id/main_loading_screen_progress"
+					android:layout_width="24dp"
+					android:layout_height="24dp"
+					android:indeterminate="true" />
+
+				<TextView
+					android:id="@+id/main_loading_screen_text"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/loading_screen_title"
+					android:textColor="@android:color/white"
+					android:textSize="16sp" />
+
+				<TextView
+					android:id="@+id/main_loading_screen_warning"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/loading_screen_warning"
+					android:textColor="@android:color/darker_gray"
+					android:textSize="12sp" />
+			</LinearLayout>
+		</FrameLayout>
+
 		<com.kdt.LoggerView
 			android:id="@+id/mainLoggerView"
 			android:layout_width="match_parent"

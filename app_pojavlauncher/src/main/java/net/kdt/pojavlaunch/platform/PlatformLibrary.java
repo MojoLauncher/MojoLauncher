@@ -2,6 +2,9 @@ package net.kdt.pojavlaunch.platform;
 
 import android.view.Surface;
 
+import net.kdt.pojavlaunch.MainActivity;
+import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +14,8 @@ import git.mojo.sdl.SDLActivity;
 
 public abstract class PlatformLibrary {
     public static void initializeCallbacks(){
-        GLFW.setInitCallback(() -> setPlatformLibrary(new GLFWImpl()));
-        SDLActivity.setInitCallback(() -> setPlatformLibrary(new SDLImpl()));
+        GLFW.setInitCallback(() -> onInit(new GLFWImpl()));
+        SDLActivity.setInitCallback(() -> onInit(new SDLImpl()));
         GLFWImpl.initialize();
         SDLImpl.initialize();
     }
@@ -26,6 +29,11 @@ public abstract class PlatformLibrary {
     public static double cursorX;
     public static double cursorY;
     private static Surface mPendingSurface;
+
+    private static void onInit(PlatformLibrary impl){
+        PlatformLibrary.setPlatformLibrary(impl);
+        ContextExecutor.executeActivity(activity -> ((MainActivity) activity).hideLoadingScreen());
+    }
 
 
 

@@ -29,6 +29,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -91,6 +92,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     private GyroControl mGyroControl = null;
     private ControlLayout mControlLayout;
     private HotbarView mHotbarView;
+    private View mLoadingScreen;
     private volatile AndroidClipboardProvider mClipboardProvider;
 
     Instance instance;
@@ -302,6 +304,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         touchCharInput = findViewById(R.id.mainTouchCharInput);
         mDrawerPullButton = findViewById(R.id.drawer_button);
         mHotbarView = findViewById(R.id.hotbar_view);
+        mLoadingScreen = findViewById(R.id.main_loading_screen);
     }
 
     @Override
@@ -494,6 +497,15 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             touchCharInput.switchKeyboardState();
             MainActivity.mForceFullPanning = panning;
         }
+    }
+
+    public void hideLoadingScreen(){
+        ((TextView) mLoadingScreen.findViewById(R.id.main_loading_screen_text)).setText(R.string.loading_screen_booted);
+        mLoadingScreen.animate()
+                .alpha(0f)
+                .setDuration(300)
+                .withEndAction(() -> mLoadingScreen.setVisibility(View.GONE))
+                .start();
     }
 
     @Override
