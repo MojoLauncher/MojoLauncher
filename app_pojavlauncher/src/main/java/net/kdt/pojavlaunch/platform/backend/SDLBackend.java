@@ -48,8 +48,11 @@ public class SDLBackend extends Platform {
 
     @Override
     public void sendMousePosition() {
-        // SDL expects normalized coords, not pixel ones like we use
-        // Or pixel ones? Whatever
+        if(!isGrabbing()){
+            Platform.cursorX = Math.clamp(Platform.cursorX, 0, 1);
+            Platform.cursorY = Math.clamp(Platform.cursorY, 0, 1);
+        }
+        // SDL uses coordinates in pixel space, the launcher uses normalized
         float x = (float) (Platform.cursorX * LauncherGLSurface.getWindowWidth());
         float y = (float) (Platform.cursorY * LauncherGLSurface.getWindowHeight());
         SDLActivity.onNativeMouse(0, MotionEvent.ACTION_MOVE, x, y, isGrabbing());
@@ -64,8 +67,7 @@ public class SDLBackend extends Platform {
 
     @Override
     public void sendMouseEvent(int key, int state, int mods) {
-        // SDL expects normalized coords, not pixel ones like we use
-        // Or pixel ones? Whatever
+        // SDL uses coordinates in pixel space, the launcher uses normalized
         float x = (float) (Platform.cursorX * LauncherGLSurface.getWindowWidth());
         float y = (float) (Platform.cursorY * LauncherGLSurface.getWindowHeight());
         if(state == KeyEvent.ACTION_DOWN)

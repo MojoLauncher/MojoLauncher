@@ -106,5 +106,4 @@ public abstract class Platform {
         if(mPendingSurface != null)
             PLATFORM.surfaceCreated(mPendingSurface);
     }
-
 }
