@@ -1,5 +1,6 @@
 package net.kdt.pojavlaunch.platform;
 
+import android.app.Activity;
 import android.view.Surface;
 
 import net.kdt.pojavlaunch.MainActivity;
@@ -11,13 +12,17 @@ import java.util.List;
 import git.artdeell.dnbootstrap.glfw.GLFW;
 import git.artdeell.dnbootstrap.glfw.GamepadEnableHandler;
 import git.mojo.sdl.SDLActivity;
+import git.mojo.sdl.SDLControllerManager;
 
 public abstract class PlatformLibrary {
-    public static void initializeCallbacks(){
+    public static void initializeCallbacks(Activity activity){
         GLFW.setInitCallback(() -> onInit(new GLFWImpl()));
         SDLActivity.setInitCallback(() -> onInit(new SDLImpl()));
-        GLFWImpl.initialize();
-        SDLImpl.initialize();
+        // SDL can handle gamepads on its own, so route all events through it
+        // if SDL was detected of course (the check is based on detectDevices)
+        // Vanilla SDL client shouldn't touch input system and thus cause emulated input to break
+        SDLControllerManager.setEnabledCallback(() -> mPlatformGamepad = new SDLGamepad());
+        SDLImpl.initialize(activity);
     }
 
     public static PlatformLibrary PLATFORM = new NullImpl(); // Initialize a dummy platform - the game will initialize correct one later
@@ -29,13 +34,13 @@ public abstract class PlatformLibrary {
     public static double cursorX;
     public static double cursorY;
     private static Surface mPendingSurface;
+    private static PlatformGamepad mPlatformGamepad = null;
+    private static GamepadEnableHandler mGamepadEnabler;
 
     private static void onInit(PlatformLibrary impl){
         PlatformLibrary.setPlatformLibrary(impl);
         ContextExecutor.executeActivity(activity -> ((MainActivity) activity).hideLoadingScreen());
     }
-
-
 
     public abstract void surfaceCreated(Surface surface);
     public abstract void surfaceUpdated();
@@ -60,13 +65,25 @@ public abstract class PlatformLibrary {
             listener.onGrabState(grabbing);
         }
     }
-    public abstract void setGamepadEnableHandler(GamepadEnableHandler handler);
+
+    public static PlatformGamepad getPlatformGamepad() {
+        return mPlatformGamepad;
+    }
+
+    // To be picked by GLFW
+    public static void setGamepadEnableHandler(GamepadEnableHandler handler){
+        mGamepadEnabler = handler;
+    }
+    static GamepadEnableHandler getGamepadEnableHandler(){
+        return mGamepadEnabler;
+    }
     public static void addGrabListener(PlatformGrabListener pgl){
         grabListeners.add(pgl);
     }
 
     public static void setPlatformLibrary(PlatformLibrary library){
         PLATFORM = library;
+        // To be picked by platform library
         if(mPendingSurface != null)
             PLATFORM.surfaceCreated(mPendingSurface);
     }

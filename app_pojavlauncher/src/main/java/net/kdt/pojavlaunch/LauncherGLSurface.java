@@ -24,7 +24,6 @@ import androidx.annotation.RequiresApi;
 import net.kdt.pojavlaunch.customcontrols.ControlLayout;
 import net.kdt.pojavlaunch.customcontrols.gamepad.DefaultDataProvider;
 import net.kdt.pojavlaunch.customcontrols.gamepad.Gamepad;
-import net.kdt.pojavlaunch.customcontrols.gamepad.DirectGamepad;
 import net.kdt.pojavlaunch.customcontrols.mouse.AndroidPointerCapture;
 import net.kdt.pojavlaunch.customcontrols.mouse.InGUIEventProcessor;
 import net.kdt.pojavlaunch.customcontrols.mouse.InGameEventProcessor;
@@ -32,7 +31,6 @@ import net.kdt.pojavlaunch.customcontrols.mouse.TouchEventProcessor;
 import net.kdt.pojavlaunch.platform.PlatformGrabListener;
 import net.kdt.pojavlaunch.platform.PlatformLibrary;
 
-import net.kdt.pojavlaunch.platform.SDLImpl;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.render.SurfaceProvider;
 import net.kdt.pojavlaunch.render.SurfaceViewSurfaceProvider;
@@ -42,7 +40,6 @@ import net.kdt.pojavlaunch.utils.MCOptionUtils;
 import fr.spse.gamepad_remapper.GamepadHandler;
 import fr.spse.gamepad_remapper.RemapperManager;
 import fr.spse.gamepad_remapper.RemapperView;
-import git.artdeell.dnbootstrap.glfw.GLFW;
 import git.artdeell.dnbootstrap.glfw.GamepadEnableHandler;
 import git.artdeell.mojoexec.MojoExec;
 
@@ -96,7 +93,7 @@ public class LauncherGLSurface extends View implements PlatformGrabListener, Gam
     public LauncherGLSurface(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
             setFocusable(true);
-        //PLATFORM.setGamepadEnableHandler(this);
+        PlatformLibrary.setGamepadEnableHandler(this);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -174,14 +171,8 @@ public class LauncherGLSurface extends View implements PlatformGrabListener, Gam
     }
 
     private void createGamepad(InputDevice inputDevice) {
-        if(GLFW.gamepadButtonBuffer != null) {
-            mGamepadHandler = new DirectGamepad();
-            // Only send this if there was a gamepad event, to avoid forcing users without gamepads through
-            // Controlify calibration
-           // GLFW.nativeNotifyGamepadConnected();
-        }else {
+        if(PlatformLibrary.getPlatformGamepad() == null || PlatformLibrary.getPlatformGamepad().shouldOverride())
             mGamepadHandler = new Gamepad(inputDevice, DefaultDataProvider.INSTANCE, mTouchpad);
-        }
     }
 
     /**
@@ -193,8 +184,11 @@ public class LauncherGLSurface extends View implements PlatformGrabListener, Gam
         int mouseCursorIndex = -1;
 
         if(Gamepad.isGamepadEvent(event)){
+            if(PlatformLibrary.getPlatformGamepad() != null && PlatformLibrary.getPlatformGamepad().shouldOverride()){
+                PlatformLibrary.getPlatformGamepad().sendMotionEvent(event);
+                return true;
+            }
             if(mGamepadHandler == null) createGamepad(event.getDevice());
-
             mInputManager.handleMotionEventInput(getContext(), event, mGamepadHandler);
             return true;
         }
@@ -264,6 +258,10 @@ public class LauncherGLSurface extends View implements PlatformGrabListener, Gam
         }
 
         if(Gamepad.isGamepadEvent(event)){
+            if(PlatformLibrary.getPlatformGamepad() != null && PlatformLibrary.getPlatformGamepad().shouldOverride()){
+                PlatformLibrary.getPlatformGamepad().sendKeyEvent(event);
+                return true;
+            }
             if(mGamepadHandler == null) createGamepad(event.getDevice());
 
             mInputManager.handleKeyEventInput(getContext(), event, mGamepadHandler);

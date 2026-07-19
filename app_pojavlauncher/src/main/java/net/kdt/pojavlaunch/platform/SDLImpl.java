@@ -1,5 +1,7 @@
 package net.kdt.pojavlaunch.platform;
 
+import android.app.Activity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Surface;
 
@@ -9,16 +11,22 @@ import net.kdt.pojavlaunch.Tools;
 import git.mojo.sdl.SDL;
 import git.mojo.sdl.SDLActivity;
 
-import git.artdeell.dnbootstrap.glfw.GamepadEnableHandler;
+import git.mojo.sdl.SDLControllerManager;
 import git.mojo.sdl.SDLInputConnection;
 
 public class SDLImpl extends PlatformLibrary {
-    public static void initialize() {
-        SDL.initialize();
-        SDL.setupJNI();
+    public SDLImpl(){
         SDLActivity.addGrabListener(isGrabbing -> {
             Tools.runOnUiThread(() -> PlatformLibrary.executeGrabbingListeners(isGrabbing));
         });
+    }
+    public static void initialize(Activity activity) {
+        // TODO: check what can be moved to the initialize point
+        // we need to setup enough SDL for the game to not crash to initialize it later
+        SDL.initialize();
+        SDL.setContext(activity);
+        SDL.setupJNI();
+        SDLControllerManager.initializeDeviceListener();
     }
 
     @Override
@@ -58,7 +66,10 @@ public class SDLImpl extends PlatformLibrary {
         // Or pixel ones? Whatever
         float x = (float) (PlatformLibrary.cursorX * LauncherGLSurface.getWindowWidth());
         float y = (float) (PlatformLibrary.cursorY * LauncherGLSurface.getWindowHeight());
-        SDLActivity.onNativeMouseButton(key, state, x, y, isGrabbing());
+        if(state == KeyEvent.ACTION_DOWN)
+            SDLActivity.onNativeMouseButton(key, KeyEvent.ACTION_DOWN, x, y, isGrabbing());
+        else
+            SDLActivity.onNativeMouseButton(key, KeyEvent.ACTION_UP, x, y, isGrabbing());
     }
 
     @Override
@@ -87,10 +98,5 @@ public class SDLImpl extends PlatformLibrary {
     @Override
     public void sendBulkUnicodeEvent(String text, int mods) {
         SDLInputConnection.nativeCommitText(text, mods);
-    }
-
-    @Override
-    public void setGamepadEnableHandler(GamepadEnableHandler handler) {
-
     }
 }

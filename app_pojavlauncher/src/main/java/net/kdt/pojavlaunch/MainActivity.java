@@ -119,7 +119,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             finish();
             return;
         }
-        PlatformLibrary.initializeCallbacks();
+        PlatformLibrary.initializeCallbacks(this);
         AsyncAssetManager.extractDefaultSettings(this, instance.getGameDirectory());
         MCOptionUtils.load(instance.getGameDirectory().getAbsolutePath());
 

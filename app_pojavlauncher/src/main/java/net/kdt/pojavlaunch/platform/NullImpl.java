@@ -2,7 +2,6 @@ package net.kdt.pojavlaunch.platform;
 
 import android.view.Surface;
 
-import git.artdeell.dnbootstrap.glfw.GamepadEnableHandler;
 
 public class NullImpl extends PlatformLibrary {
 
@@ -53,11 +52,6 @@ public class NullImpl extends PlatformLibrary {
 
     @Override
     public void sendBulkUnicodeEvent(String text, int mods) {
-
-    }
-
-    @Override
-    public void setGamepadEnableHandler(GamepadEnableHandler handler) {
 
     }
 }
