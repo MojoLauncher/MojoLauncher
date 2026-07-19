@@ -52,7 +52,8 @@ public class GLFWBackend implements PlatformBackend {
             case MotionEvent.BUTTON_PRIMARY:    glfwButton = LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_LEFT; break;
             case MotionEvent.BUTTON_SECONDARY:  glfwButton = LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_RIGHT; break;
             case MotionEvent.BUTTON_TERTIARY:   glfwButton = LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_MIDDLE; break;
-            // TODO: back/forward buttons from MotionEvent, are they even used?
+            case MotionEvent.BUTTON_BACK:       glfwButton = LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_4; break;
+            case MotionEvent.BUTTON_FORWARD:    glfwButton = LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_5; break;
             default:
                 glfwButton = 0;
         }
