@@ -2,7 +2,7 @@ package net.kdt.pojavlaunch.customcontrols;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
-import static net.kdt.pojavlaunch.platform.PlatformLibrary.PLATFORM;
+import static net.kdt.pojavlaunch.platform.Platform.PLATFORM;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -29,7 +29,6 @@ import com.kdt.pickafile.FileSelectedListener;
 
 import net.kdt.pojavlaunch.LauncherGLSurface;
 
-import git.artdeell.dnbootstrap.glfw.GLFW;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.customcontrols.buttons.ControlButton;

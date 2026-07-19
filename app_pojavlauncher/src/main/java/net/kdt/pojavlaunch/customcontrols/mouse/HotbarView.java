@@ -1,6 +1,6 @@
 package net.kdt.pojavlaunch.customcontrols.mouse;
 
-import static net.kdt.pojavlaunch.platform.PlatformLibrary.PLATFORM;
+import static net.kdt.pojavlaunch.platform.Platform.PLATFORM;
 
 import android.content.Context;
 import android.os.Handler;
@@ -14,8 +14,8 @@ import android.view.ViewParent;
 
 import androidx.annotation.Nullable;
 
-import net.kdt.pojavlaunch.platform.PlatformGrabListener;
-import net.kdt.pojavlaunch.platform.PlatformLibrary;
+import net.kdt.pojavlaunch.platform.input.PlatformGrabListener;
+import net.kdt.pojavlaunch.platform.Platform;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
 import net.kdt.pojavlaunch.utils.MathUtils;
@@ -79,7 +79,7 @@ public class HotbarView extends View implements MCOptionUtils.MCOptionListener, 
         }
         mGuiScale = MCOptionUtils.getMcScale();
         repositionView();
-        PlatformLibrary.addGrabListener(mGrabListener);
+        Platform.addGrabListener(mGrabListener);
     }
 
     private void repositionView() {

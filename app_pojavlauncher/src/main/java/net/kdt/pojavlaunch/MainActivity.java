@@ -56,7 +56,7 @@ import net.kdt.pojavlaunch.customcontrols.mouse.HotbarView;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
-import net.kdt.pojavlaunch.platform.PlatformLibrary;
+import net.kdt.pojavlaunch.platform.Platform;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.prefs.QuickSettingSideDialog;
 import net.kdt.pojavlaunch.services.GameService;
@@ -119,7 +119,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             finish();
             return;
         }
-        PlatformLibrary.initializeCallbacks(this);
+        Platform.initializeCallbacks(this);
         AsyncAssetManager.extractDefaultSettings(this, instance.getGameDirectory());
         MCOptionUtils.load(instance.getGameDirectory().getAbsolutePath());
 
@@ -169,7 +169,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             int translationY;
             // Autopanning (if keyboardPan wasn't clicked)
             if(!mForceFullPanning) {
-                int cursorY = (int) (PlatformLibrary.cursorY * launcherGLView.mSurface.getHeight()) + 100;
+                int cursorY = (int) (Platform.cursorY * launcherGLView.mSurface.getHeight()) + 100;
                 translationY = Tools.getTranslationFromCursorY(
                         cursorY,
                         launcherGLView.mSurface.getHeight(),

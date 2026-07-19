@@ -1,9 +1,11 @@
-package net.kdt.pojavlaunch.platform;
+package net.kdt.pojavlaunch.platform.backend;
 
 import android.view.Surface;
 
+import net.kdt.pojavlaunch.platform.Platform;
 
-public class NullImpl extends PlatformLibrary {
+
+public class DummyBackend extends Platform {
 
     @Override
     public void surfaceCreated(Surface surface) {

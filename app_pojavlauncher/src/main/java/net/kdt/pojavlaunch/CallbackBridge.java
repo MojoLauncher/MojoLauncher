@@ -1,6 +1,6 @@
 package net.kdt.pojavlaunch;
 
-import static net.kdt.pojavlaunch.platform.PlatformLibrary.PLATFORM;
+import static net.kdt.pojavlaunch.platform.Platform.PLATFORM;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -10,7 +10,7 @@ import android.view.KeyEvent;
 import androidx.annotation.Keep;
 
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
-import net.kdt.pojavlaunch.platform.PlatformLibrary;
+import net.kdt.pojavlaunch.platform.Platform;
 
 import java.io.File;
 
@@ -22,11 +22,11 @@ public class CallbackBridge {
             holdingNumlock, holdingShift;
 
     public static void performClick(int button) {
-        double ox = PlatformLibrary.cursorX, oy = PlatformLibrary.cursorY;
+        double ox = Platform.cursorX, oy = Platform.cursorY;
         PLATFORM.sendMouseEvent(button, 1, CallbackBridge.getCurrentMods());
         sChoreographer.postFrameCallbackDelayed(l -> {
-            PlatformLibrary.cursorX = ox;
-            PlatformLibrary.cursorY = oy;
+            Platform.cursorX = ox;
+            Platform.cursorY = oy;
             PLATFORM.sendMouseEvent(button, 0, CallbackBridge.getCurrentMods());
         }, 33);
     }

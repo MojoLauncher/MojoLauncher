@@ -1,6 +1,6 @@
 package net.kdt.pojavlaunch.customcontrols.mouse;
 
-import static net.kdt.pojavlaunch.platform.PlatformLibrary.PLATFORM;
+import static net.kdt.pojavlaunch.platform.Platform.PLATFORM;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,8 +12,8 @@ import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.WindowManager;
 
-import net.kdt.pojavlaunch.platform.PlatformGrabListener;
-import net.kdt.pojavlaunch.platform.PlatformLibrary;
+import net.kdt.pojavlaunch.platform.input.PlatformGrabListener;
+import net.kdt.pojavlaunch.platform.Platform;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 import java.util.Arrays;
@@ -74,7 +74,7 @@ public class GyroControl implements SensorEventListener, PlatformGrabListener {
         mCorrectionListener.enable();
         // Avoid going through the JNI each time.
         mShouldHandleEvents = PLATFORM.isGrabbing();
-        PlatformLibrary.addGrabListener(this);
+        Platform.addGrabListener(this);
     }
 
     public void disable() {
@@ -107,20 +107,20 @@ public class GyroControl implements SensorEventListener, PlatformGrabListener {
         float absY = Math.abs(mStoredY);
 
         if(absX + absY > MULTI_AXIS_LOW_PASS_THRESHOLD) {
-            PlatformLibrary.cursorX -= ((mSwapXY ? mStoredY : mStoredX) * xFactor);
-            PlatformLibrary.cursorY += ((mSwapXY ? mStoredX : mStoredY) * yFactor);
+            Platform.cursorX -= ((mSwapXY ? mStoredY : mStoredX) * xFactor);
+            Platform.cursorY += ((mSwapXY ? mStoredX : mStoredY) * yFactor);
             mStoredX = 0;
             mStoredY = 0;
             updatePosition = true;
         } else {
             if(Math.abs(mStoredX) > SINGLE_AXIS_LOW_PASS_THRESHOLD){
-                PlatformLibrary.cursorX -= ((mSwapXY ? mStoredY : mStoredX) * xFactor);
+                Platform.cursorX -= ((mSwapXY ? mStoredY : mStoredX) * xFactor);
                 mStoredX = 0;
                 updatePosition = true;
             }
 
             if(Math.abs(mStoredY) > SINGLE_AXIS_LOW_PASS_THRESHOLD) {
-                PlatformLibrary.cursorY += ((mSwapXY ? mStoredX : mStoredY) * yFactor);
+                Platform.cursorY += ((mSwapXY ? mStoredX : mStoredY) * yFactor);
                 mStoredY = 0;
                 updatePosition = true;
             }

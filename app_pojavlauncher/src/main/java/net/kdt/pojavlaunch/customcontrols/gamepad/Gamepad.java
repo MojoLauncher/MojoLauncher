@@ -18,8 +18,8 @@ import android.view.View;
 
 
 import net.kdt.pojavlaunch.CallbackBridge;
-import net.kdt.pojavlaunch.platform.PlatformGrabListener;
-import net.kdt.pojavlaunch.platform.PlatformLibrary;
+import net.kdt.pojavlaunch.platform.input.PlatformGrabListener;
+import net.kdt.pojavlaunch.platform.Platform;
 
 import static net.kdt.pojavlaunch.Tools.currentDisplayMetrics;
 import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTION_EAST;
@@ -32,14 +32,13 @@ import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTI
 import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTION_SOUTH_WEST;
 import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTION_WEST;
 import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.isJoystickEvent;
-import static net.kdt.pojavlaunch.platform.PlatformLibrary.PLATFORM;
+import static net.kdt.pojavlaunch.platform.Platform.PLATFORM;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_DEADZONE_SCALE;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_SCALE_FACTOR;
 import static net.kdt.pojavlaunch.CallbackBridge.sendMouseButton;
 
 import fr.spse.gamepad_remapper.GamepadHandler;
 import fr.spse.gamepad_remapper.Settings;
-import git.artdeell.dnbootstrap.glfw.GrabListener;
 
 public class Gamepad implements PlatformGrabListener, GamepadHandler {
 
@@ -97,7 +96,7 @@ public class Gamepad implements PlatformGrabListener, GamepadHandler {
         mMapProvider = mapProvider;
         mTouchpadView = touchpadView;
 
-        PlatformLibrary.cursorX = PlatformLibrary.cursorY = 0.5;
+        Platform.cursorX = Platform.cursorY = 0.5;
         PLATFORM.sendMousePosition();
 
         enableTouchpadIfNecessary();
@@ -192,8 +191,8 @@ public class Gamepad implements PlatformGrabListener, GamepadHandler {
             deltaX *= deltaTimeScale;
             deltaY *= deltaTimeScale;
 
-            PlatformLibrary.cursorX += deltaX / 1000;
-            PlatformLibrary.cursorY -= deltaY / 1000;
+            Platform.cursorX += deltaX / 1000;
+            Platform.cursorY -= deltaY / 1000;
 
             //Send the mouse to the game
             PLATFORM.sendMousePosition();

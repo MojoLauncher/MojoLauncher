@@ -1,4 +1,4 @@
-package net.kdt.pojavlaunch.platform;
+package net.kdt.pojavlaunch.platform.backend;
 
 import android.app.Activity;
 import android.view.KeyEvent;
@@ -7,6 +7,7 @@ import android.view.Surface;
 
 import net.kdt.pojavlaunch.LauncherGLSurface;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.platform.Platform;
 
 import git.mojo.sdl.SDL;
 import git.mojo.sdl.SDLActivity;
@@ -14,10 +15,10 @@ import git.mojo.sdl.SDLActivity;
 import git.mojo.sdl.SDLControllerManager;
 import git.mojo.sdl.SDLInputConnection;
 
-public class SDLImpl extends PlatformLibrary {
-    public SDLImpl(){
+public class SDLBackend extends Platform {
+    public SDLBackend(){
         SDLActivity.addGrabListener(isGrabbing -> {
-            Tools.runOnUiThread(() -> PlatformLibrary.executeGrabbingListeners(isGrabbing));
+            Tools.runOnUiThread(() -> Platform.executeGrabbingListeners(isGrabbing));
         });
     }
     public static void initialize(Activity activity) {
@@ -49,13 +50,13 @@ public class SDLImpl extends PlatformLibrary {
     public void sendMousePosition() {
         // SDL expects normalized coords, not pixel ones like we use
         // Or pixel ones? Whatever
-        float x = (float) (PlatformLibrary.cursorX * LauncherGLSurface.getWindowWidth());
-        float y = (float) (PlatformLibrary.cursorY * LauncherGLSurface.getWindowHeight());
+        float x = (float) (Platform.cursorX * LauncherGLSurface.getWindowWidth());
+        float y = (float) (Platform.cursorY * LauncherGLSurface.getWindowHeight());
         SDLActivity.onNativeMouse(0, MotionEvent.ACTION_MOVE, x, y, isGrabbing());
         if(isGrabbing()){
             // SDL in relative mode expects these to be reset to 0 or it will freak out (classic:tm: way)
-            PlatformLibrary.cursorX = 0;
-            PlatformLibrary.cursorY = 0;
+            Platform.cursorX = 0;
+            Platform.cursorY = 0;
         }
     }
 
@@ -64,8 +65,8 @@ public class SDLImpl extends PlatformLibrary {
     public void sendMouseEvent(int key, int state, int mods) {
         // SDL expects normalized coords, not pixel ones like we use
         // Or pixel ones? Whatever
-        float x = (float) (PlatformLibrary.cursorX * LauncherGLSurface.getWindowWidth());
-        float y = (float) (PlatformLibrary.cursorY * LauncherGLSurface.getWindowHeight());
+        float x = (float) (Platform.cursorX * LauncherGLSurface.getWindowWidth());
+        float y = (float) (Platform.cursorY * LauncherGLSurface.getWindowHeight());
         if(state == KeyEvent.ACTION_DOWN)
             SDLActivity.onNativeMouseButton(key, KeyEvent.ACTION_DOWN, x, y, isGrabbing());
         else

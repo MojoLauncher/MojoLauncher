@@ -1,10 +1,11 @@
-package net.kdt.pojavlaunch.platform;
+package net.kdt.pojavlaunch.platform.backend;
 
 
 import android.view.MotionEvent;
 import android.view.Surface;
 
 import net.kdt.pojavlaunch.LwjglGlfwKeycode;
+import net.kdt.pojavlaunch.platform.Platform;
 
 import git.artdeell.dnbootstrap.glfw.GLFW;
 import git.artdeell.dnbootstrap.glfw.GrabListener;
@@ -12,12 +13,12 @@ import git.artdeell.dnbootstrap.glfw.GrabListener;
 /*
 Static provider for GLFW
  */
-public class GLFWImpl extends PlatformLibrary{
-    private static final GrabListener BASE_GRAB_LISTENER = PlatformLibrary::executeGrabbingListeners;
+public class GLFWBackend extends Platform {
+    private static final GrabListener BASE_GRAB_LISTENER = Platform::executeGrabbingListeners;
 
-    public GLFWImpl(){
+    public GLFWBackend(){
         GLFW.addGrabListener(BASE_GRAB_LISTENER);
-        GLFW.setGamepadEnableHandler(PlatformLibrary.getGamepadEnableHandler());
+        GLFW.setGamepadEnableHandler(Platform.getGamepadEnableHandler());
     }
     public static void initialize() {}
 
@@ -38,8 +39,8 @@ public class GLFWImpl extends PlatformLibrary{
 
     @Override
     public void sendMousePosition() {
-        GLFW.cursorX = PlatformLibrary.cursorX;
-        GLFW.cursorY = PlatformLibrary.cursorY;
+        GLFW.cursorX = Platform.cursorX;
+        GLFW.cursorY = Platform.cursorY;
         GLFW.sendMousePos();
     }
 

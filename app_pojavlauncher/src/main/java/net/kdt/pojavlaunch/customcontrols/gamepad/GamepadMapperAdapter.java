@@ -19,7 +19,7 @@ import net.kdt.pojavlaunch.EfficientAndroidLWJGLKeycode;
 
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
-import net.kdt.pojavlaunch.platform.PlatformGrabListener;
+import net.kdt.pojavlaunch.platform.input.PlatformGrabListener;
 
 import android.widget.TextView;
 

@@ -9,13 +9,12 @@ import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTI
 import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTION_SOUTH_EAST;
 import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTION_SOUTH_WEST;
 import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTION_WEST;
-import static net.kdt.pojavlaunch.platform.PlatformLibrary.PLATFORM;
+import static net.kdt.pojavlaunch.platform.Platform.PLATFORM;
 
 import android.annotation.SuppressLint;
 import android.view.KeyEvent;
 import android.view.View;
 
-import net.kdt.pojavlaunch.LwjglGlfwKeycode;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.customcontrols.ControlData;
 import net.kdt.pojavlaunch.customcontrols.ControlJoystickData;
@@ -25,7 +24,6 @@ import net.kdt.pojavlaunch.customcontrols.handleview.EditControlSideDialog;
 
 import net.kdt.pojavlaunch.CallbackBridge;
 
-import git.artdeell.dnbootstrap.glfw.GLFW;
 import io.github.controlwear.virtual.joystick.android.JoystickView;
 
 @SuppressLint("ViewConstructor")

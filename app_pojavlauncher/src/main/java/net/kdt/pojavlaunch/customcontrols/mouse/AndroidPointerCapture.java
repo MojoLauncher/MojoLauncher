@@ -1,6 +1,6 @@
 package net.kdt.pojavlaunch.customcontrols.mouse;
 
-import static net.kdt.pojavlaunch.platform.PlatformLibrary.PLATFORM;
+import static net.kdt.pojavlaunch.platform.Platform.PLATFORM;
 
 import android.os.Build;
 import android.view.InputDevice;
@@ -10,14 +10,11 @@ import android.view.ViewTreeObserver;
 
 import androidx.annotation.RequiresApi;
 
-import net.kdt.pojavlaunch.LauncherGLSurface;
 import net.kdt.pojavlaunch.Tools;
 
 import net.kdt.pojavlaunch.CallbackBridge;
-import net.kdt.pojavlaunch.platform.PlatformLibrary;
+import net.kdt.pojavlaunch.platform.Platform;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
-
-import git.artdeell.dnbootstrap.glfw.GLFW;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChangeListener, View.OnCapturedPointerListener {
@@ -125,8 +122,8 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
     }
 
     private void applyMotionVector(View view, float speed) {
-        PlatformLibrary.cursorX += mVector[0] * speed / view.getWidth();
-        PlatformLibrary.cursorY += mVector[1] * speed / view.getHeight();
+        Platform.cursorX += mVector[0] * speed / view.getWidth();
+        Platform.cursorY += mVector[1] * speed / view.getHeight();
         PLATFORM.sendMousePosition();
     }
 

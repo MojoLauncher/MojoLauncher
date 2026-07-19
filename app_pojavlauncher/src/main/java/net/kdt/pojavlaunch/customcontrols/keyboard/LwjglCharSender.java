@@ -2,12 +2,8 @@ package net.kdt.pojavlaunch.customcontrols.keyboard;
 
 import android.view.KeyEvent;
 
-import net.kdt.pojavlaunch.LwjglGlfwKeycode;
-
 import net.kdt.pojavlaunch.CallbackBridge;
-import net.kdt.pojavlaunch.platform.PlatformLibrary;
-
-import git.artdeell.dnbootstrap.glfw.GLFW;
+import net.kdt.pojavlaunch.platform.Platform;
 
 /** Sends keys via the CallBackBridge */
 public class LwjglCharSender implements CharacterSenderStrategy {
@@ -23,6 +19,6 @@ public class LwjglCharSender implements CharacterSenderStrategy {
 
     @Override
     public void sendChars(CharSequence chars) {
-        PlatformLibrary.PLATFORM.sendBulkUnicodeEvent(chars.toString(), CallbackBridge.getCurrentMods());
+        Platform.PLATFORM.sendBulkUnicodeEvent(chars.toString(), CallbackBridge.getCurrentMods());
     }
 }

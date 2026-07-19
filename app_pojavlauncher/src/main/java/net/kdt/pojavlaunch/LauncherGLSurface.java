@@ -28,8 +28,8 @@ import net.kdt.pojavlaunch.customcontrols.mouse.AndroidPointerCapture;
 import net.kdt.pojavlaunch.customcontrols.mouse.InGUIEventProcessor;
 import net.kdt.pojavlaunch.customcontrols.mouse.InGameEventProcessor;
 import net.kdt.pojavlaunch.customcontrols.mouse.TouchEventProcessor;
-import net.kdt.pojavlaunch.platform.PlatformGrabListener;
-import net.kdt.pojavlaunch.platform.PlatformLibrary;
+import net.kdt.pojavlaunch.platform.input.PlatformGrabListener;
+import net.kdt.pojavlaunch.platform.Platform;
 
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.render.SurfaceProvider;
@@ -43,7 +43,7 @@ import fr.spse.gamepad_remapper.RemapperView;
 import git.artdeell.dnbootstrap.glfw.GamepadEnableHandler;
 import git.artdeell.mojoexec.MojoExec;
 
-import static net.kdt.pojavlaunch.platform.PlatformLibrary.PLATFORM;
+import static net.kdt.pojavlaunch.platform.Platform.PLATFORM;
 
 /**
  * Class dealing with showing minecraft surface and taking inputs to dispatch them to minecraft
@@ -93,7 +93,7 @@ public class LauncherGLSurface extends View implements PlatformGrabListener, Gam
     public LauncherGLSurface(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
             setFocusable(true);
-        PlatformLibrary.setGamepadEnableHandler(this);
+        Platform.setGamepadEnableHandler(this);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -141,8 +141,8 @@ public class LauncherGLSurface extends View implements PlatformGrabListener, Gam
             // Mouse found
             // Avoid going through the JNI each time.
             if(PLATFORM.isGrabbing()) return false;
-            PlatformLibrary.cursorX = e.getX(i) / getWidth();
-            PlatformLibrary.cursorY = e.getY(i) / getHeight();
+            Platform.cursorX = e.getX(i) / getWidth();
+            Platform.cursorY = e.getY(i) / getHeight();
             PLATFORM.sendMousePosition();
             return true; //mouse event handled successfully
         }
@@ -151,7 +151,7 @@ public class LauncherGLSurface extends View implements PlatformGrabListener, Gam
         // Keep cursor on screen if panning with IME inset
         if(LauncherPreferences.PREF_KEYBOARD_AUTOPANNING && MainActivity.mImeHeight > 0){
             int translationY = Tools.getTranslationFromCursorY(
-                    (int)(PlatformLibrary.cursorY * mSurface.getHeight() + 100),
+                    (int)(Platform.cursorY * mSurface.getHeight() + 100),
                     mSurface.getHeight(),
                     MainActivity.mImeHeight,
                     0
@@ -171,7 +171,7 @@ public class LauncherGLSurface extends View implements PlatformGrabListener, Gam
     }
 
     private void createGamepad(InputDevice inputDevice) {
-        if(PlatformLibrary.getPlatformGamepad() == null || PlatformLibrary.getPlatformGamepad().shouldOverride())
+        if(Platform.getPlatformGamepad() == null || Platform.getPlatformGamepad().shouldOverride())
             mGamepadHandler = new Gamepad(inputDevice, DefaultDataProvider.INSTANCE, mTouchpad);
     }
 
@@ -184,8 +184,8 @@ public class LauncherGLSurface extends View implements PlatformGrabListener, Gam
         int mouseCursorIndex = -1;
 
         if(Gamepad.isGamepadEvent(event)){
-            if(PlatformLibrary.getPlatformGamepad() != null && PlatformLibrary.getPlatformGamepad().shouldOverride()){
-                PlatformLibrary.getPlatformGamepad().sendMotionEvent(event);
+            if(Platform.getPlatformGamepad() != null && Platform.getPlatformGamepad().shouldOverride()){
+                Platform.getPlatformGamepad().sendMotionEvent(event);
                 return true;
             }
             if(mGamepadHandler == null) createGamepad(event.getDevice());
@@ -207,8 +207,8 @@ public class LauncherGLSurface extends View implements PlatformGrabListener, Gam
 
         switch(event.getActionMasked()) {
             case MotionEvent.ACTION_HOVER_MOVE:
-                PlatformLibrary.cursorX = event.getX(mouseCursorIndex) / getWidth();
-                PlatformLibrary.cursorY = event.getY(mouseCursorIndex) / getHeight();
+                Platform.cursorX = event.getX(mouseCursorIndex) / getWidth();
+                Platform.cursorY = event.getY(mouseCursorIndex) / getHeight();
                 PLATFORM.sendMousePosition();
                 return true;
             case MotionEvent.ACTION_SCROLL:
@@ -258,8 +258,8 @@ public class LauncherGLSurface extends View implements PlatformGrabListener, Gam
         }
 
         if(Gamepad.isGamepadEvent(event)){
-            if(PlatformLibrary.getPlatformGamepad() != null && PlatformLibrary.getPlatformGamepad().shouldOverride()){
-                PlatformLibrary.getPlatformGamepad().sendKeyEvent(event);
+            if(Platform.getPlatformGamepad() != null && Platform.getPlatformGamepad().shouldOverride()){
+                Platform.getPlatformGamepad().sendKeyEvent(event);
                 return true;
             }
             if(mGamepadHandler == null) createGamepad(event.getDevice());
@@ -352,8 +352,8 @@ public class LauncherGLSurface extends View implements PlatformGrabListener, Gam
 
     @Override
     public void onSurfaceAvailable(Surface surface) {
-        PlatformLibrary.addGrabListener(this);
-        PlatformLibrary.setPendingSurface(surface);
+        Platform.addGrabListener(this);
+        Platform.setPendingSurface(surface);
         if(mRefreshOnly) return;
         realStart();
         mRefreshOnly = true;

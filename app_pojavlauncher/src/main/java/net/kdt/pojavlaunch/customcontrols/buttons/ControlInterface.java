@@ -23,8 +23,8 @@ import net.kdt.pojavlaunch.customcontrols.ControlData;
 import net.kdt.pojavlaunch.customcontrols.ControlLayout;
 import net.kdt.pojavlaunch.customcontrols.LayoutBitmaps;
 import net.kdt.pojavlaunch.customcontrols.handleview.EditControlSideDialog;
-import net.kdt.pojavlaunch.platform.PlatformGrabListener;
-import net.kdt.pojavlaunch.platform.PlatformLibrary;
+import net.kdt.pojavlaunch.platform.input.PlatformGrabListener;
+import net.kdt.pojavlaunch.platform.Platform;
 
 
 
@@ -327,7 +327,7 @@ public interface ControlInterface extends View.OnLongClickListener, PlatformGrab
         getControlView().addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(@NonNull View v) {
-                PlatformLibrary.addGrabListener(ControlInterface.this);
+                Platform.addGrabListener(ControlInterface.this);
                 getControlView().removeOnAttachStateChangeListener(this);
             }
 
