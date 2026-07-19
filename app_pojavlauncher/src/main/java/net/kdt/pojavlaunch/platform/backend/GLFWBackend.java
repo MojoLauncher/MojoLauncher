@@ -39,6 +39,11 @@ public class GLFWBackend implements PlatformBackend {
 
     @Override
     public void sendMousePosition() {
+        // I'm not sure if GLFW does this already
+        if(!Platform.isGrabbing()){
+            Platform.cursorX = Math.clamp(Platform.cursorX, 0, 1);
+            Platform.cursorY = Math.clamp(Platform.cursorY, 0, 1);
+        }
         GLFW.cursorX = Platform.cursorX;
         GLFW.cursorY = Platform.cursorY;
         GLFW.sendMousePos();
