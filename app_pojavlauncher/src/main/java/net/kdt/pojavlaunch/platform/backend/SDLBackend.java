@@ -58,6 +58,7 @@ public class SDLBackend extends Platform {
             Platform.cursorX = 0;
             Platform.cursorY = 0;
         }
+        Platform.getCursorImplementor().onCursorPosition();
     }
 
 

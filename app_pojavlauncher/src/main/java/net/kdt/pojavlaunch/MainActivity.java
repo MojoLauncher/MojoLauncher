@@ -57,6 +57,7 @@ import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.platform.Platform;
+import net.kdt.pojavlaunch.platform.cursor.PlatformCursorView;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.prefs.QuickSettingSideDialog;
 import net.kdt.pojavlaunch.services.GameService;
@@ -74,7 +75,6 @@ import java.util.Objects;
 
 import git.artdeell.dnbootstrap.glfw.AndroidClipboardProvider;
 import git.artdeell.dnbootstrap.glfw.GLFW;
-import git.artdeell.dnbootstrap.glfw.GLFWCursorView;
 import git.artdeell.mojo.R;
 
 public class MainActivity extends BaseActivity implements ControlButtonMenuListener, EditorExitable, ServiceConnection {
@@ -83,8 +83,8 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
 
     public static TouchCharInput touchCharInput;
     private LauncherGLSurface launcherGLView;
-    private static WeakReference<GLFWCursorView> weakCursor;
-    private GLFWCursorView cursor;
+    private static WeakReference<PlatformCursorView> weakCursor;
+    private PlatformCursorView cursor;
     private LoggerView loggerView;
     private DrawerLayout drawerLayout;
     private ListView navDrawer;
@@ -212,6 +212,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     protected void initLayout(int resId) {
         setContentView(resId);
         bindValues();
+        Platform.setCursorImplementor(cursor);
         mControlLayout.setMenuListener(this);
 
         mDrawerPullButton.setOnClickListener(v -> onClickedMenu());
@@ -453,8 +454,8 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
 
     public static void toggleMouse(Context ctx) {
         // Avoid going through the JNI each time.
-        if (GLFW.isGrabbing()) return;
-        GLFWCursorView cursorView = Tools.getWeakReference(weakCursor);
+        if (Platform.isGrabbing()) return;
+        PlatformCursorView cursorView = Tools.getWeakReference(weakCursor);
         if(cursorView == null) return;
         int toastString = 0;
         switch (cursorView.getVisibility()) {

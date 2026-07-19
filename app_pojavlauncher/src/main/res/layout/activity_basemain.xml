@@ -27,7 +27,7 @@
 				android:defaultFocusHighlightEnabled="false"
                 tools:ignore="UnusedAttribute" />
 
-			<git.artdeell.dnbootstrap.glfw.GLFWCursorView
+			<net.kdt.pojavlaunch.platform.cursor.PlatformCursorView
 				android:layout_height="match_parent"
 				android:layout_width="match_parent"
 				android:orientation="vertical"

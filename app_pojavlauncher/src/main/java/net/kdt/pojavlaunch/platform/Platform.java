@@ -8,6 +8,8 @@ import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.platform.backend.GLFWBackend;
 import net.kdt.pojavlaunch.platform.backend.DummyBackend;
 import net.kdt.pojavlaunch.platform.backend.SDLBackend;
+import net.kdt.pojavlaunch.platform.cursor.PlatformCursor;
+import net.kdt.pojavlaunch.platform.cursor.PlatformCursorImplementor;
 import net.kdt.pojavlaunch.platform.input.PlatformGamepad;
 import net.kdt.pojavlaunch.platform.input.PlatformGrabListener;
 import net.kdt.pojavlaunch.platform.input.SDLGamepad;
@@ -41,6 +43,8 @@ public abstract class Platform {
     public static double cursorY;
     private static Surface mPendingSurface;
     private static PlatformGamepad mPlatformGamepad = null;
+    private static PlatformCursor mPlatformCursor = null;
+    private static PlatformCursorImplementor mCursorImplementor = null;
     private static GamepadEnableHandler mGamepadEnabler;
 
     private static void onInit(Platform impl){
@@ -75,12 +79,21 @@ public abstract class Platform {
     public static PlatformGamepad getPlatformGamepad() {
         return mPlatformGamepad;
     }
+    public static PlatformCursor getCursor(){
+        return mPlatformCursor;
+    }
+    public static void setCursorImplementor(PlatformCursorImplementor implementor){
+        mCursorImplementor = implementor;
+    }
+    public static PlatformCursorImplementor getCursorImplementor(){
+        return mCursorImplementor;
+    }
 
     // To be picked by GLFW
     public static void setGamepadEnableHandler(GamepadEnableHandler handler){
         mGamepadEnabler = handler;
     }
-    static GamepadEnableHandler getGamepadEnableHandler(){
+    protected static GamepadEnableHandler getGamepadEnableHandler(){
         return mGamepadEnabler;
     }
     public static void addGrabListener(PlatformGrabListener pgl){

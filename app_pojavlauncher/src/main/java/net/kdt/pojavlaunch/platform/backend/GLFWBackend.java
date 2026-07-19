@@ -42,6 +42,7 @@ public class GLFWBackend extends Platform {
         GLFW.cursorX = Platform.cursorX;
         GLFW.cursorY = Platform.cursorY;
         GLFW.sendMousePos();
+        Platform.getCursorImplementor().onCursorPosition();
     }
 
     @Override
