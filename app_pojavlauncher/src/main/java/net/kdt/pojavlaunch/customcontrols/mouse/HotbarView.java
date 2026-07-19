@@ -100,7 +100,7 @@ public class HotbarView extends View implements MCOptionUtils.MCOptionListener, 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Avoid going through the JNI each time.
-        if(!PLATFORM.isGrabbing()) return false;
+        if(!Platform.isGrabbing()) return false;
         boolean hasDoubleTapped = mDoubleTapDetector.onTouchEvent(event);
 
         // Check if we need to cancel the drop event

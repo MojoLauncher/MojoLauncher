@@ -5,7 +5,7 @@ import android.view.Surface;
 import net.kdt.pojavlaunch.platform.Platform;
 
 
-public class DummyBackend extends Platform {
+public class DummyBackend implements PlatformBackend {
 
     @Override
     public void surfaceCreated(Surface surface) {

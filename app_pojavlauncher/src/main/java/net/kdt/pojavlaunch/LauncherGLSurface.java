@@ -140,7 +140,7 @@ public class LauncherGLSurface extends View implements PlatformGrabListener, Gam
 
             // Mouse found
             // Avoid going through the JNI each time.
-            if(PLATFORM.isGrabbing()) return false;
+            if(Platform.isGrabbing()) return false;
             Platform.cursorX = e.getX(i) / getWidth();
             Platform.cursorY = e.getY(i) / getHeight();
             PLATFORM.sendMousePosition();
@@ -203,7 +203,7 @@ public class LauncherGLSurface extends View implements PlatformGrabListener, Gam
 
         // Make sure we grabbed the mouse if necessary
         // Avoid going through the JNI each time.
-        updateGrabState(PLATFORM.isGrabbing());
+        updateGrabState(Platform.isGrabbing());
 
         switch(event.getActionMasked()) {
             case MotionEvent.ACTION_HOVER_MOVE:

@@ -73,7 +73,7 @@ public class GyroControl implements SensorEventListener, PlatformGrabListener {
         mSensorManager.registerListener(this, mSensor, 1000 * LauncherPreferences.PREF_GYRO_SAMPLE_RATE);
         mCorrectionListener.enable();
         // Avoid going through the JNI each time.
-        mShouldHandleEvents = PLATFORM.isGrabbing();
+        mShouldHandleEvents = Platform.isGrabbing();
         Platform.addGrabListener(this);
     }
 

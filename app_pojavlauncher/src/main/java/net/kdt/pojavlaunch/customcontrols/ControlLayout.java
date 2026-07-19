@@ -39,6 +39,7 @@ import net.kdt.pojavlaunch.customcontrols.buttons.ControlSubButton;
 import net.kdt.pojavlaunch.customcontrols.handleview.ActionRow;
 import net.kdt.pojavlaunch.customcontrols.handleview.ControlHandleView;
 import net.kdt.pojavlaunch.customcontrols.handleview.EditControlSideDialog;
+import net.kdt.pojavlaunch.platform.Platform;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 import java.io.File;
@@ -263,7 +264,7 @@ public class ControlLayout extends FrameLayout {
 		for(ControlInterface button : getButtonChildren()){
             // Avoid going through the JNI each time.
             // Avoid going through the JNI each time.
-            button.setVisible(((button.getProperties().displayInGame && PLATFORM.isGrabbing()) || (button.getProperties().displayInMenu && !PLATFORM.isGrabbing())) && isVisible);
+            button.setVisible(((button.getProperties().displayInGame && Platform.isGrabbing()) || (button.getProperties().displayInMenu && !Platform.isGrabbing())) && isVisible);
 		}
 	}
 

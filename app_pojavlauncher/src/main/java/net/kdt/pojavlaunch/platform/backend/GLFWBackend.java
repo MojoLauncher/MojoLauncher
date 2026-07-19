@@ -13,7 +13,7 @@ import git.artdeell.dnbootstrap.glfw.GrabListener;
 /*
 Static provider for GLFW
  */
-public class GLFWBackend extends Platform {
+public class GLFWBackend implements PlatformBackend {
     private static final GrabListener BASE_GRAB_LISTENER = Platform::executeGrabbingListeners;
 
     public GLFWBackend(){

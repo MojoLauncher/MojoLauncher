@@ -85,7 +85,7 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
         }
 
         // Avoid going through the JNI each time.
-        if(!PLATFORM.isGrabbing()) {
+        if(!Platform.isGrabbing()) {
             enableTouchpadIfNecessary();
             // Yes, if the user's touchpad is multi-touch we will also receive events for that.
             // So, handle the scrolling gesture ourselves.

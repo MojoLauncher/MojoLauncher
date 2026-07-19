@@ -115,7 +115,7 @@ public class Gamepad implements PlatformGrabListener, GamepadHandler {
         mCurrentMap = mGameMap;
         // Force state refresh
         // Avoid going through the JNI each time.
-        boolean currentGrab = PLATFORM.isGrabbing();
+        boolean currentGrab = Platform.isGrabbing();
         isGrabbing = !currentGrab;
         onGrabState(currentGrab);
     }

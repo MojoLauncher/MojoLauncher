@@ -27,7 +27,7 @@ public class DefaultDataProvider implements GamepadDataProvider {
     @Override
     public boolean isGrabbing() {
         // Avoid going through the JNI each time.
-        return PLATFORM.isGrabbing();
+        return Platform.isGrabbing();
     }
 
     @Override

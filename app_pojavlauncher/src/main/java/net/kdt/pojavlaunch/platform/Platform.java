@@ -7,6 +7,7 @@ import net.kdt.pojavlaunch.MainActivity;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.platform.backend.GLFWBackend;
 import net.kdt.pojavlaunch.platform.backend.DummyBackend;
+import net.kdt.pojavlaunch.platform.backend.PlatformBackend;
 import net.kdt.pojavlaunch.platform.backend.SDLBackend;
 import net.kdt.pojavlaunch.platform.cursor.PlatformCursor;
 import net.kdt.pojavlaunch.platform.cursor.PlatformCursorImplementor;
@@ -33,7 +34,7 @@ public abstract class Platform {
         SDLBackend.initialize(activity);
     }
 
-    public static Platform PLATFORM = new DummyBackend(); // Initialize a dummy platform - the game will initialize correct one later
+    public static PlatformBackend PLATFORM = new DummyBackend(); // Initialize a dummy platform - the game will initialize correct one later
     private static List<PlatformGrabListener> grabListeners = new ArrayList<>();
     private static PlatformCursorImplementor mCursorImplementor = null;
     static {
@@ -48,22 +49,10 @@ public abstract class Platform {
     private static PlatformCursor mPlatformCursor = null;
     private static GamepadEnableHandler mGamepadEnabler;
 
-    private static void onInit(Platform impl){
+    private static void onInit(PlatformBackend impl){
         Platform.setPlatformLibrary(impl);
         ContextExecutor.executeActivity(activity -> ((MainActivity) activity).hideLoadingScreen());
     }
-
-    public abstract void surfaceCreated(Surface surface);
-    public abstract void surfaceUpdated();
-    public abstract void surfaceDestroyed();
-
-    public abstract void sendMousePosition();
-    public abstract void sendMouseEvent(int key, int state, int mods);
-    public abstract void sendKeyEvent(int key, int state, int mods, char codepoint);
-    public abstract void sendKeyEvent(int key, int state, int mods);
-    public abstract void sendKeyEvent(int key, boolean state, int mods);
-    public abstract void sendScrollEvent(double x, double y);
-    public abstract void sendBulkUnicodeEvent(String text, int mods);
     public static boolean isGrabbing(){
         return isGrabbing;
     }
@@ -94,15 +83,15 @@ public abstract class Platform {
     public static void setGamepadEnableHandler(GamepadEnableHandler handler){
         mGamepadEnabler = handler;
     }
-    protected static GamepadEnableHandler getGamepadEnableHandler(){
+    public static GamepadEnableHandler getGamepadEnableHandler(){
         return mGamepadEnabler;
     }
     public static void addGrabListener(PlatformGrabListener pgl){
         grabListeners.add(pgl);
     }
 
-    public static void setPlatformLibrary(Platform library){
-        PLATFORM = library;
+    public static void setPlatformLibrary(PlatformBackend backend){
+        PLATFORM = backend;
         // To be picked by platform library
         if(mPendingSurface != null)
             PLATFORM.surfaceCreated(mPendingSurface);
