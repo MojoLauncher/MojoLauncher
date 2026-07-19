@@ -21,6 +21,6 @@ public class SDLGamepad implements PlatformGamepad {
 
     @Override
     public boolean shouldOverride() {
-        return true;
+        return SDLControllerManager.isEnabled();
     }
 }
