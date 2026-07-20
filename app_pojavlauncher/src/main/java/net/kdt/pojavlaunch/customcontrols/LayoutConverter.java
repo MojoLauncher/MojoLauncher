@@ -1,6 +1,7 @@
 package net.kdt.pojavlaunch.customcontrols;
 
 import android.graphics.Point;
+import android.util.Log;
 
 import com.google.gson.JsonSyntaxException;
 
@@ -17,12 +18,16 @@ import java.util.ArrayList;
 
 public class LayoutConverter {
 
+    private static final int TARGET_VERSION = 9;
+
     public static CustomControls loadAndConvertIfNecessary(Point size, String jsonPath) throws IOException, JsonSyntaxException{
         File jsonFile = new File(jsonPath);
         LayoutBitmaps.ControlsContainer container = LayoutBitmaps.load(jsonFile);
         LayoutBitmaps layoutBitmaps = container.mLayoutZip;
         CustomControls controls = internalLoad(size, container.mControlsJson);
         if(controls == null) throw new IOException("Unsupported control layout version");
+        while(controls.version < TARGET_VERSION)
+            controls = upgradeLayout(size, controls);
         controls.mLayoutBitmaps = layoutBitmaps;
         return controls;
     }
@@ -55,6 +60,12 @@ public class LayoutConverter {
         } catch (JSONException e) {
             throw new JsonSyntaxException("Failed to load the layout. Maybe it's corrupted?", e);
         }
+    }
+
+    private static CustomControls upgradeLayout(Point size, CustomControls controls){
+        // Extremely ugly solution but it's how LayoutConverter was made
+        String layoutJson = Tools.GLOBAL_GSON.toJson(controls);
+        return internalLoad(size, layoutJson);
     }
 
 
@@ -190,7 +201,7 @@ public class LayoutConverter {
     }
 
     private static CustomControls convertV8Layout(CustomControls layout){
-        if(layout.version != 8)
+        if(layout.version > 8)
             return layout;
         if(layout.mControlDataList != null){
             for(ControlData data : layout.mControlDataList){
