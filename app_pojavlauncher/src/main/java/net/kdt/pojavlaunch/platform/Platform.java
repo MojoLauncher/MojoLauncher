@@ -23,7 +23,7 @@ import git.artdeell.dnbootstrap.glfw.GamepadEnableHandler;
 import git.mojo.sdl.SDLActivity;
 import git.mojo.sdl.SDLControllerManager;
 
-public abstract class Platform {
+public class Platform {
     public static void initializeCallbacks(Activity activity){
         GLFW.setInitCallback(() -> onInit(new GLFWBackend()));
         SDLActivity.setInitCallback(() -> onInit(new SDLBackend()));
