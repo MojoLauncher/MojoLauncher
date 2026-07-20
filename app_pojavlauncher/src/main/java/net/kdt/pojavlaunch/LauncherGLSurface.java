@@ -1,5 +1,6 @@
 package net.kdt.pojavlaunch;
 
+import static net.kdt.pojavlaunch.CallbackBridge.windowRate;
 import static net.kdt.pojavlaunch.MainActivity.touchCharInput;
 import static net.kdt.pojavlaunch.utils.MCOptionUtils.getMcScale;
 import static net.kdt.pojavlaunch.CallbackBridge.sendMouseButton;
@@ -298,6 +299,7 @@ public class LauncherGLSurface extends View implements PlatformGrabListener, Gam
         }
         windowWidth = newWidth;
         windowHeight = newHeight;
+        windowRate = mSurface.getDisplay().getRefreshRate();
         if(mSurface == null){
             Log.w("MGLSurface", "Attempt to refresh size on null surface");
             return;
@@ -398,5 +400,8 @@ public class LauncherGLSurface extends View implements PlatformGrabListener, Gam
     }
     public static int getWindowHeight(){
         return windowHeight;
+    }
+    public static float getWindowRate(){
+        return windowRate;
     }
 }

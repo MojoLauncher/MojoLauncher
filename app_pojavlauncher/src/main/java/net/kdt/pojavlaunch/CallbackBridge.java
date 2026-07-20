@@ -18,6 +18,7 @@ public class CallbackBridge {
     public static final Choreographer sChoreographer = Choreographer.getInstance();
 
     public static volatile int windowWidth, windowHeight;
+    public static volatile float windowRate;
     public volatile static boolean holdingAlt, holdingCapslock, holdingCtrl,
             holdingNumlock, holdingShift;
 
