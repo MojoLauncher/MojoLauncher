@@ -93,7 +93,6 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     private ControlLayout mControlLayout;
     private HotbarView mHotbarView;
     private View mLoadingScreen;
-    private volatile AndroidClipboardProvider mClipboardProvider;
 
     Instance instance;
     Account account;
@@ -119,7 +118,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             finish();
             return;
         }
-        Platform.initializeCallbacks(this);
+        Platform.initialize(this);
         AsyncAssetManager.extractDefaultSettings(this, instance.getGameDirectory());
         MCOptionUtils.load(instance.getGameDirectory().getAbsolutePath());
 
@@ -224,9 +223,6 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             if(!latestLogFile.exists() && !latestLogFile.createNewFile())
                 throw new IOException("Failed to create a new log file");
             Logger.begin(latestLogFile.getAbsolutePath());
-
-            mClipboardProvider = new AndroidClipboardProvider(getApplicationContext());
-            GLFW.setClipboardImpl(mClipboardProvider);
 
             touchCharInput.setCharacterSender(new LwjglCharSender());
 

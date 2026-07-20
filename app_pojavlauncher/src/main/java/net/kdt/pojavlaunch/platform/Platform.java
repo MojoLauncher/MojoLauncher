@@ -9,6 +9,7 @@ import net.kdt.pojavlaunch.platform.backend.GLFWBackend;
 import net.kdt.pojavlaunch.platform.backend.DummyBackend;
 import net.kdt.pojavlaunch.platform.backend.PlatformBackend;
 import net.kdt.pojavlaunch.platform.backend.SDLBackend;
+import net.kdt.pojavlaunch.platform.clipboard.AndroidClipboard;
 import net.kdt.pojavlaunch.platform.cursor.PlatformCursor;
 import net.kdt.pojavlaunch.platform.cursor.PlatformCursorImplementor;
 import net.kdt.pojavlaunch.platform.input.PlatformGamepad;
@@ -24,14 +25,20 @@ import git.mojo.sdl.SDLActivity;
 import git.mojo.sdl.SDLControllerManager;
 
 public class Platform {
-    public static void initializeCallbacks(Activity activity){
+    private static AndroidClipboard mClipboard;
+    public static void initialize(Activity activity){
+        mClipboard = new AndroidClipboard(activity.getApplicationContext());
         GLFW.setInitCallback(() -> onInit(new GLFWBackend()));
         SDLActivity.setInitCallback(() -> onInit(new SDLBackend()));
+        SDLActivity.setClipboard(mClipboard);
+        GLFW.setClipboardImpl(mClipboard);
         // SDL can handle gamepads on its own, so route all events through it
         // if SDL was detected of course (the check is based on detectDevices)
         // Vanilla SDL client shouldn't touch input system and thus cause emulated input to break
         SDLControllerManager.setEnabledCallback(() -> mPlatformGamepad = new SDLGamepad());
         SDLBackend.initialize(activity);
+
+
     }
 
     public static PlatformBackend PLATFORM = new DummyBackend(); // Initialize a dummy platform - the game will initialize correct one later
