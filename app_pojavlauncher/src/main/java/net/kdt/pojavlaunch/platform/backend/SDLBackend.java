@@ -34,10 +34,16 @@ public class SDLBackend implements PlatformBackend{
     public void surfaceCreated(Surface surface) {
         SDLActivity.setNativeSurface(surface);
         SDLActivity.onNativeSurfaceCreated();
+        this.surfaceUpdated(); // Update initial size
     }
 
     @Override
     public void surfaceUpdated() {
+        int w = LauncherGLSurface.getWindowWidth();
+        int h = LauncherGLSurface.getWindowHeight();
+        float r = LauncherGLSurface.getWindowRate();
+        SDLActivity.nativeSetScreenResolution(w, h, w, h, 1.0f, r);
+        SDLActivity.onNativeResize();
         SDLActivity.onNativeSurfaceChanged();
     }
 
