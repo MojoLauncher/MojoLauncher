@@ -1,5 +1,7 @@
 package net.kdt.pojavlaunch.customcontrols.keyboard;
 
+import static net.kdt.pojavlaunch.platform.Platform.PLATFORM;
+
 import android.view.KeyEvent;
 
 import net.kdt.pojavlaunch.CallbackBridge;
@@ -19,6 +21,6 @@ public class LwjglCharSender implements CharacterSenderStrategy {
 
     @Override
     public void sendChars(CharSequence chars) {
-        Platform.PLATFORM.sendBulkUnicodeEvent(chars.toString(), CallbackBridge.getCurrentMods());
+        PLATFORM.sendBulkUnicodeEvent(chars.toString(), CallbackBridge.getCurrentMods());
     }
 }
