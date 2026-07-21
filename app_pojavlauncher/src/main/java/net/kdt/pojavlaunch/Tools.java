@@ -92,7 +92,7 @@ public final class Tools {
 
     public static final Gson GLOBAL_GSON = new GsonBuilder().setPrettyPrinting().create();
 
-    public static final String URL_HOME = "https://pojavlauncherteam.github.io";
+    public static final String URL_HOME = "https://mojolauncher.ru";
     public static String NATIVE_LIB_DIR;
     public static String DIR_DATA; //Initialized later to get context
     public static File DIR_CACHE;
@@ -427,7 +427,19 @@ public final class Tools {
         activity.runOnUiThread(()->dialog(activity, title, message));
     }
 
+    public static void dialogOnUiThread(final Activity activity, final int title, final int message) {
+        activity.runOnUiThread(()->dialog(activity, title, message));
+    }
+
     public static void dialog(final Context context, final CharSequence title, final CharSequence message) {
+        new AlertDialog.Builder(context)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
+    }
+
+    public static void dialog(final Context context, final int title, final int message) {
         new AlertDialog.Builder(context)
                 .setTitle(title)
                 .setMessage(message)
@@ -520,6 +532,16 @@ public final class Tools {
     }
     public static void write(String path, String content) throws IOException {
         write(new File(path), content);
+    }
+    public static void write(InputStream source, File dest) throws IOException {
+        try(FileOutputStream fos = new FileOutputStream(dest)){
+            byte[] buf = new byte[65535];
+            int len;
+            while((len = source.read(buf)) > 0) {
+                fos.write(buf, 0, len);
+            }
+            fos.flush();
+        }
     }
 
     public static boolean isAndroid8OrHigher() {
