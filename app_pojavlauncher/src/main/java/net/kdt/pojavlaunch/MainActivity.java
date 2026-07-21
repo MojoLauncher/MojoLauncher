@@ -24,6 +24,7 @@ import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -497,11 +498,15 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     }
 
     public void hideLoadingScreen(){
+        if(mLoadingScreen == null) return;
         ((TextView) mLoadingScreen.findViewById(R.id.main_loading_screen_text)).setText(R.string.loading_screen_booted);
         mLoadingScreen.animate()
                 .alpha(0f)
                 .setDuration(300)
-                .withEndAction(() -> mLoadingScreen.setVisibility(View.GONE))
+                .withEndAction(() -> {
+                    ((ViewGroup) mLoadingScreen.getParent()).removeView(mLoadingScreen);
+                    mLoadingScreen = null;
+                })
                 .start();
     }
 
