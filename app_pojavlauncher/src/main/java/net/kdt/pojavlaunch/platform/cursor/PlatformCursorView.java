@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import net.kdt.pojavlaunch.platform.Platform;
 
@@ -35,12 +36,8 @@ public class PlatformCursorView extends View implements PlatformCursorImplemento
 
     public PlatformCursorView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        if(attrs != null) {
-            try(TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.PlatformCursorView)) {
-                cursorDrawable = arr.getDrawable(R.styleable.PlatformCursorView_defaultCursorDrawable);
-            }
-        }
-        if(cursorDrawable == null) cursorDrawable = new FallbackCursorDrawable();
+        cursorDrawable = ContextCompat.getDrawable(context, R.drawable.ic_mouse_pointer);
+        assert cursorDrawable != null;
         cursorDrawable.setBounds(0, 0, 36, 54);
     }
 
