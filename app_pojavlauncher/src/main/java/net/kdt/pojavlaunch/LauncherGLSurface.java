@@ -93,7 +93,7 @@ public class LauncherGLSurface extends View implements PlatformGrabListener, Gam
 
     public LauncherGLSurface(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-            setFocusable(true);
+        setFocusable(true);
         Platform.setGamepadEnableHandler(this);
     }
 
