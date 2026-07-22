@@ -156,7 +156,7 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         mInstanceIcon.setImageDrawable(
                 InstanceIconProvider.fetchIcon(getResources(), instance)
         );
-        if(instance.modded) {
+        if(instance.platform != null) {
             mVersionSelectButton.setVisibility(View.GONE);
             mDefaultVersion.setVisibility(View.GONE);
             mVersionLabel.setVisibility(View.GONE);

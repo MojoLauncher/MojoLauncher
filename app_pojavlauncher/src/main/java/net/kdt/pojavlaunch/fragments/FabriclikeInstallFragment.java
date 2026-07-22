@@ -20,6 +20,8 @@ import androidx.fragment.app.Fragment;
 
 import net.kdt.pojavlaunch.PojavApplication;
 import git.artdeell.mojo.R;
+import me.andreasmelone.basicmodinfoparser.platform.Platform;
+
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.instances.Instances;
@@ -118,7 +120,7 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
                 i.name = mFabriclikeUtils.getName();
                 i.icon = mFabriclikeUtils.getIconName();
                 i.versionId = versionId;
-                i.modded = true;
+                i.platform = Platform.FABRIC;
             }, versionId);
             getListenerProxy().onDownloadFinished(null);
         }catch (IOException e) {

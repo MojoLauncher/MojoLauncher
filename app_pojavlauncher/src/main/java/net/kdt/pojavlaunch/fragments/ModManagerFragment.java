@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.contracts.OpenDocumentWithExtension;
+import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.modloaders.modmanager.ModAdapter;
 import net.kdt.pojavlaunch.modloaders.modmanager.ModInfo;
@@ -74,10 +75,11 @@ public class ModManagerFragment extends Fragment {
     private void refreshModsList() {
         mProgressBar.setVisibility(View.VISIBLE);
         PojavApplication.sExecutorService.execute(()->{
-            List<ModInfo> modInfoList = ModScanner.findMods(mModsFolder, Platform.NEOFORGE);
+            Instance instance = Instances.loadSelectedInstance();
+            List<ModInfo> modInfoList = ModScanner.findMods(mModsFolder, instance.platform);
             Tools.runOnUiThread(()->{
                 if(isRemoving() || isDetached()) return;
-                ModAdapter modAdapter = new ModAdapter(modInfoList, Platform.NEOFORGE);
+                ModAdapter modAdapter = new ModAdapter(modInfoList, instance.platform);
                 mModRecyclerView.setAdapter(modAdapter);
                 modAdapter.performSearch(m->true, mProgressBar);
             });
