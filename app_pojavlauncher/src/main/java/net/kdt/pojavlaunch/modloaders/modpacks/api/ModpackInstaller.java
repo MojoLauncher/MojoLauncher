@@ -9,6 +9,7 @@ import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.modloaders.modpacks.imagecache.ModIconCache;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
+import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDownload;
 import net.kdt.pojavlaunch.progresskeeper.DownloaderProgressWrapper;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
 
@@ -57,17 +58,12 @@ public class ModpackInstaller {
     }
 
     public static ModLoader downloadModpack(ModDetail modDetail, int selectedVersion, InstallFunction installFunction) throws IOException {
-        String versionUrl = modDetail.versionUrls[selectedVersion];
-        String versionHash = modDetail.versionHashes[selectedVersion];
-        String modpackName = (modDetail.title.toLowerCase(Locale.ROOT) + " " + modDetail.versionNames[selectedVersion])
+        ModDownload modDownload = modDetail.downloads[selectedVersion];
+        String modpackName = (modDetail.title.toLowerCase(Locale.ROOT) + " " + modDownload.versionName)
                 .trim().replaceAll("[\\\\/:*?\"<>| \\t\\n]", "_" );
-        String name = modDetail.title;
-        String icon = modDetail.getIconCacheTag();
-
-        if (versionHash != null) {
-            modpackName += "_" + versionHash;
+        if (modDownload.versionHash != null) {
+            modpackName += "_" + modDownload.versionHash;
         }
-
         if (modpackName.length() > 255){
             modpackName = modpackName.substring(0,255);
         }
@@ -76,8 +72,8 @@ public class ModpackInstaller {
 
         byte[] downloadBuffer = new byte[8192];
         try {
-            DownloadUtils.ensureSha1(modpackFile, versionHash, (Callable<Void>) () -> {
-                DownloadUtils.downloadFileMonitored(versionUrl, modpackFile, downloadBuffer,
+            DownloadUtils.ensureSha1(modpackFile, modDownload.versionHash, (Callable<Void>) () -> {
+                DownloadUtils.downloadFileMonitored(modDownload.versionUrl, modpackFile, downloadBuffer,
                         new DownloaderProgressWrapper(R.string.modpack_download_downloading_metadata,
                                 ProgressLayout.INSTALL_MODPACK
                         )
@@ -89,7 +85,7 @@ public class ModpackInstaller {
             throw e;
         }
 
-        return installModpack(modpackName, name, modpackFile, icon, installFunction);
+        return installModpack(modpackName, modDetail.title, modpackFile, modDetail.getIconCacheTag(), installFunction);
     }
 
     public interface InstallFunction {

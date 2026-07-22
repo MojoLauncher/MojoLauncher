@@ -28,6 +28,7 @@ public class Instance extends DisplayInstance {
     public String selectedRuntime;
     public String controlLayout;
     public boolean sharedData;
+    public boolean modded;
 
     protected Instance() {
     }

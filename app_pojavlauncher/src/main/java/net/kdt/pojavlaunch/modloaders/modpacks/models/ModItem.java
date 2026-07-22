@@ -4,15 +4,14 @@ import androidx.annotation.NonNull;
 
 public class ModItem extends ModSource {
 
-    public String id;
-    public String title;
-    public String description;
-    public String imageUrl;
+    public final boolean isModpack;
+    public final String title;
+    public final String description;
+    public final String imageUrl;
 
     public ModItem(int apiSource, boolean isModpack, String id, String title, String description, String imageUrl) {
-        this.apiSource = apiSource;
+        super(apiSource, id);
         this.isModpack = isModpack;
-        this.id = id;
         this.title = title;
         this.description = description;
         this.imageUrl = imageUrl;
@@ -29,9 +28,5 @@ public class ModItem extends ModSource {
                 ", apiSource=" + apiSource +
                 ", isModpack=" + isModpack +
                 '}';
-    }
-
-    public String getIconCacheTag() {
-        return apiSource+"_"+id;
     }
 }
