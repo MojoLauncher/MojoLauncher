@@ -80,7 +80,7 @@ public class DumbZipFile implements IZipFile {
             int skipAmount = extraLength + commentLength;
             // Why the duplicate position call for extra here and below?
             // ByteBuffer.position takes a non-insignificant amount of time, surprisingly
-            if(skipAmount != 0) directoryBuffer.position(extraLength + skipAmount);
+            if(skipAmount != 0) directoryBuffer.position(directoryBuffer.position() + skipAmount);
             return;
         }
         // Skip extra field
