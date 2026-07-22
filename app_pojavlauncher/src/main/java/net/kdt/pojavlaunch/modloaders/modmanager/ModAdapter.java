@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -66,7 +67,7 @@ public class ModAdapter extends RecyclerView.Adapter<ModAdapter.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        return mDisplayModInfos.get(position).expanded ? 1 : 0;
+        return mDisplayModInfos.get(position) != null && mDisplayModInfos.get(position).expanded ? 1 : 0;
     }
 
     @NonNull
@@ -208,6 +209,12 @@ public class ModAdapter extends RecyclerView.Adapter<ModAdapter.ViewHolder> {
         public ExpandedViewHolder(@NonNull View itemView) {
             super(itemView);
             View expansionView = ((ViewStub) itemView.findViewById(R.id.mod_limited_state_stub)).inflate();
+            ImageButton delete = expansionView.findViewById(R.id.mod_manager_delete_button);
+            delete.setOnClickListener(v ->{
+                mModInfo.jarFile.delete();
+                mDisplayModInfos.remove(mModInfo);
+                ModAdapter.this.notifyDataSetChanged();
+            });
         }
     }
 }
