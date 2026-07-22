@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import me.andreasmelone.basicmodinfoparser.modfile.ModFile;
 import me.andreasmelone.basicmodinfoparser.platform.BasicModInfo;
 import me.andreasmelone.basicmodinfoparser.platform.Platform;
+import me.andreasmelone.basicmodinfoparser.util.ModInfoParseException;
 
 public class ModScanner {
     static {
@@ -75,14 +76,15 @@ public class ModScanner {
             try {
                 ModFile modFile = ModFile.create(mModFile);
                 BasicModInfo[] infos = modFile.getInfo(mPlatform);
-                if(infos.length == 0) {
+                if (infos.length == 0) {
                     modInfo = new CorruptModInfo(mModFile, CorruptModInfo.CORRUPTION_REASON_NOT_A_MOD);
-                }else {
+                } else {
                     BasicModInfo basicModInfo = infos[0];
                     modInfo = new ContainedModInfo(mModFile, modFile, createSearchTerms(basicModInfo));
                 }
-
-            }catch (IOException e) {
+            } catch (ModInfoParseException e){
+                modInfo = new CorruptModInfo(mModFile, CorruptModInfo.CORRUPTION_REASON_NOT_A_MOD);
+            } catch (IOException e) {
                 Log.i("ModScanner", "Exception while reading mod", e);
                 modInfo = new CorruptModInfo(mModFile, CorruptModInfo.CORRUPTION_REASON_NOT_READABLE);
             }
