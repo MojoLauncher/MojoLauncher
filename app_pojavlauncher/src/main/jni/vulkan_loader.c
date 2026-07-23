@@ -16,6 +16,9 @@
 #include <pojavexec.h>
 
 static bool driver_loaded = false;
+static bool custom_driver = false;
+
+#define ENABLE_TURNIP_LOADER
 
 #ifdef ENABLE_TURNIP_LOADER
 void load_turnip_vulkan(const char* custom_path) {
@@ -54,11 +57,11 @@ void load_turnip_vulkan(const char* custom_path) {
 void* pojavexec_loadVulkanDriver(const char* custom_path) {
 #ifdef ENABLE_TURNIP_LOADER
     if(android_get_device_api_level() >= 28) { // the loader does not support below that
-        if(custom_path) load_turnip_vulkan(custom_path);
+        if(custom_driver && custom_path) load_turnip_vulkan(custom_path);
         if(driver_loaded)
             // Reference the vulkan driver separately to avoid weirdness from libraries calling dlclose
             return linker_ns_dlopen("libmjlvlk.so", RTLD_LOCAL);
-    }
+        }
 #endif
     void* vulkan_ptr = dlopen("libvulkan.so", RTLD_LAZY | RTLD_LOCAL);
     printf("VulkanLoader: loaded system vulkan, ptr=%p\n", vulkan_ptr);
@@ -69,6 +72,7 @@ JNIEXPORT void JNICALL
 Java_net_kdt_pojavlaunch_utils_JREUtils_loadVulkanLibrary(JNIEnv *env, jclass clazz,
                                                           jstring absolute_path) {
     if(absolute_path == NULL) return;
+    custom_driver = true;
     const char* _absolute_path = (*env)->GetStringUTFChars(env, absolute_path, NULL);
     pojavexec_loadVulkanDriver(_absolute_path);
     (*env)->ReleaseStringUTFChars(env, absolute_path, _absolute_path);
