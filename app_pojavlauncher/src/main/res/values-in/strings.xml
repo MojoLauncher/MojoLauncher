@@ -8,7 +8,6 @@
     <string name="login_online_username_hint">Username</string>
     <string name="login_online_login_label">Login</string>
     <!-- Hint -->
-    <string name="hint_control_mapping">"Sentuh roda gigi diatas tengah untuk membuka menu konteks ⚙️\nSentuh sebuah tombol untuk menyesuaikan: edit, ubah ukuran, atau ubah tombol pintasannya."</string>
     <!-- Warnings -->
     <string name="warning_remove_account">Akun ini akan dihapus!</string>
     <!-- AlertDialog title -->

@@ -9,6 +9,7 @@
     <string name="login_online_login_label">Увійти</string>
     <!-- Hint -->
     <!-- Warnings -->
+    <string name="hint_control_mapping">Натисніть на значок шестерні ⚙, щоб відкрити меню дій.\nВиберіть кнопку, щоб видалили її або скопіювати;\nзмінити її властивості, розмір або прозорість клавіші</string>
     <string name="warning_remove_account">Вибранний аккаунт буде видалено!</string>
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Вибрати інсталятор моду</string>

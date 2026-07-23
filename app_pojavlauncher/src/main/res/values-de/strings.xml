@@ -8,7 +8,7 @@
     <string name="login_online_username_hint">Benutzername</string>
     <string name="login_online_login_label">Anmelden</string>
     <!-- Hint -->
-    <string name="hint_control_mapping">"Tippe auf das Zahnradsymbol oben in der Mitte, um das Kontextmenü zu öffnen ⚙.\nTippe auf eine Schaltfläche, um sie anzupassen: Bearbeiten, Größe ändern, Löschen oder die Tastenzuordnung ändern."</string>
+    <string name="hint_control_mapping">Tippe auf das Zahnradsymbol, um das Kontextmenü zu öffnen ⚙.\nTippe auf eine Schaltfläche, um sie anzupassen: Bearbeiten, Größe ändern, Löschen oder die Tastenzuordnung ändern.</string>
     <!-- Warnings -->
     <string name="warning_remove_account">Dieses Konto wird entfernt!</string>
     <!-- AlertDialog title -->
