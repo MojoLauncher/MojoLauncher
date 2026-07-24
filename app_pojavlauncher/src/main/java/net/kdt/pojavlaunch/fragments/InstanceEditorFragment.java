@@ -47,7 +47,7 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
     private String mSelectedControlLayout;
     private Button mSaveButton, mDeleteButton, mControlSelectButton, mVersionSelectButton;
     private Spinner mDefaultRuntime, mDefaultRenderer;
-    private EditText mDefaultName, mDefaultJvmArgument;
+    private EditText mDefaultName, mDefaultJvmArgument, mServerAutoConnect;
     private TextView mDefaultVersion, mDefaultControl;
     private ImageView mInstanceIcon;
     private CheckBox mSharedDataCheckbox;
@@ -175,6 +175,7 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         mDefaultName.setText(nullToEmpty(instance.name));
         mDefaultControl.setText(mSelectedControlLayout == null ? nullToEmpty(instance.controlLayout) : mSelectedControlLayout);
         mSharedDataCheckbox.setChecked(instance.sharedData);
+        mServerAutoConnect.setText(nullToEmpty(instance.serverAddress));
     }
 
     private void bindViews(@NonNull View view){
@@ -192,6 +193,7 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         mVersionSelectButton = view.findViewById(R.id.vprof_editor_version_button);
         mInstanceIcon = view.findViewById(R.id.vprof_editor_instance_icon);
         mSharedDataCheckbox = view.findViewById(R.id.vprof_editor_data_checkbox_container);
+        mServerAutoConnect = view.findViewById(R.id.vprof_editor_server_address);
     }
 
     private void save(){
@@ -200,9 +202,11 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         mInstance.controlLayout = mDefaultControl.getText().toString();
         mInstance.name = mDefaultName.getText().toString();
         mInstance.jvmArgs = mDefaultJvmArgument.getText().toString();
+        mInstance.serverAddress = mServerAutoConnect.getText().toString();
 
         if(mInstance.controlLayout.isEmpty()) mInstance.controlLayout = null;
         if(mInstance.jvmArgs.isEmpty()) mInstance.jvmArgs = null;
+        if(mInstance.serverAddress.isEmpty()) mInstance.serverAddress = null;
 
         Runtime selectedRuntime = (Runtime) mDefaultRuntime.getSelectedItem();
         mInstance.selectedRuntime = (selectedRuntime.name.equals("<Default>") || selectedRuntime.versionString == null)
