@@ -1,7 +1,18 @@
 package net.kdt.pojavlaunch.instances;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentSender;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+
+import androidx.core.content.pm.ShortcutInfoCompat;
+import androidx.core.content.pm.ShortcutManagerCompat;
+import androidx.core.graphics.drawable.IconCompat;
+
 import com.google.gson.JsonSyntaxException;
 
+import net.kdt.pojavlaunch.TestStorageActivity;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.FileUtils;
@@ -13,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+
+import git.artdeell.mojo.R;
 
 public class Instances {
     private static final File sInstancePath = new File(Tools.DIR_GAME_HOME, "instances");
@@ -127,11 +140,13 @@ public class Instances {
     /**
      * Remove the instance. This also removes its data storage folder.
      * @param instance the Instance to remove
+     * @param context the context to remove all bound shortcuts. Provide null to skip this
      * @throws IOException in case of errors during directory removal
      */
-    public static void removeInstance(Instance instance) throws IOException {
+    public static void removeInstance(Instance instance, Context context) throws IOException {
         File instanceDirectory = instance.mInstanceRoot;
         if(instanceDirectory == null) return;
+        if(context != null) removeInstanceShortcut(instance, context);
         org.apache.commons.io.FileUtils.deleteDirectory(instanceDirectory);
     }
 
@@ -192,5 +207,43 @@ public class Instances {
         if(instance == null) return null;
         instance.sanitize();
         return instance;
+    }
+
+    private static String makeInstanceLabel(Instance instance){
+        String label = Tools.validOrNullString(instance.name);
+        if(label == null) label = instance.versionId;
+        label = "MJ - " + label;
+        return label;
+    }
+
+    public static void createInstanceShortcut(Instance instance, Context context){
+        if(!ShortcutManagerCompat.isRequestPinShortcutSupported(context))
+            return;
+        String uuid = instance.getInstanceRoot().getName();
+        String label = makeInstanceLabel(instance);
+        Drawable drawable = InstanceIconProvider.fetchIcon(context.getResources(), instance);
+        IconCompat ic;
+        if(drawable instanceof BitmapDrawable){
+            ic = IconCompat.createWithBitmap(((BitmapDrawable) drawable).getBitmap());
+        } else {
+            ic = null;
+        }
+        Intent target = new Intent(context, TestStorageActivity.class)
+                .setAction(Intent.ACTION_MAIN)
+                .addCategory(Intent.CATEGORY_LAUNCHER)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra("instance", uuid);
+        ShortcutInfoCompat shortcut = new ShortcutInfoCompat.Builder(context, uuid)
+                .setShortLabel(label)
+                .setIcon(ic)
+                .setLongLabel(context.getString(R.string.shortcut_long_label, instance.name))
+                .setIntent(target)
+                .build();
+        ShortcutManagerCompat.requestPinShortcut(context, shortcut, null);
+    }
+    public static void removeInstanceShortcut(Instance instance, Context context){
+        if(!ShortcutManagerCompat.isRequestPinShortcutSupported(context))
+            return;
+        ShortcutManagerCompat.disableShortcuts(context, Collections.singletonList(instance.getInstanceRoot().getName()), context.getString(R.string.shortcut_disabled));
     }
 }

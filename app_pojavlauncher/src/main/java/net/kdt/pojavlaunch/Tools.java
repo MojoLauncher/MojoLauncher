@@ -958,33 +958,4 @@ public final class Tools {
             return 0;
         return Math.min(imeHeight, cursorY - visibleHeight + padding);
     }
-
-    // TODO: split
-    public static void createInstanceShortcut(Instance instance, Context context){
-        if(!ShortcutManagerCompat.isRequestPinShortcutSupported(context))
-            return;
-        String uuid = instance.getInstanceRoot().getName();
-        String label = Tools.validOrNullString(instance.name);
-        if(label == null) label = instance.versionId;
-        label = "MJ - " + label;
-        Drawable drawable = InstanceIconProvider.fetchIcon(context.getResources(), instance);
-        IconCompat ic;
-        if(drawable instanceof BitmapDrawable){
-            ic = IconCompat.createWithBitmap(((BitmapDrawable) drawable).getBitmap());
-        } else {
-            ic = null;
-        }
-        Intent target = new Intent(context, TestStorageActivity.class)
-                .setAction(Intent.ACTION_MAIN)
-                .addCategory(Intent.CATEGORY_LAUNCHER)
-                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra("instance", uuid);
-        ShortcutInfoCompat shortcut = new ShortcutInfoCompat.Builder(context, uuid)
-                .setShortLabel(label)
-                .setIcon(ic)
-                .setLongLabel(instance.versionId)
-                .setIntent(target)
-                .build();
-        ShortcutManagerCompat.requestPinShortcut(context, shortcut, null);
-    }
 }

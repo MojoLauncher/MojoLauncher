@@ -46,7 +46,7 @@ public class ModpackInstaller {
                 instance.installer.start();
             }
         } catch (IOException e) {
-            Instances.removeInstance(instance);
+            Instances.removeInstance(instance, null);
             throw e;
         } finally {
             modpackFile.delete();

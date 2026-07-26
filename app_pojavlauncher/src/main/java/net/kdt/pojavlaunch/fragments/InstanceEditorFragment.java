@@ -117,10 +117,6 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
             mSharedDataCheckbox.setText(text);
         });
 
-        mPinShortcutButton.setOnClickListener(v -> {
-            Tools.createInstanceShortcut(mInstance, getContext());
-        });
-
         Instance selectedInstance = Instances.loadSelectedInstance();
         Context context = view.getContext();
         if(selectedInstance == null) {
@@ -179,6 +175,9 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         mDefaultName.setText(nullToEmpty(instance.name));
         mDefaultControl.setText(mSelectedControlLayout == null ? nullToEmpty(instance.controlLayout) : mSelectedControlLayout);
         mSharedDataCheckbox.setChecked(instance.sharedData);
+
+        // Shortcut MineButton
+        mPinShortcutButton.setOnClickListener(v -> Instances.createInstanceShortcut(instance, getContext()));
     }
 
     private void bindViews(@NonNull View view){

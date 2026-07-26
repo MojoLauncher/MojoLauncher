@@ -440,6 +440,8 @@
     <string name="migration_progress_space">На вашем устройстве недостаточно места для переноса данных. Освободите как минимум $%1l МБ или больше чтобы продолжить</string>
     <string name="preference_alsoft_opensl_title">Принудительно использовать OpenSL для аудио</string>
     <string name="preference_alsoft_opensl_summary">Включает принудительное использование OpenSL вместо Oboe для ALSoft. Может исправить проблемы с записью звука на некоторых устройствах. Выключите если вы наблюдаете проблемы с записью или воспроизведением звука.</string>
-    <string name="shortcut_no_instance">Вы должны запустить данную установку хотя бы один раз перед тем как запускать её через ярлык!</string>
+    <string name="shortcut_no_instance">Данная установка не существует или не установлена. Запустите её через основной лаунчер и попробуйте снова</string>
     <string name="shortcut_no_account">"Вы не выбрали аккаунт для игры. Откройте основной лаунчер, выберите аккаунт и запустите данный ярлык заново"</string>
+    <string name="shortcut_long_label">Запустить MJLauncher с установкой %1s</string>
+    <string name="shortcut_disabled">Данная установка была удалена</string>
 </resources>
