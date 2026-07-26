@@ -953,7 +953,7 @@ public final class Tools {
     public static String validateServerAddress(String address){
         if(address == null || address.isEmpty()) return null;
         if(address.contains(":")){
-            String[] split = address.split(":", 1);
+            String[] split = address.split(":", 2);
             // remove port if it's incorrect
             try {
                 int port = Integer.parseInt(split[1]);
