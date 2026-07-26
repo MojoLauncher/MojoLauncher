@@ -1,22 +1,28 @@
 package net.kdt.pojavlaunch.value;
 
 import net.kdt.pojavlaunch.Architecture;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MoJsonRule {
     public String action;
     public OSDescriptor os;
+    public FeatureDescriptor features;
 
     public int getPrecedenceLevel() {
-        if(os == null) return 1;
-        return 1 + os.getPrecedenceLevel();
+        int level = 1;
+        if(os != null) level += os.getPrecedenceLevel();
+        if(features != null) level += features.getPrecedenceLevel();
+        return level;
     }
 
-    public boolean matches() {
-        if(os == null) return true;
-        else return os.matches();
+    public boolean matches(Map<String, Boolean> feats) {
+        if(os != null && os.matches()) return true;
+        if(features != null && features.matches(feats)) return true;
+        return false;
     }
 
-    public static String ruleSetCheck(MoJsonRule[] rules) {
+    public static String ruleSetCheck(MoJsonRule[] rules, Map<String, Boolean> features) {
         int precedenceLevel = 0;
         String action = "disallow";
         for(MoJsonRule rule : rules) {
@@ -24,7 +30,7 @@ public class MoJsonRule {
             if(ruleLevel <= precedenceLevel) {
                 continue;
             }
-            if(rule.matches()) action = rule.action;
+            if(rule.matches(features)) action = rule.action;
             precedenceLevel = ruleLevel;
         }
         return action;
@@ -53,6 +59,20 @@ public class MoJsonRule {
             return propertyMatches(name, "linux") &&
                     propertyMatches(arch, Architecture.archAsString(Architecture.getDeviceArchitecture())) &&
                     version == null;
+        }
+    }
+
+    public static class FeatureDescriptor extends HashMap<String, Boolean> {
+        public boolean matches(Map<String, Boolean> features){
+            if(features == null) return true;
+            for(Entry<String, Boolean> feat : features.entrySet()) {
+                if (containsKey(feat.getKey()) && feat.getValue().equals(get(feat.getKey())))
+                    return feat.getValue();
+            }
+            return false;
+        }
+        public int getPrecedenceLevel(){
+            return size();
         }
     }
 }

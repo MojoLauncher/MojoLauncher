@@ -373,7 +373,7 @@ public class MoJsonDownloader extends Downloader {
         Tools.preProcessLibraries(dependentLibraries);
         for(DependentLibrary dependentLibrary : dependentLibraries) {
             if(dependentLibrary.rules != null) {
-                String ruleSetAction = MoJsonRule.ruleSetCheck(dependentLibrary.rules);
+                String ruleSetAction = MoJsonRule.ruleSetCheck(dependentLibrary.rules, null);
                 if(!ruleSetAction.equals("allow")) continue;
             }
 

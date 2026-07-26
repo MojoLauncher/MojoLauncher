@@ -25,6 +25,7 @@ import net.kdt.pojavlaunch.utils.JSONUtils;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
 import net.kdt.pojavlaunch.utils.OldVersionsUtils;
 import net.kdt.pojavlaunch.utils.RendererCompatUtil;
+import net.kdt.pojavlaunch.value.MoJsonRule;
 
 import java.io.File;
 import java.io.IOException;
@@ -212,7 +213,7 @@ public class GameRunner {
 
         // Pre-process specific files
         disableSplash(gamedir);
-        List<String> launchArgs = getMoJsonClientArgs(account, versionInfo, gamedir);
+        List<String> launchArgs = getMoJsonClientArgs(account, versionInfo, instance);
         addMultiplayerArgs(launchArgs, instance, versionInfo);
 
         // Select the appropriate openGL version
@@ -319,17 +320,13 @@ public class GameRunner {
 
     private static void addMultiplayerArgs(List<String> argList, Instance instance, JVersionList.Version version) throws ParseException {
         if(instance.serverAddress == null) return;
-
-        // Since 23w14a the game uses quickPlayMultiplayer to connect to the server
-        if(DateUtils.dateBefore(DateUtils.getOriginalReleaseDate(version), 2023, 4, 5)){
+        // Since 23w14a the game uses quickPlayMultiplayer to connect to the server. It's handled separately
+        if(DateUtils.dateBefore(DateUtils.getOriginalReleaseDate(version), 2023, 4, 5)) {
             String[] addr = instance.serverAddress.split(":", 2);
-            String server = addr[0];
-            String port = addr.length > 1 ? addr[1] : "25565";
-            argList.add("--server"); argList.add(server);
-            argList.add("--port"); argList.add(port);
-        } else {
-            boolean hasPort = instance.serverAddress.contains(":");
-            argList.add("--quickPlayMultiplayer"); argList.add(instance.serverAddress + (!hasPort ? ":25565" : ""));
+            argList.add("--server");
+            argList.add(addr[0]);
+            argList.add("--port");
+            argList.add(addr[1]);
         }
     }
 
@@ -357,7 +354,7 @@ public class GameRunner {
         return JSONUtils.insertJSONValueList(clientVmArgs, varArgMap);
     }
 
-    private static List<String> getMoJsonClientArgs(Account profile, JVersionList.Version versionInfo, File gameDir) {
+    private static List<String> getMoJsonClientArgs(Account profile, JVersionList.Version versionInfo, Instance instance) {
         String username = profile.username;
         String versionName = versionInfo.id;
         if (versionInfo.inheritsFrom != null) {
@@ -387,11 +384,16 @@ public class GameRunner {
         varArgMap.put("assets_root", Tools.ASSETS_PATH);
         varArgMap.put("assets_index_name", versionInfo.assets);
         varArgMap.put("game_assets", Tools.ASSETS_PATH);
-        varArgMap.put("game_directory", gameDir.getAbsolutePath());
+        varArgMap.put("game_directory", instance.getGameDirectory().getAbsolutePath());
         varArgMap.put("user_properties", "{}");
         varArgMap.put("user_type", userType);
         varArgMap.put("version_name", versionName);
         varArgMap.put("version_type", versionInfo.type);
+        varArgMap.put("quickPlayMultiplayer", instance.serverAddress);
+
+        Map<String, Boolean> features = Map.of(
+                "is_quick_play_multiplayer", instance.serverAddress != null
+        );
 
         List<String> clientArgs = new ArrayList<>();
         if (versionInfo.arguments != null && versionInfo.arguments.game != null) {
@@ -399,7 +401,20 @@ public class GameRunner {
             for (Object arg : versionInfo.arguments.game) {
                 if (arg instanceof String) {
                     clientArgs.add((String) arg);
-                } //TODO: implement else clause
+                } else if(arg instanceof JVersionList.Arguments.ArgValue) {
+                    JVersionList.Arguments.ArgValue argValue = (JVersionList.Arguments.ArgValue) arg;
+                    if(argValue.rules != null && argValue.rules.length > 0){
+                        String rule = MoJsonRule.ruleSetCheck(argValue.rules, features);
+                        if(!rule.equals("allow")) continue;
+                    }
+                    if(argValue.values != null) {
+                        Collections.addAll(clientArgs, argValue.values);
+                    }
+                    if(argValue.value != null){
+                        if(argValue.value instanceof List<?>) clientArgs.addAll((List<? extends String>) argValue.value);
+                        if(argValue.value instanceof String) clientArgs.add((String) argValue.value);
+                    }
+                }
             }
         }
         if(versionInfo.minecraftArguments != null){

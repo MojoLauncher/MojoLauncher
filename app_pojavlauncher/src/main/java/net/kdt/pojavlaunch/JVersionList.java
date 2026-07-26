@@ -61,7 +61,7 @@ public class JVersionList {
         @Keep
         public static class ArgValue {
             public MoJsonRule[] rules;
-            public String value;
+            public Object value;
 
             // TLauncher styled argument...
             public String[] values;

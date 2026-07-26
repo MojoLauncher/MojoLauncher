@@ -58,6 +58,7 @@ import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.GLInfoUtils;
+import net.kdt.pojavlaunch.value.ArgumentsAdapter;
 import net.kdt.pojavlaunch.value.DependentLibrary;
 import net.kdt.pojavlaunch.value.LibraryArtifact;
 
@@ -90,7 +91,10 @@ public final class Tools {
     public static final Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
     public static String APP_NAME = "PojavLauncher";
 
-    public static final Gson GLOBAL_GSON = new GsonBuilder().setPrettyPrinting().create();
+    public static final Gson GLOBAL_GSON = new GsonBuilder()
+            .setPrettyPrinting()
+            .registerTypeAdapter(JVersionList.Arguments.class, new ArgumentsAdapter())
+            .create();
 
     public static final String URL_HOME = "https://mojolauncher.ru";
     public static String NATIVE_LIB_DIR;
