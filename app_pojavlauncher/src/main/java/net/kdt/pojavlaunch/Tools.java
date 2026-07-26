@@ -949,4 +949,21 @@ public final class Tools {
             return 0;
         return Math.min(imeHeight, cursorY - visibleHeight + padding);
     }
+
+    public static String validateServerAddress(String address){
+        if(address == null || address.isEmpty()) return null;
+        if(address.contains(":")){
+            String[] split = address.split(":", 1);
+            // remove port if it's incorrect
+            try {
+                int port = Integer.parseInt(split[1]);
+                if(port < 0 || port > 65535)
+                    return split[0] + ":25565";
+            } catch (NumberFormatException e){
+                return split[0] + ":25565";
+            }
+            return address;
+        }
+        else return address + ":25565";
+    }
 }

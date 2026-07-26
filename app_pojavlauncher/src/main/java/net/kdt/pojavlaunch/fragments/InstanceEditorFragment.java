@@ -202,11 +202,10 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         mInstance.controlLayout = mDefaultControl.getText().toString();
         mInstance.name = mDefaultName.getText().toString();
         mInstance.jvmArgs = mDefaultJvmArgument.getText().toString();
-        mInstance.serverAddress = mServerAutoConnect.getText().toString();
+        mInstance.serverAddress = Tools.validateServerAddress(mServerAutoConnect.getText().toString());
 
         if(mInstance.controlLayout.isEmpty()) mInstance.controlLayout = null;
         if(mInstance.jvmArgs.isEmpty()) mInstance.jvmArgs = null;
-        if(mInstance.serverAddress.isEmpty()) mInstance.serverAddress = null;
 
         Runtime selectedRuntime = (Runtime) mDefaultRuntime.getSelectedItem();
         mInstance.selectedRuntime = (selectedRuntime.name.equals("<Default>") || selectedRuntime.versionString == null)
