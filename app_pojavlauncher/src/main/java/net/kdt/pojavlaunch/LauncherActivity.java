@@ -112,7 +112,8 @@ public class LauncherActivity extends BaseActivity {
             return false;
         }
 
-        Instance selectedInstance = Instances.loadSelectedInstance();
+        String instance = getIntent().getStringExtra("instance");
+        Instance selectedInstance = instance == null ? Instances.loadSelectedInstance() : Instances.getInstance(instance, Instance.class);
 
         if(selectedInstance == null) {
             Toast.makeText(this, R.string.no_instance, Toast.LENGTH_LONG).show();
@@ -136,35 +137,6 @@ public class LauncherActivity extends BaseActivity {
         }
 
         String normalizedVersionId = MoJsonExtras.normalizeVersionId(selectedInstance.versionId);
-        JVersionList.Version mcVersion = MoJsonExtras.getListedVersion(normalizedVersionId);
-        new MoJsonDownloader().start(
-                this.getAssets(),
-                mcVersion,
-                normalizedVersionId,
-                new ContextAwareDoneListener(this, normalizedVersionId)
-        );
-        return false;
-    };
-
-    private final ExtraListener<Boolean> mShortcutLaunchListener = (k, v) -> {
-        Instance current = Instances.getInstance(getIntent().getStringExtra("instance"), Instance.class);
-        if(current == null || current.installer != null || !Tools.isValidString(current.versionId)){
-            new AlertDialog.Builder(this)
-                    .setMessage(R.string.shortcut_no_instance)
-                    .setPositiveButton(android.R.string.ok, (d, w) -> {})
-                    .setOnDismissListener(d -> Tools.fullyExit())
-                    .show();
-            return false;
-        }
-        if(Accounts.getCurrent() == null) {
-            new AlertDialog.Builder(this)
-                    .setMessage(R.string.shortcut_no_account)
-                    .setPositiveButton(android.R.string.ok, (d, w) -> {})
-                    .setOnDismissListener(d -> Tools.fullyExit())
-                    .show();
-            return false;
-        }
-        String normalizedVersionId = MoJsonExtras.normalizeVersionId(current.versionId);
         JVersionList.Version mcVersion = MoJsonExtras.getListedVersion(normalizedVersionId);
         new MoJsonDownloader().start(
                 this.getAssets(),
@@ -212,12 +184,7 @@ public class LauncherActivity extends BaseActivity {
         String instance = getIntent().getStringExtra("instance");
 
         bindViews();
-        // Hide main launcher UI when launching from shortcut. Progress bar will be still there for tracking launch progress
-        if(instance != null){
-            mFragmentView.setVisibility(View.GONE);
-            mSettingsButton.setVisibility(View.GONE);
-            mAccountSpinnerView.setVisibility(View.GONE);
-        } else getWindow().setBackgroundDrawable(null);
+        getWindow().setBackgroundDrawable(null);
         mRequestPermissionLauncher = this.registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(),
                 isAllowed -> {
@@ -237,7 +204,7 @@ public class LauncherActivity extends BaseActivity {
         ExtraCore.addExtraListener(ExtraConstants.BACK_PREFERENCE, mBackPreferenceListener);
         ExtraCore.addExtraListener(ExtraConstants.SELECT_AUTH_METHOD, mSelectAuthMethod);
 
-        ExtraCore.addExtraListener(ExtraConstants.LAUNCH_GAME, instance == null ? mLaunchGameListener : mShortcutLaunchListener);
+        ExtraCore.addExtraListener(ExtraConstants.LAUNCH_GAME, mLaunchGameListener);
 
         new AsyncVersionList().getVersionList(versions -> ExtraCore.setValue(ExtraConstants.RELEASE_TABLE, versions));
 

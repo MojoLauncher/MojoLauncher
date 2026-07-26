@@ -506,8 +506,6 @@
     <string name="preference_alsoft_opensl_title">Forcefully use OpenSL for audio</string>
     <string name="preference_alsoft_opensl_summary">Forcefully enables OpenSL backend in ALSoft instead of Oboe. Can fix audio capture issues on some devices. Disable if you see audio playback/capture issues</string>
     <string name="pedit_shortcut">Create shortcut</string>
-    <string name="shortcut_no_instance">The instance used in this shortcut is unavailable or not installed. Try launching it from the main launcher.</string>
-    <string name="shortcut_no_account">"You haven't selected any account to use. Go to the main launcher, select an account and open this shortcut again."</string>
     <string name="shortcut_long_label">Start MJLauncher with "%1s" instance</string>
     <string name="shortcut_disabled">This instance was removed.</string>
 </resources>
