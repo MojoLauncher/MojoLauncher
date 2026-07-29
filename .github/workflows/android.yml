@@ -29,6 +29,17 @@ jobs:
           name: output-aar
           path: app_pojavlauncher/libs
 
+      - name: Get Mesa
+        uses: dawidd6/action-download-artifact@v6  
+        continue-on-error: true
+        with:
+          repo: MojoLauncher/mesa-unified2
+          workflow: android.yml
+          workflow_conclusion: success
+          run-id: 30483173676
+          name: mesa-aar
+          path: app_pojavlauncher/libs
+
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.14.3"
