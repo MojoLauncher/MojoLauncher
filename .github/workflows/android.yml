@@ -36,7 +36,7 @@ jobs:
           repo: MojoLauncher/mesa-unified2
           workflow: android.yml
           workflow_conclusion: success
-          run-id: 30483173676
+          branch: mojo/26.1-v2
           name: mesa-aar
           path: app_pojavlauncher/libs
 
