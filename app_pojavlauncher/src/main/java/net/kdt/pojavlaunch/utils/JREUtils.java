@@ -80,17 +80,26 @@ public class JREUtils {
     }
 
     // Sets up ANGLE driver environment
-    public static void setupAngleEnv(Context ctx, Map<String, String> envMap) {
-        if (!LauncherPreferences.PREF_USE_ANGLE) return;
+    private static boolean setupSystemAngle(Map<String, String> envMap){
+        File[] system = Tools.getSystemAngle();
+        if(system == null) return false;
+        Log.i("JREUtils", "Using system-provided ANGLE");
+        envMap.put("LIBGL_EGL", system[0].getAbsolutePath());
+        envMap.put("LIBGL_GLES", system[1].getAbsolutePath());
+        return true;
+    }
+    public static boolean setupAngleEnv(Context ctx, Map<String, String> envMap) {
         LibraryPlugin angle = LibraryPlugin.discoverPlugin(ctx, LibraryPlugin.ID_ANGLE_PLUGIN);
-        if (angle == null) return;
+        if (angle == null) return setupSystemAngle(envMap);
         String[] angleLibs = {"libEGL_angle.so", "libGLESv2_angle.so"};
         if (!angle.checkLibraries(angleLibs)) {
             Log.e("AngleEnvSetup", "AnglePlugin exists, but the ANGLE libraries are not present. Is the plugin corrupted?");
-            return;
+            return setupSystemAngle(envMap);
         }
+        Log.i("JREUtils", "Using external ANGLE plugin");
         envMap.put("LIBGL_EGL", angle.resolveAbsolutePath(angleLibs[0]));
         envMap.put("LIBGL_GLES", angle.resolveAbsolutePath(angleLibs[1]));
+        return true;
     }
 
     public static void setupFfmpegEnv(Context ctx, Map<String, String> envMap) {
@@ -132,7 +141,10 @@ public class JREUtils {
 		}
 		envMap.put("MOD_ANDROID_RUNTIME", modRuntimeDir.getAbsolutePath());
 
-        setupAngleEnv(context, envMap);
+        if(LauncherPreferences.PREF_USE_ANGLE){
+            if(!setupAngleEnv(context, envMap))
+                Log.i("JREUtils", "Failed to setup ANGLE environment");
+        }
         setupFfmpegEnv(context, envMap);
         // Init mesa renderers
         MesaUtils.initEnvironment(context, renderer, envMap);
