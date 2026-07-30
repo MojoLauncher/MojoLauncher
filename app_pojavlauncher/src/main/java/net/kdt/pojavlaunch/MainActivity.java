@@ -39,6 +39,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.kdt.LoggerView;
+import com.kdt.pickafile.FileListView;
+import com.kdt.pickafile.FileSelectedListener;
 
 import net.kdt.pojavlaunch.authenticator.accounts.Accounts;
 import net.kdt.pojavlaunch.customcontrols.ControlButtonMenuListener;
@@ -242,6 +244,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
                      case 2: dialogSendCustomKey(); break;
                      case 3: openQuickSettings(); break;
                      case 4: openCustomControls(); break;
+                     case 5: openSelectControlMap(); break;
                 }
                 drawerLayout.closeDrawers();
             };
@@ -445,6 +448,30 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             };
         }
         mQuickSettingSideDialog.appear(true);
+    }
+    private void openSelectControlMap()
+    {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle(Tools.CTRLMAP_PATH);
+        builder.setPositiveButton(android.R.string.cancel,null);
+        final androidx.appcompat.app.AlertDialog dialog = builder.create();
+        FileListView flv = new FileListView(dialog,"json");
+        flv.lockPathAt(new File(Tools.CTRLMAP_PATH));
+        flv.setFileSelectedListener(new FileSelectedListener() {
+            @Override
+            public void onFileSelected(File file, String path) {
+                try {
+                    instance.controlLayout = file.getName();
+                    instance.maybeWrite();
+                    mControlLayout.loadLayout(path);
+                } catch (Exception e) {
+                    Tools.showError(MainActivity.this,e);
+                }
+                dialog.dismiss();
+            }
+        });
+        dialog.setView(flv);
+        dialog.show();
     }
 
     public static void toggleMouse(Context ctx) {

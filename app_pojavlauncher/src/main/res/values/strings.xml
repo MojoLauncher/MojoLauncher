@@ -120,6 +120,7 @@
     <string name="control_viewout">Log output</string>
     <string name="control_adebug">Input Debug</string>
     <string name="control_customkey">Send custom keycode</string>
+    <string name="control_selectcontrolmap">Select control map</string>
 
     <!-- ImportControlActivity Strings -->
     <string name="import_control_label">Import controls</string>
