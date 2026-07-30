@@ -277,6 +277,10 @@ public class JREUtils {
                 break;
         }
 
+        // System ANGLE cannot be loaded without bypassing namespaces. Sadly. Hate Google.
+        if(LauncherPreferences.PREF_USE_ANGLE)
+            bypassNamespace = true;
+
         if (!configureRenderspec(renderLibrary, bypassNamespace, useGles, glesVersion)) {
             Log.e("RENDER_LIBRARY","Failed to load renderer " + renderLibrary );
             return null;
