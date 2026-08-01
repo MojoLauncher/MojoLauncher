@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -65,6 +67,7 @@ public class CustomSeekBarPreference extends SeekBarPreference {
 
         mTextView = (TextView) view.findViewById(R.id.seekbar_value);
         mTextView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+        mTextView.setOnClickListener(v -> openExactValueDialog());
         SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekbar);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -99,6 +102,32 @@ public class CustomSeekBarPreference extends SeekBarPreference {
         updateTextViewWithSuffix();
     }
 
+    private void openExactValueDialog() {
+        if(mTextView == null) return;
+        Context context = mTextView.getContext();
+        EditText input = new EditText(context);
+        input.setSingleLine();
+        input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+        input.setText(String.valueOf(getValue()));
+        input.setSelection(input.getText().length());
+
+        new androidx.appcompat.app.AlertDialog.Builder(context)
+                .setTitle(getTitle())
+                .setMessage(context.getString(R.string.slider_exact_value_prompt, getMin(), getMax()))
+                .setView(input)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    try {
+                        int value = Integer.parseInt(input.getText().toString().trim());
+                        setValue(clampToRange(value));
+                        updateTextViewWithSuffix();
+                    } catch (NumberFormatException ignored) {
+                        // Ignore invalid edits and keep the current value.
+                    }
+                })
+                .show();
+    }
+
     /**
      * Set a suffix to be appended on the TextView associated to the value
      * @param suffix The suffix to append as a String
@@ -120,6 +149,10 @@ public class CustomSeekBarPreference extends SeekBarPreference {
     public void setMaxKeepIncrement(int max) {
         super.setMax(max);
         setSeekBarIncrement(mIncrement);
+    }
+
+    private int clampToRange(int value) {
+        return Math.max(getMin(), Math.min(getMax(), value));
     }
 
 

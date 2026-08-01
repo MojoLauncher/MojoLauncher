@@ -12,8 +12,10 @@ import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_SCALE_FACTOR;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -127,6 +129,7 @@ public abstract class QuickSettingSideDialog extends com.kdt.SideDialogView {
             mEditor.putInt("gyroSensitivity", progress);
             setSeekTextPercent(mGyroSensitivityText, progress);
         });
+        mGyroSensitivityText.setOnClickListener(v -> editExactSeekValue(mGyroSensitivityBar, mGyroSensitivityText, true));
         mGyroSensitivityBar.setProgress((int) (mOriginalGyroSensitivity * 100f));
         setSeekTextPercent(mGyroSensitivityText, mGyroSensitivityBar.getProgress());
 
@@ -135,6 +138,7 @@ public abstract class QuickSettingSideDialog extends com.kdt.SideDialogView {
             mEditor.putInt("mousespeed", progress);
             setSeekTextPercent(mMouseSpeedText, progress);
         });
+        mMouseSpeedText.setOnClickListener(v -> editExactSeekValue(mMouseSpeedBar, mMouseSpeedText, true));
         mMouseSpeedBar.setProgress((int) (mOriginalMouseSpeed * 100f));
         setSeekTextPercent(mMouseSpeedText, mMouseSpeedBar.getProgress());
 
@@ -143,6 +147,7 @@ public abstract class QuickSettingSideDialog extends com.kdt.SideDialogView {
             mEditor.putInt("timeLongPressTrigger", progress);
             setSeekTextMillisecond(mGestureDelayText, progress);
         });
+        mGestureDelayText.setOnClickListener(v -> editExactSeekValue(mGestureDelayBar, mGestureDelayText, false));
         mGestureDelayBar.setProgress(mOriginalGestureDelay);
         setSeekTextMillisecond(mGestureDelayText, mGestureDelayBar.getProgress());
 
@@ -152,6 +157,7 @@ public abstract class QuickSettingSideDialog extends com.kdt.SideDialogView {
             setSeekTextPercent(mResolutionText, progress);
             onResolutionChanged();
         });
+        mResolutionText.setOnClickListener(v -> editExactSeekValue(mResolutionBar, mResolutionText, true));
         mResolutionBar.setProgress((int) (mOriginalResolution * 100));
         setSeekTextPercent(mResolutionText, mResolutionBar.getProgress());
 
@@ -170,6 +176,35 @@ public abstract class QuickSettingSideDialog extends com.kdt.SideDialogView {
 
     private static void setSeekText(TextView target, int format, int value) {
         target.setText(target.getContext().getString(format, value));
+    }
+
+    private void editExactSeekValue(CustomSeekbar bar, TextView label, boolean percentValue) {
+        Context context = label.getContext();
+        EditText input = new EditText(context);
+        input.setSingleLine();
+        input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+        input.setText(String.valueOf(bar.getProgress()));
+        input.setSelection(input.getText().length());
+
+        new androidx.appcompat.app.AlertDialog.Builder(context)
+                .setTitle(label.getText())
+                .setMessage(context.getString(R.string.slider_exact_value_prompt, bar.getCustomMin(), bar.getCustomMax()))
+                .setView(input)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    try {
+                        int value = Integer.parseInt(input.getText().toString().trim());
+                        value = Math.max(bar.getCustomMin(), Math.min(bar.getCustomMax(), value));
+                        bar.setProgress(value);
+                        if (percentValue) {
+                            setSeekTextPercent(label, value);
+                        } else {
+                            setSeekTextMillisecond(label, value);
+                        }
+                    } catch (NumberFormatException ignored) {
+                    }
+                })
+                .show();
     }
 
     private void updateGyroVisibility(boolean isEnabled) {
