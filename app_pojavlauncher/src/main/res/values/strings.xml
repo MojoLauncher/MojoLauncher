@@ -12,7 +12,7 @@
     <string name="login_online_login_label">Login</string>
 
     <!-- Hint -->
-    <string name="hint_control_mapping">"Touch the top center cogwheel to open the context menu ⚙\nTap a button to customize: edit, resize, remove, or change its keybinds."</string>
+    <string name="hint_control_mapping">Touch the cogwheel icon to open the context menu ⚙\nTap a button to customize: edit, resize, remove, or change its keybinds.</string>
 
     <!-- Warnings -->
     <string name="warning_remove_account">This account will be removed!</string>
@@ -492,4 +492,17 @@
     <string name="preference_category_keyboard">Keyboard settings</string>
     <string name="preference_keyboard_autopan_title">Enable keyboard panning</string>
     <string name="preference_keyboard_autopan_summary">Allows on-screen keyboard to move the game window instead of overlapping it if the last touch was below the visible zone. Has no effect on custom control layout buttons with the same function</string>
+    <string name="preference_data_migration_title">Import data</string>
+    <string name="preference_data_migration_summary">Begin importing data (instances, control maps) from the old app installation</string>
+    <string name="migration_progress_foreign">Provide a correct old installation!</string>
+    <string name="migration_progress_failed">Failed to migrate data!</string>
+    <string name="migration_progress_finish">Data migration finished!</string>
+    <string name="migration_progress_self">You cannot import data from the same app!</string>
+    <string name="migration_progress_copying">Copying %1s</string>
+    <string name="migration_progress_warning_title">Data Migration</string>
+    <string name="migration_progress_warning_summary">You\'re going to launch a data migration process. This process will copy all selected launcher\'s instances and control maps to the current app installation. All conflicting files will be OVERWRITTEN! Consider making backups. You have been warned.</string>
+    <string name="migration_progress_space">Your device does not have enough space for data migration. Free minimum $%1l MB or greater to continue.</string>
+    <string name="migration_notice">Looks like you have already used this application in the past. You can import old launcher installation data from miscellaneous settings.</string>
+    <string name="preference_alsoft_opensl_title">Forcefully use OpenSL for audio</string>
+    <string name="preference_alsoft_opensl_summary">Forcefully enables OpenSL backend in ALSoft instead of Oboe. Can fix audio capture issues on some devices. Disable if you see audio playback/capture issues</string>
 </resources>

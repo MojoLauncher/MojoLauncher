@@ -8,7 +8,6 @@
     <string name="login_online_username_hint">用户名</string>
     <string name="login_online_login_label">登录</string>
     <!-- Hint -->
-    <string name="hint_control_mapping">"点按顶部中央齿轮以打开上下文菜单⚙\n点击按钮进行自定义：编辑、调整大小、删除或更改其按键绑定。"</string>
     <!-- Warnings -->
     <string name="warning_remove_account">此账户将被移除！</string>
     <!-- AlertDialog title -->
