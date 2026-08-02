@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Utils for Mesa-based renderers (zink, freedreno)
  */
-public class MesaUtils {
+public class RenderEnvUtils {
 
     public static final String MESA_EGL = "libEGL_mesa.so";
     public static final String MESA_EGL_LEGACY = "libEGL_legacy.so";
@@ -23,7 +23,7 @@ public class MesaUtils {
      * @param renderer selected renderer
      * @param envMap environment map
      */
-    public static void initEnvironment(Context context, String renderer, Map<String, String> envMap){
+    public static void setupMesaEnv(Context context, String renderer, Map<String, String> envMap){
         switch(renderer) {
             case "vulkan_zink":
                 envMap.put("GALLIUM_DRIVER", "zink");
@@ -66,7 +66,7 @@ public class MesaUtils {
      * Get preferred Mesa EGL library - picks legacy Mesa library on ARM (or if forced) if ZINK plugin is installed
      * @return
      */
-    public static String getPreferredEGL() {
+    public static String getPreferredMesaEGL() {
         if (LauncherPreferences.PREF_ZINK_FORCE_LEGACY || GLInfoUtils.getGlInfo().isArm()) {
             if (zink == null) return MESA_EGL;
             if (!zink.checkLibraries(MESA_EGL_LEGACY)) return MESA_EGL;

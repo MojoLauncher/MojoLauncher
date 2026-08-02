@@ -147,9 +147,9 @@ public class JREUtils {
         }
         setupFfmpegEnv(context, envMap);
         // Init mesa renderers
-        MesaUtils.initEnvironment(context, renderer, envMap);
+        RenderEnvUtils.setupMesaEnv(context, renderer, envMap);
 
-        setRendererLibraryPath(Tools.NATIVE_LIB_DIR, MesaUtils.getCustomZinkLibraryPath());
+        setRendererLibraryPath(Tools.NATIVE_LIB_DIR, RenderEnvUtils.getCustomZinkLibraryPath());
         envMap.put("POJAV_NATIVEDIR", Tools.NATIVE_LIB_DIR);
 
         if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
@@ -256,7 +256,7 @@ public class JREUtils {
             case "freedreno_kgsl":
                 preloadVk = false;
             case "vulkan_zink":
-                renderLibrary = MesaUtils.getPreferredEGL();
+                renderLibrary = RenderEnvUtils.getPreferredMesaEGL();
                 useGles = false;
                 bypassNamespace = true; // Mesa is linked to a bunch of libraries not available in the pojavexec namespace
                 glesVersion = 3;
@@ -285,7 +285,7 @@ public class JREUtils {
             Log.e("RENDER_LIBRARY","Failed to load renderer " + renderLibrary );
             return null;
         }
-        MesaUtils.destroyZink(); // Not needed anymore
+        RenderEnvUtils.destroyZink(); // Not needed anymore
         return renderLibrary;
     }
 
