@@ -20,7 +20,7 @@ extern bool apiRequiresHints();
 #define NATIVEDIR_BUF_SIZE 1024
 const char* additional_natives_dir = NULL;
 
-const char* replacements = "libimgui-moulberry92-java64.so";
+const char* replacements = NULL;
 
 
 // Java 21 style hook
@@ -52,7 +52,7 @@ static void library_preload_hook(JNIEnv *env, const char* name) {
 
 // Redirects known libraries load path to predefined one
 static jstring library_redirect_hook(JNIEnv* env, jstring original_name, const char* name){
-    if(!additional_natives_dir) return original_name;
+    if(!additional_natives_dir || !replacements) return original_name;
     char* base = basename(name);
     if(strstr(replacements, base) == NULL) {
         return original_name;
@@ -148,4 +148,12 @@ Java_net_kdt_pojavlaunch_utils_JREUtils_setRedirectLibraryPath(JNIEnv *env, jcla
     const char* _path = (*env)->GetStringUTFChars(env, path, NULL);
     additional_natives_dir = strdup(_path);
     (*env)->ReleaseStringUTFChars(env, path, _path);
+}
+
+JNIEXPORT void JNICALL
+Java_net_kdt_pojavlaunch_utils_JREUtils_setLibraryOverrides(JNIEnv *env, jclass clazz,
+                                                            jstring libs) {
+    const char* _libs = (*env)->GetStringUTFChars(env, libs, NULL);
+    replacements = strdup(_libs);
+    (*env)->ReleaseStringUTFChars(env, libs, _libs);
 }

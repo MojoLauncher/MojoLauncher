@@ -286,6 +286,7 @@ public class JREUtils {
     public static native void setLdLibraryPath(String ldLibraryPath);
     // See the redirect hook on the JNI side
     public static native void setRedirectLibraryPath(String path);
+    public static native void setLibraryOverrides(String libs);
     public static native boolean configureRenderspec(String eglPath, boolean useLoaderBypass, boolean useGles, int glesVersion);
     public static native void configureRenderspecDisplay(int width, int height, int refreshRate);
     private static native void nsetRendererLibraryPath(String path);
