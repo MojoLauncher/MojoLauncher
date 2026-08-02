@@ -956,12 +956,4 @@ public final class Tools {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.getApplicationContext().startActivity(intent);
     }
-
-    public static File[] getSystemAngle(){
-        File egl = new File(Architecture.is64BitsDevice() ? "/system/lib64/libEGL_angle.so" : "/system/lib/libEGL_angle.so");
-        File gles = new File(Architecture.is64BitsDevice() ? "/system/lib64/libGLESv2_angle.so" : "/system/lib/libGLESv2_angle.so");
-        if(egl.exists() && gles.exists())
-            return new File[]{egl, gles};
-        else return null;
-    }
 }

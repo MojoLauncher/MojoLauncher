@@ -79,29 +79,6 @@ public class JREUtils {
         reader.close();
     }
 
-    // Sets up ANGLE driver environment
-    private static boolean setupSystemAngle(Map<String, String> envMap){
-        File[] system = Tools.getSystemAngle();
-        if(system == null) return false;
-        Log.i("JREUtils", "Using system-provided ANGLE");
-        envMap.put("LIBGL_EGL", system[0].getAbsolutePath());
-        envMap.put("LIBGL_GLES", system[1].getAbsolutePath());
-        return true;
-    }
-    public static boolean setupAngleEnv(Context ctx, Map<String, String> envMap) {
-        LibraryPlugin angle = LibraryPlugin.discoverPlugin(ctx, LibraryPlugin.ID_ANGLE_PLUGIN);
-        if (angle == null) return setupSystemAngle(envMap);
-        String[] angleLibs = {"libEGL_angle.so", "libGLESv2_angle.so"};
-        if (!angle.checkLibraries(angleLibs)) {
-            Log.e("AngleEnvSetup", "AnglePlugin exists, but the ANGLE libraries are not present. Is the plugin corrupted?");
-            return setupSystemAngle(envMap);
-        }
-        Log.i("JREUtils", "Using external ANGLE plugin");
-        envMap.put("LIBGL_EGL", angle.resolveAbsolutePath(angleLibs[0]));
-        envMap.put("LIBGL_GLES", angle.resolveAbsolutePath(angleLibs[1]));
-        return true;
-    }
-
     public static void setupFfmpegEnv(Context ctx, Map<String, String> envMap) {
         LibraryPlugin ffmpeg = LibraryPlugin.discoverPlugin(ctx, LibraryPlugin.ID_FFMPEG_PLUGIN);
         if(ffmpeg == null) return;
@@ -142,7 +119,7 @@ public class JREUtils {
 		envMap.put("MOD_ANDROID_RUNTIME", modRuntimeDir.getAbsolutePath());
 
         if(LauncherPreferences.PREF_USE_ANGLE){
-            if(!setupAngleEnv(context, envMap))
+            if(!RenderEnvUtils.setupAngleEnv(context, envMap))
                 Log.i("JREUtils", "Failed to setup ANGLE environment");
         }
         setupFfmpegEnv(context, envMap);
@@ -278,14 +255,14 @@ public class JREUtils {
         }
 
         // System ANGLE cannot be loaded without bypassing namespaces. Sadly. Hate Google.
-        if(LauncherPreferences.PREF_USE_ANGLE)
+        if(LauncherPreferences.PREF_USE_ANGLE && !RenderEnvUtils.hasAnglePlugin())
             bypassNamespace = true;
 
         if (!configureRenderspec(renderLibrary, bypassNamespace, useGles, glesVersion)) {
             Log.e("RENDER_LIBRARY","Failed to load renderer " + renderLibrary );
             return null;
         }
-        RenderEnvUtils.destroyZink(); // Not needed anymore
+        RenderEnvUtils.cleanup(); // Not needed anymore
         return renderLibrary;
     }
 

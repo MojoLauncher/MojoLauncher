@@ -15,6 +15,7 @@ import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.CustomSeekBarPreference;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.utils.RenderEnvUtils;
 import net.kdt.pojavlaunch.utils.RendererCompatUtil;
 
 /**
@@ -48,7 +49,7 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
 
         // Show ANGLE switch only if AnglePlugin is available
         LibraryPlugin angle = LibraryPlugin.discoverPlugin(getContext(), LibraryPlugin.ID_ANGLE_PLUGIN);
-        boolean angleAvailable = Tools.getSystemAngle() != null || angle != null;
+        boolean angleAvailable = RenderEnvUtils.getSystemAngle() != null || angle != null;
         SwitchPreferenceCompat angleSwitch = requirePreference("use_angle", SwitchPreferenceCompat.class);
         angleSwitch.setVisible(angleAvailable);
         angleSwitch.setChecked(LauncherPreferences.PREF_USE_ANGLE);
