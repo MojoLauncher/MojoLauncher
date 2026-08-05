@@ -637,6 +637,10 @@ public final class Tools {
                             String perCustomArgStr = (String) perCustomArg;
                             // Check if there is a duplicate argument on combine
                             if (perCustomArgStr.startsWith("--") && totalArgList.contains(perCustomArgStr)) {
+                                // If the flag is the last argument there is no value to merge
+                                if(i + 1 >= customVer.arguments.game.length) {
+                                    continue;
+                                }
                                 perCustomArg = customVer.arguments.game[i + 1];
                                 if (perCustomArg instanceof String) {
                                     perCustomArgStr = (String) perCustomArg;
