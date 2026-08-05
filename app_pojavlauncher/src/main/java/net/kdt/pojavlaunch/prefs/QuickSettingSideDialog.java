@@ -19,6 +19,8 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.kdt.CustomSeekbar;
 
 import git.artdeell.mojo.R;
@@ -186,25 +188,32 @@ public abstract class QuickSettingSideDialog extends com.kdt.SideDialogView {
         input.setText(String.valueOf(bar.getProgress()));
         input.setSelection(input.getText().length());
 
-        new androidx.appcompat.app.AlertDialog.Builder(context)
+        AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle(label.getText())
                 .setMessage(context.getString(R.string.slider_exact_value_prompt, bar.getCustomMin(), bar.getCustomMax()))
                 .setView(input)
                 .setNegativeButton(android.R.string.cancel, null)
-                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                    try {
-                        int value = Integer.parseInt(input.getText().toString().trim());
-                        value = Math.max(bar.getCustomMin(), Math.min(bar.getCustomMax(), value));
-                        bar.setProgress(value);
-                        if (percentValue) {
-                            setSeekTextPercent(label, value);
-                        } else {
-                            setSeekTextMillisecond(label, value);
-                        }
-                    } catch (NumberFormatException ignored) {
-                    }
-                })
-                .show();
+                .setPositiveButton(android.R.string.ok, null)
+                .create();
+        dialog.setOnShowListener(d -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            try {
+                int value = Integer.parseInt(input.getText().toString().trim());
+                if (value < bar.getCustomMin() || value > bar.getCustomMax()) {
+                    input.setError(context.getString(R.string.slider_exact_value_invalid));
+                    return;
+                }
+                bar.setProgress(value);
+                if (percentValue) {
+                    setSeekTextPercent(label, value);
+                } else {
+                    setSeekTextMillisecond(label, value);
+                }
+                dialog.dismiss();
+            } catch (NumberFormatException ignored) {
+                input.setError(context.getString(R.string.slider_exact_value_invalid));
+            }
+        }));
+        dialog.show();
     }
 
     private void updateGyroVisibility(boolean isEnabled) {

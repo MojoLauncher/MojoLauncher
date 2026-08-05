@@ -7,11 +7,12 @@ import android.graphics.Color;
 import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.SeekBar;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.preference.PreferenceViewHolder;
 import androidx.preference.SeekBarPreference;
 
@@ -111,21 +112,24 @@ public class CustomSeekBarPreference extends SeekBarPreference {
         input.setText(String.valueOf(getValue()));
         input.setSelection(input.getText().length());
 
-        new androidx.appcompat.app.AlertDialog.Builder(context)
+        AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle(getTitle())
                 .setMessage(context.getString(R.string.slider_exact_value_prompt, getMin(), getMax()))
                 .setView(input)
                 .setNegativeButton(android.R.string.cancel, null)
-                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                    try {
-                        int value = Integer.parseInt(input.getText().toString().trim());
-                        setValue(clampToRange(value));
-                        updateTextViewWithSuffix();
-                    } catch (NumberFormatException ignored) {
-                        // Ignore invalid edits and keep the current value.
-                    }
-                })
-                .show();
+                .setPositiveButton(android.R.string.ok, null)
+                .create();
+        dialog.setOnShowListener(d -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            try {
+                int value = Integer.parseInt(input.getText().toString().trim());
+                setValue(clampToRange(value));
+                updateTextViewWithSuffix();
+                dialog.dismiss();
+            } catch (NumberFormatException ignored) {
+                input.setError(context.getString(R.string.slider_exact_value_invalid));
+            }
+        }));
+        dialog.show();
     }
 
     /**

@@ -91,6 +91,7 @@
     <string name="global_retry">Retry</string>
     <string name="global_default">Default</string>
     <string name="slider_exact_value_prompt">Enter a value from %1$d to %2$d</string>
+    <string name="slider_exact_value_invalid">Enter a whole number within the allowed range</string>
 
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Application/Game exited with code %d, check latestlog.txt for more details.</string>
