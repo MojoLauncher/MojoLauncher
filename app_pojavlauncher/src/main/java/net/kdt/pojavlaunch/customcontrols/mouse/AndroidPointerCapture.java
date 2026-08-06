@@ -84,6 +84,13 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
             // The relative position will already be written down into the mVector variable.
         }
 
+        // Some OEM touchpads report the axes swapped. Mouse input is relative, so leave it alone.
+        if(LauncherPreferences.PREF_SWAP_TOUCHPAD_AXES && (event.getSource() & InputDevice.SOURCE_CLASS_TRACKBALL) == 0) {
+            float tmp = mVector[0];
+            mVector[0] = mVector[1];
+            mVector[1] = tmp;
+        }
+
         // Avoid going through the JNI each time.
         if(!GLFW.isGrabbing()) {
             enableTouchpadIfNecessary();
@@ -111,8 +118,12 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
                 return LauncherGLSurface.sendMouseButtonUnconverted(event.getActionButton(), false);
             case MotionEvent.ACTION_SCROLL:
                 CallbackBridge.sendScroll(
-                        event.getAxisValue(MotionEvent.AXIS_HSCROLL),
-                        event.getAxisValue(MotionEvent.AXIS_VSCROLL)
+                        LauncherPreferences.PREF_SWAP_TOUCHPAD_AXES
+                                ? event.getAxisValue(MotionEvent.AXIS_VSCROLL)
+                                : event.getAxisValue(MotionEvent.AXIS_HSCROLL),
+                        LauncherPreferences.PREF_SWAP_TOUCHPAD_AXES
+                                ? event.getAxisValue(MotionEvent.AXIS_HSCROLL)
+                                : event.getAxisValue(MotionEvent.AXIS_VSCROLL)
                 );
                 return true;
             case MotionEvent.ACTION_UP:
