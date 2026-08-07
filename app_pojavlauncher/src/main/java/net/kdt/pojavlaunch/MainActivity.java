@@ -68,7 +68,6 @@ import net.kdt.pojavlaunch.utils.jre.GameRunner;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.Objects;
 
 import git.artdeell.dnbootstrap.glfw.AndroidClipboardProvider;
 import git.artdeell.dnbootstrap.glfw.GLFW;
@@ -226,7 +225,12 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
 
             touchCharInput.setCharacterSender(new LwjglCharSender());
 
-            Bundle extras = Objects.requireNonNull(getIntent().getExtras());
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                // Recreated after the process was killed in-game; nothing to restore.
+                finish();
+                return;
+            }
             String version = extras.getString(INTENT_LAUNCH_VERSION);
             File[] classpath = (File[]) extras.getSerializable(INTENT_LAUNCH_CLASSPATH);
 
