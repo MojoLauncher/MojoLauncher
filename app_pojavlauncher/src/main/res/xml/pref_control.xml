@@ -99,6 +99,11 @@
             android:title="@string/preference_mouse_start_title"
             android:summary="@string/preference_mouse_start_description"
             android:icon="@drawable/ic_px_virtual_mouse"/>
+        <SwitchPreference
+            android:key="swap_touchpad_axes"
+            android:title="@string/preference_swap_touchpad_axes_title"
+            android:summary="@string/preference_swap_touchpad_axes_description"
+            android:icon="@drawable/ic_px_switch_arrows_x"/>
     </PreferenceCategory>
 
     <PreferenceCategory

@@ -196,6 +196,8 @@
 
     <string name="preference_mouse_start_title">Start with virtual mouse on</string>
     <string name="preference_mouse_start_description">The virtual mouse appears at startup when this option is on.</string>
+    <string name="preference_swap_touchpad_axes_title">Swap touchpad axes</string>
+    <string name="preference_swap_touchpad_axes_description">Fixes a camera that moves the wrong way on keyboards with built-in touchpads.</string>
     <string name="preference_video_title">Video and renderer</string>
     <string name="preference_video_description">Resolution, renderer and performance</string>
     <string name="preference_control_title">Control customization</string>

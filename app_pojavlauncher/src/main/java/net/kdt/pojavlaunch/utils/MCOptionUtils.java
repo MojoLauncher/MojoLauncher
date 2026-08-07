@@ -119,7 +119,14 @@ public class MCOptionUtils {
     /** @return The stored Minecraft GUI scale, also auto-computed if on auto-mode or improper setting */
     public static int getMcScale() {
         String str = MCOptionUtils.get("guiScale");
-        int guiScale = (str == null ? 0 :Integer.parseInt(str));
+        int guiScale = 0;
+        if(str != null) {
+            try {
+                guiScale = Integer.parseInt(str.trim());
+            } catch (NumberFormatException e) {
+                guiScale = 0;
+            }
+        }
 
         int scale = Math.max(Math.min(windowWidth / 320, windowHeight / 240), 1);
         if(scale < guiScale || guiScale == 0){
