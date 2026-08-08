@@ -153,7 +153,7 @@ public class GameRunner {
             localeString = R.string.memory_warning_msg;
         }
 
-        if(LauncherPreferences.PREF_RAM_ALLOCATION > freeDeviceMemory && LauncherPreferences.PREF_SHOW_MEMORY_WARNING_DIALOG) {
+        if(LauncherPreferences.PREF_RAM_ALLOCATION > freeDeviceMemory && (freeAddressSpace != -1 || LauncherPreferences.PREF_SHOW_MEMORY_WARNING_DIALOG)) {
             int finalDeviceMemory = freeDeviceMemory;
             LifecycleAwareAlertDialog.DialogCreator dialogCreator = (dialog, builder) ->
                 builder.setMessage(activity.getString(localeString, finalDeviceMemory, LauncherPreferences.PREF_RAM_ALLOCATION))
