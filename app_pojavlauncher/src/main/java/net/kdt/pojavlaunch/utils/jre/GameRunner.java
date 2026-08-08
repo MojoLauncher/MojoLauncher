@@ -153,11 +153,15 @@ public class GameRunner {
             localeString = R.string.memory_warning_msg;
         }
 
-        if(LauncherPreferences.PREF_RAM_ALLOCATION > freeDeviceMemory) {
+        if(LauncherPreferences.PREF_RAM_ALLOCATION > freeDeviceMemory && LauncherPreferences.PREF_SHOW_MEMORY_WARNING_DIALOG) {
             int finalDeviceMemory = freeDeviceMemory;
             LifecycleAwareAlertDialog.DialogCreator dialogCreator = (dialog, builder) ->
                 builder.setMessage(activity.getString(localeString, finalDeviceMemory, LauncherPreferences.PREF_RAM_ALLOCATION))
-                        .setPositiveButton(android.R.string.ok, (d, w)->{});
+                        .setPositiveButton(android.R.string.ok, (d, w)->{})
+                        .setNegativeButton(R.string.option_do_not_show_again, (d, w)->{
+                            LauncherPreferences.DEFAULT_PREF.edit().putBoolean("showMemoryWarning", false).apply();
+                            Toast.makeText(activity, R.string.notification_permission_toast, Toast.LENGTH_SHORT).show();
+                        });
 
             if(LifecycleAwareAlertDialog.haltOnDialog(activity.getLifecycle(), activity, dialogCreator)) {
                 return; // If the dialog's lifecycle has ended, return without

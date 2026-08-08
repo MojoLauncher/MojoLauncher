@@ -50,6 +50,12 @@
             android:icon="@drawable/ic_px_data_import"
             android:title="@string/preference_data_migration_title"
             android:summary="@string/preference_data_migration_summary" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:icon="@drawable/ic_px_memory_warning"
+            android:key="showMemoryWarning"
+            android:title="@string/preference_show_memory_warning_title"
+            android:summary="@string/preference_show_memory_warning_summary"/>
 
     </PreferenceCategory>
 
