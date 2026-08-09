@@ -15,9 +15,11 @@ import net.kdt.pojavlaunch.contracts.OpenDocumentWithExtension;
 import net.kdt.pojavlaunch.multirt.MultiRTConfigDialog;
 import net.kdt.pojavlaunch.prefs.CustomSeekBarPreference;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.prefs.MemoryInputDialog;
 
 public class LauncherPreferenceJavaFragment extends LauncherPreferenceFragment {
     private MultiRTConfigDialog mDialogScreen;
+    private MemoryInputDialog mInputDialog;
     private final ActivityResultLauncher<Object> mVmInstallLauncher =
             registerForActivityResult(new OpenDocumentWithExtension("xz"), (data)->{
                 if(data != null) Tools.installRuntimeFromUri(getContext(), data);
@@ -42,6 +44,11 @@ public class LauncherPreferenceJavaFragment extends LauncherPreferenceFragment {
         memorySeekbar.setValue(ramAllocation);
         memorySeekbar.setSuffix(" MB");
 
+        memorySeekbar.setOnPreferenceClickListener(pref -> {
+            this.openMemoryInput(memorySeekbar::setValue);
+            return true;
+        });
+
         EditTextPreference editJVMArgs = findPreference("javaArgs");
         if (editJVMArgs != null) {
             editJVMArgs.setOnBindEditTextListener(TextView::setSingleLine);
@@ -59,5 +66,11 @@ public class LauncherPreferenceJavaFragment extends LauncherPreferenceFragment {
             mDialogScreen.prepare(getContext(), mVmInstallLauncher);
         }
         mDialogScreen.show();
+    }
+
+    private void openMemoryInput(MemoryInputDialog.Callback onMemSet){
+        if(mInputDialog == null)
+            mInputDialog = new MemoryInputDialog(this.getContext(), onMemSet);
+        mInputDialog.show();
     }
 }
