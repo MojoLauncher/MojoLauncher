@@ -5,11 +5,14 @@ import android.Manifest;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.opengl.Visibility;
 import android.os.Build;
 import android.os.Bundle;
 import android.system.Os;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -55,6 +58,7 @@ public class LauncherActivity extends BaseActivity {
     public static final String SETTING_FRAGMENT_TAG = "SETTINGS_FRAGMENT";
 
     private FragmentContainerView mFragmentView;
+    private View mAccountSpinnerView;
     private ImageButton mSettingsButton;
     private ProgressLayout mProgressLayout;
     private ProgressServiceKeeper mProgressServiceKeeper;
@@ -108,7 +112,8 @@ public class LauncherActivity extends BaseActivity {
             return false;
         }
 
-        Instance selectedInstance = Instances.loadSelectedInstance();
+        String instance = getIntent().getStringExtra("instance");
+        Instance selectedInstance = instance == null ? Instances.loadSelectedInstance() : Instances.getInstance(instance, Instance.class);
 
         if(selectedInstance == null) {
             Toast.makeText(this, R.string.no_instance, Toast.LENGTH_LONG).show();
@@ -130,6 +135,7 @@ public class LauncherActivity extends BaseActivity {
             ExtraCore.setValue(ExtraConstants.SELECT_AUTH_METHOD, true);
             return false;
         }
+
         String normalizedVersionId = MoJsonExtras.normalizeVersionId(selectedInstance.versionId);
         JVersionList.Version mcVersion = MoJsonExtras.getListedVersion(normalizedVersionId);
         new MoJsonDownloader().start(
@@ -175,8 +181,10 @@ public class LauncherActivity extends BaseActivity {
 
         IconCacheJanitor.runJanitor();
 
-        getWindow().setBackgroundDrawable(null);
+        String instance = getIntent().getStringExtra("instance");
+
         bindViews();
+        getWindow().setBackgroundDrawable(null);
         mRequestPermissionLauncher = this.registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(),
                 isAllowed -> {
@@ -207,6 +215,11 @@ public class LauncherActivity extends BaseActivity {
         mProgressLayout.observe(ProgressLayout.DOWNLOAD_VERSION_LIST);
         mProgressLayout.observe(ProgressLayout.INSTANCE_INSTALL);
         mProgressLayout.observe(ProgressLayout.DATA_MIGRATION);
+
+        if(instance != null){
+            Log.i("LauncherActivity", "Autolaunching instance " + instance);
+            ProgressKeeper.waitUntilDone(() -> ExtraCore.setValue(ExtraConstants.LAUNCH_GAME, true));
+        }
     }
 
     @Override
@@ -332,5 +345,6 @@ public class LauncherActivity extends BaseActivity {
         mFragmentView = findViewById(R.id.container_fragment);
         mSettingsButton = findViewById(R.id.setting_button);
         mProgressLayout = findViewById(R.id.progress_layout);
+        mAccountSpinnerView = findViewById(R.id.account_spinner);
     }
 }
