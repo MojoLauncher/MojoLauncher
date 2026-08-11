@@ -255,6 +255,31 @@
 
         tools:text="HELLO" />
 
+    <TextView
+        android:id="@+id/editCodepoint_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2.60dp"
+        android:gravity="center"
+        android:text="Chat symbol"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mapping_3_textview"
+        />
+
+    <EditText
+        android:id="@+id/editCodepoint_edittext"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="A character to type"
+        android:imeOptions="flagNoExtractUi"
+        android:maxLength="1"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editCodepoint_textview" />
+
+
 
     <!-- ORIENTATION SECTION -->
     <TextView
@@ -267,7 +292,9 @@
         android:text="@string/customctrl_orientation"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapping_3_textview" />
+        app:layout_constraintTop_toBottomOf="@+id/editCodepoint_edittext"
+        />
+
 
     <Spinner
         android:id="@+id/editOrientation_spinner"
