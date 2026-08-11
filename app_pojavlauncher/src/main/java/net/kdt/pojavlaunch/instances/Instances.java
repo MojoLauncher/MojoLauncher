@@ -1,5 +1,7 @@
 package net.kdt.pojavlaunch.instances;
 
+import android.util.Log;
+
 import com.google.gson.JsonSyntaxException;
 
 import net.kdt.pojavlaunch.Tools;
@@ -44,6 +46,8 @@ public class Instances {
     private static File selectedInstanceLocation() {
         String directoryName = LauncherPreferences.DEFAULT_PREF.getString(LauncherPreferences.PREF_KEY_CURRENT_INSTANCE, "");
         File instanceRoot = new File(sInstancePath, directoryName);
+        if(!instanceRoot.exists())
+            Log.e("Instances", "New instance dir doesn't exist!");
         if(!metadataLocation(instanceRoot).exists()) return null;
         return instanceRoot;
     }
@@ -189,5 +193,30 @@ public class Instances {
         if(instance == null) return null;
         instance.sanitize();
         return instance;
+    }
+
+    /**
+     * Rename the provided instance directory. This will apply the new name only if it's unique.
+     * If no name provided - using bare UUID. If a name conflict - newName as prefix + UUID.
+     * @param instance Instance
+     * @param newName New instance name
+     */
+    public static void renameInstanceDirectory(Instance instance, String newName) {
+        if(newName == null) return;
+        if(newName.trim().isEmpty())
+            newName = String.valueOf(UUID.randomUUID());
+        newName = newName
+                .replace('\\', '-')
+                .replace('\0', '-')
+                .replace(' ', '-');
+        File targetDirectory = new File(sInstancePath, newName);
+        if(targetDirectory.exists())
+            targetDirectory = findNewInstanceRoot(newName);
+        String oldName = instance.mInstanceRoot.getName();
+        if(!instance.mInstanceRoot.renameTo(targetDirectory))
+            throw new RuntimeException("Failed to rename instance!");
+        instance.mInstanceRoot = targetDirectory;
+        if(oldName.equals(LauncherPreferences.DEFAULT_PREF.getString(LauncherPreferences.PREF_KEY_CURRENT_INSTANCE, "")))
+            setSelectedInstance(instance);
     }
 }
