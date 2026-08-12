@@ -11,6 +11,7 @@ import androidx.preference.Preference;
 import androidx.preference.SwitchPreference;
 import androidx.preference.SwitchPreferenceCompat;
 
+import git.artdeell.mojo.BuildConfig;
 import git.artdeell.mojo.R;
 
 import net.kdt.pojavlaunch.Tools;
@@ -85,12 +86,14 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         Preference drivers = requirePreference("manageDrivers");
         SwitchPreference customVk = requirePreference("zinkPreferSystemDriver", SwitchPreference.class);
         if(DriverManager.isSupportedByDevice()) {
-            drivers.setVisible(true);
-            updateDriversPref();
-            drivers.setOnPreferenceClickListener(pref -> {
-                openDriverDialog();
-                return true;
-            });
+            if(!BuildConfig.BUILD_TYPE.equals("gplay")) {
+                drivers.setVisible(true);
+                updateDriversPref();
+                drivers.setOnPreferenceClickListener(pref -> {
+                    openDriverDialog();
+                    return true;
+                });
+            }
             customVk.setVisible(true);
             customVk.setChecked(LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER);
         } else {
