@@ -515,4 +515,6 @@
     <string name="mod_manager_mod_corrupt_not_a_mod">This file isn\'t a mod or isn\'t compatible with this mod loader</string>
     <string name="mod_manager_mod_unknown_description">No description</string>
     <string name="mod_manager_mod_unknown_version">Unknown version</string>
+    <string name="loading_screen_booted">Ready - running on %1$s!</string>
+    <string name="loading_screen_warning">If you are stuck here, the game might have crashed</string>
 </resources>

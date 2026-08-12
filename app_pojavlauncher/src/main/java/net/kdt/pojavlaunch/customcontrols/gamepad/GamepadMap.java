@@ -136,17 +136,17 @@ public class GamepadMap {
         menuMap.BUTTON_B.keycodes[0] = KeyEvent.KEYCODE_ESCAPE;
         menuMap.BUTTON_X.keycodes[0] = GamepadMap.MOUSE_RIGHT;
         {
-            short[] keycodes = menuMap.BUTTON_Y.keycodes;
+            int[] keycodes = menuMap.BUTTON_Y.keycodes;
             keycodes[0] = KeyEvent.KEYCODE_SHIFT_LEFT;
             keycodes[1] = GamepadMap.MOUSE_RIGHT;
         }
 
         {
-            short[] keycodes = menuMap.DIRECTION_FORWARD.keycodes;
+            int[] keycodes = menuMap.DIRECTION_FORWARD.keycodes;
             keycodes[0] = keycodes[1] = keycodes[2] = keycodes[3] = GamepadMap.MOUSE_SCROLL_UP;
         }
         {
-            short[] keycodes = menuMap.DIRECTION_BACKWARD.keycodes;
+            int[] keycodes = menuMap.DIRECTION_BACKWARD.keycodes;
             keycodes[0] = keycodes[1] = keycodes[2] = keycodes[3] = GamepadMap.MOUSE_SCROLL_DOWN;
         }
 
@@ -182,7 +182,7 @@ public class GamepadMap {
     @SuppressWarnings("unused") public static GamepadMap createEmptyMap(){
         GamepadMap emptyMap = createAndInitializeButtons();
         for(GamepadEmulatedButton button : emptyMap.getButtons())
-            button.keycodes = new short[] {UNSPECIFIED, UNSPECIFIED, UNSPECIFIED, UNSPECIFIED};
+            button.keycodes = new int[] {UNSPECIFIED, UNSPECIFIED, UNSPECIFIED, UNSPECIFIED};
         return emptyMap;
     }
 

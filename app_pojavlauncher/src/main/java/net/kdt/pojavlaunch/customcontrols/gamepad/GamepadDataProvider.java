@@ -1,7 +1,7 @@
 package net.kdt.pojavlaunch.customcontrols.gamepad;
 
 
-import net.kdt.pojavlaunch.platform.input.PlatformGrabListener;
+import net.kdt.pojavlaunch.game.platform.input.PlatformGrabListener;
 
 public interface GamepadDataProvider {
     GamepadMap getMenuMap();

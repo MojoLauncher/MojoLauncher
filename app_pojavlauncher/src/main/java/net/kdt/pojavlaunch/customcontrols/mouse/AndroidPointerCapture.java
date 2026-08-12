@@ -1,7 +1,5 @@
 package net.kdt.pojavlaunch.customcontrols.mouse;
 
-import static net.kdt.pojavlaunch.platform.Platform.PLATFORM;
-
 import android.os.Build;
 import android.view.InputDevice;
 import android.view.MotionEvent;
@@ -13,7 +11,7 @@ import androidx.annotation.RequiresApi;
 import net.kdt.pojavlaunch.Tools;
 
 import net.kdt.pojavlaunch.CallbackBridge;
-import net.kdt.pojavlaunch.platform.Platform;
+import net.kdt.pojavlaunch.game.platform.Platform;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -122,9 +120,9 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
     }
 
     private void applyMotionVector(View view, float speed) {
-        Platform.cursorX += mVector[0] * speed / view.getWidth();
-        Platform.cursorY += mVector[1] * speed / view.getHeight();
-        PLATFORM.sendMousePosition();
+        Platform.cursorX += mVector[0] * speed;
+        Platform.cursorY += mVector[1] * speed;
+        Platform.sendCursorPosition();
     }
 
     private void checkSameDevice(InputDevice inputDevice) {

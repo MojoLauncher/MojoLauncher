@@ -1,10 +1,8 @@
 package net.kdt.pojavlaunch.customcontrols.gamepad;
 
 
-import static net.kdt.pojavlaunch.platform.Platform.PLATFORM;
-
-import net.kdt.pojavlaunch.platform.input.PlatformGrabListener;
-import net.kdt.pojavlaunch.platform.Platform;
+import net.kdt.pojavlaunch.game.platform.input.PlatformGrabListener;
+import net.kdt.pojavlaunch.game.platform.Platform;
 
 
 public class DefaultDataProvider implements GamepadDataProvider {

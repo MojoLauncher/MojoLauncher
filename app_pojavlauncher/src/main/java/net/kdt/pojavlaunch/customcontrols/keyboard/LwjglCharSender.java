@@ -1,11 +1,10 @@
 package net.kdt.pojavlaunch.customcontrols.keyboard;
 
-import static net.kdt.pojavlaunch.platform.Platform.PLATFORM;
+import static net.kdt.pojavlaunch.game.platform.Platform.PLATFORM;
 
 import android.view.KeyEvent;
 
 import net.kdt.pojavlaunch.CallbackBridge;
-import net.kdt.pojavlaunch.platform.Platform;
 
 /** Sends keys via the CallBackBridge */
 public class LwjglCharSender implements CharacterSenderStrategy {

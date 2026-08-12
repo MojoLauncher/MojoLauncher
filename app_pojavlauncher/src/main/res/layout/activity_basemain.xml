@@ -20,22 +20,24 @@
 			android:layout_width="match_parent"
 			android:layout_height="match_parent">
 
-			<net.kdt.pojavlaunch.LauncherGLSurface
+			<net.kdt.pojavlaunch.game.GameView
 				android:id="@+id/main_game_render_view"
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
 				android:defaultFocusHighlightEnabled="false"
-                tools:ignore="UnusedAttribute" />
+                tools:ignore="UnusedAttribute">
 
-			<net.kdt.pojavlaunch.platform.cursor.PlatformCursorView
-				android:layout_height="match_parent"
-				android:layout_width="match_parent"
-				android:orientation="vertical"
-				android:id="@+id/main_touchpad"
-				android:focusable="false"
-				android:translationZ="1dp"
-				android:visibility="gone"
-                app:defaultCursorDrawable="@drawable/ic_mouse_pointer"/>
+				<net.kdt.pojavlaunch.game.GameCursorView
+					android:layout_height="match_parent"
+					android:layout_width="match_parent"
+					android:orientation="vertical"
+					android:id="@+id/main_cursorview"
+					android:focusable="false"
+					android:translationZ="1dp"
+					android:visibility="gone"
+					app:defaultCursorDrawable="@drawable/ic_mouse_pointer"/>
+
+			</net.kdt.pojavlaunch.game.GameView>
 
 
 			<net.kdt.pojavlaunch.customcontrols.keyboard.TouchCharInput

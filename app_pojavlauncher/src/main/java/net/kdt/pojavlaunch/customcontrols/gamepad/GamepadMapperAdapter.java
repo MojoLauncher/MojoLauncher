@@ -19,7 +19,7 @@ import net.kdt.pojavlaunch.EfficientAndroidLWJGLKeycode;
 
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
-import net.kdt.pojavlaunch.platform.input.PlatformGrabListener;
+import net.kdt.pojavlaunch.game.platform.input.PlatformGrabListener;
 
 import android.widget.TextView;
 
@@ -165,7 +165,7 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
         private final TextView mKeycodeLabel;
         private int mAttachedPosition = -1;
         private GamepadEmulatedButton mAttachedButton;
-        private short[] mKeycodes;
+        private int[] mKeycodes;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -215,7 +215,7 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
             for(spinnerIndex = 0; spinnerIndex < mKeycodes.length; spinnerIndex++) {
                 Spinner keySpinner = mKeySpinners[spinnerIndex];
                 keySpinner.setEnabled(true);
-                short keyCode = mKeycodes[spinnerIndex];
+                int keyCode = mKeycodes[spinnerIndex];
                 int selected;
                 if(keyCode < 0) selected = keyCode + mSpecialKeycodeCount;
                 else selected = EfficientAndroidLWJGLKeycode.getIndexByValue(keyCode) + mSpecialKeycodeCount;

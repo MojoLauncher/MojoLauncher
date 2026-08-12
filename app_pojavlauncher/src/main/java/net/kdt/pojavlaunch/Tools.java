@@ -50,6 +50,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import net.kdt.pojavlaunch.game.GameActivity;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutorTask;
@@ -371,7 +372,7 @@ public final class Tools {
                     .setMessage(errMsg)
                     .setPositiveButton(android.R.string.ok, (p1, p2) -> {
                         if(exitIfOk) {
-                            if (ctx instanceof MainActivity) {
+                            if (ctx instanceof GameActivity) {
                                 fullyExit();
                             } else if (ctx instanceof Activity) {
                                 ((Activity) ctx).finish();
@@ -383,7 +384,7 @@ public final class Tools {
                         ClipboardManager mgr = (ClipboardManager) ctx.getSystemService(Context.CLIPBOARD_SERVICE);
                         mgr.setPrimaryClip(ClipData.newPlainText("error", printToString(e)));
                         if(exitIfOk) {
-                            if (ctx instanceof MainActivity) {
+                            if (ctx instanceof GameActivity) {
                                 fullyExit();
                             } else {
                                 ((Activity) ctx).finish();
@@ -918,6 +919,7 @@ public final class Tools {
                 .setNegativeButton(android.R.string.cancel, null)
                 .setPositiveButton(android.R.string.ok, (p1, p2) -> {
                     try {
+                        Tools.restartLauncherActivity(ctx);
                         Tools.fullyExit();
                     } catch (Throwable th) {
                         Log.w(Tools.APP_NAME, "Could not enable System.exit() method!", th);
@@ -953,6 +955,11 @@ public final class Tools {
         return Math.min(imeHeight, cursorY - visibleHeight + padding);
     }
 
+    public static void restartLauncherActivity(Context context){
+        Intent intent = new Intent(context, LauncherActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.getApplicationContext().startActivity(intent);
+    }
 
     public static void setupOverlayView(RecyclerView recyclerView, View overlayView) {
         float mOverlayTopCache = recyclerView.getResources().getDimension(R.dimen.fragment_padding_medium);; // Padding cache reduce resource lookup

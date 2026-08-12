@@ -18,8 +18,8 @@ import android.view.View;
 
 
 import net.kdt.pojavlaunch.CallbackBridge;
-import net.kdt.pojavlaunch.platform.input.PlatformGrabListener;
-import net.kdt.pojavlaunch.platform.Platform;
+import net.kdt.pojavlaunch.game.platform.input.PlatformGrabListener;
+import net.kdt.pojavlaunch.game.platform.Platform;
 
 import static net.kdt.pojavlaunch.Tools.currentDisplayMetrics;
 import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTION_EAST;
@@ -32,7 +32,7 @@ import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTI
 import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTION_SOUTH_WEST;
 import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.DIRECTION_WEST;
 import static net.kdt.pojavlaunch.customcontrols.gamepad.GamepadJoystick.isJoystickEvent;
-import static net.kdt.pojavlaunch.platform.Platform.PLATFORM;
+import static net.kdt.pojavlaunch.game.platform.Platform.PLATFORM;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_DEADZONE_SCALE;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_SCALE_FACTOR;
 import static net.kdt.pojavlaunch.CallbackBridge.sendMouseButton;
@@ -96,8 +96,8 @@ public class Gamepad implements PlatformGrabListener, GamepadHandler {
         mMapProvider = mapProvider;
         mTouchpadView = touchpadView;
 
-        Platform.cursorX = Platform.cursorY = 0.5;
-        PLATFORM.sendMousePosition();
+        Platform.resetCursorPosition();
+        Platform.sendCursorPosition();
 
         enableTouchpadIfNecessary();
 
@@ -130,8 +130,8 @@ public class Gamepad implements PlatformGrabListener, GamepadHandler {
         if(mTouchpadView.getVisibility() != View.VISIBLE) mTouchpadView.setVisibility(View.VISIBLE);
     }
 
-    public static void sendInput(short[] keycodes, boolean isDown){
-        for(short keycode : keycodes){
+    public static void sendInput(int[] keycodes, boolean isDown){
+        for(int keycode : keycodes){
             switch (keycode){
                 case GamepadMap.MOUSE_SCROLL_DOWN:
                     if(isDown) CallbackBridge.sendScroll(0, -1);
@@ -191,11 +191,11 @@ public class Gamepad implements PlatformGrabListener, GamepadHandler {
             deltaX *= deltaTimeScale;
             deltaY *= deltaTimeScale;
 
-            Platform.cursorX += deltaX / 1000;
-            Platform.cursorY -= deltaY / 1000;
+            Platform.cursorX += deltaX;
+            Platform.cursorY -= deltaY;
 
             //Send the mouse to the game
-            PLATFORM.sendMousePosition();
+            Platform.sendCursorPosition();
         }
 
         // Update last nano time
