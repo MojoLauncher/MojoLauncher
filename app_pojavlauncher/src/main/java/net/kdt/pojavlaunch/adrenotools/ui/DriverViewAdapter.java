@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -117,7 +118,7 @@ public class DriverViewAdapter extends RecyclerView.Adapter<DriverViewAdapter.Dr
                     boolean state = DriverManager.removeDriver(mCurrentDriver.getHash());
                     mDeleteButton.post(() -> {
                         if(!state) {
-                            Log.e(DriverManager.TAG, "Unable to remove the package");
+                            Toast.makeText(mContext, R.string.driver_config_remove_failed, Toast.LENGTH_SHORT).show();
                             return;
                         }
                         if(getBindingAdapter() != null)
