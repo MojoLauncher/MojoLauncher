@@ -23,9 +23,9 @@ import net.kdt.pojavlaunch.customcontrols.ControlData;
 import net.kdt.pojavlaunch.customcontrols.ControlLayout;
 import net.kdt.pojavlaunch.customcontrols.LayoutBitmaps;
 import net.kdt.pojavlaunch.customcontrols.handleview.EditControlSideDialog;
+import net.kdt.pojavlaunch.game.platform.input.PlatformGrabListener;
+import net.kdt.pojavlaunch.game.platform.Platform;
 
-import git.artdeell.dnbootstrap.glfw.GLFW;
-import git.artdeell.dnbootstrap.glfw.GrabListener;
 
 
 /**
@@ -33,7 +33,7 @@ import git.artdeell.dnbootstrap.glfw.GrabListener;
  * Most of the injected behavior is editing behavior,
  * sending keys has to be implemented by sub classes.
  */
-public interface ControlInterface extends View.OnLongClickListener, GrabListener {
+public interface ControlInterface extends View.OnLongClickListener, PlatformGrabListener {
     /**
      * Get this ControlInterface implementation as a View.
      * @return this
@@ -327,7 +327,7 @@ public interface ControlInterface extends View.OnLongClickListener, GrabListener
         getControlView().addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(@NonNull View v) {
-                GLFW.addGrabListener(ControlInterface.this);
+                Platform.addGrabListener(ControlInterface.this);
                 getControlView().removeOnAttachStateChangeListener(this);
             }
 

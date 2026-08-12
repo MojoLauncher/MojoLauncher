@@ -172,8 +172,8 @@ public class EfficientAndroidLWJGLKeycode {
         CallbackBridge.sendKeyPress(getValueByIndex(index));
     }
 
-    public static short getValueByIndex(int index) {
-        return sLwjglKeycodes[index];
+    public static int getValueByIndex(int index) {
+        return sAndroidKeycodes[index];
     }
 
 

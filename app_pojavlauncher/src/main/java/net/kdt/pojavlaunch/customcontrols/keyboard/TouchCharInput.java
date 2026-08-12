@@ -7,7 +7,6 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.Selection;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
 
@@ -66,6 +65,20 @@ public class TouchCharInput extends androidx.appcompat.widget.AppCompatEditText 
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
         // Allow, regardless of whether or not a hardware keyboard is declared
         if(hasFocus()){
+            clear();
+            disable();
+        }else{
+            enable();
+            imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT);
+        }
+    }
+
+    /**
+     * Force keyboard state
+     */
+    public void setKeyboardState(boolean state){
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
+        if(!state){
             clear();
             disable();
         }else{

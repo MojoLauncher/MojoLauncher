@@ -367,6 +367,7 @@
     <string name="preference_remap_controller_title">Изменить назначения клавиш контроллера</string>
     <string name="preference_remap_controller_description">Позволяет настраивать привязку клавиш клавиатуры к кнопкам контроллера</string>
     <string name="mcl_button_social_media">Telegram</string>
+    <string name="social_media_invite" translatable="false">https://t.me/MojoLauncher</string>
     <string name="ltw_render_distance_warning_msg">Ваше видеоядро не поддерживает прорисовку более 7 чанков без использования Sodium или его аналогов. Нажмите «ОК», чтобы автоматически снизить прорисовку.</string>
     <string name="mcl_button_open_directory">Открыть папку игры</string>
     <string name="local_login_bad_username_title">Неподходящее имя пользователя</string>
@@ -454,4 +455,7 @@
     <string name="migration_progress_space">На вашем устройстве недостаточно места для переноса данных. Освободите как минимум $%1l МБ или больше чтобы продолжить</string>
     <string name="preference_alsoft_opensl_title">Принудительно использовать OpenSL для аудио</string>
     <string name="preference_alsoft_opensl_summary">Включает принудительное использование OpenSL вместо Oboe для ALSoft. Может исправить проблемы с записью звука на некоторых устройствах. Выключите если вы наблюдаете проблемы с записью или воспроизведением звука.</string>
+    <string name="loading_screen_title">Ожидание появления окна игры…</string>
+    <string name="loading_screen_booted">Запущено - используется %1$s!</string>
+    <string name="loading_screen_warning">Если окно долго не появляется - возможно игра вылетела</string>
 </resources>

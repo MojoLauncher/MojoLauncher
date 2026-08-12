@@ -17,9 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.kdt.pojavlaunch.EfficientAndroidLWJGLKeycode;
 
-import git.artdeell.dnbootstrap.glfw.GrabListener;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.game.platform.input.PlatformGrabListener;
 
 import android.widget.TextView;
 
@@ -31,7 +31,7 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
     private GamepadEmulatedButton[] mRealButtons;
     private final ArrayAdapter<String> mKeyAdapter;
     private final int mSpecialKeycodeCount;
-    private GrabListener mGamepadGrabListener;
+    private PlatformGrabListener mGamepadGrabListener;
     private boolean mGrabState = false;
     private boolean mOldState = false;
 
@@ -165,7 +165,7 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
         private final TextView mKeycodeLabel;
         private int mAttachedPosition = -1;
         private GamepadEmulatedButton mAttachedButton;
-        private short[] mKeycodes;
+        private int[] mKeycodes;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -215,7 +215,7 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
             for(spinnerIndex = 0; spinnerIndex < mKeycodes.length; spinnerIndex++) {
                 Spinner keySpinner = mKeySpinners[spinnerIndex];
                 keySpinner.setEnabled(true);
-                short keyCode = mKeycodes[spinnerIndex];
+                int keyCode = mKeycodes[spinnerIndex];
                 int selected;
                 if(keyCode < 0) selected = keyCode + mSpecialKeycodeCount;
                 else selected = EfficientAndroidLWJGLKeycode.getIndexByValue(keyCode) + mSpecialKeycodeCount;
@@ -321,7 +321,7 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
     }
 
     @Override
-    public void attachGrabListener(GrabListener grabListener) {
+    public void attachGrabListener(PlatformGrabListener grabListener) {
         mGamepadGrabListener = grabListener;
         grabListener.onGrabState(mGrabState);
     }

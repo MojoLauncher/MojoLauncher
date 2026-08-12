@@ -1,13 +1,13 @@
 package net.kdt.pojavlaunch.lifecycle;
 
-import static net.kdt.pojavlaunch.MainActivity.INTENT_LAUNCH_CLASSPATH;
-import static net.kdt.pojavlaunch.MainActivity.INTENT_LAUNCH_VERSION;
+import static net.kdt.pojavlaunch.game.GameActivity.INTENT_LAUNCH_CLASSPATH;
+import static net.kdt.pojavlaunch.game.GameActivity.INTENT_LAUNCH_VERSION;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
-import net.kdt.pojavlaunch.MainActivity;
+import net.kdt.pojavlaunch.game.GameActivity;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
@@ -27,7 +27,7 @@ public class ContextAwareDoneListener implements MoJsonExtras.DoneListener, Cont
     }
 
     private Intent createGameStartIntent(Context context) {
-        Intent mainIntent = new Intent(context, MainActivity.class);
+        Intent mainIntent = new Intent(context, GameActivity.class);
         mainIntent.putExtra(INTENT_LAUNCH_VERSION, mNormalizedVersionid);
         mainIntent.putExtra(INTENT_LAUNCH_CLASSPATH, classpath);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
