@@ -205,10 +205,8 @@ public class Instances {
         if(newName == null) return;
         if(newName.trim().isEmpty())
             newName = String.valueOf(UUID.randomUUID());
-        newName = newName
-                .replace('\\', '-')
-                .replace('\0', '-')
-                .replace(' ', '-');
+        else
+            newName = FileUtils.escapeFileName(newName);
         File targetDirectory = new File(sInstancePath, newName);
         if(targetDirectory.exists())
             targetDirectory = findNewInstanceRoot(newName);
