@@ -142,15 +142,12 @@ public class JREUtils {
 
         if(!PREF_ZINK_PREFER_SYSTEM_DRIVER && DriverManager.isSupportedByDevice()){
             setRendererLibraryPath(Tools.NATIVE_LIB_DIR, MesaUtils.getCustomZinkLibraryPath(), DriverManager.getPreferredDriverRootPath());
-            loadVulkanLibrary(DriverManager.getPreferredDriverLibraryPath());
+            MojoExec.overrideVulkanDriver(true);
+            MojoExec.overrideVulkanDriverPath(DriverManager.getPreferredDriverLibraryPath());
         } else setRendererLibraryPath(Tools.NATIVE_LIB_DIR, MesaUtils.getCustomZinkLibraryPath());
 
         if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
         if(LauncherPreferences.PREF_ALSOFT_FORCE_OPENSL) envMap.put("ALSOFT_DRIVERS", "opensl");
-
-        if(GLInfoUtils.getGlInfo().isAdreno() && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
-            MojoExec.setUseTurnip(true);
-        }
 
         if(LauncherPreferences.PREF_FREEDRENO_SYSMEM) {
             // We could also apply the FD_MESA_DEBUG only if freedreno is active but why making things complicated?
@@ -251,7 +248,6 @@ public class JREUtils {
                 useGles = false;
                 bypassNamespace = true; // Mesa is linked to a bunch of libraries not available in the pojavexec namespace
                 glesVersion = 3;
-                if(preloadVk) MojoExec.preloadVulkan(); // Zink requires Vulkan library to be preloaded
                 break;
             case "opengles3_ltw" :
                 renderLibrary = "libltw.so";
@@ -267,9 +263,11 @@ public class JREUtils {
                 glesVersion = Integer.parseInt((String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION));
                 break;
         }
-        // Always bypass namespaces with ANGLE so ANGLE can pick mjlvlk driver
-        if(LauncherPreferences.PREF_USE_ANGLE && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
-            bypassNamespace = true;
+        if(!PREF_ZINK_PREFER_SYSTEM_DRIVER && DriverManager.isSupportedByDevice()) {
+            // Preload creates mjlvlk reference which is then picked by zink/angle.
+            MojoExec.preloadVulkan();
+            // Always bypass namespaces with ANGLE so ANGLE can pick mjlvlk driver
+            if(LauncherPreferences.PREF_USE_ANGLE) bypassNamespace = true;
         }
         if (!MojoExec.prepareEgl(renderLibrary, bypassNamespace, useGles, glesVersion)) {
             Log.e("RENDER_LIBRARY","Failed to load renderer " + renderLibrary );
