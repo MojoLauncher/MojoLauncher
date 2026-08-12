@@ -45,7 +45,7 @@ import com.kdt.LoggerView;
 
 import net.kdt.pojavlaunch.BaseActivity;
 import net.kdt.pojavlaunch.CallbackBridge;
-import net.kdt.pojavlaunch.EfficientAndroidLWJGLKeycode;
+import net.kdt.pojavlaunch.utils.KeycodeUtils;
 import net.kdt.pojavlaunch.Logger;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.authenticator.accounts.Accounts;
@@ -409,7 +409,7 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
     private void dialogSendCustomKey() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle(R.string.control_customkey);
-        dialog.setItems(EfficientAndroidLWJGLKeycode.generateKeyName(), (dInterface, position) -> EfficientAndroidLWJGLKeycode.execKeyIndex(position));
+        dialog.setItems(KeycodeUtils.generateKeyName(), (dInterface, position) -> KeycodeUtils.execKeyIndex(position));
         dialog.show();
     }
 
