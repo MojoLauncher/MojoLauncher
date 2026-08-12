@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import net.kdt.pojavlaunch.Architecture;
 import net.kdt.pojavlaunch.JVersionList;
+import net.kdt.pojavlaunch.LauncherActivity;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.authenticator.accounts.Account;
 import net.kdt.pojavlaunch.instances.Instance;
@@ -286,6 +287,7 @@ public class GameRunner {
             }
         }
 
+        Tools.restartLauncherActivity(activity);
         Tools.fullyExit();
     }
 

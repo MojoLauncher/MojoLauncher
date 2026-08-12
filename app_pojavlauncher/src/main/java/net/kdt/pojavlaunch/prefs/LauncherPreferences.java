@@ -80,7 +80,6 @@ public class LauncherPreferences {
     public static String PREF_CUSTOM_RES_WIDTH = "";
     public static String PREF_CUSTOM_RES_HEIGHT = "";
 
-
     public static void loadPreferences(Context ctx) {
         //Required for CTRLDEF_FILE and MultiRT
         Tools.initStorageConstants(ctx);
