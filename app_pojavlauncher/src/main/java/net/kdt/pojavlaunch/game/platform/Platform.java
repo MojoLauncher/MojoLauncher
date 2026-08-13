@@ -31,6 +31,7 @@ import java.util.List;
 import fr.spse.gamepad_remapper.RemapperManager;
 import fr.spse.gamepad_remapper.RemapperView;
 import git.artdeell.dnbootstrap.glfw.GLFW;
+import git.artdeell.mojoexec.MojoExec;
 import git.mojo.sdl.SDLActivity;
 import git.mojo.sdl.SDLControllerManager;
 
@@ -74,6 +75,7 @@ public class Platform {
         // GLFW also has equivalent "onDirectGamepadEnable". Hook it up
         GLFW.setGamepadEnableHandler(() -> setPlatformGamepad(new GLFWGamepad(view.getContext(), mInputManager)));
         SDLBackend.initialize(activity);
+        MojoExec.setEnableTransformHook(true);
     }
 
     private static void onInit(PlatformBackend impl) {
