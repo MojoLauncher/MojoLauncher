@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import net.kdt.pojavlaunch.Architecture;
-import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
@@ -12,7 +11,7 @@ import java.io.File;
 import java.util.Map;
 
 /**
- * Utils for Mesa-based renderers (zink, freedreno)
+ * Environment utils for some renderers (zink, freedreno, ANGLE)
  */
 public class RenderEnvUtils {
 
@@ -24,33 +23,35 @@ public class RenderEnvUtils {
 
     private static LibraryPlugin zink;
     private static LibraryPlugin angle;
+
     /**
      * Setup environment for the mesa-based renderers. Does nothing if the renderer is not Mesa
-     * @param context context
+     *
+     * @param context  context
      * @param renderer selected renderer
-     * @param envMap environment map
+     * @param envMap   environment map
      */
-    public static void setupMesaEnv(Context context, String renderer, Map<String, String> envMap){
-        switch(renderer) {
+    public static void setupMesaEnv(Context context, String renderer, Map<String, String> envMap) {
+        switch (renderer) {
             case "vulkan_zink":
                 envMap.put("GALLIUM_DRIVER", "zink");
                 envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
                 // HACK: GLSL version override for Mesa-based renderers (i.e. Zink)
                 // Required to run the game properly on some mobile Vulkan drivers (Minecraft fails to compile shaders without)
                 envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
-                if(!Architecture.isx86Device() && (LauncherPreferences.PREF_ZINK_FORCE_LEGACY || GLInfoUtils.getGlInfo().isArm())) {
+                if (!Architecture.isx86Device() && (LauncherPreferences.PREF_ZINK_FORCE_LEGACY || GLInfoUtils.getGlInfo().isArm())) {
                     zink = LibraryPlugin.discoverPlugin(context, LibraryPlugin.ID_ZINK_PLUGIN);
-                    if(zink == null) return;
+                    if (zink == null) return;
                     // Mali additionally wants this
                     envMap.put("MESA_GL_VERSION_OVERRIDE", "3.3");
                 }
                 break;
             case "freedreno_kgsl":
-                if(GLInfoUtils.getGlInfo().isAdreno()) {
+                if (GLInfoUtils.getGlInfo().isAdreno()) {
                     envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "kgsl");
                     // On Adreno 5XX and lower only Core 3.1 is exposed by default due to missing hardware extensions.
                     // 3.3 is required for modern Minecraft so let's force 3.3 if running on such GPU - it's known to be working.
-                    if(GLInfoUtils.getGlInfo().isAdreno500Lower()) {
+                    if (GLInfoUtils.getGlInfo().isAdreno500Lower()) {
                         envMap.put("MESA_GL_VERSION_OVERRIDE", "3.3");
                         envMap.put("MESA_GLSL_VERSION_OVERRIDE", "330");
                     }
@@ -61,7 +62,8 @@ public class RenderEnvUtils {
 
     /**
      * Setup ANGLE environment for LTW/GL4ES
-     * @param ctx Context
+     *
+     * @param ctx    Context
      * @param envMap current environment map
      * @return if setup succeeded
      */
@@ -78,19 +80,20 @@ public class RenderEnvUtils {
         envMap.put("LIBGL_GLES", angle.resolveAbsolutePath(angleLibs[1]));
         return true;
     }
-    private static boolean setupSystemAngle(Map<String, String> envMap){
+
+    private static boolean setupSystemAngle(Map<String, String> envMap) {
         File[] system = getSystemAngle();
-        if(system == null) return false;
+        if (system == null) return false;
         Log.i("JREUtils", "Using system-provided ANGLE");
         envMap.put("LIBGL_EGL", system[0].getAbsolutePath());
         envMap.put("LIBGL_GLES", system[1].getAbsolutePath());
         return true;
     }
 
-    public static File[] getSystemAngle(){
+    public static File[] getSystemAngle() {
         File egl = new File(Architecture.is64BitsDevice() ? "/system/lib64" : "/system/lib", ANGLE_EGL);
         File gles = new File(Architecture.is64BitsDevice() ? "/system/lib64" : "/system/lib", ANGLE_OPENGL);
-        if(egl.exists() && gles.exists())
+        if (egl.exists() && gles.exists())
             return new File[]{egl, gles};
         else return null;
     }
@@ -98,15 +101,16 @@ public class RenderEnvUtils {
     /**
      * Cleanup plugin instances created during environment init if exists
      */
-    public static void cleanup(){
-        if(zink != null) zink = null;
-        if(angle != null) angle = null;
+    public static void cleanup() {
+        if (zink != null) zink = null;
+        if (angle != null) angle = null;
         System.gc();
     }
 
     /**
      * Get preferred Mesa EGL library - picks legacy Mesa library on ARM (or if forced) if ZINK plugin is installed
-     * @return
+     *
+     * @return EGL library
      */
     public static String getPreferredMesaEGL() {
         if (LauncherPreferences.PREF_ZINK_FORCE_LEGACY || GLInfoUtils.getGlInfo().isArm()) {
@@ -118,6 +122,7 @@ public class RenderEnvUtils {
 
     /**
      * Get ZINK plugin library path
+     *
      * @return library path string
      */
     public static String getCustomZinkLibraryPath() {
@@ -125,7 +130,8 @@ public class RenderEnvUtils {
             return zink.getLibraryPath();
         return null;
     }
-    public static boolean hasAnglePlugin(){
+
+    public static boolean hasAnglePlugin() {
         return angle != null;
     }
 }
