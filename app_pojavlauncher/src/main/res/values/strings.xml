@@ -505,4 +505,7 @@
     <string name="migration_notice">Looks like you have already used this application in the past. You can import old launcher installation data from miscellaneous settings.</string>
     <string name="preference_alsoft_opensl_title">Forcefully use OpenSL for audio</string>
     <string name="preference_alsoft_opensl_summary">Forcefully enables OpenSL backend in ALSoft instead of Oboe. Can fix audio capture issues on some devices. Disable if you see audio playback/capture issues</string>
+    <string name="loading_screen_title">Waiting for a game window to appear…</string>
+    <string name="loading_screen_booted">Ready - running on %1$s!</string>
+    <string name="loading_screen_warning">If you are stuck here, the game might have crashed</string>
 </resources>

@@ -1,5 +1,7 @@
 package net.kdt.pojavlaunch;
 
+import static net.kdt.pojavlaunch.game.platform.Platform.PLATFORM;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.view.Choreographer;
@@ -8,32 +10,32 @@ import android.view.KeyEvent;
 import androidx.annotation.Keep;
 
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
+import net.kdt.pojavlaunch.game.platform.Platform;
 
 import java.io.File;
-
-import git.artdeell.dnbootstrap.glfw.GLFW;
 
 public class CallbackBridge {
     public static final Choreographer sChoreographer = Choreographer.getInstance();
 
     public static volatile int windowWidth, windowHeight;
+    public static volatile float windowRate;
     public volatile static boolean holdingAlt, holdingCapslock, holdingCtrl,
             holdingNumlock, holdingShift;
 
     public static void performClick(int button) {
-        double ox = GLFW.cursorX, oy = GLFW.cursorY;
-        GLFW.sendMouseEvent(button, 1, CallbackBridge.getCurrentMods());
+        double ox = Platform.cursorX, oy = Platform.cursorY;
+        PLATFORM.sendMouseEvent(button, 1, CallbackBridge.getCurrentMods());
         sChoreographer.postFrameCallbackDelayed(l -> {
-            GLFW.cursorX = ox;
-            GLFW.cursorY = oy;
-            GLFW.sendMouseEvent(button, 0, CallbackBridge.getCurrentMods());
+            Platform.cursorX = ox;
+            Platform.cursorY = oy;
+            PLATFORM.sendMouseEvent(button, 0, CallbackBridge.getCurrentMods());
         }, 33);
     }
 
 
     public static void sendKeyPress(int keyCode) {
-        GLFW.sendKeyEvent(keyCode, true, getCurrentMods());
-        GLFW.sendKeyEvent(keyCode, false, getCurrentMods());
+        PLATFORM.sendKeyEvent(keyCode, true, getCurrentMods());
+        PLATFORM.sendKeyEvent(keyCode, false, getCurrentMods());
     }
 
     public static void sendMouseButton(int button, boolean status) {
@@ -41,11 +43,11 @@ public class CallbackBridge {
     }
 
     public static void sendMouseKeycode(int button, int modifiers, boolean isDown) {
-        GLFW.sendMouseEvent(button, isDown ? 1 : 0, modifiers);
+        PLATFORM.sendMouseEvent(button, isDown ? 1 : 0, modifiers);
     }
 
     public static void sendScroll(double xoffset, double yoffset) {
-        GLFW.sendScrollEvent(xoffset, yoffset);
+        PLATFORM.sendScrollEvent(xoffset, yoffset);
     }
 
     public static int getCurrentMods() {
@@ -74,23 +76,23 @@ public class CallbackBridge {
 
     public static void setModifiers(int keyCode, boolean isDown){
         switch (keyCode){
-            case LwjglGlfwKeycode.GLFW_KEY_LEFT_SHIFT:
+            case KeyEvent.KEYCODE_SHIFT_LEFT:
                 CallbackBridge.holdingShift = isDown;
                 return;
 
-            case LwjglGlfwKeycode.GLFW_KEY_LEFT_CONTROL:
+            case KeyEvent.KEYCODE_CTRL_LEFT:
                 CallbackBridge.holdingCtrl = isDown;
                 return;
 
-            case LwjglGlfwKeycode.GLFW_KEY_LEFT_ALT:
+            case KeyEvent.KEYCODE_ALT_LEFT:
                 CallbackBridge.holdingAlt = isDown;
                 return;
 
-            case LwjglGlfwKeycode.GLFW_KEY_CAPS_LOCK:
+            case KeyEvent.KEYCODE_CAPS_LOCK:
                 CallbackBridge.holdingCapslock = isDown;
                 return;
 
-            case LwjglGlfwKeycode.GLFW_KEY_NUM_LOCK:
+            case KeyEvent.KEYCODE_NUM_LOCK:
                 CallbackBridge.holdingNumlock = isDown;
         }
     }
