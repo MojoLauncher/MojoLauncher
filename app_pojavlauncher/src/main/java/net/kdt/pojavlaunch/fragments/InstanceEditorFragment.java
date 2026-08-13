@@ -212,7 +212,7 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         else mInstance.renderer = mRenderNames.get(mDefaultRenderer.getSelectedItemPosition());
 
         try {
-            if(!mInstance.name.equals(newName))
+            if(!newName.isEmpty() && !newName.equals(mInstance.name))
                 Instances.renameInstanceDirectory(mInstance, newName);
             mInstance.name = newName;
             mInstance.write();
