@@ -15,7 +15,6 @@ public class KeycodeUtils {
 
     static {
         add(KeyEvent.KEYCODE_UNKNOWN);
-        add(KeyEvent.KEYCODE_HOME);
         // Escape key
         add(KeyEvent.KEYCODE_BACK);
 
