@@ -253,6 +253,12 @@ public class GameView extends FrameLayout implements PlatformGrabListener, Surfa
         return (event.getFlags() & KeyEvent.FLAG_FALLBACK) == KeyEvent.FLAG_FALLBACK;
     }
 
+    @Override
+    public boolean dispatchCapturedPointerEvent(MotionEvent event){
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O || mPointerCapture == null) return true;
+        return mPointerCapture.onCapturedPointer(this, event);
+    }
+
     /** Called when the size need to be set at any point during the surface lifecycle **/
     public void refreshSize(){
         refreshSize(false);
