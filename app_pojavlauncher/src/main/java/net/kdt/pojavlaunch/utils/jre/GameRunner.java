@@ -182,7 +182,7 @@ public class GameRunner {
         }
 
         // Switch renderer to LTW when running 1.21.5
-        if(!isGl4esCompatible(versionInfo) && isGl4es) {
+        if(!versionId.contains("Cleanroom") && !isGl4esCompatible(versionInfo) && isGl4es) {
             rendererName = switchLtw(ltwSupported, instance, activity, R.string.compat_version_not_supported);
         }
         RendererCompatUtil.releaseRenderersCache();
