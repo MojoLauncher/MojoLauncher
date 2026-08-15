@@ -4,6 +4,7 @@ import com.kdt.mcgui.ProgressLayout;
 
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.instances.InstanceHint;
 import net.kdt.pojavlaunch.instances.InstanceInstaller;
 import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.instances.Instance;
@@ -29,6 +30,8 @@ public class ModpackInstaller {
             modLoaderInfo = installFunction.installModpack(modpackFile, instance.getGameDirectory());
 
             if(modLoaderInfo == null) throw new IOException("Unknown modpack mod loader information");
+
+            instance.instanceHint = InstanceHint.fromModLoader(modLoaderInfo);
 
             if(modLoaderInfo.requiresGuiInstallation()) {
                 InstanceInstaller instanceInstaller = modLoaderInfo.createInstaller();

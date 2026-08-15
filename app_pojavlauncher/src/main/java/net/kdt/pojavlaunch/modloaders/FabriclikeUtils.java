@@ -3,6 +3,8 @@ package net.kdt.pojavlaunch.modloaders;
 import com.google.gson.JsonSyntaxException;
 
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.instances.InstanceHint;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.ModLoader;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
 import net.kdt.pojavlaunch.utils.FileUtils;
 
@@ -17,9 +19,9 @@ import java.net.URLEncoder;
 
 public class FabriclikeUtils {
 
-    public static final FabriclikeUtils FABRIC_UTILS = new FabriclikeUtils("https://meta.fabricmc.net/v2", "fabric", "Fabric", "fabric");
-    public static final FabriclikeUtils QUILT_UTILS = new FabriclikeUtils("https://meta.quiltmc.org/v3", "quilt", "Quilt", "quilt");
-    public static final FabriclikeUtils LEGACY_FABRIC_UTILS = new FabriclikeUtils("https://meta.legacyfabric.net/v2", "legacy_fabric", "Legacy Fabric", "fabric");
+    public static final FabriclikeUtils FABRIC_UTILS = new FabriclikeUtils("https://meta.fabricmc.net/v2", "fabric", "Fabric", "fabric", InstanceHint.FABRIC);
+    public static final FabriclikeUtils QUILT_UTILS = new FabriclikeUtils("https://meta.quiltmc.org/v3", "quilt", "Quilt", "quilt", InstanceHint.QUILT);
+    public static final FabriclikeUtils LEGACY_FABRIC_UTILS = new FabriclikeUtils("https://meta.legacyfabric.net/v2", "legacy_fabric", "Legacy Fabric", "fabric", InstanceHint.LEGACY_FABRIC);
     private static final String LOADER_METADATA_URL = "%s/versions/loader/%s";
     private static final String GAME_METADATA_URL = "%s/versions/game";
 
@@ -29,12 +31,14 @@ public class FabriclikeUtils {
     private final String mCachePrefix;
     private final String mName;
     private final String mIconName;
+    private final InstanceHint mType;
 
-    private FabriclikeUtils(String mApiUrl, String cachePrefix, String mName, String iconName) {
+    private FabriclikeUtils(String mApiUrl, String cachePrefix, String mName, String iconName, InstanceHint type) {
         this.mApiUrl = mApiUrl;
         this.mCachePrefix = cachePrefix;
         this.mIconName = iconName;
         this.mName = mName;
+        this.mType = type;
     }
 
     public FabricVersion[] downloadGameVersions() throws IOException{
@@ -78,6 +82,10 @@ public class FabriclikeUtils {
     }
     public String getIconName() {
         return mIconName;
+    }
+
+    public InstanceHint getType() {
+        return mType;
     }
 
     public String install(String gameVersion, String loaderVersion) throws IOException {

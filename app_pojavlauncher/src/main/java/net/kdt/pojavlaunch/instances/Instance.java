@@ -29,6 +29,8 @@ public class Instance extends DisplayInstance {
     public String controlLayout;
     public boolean sharedData;
 
+    public InstanceHint instanceHint;
+
     protected Instance() {
     }
 

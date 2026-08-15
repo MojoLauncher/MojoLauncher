@@ -8,6 +8,7 @@ import com.kdt.mcgui.ProgressLayout;
 
 import git.artdeell.mojo.R;
 
+import net.kdt.pojavlaunch.instances.InstanceHint;
 import net.kdt.pojavlaunch.instances.InstanceInstaller;
 import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.modloaders.ModloaderListenerProxy;
@@ -51,6 +52,7 @@ public class OptiFineInstallFragment extends ModVersionListFragment<OptiFineUtil
                 instance.name = "OptiFine";
                 instance.installer = instanceInstaller;
                 instance.sharedData = true;
+                instance.instanceHint = InstanceHint.OPTIFINE;
             }, "OptiFine");
             ProgressLayout.clearProgress(ProgressLayout.INSTALL_MODPACK);
             instanceInstaller.start();

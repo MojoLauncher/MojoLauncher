@@ -9,6 +9,7 @@ import com.kdt.mcgui.ProgressLayout;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.instances.Instance;
+import net.kdt.pojavlaunch.instances.InstanceHint;
 import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
 import net.kdt.pojavlaunch.utils.FileUtils;
@@ -69,6 +70,7 @@ public class BTADownloadTask implements Runnable {
         Instance instance = Instances.createInstance(i -> {
             i.versionId = btaVersionId;
             i.name = "Better than Adventure!";
+            i.instanceHint = InstanceHint.BTA;
         }, "BTA-"+btaVersionId);
         tryDownloadIcon(instance);
     }
