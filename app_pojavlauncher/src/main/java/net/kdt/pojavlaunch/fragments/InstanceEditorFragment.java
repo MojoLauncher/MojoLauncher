@@ -213,9 +213,9 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         //First, check for potential issues in the inputs
         mInstance.versionId = mDefaultVersion.getText().toString();
         mInstance.controlLayout = mDefaultControl.getText().toString();
-        mInstance.name = mDefaultName.getText().toString();
         mInstance.jvmArgs = mDefaultJvmArgument.getText().toString();
 
+        String newName = mDefaultName.getText().toString();
         if(mInstance.controlLayout.isEmpty()) mInstance.controlLayout = null;
         if(mInstance.jvmArgs.isEmpty()) mInstance.jvmArgs = null;
 
@@ -227,8 +227,11 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         else mInstance.renderer = mRenderNames.get(mDefaultRenderer.getSelectedItemPosition());
 
         try {
+            if(!newName.isEmpty() && !newName.equals(mInstance.name))
+                Instances.renameInstanceDirectory(mInstance, newName);
+            mInstance.name = newName;
             mInstance.write();
-        }catch (IOException e) {
+        }catch (Exception e) {
             Tools.showErrorRemote(e);
         }
     }

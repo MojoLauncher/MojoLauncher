@@ -12,6 +12,7 @@ import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDownload;
 import net.kdt.pojavlaunch.progresskeeper.DownloaderProgressWrapper;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
+import net.kdt.pojavlaunch.utils.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,8 +60,7 @@ public class ModpackInstaller {
 
     public static ModLoader downloadModpack(ModDetail modDetail, int selectedVersion, InstallFunction installFunction) throws IOException {
         ModDownload modDownload = modDetail.downloads[selectedVersion];
-        String modpackName = (modDetail.title.toLowerCase(Locale.ROOT) + " " + modDownload.versionName)
-                .trim().replaceAll("[\\\\/:*?\"<>| \\t\\n]", "_" );
+        String modpackName = FileUtils.escapeFileName(modDetail.title.toLowerCase(Locale.ROOT) + " " + modDownload.versionName);
         if (modDownload.versionHash != null) {
             modpackName += "_" + modDownload.versionHash;
         }

@@ -83,4 +83,8 @@ public class FileUtils {
         if(parentFile == null) throw new IOException("targetFile does not have a parent");
         ensureDirectory(parentFile);
     }
+
+    public static String escapeFileName(String name){
+        return name.trim().replaceAll("[\\\\/:*?\"<>| \\t\\n]", "_");
+    }
 }

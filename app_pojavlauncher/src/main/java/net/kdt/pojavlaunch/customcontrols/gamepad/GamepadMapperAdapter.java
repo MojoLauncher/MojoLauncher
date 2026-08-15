@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.kdt.pojavlaunch.EfficientAndroidLWJGLKeycode;
+import net.kdt.pojavlaunch.utils.KeycodeUtils;
 
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
@@ -41,7 +41,7 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
         String[] specialKeycodeNames = GamepadMap.getSpecialKeycodeNames();
         mSpecialKeycodeCount = specialKeycodeNames.length;
         mKeyAdapter.addAll(specialKeycodeNames);
-        mKeyAdapter.addAll(EfficientAndroidLWJGLKeycode.generateKeyName());
+        mKeyAdapter.addAll(KeycodeUtils.generateKeyName());
         createRebinderMap();
         updateRealButtons();
     }
@@ -218,7 +218,7 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
                 int keyCode = mKeycodes[spinnerIndex];
                 int selected;
                 if(keyCode < 0) selected = keyCode + mSpecialKeycodeCount;
-                else selected = EfficientAndroidLWJGLKeycode.getIndexByValue(keyCode) + mSpecialKeycodeCount;
+                else selected = KeycodeUtils.getIndexByValue(keyCode) + mSpecialKeycodeCount;
                 keySpinner.setSelection(selected);
             }
             // In case if there is too much spinners, disable the rest of them
@@ -264,7 +264,7 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
             if(editedKeycodeIndex == -1) return;
             int keycode_offset = selectionIndex - mSpecialKeycodeCount;
             if(selectionIndex <= mSpecialKeycodeCount) mKeycodes[editedKeycodeIndex] = (short) (keycode_offset);
-            else mKeycodes[editedKeycodeIndex] = EfficientAndroidLWJGLKeycode.getValueByIndex(keycode_offset);
+            else mKeycodes[editedKeycodeIndex] = KeycodeUtils.getValueByIndex(keycode_offset);
             updateKeycodeLabel();
             try {
                 GamepadMapStore.save();
