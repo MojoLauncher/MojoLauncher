@@ -244,13 +244,13 @@ public class GameRunner {
         LibraryPlugin natives;
         if((natives = LibraryPlugin.discoverPlugin(activity, LibraryPlugin.ID_NATIVES_PLUGIN)) != null){
             additionalNativesDir = natives.getLibraryPath();
-            JREUtils.setRedirectLibraryPath(additionalNativesDir);
-            String overrides;
             File dir = new File(additionalNativesDir);
             if(dir.isDirectory()){
-                overrides = String.join(" ", dir.list((f, s) -> s.endsWith(".so")));
-            } else overrides = "";
-            JREUtils.setLibraryOverrides(overrides);
+                String overrides = String.join(" ", dir.list((f, s) -> s.endsWith(".so")));
+                JREUtils.setRedirectLibraryPath(additionalNativesDir);
+                JREUtils.setLibraryOverrides(overrides);
+            }
+            additionalNativesDir = ':' + additionalNativesDir;
         } else additionalNativesDir = "";
 
         File versionSpecificNativesDir = new File(Tools.DIR_CACHE, "natives/"+versionId);
