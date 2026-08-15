@@ -1977,6 +1977,13 @@
     "org.lwjgl:lwjgl:3.4.1:unsafe": "org.lwjgl:lwjgl:3.4.1",
     "org.lwjgl.lwjgl:lwjgl:2.9.4+legacyfabric.17": "org.lwjgl.lwjgl:lwjgl:2.9.4-glfw",
     "org.lwjgl.lwjgl:lwjgl_util:2.9.4+legacyfabric.17": "org.lwjgl.lwjgl:lwjgl_util:2.9.4-glfw",
-    "org.lwjgl.lwjgl:lwjgl-platform:2.9.4+legacyfabric.17": "org.lwjgl.lwjgl:lwjgl-platform:2.9.4-glfw"
+    "org.lwjgl.lwjgl:lwjgl-platform:2.9.4+legacyfabric.17": "org.lwjgl.lwjgl:lwjgl-platform:2.9.4-glfw",
+    "org.lwjgl:lwjgl:3.4.1:natives-linux-arm64": "org.lwjgl:lwjgl:3.4.1",
+    "org.lwjgl:lwjgl-glfw:3.4.1:natives-linux-arm64": "org.lwjgl:lwjgl-glfw:3.4.1",
+    "org.lwjgl:lwjgl-jemalloc:3.4.1:natives-linux-arm64": "org.lwjgl:lwjgl-jemalloc:3.4.1",
+    "org.lwjgl:lwjgl-openal:3.4.1:natives-linux-arm64": "org.lwjgl:lwjgl-openal:3.4.1",
+    "org.lwjgl:lwjgl-opengl:3.4.1:natives-linux-arm64": "org.lwjgl:lwjgl-opengl:3.4.1",
+    "org.lwjgl:lwjgl-stb:3.4.1:natives-linux-arm64": "org.lwjgl:lwjgl-stb:3.4.1",
+    "org.lwjgl:lwjgl-tinyfd:3.4.1:natives-linux-arm64": "org.lwjgl:lwjgl-tinyfd:3.4.1"
   }
 }
