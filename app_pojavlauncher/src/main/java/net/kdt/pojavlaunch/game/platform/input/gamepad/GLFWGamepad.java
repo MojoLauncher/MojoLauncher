@@ -1,15 +1,32 @@
-package net.kdt.pojavlaunch.customcontrols.gamepad;
+package net.kdt.pojavlaunch.game.platform.input.gamepad;
 
+import android.content.Context;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
+import net.kdt.pojavlaunch.game.platform.input.PlatformGamepad;
+
 import fr.spse.gamepad_remapper.GamepadHandler;
+import fr.spse.gamepad_remapper.RemapperManager;
 import git.artdeell.dnbootstrap.glfw.GLFW;
 import git.artdeell.dnbootstrap.glfw.GamepadKeycodes;
 
-public class DirectGamepad implements GamepadHandler {
-    @Override
+/**
+ * GLFW Gamepad implementation
+ */
+public class GLFWGamepad implements PlatformGamepad, GamepadHandler {
+    private final RemapperManager mRemapperManager;
+    private final Context mContext;
+    private boolean gamepadConnected = false;
+    public GLFWGamepad(Context context, RemapperManager remapperManager){
+        this.mContext = context;
+        this.mRemapperManager = remapperManager;
+    }
     public void handleGamepadInput(int keycode, float value) {
+        if(!gamepadConnected) {
+            GLFW.nativeNotifyGamepadConnected();
+            gamepadConnected = true;
+        }
         int gKeycode = -1, gAxis = -1;
         boolean normalize = false;
         switch (keycode) {
@@ -77,5 +94,20 @@ public class DirectGamepad implements GamepadHandler {
             if(normalize) value = value * 2 - 1;
             GLFW.gamepadAxisBuffer.put(gAxis, value);
         }
+    }
+
+    @Override
+    public void sendKeyEvent(KeyEvent event) {
+        this.mRemapperManager.handleKeyEventInput(mContext, event, this);
+    }
+
+    @Override
+    public void sendMotionEvent(MotionEvent event) {
+        this.mRemapperManager.handleMotionEventInput(mContext, event, this);
+    }
+
+    @Override
+    public void onDestroy() {
+        gamepadConnected = false;
     }
 }

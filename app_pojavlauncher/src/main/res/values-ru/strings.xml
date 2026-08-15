@@ -444,4 +444,7 @@
     <string name="preference_show_memory_warning_summary">Если опция включена, при запуске игры отображается предупреждение если игре выделено больше памяти чем доступно в системе</string>
     <string name="option_do_not_show_again">Больше не показывать</string>
     <string name="preference_show_memory_warning_title">Показывать предупреждение о недостатке памяти</string>
+    <string name="loading_screen_title">Ожидание появления окна игры…</string>
+    <string name="loading_screen_booted">Запущено - используется %1$s!</string>
+    <string name="loading_screen_warning">Если окно долго не появляется - возможно игра вылетела</string>
 </resources>

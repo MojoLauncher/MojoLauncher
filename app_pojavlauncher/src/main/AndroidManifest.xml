@@ -6,6 +6,9 @@
     <uses-feature
         android:name="android.hardware.type.pc"
         android:required="false" />
+    <uses-feature
+        android:name="android.hardware.usb.host"
+        android:required="false" />
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission
@@ -109,7 +112,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="net.kdt.pojavlaunch.MainActivity"
+            android:name="net.kdt.pojavlaunch.game.GameActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout|keyboard|navigation|uiMode"
             android:launchMode="singleTop"
             android:process=":game"

@@ -7,7 +7,7 @@ import android.view.KeyEvent;
  * emulated from other inputs on it (like WASD directional keys)
  */
 public class GamepadEmulatedButton {
-    public short[] keycodes;
+    public int[] keycodes;
     protected boolean mIsDown = false;
 
     public void update(KeyEvent event) {

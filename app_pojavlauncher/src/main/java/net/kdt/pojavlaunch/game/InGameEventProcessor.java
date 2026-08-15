@@ -1,10 +1,13 @@
-package net.kdt.pojavlaunch.customcontrols.mouse;
+package net.kdt.pojavlaunch.game;
 
 import android.os.Handler;
 import android.os.Looper;
 import android.view.MotionEvent;
 import android.view.View;
 
+import net.kdt.pojavlaunch.customcontrols.mouse.LeftClickGesture;
+import net.kdt.pojavlaunch.customcontrols.mouse.PointerTracker;
+import net.kdt.pojavlaunch.customcontrols.mouse.RightClickGesture;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 public class InGameEventProcessor extends TouchEventProcessor {
@@ -15,7 +18,7 @@ public class InGameEventProcessor extends TouchEventProcessor {
     private final LeftClickGesture mLeftClickGesture = new LeftClickGesture(mGestureHandler);
     private final RightClickGesture mRightClickGesture = new RightClickGesture(mGestureHandler);
 
-    public InGameEventProcessor(View hostView, double sensitivity) {
+    public InGameEventProcessor(GameView hostView, double sensitivity) {
         super(hostView);
         mSensitivity = sensitivity;
     }
