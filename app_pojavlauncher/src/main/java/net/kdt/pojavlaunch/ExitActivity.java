@@ -41,7 +41,8 @@ public class ExitActivity extends AppCompatActivity {
 
     @SuppressWarnings("unused") //used by native jre_launcher_new
     public static void showExitMessage(Context ctx, int code, boolean isSignal) {
-        if((!isSignal && code == 0) || ctx == null) {
+        if((!isSignal && code == 0)) {
+            if(ctx != null) Tools.restartLauncherActivity(ctx);
             System.exit(0);
             return;
         }

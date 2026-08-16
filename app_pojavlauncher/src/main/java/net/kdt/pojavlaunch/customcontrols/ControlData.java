@@ -1,8 +1,7 @@
 package net.kdt.pojavlaunch.customcontrols;
 
-import static net.kdt.pojavlaunch.LwjglGlfwKeycode.GLFW_KEY_UNKNOWN;
-
 import android.util.ArrayMap;
+import android.view.KeyEvent;
 
 import androidx.annotation.Keep;
 
@@ -194,7 +193,7 @@ public class ControlData {
     }
 
     private static int[] inflateKeycodeArray(int[] keycodes) {
-        int[] inflatedArray = new int[]{GLFW_KEY_UNKNOWN, GLFW_KEY_UNKNOWN, GLFW_KEY_UNKNOWN, GLFW_KEY_UNKNOWN};
+        int[] inflatedArray = new int[]{KeyEvent.KEYCODE_UNKNOWN, KeyEvent.KEYCODE_UNKNOWN, KeyEvent.KEYCODE_UNKNOWN, KeyEvent.KEYCODE_UNKNOWN};
         System.arraycopy(keycodes, 0, inflatedArray, 0, keycodes.length);
         return inflatedArray;
     }
