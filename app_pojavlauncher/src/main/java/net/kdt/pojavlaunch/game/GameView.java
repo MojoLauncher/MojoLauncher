@@ -76,6 +76,7 @@ public class GameView extends FrameLayout implements PlatformGrabListener, Surfa
     public GameView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         setFocusable(true);
+        setFocusableInTouchMode(true);
         Platform.addGrabListener(this);
     }
 
@@ -104,6 +105,7 @@ public class GameView extends FrameLayout implements PlatformGrabListener, Surfa
         mSurface = mSurfaceProvider.create(getContext(), this);
         this.addView(mSurface);
         this.mCursorView.bringToFront();
+        this.requestFocus();
     }
 
     /**
