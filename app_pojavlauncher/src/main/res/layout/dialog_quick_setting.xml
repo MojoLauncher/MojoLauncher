@@ -202,4 +202,42 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/editGestureDelay_textView" />
 
+    <!-- button transparency seekbar -->
+    <TextView
+        android:id="@+id/buttonTransparency_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:gravity="center"
+        android:paddingEnd="5dp"
+        android:text="@string/preference_button_transparency"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editGestureDelay_seekbar" />
+
+    <com.kdt.CustomSeekbar
+        android:id="@+id/buttonTransparency_seekBar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_36sdp"
+
+        android:min="0"
+        android:max="100"
+        app:seekBarIncrement="5"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.538"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonTransparency_textView" />
+
+    <TextView
+        android:id="@+id/buttonTransparency_textView_percent"
+        android:layout_width="150dp"
+        android:layout_height="0dp"
+        android:gravity="end"
+        tools:text="%"
+
+        app:layout_constraintBottom_toBottomOf="@id/buttonTransparency_textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/buttonTransparency_textView" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

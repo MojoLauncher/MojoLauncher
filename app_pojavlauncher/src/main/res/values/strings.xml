@@ -508,4 +508,6 @@
     <string name="loading_screen_title">Waiting for a game window to appear…</string>
     <string name="loading_screen_booted">Ready - running on %1$s!</string>
     <string name="loading_screen_warning">If you are stuck here, the game might have crashed</string>
+    <string name="preference_button_transparency">Buttons transparency</string>
+    <string name="preference_button_transparency_summary">Changes on-screen buttons transparency</string>
 </resources>

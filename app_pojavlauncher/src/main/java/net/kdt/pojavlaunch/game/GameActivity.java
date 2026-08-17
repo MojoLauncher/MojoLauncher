@@ -216,6 +216,7 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
         setContentView(resId);
         bindValues();
         mControlLayout.setMenuListener(this);
+        mControlLayout.updateButtonOpacity();
 
         mDrawerPullButton.setOnClickListener(v -> onClickedMenu());
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
@@ -445,6 +446,11 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
                     } else {
                         mGyroControl.disable();
                     }
+                }
+
+                @Override
+                public void onButtonTransparencyChanged() {
+                    mControlLayout.updateButtonOpacity();
                 }
             };
         }

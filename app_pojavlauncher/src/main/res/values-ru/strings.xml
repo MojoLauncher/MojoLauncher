@@ -444,4 +444,6 @@
     <string name="loading_screen_title">Ожидание появления окна игры…</string>
     <string name="loading_screen_booted">Запущено - используется %1$s!</string>
     <string name="loading_screen_warning">Если окно долго не появляется - возможно игра вылетела</string>
+    <string name="preference_button_transparency">Прозрачность кнопок</string>
+    <string name="preference_button_transparency_summary">Изменяет прозрачность наэкранных кнопок управления</string>
 </resources>
