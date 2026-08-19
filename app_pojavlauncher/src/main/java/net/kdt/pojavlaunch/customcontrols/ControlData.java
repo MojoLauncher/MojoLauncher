@@ -63,6 +63,7 @@ public class ControlData {
     public boolean isSwipeable;
     public boolean displayInGame;
     public boolean displayInMenu;
+    public String text;
     public String bitmapTag;
     private float width;         //Dp instead of Px now
     private float height;        //Dp instead of Px now
@@ -108,10 +109,10 @@ public class ControlData {
     }
 
     public ControlData(String name, int[] keycodes, String dynamicX, String dynamicY, float width, float height, boolean isToggle) {
-        this(name, keycodes, dynamicX, dynamicY, width, height, isToggle, 1, 0x4D000000, 0xFFFFFFFF, 0, 0, true, true, false, false, null);
+        this(name, keycodes, dynamicX, dynamicY, width, height, isToggle, 1, 0x4D000000, 0xFFFFFFFF, 0, 0, true, true, false, false, null, null);
     }
 
-    public ControlData(String name, int[] keycodes, String dynamicX, String dynamicY, float width, float height, boolean isToggle, float opacity, int bgColor, int strokeColor, float strokeWidth, float cornerRadius, boolean displayInGame, boolean displayInMenu, boolean isSwipable, boolean mousePassthrough, String bitmapTag) {
+    public ControlData(String name, int[] keycodes, String dynamicX, String dynamicY, float width, float height, boolean isToggle, float opacity, int bgColor, int strokeColor, float strokeWidth, float cornerRadius, boolean displayInGame, boolean displayInMenu, boolean isSwipable, boolean mousePassthrough, String bitmapTag, String text) {
         this.name = name;
         this.keycodes = inflateKeycodeArray(keycodes);
         this.dynamicX = dynamicX;
@@ -129,6 +130,7 @@ public class ControlData {
         this.isSwipeable = isSwipable;
         this.passThruEnabled = mousePassthrough;
         this.bitmapTag = bitmapTag;
+        this.text = text;
     }
 
     //Deep copy constructor
@@ -150,7 +152,8 @@ public class ControlData {
                 controlData.displayInMenu,
                 controlData.isSwipeable,
                 controlData.passThruEnabled,
-                controlData.bitmapTag
+                controlData.bitmapTag,
+                controlData.text
         );
     }
 
