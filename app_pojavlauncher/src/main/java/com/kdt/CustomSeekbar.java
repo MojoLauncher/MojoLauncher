@@ -87,6 +87,14 @@ public class CustomSeekbar extends SeekBar {
         mIncrement = increment;
     }
 
+    public int getCustomMin() {
+        return mMin;
+    }
+
+    public int getCustomMax() {
+        return super.getMax() + mMin;
+    }
+
     public void setRange(int min, int max) {
         mMin = min;
         setMax(max - min);
