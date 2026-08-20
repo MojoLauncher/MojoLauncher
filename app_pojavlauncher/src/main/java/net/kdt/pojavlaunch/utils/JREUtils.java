@@ -144,6 +144,9 @@ public class JREUtils {
             setRendererLibraryPath(Tools.NATIVE_LIB_DIR, MesaUtils.getCustomZinkLibraryPath(), DriverManager.getPreferredDriverRootPath());
             MojoExec.overrideVulkanDriver(true);
             MojoExec.overrideVulkanDriverPath(DriverManager.getPreferredDriverLibraryPath());
+            File qglConfig = new File(Tools.DIR_GAME_HOME, "qgl_config.txt");
+            if(qglConfig.exists() && qglConfig.isFile())
+                MojoExec.overrideQglConfigPath(qglConfig.getAbsolutePath());
         } else setRendererLibraryPath(Tools.NATIVE_LIB_DIR, MesaUtils.getCustomZinkLibraryPath());
 
         if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
