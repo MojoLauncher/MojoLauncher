@@ -256,6 +256,14 @@ public class Platform {
             PLATFORM.surfaceCreated(mPendingSurface);
     }
 
+    /**
+     * Get Platform clipboard
+     * @return clipboard object
+     */
+    public static AndroidClipboard getClipboard() {
+        return mClipboard;
+    }
+
     private static RemapperManager createRemapperManager(View view){
         return new RemapperManager(view.getContext(), new RemapperView.Builder(null)
                 .remapA(true)
