@@ -1,4 +1,4 @@
-package net.kdt.pojavlaunch;
+package net.kdt.pojavlaunch.awt;
 
 import android.content.*;
 import android.graphics.*;
@@ -9,6 +9,8 @@ import android.view.*;
 
 import java.nio.ByteBuffer;
 import java.util.*;
+
+import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.utils.*;
 
 public class AWTCanvasView extends TextureView implements TextureView.SurfaceTextureListener, Runnable {

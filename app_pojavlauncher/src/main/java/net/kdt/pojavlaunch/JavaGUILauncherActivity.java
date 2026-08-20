@@ -20,6 +20,9 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.kdt.LoggerView;
 
+import net.kdt.pojavlaunch.awt.AWTCanvasView;
+import net.kdt.pojavlaunch.awt.AWTInputBridge;
+import net.kdt.pojavlaunch.awt.AWTInputEvent;
 import net.kdt.pojavlaunch.customcontrols.keyboard.AwtCharSender;
 import net.kdt.pojavlaunch.customcontrols.keyboard.TouchCharInput;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
