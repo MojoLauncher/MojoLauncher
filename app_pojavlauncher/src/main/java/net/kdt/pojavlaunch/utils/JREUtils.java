@@ -14,6 +14,7 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.*;
 import net.kdt.pojavlaunch.*;
+import net.kdt.pojavlaunch.adrenotools.DriverManager;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.multirt.Runtime;
@@ -139,14 +140,17 @@ public class JREUtils {
         // Init mesa renderers
         MesaUtils.initEnvironment(context, renderer, envMap);
 
-        setRendererLibraryPath(Tools.NATIVE_LIB_DIR, MesaUtils.getCustomZinkLibraryPath());
+        if(!PREF_ZINK_PREFER_SYSTEM_DRIVER && DriverManager.isSupportedByDevice()){
+            setRendererLibraryPath(Tools.NATIVE_LIB_DIR, MesaUtils.getCustomZinkLibraryPath(), DriverManager.getPreferredDriverRootPath());
+            MojoExec.overrideVulkanDriver(true);
+            MojoExec.overrideVulkanDriverPath(DriverManager.getPreferredDriverLibraryPath());
+            File qglConfig = new File(Tools.DIR_GAME_HOME, "qgl_config.txt");
+            if(qglConfig.exists() && qglConfig.isFile())
+                MojoExec.overrideQglConfigPath(qglConfig.getAbsolutePath());
+        } else setRendererLibraryPath(Tools.NATIVE_LIB_DIR, MesaUtils.getCustomZinkLibraryPath());
 
         if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
         if(LauncherPreferences.PREF_ALSOFT_FORCE_OPENSL) envMap.put("ALSOFT_DRIVERS", "opensl");
-
-        if(GLInfoUtils.getGlInfo().isAdreno() && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
-            MojoExec.setUseTurnip(true);
-        }
 
         if(LauncherPreferences.PREF_FREEDRENO_SYSMEM) {
             // We could also apply the FD_MESA_DEBUG only if freedreno is active but why making things complicated?
@@ -239,17 +243,14 @@ public class JREUtils {
         String renderLibrary;
         boolean useGles;
         boolean bypassNamespace = false;
-        boolean preloadVk = true;
         int glesVersion;
         switch (renderer){
             case "freedreno_kgsl":
-                preloadVk = false;
             case "vulkan_zink":
                 renderLibrary = MesaUtils.getPreferredEGL();
                 useGles = false;
                 bypassNamespace = true; // Mesa is linked to a bunch of libraries not available in the pojavexec namespace
                 glesVersion = 3;
-                if(preloadVk) MojoExec.preloadVulkan(); // Zink requires Vulkan library to be preloaded
                 break;
             case "opengles3_ltw" :
                 renderLibrary = "libltw.so";
@@ -265,7 +266,12 @@ public class JREUtils {
                 glesVersion = Integer.parseInt((String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION));
                 break;
         }
-
+        if(!PREF_ZINK_PREFER_SYSTEM_DRIVER && DriverManager.isSupportedByDevice()) {
+            // Preload creates mjlvlk reference which is then picked by zink/angle.
+            MojoExec.preloadVulkan();
+            // Always bypass namespaces with ANGLE so ANGLE can pick mjlvlk driver
+            if(LauncherPreferences.PREF_USE_ANGLE) bypassNamespace = true;
+        }
         if (!MojoExec.prepareEgl(renderLibrary, bypassNamespace, useGles, glesVersion)) {
             Log.e("RENDER_LIBRARY","Failed to load renderer " + renderLibrary );
             return null;
@@ -277,10 +283,20 @@ public class JREUtils {
     public static int getDetectedVersion() {
         return GLInfoUtils.getGlInfo().glesMajorVersion;
     }
-    public static void setRendererLibraryPath(String mainPath, String additionalPath){
-        if(additionalPath != null)
-            mainPath = additionalPath + ":" + mainPath;
-        MojoExec.setNativeLibraryDir(mainPath);
+
+    /**
+     * Set library path for the renderer library
+     * @param mainPath main launcher natives
+     * @param additionalPaths additional natives located outside of the launcher. Prepended to mainPath
+     */
+    public static void setRendererLibraryPath(String mainPath, String... additionalPaths){
+        StringBuilder path = new StringBuilder();
+        for(String s : additionalPaths){
+            if(s == null) continue;
+            path.append(s).append(":");
+        }
+        path.append(mainPath);
+        MojoExec.setNativeLibraryDir(path.toString());
     }
     public static native int chdir(String path);
 
