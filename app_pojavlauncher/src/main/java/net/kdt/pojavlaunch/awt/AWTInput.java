@@ -1,6 +1,6 @@
 package net.kdt.pojavlaunch.awt;
 
-public class AWTInputBridge {
+public class AWTInput {
     public static final int EVENT_TYPE_CHAR = 1000;
     public static final int EVENT_TYPE_CURSOR_POS = 1003;
     public static final int EVENT_TYPE_KEY = 1005;
@@ -39,6 +39,5 @@ public class AWTInputBridge {
     }
     
     public static native void nativeSendData(int type, int i1, int i2, int i3, int i4);
-    public static native void nativeClipboardReceived(String data, String mimeTypeSub);
     public static native void nativeMoveWindow(int xoff, int yoff);
 }

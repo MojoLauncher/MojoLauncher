@@ -54,7 +54,11 @@ target_include_directories(pojavexec PRIVATE .)
 target_link_libraries(pojavexec PRIVATE log mojoexec)
 
 add_library(pojavexec_awt SHARED
-        awt_bridge.c
+		awt/awt.c
+		awt/awt_window.c
+		awt/awt_util.c
+		awt/awt_input.c
+		awt/awt_clipboard.c
 )
 
 add_library(awt_headless SHARED 
