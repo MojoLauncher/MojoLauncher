@@ -22,7 +22,7 @@
 			tools:ignore="TouchTargetSizeCheck"
 			/>
 
-		<net.kdt.pojavlaunch.awt.AWTCanvasView
+		<net.kdt.pojavlaunch.awt.AWTView
 			android:id="@+id/installmod_surfaceview"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"

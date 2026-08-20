@@ -18,9 +18,10 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.kdt.LoggerView;
 
-import net.kdt.pojavlaunch.awt.AWTCanvasView;
+import net.kdt.pojavlaunch.awt.AWTView;
 import net.kdt.pojavlaunch.awt.AWTInput;
-import net.kdt.pojavlaunch.awt.AWTInputEvent;
+import net.kdt.pojavlaunch.awt.AWTKeycode;
+import net.kdt.pojavlaunch.awt.AWTWindow;
 import net.kdt.pojavlaunch.customcontrols.keyboard.AwtCharSender;
 import net.kdt.pojavlaunch.customcontrols.keyboard.TouchCharInput;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
@@ -50,7 +51,7 @@ import git.artdeell.mojo.R;
 public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouchListener {
 
     private static volatile ClipboardManager CLIPBOARD;
-    private AWTCanvasView mTextureView;
+    private AWTView mTextureView;
     private LoggerView mLoggerView;
     private TouchCharInput mTouchCharInput;
 
@@ -120,7 +121,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
 
                 if (mGestureDetector.onTouchEvent(event)) {
                     sendScaledMousePosition(mouseX,mouseY);
-                    AWTInput.sendMousePress(AWTInputEvent.BUTTON1_DOWN_MASK);
+                    AWTInput.sendMousePress(AWTKeycode.BUTTON1_DOWN_MASK);
                 } else {
                     if (action == MotionEvent.ACTION_MOVE) { // 2
                         mouseX = Math.max(0, Math.min(v.getWidth(), mouseX + x - prevX));
@@ -141,7 +142,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
             float y = event.getY();
             if (mGestureDetector.onTouchEvent(event)) {
                 sendScaledMousePosition(x + mTextureView.getX(), y);
-                AWTInput.sendMousePress(AWTInputEvent.BUTTON1_DOWN_MASK);
+                AWTInput.sendMousePress(AWTKeycode.BUTTON1_DOWN_MASK);
                 return true;
             }
 
@@ -301,25 +302,25 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         
         switch (v.getId()) {
             case R.id.installmod_mouse_pri:
-                AWTInput.sendMousePress(AWTInputEvent.BUTTON1_DOWN_MASK, isDown);
+                AWTInput.sendMousePress(AWTKeycode.BUTTON1_DOWN_MASK, isDown);
                 break;
                 
             case R.id.installmod_mouse_sec:
-                AWTInput.sendMousePress(AWTInputEvent.BUTTON3_DOWN_MASK, isDown);
+                AWTInput.sendMousePress(AWTKeycode.BUTTON3_DOWN_MASK, isDown);
                 break;
         }
         if(isDown) switch(v.getId()) {
             case R.id.installmod_window_moveup:
-                AWTInput.nativeMoveWindow(0, -10);
+                AWTWindow.nativeMoveWindow(0, -10);
                 break;
             case R.id.installmod_window_movedown:
-                AWTInput.nativeMoveWindow(0, 10);
+                AWTWindow.nativeMoveWindow(0, 10);
                 break;
             case R.id.installmod_window_moveleft:
-                AWTInput.nativeMoveWindow(-10, 0);
+                AWTWindow.nativeMoveWindow(-10, 0);
                 break;
             case R.id.installmod_window_moveright:
-                AWTInput.nativeMoveWindow(10, 0);
+                AWTWindow.nativeMoveWindow(10, 0);
                 break;
         }
         return true;
@@ -337,8 +338,8 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         y = androidx.core.math.MathUtils.clamp(y, mTextureView.getY(), mTextureView.getY() + mTextureView.getHeight());
 
         AWTInput.sendMousePos(
-                (int) MathUtils.map(x, mTextureView.getX(), mTextureView.getX() + mTextureView.getWidth(), 0, AWTCanvasView.AWT_CANVAS_WIDTH),
-                (int) MathUtils.map(y, mTextureView.getY(), mTextureView.getY() + mTextureView.getHeight(), 0, AWTCanvasView.AWT_CANVAS_HEIGHT)
+                (int) MathUtils.map(x, mTextureView.getX(), mTextureView.getX() + mTextureView.getWidth(), 0, AWTView.AWT_CANVAS_WIDTH),
+                (int) MathUtils.map(y, mTextureView.getY(), mTextureView.getY() + mTextureView.getHeight(), 0, AWTView.AWT_CANVAS_HEIGHT)
                 );
     }
 
@@ -393,15 +394,15 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         mTouchCharInput.switchKeyboardState();
     }
     public void performCopy(View view) {
-        AWTInput.sendKey(' ', AWTInputEvent.VK_CONTROL, 1);
-        AWTInput.sendKey(' ', AWTInputEvent.VK_C);
-        AWTInput.sendKey(' ', AWTInputEvent.VK_CONTROL, 0);
+        AWTInput.sendKey(' ', AWTKeycode.VK_CONTROL, 1);
+        AWTInput.sendKey(' ', AWTKeycode.VK_C);
+        AWTInput.sendKey(' ', AWTKeycode.VK_CONTROL, 0);
     }
 
     public void performPaste(View view) {
-        AWTInput.sendKey(' ', AWTInputEvent.VK_CONTROL, 1);
-        AWTInput.sendKey(' ', AWTInputEvent.VK_V);
-        AWTInput.sendKey(' ', AWTInputEvent.VK_CONTROL, 0);
+        AWTInput.sendKey(' ', AWTKeycode.VK_CONTROL, 1);
+        AWTInput.sendKey(' ', AWTKeycode.VK_V);
+        AWTInput.sendKey(' ', AWTKeycode.VK_CONTROL, 0);
     }
 
     private static int getJavaVersion(JarFile jarFile, String mainClass) throws IOException{

@@ -13,7 +13,7 @@ import java.util.*;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.utils.*;
 
-public class AWTCanvasView extends TextureView implements TextureView.SurfaceTextureListener, Runnable {
+public class AWTView extends TextureView implements TextureView.SurfaceTextureListener, Runnable {
     public static final int AWT_CANVAS_WIDTH = 720;
     public static final int AWT_CANVAS_HEIGHT = 600;
     private static final int MAX_SIZE = 100;
@@ -24,11 +24,11 @@ public class AWTCanvasView extends TextureView implements TextureView.SurfaceTex
     // Temporary count fps https://stackoverflow.com/a/13729241
     private final LinkedList<Long> mTimes = new LinkedList<Long>(){{add(System.nanoTime());}};
     
-    public AWTCanvasView(Context ctx) {
+    public AWTView(Context ctx) {
         this(ctx, null);
     }
     
-    public AWTCanvasView(Context ctx, AttributeSet attrs) {
+    public AWTView(Context ctx, AttributeSet attrs) {
         super(ctx, attrs);
         
         mFpsPaint = new TextPaint();
@@ -82,7 +82,7 @@ public class AWTCanvasView extends TextureView implements TextureView.SurfaceTex
             while (!mIsDestroyed && surface.isValid()) {
                 surface.unlockCanvasAndPost(canvas);
                 canvas = surface.lockCanvas(null);
-                mDrawing = JREUtils.renderAWTScreenFrame(targetBuffer);
+                mDrawing = AWTWindow.nativeRenderFrame(targetBuffer);
                 targetBuffer.rewind();
                 if (mDrawing) {
                     canvas.save();
@@ -125,5 +125,4 @@ public class AWTCanvasView extends TextureView implements TextureView.SurfaceTex
 
         setLayoutParams(layoutParams);
     }
-
 }

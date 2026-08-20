@@ -1,18 +1,18 @@
 package net.kdt.pojavlaunch.customcontrols.keyboard;
 
 import net.kdt.pojavlaunch.awt.AWTInput;
-import net.kdt.pojavlaunch.awt.AWTInputEvent;
+import net.kdt.pojavlaunch.awt.AWTKeycode;
 
 /** Send chars via the AWT Bridgee */
 public class AwtCharSender implements CharacterSenderStrategy {
     @Override
     public void sendBackspace() {
-        AWTInput.sendKey(' ', AWTInputEvent.VK_BACK_SPACE);
+        AWTInput.sendKey(' ', AWTKeycode.VK_BACK_SPACE);
     }
 
     @Override
     public void sendEnter() {
-        AWTInput.sendKey(' ', AWTInputEvent.VK_ENTER);
+        AWTInput.sendKey(' ', AWTKeycode.VK_ENTER);
     }
 
     @Override

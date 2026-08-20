@@ -22,7 +22,7 @@ jfieldID field_y;
 JNIEnv* runtimeEnv;
 
 // TODO: check for memory leaks
-JNIEXPORT jboolean JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_renderAWTScreenFrame(JNIEnv* env, jclass clazz, jobject targetBuffer) {
+JNIEXPORT jboolean JNICALL Java_net_kdt_pojavlaunch_awt_AWTWindow_nativeRenderFrame(JNIEnv* env, jclass clazz, jobject targetBuffer) {
     if (runtimeEnv == NULL) {
         if (runtimeVM == NULL) {
             return JNI_FALSE;
@@ -65,7 +65,7 @@ JNIEXPORT jboolean JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_renderAWTScre
 }
 
 JNIEXPORT void JNICALL
-Java_net_kdt_pojavlaunch_awt_AWTInput_nativeMoveWindow(JNIEnv *env, jclass clazz, jint xoff, jint yoff) {
+Java_net_kdt_pojavlaunch_awt_AWTWindow_nativeMoveWindow(JNIEnv *env, jclass clazz, jint xoff, jint yoff) {
     if (JNIEnv_InputRuntime == NULL) {
         if (runtimeVM == NULL) {
             return;

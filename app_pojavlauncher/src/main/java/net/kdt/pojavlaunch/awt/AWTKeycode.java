@@ -25,7 +25,7 @@ package net.kdt.pojavlaunch.awt;
      * questions.
      */
 @SuppressWarnings("unused")
-public class AWTInputEvent {
+public class AWTKeycode {
 // InputEvent
     /**
      * This flag indicates that the Shift key was down when the event
