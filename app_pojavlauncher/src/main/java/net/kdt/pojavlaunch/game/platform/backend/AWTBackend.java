@@ -8,6 +8,7 @@ import static net.kdt.pojavlaunch.awt.AWTInput.EVENT_TYPE_MOUSE_BUTTON;
 import android.util.Log;
 import android.view.Surface;
 
+import net.kdt.pojavlaunch.CallbackBridge;
 import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.awt.AWTInput;
@@ -28,7 +29,7 @@ public class AWTBackend implements PlatformBackend {
         this.rendering = true;
         this.surface = surface;
         Platform.grabStateChanged(false);
-        AWTWindow.setNativeSize(AWTView.AWT_CANVAS_WIDTH, AWTView.AWT_CANVAS_HEIGHT);
+        AWTWindow.setNativeSize(CallbackBridge.windowWidth, CallbackBridge.windowHeight);
         AWTWindow.setNativeSurface(surface);
         // AWT requires us to manually draw on the screen
         task = PojavApplication.sExecutorService.submit(AWTWindow::beginRendering);

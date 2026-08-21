@@ -81,6 +81,9 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         mTouchCharInput = findViewById(R.id.awt_touch_char);
         mTouchCharInput.setCharacterSender(new AwtCharSender());
 
+        CallbackBridge.windowWidth = AWTView.AWT_CANVAS_WIDTH;
+        CallbackBridge.windowHeight = AWTView.AWT_CANVAS_HEIGHT;
+
         mTouchPad = findViewById(R.id.main_touchpad);
         mLoggerView = findViewById(R.id.launcherLoggerView);
         mMousePointerImageView = findViewById(R.id.main_mouse_pointer);
