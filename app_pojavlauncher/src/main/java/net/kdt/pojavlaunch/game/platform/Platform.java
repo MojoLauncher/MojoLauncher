@@ -2,6 +2,7 @@ package net.kdt.pojavlaunch.game.platform;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.InputDevice;
 import android.view.Surface;
 import android.view.View;
@@ -11,6 +12,7 @@ import net.kdt.pojavlaunch.game.GameActivity;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.customcontrols.gamepad.DefaultDataProvider;
 import net.kdt.pojavlaunch.customcontrols.gamepad.Gamepad;
+import net.kdt.pojavlaunch.game.platform.backend.AWTBackend;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.game.platform.backend.DummyBackend;
 import net.kdt.pojavlaunch.game.platform.backend.GLFWBackend;
@@ -40,7 +42,7 @@ import git.mojo.sdl.SDLControllerManager;
 public class Platform {
     // Always reset cursor on grab lost - makes it move to the center as should if the game didn't move it
     private static final boolean RESET_CURSOR_UNGRAB = true;
-    public static PlatformBackend PLATFORM = new DummyBackend(); // Initialize a dummy platform - the game will initialize correct one later
+    public static PlatformBackend PLATFORM = new AWTBackend(); // Initialize a dummy platform - the game will initialize correct one later
     public static double cursorX;
     public static double cursorY;
     private static final List<PlatformGrabListener> grabListeners = new ArrayList<>();
@@ -50,7 +52,7 @@ public class Platform {
     private static PlatformGamepad mPlatformGamepad = null;
     private static PlatformCursor mPlatformCursor = null;
     private static AndroidClipboard mClipboard;
-    private static View mHostView;
+    private static GameView mHostView;
     private static RemapperManager mInputManager;
 
     /**
@@ -59,7 +61,7 @@ public class Platform {
      * @param activity an activity to bind to
      * @param view a host view used for input handling
      */
-    public static void initialize(Activity activity, View view) {
+    public static void initialize(Activity activity, GameView view) {
         Platform.mHostView = view;
         Platform.mInputManager = createRemapperManager(view);
         mClipboard = new AndroidClipboard(activity.getApplicationContext());
@@ -78,8 +80,8 @@ public class Platform {
 
     private static void onInit(PlatformBackend impl) {
         // We probably already initialized at this point. Don't try to initialize again
-        if (!(PLATFORM instanceof DummyBackend)) return;
         Platform.setPlatformLibrary(impl);
+        Log.i("Platform", "Init backend : " + impl.backendName());
         ContextExecutor.executeActivity(activity -> ((GameActivity) activity).hideLoadingScreen());
         resetCursorPosition();
     }
@@ -250,6 +252,7 @@ public class Platform {
      * @param backend implementation backend
      */
     public static void setPlatformLibrary(PlatformBackend backend) {
+        if(PLATFORM != null) PLATFORM.surfaceDestroyed();
         PLATFORM = backend;
         // To be picked by platform library
         if (mPendingSurface != null)

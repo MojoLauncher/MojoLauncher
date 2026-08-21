@@ -1,5 +1,10 @@
 package net.kdt.pojavlaunch.awt;
 
+import android.telecom.Call;
+
+import net.kdt.pojavlaunch.CallbackBridge;
+import net.kdt.pojavlaunch.game.platform.Platform;
+
 public class AWTInput {
     public static final int EVENT_TYPE_CHAR = 1000;
     public static final int EVENT_TYPE_CURSOR_POS = 1003;
@@ -8,21 +13,21 @@ public class AWTInput {
     
     public static void sendKey(char keychar, int keycode) {
         // TODO: Android -> AWT keycode mapping
-        nativeSendData(EVENT_TYPE_KEY, (int) keychar, keycode, 1, 0);
-        nativeSendData(EVENT_TYPE_KEY, (int) keychar, keycode, 0, 0);
+        sendKey(keychar, keycode, 1);
+        sendKey(keychar, keycode, 0);
     }
 
     public static void sendKey(char keychar, int keycode, int state) {
         // TODO: Android -> AWT keycode mapping
-        nativeSendData(EVENT_TYPE_KEY, (int) keychar, keycode, state, 0);
+        Platform.PLATFORM.sendKeyEvent(keycode, state, CallbackBridge.getCurrentMods(), keychar);
     }
 
     public static void sendChar(char keychar){
-        nativeSendData(EVENT_TYPE_CHAR, (int) keychar, 0, 0, 0);
+        Platform.PLATFORM.sendKeyEvent(0, 0, CallbackBridge.getCurrentMods(), keychar);
     }
     
     public static void sendMousePress(int awtButtons, boolean isDown) {
-        nativeSendData(EVENT_TYPE_MOUSE_BUTTON, awtButtons, isDown ? 1 : 0, 0, 0);
+        Platform.PLATFORM.sendMouseEvent(awtButtons, isDown ? 1 : 0, CallbackBridge.getCurrentMods());
     }
     
     public static void sendMousePress(int awtButtons) {
@@ -31,7 +36,9 @@ public class AWTInput {
     }
     
     public static void sendMousePos(int x, int y) {
-        nativeSendData(EVENT_TYPE_CURSOR_POS, x, y, 0, 0);
+        Platform.cursorX = x;
+        Platform.cursorY = y;
+        Platform.PLATFORM.sendMousePosition();
     }
     
     static {

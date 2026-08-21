@@ -61,6 +61,8 @@ add_library(pojavexec_awt SHARED
 		awt/awt_clipboard.c
 )
 
+target_link_libraries(pojavexec_awt PRIVATE android log)
+
 add_library(awt_headless SHARED 
 	awt_xawt/dummy.c
 )
