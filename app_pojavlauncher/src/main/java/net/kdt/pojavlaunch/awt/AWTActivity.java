@@ -1,4 +1,4 @@
-package net.kdt.pojavlaunch;
+package net.kdt.pojavlaunch.awt;
 
 import android.annotation.SuppressLint;
 import android.content.ClipboardManager;
@@ -18,10 +18,12 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.kdt.LoggerView;
 
-import net.kdt.pojavlaunch.awt.AWTView;
-import net.kdt.pojavlaunch.awt.AWTInput;
-import net.kdt.pojavlaunch.awt.AWTKeycode;
-import net.kdt.pojavlaunch.awt.AWTWindow;
+import net.kdt.pojavlaunch.BaseActivity;
+import net.kdt.pojavlaunch.CallbackBridge;
+import net.kdt.pojavlaunch.Logger;
+import net.kdt.pojavlaunch.PojavApplication;
+import net.kdt.pojavlaunch.SingleTapConfirm;
+import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.customcontrols.keyboard.AwtCharSender;
 import net.kdt.pojavlaunch.customcontrols.keyboard.TouchCharInput;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
@@ -48,9 +50,8 @@ import java.util.zip.ZipEntry;
 
 import git.artdeell.mojo.R;
 
-public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouchListener {
+public class AWTActivity extends BaseActivity implements View.OnTouchListener {
 
-    private static volatile ClipboardManager CLIPBOARD;
     private AWTView mTextureView;
     private LoggerView mLoggerView;
     private TouchCharInput mTouchCharInput;
@@ -77,7 +78,6 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
             Tools.showError(this, e, true);
         }
 
-        CLIPBOARD = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         mTouchCharInput = findViewById(R.id.awt_touch_char);
         mTouchCharInput.setCharacterSender(new AwtCharSender());
 
@@ -186,7 +186,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                Tools.dialogForceClose(JavaGUILauncherActivity.this);
+                Tools.dialogForceClose(AWTActivity.this);
             }
         });
     }
@@ -258,7 +258,6 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
             return;
         }
         Runtime selectedRuntime = selectRuntime(jarFileProperties.minJavaVersion);
-        if(selectedRuntime == null) return;
         launchJavaRuntime(selectedRuntime, javaArgs,  modFile, jarFileProperties.mainClass);
     }
 
