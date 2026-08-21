@@ -2,12 +2,9 @@ package net.kdt.pojavlaunch.awt;
 
 import android.view.Surface;
 
-import java.nio.ByteBuffer;
-
 public class AWTWindow {
     public static native void nativeMoveWindow(int xoff, int yoff);
 
-    // Obtain AWT screen pixels to render on Android SurfaceView
     public static native void beginRendering();
     public static native void endRendering();
     public static native void destroySurface();

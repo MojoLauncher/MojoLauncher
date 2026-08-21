@@ -1,22 +1,14 @@
 package net.kdt.pojavlaunch.awt;
 
-import android.content.*;
-import android.graphics.*;
-import android.os.Build;
-import android.text.*;
-import android.util.*;
-import android.view.*;
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
-import java.nio.ByteBuffer;
-import java.util.*;
-
-import net.kdt.pojavlaunch.CallbackBridge;
-import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.game.platform.Platform;
-import net.kdt.pojavlaunch.render.SurfaceProvider;
-import net.kdt.pojavlaunch.utils.*;
 
 public class AWTView extends SurfaceView implements SurfaceHolder.Callback {
     public static final int AWT_CANVAS_WIDTH = 720;
@@ -25,7 +17,7 @@ public class AWTView extends SurfaceView implements SurfaceHolder.Callback {
     public AWTView(Context ctx) {
         this(ctx, null);
     }
-    
+
     public AWTView(Context ctx, AttributeSet attrs) {
         super(ctx, attrs);
         this.getHolder().addCallback(this);
@@ -33,13 +25,15 @@ public class AWTView extends SurfaceView implements SurfaceHolder.Callback {
         post(this::refreshSize);
     }
 
-    /** Make the view fit the proper aspect ratio of the surface */
-    private void refreshSize(){
+    /**
+     * Make the view fit the proper aspect ratio of the surface
+     */
+    private void refreshSize() {
         ViewGroup.LayoutParams layoutParams = getLayoutParams();
 
-        if(getHeight() < getWidth()){
+        if (getHeight() < getWidth()) {
             layoutParams.width = AWT_CANVAS_WIDTH * getHeight() / AWT_CANVAS_HEIGHT;
-        }else{
+        } else {
             layoutParams.height = AWT_CANVAS_HEIGHT * getWidth() / AWT_CANVAS_WIDTH;
         }
 
