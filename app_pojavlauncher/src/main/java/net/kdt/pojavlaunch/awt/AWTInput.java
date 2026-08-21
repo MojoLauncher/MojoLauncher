@@ -9,10 +9,6 @@ public class AWTInput {
     public static final int EVENT_TYPE_KEY = 1005;
     public static final int EVENT_TYPE_MOUSE_BUTTON = 1006;
 
-    static {
-        System.loadLibrary("pojavexec_awt");
-    }
-
     public static void sendKey(char keychar, int keycode) {
         // TODO: Android -> AWT keycode mapping
         sendKey(keychar, keycode, 1);

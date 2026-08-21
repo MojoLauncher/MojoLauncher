@@ -21,18 +21,16 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 public class AWTBackend implements PlatformBackend {
-    private volatile boolean rendering = false;
-    private Surface surface;
-    private Future<?> task;
+    static {
+        System.loadLibrary("pojavexec_awt");
+    }
     @Override
     public void surfaceCreated(Surface surface) {
-        this.rendering = true;
-        this.surface = surface;
         Platform.grabStateChanged(false);
         AWTWindow.setNativeSize(CallbackBridge.windowWidth, CallbackBridge.windowHeight);
         AWTWindow.setNativeSurface(surface);
         // AWT requires us to manually draw on the screen
-        task = PojavApplication.sExecutorService.submit(AWTWindow::beginRendering);
+        PojavApplication.sExecutorService.submit(AWTWindow::beginRendering);
     }
 
     @Override
@@ -44,7 +42,6 @@ public class AWTBackend implements PlatformBackend {
     public void surfaceDestroyed() {
         AWTWindow.endRendering();
         AWTWindow.destroySurface();
-        this.surface = null;
     }
 
     @Override
