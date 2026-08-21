@@ -9,6 +9,7 @@
 #include <android/window.h>
 #include <android/log.h>
 #include <stdio.h>
+#include <pthread.h>
 #include "awt.h"
 #include "../anw.h"
 
@@ -31,6 +32,9 @@ ANativeWindow* anw;
 
 static jint w;
 static jint h;
+
+static _Atomic bool is_rendering = false;
+static pthread_t thread;
 
 void setup_jni() {
     if (method_GetRGB == NULL) {
@@ -64,12 +68,14 @@ static void release_cacio_screenbuffer(jintArray rgbArray, void* src_buf) {
 }
 
 // TODO: check for memory leaks
-JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_awt_AWTWindow_renderFrame(JNIEnv* env, jclass clazz) {
+JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_awt_AWTWindow_beginRendering(JNIEnv* env, jclass clazz) {
     if(!anw) return;
-    if (runtimeEnv == NULL) {
-        if (runtimeVM == NULL) {
-            return;
-        } else {
+    thread = pthread_self();
+    if (!runtimeVM) {
+        pthread_mutex_lock(&vm_wait_mutex);
+        pthread_cond_wait(&vm_wait_cond, &vm_wait_mutex);
+        pthread_mutex_unlock(&vm_wait_mutex);
+        if(isVmConnected) {
             (*runtimeVM)->AttachCurrentThreadAsDaemon(runtimeVM, &runtimeEnv, NULL);
         }
     }
@@ -77,37 +83,39 @@ JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_awt_AWTWindow_renderFrame(JNIEnv
     ARect rect;
     rect.top = 0;
     rect.left = 0;
-    rect.bottom = h;
-    rect.right = w;
 
-    ANativeWindow_Buffer buffer;
+    is_rendering = true;
 
-    int res = ANativeWindow_lock(anw, &buffer, &rect);
+    while(is_rendering) {
 
-    if(res) {
-        __android_log_print(ANDROID_LOG_ERROR, "AWT", "Failed to lock native window: %d", res);
-        return;
+        rect.bottom = h;
+        rect.right = w;
+
+        ANativeWindow_Buffer buffer;
+
+        int res = ANativeWindow_lock(anw, &buffer, &rect);
+
+        if(res) {
+            __android_log_print(ANDROID_LOG_ERROR, "AWT", "Failed to lock native window: %d", res);
+            break;
+        }
+
+        jintArray array;
+        jint length;
+        void* buf = acquire_cacio_screenbuffer(&length, &array);
+        if(!length || !buf) goto end;
+
+        jint *dst = (jint*)buffer.bits;
+        jint *src = (jint*)buf;
+
+        __android_log_print(ANDROID_LOG_INFO, "AWT", "RENDERING!");
+        for(int y = 0; y < buffer.height; y++) {
+            memcpy(&dst[y*buffer.stride], &src[y*buffer.width], buffer.width * sizeof(jint));
+        }
+        release_cacio_screenbuffer(array, src);
+        end:
+        ANativeWindow_unlockAndPost(anw);
     }
-
-    jintArray array;
-    jint length;
-    void* buf = acquire_cacio_screenbuffer(&length, &array);
-    if(!length) goto end;
-    if(!buf) {
-        goto end;
-    }
-
-    jint *dst = (jint*)buffer.bits;
-    jint *src = (jint*)buf;
-
-    for(int y = 0; y < buffer.height; y++) {
-        memcpy(&dst[y*buffer.stride], &src[y*buffer.width], buffer.width * sizeof(jint));
-    }
-
-
-    release_cacio_screenbuffer(array, src);
-    end:
-    ANativeWindow_unlockAndPost(anw);
 }
 
 JNIEXPORT void JNICALL
@@ -165,4 +173,18 @@ Java_net_kdt_pojavlaunch_awt_AWTWindow_setNativeSize(JNIEnv *env, jclass clazz, 
                                                      jint height) {
     w = width;
     h = height;
+}
+
+JNIEXPORT void JNICALL
+Java_net_kdt_pojavlaunch_awt_AWTWindow_endRendering(JNIEnv *env, jclass clazz) {
+    is_rendering = false;
+    isVmConnected = false;
+    if(thread) {
+        pthread_join(thread, NULL);
+    }
+    if(runtimeVM) {
+        (*runtimeVM)->DetachCurrentThread(runtimeVM);
+        runtimeEnv = NULL;
+        runtimeVM = NULL;
+    }
 }

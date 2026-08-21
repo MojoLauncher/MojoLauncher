@@ -22,8 +22,7 @@ public class AWTView extends SurfaceView implements SurfaceHolder.Callback {
     public static final int AWT_CANVAS_HEIGHT = 600;
     private static final int MAX_SIZE = 100;
     private static final double NANOS = 1000000000.0;
-    private boolean mIsDestroyed = false;
-    
+
     public AWTView(Context ctx) {
         this(ctx, null);
     }

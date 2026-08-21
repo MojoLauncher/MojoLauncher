@@ -11,6 +11,7 @@ import android.view.Surface;
 import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.awt.AWTInput;
+import net.kdt.pojavlaunch.awt.AWTView;
 import net.kdt.pojavlaunch.awt.AWTWindow;
 import net.kdt.pojavlaunch.game.GameView;
 import net.kdt.pojavlaunch.game.platform.Platform;
@@ -26,13 +27,11 @@ public class AWTBackend implements PlatformBackend {
     public void surfaceCreated(Surface surface) {
         this.rendering = true;
         this.surface = surface;
-        AWTWindow.setNativeSize(GameView.getWindowWidth(), GameView.getWindowHeight());
+        Platform.grabStateChanged(false);
+        AWTWindow.setNativeSize(AWTView.AWT_CANVAS_WIDTH, AWTView.AWT_CANVAS_HEIGHT);
         AWTWindow.setNativeSurface(surface);
-        task = PojavApplication.sExecutorService.submit(() -> {
-            while (rendering) {
-                AWTWindow.renderFrame();
-            }
-        });
+        // AWT requires us to manually draw on the screen
+        task = PojavApplication.sExecutorService.submit(AWTWindow::beginRendering);
     }
 
     @Override
@@ -42,14 +41,9 @@ public class AWTBackend implements PlatformBackend {
 
     @Override
     public void surfaceDestroyed() {
-        rendering = false;
-        try {
-            task.get();
-            AWTWindow.destroySurface();
-            this.surface = null;
-        } catch (ExecutionException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        AWTWindow.endRendering();
+        AWTWindow.destroySurface();
+        this.surface = null;
     }
 
     @Override
