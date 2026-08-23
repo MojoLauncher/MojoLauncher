@@ -14,10 +14,10 @@
 #define TAG __FILE_NAME__
 #include <log.h>
 #include <libgen.h>
+#include <linux/limits.h>
 
 extern bool apiRequiresHints();
 
-#define NATIVEDIR_BUF_SIZE 1024
 const char* additional_natives_dir = NULL;
 
 const char* replacements = NULL;
@@ -57,8 +57,8 @@ static jstring library_redirect_hook(JNIEnv* env, jstring original_name, const c
     if(strstr(replacements, base) == NULL) {
         return original_name;
     }
-    char buf[NATIVEDIR_BUF_SIZE];
-    snprintf(buf, NATIVEDIR_BUF_SIZE, "%s/%s", additional_natives_dir, base);
+    char buf[PATH_MAX];
+    snprintf(buf, PATH_MAX, "%s/%s", additional_natives_dir, base);
     printf("Redirecting library load: %s -> %s\n", name, buf);
     jstring new = (*env)->NewStringUTF(env, buf);
     return new;
