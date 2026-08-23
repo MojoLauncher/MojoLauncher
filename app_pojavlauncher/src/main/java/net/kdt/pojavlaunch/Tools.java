@@ -48,6 +48,7 @@ import androidx.fragment.app.FragmentManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import net.kdt.pojavlaunch.game.GameActivity;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutorTask;
@@ -368,7 +369,7 @@ public final class Tools {
                     .setMessage(errMsg)
                     .setPositiveButton(android.R.string.ok, (p1, p2) -> {
                         if(exitIfOk) {
-                            if (ctx instanceof MainActivity) {
+                            if (ctx instanceof GameActivity) {
                                 fullyExit();
                             } else if (ctx instanceof Activity) {
                                 ((Activity) ctx).finish();
@@ -380,7 +381,7 @@ public final class Tools {
                         ClipboardManager mgr = (ClipboardManager) ctx.getSystemService(Context.CLIPBOARD_SERVICE);
                         mgr.setPrimaryClip(ClipData.newPlainText("error", printToString(e)));
                         if(exitIfOk) {
-                            if (ctx instanceof MainActivity) {
+                            if (ctx instanceof GameActivity) {
                                 fullyExit();
                             } else {
                                 ((Activity) ctx).finish();

@@ -1,22 +1,21 @@
-package net.kdt.pojavlaunch.customcontrols.mouse;
+package net.kdt.pojavlaunch.game;
 
 import android.view.MotionEvent;
 import android.view.View;
 
+import net.kdt.pojavlaunch.game.platform.Platform;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
-import git.artdeell.dnbootstrap.glfw.GLFW;
-
 public abstract class TouchEventProcessor {
-    private final View mHostView;
-    public TouchEventProcessor(View hostView) {
+    private final GameView mHostView;
+    public TouchEventProcessor(GameView hostView) {
         mHostView = hostView;
     }
 
     protected void sendTouchCoordinates(float x, float y) {
-        GLFW.cursorX = x / mHostView.getWidth();
-        GLFW.cursorY = y / mHostView.getHeight();
-        GLFW.sendMousePos();
+        Platform.cursorX = x / mHostView.cursorRatioX;
+        Platform.cursorY = y / mHostView.cursorRatioY;
+        Platform.sendCursorPosition();
     }
 
     protected void applyMoveVector(float[] vector) {
@@ -24,9 +23,9 @@ public abstract class TouchEventProcessor {
     }
 
     protected void applyMoveVector(float x, float y) {
-        GLFW.cursorX += x * LauncherPreferences.PREF_MOUSESPEED / mHostView.getWidth();
-        GLFW.cursorY += y * LauncherPreferences.PREF_MOUSESPEED / mHostView.getHeight();
-        GLFW.sendMousePos();
+        Platform.cursorX += x * LauncherPreferences.PREF_MOUSESPEED;
+        Platform.cursorY += y * LauncherPreferences.PREF_MOUSESPEED;
+        Platform.sendCursorPosition();
     }
 
     abstract public boolean processTouchEvent(MotionEvent motionEvent);

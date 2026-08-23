@@ -25,9 +25,8 @@ import com.google.gson.JsonSyntaxException;
 import com.kdt.pickafile.FileListView;
 import com.kdt.pickafile.FileSelectedListener;
 
-import net.kdt.pojavlaunch.LauncherGLSurface;
+import net.kdt.pojavlaunch.game.GameView;
 
-import git.artdeell.dnbootstrap.glfw.GLFW;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.customcontrols.buttons.ControlButton;
@@ -38,6 +37,7 @@ import net.kdt.pojavlaunch.customcontrols.buttons.ControlSubButton;
 import net.kdt.pojavlaunch.customcontrols.handleview.ActionRow;
 import net.kdt.pojavlaunch.customcontrols.handleview.ControlHandleView;
 import net.kdt.pojavlaunch.customcontrols.handleview.EditControlSideDialog;
+import net.kdt.pojavlaunch.game.platform.Platform;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 import java.io.File;
@@ -49,7 +49,7 @@ import java.util.List;
 public class ControlLayout extends FrameLayout {
 	protected CustomControls mLayout;
 	/* Accessible when inside the game by ControlInterface implementations, cached for perf. */
-	private LauncherGLSurface mGameSurface = null;
+	private GameView mGameSurface = null;
 
 	/* Cache to buttons for performance purposes */
 	private List<ControlInterface> mButtons;
@@ -262,7 +262,7 @@ public class ControlLayout extends FrameLayout {
 		for(ControlInterface button : getButtonChildren()){
             // Avoid going through the JNI each time.
             // Avoid going through the JNI each time.
-            button.setVisible(((button.getProperties().displayInGame && GLFW.isGrabbing()) || (button.getProperties().displayInMenu && !GLFW.isGrabbing())) && isVisible);
+            button.setVisible(((button.getProperties().displayInGame && Platform.isGrabbing()) || (button.getProperties().displayInMenu && !Platform.isGrabbing())) && isVisible);
 		}
 	}
 
@@ -478,7 +478,7 @@ public class ControlLayout extends FrameLayout {
 	}
 
 	/** Cached getter for perf purposes */
-	public LauncherGLSurface getGameSurface(){
+	public GameView getGameSurface(){
 		if(mGameSurface == null){
 			mGameSurface = findViewById(R.id.main_game_render_view);
 		}

@@ -15,11 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.kdt.pojavlaunch.EfficientAndroidLWJGLKeycode;
+import net.kdt.pojavlaunch.utils.KeycodeUtils;
 
-import git.artdeell.dnbootstrap.glfw.GrabListener;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.game.platform.input.PlatformGrabListener;
 
 import android.widget.TextView;
 
@@ -31,7 +31,7 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
     private GamepadEmulatedButton[] mRealButtons;
     private final ArrayAdapter<String> mKeyAdapter;
     private final int mSpecialKeycodeCount;
-    private GrabListener mGamepadGrabListener;
+    private PlatformGrabListener mGamepadGrabListener;
     private boolean mGrabState = false;
     private boolean mOldState = false;
 
@@ -41,7 +41,7 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
         String[] specialKeycodeNames = GamepadMap.getSpecialKeycodeNames();
         mSpecialKeycodeCount = specialKeycodeNames.length;
         mKeyAdapter.addAll(specialKeycodeNames);
-        mKeyAdapter.addAll(EfficientAndroidLWJGLKeycode.generateKeyName());
+        mKeyAdapter.addAll(KeycodeUtils.generateKeyName());
         createRebinderMap();
         updateRealButtons();
     }
@@ -165,7 +165,7 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
         private final TextView mKeycodeLabel;
         private int mAttachedPosition = -1;
         private GamepadEmulatedButton mAttachedButton;
-        private short[] mKeycodes;
+        private int[] mKeycodes;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -215,10 +215,10 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
             for(spinnerIndex = 0; spinnerIndex < mKeycodes.length; spinnerIndex++) {
                 Spinner keySpinner = mKeySpinners[spinnerIndex];
                 keySpinner.setEnabled(true);
-                short keyCode = mKeycodes[spinnerIndex];
+                int keyCode = mKeycodes[spinnerIndex];
                 int selected;
                 if(keyCode < 0) selected = keyCode + mSpecialKeycodeCount;
-                else selected = EfficientAndroidLWJGLKeycode.getIndexByValue(keyCode) + mSpecialKeycodeCount;
+                else selected = KeycodeUtils.getIndexByValue(keyCode) + mSpecialKeycodeCount;
                 keySpinner.setSelection(selected);
             }
             // In case if there is too much spinners, disable the rest of them
@@ -264,7 +264,7 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
             if(editedKeycodeIndex == -1) return;
             int keycode_offset = selectionIndex - mSpecialKeycodeCount;
             if(selectionIndex <= mSpecialKeycodeCount) mKeycodes[editedKeycodeIndex] = (short) (keycode_offset);
-            else mKeycodes[editedKeycodeIndex] = EfficientAndroidLWJGLKeycode.getValueByIndex(keycode_offset);
+            else mKeycodes[editedKeycodeIndex] = KeycodeUtils.getValueByIndex(keycode_offset);
             updateKeycodeLabel();
             try {
                 GamepadMapStore.save();
@@ -321,7 +321,7 @@ public class GamepadMapperAdapter extends RecyclerView.Adapter<GamepadMapperAdap
     }
 
     @Override
-    public void attachGrabListener(GrabListener grabListener) {
+    public void attachGrabListener(PlatformGrabListener grabListener) {
         mGamepadGrabListener = grabListener;
         grabListener.onGrabState(mGrabState);
     }

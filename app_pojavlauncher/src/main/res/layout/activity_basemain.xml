@@ -20,22 +20,24 @@
 			android:layout_width="match_parent"
 			android:layout_height="match_parent">
 
-			<net.kdt.pojavlaunch.LauncherGLSurface
+			<net.kdt.pojavlaunch.game.GameView
 				android:id="@+id/main_game_render_view"
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
 				android:defaultFocusHighlightEnabled="false"
-                tools:ignore="UnusedAttribute" />
+                tools:ignore="UnusedAttribute">
 
-			<git.artdeell.dnbootstrap.glfw.GLFWCursorView
-				android:layout_height="match_parent"
-				android:layout_width="match_parent"
-				android:orientation="vertical"
-				android:id="@+id/main_touchpad"
-				android:focusable="false"
-				android:translationZ="1dp"
-				android:visibility="gone"
-                app:defaultCursorDrawable="@drawable/ic_mouse_pointer"/>
+				<net.kdt.pojavlaunch.game.GameCursorView
+					android:layout_height="match_parent"
+					android:layout_width="match_parent"
+					android:orientation="vertical"
+					android:id="@+id/main_cursorview"
+					android:focusable="false"
+					android:translationZ="1dp"
+					android:visibility="gone"
+					app:defaultCursorDrawable="@drawable/ic_mouse_pointer"/>
+
+			</net.kdt.pojavlaunch.game.GameView>
 
 
 			<net.kdt.pojavlaunch.customcontrols.keyboard.TouchCharInput
@@ -61,6 +63,46 @@
 				android:layout_height="0px"/>
 
 		</net.kdt.pojavlaunch.customcontrols.ControlLayout>
+
+		<FrameLayout
+			android:id="@+id/main_loading_screen"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:background="#BB000000"
+			android:visibility="visible"
+			>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="16dp"
+				android:layout_gravity="center"
+				android:gravity="center"
+				android:orientation="vertical">
+
+				<ProgressBar
+					android:id="@+id/main_loading_screen_progress"
+					android:layout_width="24dp"
+					android:layout_height="24dp"
+					android:indeterminate="true" />
+
+				<TextView
+					android:id="@+id/main_loading_screen_text"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/loading_screen_title"
+					android:textColor="@android:color/white"
+					android:textSize="16sp" />
+
+				<TextView
+					android:id="@+id/main_loading_screen_warning"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/loading_screen_warning"
+					android:textColor="@android:color/darker_gray"
+					android:textSize="12sp" />
+			</LinearLayout>
+		</FrameLayout>
 
 		<com.kdt.LoggerView
 			android:id="@+id/mainLoggerView"

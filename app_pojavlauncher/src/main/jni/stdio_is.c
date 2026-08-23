@@ -9,16 +9,9 @@
 #include <errno.h>
 #include <stdlib.h>
 
-#include "stdio_is.h"
-
 //
 // Created by maks on 17.02.21.
 //
-
-static volatile jobject exitTrap_ctx;
-static volatile jclass exitTrap_exitClass;
-static volatile jmethodID exitTrap_staticMethod;
-static JavaVM *exitTrap_jvm;
 
 static int pfd[2];
 static pthread_t logger;
