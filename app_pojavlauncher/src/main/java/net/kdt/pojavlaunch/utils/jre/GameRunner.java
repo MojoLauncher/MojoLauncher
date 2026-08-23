@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import net.kdt.pojavlaunch.Architecture;
 import net.kdt.pojavlaunch.JVersionList;
-import net.kdt.pojavlaunch.LauncherActivity;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.authenticator.accounts.Account;
 import net.kdt.pojavlaunch.instances.Instance;
@@ -146,14 +145,15 @@ public class GameRunner {
         int localeString;
         int freeAddressSpace = Architecture.is32BitsDevice() ? Tools.getMaxContinuousAddressSpaceSize() : -1;
         Log.i("MemStat", "Free RAM: " + freeDeviceMemory + " Addressable: " + freeAddressSpace);
-        if(freeDeviceMemory > freeAddressSpace && freeAddressSpace != -1) {
+        boolean showAddressMemoryWarning = freeDeviceMemory > freeAddressSpace && freeAddressSpace != -1;
+        if(showAddressMemoryWarning) {
             freeDeviceMemory = freeAddressSpace;
             localeString = R.string.address_memory_warning_msg;
         } else {
             localeString = R.string.memory_warning_msg;
         }
 
-        if(LauncherPreferences.PREF_RAM_ALLOCATION > freeDeviceMemory && (freeAddressSpace != -1 || LauncherPreferences.PREF_SHOW_MEMORY_WARNING_DIALOG)) {
+        if(LauncherPreferences.PREF_RAM_ALLOCATION > freeDeviceMemory && (showAddressMemoryWarning || LauncherPreferences.PREF_SHOW_MEMORY_WARNING_DIALOG)) {
             int finalDeviceMemory = freeDeviceMemory;
             LifecycleAwareAlertDialog.DialogCreator dialogCreator = (dialog, builder) ->
                 builder.setMessage(activity.getString(localeString, finalDeviceMemory, LauncherPreferences.PREF_RAM_ALLOCATION))
