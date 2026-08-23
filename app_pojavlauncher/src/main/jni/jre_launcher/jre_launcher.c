@@ -220,6 +220,7 @@ Java_net_kdt_pojavlaunch_utils_jre_JavaRunner_nativeLoadJVM(JNIEnv *env, jclass 
     (*env)->ReleaseStringUTFChars(env, mainClass, mainClassNameBuf);
 
     bool main_result = executeMain(vm_env, mainClassName, vm_appArgs);
+    (*java_vm.vm)->DetachCurrentThread(java_vm.vm);
     (*java_vm.vm)->DestroyJavaVM(java_vm.vm);
     unloadJavaVM(&java_vm);
     if(!main_result) {
