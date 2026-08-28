@@ -10,6 +10,7 @@
 #include <jvm_hooks/jvm_hooks.h>
 #include "elf_hinter.h"
 #include "load_stages.h"
+#include "utils.h"
 
 #define TAG __FILE_NAME__
 #include <log.h>
@@ -18,9 +19,9 @@
 
 extern bool apiRequiresHints();
 
-const char* additional_natives_dir = NULL;
+static char* additional_natives_dir = NULL;
 
-const char* replacements = NULL;
+static char* replacements = NULL;
 
 
 // Java 21 style hook
@@ -152,8 +153,7 @@ Java_net_kdt_pojavlaunch_utils_JREUtils_setRedirectLibraryPath(JNIEnv *env, jcla
 
 JNIEXPORT void JNICALL
 Java_net_kdt_pojavlaunch_utils_JREUtils_setLibraryOverrides(JNIEnv *env, jclass clazz,
-                                                            jstring libs) {
-    const char* _libs = (*env)->GetStringUTFChars(env, libs, NULL);
-    replacements = strdup(_libs);
-    (*env)->ReleaseStringUTFChars(env, libs, _libs);
+                                                            jstring base_path, jstring libs) {
+    save_jvm_string(env, base_path, &additional_natives_dir);
+    save_jvm_string(env, libs, &replacements);
 }

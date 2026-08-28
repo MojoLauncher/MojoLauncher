@@ -247,8 +247,7 @@ public class GameRunner {
             File dir = new File(additionalNativesDir);
             if(dir.isDirectory()){
                 String overrides = String.join(" ", dir.list((f, s) -> s.endsWith(".so")));
-                JREUtils.setRedirectLibraryPath(additionalNativesDir);
-                JREUtils.setLibraryOverrides(overrides);
+                JREUtils.setLibraryOverrides(additionalNativesDir, overrides);
             }
             additionalNativesDir = ':' + additionalNativesDir;
         } else additionalNativesDir = "";
