@@ -288,11 +288,6 @@ public class JREUtils {
     // See the redirect hook on the JNI side
     public static native void setRedirectLibraryPath(String path);
     public static native void setLibraryOverrides(String libs);
-    public static native boolean configureRenderspec(String eglPath, boolean useLoaderBypass, boolean useGles, int glesVersion);
-    public static native void configureRenderspecDisplay(int width, int height, int refreshRate);
-    private static native void nsetRendererLibraryPath(String path);
-    public static native void preloadVulkan();
-    public static native void setUseTurnip(boolean enable);
     //public static native void initializeHooks();
     // Obtain AWT screen pixels to render on Android SurfaceView
     public static native boolean renderAWTScreenFrame(ByteBuffer tempBuffer);
