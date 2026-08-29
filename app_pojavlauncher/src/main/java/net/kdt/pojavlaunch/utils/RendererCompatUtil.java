@@ -37,6 +37,12 @@ public class RendererCompatUtil {
         // Current Mesa requires API29+
         boolean deviceCompatibleMesa = SDK_INT >= 29 && new File(Tools.NATIVE_LIB_DIR, "libEGL_mesa.so").exists();
         boolean deviceHasOpenGLES3 = JREUtils.getDetectedVersion() >= 3;
+        PackageManager p = context.getPackageManager();
+        // Enable VirGL if running on ChromeOS or there's virgl used as the system driver
+        // That's because system driver is 99.9% GLES-only, better override with our desktop GL build
+        boolean deviceIsVirgl = p.hasSystemFeature("org.chromium.arc.device_management")
+                || p.hasSystemFeature("org.chromium.arc")
+                || GLInfoUtils.getGlInfo().renderer.contains("virgl");
         // LTW is an optional dependency
         boolean appHasLtw = new File(Tools.NATIVE_LIB_DIR, "libltw.so").exists();
         List<String> rendererIds = new ArrayList<>(defaultRenderers.length);
@@ -48,6 +54,7 @@ public class RendererCompatUtil {
             // freedreno is available only on Adreno GPUs
             if(rendererId.contains("freedreno") && (!(GLInfoUtils.getGlInfo().isAdreno()) || !deviceCompatibleMesa)) continue;
             if(rendererId.contains("ltw") && (!deviceHasOpenGLES3 || !appHasLtw)) continue;
+            if(rendererId.contains("virgl") && (!deviceCompatibleMesa || !deviceIsVirgl)) continue;
             rendererIds.add(rendererId);
             rendererNames.add(defaultRendererNames[i]);
         }

@@ -242,6 +242,7 @@ public class JREUtils {
         boolean preloadVk = true;
         int glesVersion;
         switch (renderer){
+            case "virgl_virtio":
             case "freedreno_kgsl":
                 preloadVk = false;
             case "vulkan_zink":
