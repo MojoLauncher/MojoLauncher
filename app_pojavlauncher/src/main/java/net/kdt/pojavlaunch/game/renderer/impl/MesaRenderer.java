@@ -20,7 +20,7 @@ public abstract class MesaRenderer implements Renderer {
 
     @Override
     public String library() {
-        return overrideEGL != null ? overrideEGL : "libEGL_mesa";
+        return overrideEGL != null ? overrideEGL : "libEGL_mesa.so";
     }
 
     @Override
@@ -109,6 +109,11 @@ public abstract class MesaRenderer implements Renderer {
         @Override
         public String tag() {
             return GameRenderer.FREEDRENO_RENDERER;
+        }
+
+        @Override
+        public boolean compatibleDevice(Context context) {
+            return super.compatibleDevice(context) && GpuUtils.getGlInfo().isAdreno();
         }
 
         @Override
