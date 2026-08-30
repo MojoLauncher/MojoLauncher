@@ -13,8 +13,11 @@ public interface AngleDescriptor {
     String ENV_GLES = "LIBGL_GLES";
 
     File egl();
+
     File gles();
+
     void setEnvironment(Map<String, String> envMap);
+
     boolean supported();
 
     class SysAngleDescriptor implements AngleDescriptor {
@@ -42,8 +45,10 @@ public interface AngleDescriptor {
             return egl().exists() && gles().exists();
         }
     }
+
     class ExtAngleDescriptor implements AngleDescriptor {
         private final LibraryPlugin plugin;
+
         public ExtAngleDescriptor(LibraryPlugin plugin) {
             this.plugin = plugin;
         }

@@ -16,6 +16,7 @@ import git.artdeell.mojoexec.MojoExec;
 
 public abstract class MesaRenderer implements Renderer {
     private String overrideEGL;
+
     @Override
     public String library() {
         return overrideEGL != null ? overrideEGL : "libEGL_mesa";
@@ -86,6 +87,7 @@ public abstract class MesaRenderer implements Renderer {
             return super.compatibleDevice(context) && GpuUtils.checkVulkanSupport(context.getPackageManager());
         }
     }
+
     public static class FreedrenoRenderer extends MesaRenderer {
 
         @Override
@@ -100,11 +102,11 @@ public abstract class MesaRenderer implements Renderer {
 
         @Override
         public void setupEnvironment(Context context, Map<String, String> envMap) {
-            if(GpuUtils.getGlInfo().isAdreno()) {
+            if (GpuUtils.getGlInfo().isAdreno()) {
                 envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "kgsl");
                 // On Adreno 5XX and lower only Core 3.1 is exposed by default due to missing hardware extensions.
                 // 3.3 is required for modern Minecraft so let's force 3.3 if running on such GPU - it's known to be working.
-                if(GpuUtils.getGlInfo().isAdreno500Lower()) {
+                if (GpuUtils.getGlInfo().isAdreno500Lower()) {
                     envMap.put("MESA_GL_VERSION_OVERRIDE", "3.3");
                     envMap.put("MESA_GLSL_VERSION_OVERRIDE", "330");
                 }
