@@ -59,7 +59,7 @@ import net.kdt.pojavlaunch.utils.memory.SelfMapsParser;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.FileUtils;
-import net.kdt.pojavlaunch.utils.GLInfoUtils;
+import net.kdt.pojavlaunch.utils.GpuUtils;
 import net.kdt.pojavlaunch.value.DependentLibrary;
 import net.kdt.pojavlaunch.value.LibraryArtifact;
 
@@ -562,7 +562,7 @@ public final class Tools {
         Logger.appendToLog("Info: API version: " + SDK_INT);
         Logger.appendToLog("Info: Selected game version: " + gameVersion);
         Logger.appendToLog("Info: Custom Java arguments: \"" + javaArguments + "\"");
-        GLInfoUtils.GLInfo info = GLInfoUtils.getGlInfo();
+        GpuUtils.GLInfo info = GpuUtils.getGlInfo();
         Logger.appendToLog("Info: Total RAM on device: " + getTotalDeviceMemory(ctx) + " Mb");
         Logger.appendToLog("Info: RAM allocated: " + LauncherPreferences.PREF_RAM_ALLOCATION + " Mb");
         Logger.appendToLog("Info: Graphics device: "+info.vendor+ " "+info.renderer+" (OpenGL ES "+info.glesMajorVersion+")");

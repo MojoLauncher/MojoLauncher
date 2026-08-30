@@ -1,9 +1,5 @@
 package net.kdt.pojavlaunch.utils;
 
-import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_DUMP_SHADERS;
-import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_VSYNC_IN_ZINK;
-import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER;
-
 import android.content.*;
 import android.system.*;
 import android.util.*;
@@ -11,16 +7,12 @@ import android.util.*;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.*;
-import java.nio.ByteBuffer;
 import java.util.*;
 import net.kdt.pojavlaunch.*;
-import net.kdt.pojavlaunch.extra.ExtraConstants;
-import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.multirt.Runtime;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.*;
-
-import git.artdeell.mojoexec.MojoExec;
+import net.kdt.pojavlaunch.game.renderer.GameRenderer;
 
 public class JREUtils {
     public static void redirectAndPrintJRELog() {
@@ -100,33 +92,8 @@ public class JREUtils {
         if(ffmpeg == null) return;
         envMap.put("POJAV_FFMPEG_PATH", ffmpeg.resolveAbsolutePath("libffmpeg.so"));
     }
-    public static void setEnviroimentForGame(Context context, String renderer) throws Throwable {
+    public static void setGameEnvironment(Context context, GameRenderer renderer) throws Throwable {
         Map<String, String> envMap = new ArrayMap<>();
-        envMap.put("LIBGL_MIPMAP", "3");
-
-        // Prevent OptiFine (and other error-reporting stuff in Minecraft) from balooning the log
-        envMap.put("LIBGL_NOERROR", "1");
-
-        // On certain GLES drivers, overloading default functions shader hack fails, so disable it
-        envMap.put("LIBGL_NOINTOVLHACK", "1");
-
-        // Fix white color on banner and sheep, since GL4ES 1.1.5
-        envMap.put("LIBGL_NORMALIZE", "1");
-
-        if(PREF_DUMP_SHADERS)
-            envMap.put("LIBGL_VGPU_DUMP", "1");
-        if(PREF_VSYNC_IN_ZINK)
-            envMap.put("POJAV_VSYNC_IN_ZINK", "1");
-
-        // The OPEN GL version is changed according
-        envMap.put("LIBGL_ES", (String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION));
-
-        envMap.put("FORCE_VSYNC", String.valueOf(LauncherPreferences.PREF_FORCE_VSYNC));
-
-        envMap.put("MESA_GLSL_CACHE_DIR", Tools.DIR_CACHE.getAbsolutePath());
-        envMap.put("force_glsl_extensions_warn", "true");
-        envMap.put("allow_higher_compat_version", "true");
-        envMap.put("allow_glsl_extension_directive_midshader", "true");
 		// This is currently required for YSM mod to function
 		File modRuntimeDir = new File(Tools.DIR_CACHE, "app_runtime_mod");
 		if (!modRuntimeDir.exists()) {
@@ -134,26 +101,12 @@ public class JREUtils {
 		}
 		envMap.put("MOD_ANDROID_RUNTIME", modRuntimeDir.getAbsolutePath());
 
-        setupAngleEnv(context, envMap);
         setupFfmpegEnv(context, envMap);
-        // Init mesa renderers
-        MesaUtils.initEnvironment(context, renderer, envMap);
 
-        setRendererLibraryPath(Tools.NATIVE_LIB_DIR, MesaUtils.getCustomZinkLibraryPath());
+        renderer.setupEnvironment(context, envMap);
 
         if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
         if(LauncherPreferences.PREF_ALSOFT_FORCE_OPENSL) envMap.put("ALSOFT_DRIVERS", "opensl");
-
-        if(GLInfoUtils.getGlInfo().isAdreno() && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
-            MojoExec.setUseTurnip(true);
-        }
-
-        if(LauncherPreferences.PREF_FREEDRENO_SYSMEM) {
-            // We could also apply the FD_MESA_DEBUG only if freedreno is active but why making things complicated?
-            Logger.appendToLog("Will use sysmem rendering for Turnip/Freedreno");
-            envMap.put("FD_MESA_DEBUG", "sysmem");
-            envMap.put("TU_DEBUG", "sysmem");
-        }
 
         overrideEnvVars(envMap);
 
@@ -230,57 +183,8 @@ public class JREUtils {
         return parsedArguments;
     }
 
-    /**
-     * Open the render library in accordance to the settings.
-     * It will fallback if it fails to load the library.
-     * @return The name of the loaded library
-     */
-    public static String loadGraphicsLibrary(String renderer){
-        String renderLibrary;
-        boolean useGles;
-        boolean bypassNamespace = false;
-        boolean preloadVk = true;
-        int glesVersion;
-        switch (renderer){
-            case "freedreno_kgsl":
-                preloadVk = false;
-            case "vulkan_zink":
-                renderLibrary = MesaUtils.getPreferredEGL();
-                useGles = false;
-                bypassNamespace = true; // Mesa is linked to a bunch of libraries not available in the pojavexec namespace
-                glesVersion = 3;
-                if(preloadVk) MojoExec.preloadVulkan(); // Zink requires Vulkan library to be preloaded
-                break;
-            case "opengles3_ltw" :
-                renderLibrary = "libltw.so";
-                useGles = true;
-                glesVersion = 3;
-                break;
-            case "opengles2":
-            case "opengles2_5":
-            case "opengles3":
-            default:
-                renderLibrary = "libgl4es_114.so";
-                useGles = true;
-                glesVersion = Integer.parseInt((String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION));
-                break;
-        }
-
-        if (!MojoExec.prepareEgl(renderLibrary, bypassNamespace, useGles, glesVersion)) {
-            Log.e("RENDER_LIBRARY","Failed to load renderer " + renderLibrary );
-            return null;
-        }
-        MesaUtils.destroyZink(); // Not needed anymore
-        return renderLibrary;
-    }
-
     public static int getDetectedVersion() {
-        return GLInfoUtils.getGlInfo().glesMajorVersion;
-    }
-    public static void setRendererLibraryPath(String mainPath, String additionalPath){
-        if(additionalPath != null)
-            mainPath = additionalPath + ":" + mainPath;
-        MojoExec.setNativeLibraryDir(mainPath);
+        return GpuUtils.getGlInfo().glesMajorVersion;
     }
     public static native int chdir(String path);
 

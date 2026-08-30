@@ -45,6 +45,7 @@ import com.kdt.LoggerView;
 
 import net.kdt.pojavlaunch.BaseActivity;
 import net.kdt.pojavlaunch.CallbackBridge;
+import net.kdt.pojavlaunch.game.renderer.GameRenderer;
 import net.kdt.pojavlaunch.utils.KeycodeUtils;
 import net.kdt.pojavlaunch.Logger;
 import net.kdt.pojavlaunch.Tools;
@@ -71,7 +72,6 @@ import net.kdt.pojavlaunch.tasks.AsyncAssetManager;
 import net.kdt.pojavlaunch.utils.JREUtils;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
 import net.kdt.pojavlaunch.authenticator.accounts.Account;
-import net.kdt.pojavlaunch.utils.RendererCompatUtil;
 import net.kdt.pojavlaunch.utils.jre.GameRunner;
 
 import java.io.File;
@@ -96,6 +96,7 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
     private ControlLayout mControlLayout;
     private HotbarView mHotbarView;
     private View mLoadingScreen;
+    private GameRenderer mGameRenderer;
 
     Instance instance;
     Account account;
@@ -121,6 +122,9 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
             finish();
             return;
         }
+        mGameRenderer = new GameRenderer(getApplicationContext(), instance.getLaunchRenderer());
+        if(LauncherPreferences.PREF_USE_ANGLE) mGameRenderer.enableAngle();
+        if(LauncherPreferences.PREF_ZINK_FORCE_LEGACY) mGameRenderer.enableLegacyZink();
         AsyncAssetManager.extractDefaultSettings(this, instance.getGameDirectory());
         MCOptionUtils.load(instance.getGameDirectory().getAbsolutePath());
 
@@ -388,17 +392,10 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
     }
 
     private void runCraft(String versionId, File[] classpath) throws Throwable {
-        String renderer = instance.getLaunchRenderer();
-        if(!RendererCompatUtil.checkRendererCompatible(this, renderer)) {
-            RendererCompatUtil.RenderersList renderersList = RendererCompatUtil.getCompatibleRenderers(this);
-            String firstCompatibleRenderer = renderersList.rendererIds.get(0);
-            Log.w("runCraft","Incompatible renderer "+renderer+ " will be replaced with "+firstCompatibleRenderer);
-            renderer = firstCompatibleRenderer;
-        }
         Logger.appendToLog("--------- Starting game with Launcher Debug!");
-        Tools.printLauncherInfo(versionId, instance.getLaunchArgs(), renderer, this);
+        Tools.printLauncherInfo(versionId, instance.getLaunchArgs(), mGameRenderer.getCurrentRenderer().name(), this);
         JREUtils.redirectAndPrintJRELog();
-        GameRunner.launchGame(this, account, instance, versionId, classpath, renderer);
+        GameRunner.launchGame(this, account, instance, versionId, classpath, mGameRenderer);
         //Note that we actually stall in the above function, even if the game crashes. But let's be safe.
         Tools.runOnUiThread(()-> mServiceBinder.isActive = false);
     }
