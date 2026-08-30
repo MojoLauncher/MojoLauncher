@@ -4,6 +4,7 @@ import android.content.Context;
 
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
+import net.kdt.pojavlaunch.game.renderer.GameRenderer;
 import net.kdt.pojavlaunch.game.renderer.Renderer;
 
 import java.util.Map;
@@ -30,7 +31,7 @@ public class GL4ESRenderer implements Renderer {
 
     @Override
     public String tag() {
-        return "opengles2";
+        return GameRenderer.GL4ES_RENDERER;
     }
 
     @Override

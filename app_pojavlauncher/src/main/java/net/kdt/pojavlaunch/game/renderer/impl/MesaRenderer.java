@@ -5,6 +5,7 @@ import static android.os.Build.VERSION.SDK_INT;
 import android.content.Context;
 
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.game.renderer.GameRenderer;
 import net.kdt.pojavlaunch.game.renderer.Renderer;
 import net.kdt.pojavlaunch.utils.GpuUtils;
 
@@ -39,7 +40,7 @@ public abstract class MesaRenderer implements Renderer {
 
     @Override
     public String tag() {
-        return "";
+        return GameRenderer.MESA_RENDERER;
     }
 
     // To allow legacy Zink usage
@@ -58,6 +59,11 @@ public abstract class MesaRenderer implements Renderer {
         @Override
         public String name() {
             return "ZINK";
+        }
+
+        @Override
+        public String tag() {
+            return GameRenderer.ZINK_RENDERER;
         }
 
         @Override
@@ -98,6 +104,11 @@ public abstract class MesaRenderer implements Renderer {
         @Override
         public int displayName() {
             return R.string.mcl_setting_renderer_freedreno_kgsl;
+        }
+
+        @Override
+        public String tag() {
+            return GameRenderer.FREEDRENO_RENDERER;
         }
 
         @Override

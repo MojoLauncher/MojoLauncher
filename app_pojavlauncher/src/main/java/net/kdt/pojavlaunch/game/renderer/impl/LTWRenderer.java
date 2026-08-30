@@ -3,6 +3,7 @@ package net.kdt.pojavlaunch.game.renderer.impl;
 import android.content.Context;
 
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.game.renderer.GameRenderer;
 import net.kdt.pojavlaunch.game.renderer.Renderer;
 import net.kdt.pojavlaunch.utils.JREUtils;
 
@@ -31,7 +32,7 @@ public class LTWRenderer implements Renderer {
 
     @Override
     public String tag() {
-        return "";
+        return GameRenderer.LTW_RENDERER;
     }
 
     @Override
