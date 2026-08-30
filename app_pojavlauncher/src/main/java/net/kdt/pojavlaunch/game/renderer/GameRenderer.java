@@ -112,8 +112,6 @@ public class GameRenderer {
             angleDescriptor.setEnvironment(envMap);
         if (PREF_DUMP_SHADERS)
             envMap.put("LIBGL_VGPU_DUMP", "1");
-        // The OPEN GL version is changed according
-        envMap.put("LIBGL_ES", (String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION));
         envMap.put("force_glsl_extensions_warn", "true");
         envMap.put("allow_higher_compat_version", "true");
         envMap.put("allow_glsl_extension_directive_midshader", "true");

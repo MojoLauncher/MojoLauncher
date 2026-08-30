@@ -48,6 +48,8 @@ public class GL4ESRenderer implements Renderer {
         // Fix white color on banner and sheep, since GL4ES 1.1.5
         envMap.put("LIBGL_NORMALIZE", "1");
         envMap.put("LIBGL_MIPMAP", "3");
+        // The OPEN GL version is changed according
+        envMap.put("LIBGL_ES", (String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION));
     }
 
     @Override
