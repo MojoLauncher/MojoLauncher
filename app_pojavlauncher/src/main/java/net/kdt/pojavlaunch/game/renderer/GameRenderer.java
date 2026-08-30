@@ -7,8 +7,6 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import net.kdt.pojavlaunch.Tools;
-import net.kdt.pojavlaunch.extra.ExtraConstants;
-import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.game.renderer.angle.AngleDescriptor;
 import net.kdt.pojavlaunch.game.renderer.impl.GL4ESRenderer;
 import net.kdt.pojavlaunch.game.renderer.impl.LTWRenderer;
@@ -17,7 +15,7 @@ import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +28,7 @@ public class GameRenderer {
     public static final String FREEDRENO_RENDERER = "freedreno_kgsl";
     public static final String MESA_RENDERER = "mesa_desktop";
     private final static String TAG = "Renderer";
-    private static final Map<String, Class<? extends Renderer>> KNOWN_RENDERERS = new HashMap<>();
+    private static final Map<String, Class<? extends Renderer>> KNOWN_RENDERERS = new LinkedHashMap<>();
     private final static String FALLBACK_RENDERER = GL4ES_RENDERER;
     private static RenderersList sCompatibleRenderers;
 
