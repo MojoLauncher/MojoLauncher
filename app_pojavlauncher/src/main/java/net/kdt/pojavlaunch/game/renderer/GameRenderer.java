@@ -43,6 +43,7 @@ public class GameRenderer {
     private Renderer currentRenderer;
     private AngleDescriptor angleDescriptor = null;
     private boolean forceNsBypass = false;
+    private String additionalLibraryPath = null;
 
     public GameRenderer(Context context, String currentRenderer) {
         this.context = context;
@@ -155,7 +156,7 @@ public class GameRenderer {
         if (zink == null) return;
         if (!zink.checkLibraries("libEGL_legacy.so")) return;
         ((MesaRenderer) currentRenderer).overrideEGL(zink.resolveAbsolutePath("libEGL_legacy.so"));
-        setRendererLibraryPath(Tools.NATIVE_LIB_DIR, zink.getLibraryPath());
+        this.additionalLibraryPath = zink.getLibraryPath();
         Log.i(TAG, "Using legacy Mesa ZINK!");
     }
 
@@ -187,6 +188,7 @@ public class GameRenderer {
      * @return whether the renderer setup was successful
      */
     public boolean maybeSetupRenderer() {
+        setRendererLibraryPath(Tools.NATIVE_LIB_DIR, additionalLibraryPath);
         if (!currentRenderer.setupRenderer(forceNsBypass)) {
             Log.e(TAG, "Failed to setup renderer " + currentRenderer.name() + ", falling back to " + FALLBACK_RENDERER);
             // Hopefully
