@@ -1,18 +1,22 @@
 package net.kdt.pojavlaunch.game.platform;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.InputDevice;
 import android.view.Surface;
 import android.view.View;
 
+import net.kdt.pojavlaunch.awt.AWTBridge;
 import net.kdt.pojavlaunch.game.GameView;
 import net.kdt.pojavlaunch.game.GameActivity;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.customcontrols.gamepad.DefaultDataProvider;
 import net.kdt.pojavlaunch.customcontrols.gamepad.Gamepad;
-import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
+import net.kdt.pojavlaunch.game.platform.backend.AWTBackend;
 import net.kdt.pojavlaunch.game.platform.backend.DummyBackend;
+import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.game.platform.backend.GLFWBackend;
 import net.kdt.pojavlaunch.game.platform.backend.PlatformBackend;
 import net.kdt.pojavlaunch.game.platform.backend.SDLBackend;
@@ -40,7 +44,7 @@ import git.mojo.sdl.SDLControllerManager;
 public class Platform {
     // Always reset cursor on grab lost - makes it move to the center as should if the game didn't move it
     private static final boolean RESET_CURSOR_UNGRAB = true;
-    public static PlatformBackend PLATFORM = new DummyBackend(); // Initialize a dummy platform - the game will initialize correct one later
+    public static PlatformBackend PLATFORM = new DummyBackend();
     public static double cursorX;
     public static double cursorY;
     private static final List<PlatformGrabListener> grabListeners = new ArrayList<>();
@@ -50,7 +54,7 @@ public class Platform {
     private static PlatformGamepad mPlatformGamepad = null;
     private static PlatformCursor mPlatformCursor = null;
     private static AndroidClipboard mClipboard;
-    private static View mHostView;
+    private static GameView mHostView;
     private static RemapperManager mInputManager;
 
     /**
@@ -59,12 +63,13 @@ public class Platform {
      * @param activity an activity to bind to
      * @param view a host view used for input handling
      */
-    public static void initialize(Activity activity, View view) {
+    public static void initialize(Activity activity, GameView view) {
         Platform.mHostView = view;
         Platform.mInputManager = createRemapperManager(view);
         mClipboard = new AndroidClipboard(activity.getApplicationContext());
         GLFW.setInitCallback(() -> onInit(new GLFWBackend()));
         SDLActivity.setInitCallback(() -> onInit(new SDLBackend()));
+        AWTBridge.setEnableCallback(() -> onInit(new AWTBackend()));
         SDLActivity.setClipboard(mClipboard);
         GLFW.setClipboardImpl(mClipboard);
         // SDL can handle gamepads on its own, so route all events through it
@@ -76,10 +81,17 @@ public class Platform {
         SDLBackend.initialize(activity);
     }
 
+    public static void initializeMinimal(Context appContext) {
+        Platform.mHostView = null;
+        Platform.mInputManager = null;
+        mClipboard = new AndroidClipboard(appContext);
+        // Do not set backend init callbacks here, as this will be functioning in single-platform mode
+    }
+
     private static void onInit(PlatformBackend impl) {
         // We probably already initialized at this point. Don't try to initialize again
-        if (!(PLATFORM instanceof DummyBackend)) return;
         Platform.setPlatformLibrary(impl);
+        Log.i("Platform", "Init backend : " + impl.backendName());
         ContextExecutor.executeActivity(activity -> ((GameActivity) activity).hideLoadingScreen());
         resetCursorPosition();
     }
@@ -171,6 +183,7 @@ public class Platform {
      * @param touchpadView A view representing on-screen "trackpad"
      */
     public static void createGenericGamepad(InputDevice device, View touchpadView){
+        if(mHostView == null || mInputManager == null) return; // Running in minimal mode
         Gamepad gamepad = new Gamepad(device, DefaultDataProvider.INSTANCE, touchpadView);
         setPlatformGamepad(new GenericGamepad(mHostView.getContext(), mInputManager, gamepad));
     }
@@ -250,10 +263,19 @@ public class Platform {
      * @param backend implementation backend
      */
     public static void setPlatformLibrary(PlatformBackend backend) {
+        if(PLATFORM != null) PLATFORM.surfaceDestroyed();
         PLATFORM = backend;
         // To be picked by platform library
         if (mPendingSurface != null)
             PLATFORM.surfaceCreated(mPendingSurface);
+    }
+
+    /**
+     * Get Platform clipboard
+     * @return clipboard object
+     */
+    public static AndroidClipboard getClipboard() {
+        return mClipboard;
     }
 
     private static RemapperManager createRemapperManager(View view){
