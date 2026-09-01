@@ -287,9 +287,6 @@ public class JREUtils {
     public static native void setLdLibraryPath(String ldLibraryPath);
     // See the redirect hook on the JNI side
     public static native void setLibraryOverrides(String basePath, String overridelibs);
-    //public static native void initializeHooks();
-    // Obtain AWT screen pixels to render on Android SurfaceView
-    public static native boolean renderAWTScreenFrame(ByteBuffer tempBuffer);
     static {
         System.loadLibrary("pojavexec");
         System.loadLibrary("pojavexec_awt");
