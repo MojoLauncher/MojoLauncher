@@ -144,5 +144,6 @@
         <package android:name="git.artdeell.mojo"/>
         <package android:name="git.artdeell.mojo.debug"/>
         <package android:name="git.artdeell.mojo.pub"/>
+        <package android:name="git.mojo.natives"/>
     </queries>
 </manifest>

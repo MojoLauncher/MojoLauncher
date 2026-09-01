@@ -285,6 +285,8 @@ public class JREUtils {
     public static native int chdir(String path);
 
     public static native void setLdLibraryPath(String ldLibraryPath);
+    // See the redirect hook on the JNI side
+    public static native void setLibraryOverrides(String basePath, String overridelibs);
     static {
         System.loadLibrary("pojavexec");
         System.loadLibrary("pojavexec_awt");

@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "log.h"
 
@@ -113,4 +114,10 @@ JNIEnv* get_attached_env(JavaVM* jvm) {
         return NULL;
     }
     return jvm_env;
+}
+
+void save_jvm_string(JNIEnv* env, jstring src, char** dst) {
+    char* _src = (*env)->GetStringUTFChars(env, src, NULL);
+    *dst = strdup(_src);
+    (*env)->ReleaseStringUTFChars(env, src, _src);
 }
