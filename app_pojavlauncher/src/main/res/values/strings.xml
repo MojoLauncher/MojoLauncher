@@ -352,6 +352,7 @@
     <string name="modpack_install_modloader_download_failed">Failed to download the mod loader files</string>
     <string name="modpack_install_download_failed">Failed to download modpack files</string>
     <string name="modpack_install_instance_button">Create modpack instance</string>
+    <string name="modpack_install_toast_success">Modpack installation completed!</string>
 
     <string name="notif_error_occured">An error has occurred</string>
     <string name="notif_error_occured_desc">Click to see more details</string>

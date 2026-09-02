@@ -290,6 +290,7 @@
     <string name="modpack_install_modloader_download_failed">Не удалось загрузить файлы загрузчика модов</string>
     <string name="modpack_install_download_failed">Не удалось загрузить файлы сборки</string>
     <string name="modpack_install_instance_button">Установка со сборкой модов</string>
+    <string name="modpack_install_toast_success">Установка сборки модов завершена!</string>
     <string name="notif_error_occured">Возникла ошибка</string>
     <string name="notif_error_occured_desc">Нажмите для получения дополнительных сведений</string>
     <string name="fabric_dl_only_stable">Только стабильные версии</string>
