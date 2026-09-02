@@ -48,6 +48,7 @@ import androidx.fragment.app.FragmentManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import net.kdt.pojavlaunch.awt.AWTActivity;
 import net.kdt.pojavlaunch.game.GameActivity;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
@@ -795,7 +796,7 @@ public final class Tools {
      * from ACTION_OPEN_DOCUMENT
      */
     public static void launchModInstaller(Context context, @NonNull Uri uri){
-        Intent intent = new Intent(context, JavaGUILauncherActivity.class);
+        Intent intent = new Intent(context, AWTActivity.class);
         intent.putExtra("modUri", uri);
         context.startActivity(intent);
     }

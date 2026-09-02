@@ -254,6 +254,8 @@ public class GameRunner {
             String dirPath = versionSpecificNativesDir.getAbsolutePath();
             javaArgList.add("-Djava.library.path="+dirPath+":"+Tools.NATIVE_LIB_DIR);
             javaArgList.add("-Djna.boot.library.path="+dirPath);
+            // Sometimes, the game can extract natives itself onto this path
+            javaArgList.add("-Dorg.lwjgl.librarypath="+dirPath);
         }
 
         File lwjglExtractDir = new File(Tools.DIR_CACHE, "lwjgl_native/"+versionId);

@@ -1,5 +1,6 @@
 package net.kdt.pojavlaunch.prefs;
 
+import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_BUTTON_TRANSPARENCY;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_DISABLE_GESTURES;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_ENABLE_GYRO;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_GYRO_INVERT_X;
@@ -32,12 +33,13 @@ public abstract class QuickSettingSideDialog extends com.kdt.SideDialogView {
     private SharedPreferences.Editor mEditor;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch mGyroSwitch, mGyroXSwitch, mGyroYSwitch, mGestureSwitch;
-    private CustomSeekbar mGyroSensitivityBar, mMouseSpeedBar, mGestureDelayBar, mResolutionBar;
-    private TextView mGyroSensitivityText, mGyroSensitivityDisplayText, mMouseSpeedText, mGestureDelayText, mGestureDelayDisplayText, mResolutionText;
+    private CustomSeekbar mGyroSensitivityBar, mMouseSpeedBar, mGestureDelayBar, mResolutionBar, mTransparencyBar;
+    private TextView mGyroSensitivityText, mGyroSensitivityDisplayText, mMouseSpeedText, mGestureDelayText, mGestureDelayDisplayText, mResolutionText, mTransparencyText;
 
     private boolean mOriginalGyroEnabled, mOriginalGyroXEnabled, mOriginalGyroYEnabled, mOriginalGestureDisabled;
     private float mOriginalGyroSensitivity, mOriginalMouseSpeed, mOriginalResolution;
     private int mOriginalGestureDelay;
+    private short mOriginalTransparency;
 
     public QuickSettingSideDialog(Context context, ViewGroup parent) {
         super(context, parent, R.layout.dialog_quick_setting);
@@ -70,6 +72,7 @@ public abstract class QuickSettingSideDialog extends com.kdt.SideDialogView {
         mMouseSpeedBar = mDialogContent.findViewById(R.id.editMouseSpeed_seekbar);
         mGestureDelayBar = mDialogContent.findViewById(R.id.editGestureDelay_seekbar);
         mResolutionBar = mDialogContent.findViewById(R.id.editResolution_seekbar);
+        mTransparencyBar = mDialogContent.findViewById(R.id.buttonTransparency_seekBar);
 
         mGyroSensitivityText = mDialogContent.findViewById(R.id.editGyro_textView_percent);
         mGyroSensitivityDisplayText = mDialogContent.findViewById(R.id.editGyro_textView);
@@ -77,6 +80,7 @@ public abstract class QuickSettingSideDialog extends com.kdt.SideDialogView {
         mGestureDelayText = mDialogContent.findViewById(R.id.editGestureDelay_textView_percent);
         mGestureDelayDisplayText = mDialogContent.findViewById(R.id.editGestureDelay_textView);
         mResolutionText = mDialogContent.findViewById(R.id.editResolution_textView_percent);
+        mTransparencyText = mDialogContent.findViewById(R.id.buttonTransparency_textView_percent);
     }
 
     private void setupListeners() {
@@ -91,6 +95,7 @@ public abstract class QuickSettingSideDialog extends com.kdt.SideDialogView {
         mOriginalMouseSpeed = PREF_MOUSESPEED;
         mOriginalGestureDelay = PREF_LONGPRESS_TRIGGER;
         mOriginalResolution = PREF_SCALE_FACTOR;
+        mOriginalTransparency = PREF_BUTTON_TRANSPARENCY;
 
         mGyroSwitch.setChecked(mOriginalGyroEnabled);
         mGyroXSwitch.setChecked(mOriginalGyroXEnabled);
@@ -155,6 +160,15 @@ public abstract class QuickSettingSideDialog extends com.kdt.SideDialogView {
         mResolutionBar.setProgress((int) (mOriginalResolution * 100));
         setSeekTextPercent(mResolutionText, mResolutionBar.getProgress());
 
+        mTransparencyBar.setProgress(PREF_BUTTON_TRANSPARENCY);
+        setSeekTextPercent(mTransparencyText, mTransparencyBar.getProgress());
+        mTransparencyBar.setOnSeekBarChangeListener((SimpleSeekBarListener) (seekBar, progress, fromUser) -> {
+            PREF_BUTTON_TRANSPARENCY = (short) progress;
+            mEditor.putInt("buttonTransparency", progress);
+            setSeekTextPercent(mTransparencyText, progress);
+            onButtonTransparencyChanged();
+        });
+
 
         updateGyroVisibility(mOriginalGyroEnabled);
         updateGestureVisibility(mOriginalGestureDisabled);
@@ -207,6 +221,7 @@ public abstract class QuickSettingSideDialog extends com.kdt.SideDialogView {
         mMouseSpeedBar.setOnSeekBarChangeListener(null);
         mGestureDelayBar.setOnSeekBarChangeListener(null);
         mResolutionBar.setOnSeekBarChangeListener(null);
+        mTransparencyBar.setOnSeekBarChangeListener(null);
     }
 
     private void setupCancelButton() {
@@ -230,9 +245,11 @@ public abstract class QuickSettingSideDialog extends com.kdt.SideDialogView {
             PREF_MOUSESPEED = mOriginalMouseSpeed;
             PREF_LONGPRESS_TRIGGER = mOriginalGestureDelay;
             PREF_SCALE_FACTOR = mOriginalResolution;
+            PREF_BUTTON_TRANSPARENCY = mOriginalTransparency;
 
             onGyroStateChanged();
             onResolutionChanged();
+            onButtonTransparencyChanged();
         }
 
         disappear(true);
@@ -247,5 +264,10 @@ public abstract class QuickSettingSideDialog extends com.kdt.SideDialogView {
      * Use {@link LauncherPreferences#PREF_GYRO_INVERT_Y}
      */
     public abstract void onGyroStateChanged();
+
+    /**
+     * Called when the button transparency state is changed. Use {@link LauncherPreferences#PREF_BUTTON_TRANSPARENCY}
+     */
+    public abstract void onButtonTransparencyChanged();
 
 }

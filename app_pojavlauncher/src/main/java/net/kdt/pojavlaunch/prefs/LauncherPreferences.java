@@ -77,6 +77,7 @@ public class LauncherPreferences {
     public static boolean PREF_MIGRATION_NOTICE = true;
     public static boolean PREF_ALSOFT_FORCE_OPENSL = false;
     public static boolean PREF_SHOW_MEMORY_WARNING_DIALOG = true;
+    public static short PREF_BUTTON_TRANSPARENCY = 100;
 
     public static void loadPreferences(Context ctx) {
         //Required for CTRLDEF_FILE and MultiRT
@@ -125,6 +126,7 @@ public class LauncherPreferences {
         PREF_MIGRATION_NOTICE = DEFAULT_PREF.getBoolean("migrationNotice", true);
         PREF_ALSOFT_FORCE_OPENSL = DEFAULT_PREF.getBoolean("alsoftForceOpenSL", false);
         PREF_SHOW_MEMORY_WARNING_DIALOG = DEFAULT_PREF.getBoolean("showMemoryWarning", true);
+        PREF_BUTTON_TRANSPARENCY = (short) DEFAULT_PREF.getInt("buttonTransparency", 100);
 
         String argLwjglLibname = "-Dorg.lwjgl.opengl.libname=";
         for (String arg : JREUtils.parseJavaArguments(PREF_CUSTOM_JAVA_ARGS)) {
