@@ -90,6 +90,7 @@ public class ControlLayout extends FrameLayout {
 	}
 
 	public void loadLayout(CustomControls controlLayout) {
+		this.mButtonsOpacity = (float) LauncherPreferences.PREF_BUTTON_TRANSPARENCY / 100;
 		boolean sanitizedModified = false;
 		if(controlLayout != null) {
 			sanitizedModified = LayoutSanitizer.sanitizeLayout(controlLayout);
@@ -263,7 +264,6 @@ public class ControlLayout extends FrameLayout {
 		mControlVisible = isVisible;
 		for(ControlInterface button : getButtonChildren()){
             // Avoid going through the JNI each time.
-            // Avoid going through the JNI each time.
             button.setVisible(((button.getProperties().displayInGame && Platform.isGrabbing()) || (button.getProperties().displayInMenu && !Platform.isGrabbing())) && isVisible);
 		}
 	}
@@ -273,12 +273,7 @@ public class ControlLayout extends FrameLayout {
 			removeEditWindow();
 		}
 		mModifiable = isModifiable;
-		if(isModifiable){
-			// In edit mode, all controls have to be shown
-			for(ControlInterface button : getButtonChildren()){
-				button.setVisible(true);
-			}
-		}
+		updateButtonOpacity();
 	}
 
 	public boolean getModifiable(){
@@ -713,7 +708,9 @@ public class ControlLayout extends FrameLayout {
 	public void updateButtonOpacity() {
 		mButtonsOpacity = Math.clamp((float) LauncherPreferences.PREF_BUTTON_TRANSPARENCY / 100, 0, 1);
 		for(ControlInterface button : getButtonChildren()) {
-			button.getControlView().setAlpha(mButtonsOpacity * button.getProperties().opacity);
+			// In edit mode, all controls have to be shown
+			if(mModifiable) button.setVisible(true);
+			button.getControlView().setAlpha(mModifiable ? button.getProperties().opacity : mButtonsOpacity * button.getProperties().opacity);
 		}
 	}
 }
