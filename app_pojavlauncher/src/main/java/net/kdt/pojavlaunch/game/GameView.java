@@ -383,4 +383,7 @@ public class GameView extends FrameLayout implements PlatformGrabListener, Surfa
     public double getCursorRatioY() {
         return cursorRatioY;
     }
+    public SurfaceProvider getSurfaceProvider() {
+        return mSurfaceProvider;
+    }
 }

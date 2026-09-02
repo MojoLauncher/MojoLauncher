@@ -1,12 +1,11 @@
-package net.kdt.pojavlaunch;
+package net.kdt.pojavlaunch.awt;
 
 import android.annotation.SuppressLint;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +14,19 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.Keep;
 import androidx.appcompat.app.AlertDialog;
 
 import com.kdt.LoggerView;
 
-import net.kdt.pojavlaunch.customcontrols.keyboard.AwtCharSender;
+import net.kdt.pojavlaunch.BaseActivity;
+import net.kdt.pojavlaunch.CallbackBridge;
+import net.kdt.pojavlaunch.Logger;
+import net.kdt.pojavlaunch.PojavApplication;
+import net.kdt.pojavlaunch.SingleTapConfirm;
+import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.customcontrols.keyboard.TouchCharInput;
+import net.kdt.pojavlaunch.game.platform.Platform;
+import net.kdt.pojavlaunch.game.platform.backend.AWTBackend;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.Runtime;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
@@ -46,10 +51,9 @@ import java.util.zip.ZipEntry;
 
 import git.artdeell.mojo.R;
 
-public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouchListener {
+public class AWTActivity extends BaseActivity implements View.OnTouchListener {
 
-    private static volatile ClipboardManager CLIPBOARD;
-    private AWTCanvasView mTextureView;
+    private AWTView mTextureView;
     private LoggerView mLoggerView;
     private TouchCharInput mTouchCharInput;
 
@@ -59,7 +63,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
 
     private boolean mIsVirtualMouseEnabled;
     private boolean mIsTrusted;
-    
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +79,13 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
             Tools.showError(this, e, true);
         }
 
-        CLIPBOARD = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         mTouchCharInput = findViewById(R.id.awt_touch_char);
-        mTouchCharInput.setCharacterSender(new AwtCharSender());
+
+        CallbackBridge.windowWidth = AWTView.AWT_CANVAS_WIDTH;
+        CallbackBridge.windowHeight = AWTView.AWT_CANVAS_HEIGHT;
+
+        Platform.PLATFORM = new AWTBackend();
+        Platform.initializeMinimal(getApplicationContext());
 
         mTouchPad = findViewById(R.id.main_touchpad);
         mLoggerView = findViewById(R.id.launcherLoggerView);
@@ -119,7 +127,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
 
                 if (mGestureDetector.onTouchEvent(event)) {
                     sendScaledMousePosition(mouseX,mouseY);
-                    AWTInputBridge.sendMousePress(AWTInputEvent.BUTTON1_DOWN_MASK);
+                    CallbackBridge.performClick(MotionEvent.BUTTON_PRIMARY);
                 } else {
                     if (action == MotionEvent.ACTION_MOVE) { // 2
                         mouseX = Math.max(0, Math.min(v.getWidth(), mouseX + x - prevX));
@@ -140,7 +148,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
             float y = event.getY();
             if (mGestureDetector.onTouchEvent(event)) {
                 sendScaledMousePosition(x + mTextureView.getX(), y);
-                AWTInputBridge.sendMousePress(AWTInputEvent.BUTTON1_DOWN_MASK);
+                CallbackBridge.performClick(MotionEvent.BUTTON_PRIMARY);
                 return true;
             }
 
@@ -181,7 +189,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                Tools.dialogForceClose(JavaGUILauncherActivity.this);
+                Tools.dialogForceClose(AWTActivity.this);
             }
         });
     }
@@ -253,7 +261,6 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
             return;
         }
         Runtime selectedRuntime = selectRuntime(jarFileProperties.minJavaVersion);
-        if(selectedRuntime == null) return;
         launchJavaRuntime(selectedRuntime, javaArgs,  modFile, jarFileProperties.mainClass);
     }
 
@@ -300,25 +307,25 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         
         switch (v.getId()) {
             case R.id.installmod_mouse_pri:
-                AWTInputBridge.sendMousePress(AWTInputEvent.BUTTON1_DOWN_MASK, isDown);
+                Platform.PLATFORM.sendMouseEvent(MotionEvent.BUTTON_PRIMARY, isDown ? 1 : 0, CallbackBridge.getCurrentMods());
                 break;
                 
             case R.id.installmod_mouse_sec:
-                AWTInputBridge.sendMousePress(AWTInputEvent.BUTTON3_DOWN_MASK, isDown);
+                Platform.PLATFORM.sendMouseEvent(MotionEvent.BUTTON_SECONDARY, isDown ? 1 : 0, CallbackBridge.getCurrentMods());
                 break;
         }
         if(isDown) switch(v.getId()) {
             case R.id.installmod_window_moveup:
-                AWTInputBridge.nativeMoveWindow(0, -10);
+                AWTBridge.nativeMoveWindow(0, -10);
                 break;
             case R.id.installmod_window_movedown:
-                AWTInputBridge.nativeMoveWindow(0, 10);
+                AWTBridge.nativeMoveWindow(0, 10);
                 break;
             case R.id.installmod_window_moveleft:
-                AWTInputBridge.nativeMoveWindow(-10, 0);
+                AWTBridge.nativeMoveWindow(-10, 0);
                 break;
             case R.id.installmod_window_moveright:
-                AWTInputBridge.nativeMoveWindow(10, 0);
+                AWTBridge.nativeMoveWindow(10, 0);
                 break;
         }
         return true;
@@ -332,13 +339,12 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
     @SuppressWarnings("SuspiciousNameCombination")
     void sendScaledMousePosition(float x, float y){
         // Clamp positions to the borders of the usable view, then scale them
-        x = androidx.core.math.MathUtils.clamp(x, mTextureView.getX(), mTextureView.getX() + mTextureView.getWidth());
-        y = androidx.core.math.MathUtils.clamp(y, mTextureView.getY(), mTextureView.getY() + mTextureView.getHeight());
+        x = androidx.core.math.MathUtils.clamp(x, 0, mTextureView.getWidth());
+        y = androidx.core.math.MathUtils.clamp(y, 0, mTextureView.getHeight());
 
-        AWTInputBridge.sendMousePos(
-                (int) MathUtils.map(x, mTextureView.getX(), mTextureView.getX() + mTextureView.getWidth(), 0, AWTCanvasView.AWT_CANVAS_WIDTH),
-                (int) MathUtils.map(y, mTextureView.getY(), mTextureView.getY() + mTextureView.getHeight(), 0, AWTCanvasView.AWT_CANVAS_HEIGHT)
-                );
+        Platform.cursorX = (int) MathUtils.map(x, 0, mTextureView.getWidth(), 0, CallbackBridge.windowWidth);
+        Platform.cursorY = (int) MathUtils.map(y, 0, mTextureView.getHeight(), 0, CallbackBridge.windowHeight);
+        Platform.PLATFORM.sendMousePosition();
     }
 
     public void forceClose(View v) {
@@ -391,16 +397,21 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
     public void toggleKeyboard(View view) {
         mTouchCharInput.switchKeyboardState();
     }
+
     public void performCopy(View view) {
-        AWTInputBridge.sendKey(' ', AWTInputEvent.VK_CONTROL, 1);
-        AWTInputBridge.sendKey(' ', AWTInputEvent.VK_C);
-        AWTInputBridge.sendKey(' ', AWTInputEvent.VK_CONTROL, 0);
+        CallbackBridge.setModifiers(KeyEvent.KEYCODE_CTRL_LEFT, true);
+        Platform.PLATFORM.sendKeyEvent(KeyEvent.KEYCODE_CTRL_LEFT, 1, CallbackBridge.getCurrentMods());
+        CallbackBridge.sendKeyPress(KeyEvent.KEYCODE_C);
+        Platform.PLATFORM.sendKeyEvent(KeyEvent.KEYCODE_CTRL_LEFT, 0, CallbackBridge.getCurrentMods());
+        CallbackBridge.setModifiers(KeyEvent.KEYCODE_CTRL_LEFT, false);
     }
 
     public void performPaste(View view) {
-        AWTInputBridge.sendKey(' ', AWTInputEvent.VK_CONTROL, 1);
-        AWTInputBridge.sendKey(' ', AWTInputEvent.VK_V);
-        AWTInputBridge.sendKey(' ', AWTInputEvent.VK_CONTROL, 0);
+        CallbackBridge.setModifiers(KeyEvent.KEYCODE_CTRL_LEFT, true);
+        Platform.PLATFORM.sendKeyEvent(KeyEvent.KEYCODE_CTRL_LEFT, 1, CallbackBridge.getCurrentMods());
+        CallbackBridge.sendKeyPress(KeyEvent.KEYCODE_V);
+        Platform.PLATFORM.sendKeyEvent(KeyEvent.KEYCODE_CTRL_LEFT, 0, CallbackBridge.getCurrentMods());
+        CallbackBridge.setModifiers(KeyEvent.KEYCODE_CTRL_LEFT, false);
     }
 
     private static int getJavaVersion(JarFile jarFile, String mainClass) throws IOException{
@@ -423,40 +434,5 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
     public static int classVersionToJavaVersion(int majorVersion) {
         if(majorVersion < 46) return 2; // there isn't even an arm64 port of jre 1.1 (or anything before 1.8 in fact)
         return majorVersion - 44;
-    }
-
-
-    @Keep
-    public static void querySystemClipboard() {
-        Tools.runOnUiThread(()->{
-            ClipData clipData = CLIPBOARD.getPrimaryClip();
-            if(clipData == null) {
-                AWTInputBridge.nativeClipboardReceived(null, null);
-                return;
-            }
-            ClipData.Item firstClipItem = clipData.getItemAt(0);
-            //TODO: coerce to HTML if the clip item is styled
-            CharSequence clipItemText = firstClipItem.getText();
-            if(clipItemText == null) {
-                AWTInputBridge.nativeClipboardReceived(null, null);
-                return;
-            }
-            AWTInputBridge.nativeClipboardReceived(clipItemText.toString(), "plain");
-        });
-    }
-
-    @Keep
-    public static void putClipboardData(String data, String mimeType) {
-        Tools.runOnUiThread(()-> {
-            ClipData clipData = null;
-            switch(mimeType) {
-                case "text/plain":
-                    clipData = ClipData.newPlainText("AWT Paste", data);
-                    break;
-                case "text/html":
-                    clipData = ClipData.newHtmlText("AWT Paste", data, data);
-            }
-            if(clipData != null) CLIPBOARD.setPrimaryClip(clipData);
-        });
     }
 }
