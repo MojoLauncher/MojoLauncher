@@ -10,9 +10,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import net.kdt.pojavlaunch.AWTCanvasView;
 import net.kdt.pojavlaunch.Architecture;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.awt.AWTView;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.Runtime;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
@@ -31,7 +31,7 @@ public class JavaRunner {
     private static boolean getCacioJavaArgs(List<String> javaArgList, boolean isJava8) {
         // Caciocavallo config AWT-enabled version
         javaArgList.add("-Djava.awt.headless=false");
-        javaArgList.add("-Dcacio.managed.screensize=" + AWTCanvasView.AWT_CANVAS_WIDTH + "x" + AWTCanvasView.AWT_CANVAS_HEIGHT);
+        javaArgList.add("-Dcacio.managed.screensize=" + AWTView.AWT_CANVAS_WIDTH + "x" + AWTView.AWT_CANVAS_HEIGHT);
         javaArgList.add("-Dcacio.font.fontmanager=sun.awt.X11FontManager");
         javaArgList.add("-Dcacio.font.fontscaler=sun.font.FreetypeFontScaler");
         javaArgList.add("-Dswing.defaultlaf=javax.swing.plaf.metal.MetalLookAndFeel");
@@ -103,7 +103,8 @@ public class JavaRunner {
                 "-Djava.io.tmpdir=" + Tools.DIR_CACHE.getAbsolutePath(),
                 "-Djna.boot.library.path=" + NATIVE_LIB_DIR,
                 "-Duser.home=" + Tools.DIR_GAME_HOME,
-                "-Duser.language=" + System.getProperty("user.language"),
+                "-Duser.language=en",
+                "-Duser.country=US",
                 "-Dos.name=Linux",
                 "-Dos.version=Android-" + Build.VERSION.RELEASE,
                 "-Dpojav.path.minecraft=" + Tools.DIR_GAME_NEW,
@@ -112,6 +113,7 @@ public class JavaRunner {
 
                 "-Dorg.lwjgl.vulkan.libname=libvulkan.so",
                 "-Dorg.lwjgl.spvc.libname=spirv-cross-c-shared",
+                "-Dorg.lwjgl.sdl.libname=" + new File(NATIVE_LIB_DIR, "libSDL3.so").getAbsolutePath(),
                 "-Dorg.lwjgl.system.allocator=system",
                 //LWJGL 3 DEBUG FLAGS
                 //"-Dorg.lwjgl.util.Debug=true",
@@ -199,7 +201,6 @@ public class JavaRunner {
 
     private static void setImmutableEnvVars(File jreHome) {
         try {
-            Os.setenv("POJAV_NATIVEDIR", Tools.NATIVE_LIB_DIR, true);
             Os.setenv("JAVA_HOME", jreHome.getAbsolutePath(), true);
             Os.setenv("HOME", Tools.DIR_GAME_HOME, true);
             Os.setenv("TMPDIR", Tools.DIR_CACHE.getAbsolutePath(), true);

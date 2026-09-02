@@ -171,7 +171,7 @@ public class GLInfoUtils {
          * @return
          */
         public boolean isAdreno() {
-            return renderer.contains("Adreno") && vendor.equals("Qualcomm");
+            return renderer.contains("Adreno") && vendor.contains("Qualcomm");
         }
 
         /**
@@ -179,7 +179,7 @@ public class GLInfoUtils {
          * @return
          */
         public boolean isAdreno500Lower(){
-            return vendor.equals("Qualcomm") &&
+            return vendor.contains("Qualcomm") &&
                     (renderer.contains("Adreno (TM) 5") ||
                     renderer.contains("Adreno (TM) 4") ||
                     renderer.contains("Adreno (TM) 3") ||

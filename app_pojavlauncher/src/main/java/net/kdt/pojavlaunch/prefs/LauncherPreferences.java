@@ -77,7 +77,6 @@ public class LauncherPreferences {
     public static boolean PREF_MIGRATION_NOTICE = true;
     public static boolean PREF_ALSOFT_FORCE_OPENSL = false;
 
-
     public static void loadPreferences(Context ctx) {
         //Required for CTRLDEF_FILE and MultiRT
         Tools.initStorageConstants(ctx);

@@ -1,6 +1,7 @@
 package net.kdt.pojavlaunch.customcontrols.mouse;
 
 import android.os.Handler;
+import android.view.MotionEvent;
 
 import net.kdt.pojavlaunch.LwjglGlfwKeycode;
 
@@ -45,9 +46,8 @@ public class RightClickGesture extends DistanceGesture {
         mGestureEnabled = true;
         if(!mGestureValid || isSwitching) return;
         boolean fingerStill = travelBelowThreshold(LeftClickGesture.FINGER_STILL_THRESHOLD);
-        System.out.println("Right click: " + fingerStill);
         if(!fingerStill) return;
-        CallbackBridge.sendMouseButton(LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_RIGHT, true);
-        CallbackBridge.sendMouseButton(LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_RIGHT, false);
+        CallbackBridge.sendMouseButton(MotionEvent.BUTTON_SECONDARY, true);
+        CallbackBridge.sendMouseButton(MotionEvent.BUTTON_SECONDARY, false);
     }
 }
