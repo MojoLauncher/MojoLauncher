@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog.Builder;
 import androidx.appcompat.app.AppCompatActivity;
 
 import net.kdt.pojavlaunch.Architecture;
@@ -155,20 +156,26 @@ public class GameRunner {
 
         if(LauncherPreferences.PREF_RAM_ALLOCATION > freeDeviceMemory && (showAddressMemoryWarning || LauncherPreferences.PREF_SHOW_MEMORY_WARNING_DIALOG)) {
             int finalDeviceMemory = freeDeviceMemory;
-            LifecycleAwareAlertDialog.DialogCreator dialogCreator = (dialog, builder) ->
+            LifecycleAwareAlertDialog.DialogCreator dialogCreator = (dialog, builder) -> {
                 builder.setMessage(activity.getString(localeString, finalDeviceMemory, LauncherPreferences.PREF_RAM_ALLOCATION))
-                        .setPositiveButton(android.R.string.ok, (d, w)->{})
-                        .setNegativeButton(R.string.option_do_not_show_again, (d, w)->{
-                            LauncherPreferences.DEFAULT_PREF.edit().putBoolean("showMemoryWarning", false).apply();
-                            Toast.makeText(activity, R.string.notification_permission_toast, Toast.LENGTH_SHORT).show();
+                        .setPositiveButton(android.R.string.ok, (d, w) -> {
                         });
 
-            if(LifecycleAwareAlertDialog.haltOnDialog(activity.getLifecycle(), activity, dialogCreator)) {
-                return; // If the dialog's lifecycle has ended, return without
-                // actually launching the game, thus giving us the opportunity
-                // to start after the activity is shown again
+                if (!showAddressMemoryWarning) {
+                    builder.setNegativeButton(R.string.option_do_not_show_again, (d, w) -> {
+                        LauncherPreferences.DEFAULT_PREF.edit().putBoolean("showMemoryWarning", false).apply();
+                        Toast.makeText(activity, R.string.notification_permission_toast, Toast.LENGTH_SHORT).show();
+                    });
+                }
+            };
+
+
+                if (LifecycleAwareAlertDialog.haltOnDialog(activity.getLifecycle(), activity, dialogCreator)) {
+                    return; // If the dialog's lifecycle has ended, return without
+                    // actually launching the game, thus giving us the opportunity
+                    // to start after the activity is shown again
+                }
             }
-        }
         File gamedir = instance.getGameDirectory();
         JVersionList.Version versionInfo = Tools.getVersionInfo(versionId);
 
