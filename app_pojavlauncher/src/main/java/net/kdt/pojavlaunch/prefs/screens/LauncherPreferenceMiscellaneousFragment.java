@@ -97,11 +97,11 @@ public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceF
                 try {
                     FileUtils.deleteDirectory(new File(Tools.DIR_CACHE, "string_cache"));
                 } catch (IOException e) {
-                    Tools.runOnUiThread(() -> Toast.makeText(getContext(), R.string.preference_metadata_clear_fail, Toast.LENGTH_SHORT).show());
+                    Tools.showErrorRemote(getLauncherActivity(), R.string.preference_metadata_clear_fail, e);
                     return;
                 }
                 Tools.runOnUiThread(() -> {
-                    Toast.makeText(getContext(), R.string.preference_metadata_clear_complete, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getLauncherActivity(), R.string.preference_metadata_clear_complete, Toast.LENGTH_LONG).show();
                     updateVisibility();
                 });
             });
