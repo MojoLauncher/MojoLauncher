@@ -243,6 +243,8 @@ public class GameRunner {
             String dirPath = versionSpecificNativesDir.getAbsolutePath();
             javaArgList.add("-Djava.library.path="+dirPath+":"+Tools.NATIVE_LIB_DIR);
             javaArgList.add("-Djna.boot.library.path="+dirPath);
+            // Sometimes, the game can extract natives itself onto this path
+            javaArgList.add("-Dorg.lwjgl.librarypath="+dirPath);
         }
 
         File lwjglExtractDir = new File(Tools.DIR_CACHE, "lwjgl_native/"+versionId);
@@ -270,8 +272,6 @@ public class GameRunner {
         }
         javaArgList.add("-Dorg.lwjgl.opengl.libname=libGLMojo.so");
         javaArgList.add("-Dorg.lwjgl.freetype.libname="+ Tools.NATIVE_LIB_DIR+"/libfreetype.so");
-        // Sometimes, the game can extract natives themselves onto this path
-        javaArgList.add("-Dorg.lwjgl.librarypath=" + Tools.DIR_CACHE + "/natives/" + versionId);
 
         activity.runOnUiThread(() -> Toast.makeText(activity, activity.getString(R.string.autoram_info_msg,LauncherPreferences.PREF_RAM_ALLOCATION), Toast.LENGTH_SHORT).show());
 
