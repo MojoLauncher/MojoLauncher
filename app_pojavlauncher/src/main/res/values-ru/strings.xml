@@ -445,7 +445,7 @@
     <string name="loading_screen_booted">Запущено - используется %1$s!</string>
     <string name="loading_screen_warning">Если окно долго не появляется - возможно игра вылетела</string>
     <string name="preference_metadata_clear">Очистить кэш метаданных</string>
-    <string name="preference_metadata_clear_summary">Полностью удаляет кэш метаданных версий. Используйте, если лаунчер не видит новые версии игры</string>
+    <string name="preference_metadata_clear_summary">Полностью удаляет кэш метаданных строк. Используйте, если лаунчер не видит новые версии игры или загрузчиков модов</string>
     <string name="preference_metadata_clear_fail">Не удалось удалить файлы кэша</string>
     <string name="preference_metadata_clear_complete">Очистка завершена. Перезапустите лаунчер для применения изменений</string>
 </resources>

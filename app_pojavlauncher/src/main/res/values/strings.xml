@@ -509,7 +509,7 @@
     <string name="loading_screen_booted">Ready - running on %1$s!</string>
     <string name="loading_screen_warning">If you are stuck here, the game might have crashed</string>
     <string name="preference_metadata_clear">Clear metadata cache</string>
-    <string name="preference_metadata_clear_summary">Removes all version metadata cache and forces a rebuild. Use this if the launcher can\'t see new game versions</string>
+    <string name="preference_metadata_clear_summary">Removes all strings metadata cache and forces a rebuild. Use this if the launcher can\'t see new game or modloader versions</string>
     <string name="preference_metadata_clear_fail">Failed to remove cache files</string>
     <string name="preference_metadata_clear_complete">Completed. Restart the launcher to apply the changes</string>
 </resources>
