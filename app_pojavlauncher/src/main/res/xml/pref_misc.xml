@@ -54,6 +54,12 @@
             android:key="clearMetadataCache"
             android:title="@string/preference_metadata_clear"
             android:summary="@string/preference_metadata_clear_summary" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:icon="@drawable/ic_px_memory_warning"
+            android:key="showMemoryWarning"
+            android:title="@string/preference_show_memory_warning_title"
+            android:summary="@string/preference_show_memory_warning_summary"/>
 
     </PreferenceCategory>
 

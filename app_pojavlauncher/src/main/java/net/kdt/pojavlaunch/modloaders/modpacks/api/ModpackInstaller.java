@@ -1,12 +1,16 @@
 package net.kdt.pojavlaunch.modloaders.modpacks.api;
 
+import android.widget.Toast;
+
 import com.kdt.mcgui.ProgressLayout;
 
 import git.artdeell.mojo.R;
+
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.instances.InstanceInstaller;
 import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.instances.Instance;
+import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.modloaders.modpacks.imagecache.ModIconCache;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
 import net.kdt.pojavlaunch.progresskeeper.DownloaderProgressWrapper;
@@ -46,6 +50,7 @@ public class ModpackInstaller {
             if(modLoaderInfo.requiresGuiInstallation()) {
                 instance.installer.start();
             }
+            else ContextExecutor.executeActivity(activity -> Toast.makeText(activity, R.string.modpack_install_toast_success, Toast.LENGTH_SHORT).show());
         } catch (IOException e) {
             Instances.removeInstance(instance);
             throw e;
