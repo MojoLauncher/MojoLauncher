@@ -458,7 +458,7 @@
     <string name="newerdl_downloading_files_count">Downloading files… (%d/%d, %.2f MB/s)</string>
     <string name="newerdl_downloading_files_size">Downloading files… (%.2f/%.2f MB, %.2f MB/s)</string>
     <string name="preference_verify_game_files_title">Verify game files</string>
-    <string name="preference_verify_game_files_description">Verify downloaded game files against the checksum and size set in the metadata. Metadata JSON files are verified regardless of this setting.</string>
+    <string name="preference_verify_game_files_description">Verify downloaded game files against the checksum and size set in the metadata. Metadata JSON files are verified regardless of this setting. DISABLE IF YOU HAVE TO DIRECTLY MOD .jar FILE(such as apply mod on 1.5.2-)</string>
     <string name="preference_go_vroom_title">Fast game startup</string>
     <string name="preference_go_vroom_description">Don\'t verify file checksums upon sequential restarts. Makes the game start-up very fast.</string>
     <string name="vml_fail_load_runtime">Failed to load the Java virtual machine: %s</string>
