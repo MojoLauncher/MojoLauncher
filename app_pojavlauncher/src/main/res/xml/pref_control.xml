@@ -58,6 +58,16 @@
             app2:seekBarIncrement="@integer/button_scale_seekbar_increment"
             android:icon="@drawable/ic_px_control_size"
             />
+        <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
+            android:key="buttonTransparency"
+            android:title="@string/preference_button_transparency"
+            android:summary="@string/preference_button_transparency_summary"
+            app2:showSeekBarValue="true"
+            app2:selectable="false"
+            app2:min="0"
+            android:max="100"
+            app2:seekBarIncrement="@integer/button_scale_seekbar_increment"
+            />
         <SwitchPreference
             android:key="buttonAllCaps"
             android:defaultValue="true"

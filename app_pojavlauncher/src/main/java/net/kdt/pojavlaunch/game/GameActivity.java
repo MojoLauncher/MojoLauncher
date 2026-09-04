@@ -440,6 +440,11 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
                         mGyroControl.disable();
                     }
                 }
+
+                @Override
+                public void onButtonTransparencyChanged() {
+                    mControlLayout.updateButtonOpacity();
+                }
             };
         }
         mQuickSettingSideDialog.appear(true);

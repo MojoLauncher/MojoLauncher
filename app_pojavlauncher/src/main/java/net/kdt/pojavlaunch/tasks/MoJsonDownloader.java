@@ -388,6 +388,13 @@ public class MoJsonDownloader extends Downloader {
             if (mAllLibraries.containsKey(libraryTrimmedName)) {
                 mAllLibraries.remove(libraryTrimmedName);
             }
+
+            // If the lib list has both asm-all and normal asm, something is either terribly wrong
+            // or it's just babric. Let's hope for the latter
+            if(libraryTrimmedName.equals("org.ow2.asm:asm")){
+                mAllLibraries.remove("org.ow2.asm:asm-all");
+            }
+
             mAllLibraries.put(libraryTrimmedName, dependentLibrary);
         }
     }
