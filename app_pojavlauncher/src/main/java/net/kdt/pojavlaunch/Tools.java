@@ -53,6 +53,7 @@ import net.kdt.pojavlaunch.game.GameActivity;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutorTask;
+import net.kdt.pojavlaunch.utils.CPUInfoUtils;
 import net.kdt.pojavlaunch.utils.HashUtils;
 import net.kdt.pojavlaunch.utils.memory.MemoryHoleFinder;
 import net.kdt.pojavlaunch.utils.memory.SelfMapsParser;
@@ -567,6 +568,8 @@ public final class Tools {
         Logger.appendToLog("Info: RAM allocated: " + LauncherPreferences.PREF_RAM_ALLOCATION + " Mb");
         Logger.appendToLog("Info: Graphics device: "+info.vendor+ " "+info.renderer+" (OpenGL ES "+info.glesMajorVersion+")");
         Logger.appendToLog("Info: Selected renderer: " + renderer);
+
+        Logger.appendToLog("Info: CPU Vendor " + CPUInfoUtils.getRawVendor() + " CPU Model " + CPUInfoUtils.getRawName());
     }
 
     public static JVersionList.Version getVersionInfo(String versionName) {
