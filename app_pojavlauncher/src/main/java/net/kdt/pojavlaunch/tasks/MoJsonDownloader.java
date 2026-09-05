@@ -175,9 +175,9 @@ public class MoJsonDownloader extends Downloader {
                 scheduleAarDownload(Tools.MAVEN_CENTRAL, dependentLibrary);
             }
 
-            if(name.module.equals("asm") && name.provider.equals("org.ow2")) {
+            if(name.module.equals("asm") && name.provider.equals("org.ow2.asm")) {
                 // Refuse to process asm-all when modern, modularized asm is present
-                processedLibraries.add(new MavenName("org.ow2", "asm-all"));
+                processedLibraries.add(new MavenName("org.ow2.asm", "asm-all"));
             }
 
             if(dependentLibrary.downloads != null) processLibraryWithDownloads(dependentLibrary);
