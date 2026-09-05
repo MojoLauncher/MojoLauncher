@@ -1,31 +1,15 @@
-## 📜 License
+CRYONIXLAUNCHERV2 LICENSE
 
-CryonixLauncher V2 is based on and incorporates code from **PojavLauncher** and other open-source projects.
+Copyright (c) 2026 CryonixLauncherV2
 
-Unless otherwise stated, the applicable source code is distributed under the terms of the **GNU Lesser General Public License v3 (LGPLv3)**.
+Permission is granted to use, copy, modify, and distribute this software for personal and non-commercial purposes.
 
-A complete copy of the LGPLv3 license is included in this repository:
+You may modify the source code for your own use.
 
-```text
-LICENSE
-```
+You may not sell, redistribute, or publish modified or unmodified versions of CryonixLauncherV2 without explicit permission from the CryonixLauncherV2 developers.
 
-### Important
+You must keep all original copyright notices and credits when using or modifying the source code.
 
-CryonixLauncher V2 does **not** replace or remove the original copyright notices or licenses of the projects from which its code and components are derived.
+CryonixLauncherV2 is provided "AS IS", without warranty of any kind. The developers are not responsible for any damage, data loss, device issues, or other problems resulting from the use of this software.
 
-Third-party libraries, libraries, native components, and other dependencies may be distributed under their own licenses. Their respective copyright notices and license terms must be preserved.
-
-For details about third-party components and their licenses, see:
-
-```text
-THIRD_PARTY_NOTICES
-```
-
-### Original Project
-
-CryonixLauncher V2 is based on the open-source **PojavLauncher** project.
-
-All applicable upstream copyrights and license requirements remain in effect.
-
-If you redistribute a modified version of CryonixLauncher V2, make sure you comply with the LGPLv3 and the licenses of all included third-party components.
+By using, modifying, or distributing CryonixLauncherV2, you agree to the terms of this license.
