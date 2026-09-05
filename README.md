@@ -1,88 +1,346 @@
-<H1 align="center">MojoLauncher (a.k.a. MJLauncher)</H1>
+# ❄️ CryonixLauncher V2
 
-<a href="./README_RU.md">Readme на русском</a>
+<p align="center">
+  <img src="./app_pojavlauncher/src/main/assets/cryonixlauncher.png" width="150" height="150" alt="CryonixLauncher V2 Logo">
+</p>
 
-<img src="./app_pojavlauncher/src/main/assets/pojavlauncher.png" align="left" width="150" height="150" alt="MojoLauncher logo">
+<h1 align="center">CryonixLauncher V2</h1>
 
-[![Android CI](https://github.com/MojoLauncher/MojoLauncher/workflows/Android%20CI/badge.svg)](https://github.com/MojoLauncher/MojoLauncher/actions)
-[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/MojoLauncher/MojoLauncher)](https://github.com/MojoLauncher/MojoLauncher/actions)
-[![Discord](https://img.shields.io/discord/1365346109131722753.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/VHdwQFsaGX)
+<p align="center">
+  <strong>A powerful Minecraft: Java Edition launcher for Android.</strong>
+</p>
 
-* MojoLauncher is a launcher, based on [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher), that allows you to play Minecraft: Java Edition on your Android device!
+<p align="center">
+  Built on the foundation of PojavLauncher and redesigned for the CryonixLauncher V2 experience.
+</p>
 
-* It can run almost every version of Minecraft, allowing you to use .jar only installers to install modloaders such as [Forge](https://files.minecraftforge.net/) and [Fabric](http://fabricmc.net/) and mods like [OptiFine](https://optifine.net).
+<p align="center">
 
-## Navigation
-- [Introduction](#introduction)
-- [Getting MojoLauncher](#getting-mojolauncher)
-- [Building](#building) 
-- [Current roadmap](#current-roadmap) 
-- [License](#license) 
-- [Contributing](#contributing) 
-- [Credits & Third party components and their licenses](#credits--third-party-components-and-their-licenses-if-available)
+[![Android CI](https://img.shields.io/github/actions/workflow/status/YOUR_USERNAME/CryonixLauncherV2/android.yml?label=Android%20CI\&logo=android)](https://github.com/YOUR_USERNAME/CryonixLauncherV2/actions)
 
-## Introduction 
-* MojoLauncher is a Minecraft: Java Edition launcher for Android based on [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher)
-* This launcher can launch almost all available Minecraft versions ranging from rd-132211 to 26.x snapshots (including Combat Test versions). 
-* Modding via Forge and Fabric are also supported. 
+[![GitHub Release](https://img.shields.io/github/v/release/YOUR_USERNAME/CryonixLauncherV2?logo=github)](https://github.com/YOUR_USERNAME/CryonixLauncherV2/releases)
 
-## Getting MojoLauncher
+[![License](https://img.shields.io/badge/license-LGPLv3-blue.svg)](LICENSE)
 
-You can get MojoLauncher via four methods:
+</p>
 
-1. You can get the prebuilt app from the [releases section](http://github.com/mojolauncher/mojolauncher/releases).
+---
 
-2. You can get it from Google Play by clicking on this badge:
-[![Google Play](https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=git.artdeell.mjlaunch)
+## ✨ About CryonixLauncher V2
 
-3. You can get early builds from [Github Actions](http://github.com/mojolauncher/mojolauncher/actions).
+**CryonixLauncher V2** is a modern Minecraft: Java Edition launcher designed specifically for Android devices.
 
-4. You can [build](#building) from source.
-## Building   
-* Build the launcher (it will automatically download all required components)
+It is based on the open-source **PojavLauncher** project and aims to provide a cleaner interface, improved usability, powerful modding support, and a smooth Minecraft Java Edition experience on mobile devices.
+
+CryonixLauncher V2 supports a wide range of Minecraft versions and allows users to install and manage different mod loaders, mods, modpacks, Java runtimes, and game instances.
+
+### 🚀 Features
+
+* 🎮 Minecraft: Java Edition on Android
+* ❄️ Modern CryonixLauncher V2 interface
+* 📦 Instance-based game management
+* 🔧 Forge support
+* 🧵 Fabric support
+* ⚡ Performance-focused launcher
+* ☕ Multiple Java runtime support
+* 📁 `.jar` installer support
+* 📦 Modpack / `.mrpack` support
+* 🎨 Custom controls and UI
+* 🖥️ Custom rendering support
+* 🔐 Account authentication support
+* 🌐 Wide Minecraft version compatibility
+
+---
+
+# 📱 Minecraft Version Support
+
+CryonixLauncher V2 is designed to support a wide range of Minecraft Java Edition versions.
+
+Depending on the installed Java runtime, renderer, and device capabilities, users can run:
+
+* Classic Minecraft versions
+* Alpha versions
+* Beta versions
+* Release versions
+* Modern Minecraft versions
+* Snapshot versions
+* Combat Test versions
+
+> ⚠️ Performance and compatibility may vary depending on your Android device, GPU, renderer, Java version, and Minecraft configuration.
+
+---
+
+# 🧩 Modding Support
+
+CryonixLauncher V2 supports Minecraft modding through popular mod loaders.
+
+### Forge
+
+Run Forge-based Minecraft modpacks and mods directly from your Android device.
+
+### Fabric
+
+Fabric-based Minecraft versions and mods are also supported.
+
+### Mods
+
+CryonixLauncher V2 can work with common Minecraft mod formats such as:
+
+```text
+.jar
 ```
+
+You can install compatible mods into your Minecraft instance's `mods` directory.
+
+---
+
+# 📦 Modpack Support
+
+CryonixLauncher V2 is designed to make modpack installation easier.
+
+Supported formats may include:
+
+```text
+.mrpack
+.zip
+```
+
+Modpacks can be imported into a separate instance, keeping your installations organized.
+
+---
+
+# 🏗️ Building CryonixLauncher V2
+
+## Requirements
+
+Before building the launcher, make sure you have:
+
+* Android Studio
+* Android SDK
+* Git
+* JDK / Java runtime required by the project
+* A Windows, Linux, or macOS development environment
+
+## Build
+
+Clone the repository:
+
+```bash
+git clone https://github.com/YOUR_USERNAME/CryonixLauncherV2.git
+cd CryonixLauncherV2
+```
+
+Build the debug version:
+
+### Linux / macOS
+
+```bash
 ./gradlew :app_pojavlauncher:assembleDebug
 ```
-(Replace `./gradlew` with `.\gradlew.bat` if you are building on Windows).
 
-## Current roadmap
-- [x] Instance system in favor of profiles
-- [x] Out-of-the box 1.21.5 support
-- [x] mrpack/CurseForge zip import
-- [ ] LTW: resolve issues with Create
-- [ ] LTW: enable compute shader/image extensions
-- [ ] LTW: switch to a color-renderable format for framebuffers
-- [ ] Modpack/mod management tool
-- [ ] MMC-compatible instance import
-- [ ] Implement common native library standard
+### Windows
 
-## Known Issues
-- Some physical mice may have very slow mouse speed
-- On Holy GL4ES, large texture atlases may be distorted (resulting in stretched/blocky textures in modpacks)
-- Probably more, that's why we have a bug tracker ;) 
+```bat
+.\gradlew.bat :app_pojavlauncher:assembleDebug
+```
 
-## License
-- MojoLauncher is licensed under [GNU LGPLv3](https://github.com/MojoLauncher/MojoLauncher/blob/v3_openjdk/LICENSE).
+After a successful build, the generated APK can be found inside the project's build output directory.
 
-## Contributing
-Contributions are welcome! We welcome any type of contribution, not only code. For example, you can help the wiki shape up. You can help the [translation](https://crowdin.com/project/pojavlauncher) too!
+---
 
+# 🗺️ Roadmap
 
-Any code change to this repository should be submitted as a pull request. The description should explain what the code does and give steps to execute it.
+The CryonixLauncher V2 roadmap is focused on improving performance, stability, UI, and Minecraft compatibility.
 
-## Third party components, licenses and sources (when applicable)
-- [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher): [GNU LGPLv3 License](https://github.com/PojavLauncherTeam/PojavLauncher/blob/v3_openjdk/LICENSE)
-- [Boardwalk](https://github.com/zhuowei/Boardwalk) (JVM Launcher): Unknown License/[Apache License 2.0](https://github.com/zhuowei/Boardwalk/blob/master/LICENSE) or GNU GPLv2.
-- Android Support Libraries: [Apache License 2.0](https://android.googlesource.com/platform/prebuilts/maven_repo/android/+/master/NOTICE.txt).
-- [Holy GL4ES](https://github.com/artdeell/gl4es_extra_extra/): [MIT License](https://github.com/ptitSeb/gl4es/blob/master/LICENSE).<br>
-- [OpenJDK](https://github.com/PojavLauncherTeam/openjdk-multiarch-jdk8u): [GNU GPLv2 License](https://openjdk.java.net/legal/gplv2+ce.html).<br>
-- [GLFW](https://github.com/MojoLauncher/glfw): [zlib license](https://github.com/MojoLauncher/glfw/blob/glfw34/LICENSE.md)
-- [LWJGL2-GLFW](https://github.com/MojoLauncher/lwjgl2-glfw): 3-Clause BSD license
-- [LWJGL3](https://github.com/LWJGL/lwjgl3): [BSD-3 License](https://github.com/LWJGL/lwjgl3/blob/master/LICENSE.md).
-- [Mesa 3D Graphics Library](https://gitlab.freedesktop.org/mesa/mesa): [MIT License](https://docs.mesa3d.org/license.html).
-- [pro-grade](https://github.com/pro-grade/pro-grade) (Java sandboxing security manager): [Apache License 2.0](https://github.com/pro-grade/pro-grade/blob/master/LICENSE.txt).
-- [bhook](https://github.com/bytedance/bhook) (Used for exit code trapping): [MIT license](https://github.com/bytedance/bhook/blob/main/LICENSE).
-- [Authlib-Injector](https://github.com/yushijinhun/authlib-injector) (Used for authorisation via ely.by): [AGPL-3.0](https://github.com/yushijinhun/authlib-injector/blob/develop/LICENSE).
-- [alsoft](https://github.com/kcat/openal-soft/) (Audio output library): [GNU LIBRARY GENERAL PUBLIC LICENSE](https://github.com/kcat/openal-soft/blob/master/COPYING) and [modified PFFFT](https://github.com/kcat/openal-soft/blob/master/LICENSE-pffft).
-- [oboe](https://github.com/google/oboe): [Apache License 2.0](https://github.com/google/oboe/blob/main/LICENSE).
-- Thanks to [Mineskin](https://mineskin.eu/) for providing Minecraft avatars.
+* [x] CryonixLauncher V2 rebranding
+* [x] Modern launcher interface
+* [x] Instance system
+* [x] Minecraft version management
+* [x] Forge support
+* [x] Fabric support
+* [x] `.jar` installer support
+* [x] Modpack import
+* [ ] Advanced mod manager
+* [ ] Built-in resource-pack manager
+* [ ] Built-in shader manager
+* [ ] Improved instance management
+* [ ] Advanced Java runtime manager
+* [ ] Performance profiles
+* [ ] Better controller support
+* [ ] Improved renderer configuration
+* [ ] Custom CryonixLauncher theme system
+* [ ] More Minecraft version compatibility
+* [ ] Launcher optimization
+* [ ] Improved crash diagnostics
+
+---
+
+# ⚠️ Known Issues
+
+Some issues may occur depending on the Android device and configuration.
+
+Possible issues include:
+
+* Some physical mice may have incorrect or slow mouse movement.
+* Certain large texture atlases may appear distorted with some renderers.
+* Some mods may not work correctly on Android.
+* Performance can vary significantly between devices.
+* Certain Minecraft versions may require a specific Java runtime.
+* Some modpacks may require additional configuration.
+
+If you encounter a problem, please report it through the project's issue tracker.
+
+---
+
+# 🐛 Bug Reports
+
+Found a bug?
+
+Please create an issue and include as much information as possible.
+
+### Include:
+
+```text
+Device:
+Android Version:
+CryonixLauncher Version:
+Minecraft Version:
+Java Version:
+Renderer:
+Mod Loader:
+Modpack:
+Problem:
+Crash Log:
+```
+
+Providing logs and reproduction steps makes it much easier to fix problems.
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome!
+
+You can contribute to CryonixLauncher V2 by:
+
+* 💻 Submitting code
+* 🐛 Reporting bugs
+* 💡 Suggesting features
+* 🎨 Improving the UI
+* 🌐 Improving translations
+* 📚 Improving documentation
+* 🧪 Testing new builds
+
+For code changes, please submit a pull request with a clear description of what was changed and how the changes can be tested.
+
+---
+
+# 📜 License
+
+CryonixLauncher V2 is based on open-source projects and contains components distributed under their respective licenses.
+
+Unless otherwise specified, the launcher follows the licensing requirements of the original components used within the project.
+
+See:
+
+```text
+LICENSE
+```
+
+for the license applicable to this repository.
+
+---
+
+# 🧱 Third-Party Components
+
+CryonixLauncher V2 uses or is based on various open-source projects and libraries.
+
+### PojavLauncher
+
+Minecraft: Java Edition launcher foundation.
+
+License:
+
+```text
+GNU LGPLv3
+```
+
+### OpenJDK
+
+Java runtime used for running Minecraft Java Edition.
+
+License:
+
+```text
+GNU GPLv2 with Classpath Exception
+```
+
+### LWJGL
+
+Lightweight Java Game Library used by Minecraft and related components.
+
+License:
+
+```text
+BSD License
+```
+
+### GLFW
+
+Window and input management components.
+
+License:
+
+```text
+zlib License
+```
+
+### Mesa / OpenGL Components
+
+Graphics and rendering components used by supported rendering systems.
+
+License:
+
+```text
+MIT / respective upstream licenses
+```
+
+### Android Libraries
+
+AndroidX and other Android libraries used by the launcher.
+
+License:
+
+```text
+Apache License 2.0
+```
+
+> Each third-party component remains subject to its original license. Please refer to the corresponding upstream project for complete license information.
+
+---
+
+# ❤️ Credits
+
+CryonixLauncher V2 would not be possible without the work of the open-source community.
+
+Special thanks to:
+
+* **PojavLauncher contributors**
+* **OpenJDK contributors**
+* **LWJGL contributors**
+* **Mesa contributors**
+* **GLFW contributors**
+* **Android Open Source Project**
+* All developers, testers, translators, and Minecraft modding community members who contribute to the ecosystem.
+
+---
+
+# ❄️ CryonixLauncher V2
+
+<p align="center">
+  <strong>Play Minecraft: Java Edition. Anywhere.</strong>
+</p>
+
+<p align="center">
+  Made with ❄️ for the Minecraft Android community.
+</p>
