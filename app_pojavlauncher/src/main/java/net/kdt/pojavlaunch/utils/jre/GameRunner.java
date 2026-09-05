@@ -334,7 +334,7 @@ public class GameRunner {
     private static List<String> getMoJsonJvmArgs(String versionName) {
         JVersionList.Version versionInfo = Tools.getVersionInfo(versionName, true);
         // Parse Forge 1.17+ additional JVM Arguments
-        if (versionInfo.inheritsFrom == null || versionInfo.arguments == null || versionInfo.arguments.jvm == null) {
+        if (versionInfo.arguments == null || versionInfo.arguments.jvm == null) {
             return Collections.emptyList();
         }
 
