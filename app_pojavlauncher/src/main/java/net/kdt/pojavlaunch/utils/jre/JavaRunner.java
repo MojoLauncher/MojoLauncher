@@ -238,6 +238,12 @@ public class JavaRunner {
                 case "-XX:+UseLargePages":
                     iterator.remove();
                     break;
+                case "-cp":
+                    // remove classpath and the next argument (which is either garbage or pointless classpath definition)
+                    iterator.remove();
+                    iterator.next();
+                    iterator.remove();
+                    break;
                 default:
                     if(arg.startsWith("-Xms") || arg.startsWith("-Xmx") || arg.startsWith("-XX:ActiveProcessorCount")) iterator.remove();
                     if(!hasJavaAgent && arg.startsWith("-javaagent:")) hasJavaAgent = true;
