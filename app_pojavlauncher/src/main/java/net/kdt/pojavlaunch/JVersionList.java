@@ -27,6 +27,7 @@ public class JVersionList {
         public String inheritsFrom;
         public JavaVersionInfo javaVersion;
         public DependentLibrary[] libraries;
+        public String[] excludedLibraries;
         public LoggingConfig logging;
         public String mainClass;
         public String minecraftArguments;
