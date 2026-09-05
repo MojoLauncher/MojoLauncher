@@ -4,8 +4,9 @@ import android.content.Context;
 import android.view.Surface;
 import android.view.View;
 
-public interface SurfaceProvider<T extends View> {
-    T create(Context context, SurfaceCallback callback);
+public interface SurfaceProvider{
+    View create(Context context, SurfaceCallback callback);
+    void updateSize();
 
     interface SurfaceCallback {
         void onSurfaceAvailable(Surface surface);

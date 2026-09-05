@@ -8,7 +8,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.TextView;
 
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.R;
 
 import java.util.ArrayList;
 import java.util.List;

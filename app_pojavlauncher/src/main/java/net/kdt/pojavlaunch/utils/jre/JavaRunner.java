@@ -110,6 +110,8 @@ public class JavaRunner {
                 "-Duser.timezone=" + TimeZone.getDefault().getID(),
 
                 "-Dorg.lwjgl.vulkan.libname=libvulkan.so",
+                "-Dorg.lwjgl.spvc.libname=spirv-cross-c-shared",
+                "-Dorg.lwjgl.system.allocator=system",
                 //LWJGL 3 DEBUG FLAGS
                 //"-Dorg.lwjgl.util.Debug=true",
                 //"-Dorg.lwjgl.util.DebugFunctions=true",
@@ -277,7 +279,7 @@ public class JavaRunner {
         }
         runtimeArgs.add(classpathBuilder.toString());
 
-        JREUtils.initializeHooks();
+        //JREUtils.initializeHooks();
 
         setImmutableEnvVars(runtimeHomeDir);
         relocateLdLibPath(vmPath, null);

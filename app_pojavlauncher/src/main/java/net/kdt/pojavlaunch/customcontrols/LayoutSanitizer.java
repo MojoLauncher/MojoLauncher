@@ -6,31 +6,30 @@ import java.util.List;
 public class LayoutSanitizer {
 
     // Maybe add more conditions here later?
-    private static boolean isValidFormula(String formula) {
-        return !formula.contains("Infinity") && !formula.contains("NaN");
+    private static boolean isInvalidFormula(String formula) {
+        return formula.contains("Infinity");
     }
 
     private static boolean isSaneData(ControlData controlData) {
         if(controlData.getWidth() == 0 || controlData.getHeight() == 0) return false;
-        return isValidFormula(controlData.dynamicX) && isValidFormula(controlData.dynamicY);
+        if(isInvalidFormula(controlData.dynamicX) || isInvalidFormula(controlData.dynamicY)) return false;
+        return true;
     }
 
-    private static boolean checkEntry(Object entry) {
-        if(entry instanceof ControlData) {
-            return isSaneData((ControlData) entry);
-        }else if(entry instanceof ControlDrawerData) {
-            ControlDrawerData drawerData = (ControlDrawerData) entry;
-            if(!isSaneData(drawerData.properties)) return false;
-            sanitizeList(drawerData.buttonProperties);
-            return true;
-        }else throw new RuntimeException("Unknown data entry "+entry.getClass().getName());
+    private static ControlData getControlData(Object dataEntry) {
+        if(dataEntry instanceof ControlData) {
+            return (ControlData) dataEntry;
+        }else if(dataEntry instanceof ControlDrawerData) {
+            return ((ControlDrawerData) dataEntry).properties;
+        }else throw new RuntimeException("Encountered wrong type during ControlData sanitization");
     }
 
     private static boolean sanitizeList(List<?> controlDataList) {
         boolean madeChanges = false;
         Iterator<?> iterator = controlDataList.iterator();
         while(iterator.hasNext()) {
-            if(!checkEntry(iterator.next())) {
+            ControlData controlData = getControlData(iterator.next());
+            if(!isSaneData(controlData)) {
                 madeChanges = true;
                 iterator.remove();
             }

@@ -25,6 +25,7 @@ public class RightClickGesture extends ValidatorGesture {
     }
 
     public void setMotion(float deltaX, float deltaY) {
+        System.out.println("set motion called");
         mGestureEndX += deltaX;
         mGestureEndY += deltaY;
     }

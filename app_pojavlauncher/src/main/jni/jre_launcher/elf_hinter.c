@@ -4,6 +4,7 @@
 
 #include <dlfcn.h>
 #include <elf.h>
+#include <elf_defs.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -14,20 +15,6 @@
 
 #define TAG __FILE_NAME__
 #include <log.h>
-
-#if defined(__x86_64__) || defined(__aarch64__)
-#define ELF_EHDR Elf64_Ehdr
-#define ELF_SHDR Elf64_Shdr
-#define ELF_HALF Elf64_Half
-#define ELF_XWORD Elf64_Xword
-#define ELF_DYN Elf64_Dyn
-#elif defined(__arm__) || defined(__i386__)
-#define ELF_EHDR Elf32_Ehdr
-#define ELF_SHDR Elf32_Shdr
-#define ELF_HALF Elf32_Half
-#define ELF_XWORD Elf32_Xword
-#define ELF_DYN Elf32_Dyn
-#endif
 
 static bool inner_hinter_process(void** popstack, int* stack_top, const char* lib_name);
 

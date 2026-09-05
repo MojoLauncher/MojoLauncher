@@ -3,9 +3,10 @@ package net.kdt.pojavlaunch.customcontrols.handleview;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import static net.kdt.pojavlaunch.Tools.currentDisplayMetrics;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
@@ -20,19 +21,15 @@ import android.widget.TextView;
 
 import com.kdt.SideDialogView;
 
-import net.kdt.pojavlaunch.CustomControlsActivity;
 import net.kdt.pojavlaunch.EfficientAndroidLWJGLKeycode;
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.colorselector.ColorSelector;
 import net.kdt.pojavlaunch.customcontrols.ControlData;
 import net.kdt.pojavlaunch.customcontrols.ControlDrawerData;
 import net.kdt.pojavlaunch.customcontrols.ControlJoystickData;
-import net.kdt.pojavlaunch.customcontrols.ControlLayout;
-import net.kdt.pojavlaunch.customcontrols.LayoutBitmaps;
 import net.kdt.pojavlaunch.customcontrols.buttons.ControlDrawer;
 import net.kdt.pojavlaunch.customcontrols.buttons.ControlInterface;
-import net.kdt.pojavlaunch.utils.CropperUtils;
 import net.kdt.pojavlaunch.utils.interfaces.SimpleItemSelectedListener;
 import net.kdt.pojavlaunch.utils.interfaces.SimpleSeekBarListener;
 import net.kdt.pojavlaunch.utils.interfaces.SimpleTextWatcher;
@@ -69,15 +66,14 @@ public class EditControlSideDialog extends SideDialogView {
     private final TextView[] mKeycodeTextviews = new TextView[4];
     private SeekBar mStrokeWidthSeekbar, mCornerRadiusSeekbar, mAlphaSeekbar;
     private TextView mStrokePercentTextView, mCornerRadiusPercentTextView, mAlphaPercentTextView;
-    private TextView mSelectBackgroundBitmap, mSelectBackgroundColor, mSelectStrokeColor;
+    private TextView mSelectBackgroundColor, mSelectStrokeColor;
     private ArrayAdapter<String> mAdapter;
     private List<String> mSpecialArray;
     private CheckBox mDisplayInGameCheckbox, mDisplayInMenuCheckbox;
     private ControlInterface mCurrentlyEditedButton;
     // Decorative textviews
     private TextView mOrientationTextView, mMappingTextView, mNameTextView,
-            mCornerRadiusTextView, mVisibilityTextView, mSizeTextview,
-            mSizeXTextView, mStrokeWidthTextView, mColorSelectWarningTextView;
+            mCornerRadiusTextView, mVisibilityTextView, mSizeTextview, mSizeXTextView;
 
     // Color selector related stuff
     private ColorSelector mColorSelector;
@@ -138,15 +134,12 @@ public class EditControlSideDialog extends SideDialogView {
      * Switch the panels position if needed
      */
     public void adaptPanelPosition() {
-        if(!mDisplaying) return;
-        if(mCurrentlyEditedButton == null) return;
-        ControlLayout parent = mCurrentlyEditedButton.getControlLayoutParent();
-        if(parent == null) return;
-
-        boolean isAtRight = mCurrentlyEditedButton.getControlView().getX() + mCurrentlyEditedButton.getControlView().getWidth() / 2f < mCurrentlyEditedButton.getControlLayoutParent().getWidth() / 2f;
-        appear(isAtRight);
-        if (mColorSelector.isDisplaying()) {
-            Tools.runOnUiThread(() -> appearColor(isAtRight, mCurrentlyEditedButton.getProperties().bgColor));
+        if (mDisplaying) {
+            boolean isAtRight = mCurrentlyEditedButton.getControlView().getX() + mCurrentlyEditedButton.getControlView().getWidth() / 2f < currentDisplayMetrics.widthPixels / 2f;
+            appear(isAtRight);
+            if (mColorSelector.isDisplaying()) {
+                Tools.runOnUiThread(() -> appearColor(isAtRight, mCurrentlyEditedButton.getProperties().bgColor));
+            }
         }
     }
 
@@ -192,15 +185,6 @@ public class EditControlSideDialog extends SideDialogView {
                 mKeycodeSpinners[i].setSelection(EfficientAndroidLWJGLKeycode.getIndexByValue(data.keycodes[i]) + mSpecialArray.size());
             }
         }
-
-        setHasBitmap(Tools.isValidString(data.bitmapTag));
-
-        Context viewContext = mCurrentlyEditedButton.getControlView().getContext();
-
-        // Don't allow editing the bitmap in-game (i don't want to bother with implementing that,
-        // and it has potential to kill the game during icon selection)
-        if(!(viewContext instanceof CustomControlsActivity))
-            mSelectBackgroundBitmap.setVisibility(GONE);
     }
 
     /**
@@ -254,8 +238,6 @@ public class EditControlSideDialog extends SideDialogView {
 
         mAbsoluteTrackingSwitch.setVisibility(VISIBLE);
         mAbsoluteTrackingSwitch.setChecked(data.absolute);
-
-        mSelectBackgroundBitmap.setVisibility(GONE);
     }
 
     /**
@@ -306,24 +288,6 @@ public class EditControlSideDialog extends SideDialogView {
         for(Spinner s : mKeycodeSpinners) {
             s.setVisibility(View.INVISIBLE);
         }
-        mColorSelectWarningTextView.setVisibility(GONE);
-    }
-
-    private void setHasBitmap(boolean hasBitmap) {
-        int visibility = (!hasBitmap) ? VISIBLE : GONE;
-        int visibilityOpposite = hasBitmap ? VISIBLE : GONE;
-
-        // Disable all settings not available in bitmap background mode
-        mSelectStrokeColor.setVisibility(visibility);
-        mStrokePercentTextView.setVisibility(visibility);
-        mStrokeWidthSeekbar.setVisibility(visibility);
-        mCornerRadiusSeekbar.setVisibility(visibility);
-        mCornerRadiusPercentTextView.setVisibility(visibility);
-        mCornerRadiusTextView.setVisibility(visibility);
-        mStrokeWidthTextView.setVisibility(visibility);
-
-        // Show the warning that will notify the user that color selection will reset the bitmap
-        mColorSelectWarningTextView.setVisibility(visibilityOpposite);
     }
 
     private void bindLayout() {
@@ -347,7 +311,6 @@ public class EditControlSideDialog extends SideDialogView {
         mStrokeWidthSeekbar = mDialogContent.findViewById(R.id.editStrokeWidth_seekbar);
         mCornerRadiusSeekbar = mDialogContent.findViewById(R.id.editCornerRadius_seekbar);
         mAlphaSeekbar = mDialogContent.findViewById(R.id.editButtonOpacity_seekbar);
-        mSelectBackgroundBitmap = mDialogContent.findViewById(R.id.setBackgroundBitmap_textView);
         mSelectBackgroundColor = mDialogContent.findViewById(R.id.editBackgroundColor_textView);
         mSelectStrokeColor = mDialogContent.findViewById(R.id.editStrokeColor_textView);
         mStrokePercentTextView = mDialogContent.findViewById(R.id.editStrokeWidth_textView_percent);
@@ -364,16 +327,6 @@ public class EditControlSideDialog extends SideDialogView {
         mVisibilityTextView = mDialogContent.findViewById(R.id.visibility_textview);
         mSizeTextview = mDialogContent.findViewById(R.id.editSize_textView);
         mSizeXTextView = mDialogContent.findViewById(R.id.editSize_x_textView);
-        mStrokeWidthTextView = mDialogContent.findViewById(R.id.editStrokeWidth_textView);
-        mColorSelectWarningTextView = mDialogContent.findViewById(R.id.editBackgroundColorWarning_textView);
-    }
-
-    private void removeBitmap(ControlInterface button) {
-        LayoutBitmaps storage = button.getControlLayoutParent().getBitmaps();
-        ControlData properties = button.getProperties();
-        storage.putBitmap(null, properties.bitmapTag);
-        properties.bitmapTag = null;
-        setHasBitmap(false);
     }
 
     /**
@@ -394,7 +347,6 @@ public class EditControlSideDialog extends SideDialogView {
         mWidthEditText.addTextChangedListener((SimpleTextWatcher) s -> {
             if (internalChanges) return;
 
-            internalChanges = true;
             float width = safeParseFloat(s.toString());
             if (width >= 0) {
                 mCurrentlyEditedButton.getProperties().setWidth(width);
@@ -404,14 +356,11 @@ public class EditControlSideDialog extends SideDialogView {
                 }
                 mCurrentlyEditedButton.updateProperties();
             }
-            // Unset after the layout pass, to avoid resetting the text in the edittext
-            mCurrentlyEditedButton.getControlView().post(()->internalChanges = false);
         });
 
         mHeightEditText.addTextChangedListener((SimpleTextWatcher) s -> {
             if (internalChanges) return;
 
-            internalChanges = true;
             float height = safeParseFloat(s.toString());
             if (height >= 0) {
                 mCurrentlyEditedButton.getProperties().setHeight(height);
@@ -421,7 +370,6 @@ public class EditControlSideDialog extends SideDialogView {
                 }
                 mCurrentlyEditedButton.updateProperties();
             }
-            mCurrentlyEditedButton.getControlView().post(()->internalChanges = false);
         });
 
         mSwipeableSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -511,51 +459,15 @@ public class EditControlSideDialog extends SideDialogView {
         mSelectStrokeColor.setOnClickListener(v -> {
             mColorSelector.setAlphaEnabled(false);
             mColorSelector.setColorSelectionListener(color -> {
-                removeBitmap(mCurrentlyEditedButton);
                 mCurrentlyEditedButton.getProperties().strokeColor = color;
                 mCurrentlyEditedButton.setBackground();
             });
             appearColor(isAtRight(), mCurrentlyEditedButton.getProperties().strokeColor);
         });
 
-        mSelectBackgroundBitmap.setOnClickListener(v ->  {
-            final View mTargetView = mCurrentlyEditedButton.getControlView();
-            CropperUtils.CropperReceiver receiver = new CropperUtils.CropperReceiver() {
-                @Override
-                public float getAspectRatio() {
-                    return (float) mTargetView.getWidth() / mTargetView.getHeight();
-                }
-
-                @Override
-                public int getTargetMaxSide() {
-                    return Math.max(mTargetView.getWidth(), mTargetView.getHeight());
-                }
-
-                @Override
-                public void onCropped(Bitmap contentBitmap) {
-                    ControlData buttonProperties = mCurrentlyEditedButton.getProperties();
-                    LayoutBitmaps storage = mCurrentlyEditedButton.getControlLayoutParent().getBitmaps();
-                    String oldTag = buttonProperties.bitmapTag;
-                    buttonProperties.bitmapTag = storage.putBitmap(contentBitmap, oldTag);
-                    setHasBitmap(true);
-                    mCurrentlyEditedButton.setBackground();
-                }
-
-                @Override
-                public void onFailed(Exception exception) {
-                    Tools.showError(mTargetView.getContext(), exception);
-                }
-            };
-            Context context = mTargetView.getContext();
-            if(context instanceof CustomControlsActivity) {
-                ((CustomControlsActivity)context).startCropping(receiver);
-            }
-        });
-
         mSelectBackgroundColor.setOnClickListener(v -> {
             mColorSelector.setAlphaEnabled(true);
             mColorSelector.setColorSelectionListener(color -> {
-                removeBitmap(mCurrentlyEditedButton);
                 mCurrentlyEditedButton.getProperties().bgColor = color;
                 mCurrentlyEditedButton.setBackground();
             });

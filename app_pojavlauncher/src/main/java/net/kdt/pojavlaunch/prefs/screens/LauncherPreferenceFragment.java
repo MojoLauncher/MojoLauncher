@@ -12,7 +12,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import net.kdt.pojavlaunch.LauncherActivity;
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 /**
@@ -23,7 +23,7 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        view.setBackgroundColor(getResources().getColor(R.color.background_app));
+        net.kdt.pojavlaunch.theme.ThemeManager.applyToPrefView(view);
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -35,12 +35,18 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
 
     private void setupNotificationRequestPreference() {
         Preference mRequestNotificationPermissionPreference = requirePreference("notification_permission_request");
+        Preference mMicrophonePermissionPreference = requirePreference("microphone_permission_request");
         Activity activity = getActivity();
         if(activity instanceof LauncherActivity) {
             LauncherActivity launcherActivity = (LauncherActivity)activity;
             mRequestNotificationPermissionPreference.setVisible(!launcherActivity.checkForNotificationPermission());
             mRequestNotificationPermissionPreference.setOnPreferenceClickListener(preference -> {
                 launcherActivity.askForNotificationPermission(()->mRequestNotificationPermissionPreference.setVisible(false));
+                return true;
+            });
+            mMicrophonePermissionPreference.setVisible(!launcherActivity.checkForMicrophonePermission());
+            mMicrophonePermissionPreference.setOnPreferenceClickListener(preference -> {
+                launcherActivity.askForMicrophonePermission(()->mMicrophonePermissionPreference.setVisible(false));
                 return true;
             });
         }else{

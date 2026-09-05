@@ -14,8 +14,6 @@ import net.kdt.pojavlaunch.utils.NotificationUtils;
 
 import java.io.Serializable;
 
-import git.artdeell.mojo.R;
-
 public class ShowErrorActivity extends Activity {
 
     private static final String ERROR_ACTIVITY_REMOTE_TASK = "remoteTask";

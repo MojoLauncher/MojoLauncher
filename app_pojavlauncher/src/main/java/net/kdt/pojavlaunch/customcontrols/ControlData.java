@@ -13,6 +13,8 @@ import net.kdt.pojavlaunch.utils.JSONUtils;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import net.objecthunter.exp4j.function.Function;
 
+import org.lwjgl.glfw.CallbackBridge;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,7 +65,6 @@ public class ControlData {
     public boolean isSwipeable;
     public boolean displayInGame;
     public boolean displayInMenu;
-    public String bitmapTag;
     private float width;         //Dp instead of Px now
     private float height;        //Dp instead of Px now
 
@@ -76,7 +77,7 @@ public class ControlData {
     }
 
     public ControlData(String name, int[] keycodes) {
-        this(name, keycodes, 100, 100);
+        this(name, keycodes, Tools.currentDisplayMetrics.widthPixels / 2f, Tools.currentDisplayMetrics.heightPixels / 2f);
     }
 
     public ControlData(String name, int[] keycodes, float x, float y) {
@@ -108,10 +109,10 @@ public class ControlData {
     }
 
     public ControlData(String name, int[] keycodes, String dynamicX, String dynamicY, float width, float height, boolean isToggle) {
-        this(name, keycodes, dynamicX, dynamicY, width, height, isToggle, 1, 0x4D000000, 0xFFFFFFFF, 0, 0, true, true, false, false, null);
+        this(name, keycodes, dynamicX, dynamicY, width, height, isToggle, 1, 0x4D000000, 0xFFFFFFFF, 0, 0, true, true, false, false);
     }
 
-    public ControlData(String name, int[] keycodes, String dynamicX, String dynamicY, float width, float height, boolean isToggle, float opacity, int bgColor, int strokeColor, float strokeWidth, float cornerRadius, boolean displayInGame, boolean displayInMenu, boolean isSwipable, boolean mousePassthrough, String bitmapTag) {
+    public ControlData(String name, int[] keycodes, String dynamicX, String dynamicY, float width, float height, boolean isToggle, float opacity, int bgColor, int strokeColor, float strokeWidth, float cornerRadius, boolean displayInGame, boolean displayInMenu, boolean isSwipable, boolean mousePassthrough) {
         this.name = name;
         this.keycodes = inflateKeycodeArray(keycodes);
         this.dynamicX = dynamicX;
@@ -128,7 +129,6 @@ public class ControlData {
         this.displayInMenu = displayInMenu;
         this.isSwipeable = isSwipable;
         this.passThruEnabled = mousePassthrough;
-        this.bitmapTag = bitmapTag;
     }
 
     //Deep copy constructor
@@ -149,8 +149,7 @@ public class ControlData {
                 controlData.displayInGame,
                 controlData.displayInMenu,
                 controlData.isSwipeable,
-                controlData.passThruEnabled,
-                controlData.bitmapTag
+                controlData.passThruEnabled
         );
     }
 
@@ -248,9 +247,9 @@ public class ControlData {
         conversionMap = new WeakReference<>(keyValueMap);
     }
 
-    public float insertDynamicPos(String dynamicPos, int w, int h) {
+    public float insertDynamicPos(String dynamicPos) {
         // Insert value to ${variable}
-        String insertedPos = JSONUtils.insertSingleJSONValue(dynamicPos, fillConversionMap(w, h));
+        String insertedPos = JSONUtils.insertSingleJSONValue(dynamicPos, fillConversionMap());
 
         // Calculate, because the dynamic position contains some math equations
         return calculate(insertedPos);
@@ -288,19 +287,19 @@ public class ControlData {
      *
      * @return the valueMap to use.
      */
-    private Map<String, String> fillConversionMap(int w, int h) {
+    private Map<String, String> fillConversionMap() {
         ArrayMap<String, String> valueMap = conversionMap.get();
         if (valueMap == null) {
             buildConversionMap();
             valueMap = conversionMap.get();
         }
 
-        valueMap.put("right", Float.toString(w - getWidth()));
-        valueMap.put("bottom", Float.toString(h - getHeight()));
+        valueMap.put("right", Float.toString(CallbackBridge.physicalWidth - getWidth()));
+        valueMap.put("bottom", Float.toString(CallbackBridge.physicalHeight - getHeight()));
         valueMap.put("width", Float.toString(getWidth()));
         valueMap.put("height", Float.toString(getHeight()));
-        valueMap.put("screen_width", Integer.toString(w));
-        valueMap.put("screen_height", Integer.toString(h));
+        valueMap.put("screen_width", Integer.toString(CallbackBridge.physicalWidth));
+        valueMap.put("screen_height", Integer.toString(CallbackBridge.physicalHeight));
         valueMap.put("preferred_scale", Float.toString(LauncherPreferences.PREF_BUTTONSIZE));
 
         return valueMap;

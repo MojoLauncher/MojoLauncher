@@ -11,6 +11,7 @@
 #include "egl_loader.h"
 
 #define TAG __FILE_NAME__
+#include <unistd.h>
 #include <log.h>
 
 //
@@ -77,14 +78,14 @@ gl_render_window_t* gl_init_context(gl_render_window_t *share) {
 
     {
         EGLBoolean bindResult;
-        if (strncmp(getenv("MOJO_RENDERER"), "opengles3_desktopgl", 19) == 0) {
+        if (strncmp(getenv("AMETHYST_RENDERER"), "opengles3_desktopgl", 19) == 0) {
             printf("EGLBridge: Binding to desktop OpenGL\n");
             bindResult = eglBindAPI_p(EGL_OPENGL_API);
         } else {
             printf("EGLBridge: Binding to OpenGL ES\n");
             bindResult = eglBindAPI_p(EGL_OPENGL_ES_API);
         }
-        if (!bindResult) printf("EGLBridge: bind failed: %04x\n", eglGetError_p());
+        if (!bindResult) printf("EGLBridge: bind failed: %p\n", eglGetError_p());
     }
 
     int libgl_es = strtol(getenv("LIBGL_ES"), NULL, 0);
@@ -101,17 +102,39 @@ gl_render_window_t* gl_init_context(gl_render_window_t *share) {
 }
 
 void gl_swap_surface(gl_render_window_t* bundle) {
-    if(bundle->nativeSurface != NULL) {
-        ANativeWindow_release(bundle->nativeSurface);
+    /*
+     * In some cases (see MinecraftGLSurface.start(), android kills the surface automatically for
+     * us, if we try to release/destroy it, we SIGSEGV. Check if we are -19x-19 or some other
+     * invalid value and skip the release because Android decided to handle releasing it for us.
+     * This goes against every piece of documentation I have ever seen but who actually reads those?
+     *
+     * Some drivers take forever to properly destroy the surface, they do it part at a time or
+     * some other garbage while SIGSEGVing us if we try releasing while they're in the middle of
+     * turning the surface dead. This makes the width and height make it look valid when it actually
+     * isn't so we wait for them and hope there is no race condition of both us and Android trying
+     * to release the surface. This seems driver dependent as AVD and Waydroid do not need 0.75s
+     * to set the bloody height and width to their proper values. They just do it, instantly.
+     */
+    usleep(750000); // An overkill amount of time to wait for a surface to finish dying
+    int32_t nativeWindowWidth = ANativeWindow_getWidth(pojav_environ->pojavWindow);
+    int32_t nativeWindowHeight = ANativeWindow_getHeight(pojav_environ->pojavWindow);
+    if ((nativeWindowWidth > 0) || (nativeWindowHeight > 0)) {
+        LOGI("Native surface dimensions (%d x %d)\n",
+             nativeWindowWidth, nativeWindowHeight);
+        if (bundle->nativeSurface != NULL) {
+            ANativeWindow_release(bundle->nativeSurface);
+        }
+        if (bundle->surface != NULL) eglDestroySurface_p(g_EglDisplay, bundle->surface);
+    } else {
+        LOGW("Native surface dimensions (%d x %d) are invalid! Assuming given nativeSurface is bad.\n",
+             nativeWindowWidth, nativeWindowHeight);
     }
-    if(bundle->surface != NULL) eglDestroySurface_p(g_EglDisplay, bundle->surface);
     if(bundle->newNativeSurface != NULL) {
         LOGI("Switching to new native surface");
         bundle->nativeSurface = bundle->newNativeSurface;
         bundle->newNativeSurface = NULL;
-        int32_t w = pojav_environ->savedWidth;
-        int32_t h = pojav_environ->savedHeight;
-        ANativeWindow_setBuffersGeometry(bundle->nativeSurface, w, h, bundle->format);
+        ANativeWindow_acquire(bundle->nativeSurface);
+        ANativeWindow_setBuffersGeometry(bundle->nativeSurface, 0, 0, bundle->format);
         bundle->surface = eglCreateWindowSurface_p(g_EglDisplay, bundle->config, bundle->nativeSurface, NULL);
     }else{
         LOGI("No new native surface, switching to 1x1 pbuffer");
@@ -155,7 +178,6 @@ void gl_make_current(gl_render_window_t* bundle) {
 }
 
 void gl_swap_buffers() {
-    if(currentBundle == NULL) return;
     if(currentBundle->state == STATE_RENDERER_NEW_WINDOW) {
         eglMakeCurrent_p(g_EglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT); //detach everything to destroy the old EGLSurface
         gl_swap_surface(currentBundle);

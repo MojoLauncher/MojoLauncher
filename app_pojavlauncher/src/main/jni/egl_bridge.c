@@ -8,12 +8,15 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <pthread.h>
 
 #include <EGL/egl.h>
 #include <GL/osmesa.h>
 #include "ctxbridges/osmesa_loader.h"
 #include "driver_helper/nsbypass.h"
+
+#ifdef GLES_TEST
+#include <GLES2/gl2.h>
+#endif
 
 #include <android/native_window.h>
 #include <android/native_window_jni.h>
@@ -35,44 +38,59 @@
 // This means that you are forced to have this function/variable for ABI compatibility
 #define ABI_COMPAT __attribute__((unused))
 
+
+struct PotatoBridge {
+
+    /* EGLContext */ void* eglContext;
+    /* EGLDisplay */ void* eglDisplay;
+    /* EGLSurface */ void* eglSurface;
+/*
+    void* eglSurfaceRead;
+    void* eglSurfaceDraw;
+*/
+};
+EGLConfig config;
+struct PotatoBridge potatoBridge;
+
 #include "ctxbridges/egl_loader.h"
 #include "ctxbridges/osmesa_loader.h"
-#include "linkedlist.h"
 
 #define RENDERER_GL4ES 1
 #define RENDERER_VK_ZINK 2
 #define RENDERER_VULKAN 4
 
-extern void destroyAllCursors();
-
 EXTERNAL_API void pojavTerminate() {
     printf("EGLBridge: Terminating\n");
 
-    destroyAllCursors();
-}
+    switch (pojav_environ->config_renderer) {
+        case RENDERER_GL4ES: {
+            eglMakeCurrent_p(potatoBridge.eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+            eglDestroySurface_p(potatoBridge.eglDisplay, potatoBridge.eglSurface);
+            eglDestroyContext_p(potatoBridge.eglDisplay, potatoBridge.eglContext);
+            eglTerminate_p(potatoBridge.eglDisplay);
+            eglReleaseThread_p();
 
-JNIEXPORT void JNICALL
-Java_net_kdt_pojavlaunch_utils_JREUtils_applyWindowSize(ABI_COMPAT JNIEnv *env, ABI_COMPAT jclass clazz) {
-    if(pojav_environ->pojavWindow == NULL) return;
-    int32_t w = pojav_environ->savedWidth;
-    int32_t h = pojav_environ->savedHeight;
-    int32_t result = ANativeWindow_setBuffersGeometry(pojav_environ->pojavWindow, w, h, AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM);
-    if(result != 0) {
-        printf("Failed to set buffers geometry for the new window: %"PRIi32"\n", result);
+            potatoBridge.eglContext = EGL_NO_CONTEXT;
+            potatoBridge.eglDisplay = EGL_NO_DISPLAY;
+            potatoBridge.eglSurface = EGL_NO_SURFACE;
+        } break;
+
+            //case RENDERER_VIRGL:
+        case RENDERER_VK_ZINK: {
+            // Nothing to do here
+        } break;
     }
 }
 
 JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_setupBridgeWindow(JNIEnv* env, ABI_COMPAT jclass clazz, jobject surface) {
     pojav_environ->pojavWindow = ANativeWindow_fromSurface(env, surface);
-    ANativeWindow_acquire(pojav_environ->pojavWindow);
-    Java_net_kdt_pojavlaunch_utils_JREUtils_applyWindowSize(env, clazz);
     if(br_setup_window != NULL) br_setup_window();
 }
 
+
 JNIEXPORT void JNICALL
 Java_net_kdt_pojavlaunch_utils_JREUtils_releaseBridgeWindow(ABI_COMPAT JNIEnv *env, ABI_COMPAT jclass clazz) {
-    pojav_environ->pojavWindow = NULL;
-    if(br_setup_window != NULL) br_setup_window();
+    ANativeWindow_release(pojav_environ->pojavWindow);
 }
 
 EXTERNAL_API void* pojavGetCurrentContext() {
@@ -144,23 +162,28 @@ int pojavInitOpenGL() {
         pojav_environ->force_vsync = true;
 
     // NOTE: Override for now.
-    const char *renderer = getenv("MOJO_RENDERER");
+    const char *renderer = getenv("AMETHYST_RENDERER");
     if (strncmp("opengles", renderer, 8) == 0) {
         pojav_environ->config_renderer = RENDERER_GL4ES;
+        if (!strcmp(renderer, "opengles3_desktopgl_zink_kopper")) {
+            load_vulkan();
+            setenv("GALLIUM_DRIVER", "zink", 1);
+            setenv("MESA_ANDROID_NO_KMS_SWRAST", "1", 1);
+        }
         set_gl_bridge_tbl();
     } else if (strcmp(renderer, "vulkan_zink") == 0) {
         pojav_environ->config_renderer = RENDERER_VK_ZINK;
         load_vulkan();
         setenv("GALLIUM_DRIVER","zink",1);
         set_osm_bridge_tbl();
-    }
+    } else printf("EGLBridge: Renderer was not configured as a bridge. Consider adding \"opengles\" to the start of renderer name if it crashes");
     if(br_init()) {
         br_setup_window();
     }
     return 0;
 }
 
-extern void updateMonitorSize(JNIEnv *env, int width, int height);
+extern void updateMonitorSize(int width, int height);
 
 EXTERNAL_API int pojavInit() {
     pojav_environ->glfwThreadVmEnv = get_attached_env(pojav_environ->runtimeJavaVMPtr);
@@ -168,8 +191,11 @@ EXTERNAL_API int pojavInit() {
         printf("Failed to attach Java-side JNIEnv to GLFW thread\n");
         return 0;
     }
-    glfw_main_thread = true;
-    updateMonitorSize(pojav_environ->glfwThreadVmEnv, pojav_environ->savedWidth, pojav_environ->savedHeight);
+    ANativeWindow_acquire(pojav_environ->pojavWindow);
+    pojav_environ->savedWidth = ANativeWindow_getWidth(pojav_environ->pojavWindow);
+    pojav_environ->savedHeight = ANativeWindow_getHeight(pojav_environ->pojavWindow);
+    ANativeWindow_setBuffersGeometry(pojav_environ->pojavWindow,pojav_environ->savedWidth,pojav_environ->savedHeight,AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM);
+    updateMonitorSize(pojav_environ->savedWidth, pojav_environ->savedHeight);
     pojavInitOpenGL();
     return 1;
 }
@@ -183,6 +209,12 @@ EXTERNAL_API void pojavSetWindowHint(int hint, int value) {
             // pojavInitVulkan();
             break;
         case GLFW_OPENGL_API:
+            const char *renderer = getenv("AMETHYST_RENDERER");
+            if (strncmp("opengles", renderer, 8) == 0) {
+                pojav_environ->config_renderer = RENDERER_GL4ES;
+            } else if (strcmp(renderer, "vulkan_zink") == 0) {
+                pojav_environ->config_renderer = RENDERER_VK_ZINK;
+            }
             /* Nothing to do: initialization is called in pojavCreateContext */
             // pojavInitOpenGL();
             break;
@@ -196,10 +228,8 @@ EXTERNAL_API void pojavSwapBuffers() {
     br_swap_buffers();
 }
 
-extern void make_big_core_affine();
 
 EXTERNAL_API void pojavMakeCurrent(void* window) {
-    if(getenv("POJAV_BIG_CORE_AFFINITY") != NULL) make_big_core_affine();
     br_make_current((basic_render_window_t*)window);
 }
 
@@ -227,3 +257,4 @@ Java_org_lwjgl_vulkan_VK_getVulkanDriverHandle(ABI_COMPAT JNIEnv *env, ABI_COMPA
 EXTERNAL_API void pojavSwapInterval(int interval) {
     br_swap_interval(interval);
 }
+

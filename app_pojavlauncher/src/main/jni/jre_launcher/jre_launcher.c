@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <linux/futex.h>
+#include "../jvm_hooks/jvm_hooks.h"
 #include "utils.h"
 #include "load_stages.h"
 #include "elf_hinter.h"
@@ -205,6 +206,8 @@ Java_net_kdt_pojavlaunch_utils_jre_JavaRunner_nativeLoadJVM(JNIEnv *env, jclass 
     if(apiRequiresHints()) {
         if(!installClassLoaderHooks(env, vm_env)) return JNI_FALSE;
     }
+
+    hookExec(vm_env);
 
     jint numAppArgs = (*env)->GetArrayLength(env, appArgs);
     const char** appArgsChar = convert_to_char_array(env, appArgs);

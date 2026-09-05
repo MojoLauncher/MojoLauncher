@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition for Android) Translation By Justine Victorino or EnderProJustine</string>
-    <string name="app_short_name">MojoLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
-    <string name="login_online_username_hint">Username</string>
     <string name="login_online_login_label">Mag-login</string>
     <!-- Hint -->
     <!-- Warnings -->
@@ -14,9 +11,9 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Pumili ng mod installer</string>
     <!-- Error messages -->
-    <string name="error_fatal">Ang MojoLauncher ay hindi inaasahang nag-crash</string>
+    <string name="error_fatal">Ang Copper ay hindi inaasahang nag-crash</string>
     <string name="error_no_version">Walang bersyon!</string>
-    <string name="error_show_more">Magpakita ng higit pa</string>
+    <string name="error_show_more">Tignan ang error</string>
     <string name="error_show_less">Magpakita ng kaunti</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">Kinakailangan ang basahin / sumulat sa pahintulot sa pag-iimbak!</string>
@@ -25,7 +22,6 @@
     <string name="toast_3">Exit</string>
     -->
     <!-- MCLauncherActivity: Tabs -->
-    <string name="mcl_tab_wiki">Wiki</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
     <string name="mcl_launch_cleancache">Nililinis ang mga file ng cache</string>
@@ -37,21 +33,18 @@
     <string name="mcl_setting_title_use_surface_view">Gumamit ng alternatibong surface rendering</string>
     <string name="mcl_setting_subtitle_use_surface_view">Maaaring makatulong sa performance sa GPU bound scenario.</string>
     <string name="mcl_setting_title_ignore_notch">Huwag pansinin ang notch</string>
-    <string name="mcl_setting_title_resolution_scaler">Resolution Scaler</string>
+    <string name="mcl_setting_subtitle_ignore_notch">Tinatangal ang itim na linya sa ilalim ng kamera.\nMasmaganda ito tignan.</string>
+    <string name="mcl_setting_title_resolution_scaler">Pang-bago ng Resolusyon</string>
+    <string name="mcl_setting_subtitle_resolution_scaler">Ibahin ang iyon resolusyon, 100% ay kaparehas ng iyong screen.</string>
     <string name="mcl_setting_title_buttonscale">Pagkontrol sa pag-scale ng mga pindutan</string>
     <string name="mcl_setting_title_mousescale">Pag-scale ng mouse</string>
-    <string name="mcl_setting_title_javaargs">JVM Launch arguments</string>
     <string name="mcl_setting_subtitle_javaargs">Mag-ingat, maaari itong mag-crash ng laro kung babaguhin nang walang kaalaman.</string>
-    <string name="mcl_setting_category_renderer">Renderer</string>
-    <string name="mcl_setting_renderer_gles2_4">Holy Gl4ES - (lahat ng bersyon, mabilis)</string>
-    <string name="mcl_setting_veroption_release">Release</string>
     <string name="mcl_setting_veroption_snapshot">Snapshot</string>
     <string name="mcl_setting_veroption_oldalpha">Lumang-alpha</string>
     <string name="mcl_setting_veroption_oldbeta">Lumang-beta</string>
     <string name="mcl_version_clone">I-Clone</string>
     <!-- Global strings -->
     <string name="global_edit">I-Edit</string>
-    <string name="global_error">Error</string>
     <string name="global_load">Ikarga</string>
     <string name="global_name">Pangalan</string>
     <string name="global_remove">Tanggalin</string>
@@ -62,25 +55,17 @@
     <string name="global_error_field_empty">Hindi maaaring walang laman ang field na ito</string>
     <string name="global_waiting">Maghintay</string>
     <string name="global_select">Iselekta</string>
-    <string name="global_default">Default</string>
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Lumabas ang application/Laro na may code na %d, tingnan ang latestlog.txt para sa higit pang mga detalye.</string>
     <string name="mcn_exit_confirm">Sigurado ka bang gusto mong pilitin na isara?</string>
+    <string name="mcn_check_fail_vulkan_support">Hindi ipwepwedeng gamitin ang Zink (Vulkan) sa inyong kagamitan.</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">Mag-usap</string>
-    <string name="control_debug">Debug</string>
-    <string name="control_primary">Pri</string>
-    <string name="control_secondary">Sec</string>
-    <string name="control_inventory">Inv</string>
-    <string name="control_thirdperson">3rd</string>
-    <string name="control_listplayers">Tab</string>
-    <string name="control_mouse">Mouse</string>
     <string name="control_mouseoff">Mouse: naka-off</string>
     <string name="control_mouseon">Mouse: naka-on </string>
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">Piliting isara</string>
     <string name="control_viewout">Output ng log</string>
-    <string name="control_adebug">Input Debug</string>
     <string name="control_customkey">Magpadala ng pasadyang keycode</string>
     <!-- ImportControlActivity Strings -->
     <string name="import_control_label">Mag Import ng mga kontrol</string>
@@ -98,12 +83,12 @@
     <string name="customctrl_mapping">Pag mapa</string>
     <string name="customctrl_orientation">Oryentasyon</string>
     <string name="customctrl_background_color">Kulay ng likuran</string>
-    <string name="customctrl_corner_radius">Corner radius</string>
     <string name="customctrl_stroke_width">Lapad ng stroke</string>
     <string name="customctrl_stroke_color">Kulay ng stroke</string>
     <string name="customctrl_button_opacity">Opacity ng Pindutan</string>
     <string name="customctrl_addbutton">Magdagdag ng pindutan</string>
     <string name="customctrl_addbutton_drawer">Magdagdag ng button drawer</string>
+    <string name="customctrl_addbutton_joystick">Lumagay ng joystick</string>
     <string name="customctrl_addsubbutton">Lagyan ng sub-button</string>
     <string name="main_share_logs">I-pasa ang log file</string>
     <string name="main_play">Maglaro</string>
@@ -116,17 +101,15 @@
     <string name="mcl_disable_gestures_subtitle">Hindi pinagagana ang mga kilos, tulad ng pagpindot upang masira ang bloke, at i-tap upang maglagay ng isang bloke.</string>
     <string name="mcl_disable_swap_hand">Alisin ang pagdalawang pindot para palitan ang kamay</string>
     <string name="mcl_setting_title_mousespeed">Bilis ng Mouse</string>
-    <string name="customctrl_passthru">Mouse pass-thru</string>
     <string name="customctrl_swipeable">Pwede ma swipe</string>
+    <string name="customctrl_forward_lock">Pa-diretsong lock</string>
     <string name="memory_warning_msg">Ang kasalukuyang dami ng libreng RAM (%d) ay mas mababa kaysa sa inilalaan na RAM (%d), na maaaring humantong sa mga pag-crash. Baguhin ang paglalaan kung ang laro ay nag-crash.</string>
     <string name="mcl_memory_allocation">Paglalaan ng memorya</string>
     <string name="multirt_runtime_corrupt">Sirang Java Runtime</string>
     <string name="multirt_runtime_incompatiblearch">Hindi tugmang arkitektura: %s</string>
     <string name="multirt_config_add">Magdagdag ng bago</string>
-    <string name="multirt_title">Runtime Manager</string>
     <string name="multirt_progress_caching">Pag-cache...</string>
     <string name="multirt_config_setdefault">Itakda ang default</string>
-    <string name="multirt_config_setdefault_already">Default</string>
     <string name="multirt_nojava8rt">Hindi mahanap ang Java 8. Upang magamit ang opsyong ito, kailangan mong i-install ang Java 8.</string>
     <string name="pvc_gameDirectory">Direktoryo ng laro</string>
     <string name="pvc_jvmArgs">Argumento ng JVM</string>
@@ -135,10 +118,8 @@
     <string name="preference_control_title">Kontrolin ang customization</string>
     <string name="preference_java_title">Mga tweaks sa Java</string>
     <string name="preference_misc_title">Karagdagang setting</string>
-    <string name="preference_experimental_title">Pang-eksperimentong ng bagay</string>
     <string name="preference_sustained_performance_title">I-enable ang sustained performance mode</string>
     <string name="preference_edit_controls_title">Ibahin ang pasadyang mga kontrol</string>
-    <string name="preference_category_virtual_mouse">Virtual mouse</string>
     <string name="preference_gyro_invert_x_axis">Baliktarin ang X axis</string>
     <string name="preference_gyro_invert_y_axis">Baliktarin ang Y axis</string>
     <string name="preference_back_title">Bumalik sa huling screen</string>
@@ -146,16 +127,16 @@
     <string name="profiles_latest_snapshot">Pinakabagong snapshot</string>
     <string name="profiles_latest_release">Pinakabagong na nai-release</string>
     <string name="profiles_profile_name">Pangalan</string>
-    <string name="profiles_profile_version">Bersyon</string>
     <string name="global_delete">Burahin</string>
-    <string name="pedit_java_runtime">Java Runtime</string>
-    <string name="pedit_renderer">Renderer</string>
+    <string name="arc_capes_title">Capes galing sa Cosmetica</string>
+    <string name="arc_capes_desc">Pinapagana ang mga kapa mula sa Cosmetica (ang dating Arc). Para sa karagdagang impormasyon mangyaring bisitahin ang https://cosmetica.cc  Kinagangailangan ng OptiFine.</string>
     <string name="notif_channel_name">Pangkalahatan</string>
-    <string name="lazy_service_default_title">Serbisyong Harapan ng Mojo</string>
+    <string name="lazy_service_default_title">Serbisyong Harapan ng Copper</string>
     <string name="mcl_setting_veroption_installed">Naka-Install</string>
     <string name="of_dl_progress">Nagda-download %s</string>
-    <string name="generic_debug">Debug</string>
     <string name="preference_category_java_tweaks">Mga tweaks sa Java</string>
     <string name="preference_category_miscellaneous">Karagdagang setting</string>
     <string name="controller_button_select">Iselekta</string>
+    <string name="customctrl_visibility_title">Pagkakakita</string>
+    <string name="preference_experimental_title">Pang-eksperimentong ng bagay</string>
 </resources>

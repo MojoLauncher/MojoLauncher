@@ -17,7 +17,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
 import net.kdt.pojavlaunch.progresskeeper.TaskCountListener;
@@ -90,7 +90,7 @@ public class ProgressService extends Service implements TaskCountListener {
     }
 
     @Override
-    public boolean onUpdateTaskCount(int taskCount) {
+    public void onUpdateTaskCount(int taskCount) {
         Tools.MAIN_HANDLER.post(()->{
             if(taskCount > 0) {
                 mNotificationBuilder.setContentText(getString(R.string.progresslayout_tasks_in_progress, taskCount));
@@ -99,13 +99,5 @@ public class ProgressService extends Service implements TaskCountListener {
                 stopSelf();
             }
         });
-        return false;
-    }
-
-    @Override
-    public void onTimeout(int startId, int fgsType) {
-        super.onTimeout(startId, fgsType);
-        stopForeground(true);
-        stopSelf();
     }
 }

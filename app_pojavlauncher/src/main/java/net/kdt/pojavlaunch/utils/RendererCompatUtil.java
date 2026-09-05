@@ -34,17 +34,19 @@ public class RendererCompatUtil {
         String[] defaultRenderers = resources.getStringArray(R.array.renderer_values);
         String[] defaultRendererNames = resources.getStringArray(R.array.renderer);
         boolean deviceHasVulkan = checkVulkanSupport(context.getPackageManager());
-        // Currently, only 32-bit x86 does not have the Zink binary
-        boolean deviceHasZinkBinary = !(Architecture.is32BitsDevice() && Architecture.isx86Device());
+        // Current Mesa requires API29+
+        boolean deviceCompatibleMesa = SDK_INT >= 29;
         boolean deviceHasOpenGLES3 = JREUtils.getDetectedVersion() >= 3;
-        // LTW is an optional proprietary dependency
+        // LTW is an optional dependency
         boolean appHasLtw = new File(Tools.NATIVE_LIB_DIR, "libltw.so").exists();
         List<String> rendererIds = new ArrayList<>(defaultRenderers.length);
         List<String> rendererNames = new ArrayList<>(defaultRendererNames.length);
         for(int i = 0; i < defaultRenderers.length; i++) {
             String rendererId = defaultRenderers[i];
             if(rendererId.contains("vulkan") && !deviceHasVulkan) continue;
-            if(rendererId.contains("zink") && !deviceHasZinkBinary) continue;
+            if(rendererId.contains("zink") && !deviceCompatibleMesa) continue;
+            // freedreno is available only on Adreno GPUs
+            if(rendererId.contains("freedreno") && (!(GLInfoUtils.getGlInfo().isAdreno()) || !deviceCompatibleMesa)) continue;
             if(rendererId.contains("ltw") && (!deviceHasOpenGLES3 || !appHasLtw)) continue;
             rendererIds.add(rendererId);
             rendererNames.add(defaultRendererNames[i]);

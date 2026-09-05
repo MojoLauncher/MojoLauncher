@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition pentru Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -13,7 +11,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Selectează un instalator de mod</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher s-a oprit neașteptat</string>
+    <string name="error_fatal">Copper s-a oprit neașteptat</string>
     <string name="error_no_version">Fără versiune!</string>
     <string name="error_show_more">Arată mai mult</string>
     <string name="error_show_less">Arată mai puțin</string>
@@ -24,7 +22,6 @@
     <string name="toast_3">Exit</string>
     -->
     <!-- MCLauncherActivity: Tabs -->
-    <string name="mcl_tab_wiki">Wiki</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
     <string name="mcl_launch_cleancache">Se șterg fișierele cache</string>
@@ -41,7 +38,6 @@
     <string name="mcl_setting_title_javaargs">Argumente de lansare JVM</string>
     <string name="mcl_setting_subtitle_javaargs">Ai grijă, acest lucru poate face ca jocul să se oprească dacă este modificat fără cunoștințe.</string>
     <string name="mcl_setting_category_renderer">Randator</string>
-    <string name="mcl_setting_renderer_gles2_4">Sfântul GL4ES - (toate versiunile, rapid)</string>
     <string name="mcl_setting_veroption_release">Lansat oficial</string>
     <string name="mcl_setting_veroption_snapshot">Lansat pentru testare</string>
     <string name="mcl_setting_veroption_oldalpha">Alpha-vechi</string>
@@ -67,18 +63,6 @@
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">Mesaje</string>
     <string name="control_debug">Depanare</string>
-    <string name="control_primary">Pri</string>
-    <string name="control_secondary">Sec</string>
-    <string name="control_shift">◇</string>
-    <string name="control_inventory">Inv</string>
-    <string name="control_up">▲</string>
-    <string name="control_left">◀</string>
-    <string name="control_right">▶</string>
-    <string name="control_down">▼</string>
-    <string name="control_jump">⬛</string>
-    <string name="control_thirdperson">3rd</string>
-    <string name="control_listplayers">Tab</string>
-    <string name="control_mouse">Mouse</string>
     <string name="control_mouseoff">Mouse: oprit</string>
     <string name="control_mouseon">Mouse: pornit </string>
     <!-- MainActivity: Menu advanced controls -->
@@ -120,7 +104,6 @@
     <string name="mcl_disable_gestures_subtitle">Dezactivează gesturile, cum ar fi tine apasat pentru a sparge blocul, și apasă pentru a pune un bloc.</string>
     <string name="mcl_disable_swap_hand">Dezactivați apăsarea dublă pentru a schimba mâinile</string>
     <string name="mcl_setting_title_mousespeed">Viteza mouse-ului</string>
-    <string name="customctrl_passthru">Mouse pass-thru</string>
     <string name="customctrl_swipeable">Glisabil</string>
     <string name="memory_warning_msg">Cantitatea curentă de RAM liber (%d) este mai mică decât cantitatea alocată de RAM (%d), care ar putea duce la oprire. Schimbă cantitatea alocată dacă jocul se oprește.</string>
     <string name="mcl_memory_allocation">Memorie alocată</string>
@@ -128,7 +111,6 @@
     <string name="multirt_runtime_incompatiblearch">Arhitectură incompatibilă: %s</string>
     <string name="multirt_config_add">Adăugare nouă</string>
     <string name="multirt_title">Manager Runtime</string>
-    <string name="multirt_progress_caching">Caching...</string>
     <string name="multirt_config_setdefault">Setaţi ca prestabilit</string>
     <string name="multirt_config_setdefault_already">Prestabilit</string>
     <string name="multirt_nojava8rt">Nu s-a putut găsi Java 8. Pentru a folosi această opțiune, trebuie să instalezi Java 8.</string>
@@ -139,7 +121,6 @@
     <string name="preference_control_title">Personalizarea controalelor</string>
     <string name="preference_java_title">Ajustări Java</string>
     <string name="preference_misc_title">Setări diverse</string>
-    <string name="preference_experimental_title">Lucruri experimentale</string>
     <string name="preference_sustained_performance_title">Activează modul de performanță susținută</string>
     <string name="preference_edit_controls_title">Editare controale personalizate</string>
     <string name="preference_gyro_invert_x_axis">Inversează axa X</string>
@@ -149,12 +130,11 @@
     <string name="profiles_latest_snapshot">Ultimul snapshot</string>
     <string name="profiles_latest_release">Ultima versiune stabilă</string>
     <string name="profiles_profile_name">Nume</string>
-    <string name="profiles_profile_version">Versiunea</string>
     <string name="global_delete">Șterge</string>
-    <string name="pedit_java_runtime">Java Runtime</string>
     <string name="pedit_renderer">Randator</string>
-    <string name="notif_channel_name">General</string>
-    <string name="lazy_service_default_title">Serviciu Mojo prim-plan</string>
+    <string name="arc_capes_title">Pelerine Cosmetica</string>
+    <string name="arc_capes_desc">Activează pelerinele de la Cosmetica (anterior Arc). Pentru mai multe informații, vizitează https://cosmetica.cc. Necesită OptiFine.</string>
+    <string name="lazy_service_default_title">Serviciu Copper prim-plan</string>
     <string name="mcl_setting_veroption_installed">Instalat</string>
     <string name="use_global_default">(Utilizare implicită globală)</string>
     <string name="progresslayout_tasks_in_progress">%d sarcini în curs</string>
@@ -178,7 +158,6 @@
     <string name="preference_gyro_sample_rate_title">Rata de eşantionare giroscopică</string>
     <string name="microsoft_login_retry_later">Prea multe solicitări, vă rugăm să încercaţi din nou mai târziu.</string>
     <string name="preference_shader_dump_title">Activează dumping pentru shader</string>
-    <string name="percent_format">%d%%</string>
     <string name="customctrl_editor_exit_title">Părăsiți?</string>
     <string name="customctrl_editor_exit_msg">Sunteți sigur că doriți să ieșiți?</string>
     <string name="customctrl_editor_exit">Părăsește editorul</string>
@@ -190,4 +169,5 @@
     <string name="preference_category_java_tweaks">Ajustări Java</string>
     <string name="preference_category_miscellaneous">Setări diverse</string>
     <string name="controller_button_select">Selectați</string>
+    <string name="preference_experimental_title">Lucruri experimentale</string>
 </resources>

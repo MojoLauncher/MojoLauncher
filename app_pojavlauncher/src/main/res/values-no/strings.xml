@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition for Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -13,7 +11,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Velg en mod installasjonprogram</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher har uventet krasjet</string>
+    <string name="error_fatal">Copper har uventet krasjet</string>
     <string name="error_no_version">Ingen versjon!</string>
     <string name="error_show_more">Vis mer</string>
     <string name="error_show_less">Vis mindre</string>
@@ -39,10 +37,6 @@
     <string name="mcl_setting_title_javaargs">JVM Launch Arguments</string>
     <string name="mcl_setting_subtitle_javaargs">Vær forsiktig, dette kan gjøre spillet krasj dersom det endres uten kunnskap.</string>
     <string name="mcl_setting_category_renderer">Gjengir</string>
-    <string name="mcl_setting_veroption_release">Release</string>
-    <string name="mcl_setting_veroption_snapshot">Snapshot</string>
-    <string name="mcl_setting_veroption_oldalpha">Old-alpha</string>
-    <string name="mcl_setting_veroption_oldbeta">Old-beta</string>
     <string name="mcl_version_clone">Klone</string>
     <!-- Global strings -->
     <string name="global_edit">Rediger</string>
@@ -60,7 +54,6 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_confirm">Er du sikker på at du vil tvinge avslutte?</string>
     <!-- MainActivity: Control buttons -->
-    <string name="control_chat">Chat</string>
     <string name="control_debug">Avlusing</string>
     <string name="control_primary">LMB</string>
     <string name="control_secondary">RMB</string>
@@ -73,7 +66,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">Tving avslutt</string>
     <string name="control_viewout">Logg utdata</string>
-    <string name="control_adebug">Input Debug</string>
     <string name="control_customkey">Send tilpasset kode</string>
     <!-- ImportControlActivity Strings -->
     <!--
@@ -97,7 +89,6 @@
     <string name="mcl_memory_allocation">Minne tildeling</string>
     <string name="multirt_runtime_corrupt">Korrupt Java Runtime</string>
     <string name="multirt_config_add">Legg til ny</string>
-    <string name="multirt_title">Runtime Manager</string>
     <string name="multirt_progress_caching">Bufrer...</string>
     <string name="multirt_config_setdefault">Sett som standard</string>
     <string name="multirt_config_setdefault_already">Standard</string>

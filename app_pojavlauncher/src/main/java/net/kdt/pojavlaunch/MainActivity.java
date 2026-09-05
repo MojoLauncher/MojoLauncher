@@ -1,12 +1,16 @@
 package net.kdt.pojavlaunch;
 
-
+import static net.kdt.pojavlaunch.Tools.currentDisplayMetrics;
 import static net.kdt.pojavlaunch.Tools.dialogForceClose;
+import static net.kdt.pojavlaunch.Tools.hasMods;
+import static net.kdt.pojavlaunch.Tools.runMethodbyReflection;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_ENABLE_GYRO;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_SUSTAINED_PERFORMANCE;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_USE_ALTERNATE_SURFACE;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_VIRTUAL_MOUSE_START;
 import static org.lwjgl.glfw.CallbackBridge.sendKeyPress;
+import static org.lwjgl.glfw.CallbackBridge.windowHeight;
+import static org.lwjgl.glfw.CallbackBridge.windowWidth;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -41,7 +45,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.kdt.LoggerView;
 
-import net.kdt.pojavlaunch.authenticator.accounts.Accounts;
 import net.kdt.pojavlaunch.customcontrols.ControlButtonMenuListener;
 import net.kdt.pojavlaunch.customcontrols.ControlData;
 import net.kdt.pojavlaunch.customcontrols.ControlDrawerData;
@@ -54,29 +57,32 @@ import net.kdt.pojavlaunch.customcontrols.keyboard.TouchCharInput;
 import net.kdt.pojavlaunch.customcontrols.mouse.GyroControl;
 import net.kdt.pojavlaunch.customcontrols.mouse.HotbarView;
 import net.kdt.pojavlaunch.customcontrols.mouse.Touchpad;
-import net.kdt.pojavlaunch.instances.Instance;
-import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.prefs.QuickSettingSideDialog;
 import net.kdt.pojavlaunch.services.GameService;
-import net.kdt.pojavlaunch.tasks.AsyncAssetManager;
 import net.kdt.pojavlaunch.utils.JREUtils;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
-import net.kdt.pojavlaunch.authenticator.accounts.MinecraftAccount;
-import net.kdt.pojavlaunch.utils.RendererCompatUtil;
-import net.kdt.pojavlaunch.utils.jre.GameRunner;
+import net.kdt.pojavlaunch.utils.TouchControllerUtils;
+import net.kdt.pojavlaunch.value.MinecraftAccount;
+import net.kdt.pojavlaunch.value.launcherprofiles.LauncherProfiles;
+import net.kdt.pojavlaunch.value.launcherprofiles.MinecraftProfile;
 
+import org.libsdl.app.SDL;
+import org.libsdl.app.SDLSurface;
 import org.lwjgl.glfw.CallbackBridge;
 
 import java.io.File;
 import java.io.IOException;
-
-import git.artdeell.mojo.R;
+import java.util.Objects;
 
 public class MainActivity extends BaseActivity implements ControlButtonMenuListener, EditorExitable, ServiceConnection {
     public static volatile ClipboardManager GLOBAL_CLIPBOARD;
+    public static final String TAG = "MainActivity";
     public static final String INTENT_MINECRAFT_VERSION = "intent_version";
+
+    volatile public static boolean isInputStackCall;
+    protected static View.OnGenericMotionListener motionListener = (v, event) -> false;
 
     public static TouchCharInput touchCharInput;
     private MinecraftGLSurface minecraftGLView;
@@ -89,8 +95,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     private ControlLayout mControlLayout;
     private HotbarView mHotbarView;
 
-    Instance instance;
-    MinecraftAccount minecraftAccount;
+    MinecraftProfile minecraftProfile;
 
     private ArrayAdapter<String> gameActionArrayAdapter;
     private AdapterView.OnItemClickListener gameActionClickListener;
@@ -103,15 +108,43 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        instance = Instances.loadSelectedInstance();
-        minecraftAccount = Accounts.getCurrent();
-        if(instance == null) {
-            Toast.makeText(this, R.string.instance_dir_missing, Toast.LENGTH_LONG).show();
-            finish();
-            return;
+        if (LauncherPreferences.PREF_GAMEPAD_SDL_PASSTHRU) {
+            // TODO: Use lower level HID capture that needs a dialogue box from the user for the
+            // app to fully take focus of the input devices. Might cause issues with older android
+            // versions so we don't use that right now. Needs testing.
+            // Currently tried but only identification works OOTB, inputs aren't being sent.
+
+            // TODO: Use a hook to load SDL logic depending on whether libSDL3.so is loaded.
+            try {
+                // Note: This doesn't dlopen it for the mod, they still have to do it themselves
+                // Why? https://github.com/android/ndk/issues/201#issuecomment-248060092
+                // Just in case that gets deleted off the internet:
+                // "On Android only the main executable and LD_PRELOADs are considered to be
+                // RTLD_GLOBAL, all the dependencies of the main executable remain RTLD_LOCAL." - dimitry
+                SDL.loadLibrary("SDL3", this);
+                SDL.loadLibrary("SDL2", this);
+                SDL.initialize();
+                SDL.setupJNI();
+                SDL.setContext(this);
+                new SDLSurface(this);
+                motionListener = (View.OnGenericMotionListener)
+                        runMethodbyReflection("org.libsdl.app.SDLActivity",
+                                "getMotionListener");
+                if (LauncherPreferences.PREF_GAMEPAD_FORCEDSDL_PASSTHRU) Tools.SDL.initializeControllerSubsystems();
+            } catch (UnsatisfiedLinkError ignored) {
+                // Ignore because if SDL.setupJNI(); fails, SDL wasn't loaded.
+            } catch (ReflectiveOperationException e) {
+                Tools.showErrorRemote("SDL did not load properly.", e);
+            }
         }
-        AsyncAssetManager.extractDefaultSettings(this, instance.getGameDirectory());
-        MCOptionUtils.load(instance.getGameDirectory().getAbsolutePath());
+
+        minecraftProfile = LauncherProfiles.getCurrentProfile();
+
+        String gameDirPath = Tools.getGameDirPath(minecraftProfile).getAbsolutePath();
+        MCOptionUtils.load(gameDirPath);
+        if (Tools.hasTouchController(new File(gameDirPath)) || LauncherPreferences.PREF_FORCE_ENABLE_TOUCHCONTROLLER) {
+            TouchControllerUtils.initialize(this);
+        }
 
         Intent gameServiceIntent = new Intent(this, GameService.class);
         // Start the service a bit early
@@ -173,21 +206,40 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             GLOBAL_CLIPBOARD = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             touchCharInput.setCharacterSender(new LwjglCharSender());
 
-            String version = getIntent().getStringExtra(INTENT_MINECRAFT_VERSION);
-            version = version == null ? instance.versionId : version;
+            if(minecraftProfile.pojavRendererName != null) {
+                Log.i("RdrDebug","__P_renderer="+minecraftProfile.pojavRendererName);
+                Tools.LOCAL_RENDERER = minecraftProfile.pojavRendererName;
+                // TODO: Remove this jank when it's not relevant anymore
+                // Shitty hack to make OSMZink smoothly transition into kopper
+                if (minecraftProfile.pojavRendererName.equals("vulkan_zink")) Tools.LOCAL_RENDERER = "opengles3_desktopgl_zink_kopper";
+            }
 
-            setTitle("Minecraft " + version);
+            setTitle("Minecraft " + minecraftProfile.lastVersionId);
+
+            // Minecraft 1.13+
+
+            String version = getIntent().getStringExtra(INTENT_MINECRAFT_VERSION);
+            version = version == null ? minecraftProfile.lastVersionId : version;
+
+            JMinecraftVersionList.Version mVersionInfo = Tools.getVersionInfo(version);
+            isInputStackCall = mVersionInfo.arguments != null;
+            CallbackBridge.nativeSetUseInputStackQueue(isInputStackCall);
+
+            Tools.getDisplayMetrics(this);
+            windowWidth = Tools.getDisplayFriendlyRes(currentDisplayMetrics.widthPixels, 1f);
+            windowHeight = Tools.getDisplayFriendlyRes(currentDisplayMetrics.heightPixels, 1f);
+
 
             // Menu
             gameActionArrayAdapter = new ArrayAdapter<>(this,
                     android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu_ingame));
             gameActionClickListener = (parent, view, position, id) -> {
                 switch(position) {
-                     case 0: dialogForceClose(MainActivity.this); break;
-                     case 1: openLogOutput(); break;
-                     case 2: dialogSendCustomKey(); break;
-                     case 3: openQuickSettings(); break;
-                     case 4: openCustomControls(); break;
+                    case 0: dialogForceClose(MainActivity.this); break;
+                    case 1: openLogOutput(); break;
+                    case 2: dialogSendCustomKey(); break;
+                    case 3: openQuickSettings(); break;
+                    case 4: openCustomControls(); break;
                 }
                 drawerLayout.closeDrawers();
             };
@@ -203,7 +255,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
                         touchpad.post(() -> touchpad.switchState());
                     }
 
-                    runCraft(finalVersion);
+                    runCraft(finalVersion, mVersionInfo);
                 }catch (Throwable e){
                     Tools.showErrorRemote(e);
                 }
@@ -216,7 +268,10 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     private void loadControls() {
         try {
             // Load keys
-            mControlLayout.loadLayout(instance.getLaunchControls());
+            mControlLayout.loadLayout(
+                    minecraftProfile.controlFile == null
+                            ? LauncherPreferences.PREF_DEFAULTCTRL_PATH
+                            : Tools.CTRLMAP_PATH + "/" + minecraftProfile.controlFile);
         } catch(IOException e) {
             try {
                 Log.w("MainActivity", "Unable to load the control file, loading the default now", e);
@@ -234,6 +289,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     @Override
     public void onAttachedToWindow() {
         // Post to get the correct display dimensions after layout.
+        LauncherPreferences.computeNotchSize(this);
         mControlLayout.post(()->{
             Tools.getDisplayMetrics(this);
             loadControls();
@@ -248,6 +304,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         drawerLayout = findViewById(R.id.main_drawer_options);
         navDrawer = findViewById(R.id.main_navigation_view);
         loggerView = findViewById(R.id.mainLoggerView);
+        mControlLayout = findViewById(R.id.main_control_layout);
         touchCharInput = findViewById(R.id.mainTouchCharInput);
         mDrawerPullButton = findViewById(R.id.drawer_button);
         mHotbarView = findViewById(R.id.hotbar_view);
@@ -257,6 +314,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     public void onResume() {
         super.onResume();
         if(PREF_ENABLE_GYRO) mGyroControl.enable();
+        CallbackBridge.nativeSetWindowAttrib(LwjglGlfwKeycode.GLFW_FOCUSED, 1);
         CallbackBridge.nativeSetWindowAttrib(LwjglGlfwKeycode.GLFW_HOVERED, 1);
     }
 
@@ -269,7 +327,9 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         if(mQuickSettingSideDialog != null) {
             mQuickSettingSideDialog.cancel();
         }
+        CallbackBridge.nativeSetWindowAttrib(LwjglGlfwKeycode.GLFW_FOCUSED, 0);
         CallbackBridge.nativeSetWindowAttrib(LwjglGlfwKeycode.GLFW_HOVERED, 0);
+
         super.onPause();
     }
 
@@ -296,16 +356,16 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-
         if(mGyroControl != null) mGyroControl.updateOrientation();
         // Layout resize is practically guaranteed on a configuration change, and `onConfigurationChanged`
         // does not implicitly start a layout. So, request a layout and expect the screen dimensions to be valid after the]
         // post.
-        if(mControlLayout == null) return;
         mControlLayout.requestLayout();
         mControlLayout.post(()->{
             // Child of mControlLayout, so refreshing size here is correct
+            Tools.setFullscreen(this, setFullscreen());
             minecraftGLView.refreshSize();
+            Tools.updateWindowSize(this);
             mControlLayout.refreshControlButtonPositions();
         });
     }
@@ -335,18 +395,71 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         }
     }
 
-    private void runCraft(String versionId) throws Throwable {
-        String renderer = instance.getLaunchRenderer();
-        if(!RendererCompatUtil.checkRendererCompatible(this, renderer)) {
-            RendererCompatUtil.RenderersList renderersList = RendererCompatUtil.getCompatibleRenderers(this);
-            String firstCompatibleRenderer = renderersList.rendererIds.get(0);
-            Log.w("runCraft","Incompatible renderer "+renderer+ " will be replaced with "+firstCompatibleRenderer);
-            renderer = firstCompatibleRenderer;
+    private void runCraft(String versionId, JMinecraftVersionList.Version version) throws Throwable {
+        String assetVersion;
+        try {
+            if (version.inheritsFrom != null) { // We are almost definitely modded if this runs
+                File vanillaJsonFile = new File(Tools.DIR_HOME_VERSION + "/" + version.inheritsFrom + "/" + version.inheritsFrom + ".json");
+                JMinecraftVersionList.Version vanillaJson;
+                try { // Get the vanilla json from modded instance
+                    vanillaJson = Tools.GLOBAL_GSON.fromJson(Tools.read(vanillaJsonFile.getAbsolutePath()), JMinecraftVersionList.Version.class);
+                } catch (IOException ignored) { // Should never happen, we check for this in MinecraftDownloader().start()
+                    throw new RuntimeException(getString(R.string.error_vanilla_json_corrupt));
+                }
+                // Something went wrong if this is somehow not the case anymore
+                if (!Objects.equals(vanillaJson.assets, vanillaJson.assetIndex.id))
+                    Tools.showErrorRemote(new RuntimeException(getString(R.string.error_vanilla_json_corrupt)));
+                assetVersion = vanillaJson.assets;
+            } else {
+                // Else assume we are vanilla
+                if (!Objects.equals(version.assets, version.assetIndex.id))
+                    Tools.showErrorRemote(new RuntimeException(getString(R.string.error_vanilla_json_corrupt)));
+                assetVersion = version.assets;
+            }
+       } catch (RuntimeException ignored){
+            assetVersion = "legacy";
+       } // If this fails.. oh well.
+
+        // FIXME: Automatic detection should be based on provided hint GLFW_CONTEXT_VERSION_MAJOR and GLFW_CONTEXT_VERSION_MINOR
+        // Autoselect renderer
+        if (Tools.LOCAL_RENDERER == null) {
+            // Preferably we could detect when it is modded and swap to zink however that would also
+            // cover optifine and vanilla+ configurations which are relatively common, degrading their
+            // experience for no reason. We will compromise with just having users do it themselves.
+            Tools.LOCAL_RENDERER = "opengles2";
+            // MobileGlues becomes available post 1.17. It has superior compatibility with mods
+            // while having fairly similar performance compared to GL4ES-based forks.
+            if(assetVersion.matches("\\d+") || // Should match all digits, which is the modern assetVersioning
+               "1.17".equals(assetVersion) ||
+               "1.18".equals(assetVersion) ||
+               "1.19".equals(assetVersion) ||
+                // Angelica gives us GL3.3core on 1.7.10, it's a unique case.
+                hasMods("angelica")) Tools.LOCAL_RENDERER = "opengles_mobileglues";
         }
-        Logger.appendToLog("--------- Starting game with Launcher Debug!");
-        Tools.printLauncherInfo(versionId, instance.getLaunchArgs());
+        if(!Tools.checkRendererCompatible(this, Tools.LOCAL_RENDERER)) {
+            Tools.RenderersList renderersList = Tools.getCompatibleRenderers(this);
+            String firstCompatibleRenderer = renderersList.rendererIds.get(0);
+            Log.w("runCraft","Incompatible renderer "+Tools.LOCAL_RENDERER+ " will be replaced with "+firstCompatibleRenderer);
+            Tools.LOCAL_RENDERER = firstCompatibleRenderer;
+            runOnUiThread(() -> Toast.makeText(this, R.string.autorendererselectfailed, Toast.LENGTH_LONG).show());
+            Tools.releaseRenderersCache();
+        }
+
+        // MCL-3732 Mitigation
+        // I don't trust the bug tracker. 'server-resource-pack" was removed in 1.20.3-pre3
+        // so we use 12 to detect that. We still generate till 1.20.5 else we don't cover
+        // 1.20.3-pre2 and such. Better to over than to under.
+        File folder = new File(Tools.getGameDirPath(minecraftProfile), "server-resource-pack");
+        try {
+            if (Integer.parseInt(assetVersion) <= 12) folder.mkdir();
+        } catch (NumberFormatException e) { folder.mkdir(); }
+
+        MinecraftAccount minecraftAccount = PojavProfile.getCurrentProfileContent(this, null);
         JREUtils.redirectAndPrintJRELog();
-        GameRunner.launchMinecraft(this, minecraftAccount, instance, versionId, renderer);
+        LauncherProfiles.load();
+        int requiredJavaVersion = 8;
+        if(version.javaVersion != null) requiredJavaVersion = version.javaVersion.majorVersion;
+        Tools.launchMinecraft(this, minecraftAccount, minecraftProfile, versionId, requiredJavaVersion);
         //Note that we actually stall in the above function, even if the game crashes. But let's be safe.
         Tools.runOnUiThread(()-> mServiceBinder.isActive = false);
     }
@@ -507,9 +620,12 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             mControlLayout.loadLayout((CustomControls)null);
             mControlLayout.setModifiable(false);
             System.gc();
-            mControlLayout.loadLayout(instance.getLaunchControls());
+            mControlLayout.loadLayout(
+                    minecraftProfile.controlFile == null
+                            ? LauncherPreferences.PREF_DEFAULTCTRL_PATH
+                            : Tools.CTRLMAP_PATH + "/" + minecraftProfile.controlFile);
             mDrawerPullButton.setVisibility(mControlLayout.hasMenuButton() ? View.GONE : View.VISIBLE);
-        } catch (Exception e) {
+        } catch (IOException e) {
             Tools.showError(this,e);
         }
 
@@ -551,5 +667,24 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         if(Tools.isAndroid8OrHigher() && checkCaptureDispatchConditions(ev))
             return minecraftGLView.dispatchCapturedPointerEvent(ev);
         else return super.dispatchTrackballEvent(ev);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if (hasFocus) {
+            Tools.setFullscreen(this, setFullscreen());
+        }
+        super.onWindowFocusChanged(hasFocus);
+        CallbackBridge.nativeSetWindowAttrib(LwjglGlfwKeycode.GLFW_FOCUSED, hasFocus ? 1 : 0);
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

@@ -1,15 +1,17 @@
 package net.kdt.pojavlaunch.multirt;
 
+import static net.kdt.pojavlaunch.Architecture.getDeviceArchitecture;
 import static net.kdt.pojavlaunch.Tools.NATIVE_LIB_DIR;
 import static org.apache.commons.io.FileUtils.listFiles;
-import static org.apache.commons.io.FileUtils.write;
 
 import android.system.Os;
 import android.util.Log;
 
 import com.kdt.mcgui.ProgressLayout;
 
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.Architecture;
+import net.kdt.pojavlaunch.NewJREUtil.ExternalRuntime;
+import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.utils.MathUtils;
 
@@ -24,7 +26,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -38,7 +39,7 @@ public class MultiRTUtils {
     private static final String JAVA_VERSION_STR = "JAVA_VERSION=\"";
     private static final String OS_ARCH_STR = "OS_ARCH=\"";
 
-    public static List<Runtime> getRuntimes() {
+    public static List<Runtime> getInstalledRuntimes() {
         if(!RUNTIME_FOLDER.exists() && !RUNTIME_FOLDER.mkdirs()) {
             throw new RuntimeException("Failed to create runtime directory");
         }
@@ -53,8 +54,25 @@ public class MultiRTUtils {
         return runtimes;
     }
 
+    /**
+     *
+     * @return Java versions which are not installed but are present in {@link ExternalRuntime}
+     */
+    public static List<ExternalRuntime> getRuntimesToDownload() {
+        List<ExternalRuntime> runtimesToDownload = new ArrayList<>();
+        ExternalRuntime[] downloadableRuntimes = ExternalRuntime.values();
+        for (ExternalRuntime downloadableruntime : downloadableRuntimes) {
+            if(getExactJreName(downloadableruntime.majorVersion) == null){
+                // x86 isn't supported anymore for JRE25
+                if (!(getDeviceArchitecture() == Architecture.ARCH_X86 && downloadableruntime.majorVersion >= 21))
+                    runtimesToDownload.add(downloadableruntime);
+            }
+        }
+        return runtimesToDownload;
+    }
+
     public static String getExactJreName(int majorVersion) {
-        List<Runtime> runtimes = getRuntimes();
+        List<Runtime> runtimes = getInstalledRuntimes();
         for(Runtime r : runtimes)
             if(r.javaVersion == majorVersion)return r.name;
 
@@ -62,7 +80,7 @@ public class MultiRTUtils {
     }
 
     public static String getNearestJreName(int majorVersion) {
-        List<Runtime> runtimes = getRuntimes();
+        List<Runtime> runtimes = getInstalledRuntimes();
         MathUtils.RankedValue<Runtime> nearestRankedRuntime = MathUtils.findNearestPositive(majorVersion, runtimes, (runtime)->runtime.javaVersion);
         if(nearestRankedRuntime == null) return null;
         Runtime nearestRuntime = nearestRankedRuntime.value;
@@ -73,14 +91,11 @@ public class MultiRTUtils {
     public static void installRuntimeNamed(String nativeLibDir, InputStream runtimeInputStream, String name) throws IOException {
         File dest = new File(RUNTIME_FOLDER,"/"+name);
         if(dest.exists()) FileUtils.deleteDirectory(dest);
-        try {
-            uncompressTarXZ(runtimeInputStream, dest);
-            runtimeInputStream.close();
-            unpack200(nativeLibDir, RUNTIME_FOLDER + "/" + name);
-            read(name);
-        } finally {
-            ProgressLayout.clearProgress(ProgressLayout.UNPACK_RUNTIME);
-        }
+        uncompressTarXZ(runtimeInputStream,dest);
+        runtimeInputStream.close();
+        unpack200(nativeLibDir,RUNTIME_FOLDER + "/" + name);
+        ProgressLayout.clearProgress(ProgressLayout.UNPACK_RUNTIME);
+        read(name);
     }
 
     public static void postPrepare(String name) throws IOException {
@@ -102,18 +117,19 @@ public class MultiRTUtils {
     public static void installRuntimeNamedBinpack(InputStream universalFileInputStream, InputStream platformBinsInputStream, String name, String binpackVersion) throws IOException {
         File dest = new File(RUNTIME_FOLDER,"/"+name);
         if(dest.exists()) FileUtils.deleteDirectory(dest);
-        try {
-            installRuntimeNamedNoRemove(universalFileInputStream, dest);
-            installRuntimeNamedNoRemove(platformBinsInputStream, dest);
+        installRuntimeNamedNoRemove(universalFileInputStream,dest);
+        installRuntimeNamedNoRemove(platformBinsInputStream,dest);
 
-            unpack200(NATIVE_LIB_DIR, RUNTIME_FOLDER + "/" + name);
+        unpack200(NATIVE_LIB_DIR,RUNTIME_FOLDER + "/" + name);
 
-            File binpack_verfile = new File(RUNTIME_FOLDER, "/" + name + "/pojav_version");
-            write(binpack_verfile, binpackVersion, StandardCharsets.UTF_8);
-            forceReread(name);
-        } finally {
-            ProgressLayout.clearProgress(ProgressLayout.UNPACK_RUNTIME);
-        }
+        File binpack_verfile = new File(RUNTIME_FOLDER,"/"+name+"/pojav_version");
+        FileOutputStream fos = new FileOutputStream(binpack_verfile);
+        fos.write(binpackVersion.getBytes());
+        fos.close();
+
+        ProgressLayout.clearProgress(ProgressLayout.UNPACK_RUNTIME);
+
+        forceReread(name);
     }
 
 
@@ -129,23 +145,6 @@ public class MultiRTUtils {
             e.printStackTrace();
             return null;
         }
-    }
-
-    public static long readLastUpdateTime(String name) {
-        File lastUpdateTimeFile = new File(RUNTIME_FOLDER, name+"/last_check_time");
-        if(!lastUpdateTimeFile.exists()) return -1;
-        try {
-            return Long.parseLong(Tools.read(lastUpdateTimeFile).trim());
-        }catch (IOException | NumberFormatException e) {
-            return -1;
-        }
-    }
-
-    public static void writeLastUpdateTime(String name, long time) {
-        File lastUpdateTimeFile = new File(RUNTIME_FOLDER, name+"/last_check_time");
-        try {
-            Tools.write(lastUpdateTimeFile, Long.toString(time));
-        }catch (IOException ignored) {}
     }
 
     public static void removeRuntimeNamed(String name) throws IOException {
@@ -240,32 +239,37 @@ public class MultiRTUtils {
         net.kdt.pojavlaunch.utils.FileUtils.ensureDirectory(dest);
 
         byte[] buffer = new byte[8192];
-        try(TarArchiveInputStream tarIn = new TarArchiveInputStream(new XZCompressorInputStream(tarFileInputStream))) {
-            TarArchiveEntry tarEntry;
-            // tarIn is a TarArchiveInputStream
-            while ((tarEntry = tarIn.getNextTarEntry()) != null) {
+        TarArchiveInputStream tarIn = new TarArchiveInputStream(
+                new XZCompressorInputStream(tarFileInputStream)
+        );
+        TarArchiveEntry tarEntry = tarIn.getNextTarEntry();
+        // tarIn is a TarArchiveInputStream
+        while (tarEntry != null) {
 
-                final String tarEntryName = tarEntry.getName();
-                ProgressLayout.setProgress(ProgressLayout.UNPACK_RUNTIME, 100, R.string.global_unpacking, tarEntryName);
+            final String tarEntryName = tarEntry.getName();
+            // publishProgress(null, "Unpacking " + tarEntry.getName());
+            ProgressLayout.setProgress(ProgressLayout.UNPACK_RUNTIME, 100, R.string.global_unpacking, tarEntryName);
 
-                File destPath = new File(dest, tarEntry.getName());
-                net.kdt.pojavlaunch.utils.FileUtils.ensureParentDirectory(destPath);
-                if (tarEntry.isSymbolicLink()) {
-                    try {
-                        // android.system.Os
-                        // Libcore one support all Android versions
-                        Os.symlink(tarEntry.getName(), tarEntry.getLinkName());
-                    } catch (Throwable e) {
-                        Log.e("MultiRT", e.toString());
-                    }
-                } else if (tarEntry.isDirectory()) {
-                    net.kdt.pojavlaunch.utils.FileUtils.ensureDirectory(destPath);
-                } else if (!destPath.exists() || destPath.length() != tarEntry.getSize()) {
-                    FileOutputStream os = new FileOutputStream(destPath);
-                    IOUtils.copyLarge(tarIn, os, buffer);
-                    os.close();
+            File destPath = new File(dest, tarEntry.getName());
+            net.kdt.pojavlaunch.utils.FileUtils.ensureParentDirectory(destPath);
+            if (tarEntry.isSymbolicLink()) {
+                try {
+                    // android.system.Os
+                    // Libcore one support all Android versions
+                    Os.symlink(tarEntry.getName(), tarEntry.getLinkName());
+                } catch (Throwable e) {
+                    Log.e("MultiRT", e.toString());
                 }
+
+            } else if (tarEntry.isDirectory()) {
+                net.kdt.pojavlaunch.utils.FileUtils.ensureDirectory(destPath);
+            } else if (!destPath.exists() || destPath.length() != tarEntry.getSize()) {
+                FileOutputStream os = new FileOutputStream(destPath);
+                IOUtils.copyLarge(tarIn, os, buffer);
+                os.close();
             }
+            tarEntry = tarIn.getNextTarEntry();
         }
+        tarIn.close();
     }
 }

@@ -5,7 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.text.Html;
 
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.ShowErrorActivity;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutorTask;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;

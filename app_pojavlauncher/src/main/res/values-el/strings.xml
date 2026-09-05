@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition για Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
-    <string name="login_online_username_hint">Όνομα χρήστη</string>
     <string name="login_online_login_label">Είσοδος</string>
     <!-- Hint -->
     <!-- Warnings -->
@@ -14,7 +11,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Επιλέξτε ένα πρόγραμμα εγκατάστασης mod</string>
     <!-- Error messages -->
-    <string name="error_fatal">Ο MojoLauncher κατέρρευσε απροσδόκητα</string>
+    <string name="error_fatal">Ο Copper κατέρρευσε απροσδόκητα</string>
     <string name="error_no_version">Καμία έκδοση!</string>
     <string name="error_show_more">Εμφάνιση περισσότερων</string>
     <string name="error_show_less">Εμφάνιση λιγότερων</string>
@@ -25,7 +22,6 @@
     <string name="toast_3">Exit</string>
     -->
     <!-- MCLauncherActivity: Tabs -->
-    <string name="mcl_tab_wiki">Wiki</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
     <string name="mcl_launch_cleancache">Εκκαθάριση χώρου προσωρινής αποθήκευσης αρχείων</string>
@@ -49,7 +45,6 @@
     <string name="mcl_setting_title_javaargs">JVM Εντολές εκκίνησης</string>
     <string name="mcl_setting_subtitle_javaargs">Να είστε προσεκτικοί, αυτό μπορεί να προκαλέσει συντριβή στο παιχνίδι αν τροποποιηθεί χωρίς γνώση.</string>
     <string name="mcl_setting_category_renderer">Απόδοση</string>
-    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (όλες οι εκδόσεις, γρήγορα)</string>
     <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) - (όλες οι εκδόσεις, mid)</string>
     <string name="mcl_setting_veroption_release">Κυκλοφορία</string>
     <string name="mcl_setting_veroption_snapshot">Στιγμιότυπο</string>
@@ -70,7 +65,6 @@
     <string name="global_unpacking">Αποσυμπίεση %s</string>
     <string name="global_error_field_empty">Αυτό το πεδίο δεν μπορεί να είναι κενό</string>
     <string name="global_waiting">Περιμένετε</string>
-    <string name="global_select">Επιλέξτε</string>
     <string name="global_retry">Δοκιμάστε ξανά</string>
     <string name="global_default">Προεπιλογή</string>
     <!-- MainActivity: strings -->
@@ -80,15 +74,7 @@
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">Συνομιλία</string>
     <string name="control_debug">Αποσφαλμάτωση</string>
-    <string name="control_primary">Pri</string>
-    <string name="control_secondary">Sec</string>
-    <string name="control_shift">◇</string>
     <string name="control_inventory">Κατα</string>
-    <string name="control_up">▲</string>
-    <string name="control_left">◀</string>
-    <string name="control_right">▶</string>
-    <string name="control_down">▼</string>
-    <string name="control_jump">⬛</string>
     <string name="control_thirdperson">3ος</string>
     <string name="control_listplayers">Καρτέλα</string>
     <string name="control_mouse">Ποντίκι</string>
@@ -121,8 +107,7 @@
     <string name="customctrl_button_opacity">Αδιαφάνεια Κουμπιού</string>
     <string name="customctrl_addbutton">Προσθήκη κουμπιού</string>
     <string name="customctrl_addbutton_drawer">Προσθήκη συρταριού πλήκτρων</string>
-    <string name="customctrl_addbutton_joystick">Προσθήκη χειριστηρίου (joystick)</string>
-    <string name="customctrl_addsubbutton">Προσθήκη υπο-κουμπιού</string>
+    <string name="customctrl_addsubbutton">Προσθήκη κουμπιού</string>
     <string name="customctrl_selectdefault">Επιλέξτε προεπιλεγμένο χάρτη ελέγχου</string>
     <string name="customctrl_export">Εξαγωγή χάρτη ελέγχου</string>
     <string name="main_share_logs">Κοινοποίηση αρχείου καταγραφής</string>
@@ -142,7 +127,6 @@
     <string name="mcl_setting_subtitle_mousespeed">Αλλάζει την ταχύτητα του εικονικού ποντικιού.</string>
     <string name="customctrl_passthru">Pass-thru ποντικιού</string>
     <string name="customctrl_swipeable">Ευέλικτο</string>
-    <string name="customctrl_forward_lock">Κλείδωμα ευθείας κινήσεως</string>
     <string name="customctrl_absolute_tracking">Απόλυτη παρακολούθηση δακτύλων</string>
     <string name="memory_warning_msg">Το τρέχον ποσό της διαθέσιμης μνήμης RAM (%d) είναι μικρότερο από την κατανεμημένη RAM (%d), το οποίο μπορεί να οδηγήσει σε καταρρεύσεις. Αλλάξτε την κατανομή αν το παιχνίδι καταρρεύσει.</string>
     <string name="mcl_memory_allocation">Κατανομή μνήμης</string>
@@ -165,13 +149,10 @@
     <string name="preference_mouse_start_description">Το εικονικό ποντίκι εμφανίζεται κατά την εκκίνηση όταν αυτή η επιλογή είναι ενεργή.</string>
     <string name="preference_video_title">Εικόνα και προσομοιωτής</string>
     <string name="preference_video_description">Ανάλυση, αποτύπωση και απόδοση</string>
-    <string name="preference_control_title">Προσαρμογή ελέγχου</string>
     <string name="preference_control_description">Χειρονομίες, κουμπιά και κλιμάκωση</string>
-    <string name="preference_java_title">Java Tweaks</string>
     <string name="preference_java_description">Java εκδόσεις, JVM Arguments, ποσότητα RAM και sandbox</string>
     <string name="preference_misc_title">Διάφορες ρυθμίσεις</string>
     <string name="preference_misc_description">Λίστα εκδόσεων και έλεγχος βιβλιοθηκών</string>
-    <string name="preference_experimental_title">Πειραματικές αντικείμενα</string>
     <string name="preference_experimental_description">Χρησιμοποιήστε τα πράγματα εκεί με προσοχή, χωρίς υποστήριξη</string>
     <string name="preference_sustained_performance_title">Ενεργοποίηση λειτουργίας συνεχούς απόδοσης</string>
     <string name="preference_sustained_performance_description">Περιορισμός της θερμικής επιτάχυνσης με περιορισμό των επιδόσεων.</string>
@@ -182,7 +163,6 @@
     <string name="preference_edit_controls_title">Προσαρμοστεί τα controls</string>
     <string name="preference_edit_controls_summary">Ρυθμίστε το σύστημα ελέγχου για να ταιριάζει στις ανάγκες σας.</string>
     <string name="preference_category_gyro_controls">Έλεγχοι γυροσκοπίου</string>
-    <string name="preference_category_virtual_mouse">Εικονικό ποντίκι</string>
     <string name="preference_gyro_invert_x_axis">Αντιστροφή άξονα X</string>
     <string name="preference_gyro_invert_y_axis">Αντιστροφή άξονα Y</string>
     <string name="preference_gyro_invert_x_axis_description">Αντιστροφή του οριζόντιου άξονα.</string>
@@ -194,13 +174,13 @@
     <string name="profiles_latest_snapshot">Τελευταίο στιγμιότυπο</string>
     <string name="profiles_latest_release">Τελευταία έκδοση</string>
     <string name="profiles_profile_name">Όνομα</string>
-    <string name="profiles_profile_version">Έκδοση</string>
     <string name="global_delete">Διαγραφή</string>
     <string name="pedit_java_runtime">Έκδοση Java</string>
     <string name="pedit_renderer">Απόδοση</string>
+    <string name="arc_capes_desc">Ενεργοποιεί κάπες από τη Cosmetica (προηγουμένως Arc). Για περισσότερες πληροφορίες, παρακαλώ επισκεφθείτε την ιστοσελίδα https://cosmetica.cc. Απαιτείται 
+το OptiFine.</string>
     <string name="notif_channel_name">Γενικά</string>
-    <string name="lazy_service_default_title">Υπηρεσία Προσκήνιου Mojo</string>
-    <string name="mcl_setting_veroption_installed">Εγκατεστημένο</string>
+    <string name="lazy_service_default_title">Υπηρεσία Προσκήνιου Copper</string>
     <string name="use_global_default">(Χρήση της γενικής προεπιλογής)</string>
     <string name="default_control">Προεπιλεγμένος χάρτης ελέγχου</string>
     <string name="progresslayout_tasks_in_progress">%d εργασίες σε εξέλιξη</string>
@@ -211,7 +191,6 @@
     <string name="folder_fragment_create">Δημιουργία φακέλου</string>
     <string name="folder_fragment_select">Επιλογή φακέλου</string>
     <string name="main_login_done">Η σύνδεση ολοκληρώθηκε</string>
-    <string name="main_add_account">Προσθήκη λογαριασμού</string>
     <string name="tasks_ongoing">Οι εργασίες είναι σε εξέλιξη, παρακαλώ περιμένετε</string>
     <string name="no_saved_accounts">Δεν υπάρχουν αποθηκευμένοι λογαριασμοί</string>
     <string name="mc_download_failed">Αποτυχία λήψης του Minecraft! Αυτό μπορεί να οφείλεται σε κακή σύνδεση δικτύου, εσφαλμένα τοποθετημένα αρχεία, κλπ..</string>
@@ -221,20 +200,17 @@
     <string name="xerr_child">Ο λογαριασμός σας είναι ένας λογαριασμός παιδιού, και πρέπει να προστεθεί σε μια οικογένεια για να συνδεθείτε.</string>
     <string name="minecraft_not_owned">Φαίνεται ότι αυτός ο λογαριασμός δεν έχει προφίλ Minecraft. Αν έχετε το Xbox Game Pass, παρακαλώ συνδεθείτε στο https://minecraft.net/ και ρυθμίστε το.</string>
     <string name="xerr_not_available">Το Xbox Live δεν είναι διαθέσιμο στη χώρα σας</string>
-    <string name="preference_enable_gyro_title">Ενεργοποίηση εξομάλυνσης γυροσκοπίου</string>
     <string name="preference_enable_gyro_description">Ενεργοποιώντας το, θα σας επιτρέψει να γυρίσετε τον χαρακτήρα σας μέσα στο παιχνίδι γυρίζοντας το τηλέφωνό σας.</string>
-    <string name="preference_gyro_sensitivity_title">Ευαισθησία ελέγχων γυροσκοπίου</string>
     <string name="preference_gyro_sensitivity_description">Προσαρμόστε την ευαισθησία των ελέγχων γυροσκοπίου.</string>
     <string name="toast_turn_on_gyro">Ενεργοποιήστε πρώτα τα γυροσκοπικά στοιχεία ελέγχου για να το χρησιμοποιήσετε αυτό!</string>
     <string name="preference_gyro_sample_rate_title">Ρυθμός δειγματοληψίας γυροσκοπίου</string>
     <string name="preference_gyro_sample_rate_description">Εάν έχετε προβλήματα απόδοσης με τους ελέγχους γυροσκοπίου, αυξήστε αυτό.</string>
     <string name="microsoft_login_retry_later">Πάρα πολλά αιτήματα, παρακαλώ προσπαθήστε ξανά αργότερα.</string>
-    <string name="storage_required">Το MojoLauncher απαιτεί την προσάρτηση εξωτερικού χώρου. Παρακαλώ επανασυνδέστε το και επανεκκινήστε την εφαρμογή.</string>
+    <string name="storage_required">Το PojavLauncher απαιτεί την προσάρτηση εξωτερικού χώρου. Παρακαλώ επανασυνδέστε το και επανεκκινήστε την εφαρμογή.</string>
     <string name="mcl_setting_title_buttonallcaps">Χρησιμοποιήστε μόνο κεφαλαία γράμματα σε ετικέτες κουμπιών</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Απενεργοποιήστε το αν θέλετε να χρησιμοποιήσετε πεζά γράμματα στα χειριστήριά σας.</string>
     <string name="preference_shader_dump_title">Ενεργοποίηση shader dumping</string>
     <string name="preference_shader_dump_description">Η καταγραφή μετέτρεψε τα shaders σε αρχείο καταγραφής.</string>
-    <string name="percent_format">%d%%</string>
     <string name="customctrl_editor_exit_title">Αποχώρηση;</string>
     <string name="customctrl_editor_exit_msg">Είσαι σίγουρος ότι θέλεις να φύγεις;</string>
     <string name="customctrl_editor_exit">Έξοδος από επεξεργαστή</string>
@@ -260,12 +236,17 @@
     <string name="fabric_dl_game_version">Έκδοση Minecraft</string>
     <string name="fabric_dl_install">Εγκατάσταση</string>
     <string name="fabric_dl_cant_read_meta">Αποτυχία ανάγνωσης μεταδεδομένων φορτωτή %s. Παρακαλώ προσπαθήστε ξανά αργότερα.</string>
+    <string name="modloader_dl_install_fabric">Δημιουργία προφίλ Fabric</string>
+    <string name="modloader_dl_install_quilt">Δημιουργία προφίλ Quilt</string>
+    <string name="modloader_dl_install_forge">Δημιουργία προφίλ Forge</string>
+    <string name="create_profile_vanilla">Δημιουργία νέου κανονικού προφίλ</string>
     <string name="create_profile_vanilla_like_versions">Σχεδόν κανονικές εκδόσεις</string>
     <string name="create_profile_modded_versions">Τροποποιημένες εκδόσεις</string>
     <string name="fabric_dl_loader_title">Επιλέξτε εκδόσεις</string>
     <string name="of_dl_select_version">Επιλέξτε την έκδοση του OptiFine</string>
     <string name="of_dl_failed_to_scrape">Αποτυχία συλλογής δεδομένων για εγκατάσταση του OptiFine</string>
     <string name="of_dl_progress">Γίνεται λήψη %s</string>
+    <string name="create_profile_optifine">Δημιουργία OptiFine προφίλ</string>
     <string name="hint_search_modpack">Αναζήτηση για modpacks</string>
     <string name="preference_vulkan_driver_system_title">Χρήση προγράμματος οδήγησης Vulkan</string>
     <string name="preference_vulkan_driver_system_description">Εξαναγκάστε τον εκκινητή να χρησιμοποιήσει τον οδηγό Vulkan αντί για το Turnip στις Adreno GPUs. Επηρεάζει μόνο το Zink και τα mods που χρησιμοποιούν το Vulkan.</string>
@@ -279,11 +260,11 @@
     <string name="modpack_download_downloading_mods">Λήψη mods (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Λήψη mods (Αρχείο %d από %d)</string>
     <string name="modpack_download_applying_overrides">Εφαρμογή παρακάμψεων (%d/%d)</string>
-    <string name="modpack_install_notification_title">Mojo Modpack Installer</string>
     <string name="modpack_install_notification_success">Κάντε κλικ εδώ για να ολοκληρώσετε την εγκατάσταση modpack</string>
     <string name="modpack_install_notification_data_not_available">Αποτυχία λήψης πληροφοριών για το mod loader</string>
     <string name="modpack_install_modloader_download_failed">Αποτυχία λήψης των αρχείων του mod loader</string>
     <string name="modpack_install_download_failed">Αποτυχία λήψης των αρχείων του modpack</string>
+    <string name="modpack_install_button">Δημιουργία προφίλ modpack</string>
     <string name="notif_error_occured">Παρουσιάστηκε ένα σφάλμα</string>
     <string name="notif_error_occured_desc">Κάντε κλικ για να δείτε περισσότερες λεπτομέρειες</string>
     <string name="fabric_dl_only_stable">Εμφάνιση μόνο σταθερών εκδόσεων</string>
@@ -303,12 +284,11 @@
     <string name="preference_category_gestures">Χειρονομίες</string>
     <string name="preference_category_buttons">Κουμπιά</string>
     <string name="preference_category_experimental_settings">Πειραματικές ρυθμίσεις</string>
-    <string name="preference_category_java_tweaks">Java Tweaks</string>
     <string name="preference_category_main_categories">Κατηγορίες</string>
     <string name="preference_category_miscellaneous">Διάφορες ρυθμίσεις</string>
     <string name="preference_category_video">Ρυθμίσεις βίντεο</string>
     <string name="notification_permission_dialog_title">Αίτημα άδειας</string>
-    <string name="notification_permission_dialog_text">Το MojoLauncher απαιτεί την άδεια να δημοσιεύει ειδοποιήσεις για να αποτρέψει τη διακοπή λήψεων παιχνιδιού/modpacks όταν φεύγετε από την εφαρμογή. Χωρίς αυτήν την άδεια, το Android μπορεί να τερματίσει τις λήψεις σας όταν βάζετε το MojoLauncher στη λειτουργία παρασκηνίου.</string>
+    <string name="notification_permission_dialog_text">Το PojavLauncher απαιτεί την άδεια να δημοσιεύει ειδοποιήσεις για να αποτρέψει τη διακοπή λήψεων παιχνιδιού/modpacks όταν φεύγετε από την εφαρμογή. Χωρίς αυτήν την άδεια, το Android μπορεί να τερματίσει τις λήψεις σας όταν βάζετε το PojavLauncher στη λειτουργία παρασκηνίου.</string>
     <string name="notification_permission_toast">Μπορείτε πάντα να αλλάξετε γνώμη αργότερα πηγαίνοντας στις Ρυθμίσεις</string>
     <string name="preference_ask_for_notification_title">Επιτροπή ειδοποιήσεων</string>
     <string name="preference_ask_for_notification_description">Κάντε κλικ για να ζητήσετε ξανά την άδεια ειδοποίησης, που απαιτείται για να λειτουργούν σωστά οι λήψεις παιχνιδιού/modpack.</string>
@@ -317,11 +297,5 @@
     <string name="exception_failed_to_unpack_jre17">Αποτυχία εγκατάστασης JRE 17</string>
     <string name="newdl_starting">Ανάγνωση μεταδεδομένων παιχνιδιού…</string>
     <string name="newdl_downloading_metadata">Λήψη μεταδεδομένων παιχνιδιού (%s)</string>
-    <string name="controller_button_a">A</string>
-    <string name="controller_button_b">B</string>
-    <string name="controller_button_x">X</string>
-    <string name="controller_button_y">Y</string>
-    <string name="controller_button_start">Έναρξη</string>
-    <string name="controller_button_select">Επιλέξτε</string>
-    <string name="customctrl_visibility_title">Ορατότητα</string>
+    <string name="preference_experimental_title">Πειραματικές αντικείμενα</string>
 </resources>

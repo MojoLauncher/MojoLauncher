@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import net.kdt.pojavlaunch.Logger;
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.R;
 
 /**
  * A class able to display logs to the user.
@@ -60,11 +60,10 @@ public class LoggerView extends ConstraintLayout {
                 (compoundButton, isChecked) -> {
                     mLogTextView.setVisibility(isChecked ? VISIBLE : GONE);
                     if(isChecked) {
-                        Logger.setLogListener(mLogListener);
+                        Logger.addLogListener(mLogListener);
                     }else{
                         mLogTextView.setText("");
-                        Logger.setLogListener(null); // Makes the JNI code be able to skip expensive logger callbacks
-                        // NOTE: was tested by rapidly smashing the log on/off button, no sync issues found :)
+                        Logger.removeLogListener(mLogListener);
                     }
                 });
         mLogToggle.setChecked(false);

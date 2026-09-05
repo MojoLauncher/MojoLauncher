@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition för Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -13,7 +11,7 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Välj ett mod installationsprogram</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher har oväntat kraschat</string>
+    <string name="error_fatal">Copper har oväntat kraschat</string>
     <string name="error_no_version">Ingen version!</string>
     <string name="error_show_more">Visa mer</string>
     <string name="error_show_less">Visa mindre</string>
@@ -39,7 +37,6 @@
     <string name="global_default">Standard</string>
     <!-- MainActivity: strings -->
     <!-- MainActivity: Control buttons -->
-    <string name="control_primary">Pri</string>
     <string name="control_secondary">Sek</string>
     <string name="control_inventory">Fakt</string>
     <string name="control_thirdperson">3: e</string>

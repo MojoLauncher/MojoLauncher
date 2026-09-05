@@ -1,5 +1,7 @@
 package net.kdt.pojavlaunch.fragments;
 
+import static net.kdt.pojavlaunch.Tools.hasOnlineProfile;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
@@ -9,11 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 
+import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +33,10 @@ public class LocalLoginFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        // This is overkill but meh
+        if (!hasOnlineProfile()){
+            Tools.swapFragment(requireActivity(), MainMenuFragment.class, MainMenuFragment.TAG, null);
+        }
         mUsernameEditText = view.findViewById(R.id.login_edit_email);
         view.findViewById(R.id.login_button).setOnClickListener(v -> {
             if(!checkEditText()) {
@@ -56,6 +63,7 @@ public class LocalLoginFragment extends Fragment {
                 || text.length() < 3
                 || text.length() > 16
                 || !matcher.find()
+                || new File(Tools.DIR_ACCOUNT_NEW + "/" + text + ".json").exists()
         );
     }
 }

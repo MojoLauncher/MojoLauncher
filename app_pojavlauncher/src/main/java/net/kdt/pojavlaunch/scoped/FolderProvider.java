@@ -18,8 +18,8 @@ import android.webkit.MimeTypeMap;
 
 import androidx.annotation.Nullable;
 
-import git.artdeell.mojo.BuildConfig;
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.BuildConfig;
+import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.Tools;
 
 import org.apache.commons.io.FileUtils;

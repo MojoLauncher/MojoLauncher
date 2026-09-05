@@ -23,8 +23,6 @@ import java.io.*;
 import java.util.*;
 import net.kdt.pojavlaunch.*;
 
-import git.artdeell.mojo.R;
-
 /**
  * List adapter for Files.
  * 
@@ -36,8 +34,8 @@ import git.artdeell.mojo.R;
  */
 public class FileListAdapter extends BaseAdapter {
 
-    private final static int ICON_FOLDER = R.drawable.ic_px_folder;
-    private final static int ICON_FILE = R.drawable.ic_px_file;
+    private final static int ICON_FOLDER = R.drawable.ic_folder;
+    private final static int ICON_FILE = R.drawable.ic_file;
 
     private final LayoutInflater mInflater;
 

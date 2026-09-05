@@ -19,10 +19,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import net.kdt.pojavlaunch.PojavApplication;
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraCore;
-import net.kdt.pojavlaunch.instances.Instances;
+import net.kdt.pojavlaunch.modloaders.FabriclikeDownloadTask;
 import net.kdt.pojavlaunch.modloaders.FabriclikeUtils;
 import net.kdt.pojavlaunch.modloaders.FabricVersion;
 import net.kdt.pojavlaunch.modloaders.ModloaderDownloadListener;
@@ -101,31 +101,14 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
             return;
         }
         ModloaderListenerProxy proxy = new ModloaderListenerProxy();
+        FabriclikeDownloadTask fabricDownloadTask = new FabriclikeDownloadTask(proxy, mFabriclikeUtils,
+                mSelectedGameVersion, mSelectedLoaderVersion, true);
         proxy.attachListener(this);
         setListenerProxy(proxy);
         mStartButton.setEnabled(false);
-        PojavApplication.sExecutorService.execute(this::performInstallation);
+        new Thread(fabricDownloadTask).start();
     }
 
-    private void performInstallation() {
-        try {
-            String versionId = mFabriclikeUtils.install(mSelectedGameVersion, mSelectedLoaderVersion);
-            if(versionId == null) {
-                getListenerProxy().onDataNotAvailable();
-                return;
-            }
-            Instances.createInstance((i)->{
-                i.name = mFabriclikeUtils.getName();
-                i.icon = mFabriclikeUtils.getIconName();
-                i.versionId = versionId;
-            }, versionId);
-            getListenerProxy().onDownloadFinished(null);
-        }catch (IOException e) {
-            Tools.showErrorRemote(e);
-        }
-    }
-
-    @SuppressWarnings("unused")
     private void onClickRetry(View v) {
         mStartButton.setEnabled(false);
         mRetryView.setVisibility(View.GONE);
@@ -212,7 +195,7 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
     }
 
     @Override
-    public void onCheckedChanged(@NonNull CompoundButton compoundButton, boolean b) {
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         updateGameSpinner();
         updateLoaderSpinner();
     }
@@ -259,7 +242,7 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
     }
 
     private void updateLoaderSpinner() {
-        if(mLoaderVersionArray == null || isDetached()) return;
+        if(mLoaderVersionArray == null) return;
         mLoaderVersionSpinner.setAdapter(createAdapter(mLoaderVersionArray, mOnlyStableCheckbox.isChecked()));
     }
 
@@ -306,7 +289,7 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
     }
 
     private void updateGameSpinner() {
-        if(mGameVersionArray == null || isDetached()) return;
+        if(mGameVersionArray == null) return;
         mGameVersionSpinner.setAdapter(createAdapter(mGameVersionArray, mOnlyStableCheckbox.isChecked()));
     }
 

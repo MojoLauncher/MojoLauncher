@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.kdt.SimpleArrayAdapter;
 
 import net.kdt.pojavlaunch.PojavApplication;
-import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.modloaders.modpacks.api.ModpackApi;
 import net.kdt.pojavlaunch.modloaders.modpacks.imagecache.ImageReceiver;
@@ -133,14 +133,13 @@ public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
-    public boolean onUpdateTaskCount(int taskCount) {
+    public void onUpdateTaskCount(int taskCount) {
         Tools.runOnUiThread(()->{
             mTasksRunning = taskCount != 0;
             for(ViewHolder viewHolder : mViewHolderSet) {
                 viewHolder.updateInstallButtonState();
             }
         });
-        return false;
     }
 
 
@@ -176,7 +175,7 @@ public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     mExtendedSpinner = mExtendedLayout.findViewById(R.id.mod_extended_version_spinner);
                     mExtendedErrorTextView = mExtendedLayout.findViewById(R.id.mod_extended_error_textview);
 
-                    mExtendedButton.setOnClickListener(v1 -> mModpackApi.handleModpackInstallation(
+                    mExtendedButton.setOnClickListener(v1 -> mModpackApi.handleInstallation(
                             mExtendedButton.getContext().getApplicationContext(),
                             mModDetail,
                             mExtendedSpinner.getSelectedItemPosition()));

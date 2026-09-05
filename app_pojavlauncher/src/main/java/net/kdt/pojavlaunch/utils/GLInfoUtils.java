@@ -22,7 +22,7 @@ public class GLInfoUtils {
         return Integer.parseInt(majorVersion);
     }
 
-    private static GLInfo queryInfo(int contextGLVersion, boolean forcedMsaa) {
+    private static GLInfo queryInfo(int contextGLVersion) {
         String vendor = GLES20.glGetString(GLES20.GL_VENDOR);
         String renderer = GLES20.glGetString(GLES20.GL_RENDERER);
         String versionString = GLES20.glGetString(GLES30.GL_VERSION);
@@ -36,12 +36,12 @@ public class GLInfoUtils {
         // and even if the string parse returns 3 while EGL can only create 2,
         // it's still a noncompilant implementation
         version = Math.min(version, contextGLVersion);
-        return new GLInfo(vendor, renderer, version, forcedMsaa);
+        return new GLInfo(vendor, renderer, version);
     }
 
     private static void initDummyInfo() {
         Log.e("GLInfoUtils", "An error happened during info query. Will use dummy info. This should be investigated.");
-        info = new GLInfo("<Unknown>", "<Unknown>", 2, false);
+        info = new GLInfo("<Unknown>", "<Unknown>", 2);
     }
 
     private static EGLContext tryCreateContext(EGLDisplay eglDisplay, EGLConfig config, int majorVersion) {
@@ -68,12 +68,6 @@ public class GLInfoUtils {
         return context;
     }
 
-    private static boolean isMSAAConfig(EGLDisplay eglDisplay, EGLConfig eglConfig) {
-        int[] sampleBuffers = new int[]{0};
-        EGL14.eglGetConfigAttrib(eglDisplay, eglConfig, EGL14.EGL_SAMPLE_BUFFERS, sampleBuffers, 0);
-        return sampleBuffers[0] != 0;
-    }
-
     private static boolean initAndQueryInfo() {
         // This is here just to satisfy Android M which incorrectly null-checks it
         int[] egl_version = new int[2];
@@ -96,8 +90,6 @@ public class GLInfoUtils {
             Log.e("GLInfoUtils", "Failed to choose an EGL config");
             return false;
         }
-
-        boolean forcedMsaa = isMSAAConfig(eglDisplay, config[0]);
 
         // Create PBuffer surface as some devices might actually not support surfaceless.
         int[] pbuffer_attributes = new int[] {
@@ -128,7 +120,7 @@ public class GLInfoUtils {
             return false;
         }
 
-        info = queryInfo(contextGLVersion, forcedMsaa);
+        info = queryInfo(contextGLVersion);
 
         EGL14.eglMakeCurrent(eglDisplay, EGL14.EGL_NO_SURFACE, EGL14.EGL_NO_SURFACE, EGL14.EGL_NO_CONTEXT);
         EGL14.eglDestroyContext(eglDisplay, context);
@@ -158,12 +150,10 @@ public class GLInfoUtils {
         public final String vendor;
         public final String renderer;
         public final int glesMajorVersion;
-        public final boolean forcedMsaa;
-        protected GLInfo(String vendor, String renderer, int glesMajorVersion, boolean forcedMsaa) {
+        protected GLInfo(String vendor, String renderer, int glesMajorVersion) {
             this.vendor = vendor;
             this.renderer = renderer;
             this.glesMajorVersion = glesMajorVersion;
-            this.forcedMsaa = forcedMsaa;
         }
 
         /**
@@ -172,14 +162,6 @@ public class GLInfoUtils {
          */
         public boolean isAdreno() {
             return renderer.contains("Adreno") && vendor.equals("Qualcomm");
-        }
-
-        /**
-         * Check if this GLInfo belongs to a ARM Mali/Immortalis graphics adapter
-         * @return
-         */
-        public boolean isArm() {
-            return (renderer.contains("Mali") || renderer.contains("Immortalis")) && vendor.equals("ARM");
         }
     }
 }

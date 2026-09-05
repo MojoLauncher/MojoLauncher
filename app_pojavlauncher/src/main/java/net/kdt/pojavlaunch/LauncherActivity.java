@@ -1,12 +1,15 @@
 package net.kdt.pojavlaunch;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
+import static net.kdt.pojavlaunch.Tools.hasNoOnlineProfileDialog;
+
 import android.Manifest;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -22,19 +25,22 @@ import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 
 import com.kdt.mcgui.ProgressLayout;
+import com.kdt.mcgui.mcAccountSpinner;
 
-import net.kdt.pojavlaunch.authenticator.accounts.Accounts;
+import net.kdt.pojavlaunch.contracts.OpenDocumentWithExtension;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.extra.ExtraListener;
 import net.kdt.pojavlaunch.fragments.MainMenuFragment;
 import net.kdt.pojavlaunch.fragments.MicrosoftLoginFragment;
 import net.kdt.pojavlaunch.fragments.SelectAuthFragment;
-import net.kdt.pojavlaunch.instances.Instance;
-import net.kdt.pojavlaunch.instances.InstanceInstaller;
-import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.lifecycle.ContextAwareDoneListener;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
+import net.kdt.pojavlaunch.modloaders.modpacks.ModloaderInstallTracker;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.CommonApi;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.ModLoader;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.ModpackInstaller;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.NotificationDownloadListener;
 import net.kdt.pojavlaunch.modloaders.modpacks.imagecache.IconCacheJanitor;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceFragment;
@@ -44,19 +50,49 @@ import net.kdt.pojavlaunch.services.ProgressServiceKeeper;
 import net.kdt.pojavlaunch.tasks.AsyncMinecraftDownloader;
 import net.kdt.pojavlaunch.tasks.AsyncVersionList;
 import net.kdt.pojavlaunch.tasks.MinecraftDownloader;
+import net.kdt.pojavlaunch.utils.DateUtils;
 import net.kdt.pojavlaunch.utils.NotificationUtils;
+import net.kdt.pojavlaunch.value.launcherprofiles.LauncherProfiles;
+import net.kdt.pojavlaunch.value.launcherprofiles.MinecraftProfile;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
-
-import git.artdeell.mojo.R;
+import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 
 public class LauncherActivity extends BaseActivity {
     public static final String SETTING_FRAGMENT_TAG = "SETTINGS_FRAGMENT";
 
+    public final ActivityResultLauncher<Object> modInstallerLauncher =
+            registerForActivityResult(new OpenDocumentWithExtension("jar"), (data)->{
+                if(data != null) Tools.launchModInstaller(this, data);
+            });
+    public final ActivityResultLauncher<Object> modpackImportLauncher =
+            registerForActivityResult(new OpenDocumentWithExtension(new String[]{"zip", "mrpack"}), (data)->{
+                if(data != null) {
+                    PojavApplication.sExecutorService.execute(() -> {
+                        try {
+                            ModLoader loaderInfo = new CommonApi(getString(R.string.curseforge_api_key)).importModpack(this, data);
+                            if (loaderInfo == null) return;
+                            loaderInfo.getDownloadTask(new NotificationDownloadListener(this, loaderInfo)).run();
+                        } catch (IOException e) {
+                            Tools.showErrorRemote(this, R.string.modpack_install_download_failed, e);
+                        } catch (IllegalArgumentException e) {
+                            Tools.showError(this, R.string.not_modpack_file, e);
+                        } catch (NoSuchAlgorithmException e) {
+                            // Should literally never happen because SHA-1 is required Java spec
+                            throw new RuntimeException(e);
+                        }
+                    });
+                }
+            });
+
+    private mcAccountSpinner mAccountSpinner;
     private FragmentContainerView mFragmentView;
     private ImageButton mSettingsButton;
     private ProgressLayout mProgressLayout;
     private ProgressServiceKeeper mProgressServiceKeeper;
+    private ModloaderInstallTracker mInstallTracker;
     private NotificationManager mNotificationManager;
 
     /* Allows to switch from one button "type" to another */
@@ -64,7 +100,7 @@ public class LauncherActivity extends BaseActivity {
         @Override
         public void onFragmentResumed(@NonNull FragmentManager fm, @NonNull Fragment f) {
             mSettingsButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), f instanceof MainMenuFragment
-                    ? R.drawable.ic_px_sliders : R.drawable.ic_px_home));
+                    ? R.drawable.ic_menu_settings : R.drawable.ic_menu_home));
         }
     };
 
@@ -76,26 +112,34 @@ public class LauncherActivity extends BaseActivity {
 
     /* Listener for the auth method selection screen */
     private final ExtraListener<Boolean> mSelectAuthMethod = (key, value) -> {
-        // The "false" value is used to stop auth method selection
-        FragmentManager manager = getSupportFragmentManager();
-        if(!value || manager.isStateSaved()) return false;
-        Fragment fragment = manager.findFragmentById(mFragmentView.getId());
+        Fragment fragment = getSupportFragmentManager().findFragmentById(mFragmentView.getId());
         // Allow starting the add account only from the main menu, should it be moved to fragment itself ?
         if(!(fragment instanceof MainMenuFragment)) return false;
 
-        Tools.swapFragment(this, SelectAuthFragment.class, SelectAuthFragment.TAG, null);
+        // In landscape two-pane mode, load into right pane; otherwise full-screen swap
+        MainMenuFragment mmf = (MainMenuFragment) fragment;
+        if (!mmf.tryOpenInRightPane(SelectAuthFragment.class, SelectAuthFragment.TAG, null)) {
+            Tools.swapFragment(this, SelectAuthFragment.class, SelectAuthFragment.TAG, null);
+        }
         return false;
     };
 
     /* Listener for the settings fragment */
     private final View.OnClickListener mSettingButtonListener = v -> {
-        FragmentManager manager = getSupportFragmentManager();
-        if(manager.isStateSaved()) return;
-        Fragment fragment = manager.findFragmentById(mFragmentView.getId());
-        if(fragment instanceof MainMenuFragment){
-            Tools.swapFragment(this, LauncherPreferenceFragment.class, SETTING_FRAGMENT_TAG, null);
-        } else{
-            // The setting button doubles as a home button now
+        Fragment fragment = getSupportFragmentManager().findFragmentById(mFragmentView.getId());
+        if (fragment instanceof MainMenuFragment) {
+            MainMenuFragment mmf = (MainMenuFragment) fragment;
+            // In two-pane landscape: if right pane already has content, pressing the
+            // gear/home button pops back to home. If pane is at home, open settings.
+            if (mmf.isRightPaneActive()) {
+                mmf.clearRightPane();
+            } else {
+                if (!mmf.tryOpenInRightPane(LauncherPreferenceFragment.class, SETTING_FRAGMENT_TAG, null)) {
+                    Tools.swapFragment(this, LauncherPreferenceFragment.class, SETTING_FRAGMENT_TAG, null);
+                }
+            }
+        } else {
+            // Portrait: the settings button doubles as a home button when not on main menu
             Tools.backToMainMenu(this);
         }
     };
@@ -106,32 +150,43 @@ public class LauncherActivity extends BaseActivity {
             return false;
         }
 
-        Instance selectedInstance = Instances.loadSelectedInstance();
-
-        if(selectedInstance == null) {
-            Toast.makeText(this, R.string.no_instance, Toast.LENGTH_LONG).show();
+        String selectedProfile = LauncherPreferences.DEFAULT_PREF.getString(LauncherPreferences.PREF_KEY_CURRENT_PROFILE,"");
+        if (LauncherProfiles.mainProfileJson == null || !LauncherProfiles.mainProfileJson.profiles.containsKey(selectedProfile)){
+            Toast.makeText(this, R.string.error_no_version, Toast.LENGTH_LONG).show();
             return false;
         }
-
-        if(selectedInstance.installer != null) {
-            selectedInstance.installer.start();
-            return false;
-        }
-
-        if (!Tools.isValidString(selectedInstance.versionId)){
+        MinecraftProfile prof = LauncherProfiles.mainProfileJson.profiles.get(selectedProfile);
+        if (prof == null || prof.lastVersionId == null || "Unknown".equals(prof.lastVersionId)){
             Toast.makeText(this, R.string.error_no_version, Toast.LENGTH_LONG).show();
             return false;
         }
 
-        if(Accounts.getCurrent() == null){
+        if(mAccountSpinner.getSelectedAccount() == null){
             Toast.makeText(this, R.string.no_saved_accounts, Toast.LENGTH_LONG).show();
             ExtraCore.setValue(ExtraConstants.SELECT_AUTH_METHOD, true);
             return false;
         }
-        String normalizedVersionId = AsyncMinecraftDownloader.normalizeVersionId(selectedInstance.versionId);
+        String normalizedVersionId = AsyncMinecraftDownloader.normalizeVersionId(prof.lastVersionId);
         JMinecraftVersionList.Version mcVersion = AsyncMinecraftDownloader.getListedVersion(normalizedVersionId);
+
+        // Do not load when is a modded version or older than minecraft 1.3 on demo account
+        if (mAccountSpinner.getSelectedAccount().isDemo()) {
+            boolean isOlderThan13 = true;
+
+            if (mcVersion != null) {
+                try {
+                    isOlderThan13 = DateUtils.dateBefore(DateUtils.parseReleaseDate(mcVersion.releaseTime), 2012, 6, 22);
+                } catch (ParseException ignored) {}
+            }
+
+            if (isOlderThan13) {
+                hasNoOnlineProfileDialog(this, getString(R.string.global_error), getString(R.string.demo_versions_supported));
+                return false;
+            }
+        }
+
         new MinecraftDownloader().start(
-                this.getAssets(),
+                this,
                 mcVersion,
                 normalizedVersionId,
                 new ContextAwareDoneListener(this, normalizedVersionId)
@@ -147,11 +202,12 @@ public class LauncherActivity extends BaseActivity {
                     mNotificationManager.cancel(NotificationUtils.NOTIFICATION_ID_GAME_START)
             );
         }
-        return false;
     };
 
     private ActivityResultLauncher<String> mRequestNotificationPermissionLauncher;
+    private ActivityResultLauncher<String> mRequestMicrophonePermissionLauncher;
     private WeakReference<Runnable> mRequestNotificationPermissionRunnable;
+    private WeakReference<Runnable> mRequestMicrophonePermissionRunnable;
 
     @Override
     protected boolean shouldIgnoreNotch() {
@@ -166,7 +222,25 @@ public class LauncherActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Apply saved colour theme before layout inflation
+        setTheme(net.kdt.pojavlaunch.theme.ThemeManager.getSavedTheme());
+        // Apply force-landscape preference before layout inflation
+        if (LauncherPreferences.DEFAULT_PREF.getBoolean("force_landscape", false)) {
+            setRequestedOrientation(android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        }
         setContentView(R.layout.activity_pojav_launcher);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        // If we don't have a back stack root yet...
+        if(fragmentManager.getBackStackEntryCount() < 1) {
+            // Manually add the first fragment to the backstack to get easily back to it
+            // There must be a better way to handle the root though...
+            // (artDev: No, there is not. I've spent days researching this for another unrelated project.)
+            fragmentManager.beginTransaction()
+                    .setReorderingAllowed(true)
+                    .addToBackStack("ROOT")
+                    .add(R.id.container_fragment, MainMenuFragment.class, null, "ROOT").commit();
+        }
+
 
         IconCacheJanitor.runJanitor();
         mRequestNotificationPermissionLauncher = registerForActivityResult(
@@ -175,6 +249,16 @@ public class LauncherActivity extends BaseActivity {
                     if(!isAllowed) handleNoNotificationPermission();
                     else {
                         Runnable runnable = Tools.getWeakReference(mRequestNotificationPermissionRunnable);
+                        if(runnable != null) runnable.run();
+                    }
+                }
+        );
+        mRequestMicrophonePermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                isAllowed -> {
+                    if(!isAllowed) handleNoNotificationPermission();
+                    else {
+                        Runnable runnable = Tools.getWeakReference(mRequestMicrophonePermissionRunnable);
                         if(runnable != null) runnable.run();
                     }
                 }
@@ -193,27 +277,29 @@ public class LauncherActivity extends BaseActivity {
 
         ExtraCore.addExtraListener(ExtraConstants.LAUNCH_GAME, mLaunchGameListener);
 
-        new AsyncVersionList().getVersionList(versions -> ExtraCore.setValue(ExtraConstants.RELEASE_TABLE, versions));
+        new AsyncVersionList().getVersionList(versions -> ExtraCore.setValue(ExtraConstants.RELEASE_TABLE, versions), false);
+
+        mInstallTracker = new ModloaderInstallTracker(this);
 
         mProgressLayout.observe(ProgressLayout.DOWNLOAD_MINECRAFT);
         mProgressLayout.observe(ProgressLayout.UNPACK_RUNTIME);
         mProgressLayout.observe(ProgressLayout.INSTALL_MODPACK);
-        mProgressLayout.observe(ProgressLayout.AUTHENTICATE);
+        mProgressLayout.observe(ProgressLayout.AUTHENTICATE_MICROSOFT);
         mProgressLayout.observe(ProgressLayout.DOWNLOAD_VERSION_LIST);
-        mProgressLayout.observe(ProgressLayout.INSTANCE_INSTALL);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         ContextExecutor.setActivity(this);
-        InstanceInstaller.postInstallCheck(this);
+        mInstallTracker.attach();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         ContextExecutor.clearActivity();
+        mInstallTracker.detach();
     }
 
     @Override
@@ -246,7 +332,29 @@ public class LauncherActivity extends BaseActivity {
             }
         }
 
+        // In landscape two-pane mode: if the right pane has content, pop it instead of exiting
+        Fragment rootFrag = getVisibleFragment("ROOT");
+        if (rootFrag instanceof MainMenuFragment) {
+            MainMenuFragment mmf = (MainMenuFragment) rootFrag;
+            if (mmf.isRightPaneActive()) {
+                mmf.popRightPane();
+                return;
+            }
+            finish();
+            return;
+        }
+
+        // Check if we are at the root then
+        if(getVisibleFragment("ROOT") != null){
+            finish();
+        }
+
         super.onBackPressed();
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        LauncherPreferences.computeNotchSize(this);
     }
 
     @SuppressWarnings("SameParameterValue")
@@ -304,6 +412,11 @@ public class LauncherActivity extends BaseActivity {
                 this,
                 Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_DENIED;
     }
+    public boolean checkForMicrophonePermission() {
+        return ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_DENIED;
+    }
 
     public void askForNotificationPermission(Runnable onSuccessRunnable) {
         if(Build.VERSION.SDK_INT < 33) return;
@@ -313,10 +426,18 @@ public class LauncherActivity extends BaseActivity {
         mRequestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
     }
 
+    public void askForMicrophonePermission(Runnable onSuccessRunnable) {
+        if(onSuccessRunnable != null) {
+            mRequestMicrophonePermissionRunnable = new WeakReference<>(onSuccessRunnable);
+        }
+        mRequestMicrophonePermissionLauncher.launch(Manifest.permission.RECORD_AUDIO);
+    }
+
     /** Stuff all the view boilerplate here */
     private void bindViews(){
         mFragmentView = findViewById(R.id.container_fragment);
         mSettingsButton = findViewById(R.id.setting_button);
+        mAccountSpinner = findViewById(R.id.account_spinner);
         mProgressLayout = findViewById(R.id.progress_layout);
     }
 }

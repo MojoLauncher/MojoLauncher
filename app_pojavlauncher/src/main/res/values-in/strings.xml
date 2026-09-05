@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition untuk Android)</string>
-    <string name="app_short_name">MojoLauncher</string>
+    <string name="app_name">Copper</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
-    <string name="login_online_username_hint">Username</string>
-    <string name="login_online_login_label">Login</string>
+    <string name="login_online_username_hint">Nama pengguna</string>
+    <string name="login_online_login_label">Masuk</string>
     <!-- Hint -->
     <string name="hint_control_mapping">"Sentuh roda gigi diatas tengah untuk membuka menu konteks ⚙️\nSentuh sebuah tombol untuk menyesuaikan: edit, ubah ukuran, atau ubah tombol pintasannya."</string>
     <!-- Warnings -->
@@ -15,8 +14,8 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Pilih sebuah instaler mod</string>
     <!-- Error messages -->
-    <string name="error_fatal">MojoLauncher tiba-tiba crash tanpa diduga</string>
-    <string name="error_no_version">Versi tidak ada!</string>
+    <string name="error_fatal">Copper tiba-tiba crash tanpa diduga</string>
+    <string name="error_no_version">Tidak ada versi yang terdeteksi!</string>
     <string name="error_show_more">Selengkapnya</string>
     <string name="error_show_less">Tampilkan Sedikit</string>
     <!-- Toast messages -->
@@ -49,9 +48,12 @@
     <string name="mcl_setting_subtitle_mousescale">Ubah ukuran penunjuk virtual.</string>
     <string name="mcl_setting_title_javaargs">Argumen peluncuran JVM</string>
     <string name="mcl_setting_subtitle_javaargs">Hati-hati, ini bisa membuat game crash jika dimodifikasi tanpa sepengetahuan.</string>
+    <string name="mcl_setting_title_renderer_settings">Pengaturan Tambahan Renderer</string>
+    <string name="mcl_setting_title_renderer_subtitle">Pengaturan Khusus untuk Renderer</string>
     <string name="mcl_setting_category_renderer">Renderer</string>
-    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (semua versi, cepat)</string>
-    <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) - (semua versi, menengah)</string>
+    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (Mendukung semua versi, Cepat)</string>
+    <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) - (Mendukung semua versi, Lambat)</string>
+    <string name="mcl_setting_renderer_mobileglues">MobileGlues (OpenGL ES) - (Hanya mendukung 1.17+ , Cepat)</string>
     <string name="mcl_setting_renderer_ltw">LTW (OpenGL ES 3) - hanya untuk 1.17+</string>
     <string name="mcl_setting_veroption_release">Rilis</string>
     <string name="mcl_setting_veroption_snapshot">Snapshot</string>
@@ -61,22 +63,24 @@
     <string name="mcl_setting_java_sandbox_subtitle">Kendalikan ketersedian pengelola keamanan sandbox saat meluncurkan berkas .jar.</string>
     <string name="mcl_version_clone">Klon</string>
     <!-- Global strings -->
-    <string name="global_edit">Edit</string>
+    <string name="global_edit">Ubah</string>
     <string name="global_error">Eror</string>
-    <string name="global_load">Memuat</string>
+    <string name="global_load">Muat kontrol</string>
     <string name="global_name">Nama</string>
     <string name="global_remove">Hapus</string>
     <string name="global_clone">Klon</string>
-    <string name="global_restart">Restart</string>
+    <string name="global_restart">Muat ulang</string>
     <string name="global_save">Simpan</string>
-    <string name="global_unpacking">Membongkar %s</string>
+    <string name="global_unpacking">Mengekstrak %s</string>
     <string name="global_error_field_empty">Kolom ini tidak boleh kosong</string>
     <string name="global_waiting">Tunggu</string>
-    <string name="global_select">Pilih</string>
+    <string name="global_select">Select</string>
     <string name="global_retry">Coba lagi</string>
     <string name="global_default">Default</string>
+    <string name="global_off">Off</string>
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Aplikasi/permainan keluar dengan kode %d, cek latestlog.txt untuk detail lebih lanjut.</string>
+    <string name="mcn_signal_title">Aplikasi/Game keluar dengan sinyal fatal %d, cek latestlog.txt untuk detail lebih lanjut.</string>
     <string name="mcn_exit_confirm">Apa anda yakin mau tutup secara paksa?</string>
     <string name="mcn_check_fail_vulkan_support">Renderer Zink (Vulkan) tidak didukung di perangkat ini!</string>
     <!-- MainActivity: Control buttons -->
@@ -114,7 +118,7 @@
 -->
     <string name="customctrl_toggle">Bisa dialihkan</string>
     <string name="customctrl_size">Ukuran</string>
-    <string name="customctrl_mapping">Mapping</string>
+    <string name="customctrl_mapping">Pemetaan</string>
     <string name="customctrl_orientation">Orientasi</string>
     <string name="customctrl_background_color">Warna background</string>
     <string name="customctrl_corner_radius">Radius sudut</string>
@@ -123,7 +127,7 @@
     <string name="customctrl_button_opacity">Opasitas Tombol</string>
     <string name="customctrl_addbutton">Tambah tombol</string>
     <string name="customctrl_addbutton_drawer">Tambahkan tombol drawer</string>
-    <string name="customctrl_addbutton_joystick">Tambah Joystick</string>
+    <string name="customctrl_addbutton_joystick">Tambahkan joystick</string>
     <string name="customctrl_addsubbutton">Tambahkan tombol</string>
     <string name="customctrl_selectdefault">Pilih kontrol default</string>
     <string name="customctrl_export">Ekspor Penataan Kontrol</string>
@@ -134,7 +138,7 @@
     <string name="mcl_setting_check_libraries">Periksa library setelah mendownload</string>
     <string name="mcl_setting_check_libraries_subtitle">Opsi ini memaksa peluncur untuk memeriksa hash library jika tersedia. Mencegah unduhan yang rusak.</string>
     <string name="dl_library_sha_fail">Library %s rusak dan akan di-unduh ulang</string>
-    <string name="dl_library_sha_unknown">Librry %s tidak dapat diperiksa, harus dianggap bagus</string>
+    <string name="dl_library_sha_unknown">Library %s tidak dapat diperiksa, harus dianggap bagus</string>
     <string name="dl_library_sha_pass">Library %s baik-baik saja dan dapat digunakan</string>
     <string name="mcl_disable_gestures">Matikan gestures</string>
     <string name="mcl_disable_gestures_subtitle">Mematikan gestures, seperti tahan lama untuk menghancurkan block, dan pencet untuk menempatkan block.</string>
@@ -142,6 +146,8 @@
     <string name="mcl_disable_swap_hand_subtitle">Nonaktifkan gestur ketuk dua kali pada item hotbar untuk menukarkannya di tangan kedua.</string>
     <string name="mcl_setting_title_mousespeed">Kecepatan Mouse</string>
     <string name="mcl_setting_subtitle_mousespeed">Ubah kecepatan mouse virtual.</string>
+    <string name="mcl_setting_title_grab_mouse">Gunakan kursor virtual</string>
+    <string name="mcl_setting_subtitle_grab_mouse">Menjaga kursor tetap berada di dalam game dan mencegah klik pada tombol kontrol sentuh.</string>
     <string name="customctrl_passthru">Mouse pass-thru</string>
     <string name="customctrl_swipeable">Bisa digesek</string>
     <string name="customctrl_forward_lock">Kunci ke depan</string>
@@ -157,7 +163,7 @@
     <string name="multirt_title">Pengelola Runtime</string>
     <string name="multirt_subtitle">Kelola Runtime Java terpasang.</string>
     <string name="multirt_progress_caching">Menyimpan cache...</string>
-    <string name="multirt_config_setdefault">Set default</string>
+    <string name="multirt_config_setdefault">Tetapkan sebagai default</string>
     <string name="multirt_config_setdefault_already">Default</string>
     <string name="multirt_config_removeerror_last">Kamu harus punya setidaknya satu Runtime Java yang terpasang.</string>
     <string name="multirt_nocompatiblert">Tidak dapat mencari Java Runtime yang kompatibel. Versi ini membutuhkan Java %d atau lebih baru.</string>
@@ -175,14 +181,13 @@
     <string name="preference_java_description">Runtime Java, Argumen JVM, Jumlah RAM dan sandbox</string>
     <string name="preference_misc_title">Pengaturan lain-lain</string>
     <string name="preference_misc_description">Daftar versi dan pemeriksaan lib</string>
-    <string name="preference_experimental_title">Barang Eksperimental</string>
     <string name="preference_experimental_description">Gunakan hal-hal di sana dengan pertimbangan, tidak ada dukungan</string>
     <string name="preference_sustained_performance_title">Aktifkan mode kinerja berkelanjutan</string>
     <string name="preference_sustained_performance_description">Batasi thermal throttling dengan cara membatasi performa maksimal.</string>
     <string name="preference_force_vsync_title">Paksa aktifkan VSync</string>
     <string name="preference_force_vsync_description">Batasi thermal throttling dengan cara membatasi performa maksimal.</string>
-    <string name="preference_force_english_title">Paksa bahasa ke bahasa Inggris</string>
-    <string name="preference_force_english_description">Memperbolehkan anda untuk melihat string asli, seperti kehendak pengembang. Membutuhkan muat ulang.</string>
+    <string name="preference_force_english_title">Tetapkan bahasa peluncur ke bahasa Inggris</string>
+    <string name="preference_force_english_description">Memperbolehkan anda untuk melihat string asli, seperti kehendak pengembang. perlu restart aplikasi.</string>
     <string name="preference_edit_controls_title">Ubah kontrol kustom</string>
     <string name="preference_edit_controls_summary">Atur skema kontrol untuk menyesuaikan kebutuhan Anda.</string>
     <string name="preference_category_gyro_controls">Kontrol Giro</string>
@@ -202,8 +207,10 @@
     <string name="global_delete">Hapus</string>
     <string name="pedit_java_runtime">Runtime Java</string>
     <string name="pedit_renderer">Renderer</string>
+    <string name="arc_capes_title">Capes Cosmetica</string>
+    <string name="arc_capes_desc">Mengaktifkan capes dari Cosmetica (sebelumnya Arc). Untuk informasi lebih lanjut silahkan kunjungi https://cosmetica.cc. Membutuhkan OptiFine.</string>
     <string name="notif_channel_name">Umum</string>
-    <string name="lazy_service_default_title">Mojo Foreground Service</string>
+    <string name="lazy_service_default_title">Copper Sedang Berjalan Di Latar Depan</string>
     <string name="mcl_setting_veroption_installed">Terpasang</string>
     <string name="use_global_default">(Gunakan global bawaan)</string>
     <string name="default_control">Kontrol bawaan</string>
@@ -233,12 +240,12 @@
     <string name="preference_gyro_sample_rate_title">Tingkat pengambilan sampel giroskop</string>
     <string name="preference_gyro_sample_rate_description">Jika anda memiliki masalah perfoma dengan kontrol giroskop, tingkatkan ini.</string>
     <string name="microsoft_login_retry_later">Terlalu banyak permintaan, coba lagi nanti.</string>
-    <string name="storage_required">MojoLauncher membutuhkan penyimpanan eksternal. Mohon untuk dipasang kembali dan merestart aplikasi.</string>
+    <string name="storage_required">PojavLauncher membutuhkan penyimpanan eksternal. Mohon untuk dipasang kembali dan merestart aplikasi.</string>
     <string name="mcl_setting_title_buttonallcaps">Hanya gunakan huruf kapital di label tombol</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Matikan ini jika kamu ingin menggunakan huruf kecil di kontrol.</string>
+    <string name="create_profile">Buat profil baru</string>
     <string name="preference_shader_dump_title">Aktifkan shader dumping</string>
     <string name="preference_shader_dump_description">Simpan catatan shader ke sebuah berkas.</string>
-    <string name="percent_format">%d%%</string>
     <string name="millisecond_format">%d ms</string>
     <string name="customctrl_editor_exit_title">Meninggalkan?</string>
     <string name="customctrl_editor_exit_msg">Anda yakin ingin keluar?</string>
@@ -265,15 +272,20 @@
     <string name="fabric_dl_game_version">Versi Minecraft</string>
     <string name="fabric_dl_install">Pasang</string>
     <string name="fabric_dl_cant_read_meta">Gagal membaca metadata loader %s. Mohon coba lagi nanti.</string>
+    <string name="modloader_dl_install_fabric">Buat profil Fabric</string>
+    <string name="modloader_dl_install_quilt">Buat profil Quilt</string>
+    <string name="modloader_dl_install_forge">Buat profil Forge</string>
+    <string name="create_profile_vanilla">Buat profil Vanilla</string>
     <string name="create_profile_vanilla_like_versions">Seperti Versi Vanilla</string>
     <string name="create_profile_modded_versions">Versi dimodifikasi</string>
     <string name="fabric_dl_loader_title">Pilih versi</string>
     <string name="of_dl_select_version">Pilih versi OptiFine</string>
     <string name="of_dl_failed_to_scrape">Gagal mengoleksi data untuk instalasi OptiFine</string>
     <string name="of_dl_progress">Mengunduh %s</string>
+    <string name="create_profile_optifine">Buat profil OptiFine</string>
     <string name="hint_search_modpack">Cari paket modifikasi</string>
-    <string name="preference_vulkan_driver_system_title">Gunakan driver Vulkan sistem</string>
-    <string name="preference_vulkan_driver_system_description">Paksa peluncur untuk menggunakan driver Vulkan sistem daripada Turnip di GPU Adreno. Hanya mempengaruhi Zink dan mod-mod yang menggunakan Vulkan.</string>
+    <string name="preference_vulkan_driver_system_title">Gunakan driver Vulkan dari sistem</string>
+    <string name="preference_vulkan_driver_system_description">Gunakan driver Vulkan bawaan sistem, bukan Turnip, di GPU Adreno. Berlaku hanya untuk Zink dan mod yang memakai Vulkan.</string>
     <string name="generic_install">Pasang</string>
     <string name="generic_apply">Terapkan</string>
     <string name="generic_debug">Debug</string>
@@ -284,13 +296,14 @@
     <string name="modpack_download_downloading_mods">Mengunduh mod-mod (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">Mengunduh mod-mod (Berkas %d dari %d)</string>
     <string name="modpack_download_applying_overrides">Menerapkan pergantian-pergantian paksa (%d/%d)</string>
-    <string name="modpack_install_notification_title">Pemasang Modpack Mojo</string>
-    <string name="modpack_install_notification_success">Pencet ini untuk menyelesaikan pemasangan modpack</string>
+    <string name="modpack_install_notification_title">Pemasang Modpack Pojav</string>
+    <string name="modpack_install_notification_success">Klik di sini untuk menyelesaikan pemasangan modpack</string>
     <string name="modpack_install_notification_data_not_available">Gagal mengunduh informasi loader mod</string>
     <string name="modpack_install_modloader_download_failed">Gagal mengunduh berkas-berkas loader mod</string>
     <string name="modpack_install_download_failed">Gagal mengunduh berkas-berkas modpack</string>
+    <string name="modpack_install_button">Buat profil modpack</string>
     <string name="notif_error_occured">Terjadi sebuah kesalahan</string>
-    <string name="notif_error_occured_desc">Pencet untuk melihat detail lebih lanjut</string>
+    <string name="notif_error_occured_desc">Klik untuk melihat detail lebih lanjut</string>
     <string name="fabric_dl_only_stable">Hanya tunjukkan versi-versi stabil</string>
     <string name="dl_tampered_manifest_title">Peringatan verifikasi berkas</string>
     <string name="dl_tampered_manifest"><![CDATA[Manifes versi permainan di mirror tidak sama dengan yang resmi dari Mojang, yang kemungkinan berarti manifesnya telah dimodifikasi oleh pihak lain.<br/>
@@ -313,7 +326,7 @@
     <string name="preference_category_miscellaneous">Pengaturan lain-lain</string>
     <string name="preference_category_video">Pengaturan video</string>
     <string name="notification_permission_dialog_title">Permintaan izin</string>
-    <string name="notification_permission_dialog_text">Mojo launcher memperlukan izin untuk post notifikasi untuk mencegah download game/modpack berhenti ketika keluar dari aplikasi. Tanpa izin ini, android mungkin membatalkan unduhan ketita menempatkan MojoLaunher dalam mode latar belakang.</string>
+    <string name="notification_permission_dialog_text">Pojav launcher memperlukan izin untuk post notifikasi untuk mencegah download game/modpack berhenti ketika keluar dari aplikasi. Tanpa izin ini, android mungkin membatalkan unduhan ketita menempatkan PojavLaunher dalam mode latar belakang.</string>
     <string name="notification_permission_toast">kamu selalu dapat berubah pikiran nanti dengan masuk ke Pengaturan</string>
     <string name="preference_ask_for_notification_title">Izinkan notifikasi</string>
     <string name="preference_ask_for_notification_description">Tekan untuk meminta kembali izin notifikasi, dibutuhkan untuk pengunduhan latar belakang permainan/modpack untuk berjalan dengan benar.</string>
@@ -340,8 +353,8 @@
     <string name="controller_button_b">B</string>
     <string name="controller_button_x">X</string>
     <string name="controller_button_y">Y</string>
-    <string name="controller_button_start">Mulai</string>
-    <string name="controller_button_select">Pilih</string>
+    <string name="controller_button_start">Start</string>
+    <string name="controller_button_select">Select</string>
     <string name="controller_button_trigger_left">Pemicu Kiri</string>
     <string name="controller_button_trigger_right">Pemicu Kanan</string>
     <string name="controller_button_shoulder_left">Bahu Kiri</string>
@@ -365,10 +378,52 @@
     <string name="controller_remapper_expand_entry">Besarkan untuk mengganti kode kunci</string>
     <string name="preference_remap_controller_title">Ganti pengikatan kunci kontroller</string>
     <string name="preference_remap_controller_description">Memperbolehkan anda untuk memodifikasikan kunci yang terikat ke setiap tombol kontroller</string>
-    <string name="mcl_button_social_media">Discord</string>
+    <string name="mcl_button_discord">Discord</string>
     <string name="ltw_render_distance_warning_msg">GPU anda tidak mampu untuk merender diatas 7 jarak render tanpa menginstall Sodium atau modifikasi serupa. Jarak render akan di kurangi secara otomatis setelah anda mengklik \"OK\".</string>
     <string name="mcl_button_open_directory">Buka direktori permainan</string>
-    <string name="local_login_bad_username_title">Username tidak cocok</string>
-    <string name="local_login_bad_username_text">Panjang username harus diantara 3–16 karakter, dan harus hanya berisi huruf latin, nomor 0–9 dan mengaris bawahi.</string>
+    <string name="local_login_bad_username_title">Nama pengguna tidak cocok</string>
+    <string name="local_login_bad_username_text">Nama pengguna harus 3–16 karakter, hanya boleh pakai huruf, angka, dan garis bawah.</string>
     <string name="quick_setting_title">Pengaturan cepat</string>
+    <string name="create_bta_profile">Buat profil \"Better than Adventure!\"</string>
+    <string name="select_bta_version">Pilih versi \"Better than Adventure!\"</string>
+    <string name="bta_installer_available_versions">Versi BTA yang di dukung</string>
+    <string name="bta_installer_untested_versions">Versi BTA yang belum di uji</string>
+    <string name="bta_installer_nightly_versions">Versi BTA Nightly</string>
+    <string name="newdl_extracting_native_libraries">Mengekstrak pustaka native (%d/%d)</string>
+    <string name="toast_not_available_demo">Fitur ini tidak tersedia dalam mode demo</string>
+    <string name="preference_renderer_mobileglues_settings">Setelan Renderer Untuk MobileGlues</string>
+    <string name="mg_renderer_glsl_cache">Ukuran Maksimum Cache GLSL</string>
+    <string name="mg_renderer_angle">Gunakan ANGLE sebagai driver</string>
+    <string name="mg_renderer_multidraw">Mode Emulasi Multidraw</string>
+    <string name="mg_renderer_title_errorSetting">Error Filtering</string>
+    <string name="mg_renderer_title_timerQueryExt">Nonaktifkan Penggunaan GPU di menu F3</string>
+    <string name="mg_renderer_summary_timerQueryExt">Memperbaiki crash acak saat F3 dibuka di beberapa perangkat Mali</string>
+    <string name="preference_ANGLE_only">Opsi khusus untuk ANGLE</string>
+    <string name="mg_renderer_title_angleDepthClearFixMode">Memperbaiki tangan dan item yang dipegang agar tidak menembus blok</string>
+    <string name="mg_renderer_summary_angleDepthClearFixMode">Hanya memengaruhi ANGLE, bisa memengaruhi performa.</string>
+    <string name="preference_experimental_title">Fitur Eksperimental</string>
+    <string name="mg_renderer_title_gl43exts">Gunakan Ekstensi Eksperimental OpenGL 4.3</string>
+    <string name="mg_renderer_summary_gl43exts">Dapat membantu menghindari crash karena mod. Matikan jika tidak diperlukan, karena bisa menyebabkan crash.</string>
+    <string name="mg_renderer_title_computeShaderext">Gunakan Ekstensi Compute Shader Eksperimental</string>
+    <string name="mg_renderer_summary_computeShaderext">Mungkin membantu mengatasi glitch pada shaderpack. Nonaktifkan jika tidak diperlukan, karena bisa menyebabkan crash.</string>
+    <string name="mg_renderer_title_multidrawCompute">Gunakan Emulasi Multidraw Compute</string>
+    <string name="mg_renderer_summary_multidrawCompute">Menggunakan compute shaders untuk emulasi multidraw</string>
+    <string name="app_short_name">Copper</string>
+    <string name="demo_versions_supported">Hanya Minecraft Vanilla versi 1.3.1 ke atas yang didukung untuk akun demo</string>
+    <string name="demo_unsupported">Profil Demo tidak di dukung</string>
+    <string name="change_account">Ganti akun terlebih dahulu untuk menggunakan fitur ini</string>
+    <string name="no_minecraft_account_found">Tidak Ada Akun Minecraft Java Yang Ditemukan</string>
+    <string name="feature_requires_java_account">Fitur ini hanya tersedia untuk akun Microsoft yang telah membeli Minecraft Java Edition.</string>
+    <string name="delete_account_and_login">Hapus akun dan masuk lagi</string>
+    <string name="login_again">Silakan masuk kembali</string>
+    <string name="account_corrupted">Akun yang dipilih rusak atau tidak valid</string>
+    <string name="modloader_dl_install_neoforge">Buat profil NeoForge</string>
+    <string name="neoforge_dl_select_version">Pilih versi NeoForge</string>
+    <string name="neoforge_dl_no_installer">Maaf, versi NeoForge ini belum punya installer, jadi belum didukung untuk saat ini.</string>
+    <string name="preference_category_touchcontroller_settings">Pengaturan Kontrol Sentuh</string>
+    <string name="preference_force_enable_touchcontroller_title">Selalu aktifkan kontrol sentuh</string>
+    <string name="preference_force_enable_touchcontroller_description">Selalu aktifkan integrasi kontrol sentuh, meskipun file mod tidak ditemukan.</string>
+    <string name="preference_touchcontroller_vibrate_length_title">Durasi getaran kontrol sentuh</string>
+    <string name="preference_touchcontroller_vibrate_length_description">Atur durasi getaran saat menggunakan kontrol sentuh.</string>
+    <string name="error_vanilla_json_corrupt">File JSON bawaan tampaknya rusak. Silakan kirim laporan bug di GitHub atau Discord.</string>
 </resources>

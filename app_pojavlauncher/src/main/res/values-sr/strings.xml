@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
-    <string name="app_name">MojoLauncher (Minecraft: Java Edition за Андроид)</string>
-    <string name="app_short_name">MojoLauncher</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -13,7 +11,6 @@
     <!-- AlertDialog title -->
     <string name="alerttitle_installmod">Селектујте мод инсталер</string>
     <!-- Error messages -->
-    <string name="error_fatal">ПојавЛаунчер је неочекивано угасио</string>
     <string name="error_no_version">Нема верзије!</string>
     <string name="error_show_more">Прикажи више</string>
     <string name="error_show_less">Прикажи мање</string>
