@@ -65,7 +65,7 @@
 
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/vprof_editor_version_sub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/profiles_profile_version"
@@ -101,6 +101,17 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/vprof_editor_version_spinner" />
 
+            <com.kdt.mcgui.MineButton
+                android:id="@+id/vprof_editor_manage_mods"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/vprof_editor_manage_mods"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/vprof_editor_version_spinner"
+                android:visibility="gone"/>
+
 
             <TextView
                 android:id="@+id/textView7"
@@ -124,7 +135,7 @@
 
                 app:layout_constraintEnd_toStartOf="@id/vprof_editor_ctrl_button"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/vprof_editor_version_spinner" />
+                app:layout_constraintTop_toBottomOf="@+id/vprof_editor_manage_mods" />
 
             <Button
                 android:id="@+id/vprof_editor_ctrl_button"
@@ -139,11 +150,12 @@
                 app:layout_constraintTop_toTopOf="@id/vprof_editor_ctrl_spinner" />
 
             <TextView
+                android:id="@+id/vprof_editor_data_checkbox_sub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/instance_shared_data"
                 app:layout_constraintBottom_toTopOf="@+id/vprof_editor_data_checkbox_container"
-                app:layout_constraintStart_toStartOf="@+id/vprof_editor_data_checkbox_container"/>
+                app:layout_constraintStart_toStartOf="@+id/vprof_editor_data_checkbox_container" />
 
             <CheckBox
                 android:id="@+id/vprof_editor_data_checkbox_container"

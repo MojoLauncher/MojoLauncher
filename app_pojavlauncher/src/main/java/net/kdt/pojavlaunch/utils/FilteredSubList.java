@@ -21,12 +21,12 @@ public class FilteredSubList<E> extends AbstractList<E> implements List<E> {
 
     private final ArrayList<E> mArrayList;
 
-    public FilteredSubList(E[] motherList, BasicPredicate<E> filter){
+    public FilteredSubList(Iterable<E> motherList, BasicPredicate<E> filter){
         mArrayList = new ArrayList<>();
         refresh(motherList, filter);
     }
 
-    public void refresh(E[] motherArray, BasicPredicate<E> filter){
+    public void refresh(Iterable<E> motherArray, BasicPredicate<E> filter){
         if(!mArrayList.isEmpty()) mArrayList.clear();
 
         for(E item : motherArray){

@@ -11,7 +11,9 @@ import net.kdt.pojavlaunch.downloader.TaskMetadata;
 import net.kdt.pojavlaunch.mirrors.DownloadMirror;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.Constants;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
+import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDownload;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModItem;
+import net.kdt.pojavlaunch.modloaders.modpacks.models.ModSource;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModrinthIndex;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchFilters;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchResult;
@@ -86,33 +88,31 @@ public class ModrinthApi implements ModpackApi{
     }
 
     @Override
-    public ModDetail getModDetails(ModItem item) {
+    public ModDownload[] getDownloads(ModSource item) {
 
         JsonArray response = mApiHandler.get(String.format("project/%s/version", item.id), JsonArray.class);
         if(response == null) return null;
         System.out.println(response);
-        String[] names = new String[response.size()];
-        String[] mcNames = new String[response.size()];
-        String[] urls = new String[response.size()];
-        String[] hashes = new String[response.size()];
+        ModDownload[] downloads = new ModDownload[response.size()];
 
         for (int i=0; i<response.size(); ++i) {
             JsonObject version = response.get(i).getAsJsonObject();
-            names[i] = version.get("name").getAsString();
-            mcNames[i] = version.get("game_versions").getAsJsonArray().get(0).getAsString();
-            urls[i] = version.get("files").getAsJsonArray().get(0).getAsJsonObject().get("url").getAsString();
+            String name = version.get("name").getAsString();
+            String mcName = version.get("game_versions").getAsJsonArray().get(0).getAsString();
+            String url = version.get("files").getAsJsonArray().get(0).getAsJsonObject().get("url").getAsString();
+            String hash;
             // Assume there may not be hashes, in case the API changes
             JsonObject hashesMap = version.getAsJsonArray("files").get(0).getAsJsonObject()
                     .get("hashes").getAsJsonObject();
             if(hashesMap == null || hashesMap.get("sha1") == null){
-                hashes[i] = null;
-                continue;
+                hash = null;
+            }else {
+                hash = hashesMap.get("sha1").getAsString();
             }
-
-            hashes[i] = hashesMap.get("sha1").getAsString();
+            downloads[i] = new ModDownload(name, mcName, url, hash);
         }
 
-        return new ModDetail(item, names, mcNames, urls, hashes);
+        return downloads;
     }
 
     @Override

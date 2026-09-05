@@ -510,6 +510,15 @@
     <string name="preference_show_memory_warning_summary">If enabled, displays the warning dialog that is shown during game launch if the amount of free memory is less than allocated to the game</string>
     <string name="option_do_not_show_again">Don\'t show again</string>
     <string name="loading_screen_title">Waiting for a game window to appear…</string>
+    <string name="loading_screen_booted">Appeared!</string>
+    <string name="loading_screen_warning">If you stuck here the game might been crashed</string>
+    <string name="vprof_editor_manage_mods">Manage mods</string>
+    <string name="mod_manager_import_mod">Import</string>
+    <string name="mod_manager_mod_corrupt">Corrupt mod</string>
+    <string name="mod_manager_mod_corrupt_cant_read">This file cannot be read</string>
+    <string name="mod_manager_mod_corrupt_not_a_mod">This file isn\'t a mod or isn\'t compatible with this mod loader</string>
+    <string name="mod_manager_mod_unknown_description">No description</string>
+    <string name="mod_manager_mod_unknown_version">Unknown version</string>
     <string name="loading_screen_booted">Ready - running on %1$s!</string>
     <string name="loading_screen_warning">If you are stuck here, the game might have crashed</string>
     <string name="preference_metadata_clear">Clear metadata cache</string>
