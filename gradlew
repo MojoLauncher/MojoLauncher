@@ -1,4 +1,5 @@
 #!/bin/sh
+# Cryonix Launcher V2 Update
 
 #
 # Copyright © 2015-2021 the original authors.

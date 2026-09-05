@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/instance_card_root"
+    android:layout_width="220dp"
+    android:layout_height="80dp"
+    android:layout_marginEnd="16dp"
+    android:background="@drawable/launcher_card_flat"
+    android:padding="12dp">
+
+    <ImageView
+        android:id="@+id/instance_icon"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:contentDescription="Icon"
+        android:src="@drawable/cryonixlauncher"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/instance_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:singleLine="true"
+        android:text="Instance Name"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@+id/instance_menu"
+        app:layout_constraintStart_toEndOf="@id/instance_icon"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/instance_version"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="1.20.1"
+        android:textColor="#8A8A8A"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/instance_name" />
+
+    <ImageButton
+        android:id="@+id/instance_menu"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="More"
+        android:src="@drawable/ic_px_sliders"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="#8A8A8A" />
+
+    <ImageButton
+        android:id="@+id/instance_play_small"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@drawable/launcher_sidebar_home_bg"
+        android:contentDescription="Play"
+        android:padding="8dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_px_play"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="#FFFFFF" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

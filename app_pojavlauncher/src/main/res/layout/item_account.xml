@@ -20,7 +20,7 @@
         app:drawableEndSize="@dimen/_30sdp"
 
         tools:text="HELLO THERE"
-        tools:drawableStart="@mipmap/ic_launcher"
+        tools:drawableStart="@drawable/cryonixlauncher"
 
 
         tools:ignore="RtlSymmetry" />

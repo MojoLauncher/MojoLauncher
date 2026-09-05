@@ -7,12 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.system.Os;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -47,7 +49,10 @@ import net.kdt.pojavlaunch.services.ProgressServiceKeeper;
 import net.kdt.pojavlaunch.tasks.MoJsonExtras;
 import net.kdt.pojavlaunch.tasks.AsyncVersionList;
 import net.kdt.pojavlaunch.tasks.MoJsonDownloader;
+import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.NotificationUtils;
+import net.kdt.pojavlaunch.fragments.GamepadMapperFragment;
+import net.kdt.pojavlaunch.CustomControlsActivity;
 
 import git.artdeell.mojo.R;
 
@@ -56,7 +61,12 @@ public class LauncherActivity extends BaseActivity {
 
     private FragmentContainerView mFragmentView;
     private ImageButton mSettingsButton;
+    private VideoView mVideoBackground;
     private ProgressLayout mProgressLayout;
+
+    private View mNavGroup;
+    private ImageButton mBtnDownload, mBtnControls, mBtnInfo, mBtnGallery;
+    private ImageButton mSidebarHome, mSidebarMouse, mSidebarControls, mSidebarInfo, mSidebarSettings;
     private ProgressServiceKeeper mProgressServiceKeeper;
     private NotificationManager mNotificationManager;
     private static ActivityResultLauncher<String> mRequestPermissionLauncher;
@@ -65,8 +75,9 @@ public class LauncherActivity extends BaseActivity {
     private final FragmentManager.FragmentLifecycleCallbacks mFragmentCallbackListener = new FragmentManager.FragmentLifecycleCallbacks() {
         @Override
         public void onFragmentResumed(@NonNull FragmentManager fm, @NonNull Fragment f) {
-            mSettingsButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), f instanceof MainMenuFragment
-                    ? R.drawable.ic_px_sliders : R.drawable.ic_px_home));
+            boolean isMain = f instanceof MainMenuFragment;
+            mSidebarHome.setBackgroundResource(isMain ? R.drawable.launcher_sidebar_home_bg : 0);
+            mSidebarHome.setColorFilter(isMain ? 0xFFFFFFFF : 0xFF8A8A8A);
         }
     };
 
@@ -158,7 +169,7 @@ public class LauncherActivity extends BaseActivity {
 
     @Override
     public boolean setFullscreen() {
-        return false;
+        return true;
     }
 
     @Override
@@ -197,6 +208,9 @@ public class LauncherActivity extends BaseActivity {
         ExtraCore.addExtraListener(ExtraConstants.SELECT_AUTH_METHOD, mSelectAuthMethod);
 
         ExtraCore.addExtraListener(ExtraConstants.LAUNCH_GAME, mLaunchGameListener);
+
+        setupVideoBackground();
+        setupNavigationListeners();
 
         new AsyncVersionList().getVersionList(versions -> ExtraCore.setValue(ExtraConstants.RELEASE_TABLE, versions));
 
@@ -331,6 +345,64 @@ public class LauncherActivity extends BaseActivity {
     private void bindViews(){
         mFragmentView = findViewById(R.id.container_fragment);
         mSettingsButton = findViewById(R.id.setting_button);
+        mVideoBackground = findViewById(R.id.video_background);
         mProgressLayout = findViewById(R.id.progress_layout);
+
+        mBtnDownload = findViewById(R.id.btn_download);
+        mBtnControls = findViewById(R.id.btn_controls);
+        mBtnInfo = findViewById(R.id.btn_info_top);
+        mBtnGallery = findViewById(R.id.btn_gallery);
+
+        mSidebarHome = findViewById(R.id.sidebar_home);
+        mSidebarMouse = findViewById(R.id.sidebar_mouse);
+        mSidebarControls = findViewById(R.id.sidebar_controls);
+        mSidebarInfo = findViewById(R.id.sidebar_info);
+        mSidebarSettings = findViewById(R.id.sidebar_settings);
+    }
+
+    private void setupNavigationListeners() {
+        View.OnClickListener homeListener = v -> Tools.backToMainMenu(this);
+        View.OnClickListener settingsListener = v -> {
+            if (!(getVisibleFragment(mFragmentView.getId()) instanceof LauncherPreferenceFragment)) {
+                Tools.swapFragment(this, LauncherPreferenceFragment.class, SETTING_FRAGMENT_TAG, null);
+            }
+        };
+
+        mSidebarHome.setOnClickListener(homeListener);
+        mSidebarSettings.setOnClickListener(settingsListener);
+        mSettingsButton.setOnClickListener(settingsListener);
+
+        mBtnDownload.setOnClickListener(v -> runInstallerWithConfirmation());
+        mBtnControls.setOnClickListener(v -> startActivity(new Intent(this, CustomControlsActivity.class)));
+        mSidebarControls.setOnClickListener(v -> startActivity(new Intent(this, CustomControlsActivity.class)));
+        
+        View.OnClickListener infoListener = v -> Tools.shareLog(this);
+        mBtnInfo.setOnClickListener(infoListener);
+        mSidebarInfo.setOnClickListener(infoListener);
+
+        mBtnGallery.setOnClickListener(v -> Tools.openURL(this, getString(R.string.social_media_invite)));
+        
+        mSidebarMouse.setOnClickListener(v -> {
+             // Toggle mouse or something? For now just home
+             Tools.backToMainMenu(this);
+        });
+    }
+
+    private void runInstallerWithConfirmation() {
+        if (ProgressKeeper.getTaskCount() == 0) {
+            ExtraCore.setValue("TRIGGER_INSTALLER", true);
+        } else Toast.makeText(this, R.string.tasks_ongoing, Toast.LENGTH_LONG).show();
+    }
+
+    private void setupVideoBackground() {
+        if (mVideoBackground == null) return;
+        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.cryonix);
+        mVideoBackground.setVideoURI(uri);
+        mVideoBackground.setOnPreparedListener(mp -> {
+            mp.setLooping(true);
+            // Mute video if preferred, otherwise remove this line
+            mp.setVolume(0, 0); 
+            mVideoBackground.start();
+        });
     }
 }

@@ -31,12 +31,12 @@
         android:allowNativeHeapPointerTagging="false"
         android:appCategory="game"
         android:hasFragileUserData="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/cryonixlauncher"
         android:isGame="true"
         android:label="@string/app_short_name"
         android:process=":launcher"
         android:resizeableActivity="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/cryonixlauncher"
         android:theme="@style/AppTheme"
         android:networkSecurityConfig="@xml/netconfig"
         android:enableOnBackInvokedCallback="false"
@@ -53,7 +53,9 @@
             android:name="net.kdt.pojavlaunch.TestStorageActivity"
             android:exported="true"
             android:label="@string/app_short_name"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboard|keyboardHidden|uiMode">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -63,7 +65,9 @@
         <activity
             android:name="net.kdt.pojavlaunch.LauncherActivity"
             android:label="@string/app_short_name"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboard|keyboardHidden|uiMode"/>
         <activity
             android:name="net.kdt.pojavlaunch.ImportControlActivity"
             android:configChanges="keyboard|keyboardHidden"
@@ -87,14 +91,17 @@
         <activity
             android:name="net.kdt.pojavlaunch.FatalErrorActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|keyboard|navigation"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog"
+            android:screenOrientation="landscape" />
         <activity android:name="net.kdt.pojavlaunch.ShowErrorActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|keyboard|navigation"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog"
+            android:screenOrientation="landscape" />
         <activity
             android:name="net.kdt.pojavlaunch.ExitActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|keyboard|navigation"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog"
+            android:screenOrientation="landscape" />
         <activity
             android:process=":gui_installer"
             android:name="net.kdt.pojavlaunch.awt.AWTActivity"

@@ -81,7 +81,7 @@ android {
 
     defaultConfig {
         applicationId "git.artdeell.mjlaunch"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 36
         versionCode getDateSeconds()
         versionName getVersionName()
@@ -312,6 +312,7 @@ afterEvaluate {
 }
 
 dependencies {
+    implementation 'androidx.fragment:fragment:1.9.0'
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
     implementation 'commons-codec:commons-codec:1.19.0'
     // implementation 'com.wu-man:android-bsf-api:3.1.3'

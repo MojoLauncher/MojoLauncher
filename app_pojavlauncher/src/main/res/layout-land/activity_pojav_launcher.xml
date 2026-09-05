@@ -1,44 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent">
+    android:background="#000000">
 
-    <com.kdt.mcgui.AccountSpinner
-        android:id="@+id/account_spinner"
+    <VideoView
+        android:id="@+id/video_background"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_42sdp"
-
-        android:dropDownWidth="wrap_content"
-        android:dropDownVerticalOffset="@dimen/_42sdp"
-
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <ImageButton
-        android:id="@+id/setting_button"
-        android:layout_width="@dimen/_52sdp"
-        android:layout_height="@dimen/_42sdp"
-        android:background="?attr/selectableItemBackground"
-        android:src="@drawable/ic_px_sliders"
-        android:scaleType="fitCenter"
-
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <View
+        android:id="@+id/background_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/launcher_background_overlay"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Top Bar -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <!-- Holding most of the dynamic content -->
+        <ImageView
+            android:id="@+id/launcher_logo_small"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="16dp"
+            android:contentDescription="Logo"
+            android:src="@drawable/cryonixlauncher"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.656" />
+
+        <TextView
+            android:id="@+id/launcher_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:fontFamily="@font/minecraft_ten"
+            android:text="Cryonix Launcher"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/launcher_logo_small"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/launcher_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:fontFamily="@font/minecraft_ten"
+            android:text="V2"
+            android:textColor="#3D93FF"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/launcher_name"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Navigation Group - Transparent -->
+        <LinearLayout
+            android:id="@+id/nav_group"
+            android:layout_width="wrap_content"
+            android:layout_height="42dp"
+            android:layout_marginStart="24dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/launcher_v2"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/btn_download"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_px_file_dl"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                app:tint="#FFFFFF"
+                android:contentDescription="Downloads" />
+
+            <ImageButton
+                android:id="@+id/btn_controls"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_px_gamepad"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                app:tint="#FFFFFF"
+                android:contentDescription="Controls" />
+
+            <ImageButton
+                android:id="@+id/btn_info_top"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_px_sharelog"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                app:tint="#FFFFFF"
+                android:contentDescription="Info" />
+
+            <ImageButton
+                android:id="@+id/btn_gallery"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_px_image"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                app:tint="#FFFFFF"
+                android:contentDescription="Gallery" />
+
+        </LinearLayout>
+
+        <!-- Profile / Dropdown - Transparent -->
+        <FrameLayout
+            android:id="@+id/profile_section"
+            android:layout_width="wrap_content"
+            android:layout_height="42dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/setting_button_container"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="4dp"
+                android:paddingEnd="12dp">
+
+                <ImageView
+                    android:id="@+id/profile_avatar_top"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/cryonixlauncher"
+                    android:padding="2dp"
+                    android:contentDescription="Avatar" />
+
+                <TextView
+                    android:id="@+id/profile_name_top"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="User"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/launcher_badge_pill"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:text="LOCAL"
+                    android:textColor="#FFFFFF"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/spinner_arrow"
+                    app:tint="#66FFFFFF"
+                    android:contentDescription="More" />
+            </LinearLayout>
+
+            <com.kdt.mcgui.AccountSpinner
+                android:id="@+id/account_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:dropDownVerticalOffset="52dp"
+                android:popupBackground="@drawable/launcher_card_flat"
+                android:spinnerMode="dropdown" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/setting_button_container"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/setting_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackground"
+                android:padding="11dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_px_sliders"
+                app:tint="#FFFFFF"
+                android:contentDescription="Settings" />
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Sidebar - Transparent -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/sidebar_container"
+        android:layout_width="64dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_bar">
+
+        <ImageButton
+            android:id="@+id/sidebar_home"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:padding="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_px_home"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#FFFFFF"
+            android:contentDescription="Home" />
+
+        <ImageButton
+            android:id="@+id/sidebar_mouse"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_px_mouse"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sidebar_home"
+            app:tint="#8A8A8A"
+            android:contentDescription="Mouse" />
+
+        <ImageButton
+            android:id="@+id/sidebar_controls"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_px_gamepad"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sidebar_mouse"
+            app:tint="#8A8A8A"
+            android:contentDescription="Controls" />
+
+        <ImageButton
+            android:id="@+id/sidebar_info"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_px_sharelog"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sidebar_controls"
+            app:tint="#8A8A8A"
+            android:contentDescription="Info" />
+
+        <ImageButton
+            android:id="@+id/sidebar_settings"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginBottom="12dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_px_sliders"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:tint="#8A8A8A"
+            android:contentDescription="Settings" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Content Area -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/container_fragment"
         android:name="net.kdt.pojavlaunch.fragments.MainMenuFragment"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/progress_layout"
-        app:layout_constraintTop_toBottomOf="@+id/account_spinner" />
-
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/sidebar_container"
+        app:layout_constraintTop_toBottomOf="@+id/top_bar" />
 
     <com.kdt.mcgui.ProgressLayout
         android:id="@+id/progress_layout"
@@ -46,8 +330,5 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent" />
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

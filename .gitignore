@@ -6,7 +6,9 @@ app_pojavlauncher/src/main/assets/components/jre
 /app_pojavlauncher/src/main/assets/components/jre-21/
 local.properties
 .idea/
+*.iml
 app_pojavlauncher/.cxx/
 .vs/
 /curseforge_key.txt
 /app_pojavlauncher/libs/ltw-release.aar
+# Updated for Cryonix V2
