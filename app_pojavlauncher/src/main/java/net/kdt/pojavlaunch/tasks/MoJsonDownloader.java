@@ -71,7 +71,7 @@ public class MoJsonDownloader extends Downloader {
     public static void prepareSubstitutionMap(AssetManager assetManager) {
         sSubstitutionMapFuture = sExecutorService.submit(()->{
             try (InputStream stream = assetManager.open("substitutions.json")) {
-                return JSONUtils.readFromStream(stream, SubstitutionMap.class);
+                return JSONUtils.readFromStream(stream, SubstitutionMap.class).prepare();
             }
         });
     }
