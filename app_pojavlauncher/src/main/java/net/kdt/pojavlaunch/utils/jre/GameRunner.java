@@ -1,5 +1,7 @@
 package net.kdt.pojavlaunch.utils.jre;
 
+import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER;
+
 import android.util.ArrayMap;
 import android.util.Log;
 import android.widget.Toast;
@@ -17,15 +19,18 @@ import net.kdt.pojavlaunch.lifecycle.LifecycleAwareAlertDialog;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.Runtime;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.game.renderer.GameRenderer;
+import net.kdt.pojavlaunch.game.renderer.Renderer;
+import net.kdt.pojavlaunch.game.renderer.impl.GL4ESRenderer;
+import net.kdt.pojavlaunch.game.renderer.impl.LTWRenderer;
 import net.kdt.pojavlaunch.utils.DateUtils;
 import net.kdt.pojavlaunch.utils.FileUtils;
-import net.kdt.pojavlaunch.utils.GLInfoUtils;
+import net.kdt.pojavlaunch.utils.GpuUtils;
 import net.kdt.pojavlaunch.utils.GameOptionsUtils;
 import net.kdt.pojavlaunch.utils.JREUtils;
 import net.kdt.pojavlaunch.utils.JSONUtils;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
 import net.kdt.pojavlaunch.utils.OldVersionsUtils;
-import net.kdt.pojavlaunch.utils.RendererCompatUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -88,7 +93,7 @@ public class GameRunner {
 
     private static boolean affectedByRenderDistanceIssue(JVersionList.Version version) throws ParseException {
         if(LauncherPreferences.PREF_USE_ANGLE) return false;
-        GLInfoUtils.GLInfo info = GLInfoUtils.getGlInfo();
+        GpuUtils.GLInfo info = GpuUtils.getGlInfo();
         return info.isAdreno() &&
                 info.glesMajorVersion >= 3 &&
                 // 1.21.5 fixes the RD issue, released on march 25 2025
@@ -126,22 +131,25 @@ public class GameRunner {
         return LifecycleAwareAlertDialog.haltOnDialog(activity.getLifecycle(), activity, dialogCreator);
     }
 
-    // Autoswitch to LTW if supported, otherwise - crash with resId dialog message. Returns LTW renderer strings if succeeded
-    private static String switchLtw(boolean hasLtw, Instance instance, AppCompatActivity activity, int resId) throws InterruptedException, IOException {
-        if(hasLtw) {
-            String ltwRenderer = "opengles3_ltw";
-            instance.renderer = ltwRenderer;
+    // Autoswitch to provided renderer if supported, otherwise - crash with resId dialog message
+    private static void switchRendererifSupported(boolean support,
+                                                  String renderer,
+                                                  GameRenderer gameRenderer,
+                                                  Instance instance,
+                                                  AppCompatActivity activity,
+                                                  int resId) throws InterruptedException, IOException {
+        if(support) {
+            instance.renderer = renderer;
             instance.write();
-            return ltwRenderer;
+            gameRenderer.setCurrentRenderer(renderer);
         }else {
             showDialog(activity, resId);
             System.exit(0);
-            return null;
         }
     }
 
     public static void launchGame(final AppCompatActivity activity, Account account,
-                                  Instance instance, String versionId, File[] classpath, String rendererName) throws Throwable {
+                                  Instance instance, String versionId, File[] classpath, GameRenderer gameRenderer) throws Throwable {
         int freeDeviceMemory = Tools.getFreeDeviceMemory(activity);
         int localeString;
         int freeAddressSpace = Architecture.is32BitsDevice() ? Tools.getMaxContinuousAddressSpaceSize() : -1;
@@ -179,26 +187,28 @@ public class GameRunner {
         File gamedir = instance.getGameDirectory();
         JVersionList.Version versionInfo = Tools.getVersionInfo(versionId);
 
+        Renderer renderer = gameRenderer.getCurrentRenderer();
+
         // Switch renderer to GL4ES when running a compat context version on LTW
-        if(isCompatContext(versionInfo) && !hasAngelica(gamedir) && rendererName.equals("opengles3_ltw")) {
-            instance.renderer = rendererName = "opengles2";
-            instance.write();
+        if(isCompatContext(versionInfo) && !hasAngelica(gamedir) && renderer instanceof LTWRenderer) {
+            switchRendererifSupported(true, GameRenderer.GL4ES_RENDERER, gameRenderer, instance, activity, 0);
         }
 
-        boolean isGl4es = rendererName.equals("opengles2");
-        boolean ltwSupported = RendererCompatUtil.getCompatibleRenderers(activity).rendererIds.contains("opengles3_ltw");
+        boolean isGl4es = renderer instanceof GL4ESRenderer;
+        boolean ltwSupported = gameRenderer.getKnownRenderer(GameRenderer.LTW_RENDERER).compatibleDevice(activity);
         // Block Sodium from running with GL4ES on 1.17+
         if(!isCompatContext(versionInfo) && isGl4es && hasSodium(gamedir)) {
-            rendererName = switchLtw(ltwSupported, instance, activity, R.string.compat_sodium_not_supported);
+            switchRendererifSupported(ltwSupported, GameRenderer.LTW_RENDERER, gameRenderer, instance, activity, R.string.compat_sodium_not_supported);
         }
 
         // Switch renderer to LTW when running 1.21.5
         if(!isGl4esCompatible(versionInfo) && isGl4es) {
-            rendererName = switchLtw(ltwSupported, instance, activity, R.string.compat_version_not_supported);
+            switchRendererifSupported(ltwSupported, GameRenderer.LTW_RENDERER, gameRenderer, instance, activity, R.string.compat_sodium_not_supported);
         }
-        RendererCompatUtil.releaseRenderersCache();
 
-        boolean isLtw = rendererName.equals("opengles3_ltw");
+        GameRenderer.releaseCache();
+
+        boolean isLtw = renderer instanceof LTWRenderer;
 
         if(isLtw && checkRenderDistance(versionInfo, gamedir)) {
             if(showDialog(activity, R.string.ltw_render_distance_warning_msg)) return;
@@ -213,7 +223,7 @@ public class GameRunner {
 
         GameOptionsUtils.fixOptions(isLtw);
 
-        if(isLtw && GLInfoUtils.getGlInfo().forcedMsaa) {
+        if(isLtw && GpuUtils.getGlInfo().forcedMsaa) {
             if(showDialog(activity, R.string.ltw_4x_msaa_warning_msg)) return;
         }
 
@@ -268,16 +278,15 @@ public class GameRunner {
 
         javaArgList.addAll(JREUtils.parseJavaArguments(instance.getLaunchArgs()));
 
-        JREUtils.setEnviroimentForGame(activity, rendererName);
+
+        JREUtils.setGameEnvironment(activity, gameRenderer);
         JREUtils.chdir(instance.getGameDirectory().getAbsolutePath());
 
-        String rendererLibrary = JREUtils.loadGraphicsLibrary(rendererName);
-        if(rendererLibrary == null) {
-            Log.i("GameRunner", "Falling back to GL4ES 1.1.4");
-            rendererName = "opengles2";
-            rendererLibrary = JREUtils.loadGraphicsLibrary(rendererName);
+
+        if(GpuUtils.getGlInfo().isAdreno() && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
+            gameRenderer.overrideVulkanDriver();
         }
-        if(rendererLibrary == null) {
+        if(!gameRenderer.maybeSetupRenderer()) {
             if(showDialog(activity, R.string.gr_err_renderer_load_Failed)) return;
             System.exit(0);
         }

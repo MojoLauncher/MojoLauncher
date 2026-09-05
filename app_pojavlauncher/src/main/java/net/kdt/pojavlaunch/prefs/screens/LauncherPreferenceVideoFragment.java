@@ -14,7 +14,7 @@ import net.kdt.pojavlaunch.Architecture;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.CustomSeekBarPreference;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
-import net.kdt.pojavlaunch.utils.RendererCompatUtil;
+import net.kdt.pojavlaunch.game.renderer.GameRenderer;
 
 /**
  * Fragment for any settings video related
@@ -64,7 +64,7 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
 
         ListPreference rendererListPreference = requirePreference("renderer",
                 ListPreference.class);
-        RendererCompatUtil.RenderersList renderersList = RendererCompatUtil.getCompatibleRenderers(getContext());
+        GameRenderer.RenderersList renderersList = GameRenderer.getCompatibleRenderers(getContext());
         rendererListPreference.setEntries(renderersList.rendererDisplayNames);
         rendererListPreference.setEntryValues(renderersList.rendererIds.toArray(new String[0]));
 

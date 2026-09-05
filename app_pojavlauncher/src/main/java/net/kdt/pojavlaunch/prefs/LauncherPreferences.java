@@ -14,6 +14,7 @@ import android.util.Log;
 
 import net.kdt.pojavlaunch.*;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
+import net.kdt.pojavlaunch.utils.GpuUtils;
 import net.kdt.pojavlaunch.utils.JREUtils;
 
 import java.io.IOException;
@@ -122,7 +123,7 @@ public class LauncherPreferences {
         PREF_RAPID_START = DEFAULT_PREF.getBoolean("fastStartupCheck", true);
         PREF_FREEDRENO_SYSMEM = DEFAULT_PREF.getBoolean("freedrenoSysmem", false);
         PREF_KEYBOARD_AUTOPANNING = DEFAULT_PREF.getBoolean("keyboardAutoPanning", true);
-        PREF_ZINK_FORCE_LEGACY = DEFAULT_PREF.getBoolean("zinkForceLegacy", false);
+        PREF_ZINK_FORCE_LEGACY = DEFAULT_PREF.getBoolean("zinkForceLegacy", GpuUtils.getGlInfo().isArm());
         PREF_MIGRATION_NOTICE = DEFAULT_PREF.getBoolean("migrationNotice", true);
         PREF_ALSOFT_FORCE_OPENSL = DEFAULT_PREF.getBoolean("alsoftForceOpenSL", false);
         PREF_SHOW_MEMORY_WARNING_DIALOG = DEFAULT_PREF.getBoolean("showMemoryWarning", true);
