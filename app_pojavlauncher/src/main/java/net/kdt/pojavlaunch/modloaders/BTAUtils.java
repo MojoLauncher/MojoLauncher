@@ -22,7 +22,14 @@ public class BTAUtils {
     private static final String MANIFEST_URL = BASE_DOWNLOADS_URL + "%s/versions.json";
     private static final String BUILD_TYPE_RELEASE = "release";
     private static final String BUILD_TYPE_NIGHTLY = "nightly";
+
+    private static final String BTA_JSON = "{\"inheritsFrom\":\"b1.7.3\",\"mainClass\":\"net.minecraft.client.Minecraft\",\"libraries\":[{\"name\":\"bta-client:bta-client:%1$s\",\"downloads\":{\"artifact\":{\"path\":\"bta-client/bta-client-%1$s.jar\",\"url\":\"%2$s\"}}}],\"id\":\"%3$s\"}";
+    private static final String BTA_JSON_7_3 = "{\"inheritsFrom\": \"b1.7.3\", \"mainClass\": \"net.minecraft.client.Minecraft\", \"libraries\": [ { \"name\": \"org.lwjgl.lwjgl:lwjgl:*\", \"rules\": [ { \"action\": \"disallow\" } ] }, { \"name\": \"org.lwjgl.lwjgl:lwjgl_util:*\", \"rules\": [ { \"action\": \"disallow\" } ] }, { \"name\": \"org.lwjgl.lwjgl:lwjgl-platform:*\", \"rules\": [ { \"action\": \"disallow\" } ] }, { \"name\": \"bta-client:bta-client:%1$s\", \"downloads\": { \"artifact\": { \"path\": \"bta-client/bta-client-%1$s.jar\", \"url\": \"%2$s\" } } }, { \"name\": \"org.lwjgl:lwjgl:%4$s\" }, { \"name\": \"org.lwjgl:lwjgl-glfw:%4$s\" }, { \"name\": \"org.lwjgl:lwjgl-openal:%4$s\" }, { \"name\": \"org.lwjgl:lwjgl-opengl:%4$s\" }, { \"name\": \"org.lwjgl:lwjgl-stb:%4$s\" }, { \"name\": \"org.lwjgl:lwjgl-tinyfd:%4$s\" } ], \"id\": \"%3$s\"}";
+    private static final String BTA_JSON_8_X = "{\"inheritsFrom\": \"b1.7.3\", \"mainClass\": \"net.minecraft.client.Minecraft\", \"javaVersion\": { \"component\": \"jre-runtime-alpha\", \"majorVersion\": 17 }, \"releaseTime\": \"2026-07-07T22:00:00+00:00\", \"time\": \"2026-07-07T22:00:00+00:00\", \"environment\": { \"MESA_GL_VERSION_OVERRIDE\": \"4.1\" }, \"libraries\": [ { \"name\": \"org.lwjgl.lwjgl:lwjgl:*\", \"rules\": [ { \"action\": \"disallow\" } ] }, { \"name\": \"org.lwjgl.lwjgl:lwjgl_util:*\", \"rules\": [ { \"action\": \"disallow\" } ] }, { \"name\": \"org.lwjgl.lwjgl:lwjgl-platform:*\", \"rules\": [ { \"action\": \"disallow\" } ] }, { \"name\": \"bta-client:bta-client:%1$s\", \"downloads\": { \"artifact\": { \"path\": \"bta-client/bta-client-%1$s.jar\", \"url\": \"%2$s\" } } }, { \"name\": \"org.lwjgl:lwjgl:%4$s\" }, { \"name\": \"org.lwjgl:lwjgl-glfw:%4$s\" }, { \"name\": \"org.lwjgl:lwjgl-openal:%4$s\" }, { \"name\": \"org.lwjgl:lwjgl-opengl:%4$s\" }, { \"name\": \"org.lwjgl:lwjgl-stb:%4$s\" }, { \"name\": \"org.lwjgl:lwjgl-tinyfd:%4$s\" } ], \"id\": \"%3$s\"}";
+    private static final String BTA_LWJGL_VERSION = "3.3.3";
+
     private static final List<String> BTA_TESTED_VERSIONS = new ArrayList<>();
+
     static {
         BTA_TESTED_VERSIONS.add("v7.3_04");
         BTA_TESTED_VERSIONS.add("v7.3_03");
@@ -111,6 +118,21 @@ public class BTAUtils {
             Log.e("BTAUtils", "Failed to process json", e);
             return null;
         }
+    }
+
+    public static String getBTAJson(BTAVersion version, String btaVersionId) {
+        boolean nightly= isNightlyVersion(version);
+        int[] intVersion; try {
+            intVersion = BTAUtils.parseBTAVersion(version);
+        } catch (NumberFormatException e){
+            intVersion = new int[]{8, 0, 0};
+        }
+        // BTA 8.X.X or nightlies
+        if(intVersion[0] >= 8 || nightly) return String.format(BTA_JSON_8_X, version.versionName, version.downloadUrl, btaVersionId, BTA_LWJGL_VERSION);
+        // BTA 7.3.X (the first version to use LWJGL3)
+        if(intVersion[0] == 7 && intVersion[1] == 3) return String.format(BTA_JSON_7_3, version.versionName, version.downloadUrl, btaVersionId, BTA_LWJGL_VERSION);
+        // Everything older
+        return String.format(BTA_JSON, version.versionName, version.downloadUrl, btaVersionId);
     }
 
     public static int[] parseBTAVersion(BTAVersion version) throws NumberFormatException {
