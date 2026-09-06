@@ -5,12 +5,12 @@ import net.kdt.pojavlaunch.modloaders.ForgelikeUtils;
 
 import java.io.IOException;
 
-public class ForgelikeModLoader implements ModLoader {
+public class ForgelikeLoaderInstaller implements LoaderInstaller {
     private final ForgelikeUtils mUtils;
     private final String gameVersion;
     private final String loaderVersion;
 
-    public ForgelikeModLoader(ForgelikeUtils utils, String gameVersion, String loaderVersion) {
+    public ForgelikeLoaderInstaller(ForgelikeUtils utils, String gameVersion, String loaderVersion) {
         this.mUtils = utils;
         this.gameVersion = gameVersion;
         this.loaderVersion = loaderVersion;

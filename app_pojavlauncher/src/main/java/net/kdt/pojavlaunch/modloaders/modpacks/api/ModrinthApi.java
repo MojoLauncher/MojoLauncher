@@ -11,10 +11,10 @@ import net.kdt.pojavlaunch.downloader.TaskMetadata;
 import net.kdt.pojavlaunch.mirrors.DownloadMirror;
 import net.kdt.pojavlaunch.modloaders.FabriclikeUtils;
 import net.kdt.pojavlaunch.modloaders.ForgelikeUtils;
-import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.FabriclikeModLoader;
-import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.ForgelikeModLoader;
-import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.ModLoader;
-import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.NoneModLoader;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.FabriclikeLoaderInstaller;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.ForgelikeLoaderInstaller;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.LoaderInstaller;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.NoneLoaderInstaller;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.Constants;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModItem;
@@ -122,38 +122,38 @@ public class ModrinthApi implements ModpackApi{
     }
 
     @Override
-    public ModLoader installModpack(ModDetail modDetail, int selectedVersion) throws IOException{
+    public LoaderInstaller installModpack(ModDetail modDetail, int selectedVersion) throws IOException{
         //TODO considering only modpacks for now
         return ModpackInstaller.downloadModpack(modDetail, selectedVersion, this::installMrpack);
     }
 
-    public ModLoader installLocalModpack(String modpackName, File modpackFile, String icon) throws IOException {
+    public LoaderInstaller installLocalModpack(String modpackName, File modpackFile, String icon) throws IOException {
         return ModpackInstaller.installModpack(modpackName, modpackName, modpackFile, icon, this::installMrpack);
     }
 
-    private static ModLoader createInfo(ModrinthIndex modrinthIndex) {
+    private static LoaderInstaller createInfo(ModrinthIndex modrinthIndex) {
         if(modrinthIndex == null) return null;
         Map<String, String> dependencies = modrinthIndex.dependencies;
         String mcVersion = dependencies.get("minecraft");
         if(mcVersion == null) return null;
         String modLoaderVersion;
         if((modLoaderVersion = dependencies.get("forge")) != null) {
-            return new ForgelikeModLoader(ForgelikeUtils.FORGE_UTILS, mcVersion, modLoaderVersion);
+            return new ForgelikeLoaderInstaller(ForgelikeUtils.FORGE_UTILS, mcVersion, modLoaderVersion);
         } else if((modLoaderVersion = dependencies.get("fabric-loader")) != null) {
-            return new FabriclikeModLoader(FabriclikeUtils.FABRIC_UTILS, mcVersion, modLoaderVersion);
+            return new FabriclikeLoaderInstaller(FabriclikeUtils.FABRIC_UTILS, mcVersion, modLoaderVersion);
         } else if((modLoaderVersion = dependencies.get("quilt-loader")) != null) {
-            return new FabriclikeModLoader(FabriclikeUtils.QUILT_UTILS, mcVersion, modLoaderVersion);
+            return new FabriclikeLoaderInstaller(FabriclikeUtils.QUILT_UTILS, mcVersion, modLoaderVersion);
         } else if((modLoaderVersion = dependencies.get("neoforge")) != null) {
-            return new ForgelikeModLoader(ForgelikeUtils.NEOFORGE_UTILS, mcVersion, modLoaderVersion);
+            return new ForgelikeLoaderInstaller(ForgelikeUtils.NEOFORGE_UTILS, mcVersion, modLoaderVersion);
         } else if(dependencies.size() == 1) {
             // "Vanilla" pack. This is usually not true but we should try alternative approaches.
-            return new NoneModLoader(mcVersion);
+            return new NoneLoaderInstaller(mcVersion);
         }
 
         return null;
     }
 
-    private ModLoader installMrpack(File mrpackFile, File instanceDestination) throws IOException {
+    private LoaderInstaller installMrpack(File mrpackFile, File instanceDestination) throws IOException {
         try (ZipFile modpackZipFile = new ZipFile(mrpackFile)){
             ModrinthIndex modrinthIndex = Tools.GLOBAL_GSON.fromJson(
                     Tools.read(ZipUtils.getEntryStream(modpackZipFile, "modrinth.index.json")),

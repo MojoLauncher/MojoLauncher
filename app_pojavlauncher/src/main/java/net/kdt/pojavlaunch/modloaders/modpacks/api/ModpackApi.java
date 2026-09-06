@@ -8,7 +8,7 @@ import com.kdt.mcgui.ProgressLayout;
 import net.kdt.pojavlaunch.PojavApplication;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
-import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.ModLoader;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.LoaderInstaller;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModItem;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchFilters;
@@ -62,7 +62,7 @@ public interface ModpackApi {
         });
     }
 
-    ModLoader installLocalModpack(String modpackName, File modpackFile, String icon) throws IOException;
+    LoaderInstaller installLocalModpack(String modpackName, File modpackFile, String icon) throws IOException;
 
     /**
      * Install the mod(pack).
@@ -71,5 +71,5 @@ public interface ModpackApi {
      * @param modDetail The mod detail data
      * @param selectedVersion The selected version
      */
-    ModLoader installModpack(ModDetail modDetail, int selectedVersion) throws IOException;
+    LoaderInstaller installModpack(ModDetail modDetail, int selectedVersion) throws IOException;
 }

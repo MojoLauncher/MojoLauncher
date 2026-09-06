@@ -4,10 +4,10 @@ import net.kdt.pojavlaunch.instances.InstanceInstaller;
 
 import java.io.IOException;
 
-public class NoneModLoader implements ModLoader {
+public class NoneLoaderInstaller implements LoaderInstaller {
     public final String version;
 
-    public NoneModLoader(String version) {
+    public NoneLoaderInstaller(String version) {
         this.version = version;
     }
 
