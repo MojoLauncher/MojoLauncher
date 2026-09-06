@@ -34,8 +34,9 @@ public class JVersionList {
         public String releaseTime;
         public String time;
         public String type;
-        // Our specific stuff to override some env variables
+        // Our specific stuff for BTA
         public HashMap<String, String> environment;
+        public String contextHint;
     }
     @Keep
     public static class JavaVersionInfo {
