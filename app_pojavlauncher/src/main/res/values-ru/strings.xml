@@ -290,6 +290,7 @@
     <string name="modpack_install_modloader_download_failed">Не удалось загрузить файлы загрузчика модов</string>
     <string name="modpack_install_download_failed">Не удалось загрузить файлы сборки</string>
     <string name="modpack_install_instance_button">Установка со сборкой модов</string>
+    <string name="modpack_install_toast_success">Установка сборки модов завершена!</string>
     <string name="notif_error_occured">Возникла ошибка</string>
     <string name="notif_error_occured_desc">Нажмите для получения дополнительных сведений</string>
     <string name="fabric_dl_only_stable">Только стабильные версии</string>
@@ -441,7 +442,16 @@
     <string name="migration_progress_space">На вашем устройстве недостаточно места для переноса данных. Освободите как минимум $%1l МБ или больше чтобы продолжить</string>
     <string name="preference_alsoft_opensl_title">Принудительно использовать OpenSL для аудио</string>
     <string name="preference_alsoft_opensl_summary">Включает принудительное использование OpenSL вместо Oboe для ALSoft. Может исправить проблемы с записью звука на некоторых устройствах. Выключите если вы наблюдаете проблемы с записью или воспроизведением звука.</string>
+    <string name="preference_show_memory_warning_summary">Если опция включена, при запуске игры отображается предупреждение если игре выделено больше памяти чем доступно в системе</string>
+    <string name="option_do_not_show_again">Больше не показывать</string>
+    <string name="preference_show_memory_warning_title">Показывать предупреждение о недостатке памяти</string>
     <string name="loading_screen_title">Ожидание появления окна игры…</string>
     <string name="loading_screen_booted">Запущено - используется %1$s!</string>
     <string name="loading_screen_warning">Если окно долго не появляется - возможно игра вылетела</string>
+    <string name="preference_metadata_clear">Очистить кэш метаданных</string>
+    <string name="preference_metadata_clear_summary">Полностью удаляет кэш метаданных строк. Используйте, если лаунчер не видит новые версии игры или загрузчиков модов</string>
+    <string name="preference_metadata_clear_fail">Не удалось удалить файлы кэша</string>
+    <string name="preference_metadata_clear_complete">Очистка завершена. Перезапустите лаунчер для применения изменений</string>
+    <string name="preference_button_transparency">Прозрачность кнопок</string>
+    <string name="preference_button_transparency_summary">Изменяет прозрачность наэкранных кнопок управления</string>
 </resources>

@@ -54,6 +54,8 @@ import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutorTask;
 import net.kdt.pojavlaunch.utils.HashUtils;
+import net.kdt.pojavlaunch.utils.maven.MavenName;
+import net.kdt.pojavlaunch.utils.maven.MavenNameAdapter;
 import net.kdt.pojavlaunch.utils.memory.MemoryHoleFinder;
 import net.kdt.pojavlaunch.utils.memory.SelfMapsParser;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
@@ -92,7 +94,10 @@ public final class Tools {
     public static final Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
     public static String APP_NAME = "PojavLauncher";
 
-    public static final Gson GLOBAL_GSON = new GsonBuilder().setPrettyPrinting().create();
+    public static final Gson GLOBAL_GSON = new GsonBuilder()
+            .registerTypeAdapter(MavenName.class, new MavenNameAdapter())
+            .setPrettyPrinting()
+            .create();
 
     public static final String URL_HOME = "https://mojolauncher.ru";
     public static String NATIVE_LIB_DIR;
@@ -454,61 +459,41 @@ public final class Tools {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             browserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             act.startActivity(browserIntent);
-        }catch (ActivityNotFoundException e) {
+        } catch (ActivityNotFoundException e) {
             Tools.showError(act, e);
         }
     }
 
-    public static boolean shouldSkipLibrary(DependentLibrary library) {
-        // Don't use lwjgl from libraries, we have our own bundled in.
-        return library.name.startsWith("org.lwjgl");
-    }
+    public static void preProcessLibrary(DependentLibrary libItem) {
+        MavenName libName = libItem.name;
+        String[] version = libName.version.split("\\.");
+        if (libName.module.equals("jna") && libName.provider.equals("net.java.dev.jna")) {
+            // Special handling for LabyMod 1.8.9, Forge 1.12.2(?) and oshi
+            // we have libjnidispatch 5.13.0 in jniLibs directory
+            if (Integer.parseInt(version[0]) >= 5 && Integer.parseInt(version[1]) >= 13)
+                return;
+            Log.d(APP_NAME, "Library " + libItem.name + " has been changed to version 5.13.0");
+            createLibraryInfo(libItem);
+            libItem.name = new MavenName(libName.provider, libName.module, "5.13.0");
+            libItem.downloads.artifact.path = "net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar";
+            libItem.downloads.artifact.sha1 = "1200e7ebeedbe0d10062093f32925a912020e747";
+            libItem.downloads.artifact.url = MAVEN_CENTRAL+"net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar";
+            libItem.downloads.artifact.size = 1879325;
+            libItem.replaced = true;
+        } else if (libName.module.equals("oshi-core") && libName.provider.equals("com.github.oshi")) {
+            //if (Integer.parseInt(version[0]) >= 6 && Integer.parseInt(version[1]) >= 3) return;
+            // FIXME: ensure compatibility
 
-    public static void preProcessLibraries(DependentLibrary[] libraries) {
-        for (DependentLibrary libItem : libraries) {
-            String[] version = libItem.name.split(":")[2].split("\\.");
-            if (libItem.name.startsWith("net.java.dev.jna:jna:")) {
-                // Special handling for LabyMod 1.8.9, Forge 1.12.2(?) and oshi
-                // we have libjnidispatch 5.13.0 in jniLibs directory
-                if (Integer.parseInt(version[0]) >= 5 && Integer.parseInt(version[1]) >= 13)
-                    continue;
-                Log.d(APP_NAME, "Library " + libItem.name + " has been changed to version 5.13.0");
-                createLibraryInfo(libItem);
-                libItem.name = "net.java.dev.jna:jna:5.13.0";
-                libItem.downloads.artifact.path = "net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar";
-                libItem.downloads.artifact.sha1 = "1200e7ebeedbe0d10062093f32925a912020e747";
-                libItem.downloads.artifact.url = MAVEN_CENTRAL+"net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar";
-                libItem.downloads.artifact.size = 1879325;
-                libItem.replaced = true;
-            } else if (libItem.name.startsWith("com.github.oshi:oshi-core:")) {
-                //if (Integer.parseInt(version[0]) >= 6 && Integer.parseInt(version[1]) >= 3) return;
-                // FIXME: ensure compatibility
-
-                if (Integer.parseInt(version[0]) != 6 || Integer.parseInt(version[1]) != 2)
-                    continue;
-                Log.d(APP_NAME, "Library " + libItem.name + " has been changed to version 6.3.0");
-                createLibraryInfo(libItem);
-                libItem.name = "com.github.oshi:oshi-core:6.3.0";
-                libItem.downloads.artifact.path = "com/github/oshi/oshi-core/6.3.0/oshi-core-6.3.0.jar";
-                libItem.downloads.artifact.sha1 = "9e98cf55be371cafdb9c70c35d04ec2a8c2b42ac";
-                libItem.downloads.artifact.url = MAVEN_CENTRAL+"com/github/oshi/oshi-core/6.3.0/oshi-core-6.3.0.jar";
-                libItem.downloads.artifact.size = 957945;
-                libItem.replaced = true;
-            } else if (libItem.name.startsWith("org.ow2.asm:asm-all:")) {
-                // Early versions of the ASM library get repalced with 5.0.4 because Pojav's LWJGL is compiled for
-                // Java 8, which is not supported by old ASM versions. Mod loaders like Forge, which depend on this
-                // library, often include lwjgl in their class transformations, which causes errors with old ASM versions.
-                if (Integer.parseInt(version[0]) >= 5) continue;
-                Log.d(APP_NAME, "Library " + libItem.name + " has been changed to version 5.0.4");
-                createLibraryInfo(libItem);
-                libItem.name = "org.ow2.asm:asm-all:5.0.4";
-                libItem.url = null;
-                libItem.downloads.artifact.path = "org/ow2/asm/asm-all/5.0.4/asm-all-5.0.4.jar";
-                libItem.downloads.artifact.sha1 = "e6244859997b3d4237a552669279780876228909";
-                libItem.downloads.artifact.url = MAVEN_CENTRAL+"org/ow2/asm/asm-all/5.0.4/asm-all-5.0.4.jar";
-                libItem.downloads.artifact.size = 241810;
-                libItem.replaced = true;
-            }
+            if (Integer.parseInt(version[0]) != 6 || Integer.parseInt(version[1]) != 2)
+                return;
+            Log.d(APP_NAME, "Library " + libItem.name + " has been changed to version 6.3.0");
+            createLibraryInfo(libItem);
+            libItem.name = new MavenName(libName.provider, libName.module, "6.3.0");
+            libItem.downloads.artifact.path = "com/github/oshi/oshi-core/6.3.0/oshi-core-6.3.0.jar";
+            libItem.downloads.artifact.sha1 = "9e98cf55be371cafdb9c70c35d04ec2a8c2b42ac";
+            libItem.downloads.artifact.url = MAVEN_CENTRAL+"com/github/oshi/oshi-core/6.3.0/oshi-core-6.3.0.jar";
+            libItem.downloads.artifact.size = 957945;
+            libItem.replaced = true;
         }
     }
 
@@ -578,7 +563,6 @@ public final class Tools {
         try {
             JVersionList.Version customVer = GLOBAL_GSON.fromJson(read(DIR_HOME_VERSION + "/" + versionName + "/" + versionName + ".json"), JVersionList.Version.class);
             if (skipInheriting || customVer.inheritsFrom == null || customVer.inheritsFrom.equals(customVer.id)) {
-                preProcessLibraries(customVer.libraries);
             } else {
                 JVersionList.Version inheritsVer;
                 //If it won't download, just search for it
@@ -593,33 +577,6 @@ public final class Tools {
                         "mainClass", "minecraftArguments",
                         "releaseTime", "time", "type"
                 );
-
-                // Go through the libraries, remove the ones overridden by the custom version
-                List<DependentLibrary> inheritLibraryList = new ArrayList<>(Arrays.asList(inheritsVer.libraries));
-                outer_loop:
-                for(DependentLibrary library : customVer.libraries){
-                    // Clean libraries overridden by the custom version
-                    String libName = library.name.substring(0, library.name.lastIndexOf(":"));
-
-                    for(DependentLibrary inheritLibrary : inheritLibraryList) {
-                        String inheritLibName = inheritLibrary.name.substring(0, inheritLibrary.name.lastIndexOf(":"));
-
-                        if(libName.equals(inheritLibName)){
-                            Log.d(APP_NAME, "Library " + libName + ": Replaced version " +
-                                    libName.substring(libName.lastIndexOf(":") + 1) + " with " +
-                                    inheritLibName.substring(inheritLibName.lastIndexOf(":") + 1));
-
-                            // Remove the library , superseded by the overriding libs
-                            inheritLibraryList.remove(inheritLibrary);
-                            continue outer_loop;
-                        }
-                    }
-                }
-
-                // Fuse libraries
-                inheritLibraryList.addAll(Arrays.asList(customVer.libraries));
-                inheritsVer.libraries = inheritLibraryList.toArray(new DependentLibrary[0]);
-                preProcessLibraries(inheritsVer.libraries);
 
 
                 // Inheriting Minecraft 1.13+ with append custom args

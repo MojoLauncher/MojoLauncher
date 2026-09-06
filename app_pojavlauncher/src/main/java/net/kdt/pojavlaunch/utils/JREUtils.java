@@ -224,6 +224,10 @@ public class JREUtils {
                     }
                     parsedArguments.add(parsedSubString);
                 }
+                // --a-b= handling (with multiple signs so we don't accidentally remove mandatory args)
+                else if(parsedSubString.startsWith("--") && parsedSubString.indexOf('=') != -1) {
+                    parsedArguments.add(parsedSubString);
+                }
                 else Log.w("JAVA ARGS PARSER", "Removed improper arguments: " + parsedSubString);
             }
         }

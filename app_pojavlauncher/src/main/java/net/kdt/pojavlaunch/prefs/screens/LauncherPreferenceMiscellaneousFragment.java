@@ -15,10 +15,17 @@ import androidx.preference.Preference;
 import git.artdeell.mojo.R;
 
 import net.kdt.pojavlaunch.LauncherActivity;
+import net.kdt.pojavlaunch.PojavApplication;
+import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
 import net.kdt.pojavlaunch.tasks.DataMigrator;
 import net.kdt.pojavlaunch.utils.GLInfoUtils;
 import net.kdt.pojavlaunch.utils.RendererCompatUtil;
+
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
 
 public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceFragment {
 
@@ -52,11 +59,14 @@ public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceF
             mMigrateLauncher.launch(null);
             return true;
         });
+        setupCacheClearPreference();
         setupMicrophoneRequestPreference();
+        updateVisibility();
     }
 
     private void updateVisibility(){
         requirePreference("microphoneAccessRequest").setVisible(!getLauncherActivity().checkForPermissionRationale(33, Manifest.permission.RECORD_AUDIO));
+        requirePreference("clearMetadataCache").setVisible(new File(Tools.DIR_CACHE, "string_cache").exists());
     }
 
     @Override
@@ -75,6 +85,27 @@ public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceF
         } else {
             mRequestMicrophonePermissionPreference.setVisible(false);
         }
-        updateVisibility();
+    }
+    private void setupCacheClearPreference() {
+        Preference clearPreference = requirePreference("clearMetadataCache");
+        clearPreference.setOnPreferenceClickListener(preference -> {
+            if(ProgressKeeper.getTaskCount() > 0) {
+                Toast.makeText(getContext(), R.string.tasks_ongoing, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            PojavApplication.sExecutorService.submit(() -> {
+                try {
+                    FileUtils.deleteDirectory(new File(Tools.DIR_CACHE, "string_cache"));
+                } catch (IOException e) {
+                    Tools.showErrorRemote(getLauncherActivity(), R.string.preference_metadata_clear_fail, e);
+                    return;
+                }
+                Tools.runOnUiThread(() -> {
+                    Toast.makeText(getLauncherActivity(), R.string.preference_metadata_clear_complete, Toast.LENGTH_LONG).show();
+                    updateVisibility();
+                });
+            });
+            return true;
+        });
     }
 }
