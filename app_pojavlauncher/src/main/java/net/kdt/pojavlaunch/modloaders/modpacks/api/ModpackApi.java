@@ -8,6 +8,7 @@ import com.kdt.mcgui.ProgressLayout;
 import net.kdt.pojavlaunch.PojavApplication;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.ModLoader;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModItem;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchFilters;

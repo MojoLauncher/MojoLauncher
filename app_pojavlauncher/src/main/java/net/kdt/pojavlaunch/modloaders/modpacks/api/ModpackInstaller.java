@@ -11,6 +11,8 @@ import net.kdt.pojavlaunch.instances.InstanceInstaller;
 import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.ModLoader;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.NoneModLoader;
 import net.kdt.pojavlaunch.modloaders.modpacks.imagecache.ModIconCache;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
 import net.kdt.pojavlaunch.progresskeeper.DownloaderProgressWrapper;
@@ -32,7 +34,7 @@ public class ModpackInstaller {
             // Install the modpack
             modLoaderInfo = installFunction.installModpack(modpackFile, instance.getGameDirectory());
 
-            if(modLoaderInfo == null) throw new IOException("Unknown modpack mod loader information");
+            if(modLoaderInfo == null || modLoaderInfo instanceof NoneModLoader) throw new IOException("Unknown modpack mod loader information");
 
             if(modLoaderInfo.requiresGuiInstallation()) {
                 InstanceInstaller instanceInstaller = modLoaderInfo.createInstaller();

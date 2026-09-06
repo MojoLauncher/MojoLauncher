@@ -9,6 +9,12 @@ import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.downloader.Downloader;
 import net.kdt.pojavlaunch.downloader.TaskMetadata;
 import net.kdt.pojavlaunch.mirrors.DownloadMirror;
+import net.kdt.pojavlaunch.modloaders.FabriclikeUtils;
+import net.kdt.pojavlaunch.modloaders.ForgelikeUtils;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.FabriclikeModLoader;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.ForgelikeModLoader;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.ModLoader;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.NoneModLoader;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.Constants;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModItem;
@@ -132,16 +138,16 @@ public class ModrinthApi implements ModpackApi{
         if(mcVersion == null) return null;
         String modLoaderVersion;
         if((modLoaderVersion = dependencies.get("forge")) != null) {
-            return new ModLoader(ModLoader.MOD_LOADER_FORGE, modLoaderVersion, mcVersion);
-        }
-        if((modLoaderVersion = dependencies.get("fabric-loader")) != null) {
-            return new ModLoader(ModLoader.MOD_LOADER_FABRIC, modLoaderVersion, mcVersion);
-        }
-        if((modLoaderVersion = dependencies.get("quilt-loader")) != null) {
-            return new ModLoader(ModLoader.MOD_LOADER_QUILT, modLoaderVersion, mcVersion);
-        }
-        if((modLoaderVersion = dependencies.get("neoforge")) != null) {
-            return new ModLoader(ModLoader.MOD_LOADER_NEOFORGE, modLoaderVersion, mcVersion);
+            return new ForgelikeModLoader(ForgelikeUtils.FORGE_UTILS, mcVersion, modLoaderVersion);
+        } else if((modLoaderVersion = dependencies.get("fabric-loader")) != null) {
+            return new FabriclikeModLoader(FabriclikeUtils.FABRIC_UTILS, mcVersion, modLoaderVersion);
+        } else if((modLoaderVersion = dependencies.get("quilt-loader")) != null) {
+            return new FabriclikeModLoader(FabriclikeUtils.QUILT_UTILS, mcVersion, modLoaderVersion);
+        } else if((modLoaderVersion = dependencies.get("neoforge")) != null) {
+            return new ForgelikeModLoader(ForgelikeUtils.NEOFORGE_UTILS, mcVersion, modLoaderVersion);
+        } else if(dependencies.size() == 1) {
+            // "Vanilla" pack. This is usually not true but we should try alternative approaches.
+            return new NoneModLoader(mcVersion);
         }
 
         return null;

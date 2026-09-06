@@ -14,6 +14,11 @@ import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.downloader.AcquireableTaskMetadata;
 import net.kdt.pojavlaunch.downloader.Downloader;
 import net.kdt.pojavlaunch.mirrors.DownloadMirror;
+import net.kdt.pojavlaunch.modloaders.FabriclikeUtils;
+import net.kdt.pojavlaunch.modloaders.ForgelikeUtils;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.FabriclikeModLoader;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.ForgelikeModLoader;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.ModLoader;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.Constants;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.CurseManifest;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
@@ -201,22 +206,18 @@ public class CurseforgeApi implements ModpackApi{
         String modLoaderName = modLoaderId.substring(0, dashIndex);
         String modLoaderVersion = modLoaderId.substring(dashIndex+1);
         Log.i("CurseforgeApi", modLoaderId + " " + modLoaderName + " "+modLoaderVersion);
-        int modLoaderTypeInt;
+        ModLoader modLoader;
         switch (modLoaderName) {
             case "forge":
-                modLoaderTypeInt = ModLoader.MOD_LOADER_FORGE;
-                break;
+                return new ForgelikeModLoader(ForgelikeUtils.FORGE_UTILS, minecraft.version, modLoaderVersion);
             case "fabric":
-                modLoaderTypeInt = ModLoader.MOD_LOADER_FABRIC;
-                break;
+                return new FabriclikeModLoader(FabriclikeUtils.FABRIC_UTILS, minecraft.version, modLoaderVersion);
             case "neoforge":
-                modLoaderTypeInt = ModLoader.MOD_LOADER_NEOFORGE;
-                break;
+                return new ForgelikeModLoader(ForgelikeUtils.NEOFORGE_UTILS, minecraft.version, modLoaderVersion);
             default:
                 return null;
             //TODO: Quilt is also Forge? How does that work?
         }
-        return new ModLoader(modLoaderTypeInt, modLoaderVersion, minecraft.version);
     }
 
     private String getDownloadUrl(JsonObject fileMetadata) throws IOException {
