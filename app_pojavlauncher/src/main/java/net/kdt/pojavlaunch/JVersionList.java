@@ -34,6 +34,8 @@ public class JVersionList {
         public String releaseTime;
         public String time;
         public String type;
+        // Our specific stuff to override some env variables
+        public HashMap<String, String> environment;
     }
     @Keep
     public static class JavaVersionInfo {

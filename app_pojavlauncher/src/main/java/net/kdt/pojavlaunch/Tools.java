@@ -575,7 +575,7 @@ public final class Tools {
                 insertSafety(inheritsVer, customVer,
                         "assetIndex", "assets", "id",
                         "mainClass", "minecraftArguments",
-                        "releaseTime", "time", "type"
+                        "releaseTime", "time", "type", "environment"
                 );
 
 

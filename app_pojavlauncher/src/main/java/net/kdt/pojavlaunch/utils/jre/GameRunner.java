@@ -267,7 +267,9 @@ public class GameRunner {
 
         javaArgList.addAll(JREUtils.parseJavaArguments(instance.getLaunchArgs()));
 
-        JREUtils.setEnviroimentForGame(activity, rendererName);
+        Map<String, String> versionEnvMap = versionInfo.environment;
+
+        JREUtils.setEnviroimentForGame(activity, rendererName, versionEnvMap);
         JREUtils.chdir(instance.getGameDirectory().getAbsolutePath());
 
         String rendererLibrary = JREUtils.loadGraphicsLibrary(rendererName);
