@@ -343,6 +343,7 @@ dependencies {
 
     implementation project(":glfw:jni_bindings")
     implementation project(":sdl:jni_bindings")
+    implementation 'org.tomlj:tomlj:1.1.1'
     // implementation 'net.sourceforge.streamsupport:streamsupport-cfuture:1.7.0'
 
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])

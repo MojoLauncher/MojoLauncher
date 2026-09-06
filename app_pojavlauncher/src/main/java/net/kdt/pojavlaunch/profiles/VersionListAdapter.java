@@ -31,10 +31,11 @@ public class VersionListAdapter extends BaseExpandableListAdapter implements Exp
         mHideCustomVersions = hideCustomVersions;
         mLayoutInflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        List<JVersionList.Version> releaseList = new FilteredSubList<>(versionList, item -> item.type.equals("release"));
-        List<JVersionList.Version> snapshotList = new FilteredSubList<>(versionList, item -> item.type.equals("snapshot"));
-        List<JVersionList.Version> betaList = new FilteredSubList<>(versionList, item -> item.type.equals("old_beta"));
-        List<JVersionList.Version> alphaList = new FilteredSubList<>(versionList, item -> item.type.equals("old_alpha"));
+        Iterable<JVersionList.Version> iterable = Arrays.asList(versionList);
+        List<JVersionList.Version> releaseList = new FilteredSubList<>(iterable, item -> item.type.equals("release"));
+        List<JVersionList.Version> snapshotList = new FilteredSubList<>(iterable, item -> item.type.equals("snapshot"));
+        List<JVersionList.Version> betaList = new FilteredSubList<>(iterable, item -> item.type.equals("old_beta"));
+        List<JVersionList.Version> alphaList = new FilteredSubList<>(iterable, item -> item.type.equals("old_alpha"));
 
         // Query installed versions
         mInstalledVersions = new File(Tools.DIR_GAME_NEW + "/versions").list();

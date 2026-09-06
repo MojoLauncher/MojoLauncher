@@ -8,7 +8,9 @@ import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.Constants;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
+import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDownload;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModItem;
+import net.kdt.pojavlaunch.modloaders.modpacks.models.ModSource;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchFilters;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchResult;
 
@@ -115,9 +117,9 @@ public class CommonApi implements ModpackApi {
     }
 
     @Override
-    public ModDetail getModDetails(ModItem item) {
-        Log.i("CommonApi", "Invoking getModDetails on item.apiSource="+item.apiSource +" item.title="+item.title);
-        return getModpackApi(item.apiSource).getModDetails(item);
+    public ModDownload[] getDownloads(ModSource item) {
+        Log.i("CommonApi", "Invoking getModDetails on item.apiSource="+item.apiSource +" item.id="+item.id);
+        return getModpackApi(item.apiSource).getDownloads(item);
     }
 
     @Override
