@@ -28,6 +28,6 @@ public class ForgelikeLoaderInstaller implements LoaderInstaller {
 
     @Override
     public String installHeadlessly() throws IOException {
-        throw new RuntimeException("ForgelikeModLoader only supports GUI installation");
+        throw new RuntimeException("ForgelikeLoaderInstaller only supports GUI installation");
     }
 }

@@ -22,7 +22,7 @@ public class FabriclikeLoaderInstaller implements LoaderInstaller {
 
     @Override
     public InstanceInstaller createInstaller() {
-        throw new RuntimeException("FabriclikeModLoader only supports headless installation");
+        throw new RuntimeException("FabriclikeLoaderInstaller only supports headless installation");
     }
 
     @Override

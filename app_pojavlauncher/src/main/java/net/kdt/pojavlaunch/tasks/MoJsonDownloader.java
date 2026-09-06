@@ -136,11 +136,11 @@ public class MoJsonDownloader extends Downloader {
         extractNatives(versionName);
     }
 
-    private File createGameJsonPath(String versionId) {
+    public static File createGameJsonPath(String versionId) {
         return new File(Tools.DIR_HOME_VERSION, versionId + File.separator + versionId + ".json");
     }
 
-    private File createGameJarPath(String versionId) {
+    public static File createGameJarPath(String versionId) {
         return new File(Tools.DIR_HOME_VERSION, versionId + File.separator + versionId + ".jar");
     }
 

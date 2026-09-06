@@ -11,10 +11,11 @@ import net.kdt.pojavlaunch.downloader.TaskMetadata;
 import net.kdt.pojavlaunch.mirrors.DownloadMirror;
 import net.kdt.pojavlaunch.modloaders.FabriclikeUtils;
 import net.kdt.pojavlaunch.modloaders.ForgelikeUtils;
+import net.kdt.pojavlaunch.modloaders.Lwjgl3ifyUtils;
 import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.FabriclikeLoaderInstaller;
 import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.ForgelikeLoaderInstaller;
 import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.LoaderInstaller;
-import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.NoneLoaderInstaller;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.Lwjgl3ifyLoaderInstaller;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.Constants;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModItem;
@@ -131,7 +132,7 @@ public class ModrinthApi implements ModpackApi{
         return ModpackInstaller.installModpack(modpackName, modpackName, modpackFile, icon, this::installMrpack);
     }
 
-    private static LoaderInstaller createInfo(ModrinthIndex modrinthIndex) {
+    private static LoaderInstaller createInfo(ModrinthIndex modrinthIndex, File installDestination) throws IOException {
         if(modrinthIndex == null) return null;
         Map<String, String> dependencies = modrinthIndex.dependencies;
         String mcVersion = dependencies.get("minecraft");
@@ -146,8 +147,9 @@ public class ModrinthApi implements ModpackApi{
         } else if((modLoaderVersion = dependencies.get("neoforge")) != null) {
             return new ForgelikeLoaderInstaller(ForgelikeUtils.NEOFORGE_UTILS, mcVersion, modLoaderVersion);
         } else if(dependencies.size() == 1) {
-            // "Vanilla" pack. This is usually not true but we should try alternative approaches.
-            return new NoneLoaderInstaller(mcVersion);
+            // "Vanilla" pack. Possibly GT:NH, let's try to detect lwjgl3ify
+            File lwjgl3ifyJar = Lwjgl3ifyUtils.detectLwjgl3ifyJar(installDestination);
+            if(lwjgl3ifyJar != null) return new Lwjgl3ifyLoaderInstaller(lwjgl3ifyJar);
         }
 
         return null;
@@ -167,7 +169,7 @@ public class ModrinthApi implements ModpackApi{
             ZipUtils.zipExtract(modpackZipFile, "overrides/", instanceDestination);
             ProgressLayout.setProgress(ProgressLayout.INSTALL_MODPACK, 50, R.string.modpack_download_applying_overrides, 2, 2);
             ZipUtils.zipExtract(modpackZipFile, "client-overrides/", instanceDestination);
-            return createInfo(modrinthIndex);
+            return createInfo(modrinthIndex, instanceDestination);
         }
     }
 
