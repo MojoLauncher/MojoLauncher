@@ -238,7 +238,8 @@ public class Instances {
                 si -> ShortcutManagerCompat.updateShortcuts(context, List.of(si)) :
                 si -> ShortcutManagerCompat.requestPinShortcut(context, si, null);
         UUID uuid = ShortcutUtils.manageShortcut(context, pre,
-                label, "MJLauncher shortcut",
+                context.getString(R.string.shortcut_long_label, instance.name),
+                label,
                 target,
                 bm, action);
         if(!update) {
