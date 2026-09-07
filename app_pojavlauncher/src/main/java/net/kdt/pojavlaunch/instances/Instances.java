@@ -2,13 +2,14 @@ package net.kdt.pojavlaunch.instances;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
+
+import android.util.Log;
 
 import com.google.gson.JsonSyntaxException;
 
@@ -60,6 +61,8 @@ public class Instances {
     private static File selectedInstanceLocation() {
         String directoryName = LauncherPreferences.DEFAULT_PREF.getString(LauncherPreferences.PREF_KEY_CURRENT_INSTANCE, "");
         File instanceRoot = new File(sInstancePath, directoryName);
+        if(!instanceRoot.exists())
+            Log.e("Instances", "New instance dir doesn't exist!");
         if(!metadataLocation(instanceRoot).exists()) return null;
         return instanceRoot;
     }
@@ -245,5 +248,28 @@ public class Instances {
         if(!ShortcutManagerCompat.isRequestPinShortcutSupported(context))
             return;
         ShortcutManagerCompat.disableShortcuts(context, Collections.singletonList(instance.getInstanceRoot().getName()), context.getString(R.string.shortcut_disabled));
+    }
+
+    /**
+     * Rename the provided instance directory. This will apply the new name only if it's unique.
+     * If no name provided - using bare UUID. If a name conflict - newName as prefix + UUID.
+     * @param instance Instance
+     * @param newName New instance name
+     */
+    public static void renameInstanceDirectory(Instance instance, String newName) {
+        if(newName == null) return;
+        if(newName.trim().isEmpty())
+            newName = String.valueOf(UUID.randomUUID());
+        else
+            newName = FileUtils.escapeFileName(newName);
+        File targetDirectory = new File(sInstancePath, newName);
+        if(targetDirectory.exists())
+            targetDirectory = findNewInstanceRoot(newName);
+        String oldName = instance.mInstanceRoot.getName();
+        if(!instance.mInstanceRoot.renameTo(targetDirectory))
+            throw new RuntimeException("Failed to rename instance!");
+        instance.mInstanceRoot = targetDirectory;
+        if(oldName.equals(LauncherPreferences.DEFAULT_PREF.getString(LauncherPreferences.PREF_KEY_CURRENT_INSTANCE, "")))
+            setSelectedInstance(instance);
     }
 }

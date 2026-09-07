@@ -1,7 +1,10 @@
 package net.kdt.pojavlaunch;
 
 import android.content.*;
+import android.content.res.Configuration;
 import android.os.*;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.*;
 import net.kdt.pojavlaunch.utils.*;
 
@@ -31,7 +34,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void startActivity(Intent i) {
         super.startActivity(i);
-        //new Throwable("StartActivity").printStackTrace();
     }
 
     @Override
@@ -45,6 +47,25 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onPostResume();
         Tools.setInsetsMode(this, setFullscreen(), shouldIgnoreNotch());
         Tools.getDisplayMetrics(this);
+    }
+
+    @Override
+    public void onMultiWindowModeChanged(boolean isInMultiWindowMode) {
+        super.onMultiWindowModeChanged(isInMultiWindowMode);
+        onMultiWindowModeChangedInner();
+    }
+
+    @Override
+    public void onMultiWindowModeChanged(boolean isInMultiWindowMode, @NonNull Configuration newConfig) {
+        super.onMultiWindowModeChanged(isInMultiWindowMode, newConfig);
+        onMultiWindowModeChangedInner();
+    }
+
+    private void onMultiWindowModeChangedInner() {
+        boolean wantsFullscreen = setFullscreen();
+        if(wantsFullscreen) {
+            Tools.setInsetsMode(this, true, shouldIgnoreNotch());
+        }
     }
 
     /** @return Whether or not the notch should be ignored */

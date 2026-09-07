@@ -377,9 +377,9 @@
     <string name="preference_remap_controller_title">Змінити назначення контролера</string>
     <string name="preference_remap_controller_description">Дозволяє змінити назначення кнопок контролера</string>
     <string name="mcl_button_social_media">Telegram</string>
+    <string name="social_media_invite" translatable="false">https://t.me/MojoLauncher</string>
     <string name="ltw_render_distance_warning_msg">Ваше відеоядро не може візуалізовувати більше 7 чанків без Sodium чи йому подібних модів. Дистанція промальовкий</string>
     <string name="mcl_button_open_directory">Відкрити папку гри</string>
-    <string name="social_media_invite">https://t.me/MJLauncher</string>
     <string name="local_login_bad_username_title">Недопустиме ім\'я користувача</string>
     <string name="local_login_bad_username_text">Ім\'я користувача має мати як мінімум від 3-х до 16 символів, і має мати лише латинські літери, цифри 0-9 і нижнє підкреслення</string>
     <string name="quick_setting_title">Швидкі налаштування</string>
