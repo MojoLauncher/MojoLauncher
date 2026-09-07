@@ -2,6 +2,7 @@ package net.kdt.pojavlaunch.instances;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
@@ -10,6 +11,7 @@ import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.JsonSyntaxException;
 
@@ -18,6 +20,7 @@ import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.JSONUtils;
+import net.kdt.pojavlaunch.utils.ShortcutUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -219,35 +222,33 @@ public class Instances {
         return label;
     }
 
-    public static void createInstanceShortcut(Instance instance, Context context){
-        if(!ShortcutManagerCompat.isRequestPinShortcutSupported(context))
-            return;
-        String uuid = instance.getInstanceRoot().getName();
-        String label = makeInstanceLabel(instance);
+    public static void manageInstanceShortcut(Instance instance, Context context, boolean update){
+        if(update && instance.shortcutUuid == null) return;
+        if(!ShortcutUtils.isSupported(context)) return;
         Drawable drawable = InstanceIconProvider.fetchIcon(context.getResources(), instance);
-        IconCompat ic;
-        if(drawable instanceof BitmapDrawable){
-            ic = IconCompat.createWithBitmap(((BitmapDrawable) drawable).getBitmap());
-        } else {
-            ic = null;
-        }
+        BitmapDrawable bm = drawable instanceof BitmapDrawable ? (BitmapDrawable) drawable : null;
+        String label = makeInstanceLabel(instance);
         Intent target = new Intent(context, TestStorageActivity.class)
                 .setAction(Intent.ACTION_MAIN)
                 .addCategory(Intent.CATEGORY_LAUNCHER)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra("instance", uuid);
-        ShortcutInfoCompat shortcut = new ShortcutInfoCompat.Builder(context, uuid)
-                .setShortLabel(label)
-                .setIcon(ic)
-                .setLongLabel(context.getString(R.string.shortcut_long_label, instance.name))
-                .setIntent(target)
-                .build();
-        ShortcutManagerCompat.requestPinShortcut(context, shortcut, null);
+                .putExtra("bootInstance", instance.mInstanceRoot.getName());
+        UUID pre = instance.shortcutUuid == null ? null : UUID.fromString(instance.shortcutUuid);
+        ShortcutUtils.ShortcutAction action = update ?
+                si -> ShortcutManagerCompat.updateShortcuts(context, List.of(si)) :
+                si -> ShortcutManagerCompat.requestPinShortcut(context, si, null);
+        UUID uuid = ShortcutUtils.manageShortcut(context, pre,
+                label, "MJLauncher shortcut",
+                target,
+                bm, action);
+        if(!update) {
+            instance.shortcutUuid = uuid.toString();
+            instance.maybeWrite();
+        }
     }
     public static void removeInstanceShortcut(Instance instance, Context context){
-        if(!ShortcutManagerCompat.isRequestPinShortcutSupported(context))
-            return;
-        ShortcutManagerCompat.disableShortcuts(context, Collections.singletonList(instance.getInstanceRoot().getName()), context.getString(R.string.shortcut_disabled));
+        if(instance.shortcutUuid == null || !ShortcutUtils.isSupported(context)) return;
+        ShortcutUtils.disableShortcut(context, UUID.fromString(instance.shortcutUuid), context.getString(R.string.shortcut_disabled));
     }
 
     /**

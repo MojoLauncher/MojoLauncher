@@ -112,7 +112,7 @@ public class LauncherActivity extends BaseActivity {
             return false;
         }
 
-        String instance = getIntent().getStringExtra("instance");
+        String instance = getIntent().getStringExtra("bootInstance");
         Instance selectedInstance = instance == null ? Instances.loadSelectedInstance() : Instances.getInstance(instance, Instance.class);
 
         if(selectedInstance == null) {
@@ -181,7 +181,7 @@ public class LauncherActivity extends BaseActivity {
 
         IconCacheJanitor.runJanitor();
 
-        String instance = getIntent().getStringExtra("instance");
+        String instance = getIntent().getStringExtra("bootInstance");
 
         bindViews();
         getWindow().setBackgroundDrawable(null);
