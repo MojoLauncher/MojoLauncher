@@ -24,12 +24,12 @@ public class DummyBackend implements PlatformBackend {
     }
 
     @Override
-    public void sendMousePosition() {
+    public void sendMousePosition(double x, double y) {
 
     }
 
     @Override
-    public void sendMouseEvent(int button, int state, int mods) {
+    public void sendMouseEvent(int button, int state, int mods, double x, double y) {
 
     }
 

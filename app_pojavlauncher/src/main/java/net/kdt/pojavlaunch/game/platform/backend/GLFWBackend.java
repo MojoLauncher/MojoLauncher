@@ -39,12 +39,12 @@ public class GLFWBackend implements PlatformBackend {
     }
 
     @Override
-    public void sendMousePosition() {
-        GLFW.sendMousePosition0(Platform.cursorX, Platform.cursorY);
+    public void sendMousePosition(double x, double y) {
+        GLFW.sendMousePosition0(x, y);
     }
 
     @Override
-    public void sendMouseEvent(int button, int action, int mods) {
+    public void sendMouseEvent(int button, int action, int mods, double x, double y) {
         int glfwButton;
         switch (button) {
             case MotionEvent.BUTTON_PRIMARY:
