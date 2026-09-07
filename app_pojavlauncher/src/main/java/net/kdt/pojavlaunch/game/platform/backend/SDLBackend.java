@@ -70,8 +70,8 @@ public class SDLBackend implements PlatformBackend {
     }
 
     @Override
-    public void sendMousePosition() {
-        SDLActivity.onNativeMouse(0, MotionEvent.ACTION_MOVE, (float) Platform.cursorX, (float) Platform.cursorY, Platform.isGrabbing());
+    public void sendMousePosition(double x, double y) {
+        SDLActivity.onNativeMouse(0, MotionEvent.ACTION_MOVE, (float) x, (float) y, Platform.isGrabbing());
         if (Platform.isGrabbing()) {
             // SDL in relative mode expects these to be reset to 0 or it will freak out (classic:tm: way)
             Platform.cursorX = 0;
@@ -81,8 +81,8 @@ public class SDLBackend implements PlatformBackend {
 
 
     @Override
-    public void sendMouseEvent(int button, int state, int mods) {
-        SDLActivity.onNativeMouseButton(button, state, (float) Platform.cursorX, (float) Platform.cursorY, Platform.isGrabbing());
+    public void sendMouseEvent(int button, int state, int mods, double x, double y) {
+        SDLActivity.onNativeMouseButton(button, state, (float) x, (float) y, Platform.isGrabbing());
     }
 
     @Override

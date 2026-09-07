@@ -220,13 +220,13 @@ public class Platform {
 
     /**
      * Send current cursor position to the implementation after clamping and updating its view position.
-     * Prefer using this over {@link PlatformBackend#sendMousePosition()}
+     * Prefer using this over {@link PlatformBackend#sendMousePosition(double x, double y)}
      *
      */
     public static void sendCursorPosition() {
         if(mCursorImplementor != null) mCursorImplementor.onCursorPosition();
         if (!isGrabbing) clampCursorPosition();
-        PLATFORM.sendMousePosition();
+        PLATFORM.sendMousePosition(Math.floor(Platform.cursorX), Math.floor(Platform.cursorY));
     }
 
     /**
