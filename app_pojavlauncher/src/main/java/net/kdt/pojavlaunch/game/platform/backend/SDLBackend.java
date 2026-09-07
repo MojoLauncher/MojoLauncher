@@ -73,26 +73,26 @@ public class SDLBackend implements PlatformBackend {
     private double prevY;
 
     @Override
-    public void sendMousePosition(double x, double y) {
+    public void sendMousePosition(double x, double y, boolean relative) {
         // In grabbing (relative) mode SDL expects relative cursor coordinates with center located at 0,0
         // We need to accumulate a delta between mouse positions to correctly handle such position changes
         double deltaX, deltaY;
-        if(Platform.isGrabbing()) {
+        if(relative) {
             deltaX = x - prevX;
             deltaY = y - prevY;
         } else {
             deltaX = x;
             deltaY = y;
         }
-        SDLActivity.onNativeMouse(0, MotionEvent.ACTION_MOVE, (float) deltaX, (float) deltaY, Platform.isGrabbing());
+        SDLActivity.onNativeMouse(0, MotionEvent.ACTION_MOVE, (float) deltaX, (float) deltaY, relative);
         prevX = x;
         prevY = y;
     }
 
 
     @Override
-    public void sendMouseEvent(int button, int state, int mods, double x, double y) {
-        if(Platform.isGrabbing())
+    public void sendMouseEvent(int button, int state, int mods, double x, double y, boolean relative) {
+        if(relative)
             // In relative mode we need to send mouse clicks at zero position to not accidentally trigger a motion event
             SDLActivity.onNativeMouseButton(button, state, 0, 0, true);
         else

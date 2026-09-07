@@ -24,11 +24,11 @@ public class CallbackBridge {
 
     public static void performClick(int button) {
         double ox = Platform.cursorX, oy = Platform.cursorY;
-        PLATFORM.sendMouseEvent(button, 1, CallbackBridge.getCurrentMods(), Platform.cursorX, Platform.cursorY);
+        Platform.sendMouseEvent(button, 1, CallbackBridge.getCurrentMods());
         sChoreographer.postFrameCallbackDelayed(l -> {
             Platform.cursorX = ox;
             Platform.cursorY = oy;
-            PLATFORM.sendMouseEvent(button, 0, CallbackBridge.getCurrentMods(), Platform.cursorX, Platform.cursorY);
+            Platform.sendMouseEvent(button, 0, CallbackBridge.getCurrentMods());
         }, 33);
     }
 
@@ -43,7 +43,7 @@ public class CallbackBridge {
     }
 
     public static void sendMouseKeycode(int button, int modifiers, boolean isDown) {
-        PLATFORM.sendMouseEvent(button, isDown ? 1 : 0, modifiers, Platform.cursorX, Platform.cursorY);
+        Platform.sendMouseEvent(button, isDown ? 1 : 0, modifiers);
     }
 
     public static void sendScroll(double xoffset, double yoffset) {

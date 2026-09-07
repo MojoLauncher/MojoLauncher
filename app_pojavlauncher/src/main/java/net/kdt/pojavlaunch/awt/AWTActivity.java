@@ -307,11 +307,11 @@ public class AWTActivity extends BaseActivity implements View.OnTouchListener {
         
         switch (v.getId()) {
             case R.id.installmod_mouse_pri:
-                Platform.PLATFORM.sendMouseEvent(MotionEvent.BUTTON_PRIMARY, isDown ? 1 : 0, CallbackBridge.getCurrentMods(), Platform.cursorX, Platform.cursorY);
+                Platform.sendMouseEvent(MotionEvent.BUTTON_PRIMARY, isDown ? 1 : 0, CallbackBridge.getCurrentMods());
                 break;
                 
             case R.id.installmod_mouse_sec:
-                Platform.PLATFORM.sendMouseEvent(MotionEvent.BUTTON_SECONDARY, isDown ? 1 : 0, CallbackBridge.getCurrentMods(), Platform.cursorX, Platform.cursorY);
+                Platform.sendMouseEvent(MotionEvent.BUTTON_SECONDARY, isDown ? 1 : 0, CallbackBridge.getCurrentMods());
                 break;
         }
         if(isDown) switch(v.getId()) {
@@ -344,7 +344,8 @@ public class AWTActivity extends BaseActivity implements View.OnTouchListener {
 
         Platform.cursorX = (int) MathUtils.map(x, 0, mTextureView.getWidth(), 0, CallbackBridge.windowWidth);
         Platform.cursorY = (int) MathUtils.map(y, 0, mTextureView.getHeight(), 0, CallbackBridge.windowHeight);
-        Platform.PLATFORM.sendMousePosition(Platform.cursorX, Platform.cursorY);
+        // There's no grab on AWT
+        Platform.PLATFORM.sendMousePosition(Platform.cursorX, Platform.cursorY, false);
     }
 
     public void forceClose(View v) {

@@ -31,12 +31,12 @@ public class AWTBackend implements PlatformBackend {
     }
 
     @Override
-    public void sendMousePosition(double x, double y) {
+    public void sendMousePosition(double x, double y, boolean relative) {
         AWTBridge.nativeSendCursorPos((int) x, (int) y);
     }
 
     @Override
-    public void sendMouseEvent(int button, int state, int mods, double x, double y) {
+    public void sendMouseEvent(int button, int state, int mods, double x, double y, boolean relative) {
         AWTBridge.nativeSendMouseEvent(button, state, mods);
     }
 
