@@ -217,14 +217,6 @@ public class Platform {
         cursorY = (double) GameView.getWindowHeight() / 2;
     }
 
-    /**
-     * Floor current cursor position to stop anticheats from triggering for no reason
-     *
-     */
-    public static void floorCursorPosition(){
-        cursorX = Math.floor(cursorX);
-        cursorY = Math.floor(cursorY);
-    }
 
     /**
      * Send current cursor position to the implementation after clamping and updating its view position.
@@ -234,7 +226,6 @@ public class Platform {
     public static void sendCursorPosition() {
         if(mCursorImplementor != null) mCursorImplementor.onCursorPosition();
         if (!isGrabbing) clampCursorPosition();
-        else floorCursorPosition();
         PLATFORM.sendMousePosition();
     }
 
