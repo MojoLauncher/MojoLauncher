@@ -53,7 +53,7 @@ public class ModpackInstaller {
             }
             else ContextExecutor.executeActivity(activity -> Toast.makeText(activity, R.string.modpack_install_toast_success, Toast.LENGTH_SHORT).show());
         } catch (IOException e) {
-            Instances.removeInstance(instance);
+            Instances.removeInstance(instance, null);
             throw e;
         } finally {
             modpackFile.delete();

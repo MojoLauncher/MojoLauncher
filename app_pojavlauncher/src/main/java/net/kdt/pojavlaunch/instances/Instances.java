@@ -1,13 +1,26 @@
 package net.kdt.pojavlaunch.instances;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentSender;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+
+import androidx.core.content.pm.ShortcutInfoCompat;
+import androidx.core.content.pm.ShortcutManagerCompat;
+import androidx.core.graphics.drawable.IconCompat;
+
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.JsonSyntaxException;
 
+import net.kdt.pojavlaunch.TestStorageActivity;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.JSONUtils;
+import net.kdt.pojavlaunch.utils.ShortcutUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+
+import git.artdeell.mojo.R;
 
 public class Instances {
     private static final File sInstancePath = new File(Tools.DIR_GAME_HOME, "instances");
@@ -37,6 +52,9 @@ public class Instances {
         }catch (IOException | JsonSyntaxException e) {
             return null;
         }
+    }
+    public static <T extends DisplayInstance> T getInstance(String uuid, Class<T> tClass){
+        return read(new File(sInstancePath, uuid), tClass);
     }
 
     protected static File metadataLocation(File instanceDir) {
@@ -128,11 +146,13 @@ public class Instances {
     /**
      * Remove the instance. This also removes its data storage folder.
      * @param instance the Instance to remove
+     * @param context the context to remove all bound shortcuts. Provide null to skip this
      * @throws IOException in case of errors during directory removal
      */
-    public static void removeInstance(Instance instance) throws IOException {
+    public static void removeInstance(Instance instance, Context context) throws IOException {
         File instanceDirectory = instance.mInstanceRoot;
         if(instanceDirectory == null) return;
+        if(context != null) removeInstanceShortcut(instance, context);
         org.apache.commons.io.FileUtils.deleteDirectory(instanceDirectory);
     }
 
@@ -193,6 +213,43 @@ public class Instances {
         if(instance == null) return null;
         instance.sanitize();
         return instance;
+    }
+
+    private static String makeInstanceLabel(Instance instance){
+        String label = Tools.validOrNullString(instance.name);
+        if(label == null) label = instance.versionId;
+        label = "MJ - " + label;
+        return label;
+    }
+
+    public static void manageInstanceShortcut(Instance instance, Context context, boolean update){
+        if(update && instance.shortcutUuid == null) return;
+        if(!ShortcutUtils.isSupported(context)) return;
+        Drawable drawable = InstanceIconProvider.fetchIcon(context.getResources(), instance);
+        BitmapDrawable bm = drawable instanceof BitmapDrawable ? (BitmapDrawable) drawable : null;
+        String label = makeInstanceLabel(instance);
+        Intent target = new Intent(context, TestStorageActivity.class)
+                .setAction(Intent.ACTION_MAIN)
+                .addCategory(Intent.CATEGORY_LAUNCHER)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra("bootInstance", instance.mInstanceRoot.getName());
+        UUID pre = instance.shortcutUuid == null ? null : UUID.fromString(instance.shortcutUuid);
+        ShortcutUtils.ShortcutAction action = update ?
+                si -> ShortcutManagerCompat.updateShortcuts(context, List.of(si)) :
+                si -> ShortcutManagerCompat.requestPinShortcut(context, si, null);
+        UUID uuid = ShortcutUtils.manageShortcut(context, pre,
+                context.getString(R.string.shortcut_long_label, instance.name),
+                label,
+                target,
+                bm, action);
+        if(!update) {
+            instance.shortcutUuid = uuid.toString();
+            instance.maybeWrite();
+        }
+    }
+    public static void removeInstanceShortcut(Instance instance, Context context){
+        if(instance.shortcutUuid == null || !ShortcutUtils.isSupported(context)) return;
+        ShortcutUtils.disableShortcut(context, UUID.fromString(instance.shortcutUuid), context.getString(R.string.shortcut_disabled));
     }
 
     /**
