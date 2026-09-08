@@ -3,6 +3,7 @@ package com.kdt.mcgui;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -54,6 +55,8 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
     private final ValueAnimator mLoginStepAnimator = ValueAnimator.ofFloat(mMaxSteps);
     private final Paint mLoginBarPaint = new Paint();
     private float mLoginStep;
+
+    private boolean isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
 
     class LoginExtraListener implements ExtraListener<String> {
         private final AuthType mAuthType;
@@ -194,9 +197,14 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
-        float bottom = getHeight() - mLoginBarPaint.getStrokeWidth()/2;
         float lineFillPercent = (mLoginStep / mMaxSteps);
-        canvas.drawLine(0, bottom, lineFillPercent * getWidth(), bottom, mLoginBarPaint);
+        if (isLandscape) {
+            float right = getWidth() - mLoginBarPaint.getStrokeWidth()/2;
+            canvas.drawLine(right, getHeight(), right, getHeight() * (1 - lineFillPercent), mLoginBarPaint);
+        } else {
+            float bottom = getHeight() - mLoginBarPaint.getStrokeWidth() / 2;
+            canvas.drawLine(0, bottom, lineFillPercent * getWidth(), bottom, mLoginBarPaint);
+        }
     }
 
     @Override
@@ -346,8 +354,13 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
                 mSkinHeadCache.put(headCacheHash, accountHead);
             }
 
-            textview.setText(account.username);
-            textview.setCompoundDrawablesRelative(accountHead, null, authType, null);
+            if (isDropDown || !isLandscape) {
+                textview.setText(account.username);
+                textview.setCompoundDrawablesRelative(accountHead, null, authType, null);
+            } else {
+                textview.setText("");
+                textview.setCompoundDrawablesRelative(null, null, null, null);
+            }
         }
 
         private void showDeleteDialog(Context context, int position) {
