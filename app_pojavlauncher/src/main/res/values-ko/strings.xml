@@ -48,8 +48,6 @@
     <string name="mcl_setting_title_javaargs">JVM 시작 스크립트</string>
     <string name="mcl_setting_subtitle_javaargs">조심하세요. 사전 지식 없이 이것을 수정하면 게임이 충돌할 수 있습니다.</string>
     <string name="mcl_setting_category_renderer">렌더러</string>
-    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (모든 버전 호환, 빠름)</string>
-    <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) - (모든 버전 호환, 중간)</string>
     <string name="mcl_setting_veroption_release">릴리스</string>
     <string name="mcl_setting_veroption_snapshot">스냅숏</string>
     <string name="mcl_setting_veroption_oldalpha">구-알파</string>
@@ -323,4 +321,16 @@
     <string name="controller_button_start">시작</string>
     <string name="controller_button_select">선택</string>
     <string name="customctrl_visibility_title">투명도</string>
+    <!-- most of up translation are added/updated before 2025/01/27 --> 
+
+
+    <!-- translation edited after 2026/08/25-->
+    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - 1.21.4- 버전만, 빠름</string>
+    <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) - 모든 버전 호환, 중간</string>
+    <string name="mcl_setting_renderer_ltw">LTW (OpenGL ES 3) - 1.17+ 버전만, 빠름</string>
+    <string name="preference_verify_game_files_description">metadata에 설정된 다운로드 된 게임 파일의 checksum 및 파일 크기가 일치하는지 검증합니다. Metadata Json 파일은 이 설정과 관계없이 항상 검증합니다. **.jar 파일을 직접 수정해야 하는 경우(1.5.2- 버전에 모드를 적용하는 경우 등)는 이 기능을 비활성화 해야합니다.**</string>
+    
+
+
+    
 </resources>
