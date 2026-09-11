@@ -44,7 +44,7 @@ public class GameRenderer {
             case LTW_RENDERER: return new GLESRenderSpec.LTWRenderSpec();
             case ZINK_RENDERER: return new MesaRenderSpec.ZinkRenderSpec();
             case FREEDRENO_RENDERER: return new MesaRenderSpec.FreedrenoRenderSpec();
-            default: return null;
+            default: Log.e(TAG, "Unknown renderer " + renderer); return null;
         }
     }
 
