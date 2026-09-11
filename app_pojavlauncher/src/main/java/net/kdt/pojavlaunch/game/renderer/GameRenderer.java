@@ -112,13 +112,6 @@ public class GameRenderer {
     }
 
     /**
-     * Enable ANGLE usage. Will pick AnglePlugin source if possible and fallback to the system libraries (if present) otherwise while enabling namespace bypass.
-     */
-    public void enableAngle() {
-
-    }
-
-    /**
      * Enable legacy Mesa ZINK (23.0.4) usage if ZinkPlugin is installed
      */
     public void enableLegacyZink() {
@@ -160,10 +153,10 @@ public class GameRenderer {
      */
     public boolean maybeSetupRenderer() {
         setRendererLibraryPath(Tools.NATIVE_LIB_DIR, additionalLibraryPath);
-        if (!currentRenderer.setupRenderer(false)) {
+        if (!currentRenderer.setupRenderer()) {
             Log.e(TAG, "Failed to setup renderer " + currentRenderer.name() + ", falling back to " + FALLBACK_RENDERER);
             // Hopefully
-            return internalCreateRenderer(FALLBACK_RENDERER).setupRenderer(false);
+            return internalCreateRenderer(FALLBACK_RENDERER).setupRenderer();
         }
         return true;
     }

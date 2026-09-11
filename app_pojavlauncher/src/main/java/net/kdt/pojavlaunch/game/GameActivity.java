@@ -123,7 +123,6 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
             return;
         }
         mGameRenderer = new GameRenderer(getApplicationContext(), instance.getLaunchRenderer());
-        if(LauncherPreferences.PREF_USE_ANGLE) mGameRenderer.enableAngle();
         if(LauncherPreferences.PREF_ZINK_FORCE_LEGACY) mGameRenderer.enableLegacyZink();
         AsyncAssetManager.extractDefaultSettings(this, instance.getGameDirectory());
         MCOptionUtils.load(instance.getGameDirectory().getAbsolutePath());

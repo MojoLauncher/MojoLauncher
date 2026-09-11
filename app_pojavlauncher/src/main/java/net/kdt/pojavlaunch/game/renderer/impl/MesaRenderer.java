@@ -50,7 +50,7 @@ public abstract class MesaRenderer implements Renderer {
 
     // Namespace bypass param is always active on Mesa
     @Override
-    public boolean setupRenderer(boolean namespaceBypass) {
+    public boolean setupRenderer() {
         return MojoExec.prepareEgl(library(), true, false, 3);
     }
 
@@ -83,9 +83,9 @@ public abstract class MesaRenderer implements Renderer {
         }
 
         @Override
-        public boolean setupRenderer(boolean n) {
+        public boolean setupRenderer() {
             MojoExec.preloadVulkan();
-            return super.setupRenderer(n);
+            return super.setupRenderer();
         }
 
         @Override

@@ -54,7 +54,7 @@ public abstract class GLESRenderer implements Renderer {
     }
 
     @Override
-    public boolean setupRenderer(boolean namespaceBypass) {
+    public boolean setupRenderer() {
         return MojoExec.prepareEgl(library(), nsBypass, true, Integer.parseInt((String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION)));
     }
 

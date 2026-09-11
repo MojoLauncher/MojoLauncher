@@ -55,8 +55,7 @@ public interface Renderer {
     /**
      * Setup this renderer in MojoExec. Prefer using {@link GameRenderer#maybeSetupRenderer()}
      *
-     * @param namespaceBypass if namespace bypass is needed
      * @return whether setup was successful
      */
-    boolean setupRenderer(boolean namespaceBypass);
+    boolean setupRenderer();
 }
