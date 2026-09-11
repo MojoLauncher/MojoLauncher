@@ -1,6 +1,7 @@
 package net.kdt.pojavlaunch.multirt;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import git.artdeell.mojo.R;
 public class MultiRTConfigDialog {
     private AlertDialog mDialog;
     private RecyclerView mDialogView;
+    private RTRecyclerViewAdapter mAdapter;
 
     /** Show the dialog, refreshes the adapter data before showing it */
     public void show(){
@@ -31,8 +33,11 @@ public class MultiRTConfigDialog {
     public void prepare(Context activity, ActivityResultLauncher<Object> installJvmLauncher) {
         mDialogView = new RecyclerView(activity);
         mDialogView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
-        RTRecyclerViewAdapter adapter = new RTRecyclerViewAdapter();
-        mDialogView.setAdapter(adapter);
+        mAdapter = new RTRecyclerViewAdapter();
+        if(activity instanceof Activity) {
+            mAdapter.setActivity((Activity) activity);
+        }
+        mDialogView.setAdapter(mAdapter);
 
         mDialog = new AlertDialog.Builder(activity)
                 .setTitle(R.string.multirt_config_title)
@@ -45,8 +50,8 @@ public class MultiRTConfigDialog {
         mDialog.setOnShowListener(dialog -> {
             Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEUTRAL);
             button.setOnClickListener(view -> {
-                boolean isEditing = !adapter.getIsEditing();
-                adapter.setIsEditing(isEditing);
+                boolean isEditing = !mAdapter.getIsEditing();
+                mAdapter.setIsEditing(isEditing);
                 button.setText(isEditing ? R.string.multirt_config_setdefault : R.string.multirt_delete_runtime);
             });
         });
