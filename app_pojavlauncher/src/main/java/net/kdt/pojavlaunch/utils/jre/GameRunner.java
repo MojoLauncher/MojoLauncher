@@ -272,7 +272,7 @@ public class GameRunner {
 
         addAuthlibInjectorArgs(javaArgList, account);
 
-        javaArgList.addAll(getMoJsonJvmArgs(versionId));
+        mergeMoJsonArgs(javaArgList, getMoJsonJvmArgs(versionId));
 
         javaArgList.addAll(JREUtils.parseJavaArguments(instance.getLaunchArgs()));
 
@@ -338,10 +338,31 @@ public class GameRunner {
         javaArgList.add("-javaagent:"+Tools.DIR_DATA+"/authlib-injector/authlib-injector.jar="+injectorUrl);
     }
 
+    // Skip setting essential flags from the version JSON as we already override them
+    private static boolean shouldSkipArg(String arg) {
+        final String[] args = {
+                "-Djava.library.path=",
+                "-Djna.tmpdir=",
+                "-Dorg.lwjgl.system.SharedLibraryExtractPath=",
+                "-Dio.netty.native.workdir="
+        };
+        for(String s : args) {
+            if(arg.startsWith(s)) return true;
+        }
+        return false;
+    }
+
+    private static void mergeMoJsonArgs(List<String> userArgs, List<String> moJsonArgs) {
+        for(String arg : moJsonArgs) {
+            if(shouldSkipArg(arg)) continue;
+            userArgs.add(arg);
+        }
+    }
+
     private static List<String> getMoJsonJvmArgs(String versionName) {
         JVersionList.Version versionInfo = Tools.getVersionInfo(versionName, true);
         // Parse Forge 1.17+ additional JVM Arguments
-        if (versionInfo.inheritsFrom == null || versionInfo.arguments == null || versionInfo.arguments.jvm == null) {
+        if (versionInfo.arguments == null || versionInfo.arguments.jvm == null) {
             return Collections.emptyList();
         }
 

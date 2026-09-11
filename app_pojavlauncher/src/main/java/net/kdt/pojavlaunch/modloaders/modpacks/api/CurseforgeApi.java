@@ -14,6 +14,11 @@ import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.downloader.AcquireableTaskMetadata;
 import net.kdt.pojavlaunch.downloader.Downloader;
 import net.kdt.pojavlaunch.mirrors.DownloadMirror;
+import net.kdt.pojavlaunch.modloaders.FabriclikeUtils;
+import net.kdt.pojavlaunch.modloaders.ForgelikeUtils;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.FabriclikeLoaderInstaller;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.ForgelikeLoaderInstaller;
+import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.LoaderInstaller;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.Constants;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.CurseManifest;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
@@ -135,12 +140,12 @@ public class CurseforgeApi implements ModpackApi{
     }
 
     @Override
-    public ModLoader installModpack(ModDetail modDetail, int selectedVersion) throws IOException{
+    public LoaderInstaller installModpack(ModDetail modDetail, int selectedVersion) throws IOException{
         //TODO considering only modpacks for now
         return ModpackInstaller.downloadModpack(modDetail, selectedVersion, this::installCurseforgeZip);
     }
 
-    public ModLoader installLocalModpack(String modpackName, File modpackFile, String icon) throws IOException {
+    public LoaderInstaller installLocalModpack(String modpackName, File modpackFile, String icon) throws IOException {
         return ModpackInstaller.installModpack(modpackName, modpackName, modpackFile, icon, this::installCurseforgeZip);
     }
 
@@ -166,7 +171,7 @@ public class CurseforgeApi implements ModpackApi{
         return index + data.size();
     }
 
-    private ModLoader installCurseforgeZip(File zipFile, File instanceDestination) throws IOException {
+    private LoaderInstaller installCurseforgeZip(File zipFile, File instanceDestination) throws IOException {
         try (ZipFile modpackZipFile = new ZipFile(zipFile)){
             CurseManifest curseManifest = Tools.GLOBAL_GSON.fromJson(
                     Tools.read(ZipUtils.getEntryStream(modpackZipFile, "manifest.json")),
@@ -187,7 +192,7 @@ public class CurseforgeApi implements ModpackApi{
         }
     }
 
-    private ModLoader createInfo(CurseManifest.CurseMinecraft minecraft) {
+    private LoaderInstaller createInfo(CurseManifest.CurseMinecraft minecraft) {
         CurseManifest.CurseModLoader primaryModLoader = null;
         for(CurseManifest.CurseModLoader modLoader : minecraft.modLoaders) {
             if(modLoader.primary) {
@@ -201,22 +206,18 @@ public class CurseforgeApi implements ModpackApi{
         String modLoaderName = modLoaderId.substring(0, dashIndex);
         String modLoaderVersion = modLoaderId.substring(dashIndex+1);
         Log.i("CurseforgeApi", modLoaderId + " " + modLoaderName + " "+modLoaderVersion);
-        int modLoaderTypeInt;
+        LoaderInstaller loaderInstaller;
         switch (modLoaderName) {
             case "forge":
-                modLoaderTypeInt = ModLoader.MOD_LOADER_FORGE;
-                break;
+                return new ForgelikeLoaderInstaller(ForgelikeUtils.FORGE_UTILS, minecraft.version, modLoaderVersion);
             case "fabric":
-                modLoaderTypeInt = ModLoader.MOD_LOADER_FABRIC;
-                break;
+                return new FabriclikeLoaderInstaller(FabriclikeUtils.FABRIC_UTILS, minecraft.version, modLoaderVersion);
             case "neoforge":
-                modLoaderTypeInt = ModLoader.MOD_LOADER_NEOFORGE;
-                break;
+                return new ForgelikeLoaderInstaller(ForgelikeUtils.NEOFORGE_UTILS, minecraft.version, modLoaderVersion);
             default:
                 return null;
             //TODO: Quilt is also Forge? How does that work?
         }
-        return new ModLoader(modLoaderTypeInt, modLoaderVersion, minecraft.version);
     }
 
     private String getDownloadUrl(JsonObject fileMetadata) throws IOException {

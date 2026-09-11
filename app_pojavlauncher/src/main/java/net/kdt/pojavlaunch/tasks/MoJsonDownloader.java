@@ -27,8 +27,8 @@ import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
 import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.JSONUtils;
-import net.kdt.pojavlaunch.utils.MavenNameUtils;
 import net.kdt.pojavlaunch.utils.jre.RuntimeSelectionException;
+import net.kdt.pojavlaunch.utils.maven.MavenName;
 import net.kdt.pojavlaunch.value.DependentLibrary;
 import net.kdt.pojavlaunch.value.LibrarySubstitution;
 import net.kdt.pojavlaunch.value.ClientInfo;
@@ -42,7 +42,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -58,13 +59,10 @@ public class MoJsonDownloader extends Downloader {
 
     private ArrayList<TaskMetadata> mScheduledDownloadTasks;
     private ArrayList<NativeLibraryExtractable> mDeclaredNatives;
-    private LinkedHashMap<String, DependentLibrary> mAllLibraries;
+    private LinkedHashSet<DependentLibrary> mAllLibraries;
     private LinkedHashSet<File> mClassPath;
     private SubstitutionMap mSubstitutionMap;
-
-    private File mSourceJarFile; // The source client JAR picked during the inheritance process
-    private File mTargetJarFile; // The destination client JAR to which the source will be copied to.
-    private String mVersionName;
+    private File mClientJarFile;
 
     public MoJsonDownloader() {
         super(ProgressLayout.DOWNLOAD_GAME);
@@ -73,7 +71,7 @@ public class MoJsonDownloader extends Downloader {
     public static void prepareSubstitutionMap(AssetManager assetManager) {
         sSubstitutionMapFuture = sExecutorService.submit(()->{
             try (InputStream stream = assetManager.open("substitutions.json")) {
-                return JSONUtils.readFromStream(stream, SubstitutionMap.class);
+                return JSONUtils.readFromStream(stream, SubstitutionMap.class).prepare();
             }
         });
     }
@@ -115,60 +113,76 @@ public class MoJsonDownloader extends Downloader {
         // work to keep the launcher alive. We will replace this line when we will start downloading stuff.
         ProgressLayout.setProgress(ProgressLayout.DOWNLOAD_GAME, 0, R.string.newdl_starting);
 
-        mTargetJarFile = createGameJarPath(versionName);
         mScheduledDownloadTasks = new ArrayList<>();
         mDeclaredNatives = new ArrayList<>();
-        mAllLibraries = new LinkedHashMap<>();
+        mAllLibraries = new LinkedHashSet<>();
 
         if(sSubstitutionMapFuture == null) throw new RuntimeException("SubstitutionMap not prepared");
         mSubstitutionMap = sSubstitutionMapFuture.get();
-
-        mVersionName = versionName;
 
         downloadAndProcessMetadata(assetManager, verInfo, versionName);
 
         int downloadLibCount = mAllLibraries.size();
         mClassPath = new LinkedHashSet<>(downloadLibCount);
         growDownloadList(downloadLibCount);
-        for(DependentLibrary dependentLibrary : mAllLibraries.values()) {
-            // Special handling for JNA Android natives
-            if(dependentLibrary.name.startsWith("net.java.dev.jna:jna:") && !dependentLibrary.replaced) {
+
+        prepareLibraryDownloads(downloadLibCount);
+
+        mAllLibraries.clear();
+        mClassPath.add(mClientJarFile);
+
+        runDownloads(mScheduledDownloadTasks);
+
+        extractNatives(versionName);
+    }
+
+    public static File createGameJsonPath(String versionId) {
+        return new File(Tools.DIR_HOME_VERSION, versionId + File.separator + versionId + ".json");
+    }
+
+    public static File createGameJarPath(String versionId) {
+        return new File(Tools.DIR_HOME_VERSION, versionId + File.separator + versionId + ".jar");
+    }
+
+    private void prepareLibraryDownloads(int downloadLibCount) throws IOException {
+        HashSet<MavenName> processedLibraries = new HashSet<>(downloadLibCount);
+
+        for(DependentLibrary dependentLibrary : mAllLibraries) {
+            MavenName name = dependentLibrary.name;
+            if(dependentLibrary.rules != null) {
+                String ruleSetAction = MoJsonRule.ruleSetCheck(dependentLibrary.rules);
+                if(!ruleSetAction.equals("allow")) {
+                    // Mark version-wildcard libraries as processed to allow replacing libraries using wildcard
+                    if(name.isAnyVersion()) processedLibraries.add(name);
+                    continue;
+                }
+            }
+
+            LibrarySubstitution substitution = mSubstitutionMap.findSubstitution(dependentLibrary.name);
+            if(substitution != null) {
+                if(substitution.skip) continue;
+                dependentLibrary = substitution;
+            }
+
+            Tools.preProcessLibrary(dependentLibrary);
+
+            if(!processedLibraries.add(name.anyVersion())) {
+                continue;
+            }
+
+            if(name.module.equals("jna") && name.provider.equals("net.java.dev.jna") && !dependentLibrary.replaced) {
+                // Special handling for JNA Android natives
                 scheduleAarDownload(Tools.MAVEN_CENTRAL, dependentLibrary);
+            }
+
+            if(name.module.equals("asm") && name.provider.equals("org.ow2.asm")) {
+                // Refuse to process asm-all when modern, modularized asm is present
+                processedLibraries.add(new MavenName("org.ow2.asm", "asm-all"));
             }
 
             if(dependentLibrary.downloads != null) processLibraryWithDownloads(dependentLibrary);
             else processRawLibrary(dependentLibrary);
         }
-
-        mAllLibraries.clear();
-        mClassPath.add(mTargetJarFile);
-
-        runDownloads(mScheduledDownloadTasks);
-
-        ensureJarFileCopy();
-        extractNatives(mVersionName);
-    }
-
-    private File createGameJsonPath(String versionId) {
-        return new File(Tools.DIR_HOME_VERSION, versionId + File.separator + versionId + ".json");
-    }
-
-    private File createGameJarPath(String versionId) {
-        return new File(Tools.DIR_HOME_VERSION, versionId + File.separator + versionId + ".jar");
-    }
-
-    /**
-     * Ensure that there is a copy of the client JAR file in the version folder, if a copy is
-     * needed.
-     * @throws IOException if the copy fails
-     */
-    private void ensureJarFileCopy() throws IOException {
-        if(mSourceJarFile == null) return;
-        if(mSourceJarFile.equals(mTargetJarFile)) return;
-        if(mTargetJarFile.exists()) return;
-        FileUtils.ensureParentDirectory(mTargetJarFile);
-        Log.i("NewMCDownloader", "Copying " + mSourceJarFile.getName() + " to "+mTargetJarFile.getAbsolutePath());
-        org.apache.commons.io.FileUtils.copyFile(mSourceJarFile, mTargetJarFile, false);
     }
 
     private void extractNatives(String versionName) throws IOException {
@@ -252,21 +266,23 @@ public class MoJsonDownloader extends Downloader {
         if(assetManager != null)
             NewJREUtil.installNewJreIfNeeded(assetManager, verInfo);
 
-        if(Tools.isValidString(verInfo.inheritsFrom)) {
-            JVersionList.Version inheritedVersion = MoJsonExtras.getListedVersion(verInfo.inheritsFrom);
-            // Infinite inheritance !?! :noway:
-            downloadAndProcessMetadata(assetManager, inheritedVersion, verInfo.inheritsFrom);
-        }
-
         JAssets assets = downloadAssetsIndex(verInfo);
         if(assets != null) scheduleAssetDownloads(assets);
 
         ClientInfo clientInfo = getClientInfo(verInfo);
         if(clientInfo != null) scheduleGameJarDownload(clientInfo, versionName);
 
-        if(verInfo.libraries != null) scheduleLibraryDownloads(verInfo.libraries);
+        if(verInfo.libraries != null) {
+            mAllLibraries.addAll(Arrays.asList(verInfo.libraries));
+        }
 
         if(verInfo.logging != null) scheduleLoggingAssetDownloadIfNeeded(verInfo.logging);
+
+        if(Tools.isValidString(verInfo.inheritsFrom)) {
+            JVersionList.Version inheritedVersion = MoJsonExtras.getListedVersion(verInfo.inheritsFrom);
+            // Infinite inheritance !?! :noway:
+            downloadAndProcessMetadata(assetManager, inheritedVersion, verInfo.inheritsFrom);
+        }
     }
 
     private void growDownloadList(int addedElementCount) {
@@ -291,7 +307,7 @@ public class MoJsonDownloader extends Downloader {
      * @throws IOException in case if download scheduling fails.
      */
     private void scheduleAarDownload(String baseRepository, DependentLibrary dependentLibrary) throws IOException {
-        String path = MavenNameUtils.mavenNameToAarPath(dependentLibrary.name);
+        String path = dependentLibrary.name.toPath(null, ".aar");
         String downloadUrl = baseRepository + path;
         File targetPath = new File(Tools.DIR_HOME_LIBRARY, path);
         mDeclaredNatives.add(new NativeLibraryExtractable(targetPath, null));
@@ -324,8 +340,8 @@ public class MoJsonDownloader extends Downloader {
         return artifactPath;
     }
 
-    private static boolean canIgnoreNatives(String libName) {
-        return libName.startsWith("com.mojang:text2speech");
+    private static boolean canIgnoreNatives(MavenName name) {
+        return name.provider.equals("com.mojang") && name.module.equals("text2speech");
     }
 
     private void processNatives(DependentLibrary library) throws IOException {
@@ -341,7 +357,7 @@ public class MoJsonDownloader extends Downloader {
         if(artifact == null) throw new IOException("library "+library.name +" is missing required classifier "+ libraryClassifier);
 
         String subPath = artifact.path;
-        if(subPath == null) subPath = MavenNameUtils.mavenNameToPath(library.name, libraryClassifier);
+        if(subPath == null) subPath = library.name.toPath(libraryClassifier);
 
         File artifactPath = submitArtifact(artifact, subPath);
         if(library.extract != null && artifactPath != null) {
@@ -354,7 +370,7 @@ public class MoJsonDownloader extends Downloader {
         if(downloads.artifact != null) {
 
             String subPath = downloads.artifact.path;
-            if(subPath == null) subPath = MavenNameUtils.mavenNameToPath(library.name);
+            if(subPath == null) subPath = library.name.toPath();
 
             submitArtifact(downloads.artifact, subPath);
         }
@@ -362,41 +378,11 @@ public class MoJsonDownloader extends Downloader {
     }
 
     private void processRawLibrary(DependentLibrary library) throws IOException{
-        String path = MavenNameUtils.mavenNameToPath(library.name);
+        String path = library.name.toPath();
         String baseUrl = library.url;
         if(baseUrl != null) baseUrl = baseUrl.replace("http://","https://");
         else baseUrl = "https://libraries.minecraft.net/";
         submitBareLibrary(path, baseUrl);
-    }
-
-    private void scheduleLibraryDownloads(DependentLibrary[] dependentLibraries) throws IOException {
-        Tools.preProcessLibraries(dependentLibraries);
-        for(DependentLibrary dependentLibrary : dependentLibraries) {
-            if(dependentLibrary.rules != null) {
-                String ruleSetAction = MoJsonRule.ruleSetCheck(dependentLibrary.rules);
-                if(!ruleSetAction.equals("allow")) continue;
-            }
-
-            LibrarySubstitution substitution = mSubstitutionMap.findSubstitution(dependentLibrary.name);
-            if(substitution != null) {
-                if(substitution.skip) continue;
-                dependentLibrary = substitution;
-            }
-
-            String libraryTrimmedName = MavenNameUtils.mavenBaseName(dependentLibrary.name);
-            // Move the more recent library to the front of the list
-            if (mAllLibraries.containsKey(libraryTrimmedName)) {
-                mAllLibraries.remove(libraryTrimmedName);
-            }
-
-            // If the lib list has both asm-all and normal asm, something is either terribly wrong
-            // or it's just babric. Let's hope for the latter
-            if(libraryTrimmedName.equals("org.ow2.asm:asm")){
-                mAllLibraries.remove("org.ow2.asm:asm-all");
-            }
-
-            mAllLibraries.put(libraryTrimmedName, dependentLibrary);
-        }
     }
     
     private void scheduleAssetDownloads(JAssets assets) throws IOException {
@@ -448,6 +434,6 @@ public class MoJsonDownloader extends Downloader {
                 clientInfo.size
         );
         // Store the path of the JAR to copy it into our new version folder later.
-        mSourceJarFile = clientJar;
+        mClientJarFile = clientJar;
     }
 }
