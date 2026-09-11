@@ -193,7 +193,7 @@ public class GameRunner {
         }
 
         boolean isGl4es = renderer instanceof GLESRenderSpec.GL4ESRenderSpec;
-        boolean ltwSupported = gameRenderer.getKnownRenderer(GameRenderer.LTW_RENDERER).compatibleDevice(activity);
+        boolean ltwSupported = GameRenderer.isCompatibleRenderer(GameRenderer.LTW_RENDERER);
         // Block Sodium from running with GL4ES on 1.17+
         if(!isCompatContext(versionInfo) && isGl4es && hasSodium(gamedir)) {
             switchRendererifSupported(ltwSupported, GameRenderer.LTW_RENDERER, gameRenderer, instance, activity, R.string.compat_sodium_not_supported);

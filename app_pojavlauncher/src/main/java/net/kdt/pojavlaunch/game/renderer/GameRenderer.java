@@ -11,7 +11,6 @@ import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,16 +23,8 @@ public class GameRenderer {
     public static final String FREEDRENO_RENDERER = "freedreno_kgsl";
     public static final String MESA_RENDERER = "mesa_desktop";
     private final static String TAG = "Renderer";
-    private static final Map<String, Class<? extends RenderSpec>> KNOWN_RENDERERS = new LinkedHashMap<>();
     private final static String FALLBACK_RENDERER = GL4ES_RENDERER;
     private static RenderersList sCompatibleRenderers;
-
-    static {
-        KNOWN_RENDERERS.put(GL4ES_RENDERER, GLESRenderSpec.GL4ESRenderSpec.class);
-        KNOWN_RENDERERS.put(LTW_RENDERER, GLESRenderSpec.LTWRenderSpec.class);
-        KNOWN_RENDERERS.put(ZINK_RENDERER, MesaRenderSpec.ZinkRenderSpec.class);
-        KNOWN_RENDERERS.put(FREEDRENO_RENDERER, MesaRenderSpec.FreedrenoRenderSpec.class);
-    }
 
     private final Context context;
     private RenderSpec currentRenderer;
@@ -41,18 +32,28 @@ public class GameRenderer {
 
     public GameRenderer(Context context, String currentRenderer) {
         this.context = context;
-        this.currentRenderer = internalCreateRenderer(currentRenderer);
+        this.currentRenderer = getKnownRenderer(currentRenderer);
     }
 
-    private static RenderSpec internalCreateRenderer(String renderer) {
-        Class<? extends RenderSpec> clazz = KNOWN_RENDERERS.containsKey(renderer) ?
-                KNOWN_RENDERERS.get(renderer) :
-                KNOWN_RENDERERS.get(FALLBACK_RENDERER);
-        try {
-            return clazz.newInstance();
-        } catch (IllegalAccessException | InstantiationException e) {
-            throw new RuntimeException(e);
+    public static RenderSpec getKnownRenderer(String renderer) {
+        switch (renderer) {
+            // For compatibility
+            case "opengles2_4":
+            case "opengles2_5":
+            case GL4ES_RENDERER: return new GLESRenderSpec.GL4ESRenderSpec();
+            case LTW_RENDERER: return new GLESRenderSpec.LTWRenderSpec();
+            case ZINK_RENDERER: return new MesaRenderSpec.ZinkRenderSpec();
+            case FREEDRENO_RENDERER: return new MesaRenderSpec.FreedrenoRenderSpec();
+            default: return null;
         }
+    }
+
+    public static boolean isCompatibleRenderer(String renderer) {
+        if(sCompatibleRenderers != null) {
+            return sCompatibleRenderers.rendererIds.contains(renderer);
+        }
+        Log.w(TAG, "Tried checking renderer compatibility through cache, but it was already released or wasn't initialized at all");
+        return false;
     }
 
     /**
@@ -76,10 +77,14 @@ public class GameRenderer {
     public static RenderersList getCompatibleRenderers(Context context) {
         if (sCompatibleRenderers != null) return sCompatibleRenderers;
         Resources resources = context.getResources();
-        List<String> rendererIds = new ArrayList<>(KNOWN_RENDERERS.size());
-        List<String> rendererNames = new ArrayList<>(KNOWN_RENDERERS.size());
-        for (String renderer : KNOWN_RENDERERS.keySet()) {
-            RenderSpec r = internalCreateRenderer(renderer);
+        String[] renderers = {
+                GL4ES_RENDERER, LTW_RENDERER, ZINK_RENDERER, FREEDRENO_RENDERER
+        };
+        List<String> rendererIds = new ArrayList<>(renderers.length);
+        List<String> rendererNames = new ArrayList<>(rendererIds);
+        for (String renderer : renderers) {
+            RenderSpec r = getKnownRenderer(renderer);
+            assert r != null;
             if (!r.compatibleDevice(context)) continue;
             rendererIds.add(renderer);
             rendererNames.add(resources.getString(r.displayName()));
@@ -140,13 +145,14 @@ public class GameRenderer {
      * @param renderer renderer
      */
     public void setCurrentRenderer(String renderer) {
-        if (!KNOWN_RENDERERS.containsKey(renderer)) return;
-        Log.i(TAG, "Replacing default renderer with the new: " + renderer);
-        currentRenderer = internalCreateRenderer(renderer);
+        RenderSpec spec = getKnownRenderer(renderer);
+        if(spec == null) throw new IllegalArgumentException("Invalid renderer " + renderer);
+        Log.i(TAG, "Replacing default renderer with the new: " + spec.name());
+        currentRenderer = spec;
     }
 
     /**
-     * Setup the current renderer or fallback to {@link GameRenderer#FALLBACK_RENDERER} if failed
+     * Set up the current renderer or fallback to {@link GameRenderer#FALLBACK_RENDERER} if failed
      *
      * @return whether the renderer setup was successful
      */
@@ -155,20 +161,9 @@ public class GameRenderer {
         if (!currentRenderer.setupRenderer()) {
             Log.e(TAG, "Failed to setup renderer " + currentRenderer.name() + ", falling back to " + FALLBACK_RENDERER);
             // Hopefully
-            return internalCreateRenderer(FALLBACK_RENDERER).setupRenderer();
+            return getKnownRenderer(FALLBACK_RENDERER).setupRenderer();
         }
         return true;
-    }
-
-    /**
-     * Resolve known renderer name from the tag
-     *
-     * @param renderer renderer tag
-     * @return a renderer
-     * @throws RuntimeException if the renderer is unknown
-     */
-    public RenderSpec getKnownRenderer(String renderer) throws RuntimeException {
-        return internalCreateRenderer(renderer);
     }
 
     /**
