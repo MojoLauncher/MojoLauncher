@@ -100,8 +100,9 @@ public class JREUtils {
         if(ffmpeg == null) return;
         envMap.put("POJAV_FFMPEG_PATH", ffmpeg.resolveAbsolutePath("libffmpeg.so"));
     }
-    public static void setEnviroimentForGame(Context context, String renderer) throws Throwable {
+    public static void setEnviroimentForGame(Context context, String renderer, Map<String, String> versionSpecificEnv) throws Throwable {
         Map<String, String> envMap = new ArrayMap<>();
+        if(versionSpecificEnv != null) envMap.putAll(versionSpecificEnv);
         envMap.put("LIBGL_MIPMAP", "3");
 
         // Prevent OptiFine (and other error-reporting stuff in Minecraft) from balooning the log

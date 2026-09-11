@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.net.URL;
 
 public class BTADownloadTask implements Runnable {
-    private static final String BASE_JSON = "{\"inheritsFrom\":\"b1.7.3\",\"mainClass\":\"net.minecraft.client.Minecraft\",\"libraries\":[{\"name\":\"bta-client:bta-client:%1$s\",\"downloads\":{\"artifact\":{\"path\":\"bta-client/bta-client-%1$s.jar\",\"url\":\"%2$s\"}}}],\"id\":\"%3$s\"}";
     private final ModloaderDownloadListener mListener;
     private final BTAUtils.BTAVersion mBtaVersion;
 
@@ -49,7 +48,7 @@ public class BTADownloadTask implements Runnable {
     }
 
     private void createJson(String btaVersionId) throws IOException {
-        String btaJson = String.format(BASE_JSON, mBtaVersion.versionName, mBtaVersion.downloadUrl, btaVersionId);
+        String btaJson = BTAUtils.getBTAJson(mBtaVersion, btaVersionId);
         File jsonDir = new File(Tools.DIR_HOME_VERSION, btaVersionId);
         File jsonFile = new File(jsonDir, btaVersionId+".json");
         FileUtils.ensureDirectory(jsonDir);
