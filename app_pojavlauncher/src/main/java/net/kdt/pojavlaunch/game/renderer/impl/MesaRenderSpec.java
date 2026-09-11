@@ -7,6 +7,7 @@ import android.content.Context;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.game.renderer.GameRenderer;
 import net.kdt.pojavlaunch.game.renderer.RenderSpec;
+import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.GpuUtils;
 
 import java.io.File;
@@ -117,14 +118,14 @@ public abstract class MesaRenderSpec implements RenderSpec {
         }
         @Override
         public void setupEnvironment(Context context, Map<String, String> envMap) {
-            if (GpuUtils.getGlInfo().isAdreno()) {
-                envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "kgsl");
-                // On Adreno 5XX and lower only Core 3.1 is exposed by default due to missing hardware extensions.
-                // 3.3 is required for modern Minecraft so let's force 3.3 if running on such GPU - it's known to be working.
-                if (GpuUtils.getGlInfo().isAdreno500Lower()) {
-                    envMap.put("MESA_GL_VERSION_OVERRIDE", "3.3");
-                    envMap.put("MESA_GLSL_VERSION_OVERRIDE", "330");
-                }
+            if(LauncherPreferences.PREF_FREEDRENO_SYSMEM)
+                envMap.put("FD_MESA_DEBUG", "sysmem");
+            envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "kgsl");
+            // On Adreno 5XX and lower only Core 3.1 is exposed by default due to missing hardware extensions.
+            // 3.3 is required for modern Minecraft so let's force 3.3 if running on such GPU - it's known to be working.
+            if (GpuUtils.getGlInfo().isAdreno500Lower()) {
+                envMap.put("MESA_GL_VERSION_OVERRIDE", "3.3");
+                envMap.put("MESA_GLSL_VERSION_OVERRIDE", "330");
             }
             super.setupEnvironment(context, envMap);
         }

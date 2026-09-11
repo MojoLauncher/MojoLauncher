@@ -106,9 +106,6 @@ public class GameRenderer {
      * @param envMap  environment map
      */
     public void setupEnvironment(Context context, Map<String, String> envMap) {
-        if (LauncherPreferences.PREF_FREEDRENO_SYSMEM && currentRenderer instanceof MesaRenderSpec.FreedrenoRenderSpec) {
-            envMap.put("FD_MESA_DEBUG", "sysmem");
-        }
         if (LauncherPreferences.PREF_FREEDRENO_SYSMEM && !LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER) {
             envMap.put("TU_DEBUG", "sysmem");
         }
@@ -136,8 +133,6 @@ public class GameRenderer {
     public RenderSpec getCurrentRenderer() {
         return currentRenderer;
     }
-
-    // This will be used for AdrenoTools in the far future
 
     /**
      * Set current selected renderer. Call this before {@link GameRenderer#setupEnvironment} or bad things may happen
