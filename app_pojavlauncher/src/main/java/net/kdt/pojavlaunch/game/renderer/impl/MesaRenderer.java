@@ -115,7 +115,6 @@ public abstract class MesaRenderer implements Renderer {
         public boolean compatibleDevice(Context context) {
             return super.compatibleDevice(context) && GpuUtils.getGlInfo().isAdreno();
         }
-
         @Override
         public void setupEnvironment(Context context, Map<String, String> envMap) {
             if (GpuUtils.getGlInfo().isAdreno()) {

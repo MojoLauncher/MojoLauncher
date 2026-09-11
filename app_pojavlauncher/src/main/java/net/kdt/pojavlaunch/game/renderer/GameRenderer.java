@@ -1,15 +1,12 @@
 package net.kdt.pojavlaunch.game.renderer;
 
-import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_DUMP_SHADERS;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
 
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.game.renderer.angle.AngleDescriptor;
-import net.kdt.pojavlaunch.game.renderer.impl.GL4ESRenderer;
-import net.kdt.pojavlaunch.game.renderer.impl.LTWRenderer;
+import net.kdt.pojavlaunch.game.renderer.impl.GLESRenderer;
 import net.kdt.pojavlaunch.game.renderer.impl.MesaRenderer;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
@@ -33,16 +30,14 @@ public class GameRenderer {
     private static RenderersList sCompatibleRenderers;
 
     static {
-        KNOWN_RENDERERS.put(GL4ES_RENDERER, GL4ESRenderer.class);
-        KNOWN_RENDERERS.put(LTW_RENDERER, LTWRenderer.class);
+        KNOWN_RENDERERS.put(GL4ES_RENDERER, GLESRenderer.GL4ESRenderer.class);
+        KNOWN_RENDERERS.put(LTW_RENDERER, GLESRenderer.LTWRenderer.class);
         KNOWN_RENDERERS.put(ZINK_RENDERER, MesaRenderer.ZinkRenderer.class);
         KNOWN_RENDERERS.put(FREEDRENO_RENDERER, MesaRenderer.FreedrenoRenderer.class);
     }
 
     private final Context context;
     private Renderer currentRenderer;
-    private AngleDescriptor angleDescriptor = null;
-    private boolean forceNsBypass = false;
     private String additionalLibraryPath = null;
 
     public GameRenderer(Context context, String currentRenderer) {
@@ -107,13 +102,6 @@ public class GameRenderer {
      * @param envMap  environment map
      */
     public void setupEnvironment(Context context, Map<String, String> envMap) {
-        if (angleDescriptor != null)
-            angleDescriptor.setEnvironment(envMap);
-        if (PREF_DUMP_SHADERS)
-            envMap.put("LIBGL_VGPU_DUMP", "1");
-        envMap.put("force_glsl_extensions_warn", "true");
-        envMap.put("allow_higher_compat_version", "true");
-        envMap.put("allow_glsl_extension_directive_midshader", "true");
         if (LauncherPreferences.PREF_FREEDRENO_SYSMEM && currentRenderer instanceof MesaRenderer.FreedrenoRenderer) {
             envMap.put("FD_MESA_DEBUG", "sysmem");
         }
@@ -127,24 +115,7 @@ public class GameRenderer {
      * Enable ANGLE usage. Will pick AnglePlugin source if possible and fallback to the system libraries (if present) otherwise while enabling namespace bypass.
      */
     public void enableAngle() {
-        if (angleDescriptor != null) return;
-        AngleDescriptor descriptor;
-        LibraryPlugin anglePlugin = LibraryPlugin.discoverPlugin(context, LibraryPlugin.ID_ANGLE_PLUGIN);
-        descriptor = new AngleDescriptor.ExtAngleDescriptor(anglePlugin);
-        if (descriptor.supported()) {
-            this.angleDescriptor = descriptor;
-            Log.i(TAG, "Enabled ANGLE through AnglePlugin");
-            return;
-        }
-        descriptor = new AngleDescriptor.SysAngleDescriptor();
-        if (descriptor.supported()) {
-            this.angleDescriptor = descriptor;
-            // We can't access ANGLE libraries through classloader namespace
-            this.forceNsBypass = true;
-            Log.i(TAG, "Enabled ANGLE through system libraries");
-            return;
-        }
-        Log.e(TAG, "Unable to setup neither system ANGLE nor external");
+
     }
 
     /**
@@ -189,7 +160,7 @@ public class GameRenderer {
      */
     public boolean maybeSetupRenderer() {
         setRendererLibraryPath(Tools.NATIVE_LIB_DIR, additionalLibraryPath);
-        if (!currentRenderer.setupRenderer(forceNsBypass)) {
+        if (!currentRenderer.setupRenderer(false)) {
             Log.e(TAG, "Failed to setup renderer " + currentRenderer.name() + ", falling back to " + FALLBACK_RENDERER);
             // Hopefully
             return internalCreateRenderer(FALLBACK_RENDERER).setupRenderer(false);

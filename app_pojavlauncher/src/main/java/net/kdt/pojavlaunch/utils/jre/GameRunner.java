@@ -7,13 +7,13 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog.Builder;
 import androidx.appcompat.app.AppCompatActivity;
 
 import net.kdt.pojavlaunch.Architecture;
 import net.kdt.pojavlaunch.JVersionList;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.authenticator.accounts.Account;
+import net.kdt.pojavlaunch.game.renderer.impl.GLESRenderer;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.LifecycleAwareAlertDialog;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
@@ -21,8 +21,6 @@ import net.kdt.pojavlaunch.multirt.Runtime;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.game.renderer.GameRenderer;
 import net.kdt.pojavlaunch.game.renderer.Renderer;
-import net.kdt.pojavlaunch.game.renderer.impl.GL4ESRenderer;
-import net.kdt.pojavlaunch.game.renderer.impl.LTWRenderer;
 import net.kdt.pojavlaunch.utils.DateUtils;
 import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.GpuUtils;
@@ -190,11 +188,11 @@ public class GameRunner {
         Renderer renderer = gameRenderer.getCurrentRenderer();
 
         // Switch renderer to GL4ES when running a compat context version on LTW
-        if(isCompatContext(versionInfo) && !hasAngelica(gamedir) && renderer instanceof LTWRenderer) {
+        if(isCompatContext(versionInfo) && !hasAngelica(gamedir) && renderer instanceof GLESRenderer.LTWRenderer) {
             switchRendererifSupported(true, GameRenderer.GL4ES_RENDERER, gameRenderer, instance, activity, 0);
         }
 
-        boolean isGl4es = renderer instanceof GL4ESRenderer;
+        boolean isGl4es = renderer instanceof GLESRenderer.GL4ESRenderer;
         boolean ltwSupported = gameRenderer.getKnownRenderer(GameRenderer.LTW_RENDERER).compatibleDevice(activity);
         // Block Sodium from running with GL4ES on 1.17+
         if(!isCompatContext(versionInfo) && isGl4es && hasSodium(gamedir)) {
@@ -208,7 +206,7 @@ public class GameRunner {
 
         GameRenderer.releaseCache();
 
-        boolean isLtw = renderer instanceof LTWRenderer;
+        boolean isLtw = renderer instanceof GLESRenderer.LTWRenderer;
 
         if(isLtw && checkRenderDistance(versionInfo, gamedir)) {
             if(showDialog(activity, R.string.ltw_render_distance_warning_msg)) return;
