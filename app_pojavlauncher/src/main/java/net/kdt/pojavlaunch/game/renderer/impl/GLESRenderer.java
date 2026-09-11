@@ -6,6 +6,7 @@ import android.util.Log;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
+import net.kdt.pojavlaunch.game.renderer.GameRenderer;
 import net.kdt.pojavlaunch.game.renderer.Renderer;
 import net.kdt.pojavlaunch.game.renderer.angle.AngleDescriptor;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
@@ -69,7 +70,7 @@ public abstract class GLESRenderer implements Renderer {
             return R.string.mcl_setting_renderer_ltw;
         }
         public String tag() {
-            return "opengles3_ltw";
+            return GameRenderer.LTW_RENDERER;
         }
         public String library() {
             return "libltw.so";
@@ -86,7 +87,7 @@ public abstract class GLESRenderer implements Renderer {
             return R.string.mcl_setting_renderer_gles2_4;
         }
         public String tag() {
-            return "opengles2";
+            return GameRenderer.GL4ES_RENDERER;
         }
         public String library() {
             return "libltw.so";
