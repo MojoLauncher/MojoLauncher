@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import androidx.preference.SwitchPreference;
 
-import net.kdt.pojavlaunch.utils.GLInfoUtils;
+import net.kdt.pojavlaunch.utils.GpuUtils;
 
 import git.artdeell.mojo.R;
 
@@ -14,7 +14,7 @@ public class LauncherPreferenceExperimentalFragment extends LauncherPreferenceFr
     public void onCreatePreferences(Bundle b, String str) {
         addPreferencesFromResource(R.xml.pref_experimental);
         SwitchPreference pref = requirePreference("freedrenoSysmem", SwitchPreference.class);
-        boolean hasFreedreno = GLInfoUtils.getGlInfo().isAdreno();
+        boolean hasFreedreno = GpuUtils.getGlInfo().isAdreno();
         pref.setVisible(hasFreedreno);
     }
 }

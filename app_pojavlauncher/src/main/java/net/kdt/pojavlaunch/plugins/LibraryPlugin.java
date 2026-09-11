@@ -47,6 +47,9 @@ public class LibraryPlugin {
     public String resolveAbsolutePath(String library) {
         return new File(libraryPath, library).getAbsolutePath();
     }
+    public File resolve(String library) {
+        return new File(libraryPath, library);
+    }
 
     public boolean checkLibraries(String... libs){
         for(String lib : libs){

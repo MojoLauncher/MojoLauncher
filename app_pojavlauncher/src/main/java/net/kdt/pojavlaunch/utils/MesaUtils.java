@@ -26,12 +26,8 @@ public class MesaUtils {
     public static void initEnvironment(Context context, String renderer, Map<String, String> envMap){
         switch(renderer) {
             case "vulkan_zink":
-                envMap.put("GALLIUM_DRIVER", "zink");
-                envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
-                // HACK: GLSL version override for Mesa-based renderers (i.e. Zink)
-                // Required to run the game properly on some mobile Vulkan drivers (Minecraft fails to compile shaders without)
-                envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
-                if(!Architecture.isx86Device() && (LauncherPreferences.PREF_ZINK_FORCE_LEGACY || GLInfoUtils.getGlInfo().isArm())) {
+
+                if(!Architecture.isx86Device() && (LauncherPreferences.PREF_ZINK_FORCE_LEGACY || GpuUtils.getGlInfo().isArm())) {
                     zink = LibraryPlugin.discoverPlugin(context, LibraryPlugin.ID_ZINK_PLUGIN);
                     if(zink == null) return;
                     // Mali additionally wants this
@@ -39,15 +35,7 @@ public class MesaUtils {
                 }
                 break;
             case "freedreno_kgsl":
-                if(GLInfoUtils.getGlInfo().isAdreno()) {
-                    envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "kgsl");
-                    // On Adreno 5XX and lower only Core 3.1 is exposed by default due to missing hardware extensions.
-                    // 3.3 is required for modern Minecraft so let's force 3.3 if running on such GPU - it's known to be working.
-                    if(GLInfoUtils.getGlInfo().isAdreno500Lower()) {
-                        envMap.put("MESA_GL_VERSION_OVERRIDE", "3.3");
-                        envMap.put("MESA_GLSL_VERSION_OVERRIDE", "330");
-                    }
-                }
+
                 break;
         }
     }
@@ -67,7 +55,7 @@ public class MesaUtils {
      * @return
      */
     public static String getPreferredEGL() {
-        if (LauncherPreferences.PREF_ZINK_FORCE_LEGACY || GLInfoUtils.getGlInfo().isArm()) {
+        if (LauncherPreferences.PREF_ZINK_FORCE_LEGACY || GpuUtils.getGlInfo().isArm()) {
             if (zink == null) return MESA_EGL;
             if (!zink.checkLibraries(MESA_EGL_LEGACY)) return MESA_EGL;
             return zink.resolveAbsolutePath(MESA_EGL_LEGACY);
@@ -79,7 +67,7 @@ public class MesaUtils {
      * @return library path string
      */
     public static String getCustomZinkLibraryPath() {
-        if ((LauncherPreferences.PREF_ZINK_FORCE_LEGACY || GLInfoUtils.getGlInfo().isArm()) && zink != null)
+        if ((LauncherPreferences.PREF_ZINK_FORCE_LEGACY || GpuUtils.getGlInfo().isArm()) && zink != null)
             return zink.getLibraryPath();
         return null;
     }

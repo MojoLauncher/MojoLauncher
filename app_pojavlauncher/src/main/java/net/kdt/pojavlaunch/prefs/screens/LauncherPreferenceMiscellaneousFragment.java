@@ -19,8 +19,7 @@ import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
 import net.kdt.pojavlaunch.tasks.DataMigrator;
-import net.kdt.pojavlaunch.utils.GLInfoUtils;
-import net.kdt.pojavlaunch.utils.RendererCompatUtil;
+import net.kdt.pojavlaunch.utils.GpuUtils;
 
 import org.apache.commons.io.FileUtils;
 
@@ -48,7 +47,7 @@ public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceF
         addPreferencesFromResource(R.xml.pref_misc);
         Preference driverPreference = requirePreference("zinkPreferSystemDriver");
         PackageManager packageManager = driverPreference.getContext().getPackageManager();
-        boolean supportsTurnip = RendererCompatUtil.checkVulkanSupport(packageManager) && GLInfoUtils.getGlInfo().isAdreno();
+        boolean supportsTurnip = GpuUtils.checkVulkanSupport(packageManager) && GpuUtils.getGlInfo().isAdreno();
         driverPreference.setVisible(supportsTurnip);
         Preference importPreference = requirePreference("runDataMigration");
         importPreference.setOnPreferenceClickListener(preference -> {
