@@ -5,9 +5,8 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import net.kdt.pojavlaunch.Tools;
-import net.kdt.pojavlaunch.game.renderer.angle.AngleDescriptor;
-import net.kdt.pojavlaunch.game.renderer.impl.GLESRenderer;
-import net.kdt.pojavlaunch.game.renderer.impl.MesaRenderer;
+import net.kdt.pojavlaunch.game.renderer.impl.GLESRenderSpec;
+import net.kdt.pojavlaunch.game.renderer.impl.MesaRenderSpec;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
@@ -25,19 +24,19 @@ public class GameRenderer {
     public static final String FREEDRENO_RENDERER = "freedreno_kgsl";
     public static final String MESA_RENDERER = "mesa_desktop";
     private final static String TAG = "Renderer";
-    private static final Map<String, Class<? extends Renderer>> KNOWN_RENDERERS = new LinkedHashMap<>();
+    private static final Map<String, Class<? extends RenderSpec>> KNOWN_RENDERERS = new LinkedHashMap<>();
     private final static String FALLBACK_RENDERER = GL4ES_RENDERER;
     private static RenderersList sCompatibleRenderers;
 
     static {
-        KNOWN_RENDERERS.put(GL4ES_RENDERER, GLESRenderer.GL4ESRenderer.class);
-        KNOWN_RENDERERS.put(LTW_RENDERER, GLESRenderer.LTWRenderer.class);
-        KNOWN_RENDERERS.put(ZINK_RENDERER, MesaRenderer.ZinkRenderer.class);
-        KNOWN_RENDERERS.put(FREEDRENO_RENDERER, MesaRenderer.FreedrenoRenderer.class);
+        KNOWN_RENDERERS.put(GL4ES_RENDERER, GLESRenderSpec.GL4ESRenderSpec.class);
+        KNOWN_RENDERERS.put(LTW_RENDERER, GLESRenderSpec.LTWRenderSpec.class);
+        KNOWN_RENDERERS.put(ZINK_RENDERER, MesaRenderSpec.ZinkRenderSpec.class);
+        KNOWN_RENDERERS.put(FREEDRENO_RENDERER, MesaRenderSpec.FreedrenoRenderSpec.class);
     }
 
     private final Context context;
-    private Renderer currentRenderer;
+    private RenderSpec currentRenderer;
     private String additionalLibraryPath = null;
 
     public GameRenderer(Context context, String currentRenderer) {
@@ -45,8 +44,8 @@ public class GameRenderer {
         this.currentRenderer = internalCreateRenderer(currentRenderer);
     }
 
-    private static Renderer internalCreateRenderer(String renderer) {
-        Class<? extends Renderer> clazz = KNOWN_RENDERERS.containsKey(renderer) ?
+    private static RenderSpec internalCreateRenderer(String renderer) {
+        Class<? extends RenderSpec> clazz = KNOWN_RENDERERS.containsKey(renderer) ?
                 KNOWN_RENDERERS.get(renderer) :
                 KNOWN_RENDERERS.get(FALLBACK_RENDERER);
         try {
@@ -80,7 +79,7 @@ public class GameRenderer {
         List<String> rendererIds = new ArrayList<>(KNOWN_RENDERERS.size());
         List<String> rendererNames = new ArrayList<>(KNOWN_RENDERERS.size());
         for (String renderer : KNOWN_RENDERERS.keySet()) {
-            Renderer r = internalCreateRenderer(renderer);
+            RenderSpec r = internalCreateRenderer(renderer);
             if (!r.compatibleDevice(context)) continue;
             rendererIds.add(renderer);
             rendererNames.add(resources.getString(r.displayName()));
@@ -102,7 +101,7 @@ public class GameRenderer {
      * @param envMap  environment map
      */
     public void setupEnvironment(Context context, Map<String, String> envMap) {
-        if (LauncherPreferences.PREF_FREEDRENO_SYSMEM && currentRenderer instanceof MesaRenderer.FreedrenoRenderer) {
+        if (LauncherPreferences.PREF_FREEDRENO_SYSMEM && currentRenderer instanceof MesaRenderSpec.FreedrenoRenderSpec) {
             envMap.put("FD_MESA_DEBUG", "sysmem");
         }
         if (LauncherPreferences.PREF_FREEDRENO_SYSMEM && !LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER) {
@@ -115,11 +114,11 @@ public class GameRenderer {
      * Enable legacy Mesa ZINK (23.0.4) usage if ZinkPlugin is installed
      */
     public void enableLegacyZink() {
-        if (!(currentRenderer instanceof MesaRenderer.ZinkRenderer)) return;
+        if (!(currentRenderer instanceof MesaRenderSpec.ZinkRenderSpec)) return;
         LibraryPlugin zink = LibraryPlugin.discoverPlugin(context, LibraryPlugin.ID_ZINK_PLUGIN);
         if (zink == null) return;
         if (!zink.checkLibraries("libEGL_legacy.so")) return;
-        ((MesaRenderer) currentRenderer).overrideEGL(zink.resolveAbsolutePath("libEGL_legacy.so"));
+        ((MesaRenderSpec) currentRenderer).overrideEGL(zink.resolveAbsolutePath("libEGL_legacy.so"));
         this.additionalLibraryPath = zink.getLibraryPath();
         Log.i(TAG, "Using legacy Mesa ZINK!");
     }
@@ -129,7 +128,7 @@ public class GameRenderer {
      *
      * @return renderer
      */
-    public Renderer getCurrentRenderer() {
+    public RenderSpec getCurrentRenderer() {
         return currentRenderer;
     }
 
@@ -168,7 +167,7 @@ public class GameRenderer {
      * @return a renderer
      * @throws RuntimeException if the renderer is unknown
      */
-    public Renderer getKnownRenderer(String renderer) throws RuntimeException {
+    public RenderSpec getKnownRenderer(String renderer) throws RuntimeException {
         return internalCreateRenderer(renderer);
     }
 

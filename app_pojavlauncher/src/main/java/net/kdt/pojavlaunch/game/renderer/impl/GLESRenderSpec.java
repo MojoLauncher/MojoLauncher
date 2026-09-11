@@ -7,7 +7,7 @@ import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.game.renderer.GameRenderer;
-import net.kdt.pojavlaunch.game.renderer.Renderer;
+import net.kdt.pojavlaunch.game.renderer.RenderSpec;
 import net.kdt.pojavlaunch.game.renderer.angle.AngleDescriptor;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
@@ -19,7 +19,7 @@ import java.util.Map;
 import git.artdeell.mojo.R;
 import git.artdeell.mojoexec.MojoExec;
 
-public abstract class GLESRenderer implements Renderer {
+public abstract class GLESRenderSpec implements RenderSpec {
     private boolean nsBypass = false;
 
     private AngleDescriptor getAngleDescriptor(Context context) {
@@ -59,7 +59,7 @@ public abstract class GLESRenderer implements Renderer {
         return MojoExec.prepareEgl(library(), nsBypass, true, Integer.parseInt((String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION)));
     }
 
-    public static class LTWRenderer extends GLESRenderer {
+    public static class LTWRenderSpec extends GLESRenderSpec {
         public boolean compatibleDevice(Context context) {
             return JREUtils.getDetectedVersion() >= 3 && new File(Tools.NATIVE_LIB_DIR, this.library()).exists();
         }
@@ -76,7 +76,7 @@ public abstract class GLESRenderer implements Renderer {
             return "libltw.so";
         }
     }
-    public static class GL4ESRenderer extends GLESRenderer {
+    public static class GL4ESRenderSpec extends GLESRenderSpec {
         public boolean compatibleDevice(Context context) {
             return true;
         }

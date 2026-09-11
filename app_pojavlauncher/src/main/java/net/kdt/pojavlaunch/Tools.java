@@ -50,7 +50,7 @@ import com.google.gson.GsonBuilder;
 
 import net.kdt.pojavlaunch.awt.AWTActivity;
 import net.kdt.pojavlaunch.game.GameActivity;
-import net.kdt.pojavlaunch.game.renderer.Renderer;
+import net.kdt.pojavlaunch.game.renderer.RenderSpec;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutorTask;
@@ -555,7 +555,7 @@ public final class Tools {
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 
-    public static void printLauncherInfo(String gameVersion, String javaArguments, Renderer renderer, Context ctx) {
+    public static void printLauncherInfo(String gameVersion, String javaArguments, RenderSpec renderer, Context ctx) {
         Logger.appendToLog("Info: Launcher version: " + BuildConfig.VERSION_NAME);
         Logger.appendToLog("Info: Build type: " + BuildConfig.BUILD_TYPE);
         Logger.appendToLog("Info: Architecture: " + Architecture.archAsString(DEVICE_ARCHITECTURE));

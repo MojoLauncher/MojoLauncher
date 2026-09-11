@@ -6,7 +6,7 @@ import android.content.Context;
 
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.game.renderer.GameRenderer;
-import net.kdt.pojavlaunch.game.renderer.Renderer;
+import net.kdt.pojavlaunch.game.renderer.RenderSpec;
 import net.kdt.pojavlaunch.utils.GpuUtils;
 
 import java.io.File;
@@ -15,7 +15,7 @@ import java.util.Map;
 import git.artdeell.mojo.R;
 import git.artdeell.mojoexec.MojoExec;
 
-public abstract class MesaRenderer implements Renderer {
+public abstract class MesaRenderSpec implements RenderSpec {
     private String overrideEGL;
 
     @Override
@@ -54,7 +54,7 @@ public abstract class MesaRenderer implements Renderer {
         return MojoExec.prepareEgl(library(), true, false, 3);
     }
 
-    public static class ZinkRenderer extends MesaRenderer {
+    public static class ZinkRenderSpec extends MesaRenderSpec {
 
         @Override
         public String name() {
@@ -94,7 +94,7 @@ public abstract class MesaRenderer implements Renderer {
         }
     }
 
-    public static class FreedrenoRenderer extends MesaRenderer {
+    public static class FreedrenoRenderSpec extends MesaRenderSpec {
 
         @Override
         public String name() {

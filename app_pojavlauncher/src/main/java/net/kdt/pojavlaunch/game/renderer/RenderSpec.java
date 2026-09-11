@@ -5,9 +5,9 @@ import android.content.Context;
 import java.util.Map;
 
 /**
- * Interface representing a renderer
+ * Interface representing a renderer specification
  */
-public interface Renderer {
+public interface RenderSpec {
     /**
      * Check if the current device is able to use this renderer
      *
