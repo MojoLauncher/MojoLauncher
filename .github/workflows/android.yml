@@ -3,16 +3,10 @@ name: Android CI
 on:
   push:
   workflow_dispatch:
-  pull_request:
-    types: [labeled]
 
 jobs:
   build:
     runs-on: ubuntu-22.04
-    env:
-      UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_NEXT_KEYSTORE_PASSWORD }}
-      MOJOPUB_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_NEXT_KEYSTORE_PASSWORD }}
-      CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -29,17 +23,6 @@ jobs:
           name: output-aar
           path: app_pojavlauncher/libs
 
-      - name: Get Mesa
-        uses: dawidd6/action-download-artifact@v6  
-        continue-on-error: true
-        with:
-          github_token: ${{ secrets.MESA_ACTIONS }}
-          repo: MojoLauncher/mesa-unified2
-          workflow: android.yml
-          workflow_conclusion: success
-          branch: mojo/26.2
-          name: mesa-aar
-          path: app_pojavlauncher/libs
 
       - uses: gradle/actions/setup-gradle@v4
         with:
@@ -50,72 +33,15 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Create out directory
-        run: mkdir out
-      - name: Build Publishing .aab
-        if: github.repository_owner == 'MojoLauncher' && github.ref_name == 'v3_openjdk'
-        run: |
-          gradle :app_pojavlauncher:bundleFullGplay
-          mv app_pojavlauncher/build/outputs/bundle/fullGplay/app_pojavlauncher-full-gplay.aab out/app-gplay.aab
 
-      - name: Build Debug .apk
+      - name: Build Debug APK
         run: |
-          # Build the launcher
           gradle :app_pojavlauncher:assembleFullDebug
-          mv app_pojavlauncher/build/outputs/apk/full/debug/app_pojavlauncher-full-debug.apk out/app-debug-full.apk
+          mkdir -p out
+          mv app_pojavlauncher/build/outputs/apk/full/debug/app_pojavlauncher-full-debug.apk out/mojoplus-debug.apk
 
-      - name: Build Debug .apk (No runtime)
-        run: |
-          gradle :app_pojavlauncher:assembleNoruntimeDebug
-          mv app_pojavlauncher/build/outputs/apk/noruntime/debug/app_pojavlauncher-noruntime-debug.apk out/app-debug-noruntime.apk
-      - name: Build Nightly Release .apk
-        if: github.repository_owner == 'MojoLauncher' && github.ref_name == 'v3_openjdk'
-        run: |
-          gradle :app_pojavlauncher:assembleFullPubRelease
-          mv app_pojavlauncher/build/outputs/apk/full/pubRelease/app_pojavlauncher-full-pubRelease.apk out/MojoLauncher-release.apk
-      - name: Gen md5sums
-        run: |
-          md5sum out/app-debug-full.apk > out/app-debug-full.md5
-          md5sum out/app-debug-noruntime.apk > out/app-debug-noruntime.md5
-
-      - name: Upload Debug APK
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug
-          path: out/app-debug-full.apk
-
-      - name: Upload Debug APK (No runtime)
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-debug-noruntime
-          path: out/app-debug-noruntime.apk
-
-      - name: Release Nightly APK
-        if: github.repository_owner == 'MojoLauncher' && github.ref_name == 'v3_openjdk'
-        uses: softprops/action-gh-release@v3
-        with:
-          name: MojoLauncher Nightly Builds
-          prerelease: true
-          tag_name: nightly
-          body: |
-            MojoLauncher nightly build.
-            Commit hash: ${{ github.sha }}
-          files: |
-            out/MojoLauncher-release.apk
-
-      - name: Upload AAB
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-release-aab
-          path: out/app-gplay.aab
-
-      - name: Upload onto the Google Play testing track
-        continue-on-error: true
-        if: github.repository_owner == 'MojoLauncher' && github.ref_name == 'v3_openjdk'
-        uses: r0adkll/upload-google-play@v1.1.5
-        with:
-          serviceAccountJsonPlainText: ${{ secrets.SERVICE_JSON }}
-          packageName: git.artdeell.mjlaunch
-          releaseFiles: out/app-gplay.aab
-          track: internal
-          inAppUpdatePriority: 5
+          name: mojoplus-debug
+          path: out/mojoplus-debug.apk
