@@ -230,6 +230,7 @@ public class GameRunner {
 
         ArrayList<String> launchClassPath = new ArrayList<>(classpath.length);
         for(File classpathEntry : classpath) {
+            if(classpathEntry == null) continue;
             String entryPath = classpathEntry.getAbsolutePath();
             if(!classpathEntry.exists()) {
                 Log.w("GameRunner", "Skipped classpath entry " + entryPath + " because it is missing");
