@@ -16,6 +16,9 @@ import java.util.Map;
 import git.artdeell.mojo.R;
 import git.artdeell.mojoexec.MojoExec;
 
+/**
+ * Mesa3D RenderSpec. Provides desktop Mesa, zink & freedreno
+ */
 public abstract class MesaRenderSpec implements RenderSpec {
     private String overrideEGL;
 

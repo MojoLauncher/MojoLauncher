@@ -16,6 +16,9 @@ import java.util.Map;
 
 import git.artdeell.mojoexec.MojoExec;
 
+/**
+ * Class for managing game renderers (OpenGL ES & Vulkan)
+ */
 public class GameRenderer {
     public static final String LTW_RENDERER = "opengles3_ltw";
     public static final String GL4ES_RENDERER = "opengles2";
@@ -35,6 +38,11 @@ public class GameRenderer {
         this.currentRenderer = getKnownRenderer(currentRenderer);
     }
 
+    /**
+     * Map renderer string to a known RenderSpec
+     * @param renderer renderer string
+     * @return RenderSpec instance if found, null otherwise
+     */
     public static RenderSpec getKnownRenderer(String renderer) {
         switch (renderer) {
             // For compatibility
@@ -48,6 +56,13 @@ public class GameRenderer {
         }
     }
 
+    /**
+     * Check if the provided renderer (as a string) is compatible with the current device
+     * Requires compatible renderers cache to be present, thus don't forget to call {@link GameRenderer#getCompatibleRenderers(Context)}
+     * before using this method
+     * @param renderer renderer string
+     * @return compatibility
+     */
     public static boolean isCompatibleRenderer(String renderer) {
         if(sCompatibleRenderers != null) {
             return sCompatibleRenderers.rendererIds.contains(renderer);
@@ -70,6 +85,7 @@ public class GameRenderer {
 
     /**
      * Return a list of renderers compatible with the current device
+     * Don't forget to clean the cache when the list isn't needed anymore (i.e. when starting the game) - {@link GameRenderer#releaseCache()}
      *
      * @param context application context
      * @return RenderersList containing all compatible renderers

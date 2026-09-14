@@ -19,6 +19,9 @@ import java.util.Map;
 import git.artdeell.mojo.R;
 import git.artdeell.mojoexec.MojoExec;
 
+/**
+ * Base GLES RenderSpec. Represents a desktop OpenGL wrapper running on-top of {@link GLESProvider}
+ */
 public abstract class GLESRenderSpec implements RenderSpec {
     private boolean nsBypass = false;
     @Override

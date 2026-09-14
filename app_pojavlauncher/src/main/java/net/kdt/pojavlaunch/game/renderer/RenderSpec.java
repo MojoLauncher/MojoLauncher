@@ -45,7 +45,7 @@ public interface RenderSpec {
     String library();
 
     /**
-     * Setup renderer-specific environment variables
+     * Prepare renderer usage in the game. Sets up environment and some other things
      *
      * @param context application context
      * @param envMap  environment map
@@ -55,7 +55,7 @@ public interface RenderSpec {
     /**
      * Setup this renderer in MojoExec. Prefer using {@link GameRenderer#maybeSetupRenderer()}
      *
-     * @return whether setup was successful
+     * @return whether the setup was successful
      */
     boolean setupRenderer();
 }
