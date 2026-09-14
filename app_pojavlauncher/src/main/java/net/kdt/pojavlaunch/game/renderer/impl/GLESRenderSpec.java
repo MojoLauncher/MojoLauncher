@@ -24,9 +24,9 @@ public abstract class GLESRenderSpec implements RenderSpec {
     @Override
     public void setupEnvironment(Context context, Map<String, String> envMap) {
         GLESProvider provider = GLESProvider.getGlesProvider(context, LauncherPreferences.PREF_USE_ANGLE);
+        Log.i("GLESRenderSpec", "Using GLESProvider: " + provider.type());
         provider.setEnvironment(envMap);
         this.nsBypass = provider.requiresNamespace();
-
         if (LauncherPreferences.PREF_DUMP_SHADERS)
             envMap.put("LIBGL_VGPU_DUMP", "1");
         envMap.put("force_glsl_extensions_warn", "true");
