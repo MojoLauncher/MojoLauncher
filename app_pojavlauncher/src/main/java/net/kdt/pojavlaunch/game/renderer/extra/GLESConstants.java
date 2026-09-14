@@ -4,6 +4,7 @@ public final class GLESConstants {
     // ANGLE library definitions
     public static final String ANGLE_EGL = "libEGL_angle.so";
     public static final String ANGLE_GLES = "libGLESv2_angle.so";
+
     // System OpenGLES library definitions
     public static final String NATIVE_EGL = "libEGL.so";
     public static final String NATIVE_GLES = "libGLESv2.so";
