@@ -5,6 +5,7 @@ import static net.kdt.pojavlaunch.game.renderer.extra.GLESConstants.ANGLE_GLES;
 import static net.kdt.pojavlaunch.game.renderer.extra.GLESConstants.ENV_EGL;
 import static net.kdt.pojavlaunch.game.renderer.extra.GLESConstants.ENV_GLES;
 import static net.kdt.pojavlaunch.game.renderer.extra.GLESConstants.NATIVE_EGL;
+import static net.kdt.pojavlaunch.game.renderer.extra.GLESConstants.NATIVE_GLES;
 
 import android.content.Context;
 import android.util.Log;
@@ -104,7 +105,7 @@ public interface GLESProvider {
             return NATIVE_EGL;
         }
         public String glesPath() {
-            return NATIVE_EGL;
+            return NATIVE_GLES;
         }
         public File egl() {
             return null;
