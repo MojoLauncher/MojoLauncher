@@ -51,6 +51,7 @@ public class GameRenderer {
 
     private final Context context;
     private RenderSpec currentRenderer;
+    private Map<String, String> environment = new HashMap<>();
 
     public GameRenderer(Context context, String currentRenderer) {
         this.context = context;
@@ -174,15 +175,17 @@ public class GameRenderer {
      * @throws ErrnoException if underlying Os#setenv call threw an exception
      */
     public void setupEnvironment(Context context) throws ErrnoException {
-        Map<String, String> envMap = new HashMap<>();
-        if (LauncherPreferences.PREF_FREEDRENO_SYSMEM && !LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER) {
-            envMap.put("TU_DEBUG", "sysmem");
+        if(environment == null) {
+            Log.w(TAG, "Tried to call setupEnvironment in already initialized environment");
+            return;
         }
-        currentRenderer.setupEnvironment(context, envMap);
-        for(Map.Entry<String, String> e : envMap.entrySet()) {
+        currentRenderer.setupEnvironment(context, environment);
+        for(Map.Entry<String, String> e : environment.entrySet()) {
             Logger.appendToLog("Added renderer env: " + e.getKey() + '=' + e.getValue());
             Os.setenv(e.getKey(), e.getValue(), true);
         }
+        environment.clear();
+        environment = null;
     }
 
     /**
@@ -235,6 +238,7 @@ public class GameRenderer {
      * Enable custom Vulkan driver (Turnip) usage
      */
     public void overrideVulkanDriver() {
+        if(LauncherPreferences.PREF_FREEDRENO_SYSMEM) environment.put("TU_DEBUG", "sysmem");
         MojoExec.setUseTurnip(true);
     }
 
