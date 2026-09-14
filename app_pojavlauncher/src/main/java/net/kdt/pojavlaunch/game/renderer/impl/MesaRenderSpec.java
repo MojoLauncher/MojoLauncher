@@ -119,9 +119,10 @@ public abstract class MesaRenderSpec implements RenderSpec {
         public boolean compatibleDevice(Context context) {
             return super.compatibleDevice(context) && GpuUtils.getGlInfo().isAdreno();
         }
+
         @Override
         public void setupEnvironment(Context context, Map<String, String> envMap) {
-            if(LauncherPreferences.PREF_FREEDRENO_SYSMEM)
+            if (LauncherPreferences.PREF_FREEDRENO_SYSMEM)
                 envMap.put("FD_MESA_DEBUG", "sysmem");
             envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "kgsl");
             // On Adreno 5XX and lower only Core 3.1 is exposed by default due to missing hardware extensions.

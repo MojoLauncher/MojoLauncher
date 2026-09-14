@@ -9,7 +9,6 @@ import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.game.renderer.GameRenderer;
 import net.kdt.pojavlaunch.game.renderer.RenderSpec;
 import net.kdt.pojavlaunch.game.renderer.extra.GLESProvider;
-import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.JREUtils;
 
@@ -24,6 +23,7 @@ import git.artdeell.mojoexec.MojoExec;
  */
 public abstract class GLESRenderSpec implements RenderSpec {
     private boolean nsBypass = false;
+
     @Override
     public void setupEnvironment(Context context, Map<String, String> envMap) {
         GLESProvider provider = GLESProvider.getGlesProvider(context, LauncherPreferences.PREF_USE_ANGLE);
@@ -48,32 +48,41 @@ public abstract class GLESRenderSpec implements RenderSpec {
         public boolean compatibleDevice(Context context) {
             return JREUtils.getDetectedVersion() >= 3 && new File(Tools.NATIVE_LIB_DIR, this.library()).exists();
         }
+
         public String name() {
             return "OpenLTW";
         }
+
         public int displayName() {
             return R.string.mcl_setting_renderer_ltw;
         }
+
         public String tag() {
             return GameRenderer.LTW_RENDERER;
         }
+
         public String library() {
             return "libltw.so";
         }
     }
+
     public static class GL4ESRenderSpec extends GLESRenderSpec {
         public boolean compatibleDevice(Context context) {
             return true;
         }
+
         public String name() {
             return "GL4ES";
         }
+
         public int displayName() {
             return R.string.mcl_setting_renderer_gles2_4;
         }
+
         public String tag() {
             return GameRenderer.GL4ES_RENDERER;
         }
+
         public String library() {
             return "libltw.so";
         }

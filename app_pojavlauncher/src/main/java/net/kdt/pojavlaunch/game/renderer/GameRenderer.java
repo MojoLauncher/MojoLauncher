@@ -40,6 +40,7 @@ public class GameRenderer {
 
     /**
      * Map renderer string to a known RenderSpec
+     *
      * @param renderer renderer string
      * @return RenderSpec instance if found, null otherwise
      */
@@ -48,11 +49,17 @@ public class GameRenderer {
             // For compatibility
             case "opengles2_4":
             case "opengles2_5":
-            case GL4ES_RENDERER: return new GLESRenderSpec.GL4ESRenderSpec();
-            case LTW_RENDERER: return new GLESRenderSpec.LTWRenderSpec();
-            case ZINK_RENDERER: return new MesaRenderSpec.ZinkRenderSpec();
-            case FREEDRENO_RENDERER: return new MesaRenderSpec.FreedrenoRenderSpec();
-            default: Log.e(TAG, "Unknown renderer " + renderer); return null;
+            case GL4ES_RENDERER:
+                return new GLESRenderSpec.GL4ESRenderSpec();
+            case LTW_RENDERER:
+                return new GLESRenderSpec.LTWRenderSpec();
+            case ZINK_RENDERER:
+                return new MesaRenderSpec.ZinkRenderSpec();
+            case FREEDRENO_RENDERER:
+                return new MesaRenderSpec.FreedrenoRenderSpec();
+            default:
+                Log.e(TAG, "Unknown renderer " + renderer);
+                return null;
         }
     }
 
@@ -60,11 +67,12 @@ public class GameRenderer {
      * Check if the provided renderer (as a string) is compatible with the current device
      * Requires compatible renderers cache to be present, thus don't forget to call {@link GameRenderer#getCompatibleRenderers(Context)}
      * before using this method
+     *
      * @param renderer renderer string
      * @return compatibility
      */
     public static boolean isCompatibleRenderer(String renderer) {
-        if(sCompatibleRenderers != null) {
+        if (sCompatibleRenderers != null) {
             return sCompatibleRenderers.rendererIds.contains(renderer);
         }
         Log.w(TAG, "Tried checking renderer compatibility through cache, but it was already released or wasn't initialized at all");
@@ -157,7 +165,7 @@ public class GameRenderer {
      */
     public void setCurrentRenderer(String renderer) {
         RenderSpec spec = getKnownRenderer(renderer);
-        if(spec == null) throw new IllegalArgumentException("Invalid renderer " + renderer);
+        if (spec == null) throw new IllegalArgumentException("Invalid renderer " + renderer);
         Log.i(TAG, "Replacing default renderer with the new: " + spec.name());
         currentRenderer = spec;
     }
