@@ -11,6 +11,7 @@ import androidx.preference.SwitchPreferenceCompat;
 import git.artdeell.mojo.R;
 
 import net.kdt.pojavlaunch.Architecture;
+import net.kdt.pojavlaunch.game.renderer.extra.GLESProvider;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.CustomSeekBarPreference;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
@@ -20,6 +21,7 @@ import net.kdt.pojavlaunch.game.renderer.GameRenderer;
  * Fragment for any settings video related
  */
 public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment {
+    private GLESProvider provider;
     @Override
     public void onCreatePreferences(Bundle b, String str) {
         addPreferencesFromResource(R.xml.pref_video);
@@ -46,9 +48,10 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         requirePreference("force_vsync", SwitchPreferenceCompat.class).setChecked(LauncherPreferences.PREF_FORCE_VSYNC);
 
         // Show ANGLE switch only if AnglePlugin is available
-        LibraryPlugin angle = LibraryPlugin.discoverPlugin(getContext(), LibraryPlugin.ID_ANGLE_PLUGIN);
+        if(provider == null) provider = GLESProvider.getGlesProvider(getContext(), true);
         SwitchPreferenceCompat angleSwitch = requirePreference("use_angle", SwitchPreferenceCompat.class);
-        angleSwitch.setVisible(angle != null);
+        boolean compatible = provider instanceof GLESProvider.ExternalAngleProvider; // || prov instanceof GLESProvider.SystemAngleProvider
+        angleSwitch.setVisible(compatible);
         angleSwitch.setChecked(LauncherPreferences.PREF_USE_ANGLE);
 
         ListPreference rendererListPreference = requirePreference("renderer",
