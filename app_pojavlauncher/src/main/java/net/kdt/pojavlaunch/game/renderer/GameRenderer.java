@@ -49,12 +49,10 @@ public class GameRenderer {
     private final static String FALLBACK_RENDERER = GL4ES_RENDERER;
     private static RenderersList sCompatibleRenderers;
 
-    private final Context context;
     private RenderSpec currentRenderer;
     private Map<String, String> environment = new HashMap<>();
 
-    public GameRenderer(Context context, String currentRenderer) {
-        this.context = context;
+    public GameRenderer(String currentRenderer) {
         this.currentRenderer = getKnownRenderer(currentRenderer);
         if(this.currentRenderer == null) this.currentRenderer = getKnownRenderer(GL4ES_RENDERER);
         if(this.currentRenderer == null) throw new IllegalStateException("Failed to create the current renderer!");
@@ -92,38 +90,6 @@ public class GameRenderer {
     }
 
     /**
-     * Check if the provided renderer (as a string) is compatible with the current device
-     * Requires compatible renderers cache to be present, thus don't forget to call {@link GameRenderer#getCompatibleRenderers(Context)}
-     * before using this method
-     *
-     * @param renderer renderer string
-     * @return compatibility
-     */
-    public static boolean isCompatibleRendererCached(String renderer) {
-        if (sCompatibleRenderers != null) {
-            return sCompatibleRenderers.rendererIds.contains(renderer);
-        }
-        Log.w(TAG, "Tried checking renderer compatibility through cache, but it was already released or wasn't initialized at all");
-        return false;
-    }
-
-    /**
-     * Check if the provided renderer (as a string) is compatible with the current device
-     *
-     * @param renderer renderer string
-     * @return compatibility
-     */
-    public boolean isCompatibleRenderer(String renderer) {
-        if (sCompatibleRenderers != null) {
-            return sCompatibleRenderers.rendererIds.contains(renderer);
-        }
-        else {
-            RenderSpec sp = getKnownRenderer(renderer);
-            return sp != null && sp.compatibleDevice(context);
-        }
-    }
-
-    /**
      * Set renderer library path
      *
      * @param mainPath       base library path
@@ -137,7 +103,7 @@ public class GameRenderer {
 
     /**
      * Return a list of renderers compatible with the current device
-     * Don't forget to clean the cache when the list isn't needed anymore (i.e. when starting the game) - {@link GameRenderer#releaseCache()}
+     * Don't forget to clean the cache when the list isn't needed anymore (i.e. when starting the game) - {@link GameRenderer#releaseRendererCache()}
      *
      * @param context application context
      * @return RenderersList containing all compatible renderers
@@ -164,7 +130,8 @@ public class GameRenderer {
     /**
      * Destroy compatible renderers cache
      */
-    public static void releaseCache() {
+    public static void releaseRendererCache() {
+        sCompatibleRenderers.rendererIds.clear();
         sCompatibleRenderers = null;
     }
 

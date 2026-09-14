@@ -131,14 +131,14 @@ public class GameRunner {
     }
 
     // Autoswitch to provided renderer if supported, otherwise - crash with resId dialog message
-    private static void switchRendererifSupported(boolean support,
-                                                  String renderer,
+    private static void switchRendererIfSupported(boolean support,
+                                                  RenderSpec renderer,
                                                   GameRenderer gameRenderer,
                                                   Instance instance,
                                                   AppCompatActivity activity,
                                                   int resId) throws InterruptedException, IOException {
         if(support) {
-            instance.renderer = renderer;
+            instance.renderer = renderer.tag();
             instance.write();
             gameRenderer.setCurrentRenderer(renderer);
         }else {
@@ -190,22 +190,21 @@ public class GameRunner {
 
         // Switch renderer to GL4ES when running a compat context version on LTW
         if(isCompatContext(versionInfo) && !hasAngelica(gamedir) && renderer instanceof GLESRenderSpec.LTWRenderSpec) {
-            switchRendererifSupported(true, Renderers.GL4ES_RENDERER, gameRenderer, instance, activity, 0);
+            switchRendererIfSupported(true, GameRenderer.getKnownRenderer(Renderers.GL4ES_RENDERER), gameRenderer, instance, activity, 0);
         }
 
         boolean isGl4es = renderer instanceof GLESRenderSpec.GL4ESRenderSpec;
-        boolean ltwSupported = gameRenderer.isCompatibleRenderer(Renderers.LTW_RENDERER);
+        RenderSpec ltw = new GLESRenderSpec.LTWRenderSpec();
+        boolean ltwSupported = ltw.compatibleDevice(activity);
         // Block Sodium from running with GL4ES on 1.17+
         if(!isCompatContext(versionInfo) && isGl4es && hasSodium(gamedir)) {
-            switchRendererifSupported(ltwSupported, Renderers.LTW_RENDERER, gameRenderer, instance, activity, R.string.compat_sodium_not_supported);
+            switchRendererIfSupported(ltwSupported, ltw, gameRenderer, instance, activity, R.string.compat_sodium_not_supported);
         }
 
         // Switch renderer to LTW when running 1.21.5
         if(!isGl4esCompatible(versionInfo) && isGl4es) {
-            switchRendererifSupported(ltwSupported, Renderers.LTW_RENDERER, gameRenderer, instance, activity, R.string.compat_sodium_not_supported);
+            switchRendererIfSupported(ltwSupported, ltw, gameRenderer, instance, activity, R.string.compat_sodium_not_supported);
         }
-
-        GameRenderer.releaseCache();
 
         boolean isLtw = renderer instanceof GLESRenderSpec.LTWRenderSpec;
 
