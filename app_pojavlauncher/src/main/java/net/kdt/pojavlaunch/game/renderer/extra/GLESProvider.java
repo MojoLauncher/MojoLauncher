@@ -1,5 +1,11 @@
 package net.kdt.pojavlaunch.game.renderer.extra;
 
+import static net.kdt.pojavlaunch.game.renderer.extra.GLESConstants.ANGLE_EGL;
+import static net.kdt.pojavlaunch.game.renderer.extra.GLESConstants.ANGLE_GLES;
+import static net.kdt.pojavlaunch.game.renderer.extra.GLESConstants.ENV_EGL;
+import static net.kdt.pojavlaunch.game.renderer.extra.GLESConstants.ENV_GLES;
+import static net.kdt.pojavlaunch.game.renderer.extra.GLESConstants.NATIVE_EGL;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -10,11 +16,6 @@ import java.io.File;
 import java.util.Map;
 
 public interface GLESProvider {
-    String ANGLE_EGL = "libEGL_angle.so";
-    String ANGLE_GLES = "libGLESv2_angle.so";
-    String ENV_EGL = "LIBGL_EGL";
-    String ENV_GLES = "LIBGL_GLES";
-
     String type();
 
     String eglPath();
@@ -55,10 +56,10 @@ public interface GLESProvider {
             return "Native OpenGL ES Driver";
         }
         public String eglPath() {
-            return "libEGL.so";
+            return NATIVE_EGL;
         }
         public String glesPath() {
-            return "libGLESv2.so";
+            return NATIVE_EGL;
         }
         public File egl() {
             return null;
