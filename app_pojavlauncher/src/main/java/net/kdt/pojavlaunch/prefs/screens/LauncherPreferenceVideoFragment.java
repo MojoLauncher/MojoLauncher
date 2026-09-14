@@ -51,17 +51,6 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         angleSwitch.setVisible(angle != null);
         angleSwitch.setChecked(LauncherPreferences.PREF_USE_ANGLE);
 
-        // Same but for ZINK plugin
-        SwitchPreference legacyZink = requirePreference("zinkForceLegacy", SwitchPreference.class);
-        legacyZink.setChecked(LauncherPreferences.PREF_ZINK_FORCE_LEGACY);
-        if(!Architecture.isx86Device()) {
-            LibraryPlugin zink = LibraryPlugin.discoverPlugin(getContext(), LibraryPlugin.ID_ZINK_PLUGIN);
-            legacyZink.setVisible(zink != null);
-        }
-        else {
-            legacyZink.setVisible(false);
-        }
-
         ListPreference rendererListPreference = requirePreference("renderer",
                 ListPreference.class);
         GameRenderer.RenderersList renderersList = GameRenderer.getCompatibleRenderers(getContext());
