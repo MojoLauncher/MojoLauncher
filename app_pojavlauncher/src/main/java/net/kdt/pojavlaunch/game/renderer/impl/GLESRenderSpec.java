@@ -8,7 +8,7 @@ import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.game.renderer.GameRenderer;
 import net.kdt.pojavlaunch.game.renderer.RenderSpec;
-import net.kdt.pojavlaunch.game.renderer.angle.AngleDescriptor;
+import net.kdt.pojavlaunch.game.renderer.extra.GLESProvider;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.JREUtils;
@@ -21,30 +21,12 @@ import git.artdeell.mojoexec.MojoExec;
 
 public abstract class GLESRenderSpec implements RenderSpec {
     private boolean nsBypass = false;
-
-    private AngleDescriptor getAngleDescriptor(Context context) {
-        AngleDescriptor descriptor;
-        LibraryPlugin anglePlugin = LibraryPlugin.discoverPlugin(context, LibraryPlugin.ID_ANGLE_PLUGIN);
-        descriptor = new AngleDescriptor.ExtAngleDescriptor(anglePlugin);
-        if (descriptor.supported()) {
-            Log.i("GLESRenderer", "Using ANGLE through AnglePlugin");
-            return descriptor;
-        }
-        descriptor = new AngleDescriptor.SysAngleDescriptor();
-        if (descriptor.supported()) {
-            // We can't access ANGLE libraries through classloader namespace
-            this.nsBypass = true;
-            Log.i("GLESRenderer", "Enabled ANGLE through system libraries");
-            return descriptor;
-        }
-        return null;
-    }
-
     @Override
     public void setupEnvironment(Context context, Map<String, String> envMap) {
-        AngleDescriptor angle;
-        if(LauncherPreferences.PREF_USE_ANGLE && ((angle = getAngleDescriptor(context)) != null))
-            angle.setEnvironment(envMap);
+        GLESProvider provider = GLESProvider.getGlesProvider(context, LauncherPreferences.PREF_USE_ANGLE);
+        provider.setEnvironment(envMap);
+        this.nsBypass = provider.requiresNamespace();
+
         if (LauncherPreferences.PREF_DUMP_SHADERS)
             envMap.put("LIBGL_VGPU_DUMP", "1");
         envMap.put("force_glsl_extensions_warn", "true");
