@@ -103,8 +103,6 @@ public class JREUtils {
 
         setupFfmpegEnv(context, envMap);
 
-        renderer.setupEnvironment(context, envMap);
-
         if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
         if(LauncherPreferences.PREF_ALSOFT_FORCE_OPENSL) envMap.put("ALSOFT_DRIVERS", "opensl");
 

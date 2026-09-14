@@ -10,8 +10,11 @@ import static net.kdt.pojavlaunch.game.renderer.def.Renderers.ZINK_RENDERER;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.system.ErrnoException;
+import android.system.Os;
 import android.util.Log;
 
+import net.kdt.pojavlaunch.Logger;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.game.renderer.impl.GLESRenderSpec;
 import net.kdt.pojavlaunch.game.renderer.impl.MesaRenderSpec;
@@ -19,6 +22,7 @@ import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -165,13 +169,18 @@ public class GameRenderer {
      * Setup current selected renderer environment. Call before using {@link GameRenderer#maybeSetupRenderer()}
      *
      * @param context application context
-     * @param envMap  environment map
+     * @throws ErrnoException if underlying Os#setenv call threw an exception
      */
-    public void setupEnvironment(Context context, Map<String, String> envMap) {
+    public void setupEnvironment(Context context) throws ErrnoException {
+        Map<String, String> envMap = new HashMap<>();
         if (LauncherPreferences.PREF_FREEDRENO_SYSMEM && !LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER) {
             envMap.put("TU_DEBUG", "sysmem");
         }
         currentRenderer.setupEnvironment(context, envMap);
+        for(Map.Entry<String, String> e : envMap.entrySet()) {
+            Logger.appendToLog("Renderer env: " + e.getKey() + '=' + e.getValue());
+            Os.setenv(e.getKey(), e.getValue(), true);
+        }
     }
 
     /**

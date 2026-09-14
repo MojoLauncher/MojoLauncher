@@ -277,7 +277,8 @@ public class GameRunner {
 
         javaArgList.addAll(JREUtils.parseJavaArguments(instance.getLaunchArgs()));
 
-
+        // TODO: this should be decoupled from GameRunner completely
+        gameRenderer.setupEnvironment(activity);
         JREUtils.setGameEnvironment(activity, gameRenderer);
         JREUtils.chdir(instance.getGameDirectory().getAbsolutePath());
 
