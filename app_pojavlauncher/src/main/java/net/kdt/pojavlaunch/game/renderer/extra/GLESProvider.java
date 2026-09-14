@@ -17,13 +17,15 @@ public interface GLESProvider {
 
     String type();
 
-    File egl();
+    String eglPath();
 
+    String glesPath();
+    File egl();
     File gles();
 
     default void setEnvironment(Map<String, String> envMap) {
-        envMap.put(ENV_EGL, egl().getAbsolutePath());
-        envMap.put(ENV_GLES, gles().getAbsolutePath());
+        envMap.put(ENV_EGL, eglPath());
+        envMap.put(ENV_GLES, glesPath());
     }
 
     boolean supported();
@@ -52,6 +54,12 @@ public interface GLESProvider {
         public String type() {
             return "Native OpenGL ES Driver";
         }
+        public String eglPath() {
+            return "libEGL.so";
+        }
+        public String glesPath() {
+            return "libGLESv2.so";
+        }
         public File egl() {
             return null;
         }
@@ -66,21 +74,23 @@ public interface GLESProvider {
             return false;
         }
     }
-
+    // System ANGLE provider for devices with Android 15+ (or older if it exists there)
     class SystemAngleProvider implements GLESProvider {
         private static final String BASE_PATH = Architecture.is64BitsDevice() ? "/system/lib64/" : "/system/lib";
         public String type() {
             return "System ANGLE";
+        }
+        public String eglPath() {
+            return gles().getAbsolutePath();
+        }
+        public String glesPath() {
+            return gles().getAbsolutePath();
         }
         public File egl() {
             return new File(BASE_PATH, ANGLE_EGL);
         }
         public File gles() {
             return new File(BASE_PATH, ANGLE_EGL);
-        }
-        public void setEnvironment(Map<String, String> envMap) {
-            envMap.put(ENV_EGL, egl().getAbsolutePath());
-            envMap.put(ENV_GLES, gles().getAbsolutePath());
         }
         public boolean supported() {
             return egl().exists() && gles().exists();
@@ -90,6 +100,7 @@ public interface GLESProvider {
         }
     }
 
+    // External ANGLE provider, see AnglePlugin
     class ExternalAngleProvider implements GLESProvider {
         private final LibraryPlugin plugin;
         public ExternalAngleProvider(LibraryPlugin plugin) {
@@ -98,15 +109,17 @@ public interface GLESProvider {
         public String type() {
             return "External ANGLE";
         }
+        public String eglPath() {
+            return plugin.resolve(ANGLE_EGL).getAbsolutePath();
+        }
+        public String glesPath() {
+            return gles().getAbsolutePath();
+        }
         public File egl() {
             return plugin.resolve(ANGLE_EGL);
         }
         public File gles() {
             return plugin.resolve(ANGLE_GLES);
-        }
-        public void setEnvironment(Map<String, String> envMap) {
-            envMap.put(ENV_EGL, egl().getAbsolutePath());
-            envMap.put(ENV_GLES, gles().getAbsolutePath());
         }
         public boolean supported() {
             return plugin != null && plugin.checkLibraries(ANGLE_EGL, ANGLE_GLES);
