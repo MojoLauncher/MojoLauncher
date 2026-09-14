@@ -81,7 +81,7 @@ public abstract class GLESRenderSpec implements RenderSpec {
         }
 
         public String library() {
-            return "libltw.so";
+            return "libgl4es_114.so";
         }
     }
 }
