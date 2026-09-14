@@ -55,6 +55,8 @@ public class GameRenderer {
     public GameRenderer(Context context, String currentRenderer) {
         this.context = context;
         this.currentRenderer = getKnownRenderer(currentRenderer);
+        if(this.currentRenderer == null) this.currentRenderer = getKnownRenderer(GL4ES_RENDERER);
+        if(this.currentRenderer == null) throw new IllegalStateException("Failed to create the current renderer!");
     }
 
     /**
