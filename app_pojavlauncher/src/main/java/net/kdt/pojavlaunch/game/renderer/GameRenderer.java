@@ -16,6 +16,19 @@ import java.util.Map;
 
 import git.artdeell.mojoexec.MojoExec;
 
+/*
+ How to add an extra renderer (guide 2026 mediafire works):
+
+ 1. Create RenderSpec for that renderer
+ 2. Add all requires locale strings and wire them up inside your freshly cooked RenderSpec
+ 3. Add the renderer tag onto the getKnownRenderer() mapping
+ 4. (Optional): Add the renderer tag into constant list below
+ 5. Add the renderer tag onto the list of renderers to check for the compatibility (see getCompatibleRenderers())
+ 6. ???
+ 7. PROFIT
+
+*/
+
 /**
  * Class for managing game renderers (OpenGL ES & Vulkan)
  */
