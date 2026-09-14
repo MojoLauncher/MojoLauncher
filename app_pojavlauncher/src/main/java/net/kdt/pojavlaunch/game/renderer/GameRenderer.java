@@ -180,7 +180,7 @@ public class GameRenderer {
         }
         currentRenderer.setupEnvironment(context, envMap);
         for(Map.Entry<String, String> e : envMap.entrySet()) {
-            Logger.appendToLog("Renderer env: " + e.getKey() + '=' + e.getValue());
+            Logger.appendToLog("Added renderer env: " + e.getKey() + '=' + e.getValue());
             Os.setenv(e.getKey(), e.getValue(), true);
         }
     }
