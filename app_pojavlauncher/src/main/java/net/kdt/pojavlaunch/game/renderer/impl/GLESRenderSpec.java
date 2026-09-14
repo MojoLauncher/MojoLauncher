@@ -8,6 +8,7 @@ import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.game.renderer.GameRenderer;
 import net.kdt.pojavlaunch.game.renderer.RenderSpec;
+import net.kdt.pojavlaunch.game.renderer.def.Renderers;
 import net.kdt.pojavlaunch.game.renderer.extra.GLESProvider;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.JREUtils;
@@ -23,8 +24,6 @@ import git.artdeell.mojoexec.MojoExec;
  */
 public abstract class GLESRenderSpec implements RenderSpec {
     private boolean nsBypass = false;
-
-    @Override
     public void setupEnvironment(Context context, Map<String, String> envMap) {
         GLESProvider provider = GLESProvider.getGlesProvider(context, LauncherPreferences.PREF_USE_ANGLE);
         Log.i("GLESRenderSpec", "Using GLESProvider: " + provider.type());
@@ -38,8 +37,6 @@ public abstract class GLESRenderSpec implements RenderSpec {
         // Prevent OptiFine (and other error-reporting stuff in Minecraft) from balooning the log
         envMap.put("LIBGL_NOERROR", "1");
     }
-
-    @Override
     public boolean setupRenderer() {
         return MojoExec.prepareEgl(library(), nsBypass, true, Integer.parseInt((String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION)));
     }
@@ -58,7 +55,7 @@ public abstract class GLESRenderSpec implements RenderSpec {
         }
 
         public String tag() {
-            return GameRenderer.LTW_RENDERER;
+            return Renderers.LTW_RENDERER;
         }
 
         public String library() {
@@ -80,7 +77,7 @@ public abstract class GLESRenderSpec implements RenderSpec {
         }
 
         public String tag() {
-            return GameRenderer.GL4ES_RENDERER;
+            return Renderers.GL4ES_RENDERER;
         }
 
         public String library() {

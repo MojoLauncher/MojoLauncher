@@ -1,4 +1,4 @@
-package net.kdt.pojavlaunch.game.renderer.extra;
+package net.kdt.pojavlaunch.game.renderer.def;
 
 public final class GLESConstants {
     // ANGLE library definitions

@@ -148,6 +148,12 @@ public class GpuUtils {
         return false;
     }
 
+    public static boolean checkChromebook(PackageManager packageManager) {
+        return packageManager.hasSystemFeature("org.chromium.arc")
+                || packageManager.hasSystemFeature("org.chromium.arc.device_management")
+                || (Build.MODEL != null && Build.MODEL.startsWith("sdk_gpc_"));
+    }
+
     /**
      * Get the information about the current OpenGL ES device, which consists of the vendor,
      * the renderer and the major GLES version

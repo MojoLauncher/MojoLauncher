@@ -3,10 +3,13 @@ package net.kdt.pojavlaunch.game.renderer.impl;
 import static android.os.Build.VERSION.SDK_INT;
 
 import android.content.Context;
+import android.util.Log;
 
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.game.renderer.GameRenderer;
 import net.kdt.pojavlaunch.game.renderer.RenderSpec;
+import net.kdt.pojavlaunch.game.renderer.def.Renderers;
+import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.GpuUtils;
 
@@ -19,63 +22,42 @@ import git.artdeell.mojoexec.MojoExec;
 /**
  * Mesa3D RenderSpec. Provides desktop Mesa, zink & freedreno
  */
-public abstract class MesaRenderSpec implements RenderSpec {
-    private String overrideEGL;
-
-    @Override
+public class MesaRenderSpec implements RenderSpec {
     public String library() {
-        return overrideEGL != null ? overrideEGL : "libEGL_mesa.so";
+        return "libEGL_mesa.so";
     }
-
-    @Override
     public void setupEnvironment(Context context, Map<String, String> envMap) {
         envMap.put("MESA_GLSL_CACHE_DIR", Tools.DIR_CACHE.getAbsolutePath());
     }
-
-    @Override
-    public boolean compatibleDevice(Context context) {
+    protected boolean hasMesa() {
         return SDK_INT >= 29 && new File(Tools.NATIVE_LIB_DIR, this.library()).exists();
     }
-
-    @Override
+    public boolean compatibleDevice(Context context) {
+        return hasMesa() && GpuUtils.checkChromebook(context.getPackageManager());
+    }
     public String name() {
         return "Mesa";
     }
-
-    @Override
+    public int displayName() {
+        return R.string.mcl_setting_renderer_mesa_desktop;
+    }
     public String tag() {
-        return GameRenderer.MESA_RENDERER;
+        return Renderers.MESA_RENDERER;
     }
-
-    // To allow legacy Zink usage
-    public void overrideEGL(String overrideEGL) {
-        this.overrideEGL = overrideEGL;
-    }
-
-    // Namespace bypass param is always active on Mesa
-    @Override
     public boolean setupRenderer() {
         return MojoExec.prepareEgl(library(), true, false, 3);
     }
 
     public static class ZinkRenderSpec extends MesaRenderSpec {
-
-        @Override
         public String name() {
             return "ZINK";
         }
-
-        @Override
         public String tag() {
-            return GameRenderer.ZINK_RENDERER;
+            return Renderers.ZINK_RENDERER;
         }
-
-        @Override
         public int displayName() {
             return R.string.mcl_setting_renderer_vulkan_zink;
         }
-
-        @Override
         public void setupEnvironment(Context context, Map<String, String> envMap) {
             envMap.put("GALLIUM_DRIVER", "zink");
             envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
@@ -85,42 +67,28 @@ public abstract class MesaRenderSpec implements RenderSpec {
             envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6");
             super.setupEnvironment(context, envMap);
         }
-
-        @Override
         public boolean setupRenderer() {
             MojoExec.preloadVulkan();
             return super.setupRenderer();
         }
-
-        @Override
         public boolean compatibleDevice(Context context) {
-            return super.compatibleDevice(context) && GpuUtils.checkVulkanSupport(context.getPackageManager());
+            return hasMesa() && GpuUtils.checkVulkanSupport(context.getPackageManager());
         }
     }
 
     public static class FreedrenoRenderSpec extends MesaRenderSpec {
-
-        @Override
         public String name() {
             return "Freedreno";
         }
-
-        @Override
         public int displayName() {
             return R.string.mcl_setting_renderer_freedreno_kgsl;
         }
-
-        @Override
         public String tag() {
-            return GameRenderer.FREEDRENO_RENDERER;
+            return Renderers.FREEDRENO_RENDERER;
         }
-
-        @Override
         public boolean compatibleDevice(Context context) {
-            return super.compatibleDevice(context) && GpuUtils.getGlInfo().isAdreno();
+            return hasMesa() && GpuUtils.getGlInfo().isAdreno();
         }
-
-        @Override
         public void setupEnvironment(Context context, Map<String, String> envMap) {
             if (LauncherPreferences.PREF_FREEDRENO_SYSMEM)
                 envMap.put("FD_MESA_DEBUG", "sysmem");
@@ -132,6 +100,69 @@ public abstract class MesaRenderSpec implements RenderSpec {
                 envMap.put("MESA_GLSL_VERSION_OVERRIDE", "330");
             }
             super.setupEnvironment(context, envMap);
+        }
+    }
+    public static class ExtMesaRenderSpec extends MesaRenderSpec {
+        private LibraryPlugin provider;
+        protected String plugin() {
+            return LibraryPlugin.ID_MESA_PLUGIN;
+        }
+        public String name() {
+            return "Mesa (external)";
+        }
+        public String libraryPath() {
+            return provider.getLibraryPath();
+        }
+        public String tag() {
+            return Renderers.MESA_RENDERER_EXT;
+        }
+        public int displayName() {
+            return R.string.mcl_setting_renderer_mesa_desktop_ext;
+        }
+        private boolean discover(Context context) {
+            if(provider == null) provider = LibraryPlugin.discoverPlugin(context, plugin());
+            return provider != null;
+        }
+        public boolean compatibleDevice(Context context) {
+            return discover(context) && provider.checkLibraries(library());
+        }
+        public void setupEnvironment(Context context, Map<String, String> envMap) {
+            discover(context);
+            super.setupEnvironment(context, envMap);
+        }
+        public boolean setupRenderer() {
+            if(provider == null) return false;
+            return MojoExec.prepareEgl(provider.resolveAbsolutePath(library()), true, false, 0);
+        }
+    }
+    public static class LegacyZinkRenderSpec extends ExtMesaRenderSpec {
+        protected String plugin() {
+            return LibraryPlugin.ID_ZINK_PLUGIN;
+        }
+        public String name() {
+            return "ZINK (Legacy)";
+        }
+        public String tag() {
+            return Renderers.LEGACYZINK_RENDERER;
+        }
+        public int displayName() {
+            return R.string.mcl_setting_renderer_vulkan_lzink;
+        }
+        public void setupEnvironment(Context context, Map<String, String> envMap) {
+            super.setupEnvironment(context, envMap);
+            envMap.put("MESA_GL_VERSION_OVERRIDE", "4.3COMPAT");
+            envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
+            envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
+        }
+        public boolean setupRenderer() {
+            MojoExec.preloadVulkan();
+            return super.setupRenderer();
+        }
+        public boolean compatibleDevice(Context context) {
+            return GpuUtils.checkVulkanSupport(context.getPackageManager()) && super.compatibleDevice(context);
+        }
+        public String library() {
+            return "libEGL_legacy.so";
         }
     }
 }

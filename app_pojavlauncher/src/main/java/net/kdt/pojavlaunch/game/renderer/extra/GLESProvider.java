@@ -1,11 +1,11 @@
 package net.kdt.pojavlaunch.game.renderer.extra;
 
-import static net.kdt.pojavlaunch.game.renderer.extra.GLESConstants.ANGLE_EGL;
-import static net.kdt.pojavlaunch.game.renderer.extra.GLESConstants.ANGLE_GLES;
-import static net.kdt.pojavlaunch.game.renderer.extra.GLESConstants.ENV_EGL;
-import static net.kdt.pojavlaunch.game.renderer.extra.GLESConstants.ENV_GLES;
-import static net.kdt.pojavlaunch.game.renderer.extra.GLESConstants.NATIVE_EGL;
-import static net.kdt.pojavlaunch.game.renderer.extra.GLESConstants.NATIVE_GLES;
+import static net.kdt.pojavlaunch.game.renderer.def.GLESConstants.ANGLE_EGL;
+import static net.kdt.pojavlaunch.game.renderer.def.GLESConstants.ANGLE_GLES;
+import static net.kdt.pojavlaunch.game.renderer.def.GLESConstants.ENV_EGL;
+import static net.kdt.pojavlaunch.game.renderer.def.GLESConstants.ENV_GLES;
+import static net.kdt.pojavlaunch.game.renderer.def.GLESConstants.NATIVE_EGL;
+import static net.kdt.pojavlaunch.game.renderer.def.GLESConstants.NATIVE_GLES;
 
 import android.content.Context;
 

@@ -13,6 +13,7 @@ import net.kdt.pojavlaunch.Architecture;
 import net.kdt.pojavlaunch.JVersionList;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.authenticator.accounts.Account;
+import net.kdt.pojavlaunch.game.renderer.def.Renderers;
 import net.kdt.pojavlaunch.game.renderer.impl.GLESRenderSpec;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.LifecycleAwareAlertDialog;
@@ -189,19 +190,19 @@ public class GameRunner {
 
         // Switch renderer to GL4ES when running a compat context version on LTW
         if(isCompatContext(versionInfo) && !hasAngelica(gamedir) && renderer instanceof GLESRenderSpec.LTWRenderSpec) {
-            switchRendererifSupported(true, GameRenderer.GL4ES_RENDERER, gameRenderer, instance, activity, 0);
+            switchRendererifSupported(true, Renderers.GL4ES_RENDERER, gameRenderer, instance, activity, 0);
         }
 
         boolean isGl4es = renderer instanceof GLESRenderSpec.GL4ESRenderSpec;
-        boolean ltwSupported = GameRenderer.isCompatibleRenderer(GameRenderer.LTW_RENDERER);
+        boolean ltwSupported = gameRenderer.isCompatibleRenderer(Renderers.LTW_RENDERER);
         // Block Sodium from running with GL4ES on 1.17+
         if(!isCompatContext(versionInfo) && isGl4es && hasSodium(gamedir)) {
-            switchRendererifSupported(ltwSupported, GameRenderer.LTW_RENDERER, gameRenderer, instance, activity, R.string.compat_sodium_not_supported);
+            switchRendererifSupported(ltwSupported, Renderers.LTW_RENDERER, gameRenderer, instance, activity, R.string.compat_sodium_not_supported);
         }
 
         // Switch renderer to LTW when running 1.21.5
         if(!isGl4esCompatible(versionInfo) && isGl4es) {
-            switchRendererifSupported(ltwSupported, GameRenderer.LTW_RENDERER, gameRenderer, instance, activity, R.string.compat_sodium_not_supported);
+            switchRendererifSupported(ltwSupported, Renderers.LTW_RENDERER, gameRenderer, instance, activity, R.string.compat_sodium_not_supported);
         }
 
         GameRenderer.releaseCache();
@@ -280,10 +281,6 @@ public class GameRunner {
         JREUtils.setGameEnvironment(activity, gameRenderer);
         JREUtils.chdir(instance.getGameDirectory().getAbsolutePath());
 
-
-        if(GpuUtils.getGlInfo().isAdreno() && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
-            gameRenderer.overrideVulkanDriver();
-        }
         if(!gameRenderer.maybeSetupRenderer()) {
             if(showDialog(activity, R.string.gr_err_renderer_load_Failed)) return;
             System.exit(0);
