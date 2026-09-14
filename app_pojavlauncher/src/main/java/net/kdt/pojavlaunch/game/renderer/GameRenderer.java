@@ -174,13 +174,23 @@ public class GameRenderer {
     /**
      * Set current selected renderer. Call this before {@link GameRenderer#setupEnvironment} or bad things may happen
      *
-     * @param renderer renderer
+     * @param spec renderer
      */
-    public void setCurrentRenderer(String renderer) {
-        RenderSpec spec = getKnownRenderer(renderer);
-        if (spec == null) throw new IllegalArgumentException("Invalid renderer " + renderer);
+    public void setCurrentRenderer(RenderSpec spec) {
         Log.i(TAG, "Replacing default renderer with the new: " + spec.name());
         currentRenderer = spec;
+    }
+
+    /**
+     * Set current selected renderer. Call this before {@link GameRenderer#setupEnvironment} or bad things may happen
+     *
+     * @param renderer renderer string
+     * @throws IllegalArgumentException if incorrect renderer string is given
+     */
+    public void setCurrentRenderer(String renderer) throws IllegalArgumentException {
+        RenderSpec spec = getKnownRenderer(renderer);
+        if(spec == null) throw new IllegalArgumentException("Invalid renderer string" + renderer + "!");
+        this.setCurrentRenderer(spec);
     }
 
     /**
@@ -192,7 +202,7 @@ public class GameRenderer {
         setRendererLibraryPath(Tools.NATIVE_LIB_DIR, additionalLibraryPath);
         if (!currentRenderer.setupRenderer()) {
             Log.e(TAG, "Failed to setup renderer " + currentRenderer.name() + ", falling back to " + FALLBACK_RENDERER);
-            // Hopefully
+            // Hopefully (yes, it's going to be fun if it returns null for the fallback renderer. Shouldn't happen though)
             return getKnownRenderer(FALLBACK_RENDERER).setupRenderer();
         }
         return true;
