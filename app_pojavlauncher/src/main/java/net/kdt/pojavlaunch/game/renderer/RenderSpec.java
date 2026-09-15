@@ -2,8 +2,6 @@ package net.kdt.pojavlaunch.game.renderer;
 
 import android.content.Context;
 
-import net.kdt.pojavlaunch.Tools;
-
 import java.util.Map;
 
 /**
@@ -48,9 +46,9 @@ public interface RenderSpec {
 
     /**
      * Optional library path if the renderer is linked with libs outside of the launcher native directory
-     * @return String
+     * @return String (or null if the extra search path is not needed)
      */
-    default String libraryPath() {
+    default String librarySearchPath() {
         return null;
     }
 

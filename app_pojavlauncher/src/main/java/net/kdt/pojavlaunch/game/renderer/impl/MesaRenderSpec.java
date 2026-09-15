@@ -109,7 +109,7 @@ public class MesaRenderSpec implements RenderSpec {
         public String name() {
             return "Mesa (external)";
         }
-        public String libraryPath() {
+        public String librarySearchPath() {
             return provider.getLibraryPath();
         }
         public String tag() {

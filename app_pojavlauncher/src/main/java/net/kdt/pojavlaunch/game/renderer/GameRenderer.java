@@ -9,7 +9,6 @@ import static net.kdt.pojavlaunch.game.renderer.def.Renderers.MESA_RENDERER_EXT;
 import static net.kdt.pojavlaunch.game.renderer.def.Renderers.ZINK_RENDERER;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.system.ErrnoException;
 import android.system.Os;
 import android.util.Log;
@@ -18,12 +17,9 @@ import net.kdt.pojavlaunch.Logger;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.game.renderer.impl.GLESRenderSpec;
 import net.kdt.pojavlaunch.game.renderer.impl.MesaRenderSpec;
-import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import git.artdeell.mojoexec.MojoExec;
@@ -150,7 +146,7 @@ public class GameRenderer {
      * @return whether the renderer setup was successful
      */
     public boolean maybeSetupRenderer() {
-        setRendererLibraryPath(Tools.NATIVE_LIB_DIR, currentRenderer.libraryPath());
+        setRendererLibraryPath(Tools.NATIVE_LIB_DIR, currentRenderer.librarySearchPath());
         if (!currentRenderer.setupRenderer()) {
             Log.e(TAG, "Failed to setup renderer " + currentRenderer.name() + ", falling back to " + FALLBACK_RENDERER);
             // Hopefully (yes, it's going to be fun if it returns null for the fallback renderer. Shouldn't happen though)
