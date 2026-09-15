@@ -150,7 +150,7 @@ public class MesaRenderSpec implements RenderSpec {
         }
         public void setupEnvironment(Context context, Map<String, String> envMap) {
             super.setupEnvironment(context, envMap);
-            envMap.put("MESA_GL_VERSION_OVERRIDE", "4.3COMPAT");
+            envMap.put("MESA_GL_VERSION_OVERRIDE", "4.3");
             envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
             envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
         }
