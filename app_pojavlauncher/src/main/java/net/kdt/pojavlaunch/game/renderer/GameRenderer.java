@@ -47,8 +47,6 @@ import git.artdeell.mojoexec.MojoExec;
 public class GameRenderer {
     private final static String TAG = "Renderer";
     private final static String FALLBACK_RENDERER = GL4ES_RENDERER;
-    private static RenderersList sCompatibleRenderers;
-
     private RenderSpec currentRenderer;
     private Map<String, String> environment = new HashMap<>();
 
@@ -93,39 +91,7 @@ public class GameRenderer {
         MojoExec.setNativeLibraryDir(mainPath);
     }
 
-    /**
-     * Return a list of renderers compatible with the current device
-     * Don't forget to clean the cache when the list isn't needed anymore (i.e. when starting the game) - {@link GameRenderer#releaseRendererCache()}
-     *
-     * @param context application context
-     * @return RenderersList containing all compatible renderers
-     */
-    public static RenderersList getCompatibleRenderers(Context context) {
-        if (sCompatibleRenderers != null) return sCompatibleRenderers;
-        Resources resources = context.getResources();
-        // This is the list that controls em all!
-        String[] renderers = {
-                GL4ES_RENDERER, LTW_RENDERER, ZINK_RENDERER, FREEDRENO_RENDERER, MESA_RENDERER, MESA_RENDERER_EXT, LEGACYZINK_RENDERER
-        };
-        List<String> rendererIds = new ArrayList<>(renderers.length);
-        List<String> rendererNames = new ArrayList<>(rendererIds);
-        for (String renderer : renderers) {
-            RenderSpec r = getKnownRenderer(renderer);
-            assert r != null;
-            if (!r.compatibleDevice(context)) continue;
-            rendererIds.add(renderer);
-            rendererNames.add(resources.getString(r.displayName()));
-        }
-        return (sCompatibleRenderers = new RenderersList(rendererIds, rendererNames.toArray(new String[0])));
-    }
 
-    /**
-     * Destroy compatible renderers cache
-     */
-    public static void releaseRendererCache() {
-        sCompatibleRenderers.rendererIds.clear();
-        sCompatibleRenderers = null;
-    }
 
     /**
      * Setup current selected renderer environment. Call before using {@link GameRenderer#maybeSetupRenderer()}
@@ -205,12 +171,5 @@ public class GameRenderer {
      * Compatible renderers list
      */
     public static class RenderersList {
-        public final List<String> rendererIds;
-        public final String[] rendererDisplayNames;
-
-        public RenderersList(List<String> rendererIds, String[] rendererDisplayNames) {
-            this.rendererIds = rendererIds;
-            this.rendererDisplayNames = rendererDisplayNames;
-        }
     }
 }

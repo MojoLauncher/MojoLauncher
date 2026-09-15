@@ -25,6 +25,7 @@ import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
+import net.kdt.pojavlaunch.game.renderer.RendererCache;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
@@ -75,10 +76,10 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         bindViews(view);
 
-        GameRenderer.RenderersList renderersList = GameRenderer.getCompatibleRenderers(view.getContext());
-        mRenderNames = renderersList.rendererIds;
-        List<String> renderList = new ArrayList<>(renderersList.rendererDisplayNames.length + 1);
-        renderList.addAll(Arrays.asList(renderersList.rendererDisplayNames));
+        RendererCache list = RendererCache.getCompatibleRenderers(view.getContext());
+        mRenderNames = list.rendererIds;
+        List<String> renderList = new ArrayList<>(list.rendererDisplayNames.length + 1);
+        renderList.addAll(Arrays.asList(list.rendererDisplayNames));
         renderList.add(view.getContext().getString(R.string.global_default));
         mDefaultRenderer.setAdapter(new ArrayAdapter<>(view.getContext(), R.layout.item_simple_list_1, renderList));
 

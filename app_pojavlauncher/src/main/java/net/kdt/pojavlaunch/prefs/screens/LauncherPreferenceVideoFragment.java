@@ -11,6 +11,7 @@ import androidx.preference.SwitchPreferenceCompat;
 import git.artdeell.mojo.R;
 
 import net.kdt.pojavlaunch.Architecture;
+import net.kdt.pojavlaunch.game.renderer.RendererCache;
 import net.kdt.pojavlaunch.game.renderer.extra.GLESProvider;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.CustomSeekBarPreference;
@@ -56,9 +57,9 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
 
         ListPreference rendererListPreference = requirePreference("renderer",
                 ListPreference.class);
-        GameRenderer.RenderersList renderersList = GameRenderer.getCompatibleRenderers(getContext());
-        rendererListPreference.setEntries(renderersList.rendererDisplayNames);
-        rendererListPreference.setEntryValues(renderersList.rendererIds.toArray(new String[0]));
+        RendererCache list = RendererCache.getCompatibleRenderers(getContext());
+        rendererListPreference.setEntries(list.rendererDisplayNames);
+        rendererListPreference.setEntryValues(list.rendererIds.toArray(new String[0]));
 
         computeVisibility();
     }
