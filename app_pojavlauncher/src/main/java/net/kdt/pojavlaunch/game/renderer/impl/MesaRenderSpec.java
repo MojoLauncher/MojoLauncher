@@ -59,7 +59,6 @@ public class MesaRenderSpec implements RenderSpec {
             return R.string.mcl_setting_renderer_vulkan_zink;
         }
         public void setupEnvironment(Context context, Map<String, String> envMap) {
-            envMap.put("GALLIUM_DRIVER", "zink");
             envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
             // HACK: GLSL version override for Mesa-based renderers (i.e. Zink)
             // Required to run the game properly on some mobile Vulkan drivers (Minecraft fails to compile shaders without)
