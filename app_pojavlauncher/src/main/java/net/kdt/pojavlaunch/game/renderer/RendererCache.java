@@ -42,8 +42,8 @@ public class RendererCache {
         String[] renderers = {
                 GL4ES_RENDERER, LTW_RENDERER, ZINK_RENDERER, FREEDRENO_RENDERER, MESA_RENDERER, MESA_RENDERER_EXT, LEGACYZINK_RENDERER
         };
-        List<String> rendererIds = new ArrayList<>(renderers.length);
-        List<String> rendererNames = new ArrayList<>(rendererIds);
+        ArrayList<String> rendererIds = new ArrayList<>(renderers.length);
+        ArrayList<String> rendererNames = new ArrayList<>(rendererIds);
         for (String renderer : renderers) {
             RenderSpec r = GameRenderer.getKnownRenderer(renderer);
             assert r != null;
@@ -51,6 +51,8 @@ public class RendererCache {
             rendererIds.add(renderer);
             rendererNames.add(resources.getString(r.displayName()));
         }
+        rendererIds.trimToSize();
+        rendererNames.trimToSize();
         return (sCompatibleRenderers = new RendererCache(rendererIds, rendererNames.toArray(new String[0])));
     }
 
