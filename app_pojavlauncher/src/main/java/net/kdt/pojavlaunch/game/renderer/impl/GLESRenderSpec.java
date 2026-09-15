@@ -24,6 +24,7 @@ import git.artdeell.mojoexec.MojoExec;
  */
 public abstract class GLESRenderSpec implements RenderSpec {
     private boolean nsBypass = false;
+    protected abstract int glesVersion();
     public void setupEnvironment(Context context, Map<String, String> envMap) {
         GLESProvider provider = GLESProvider.getGlesProvider(context, LauncherPreferences.PREF_USE_ANGLE);
         Log.i("GLESRenderSpec", "Using GLESProvider: " + provider.type());
@@ -38,7 +39,7 @@ public abstract class GLESRenderSpec implements RenderSpec {
         envMap.put("LIBGL_NOERROR", "1");
     }
     public boolean setupRenderer() {
-        return MojoExec.prepareEgl(library(), nsBypass, true, Integer.parseInt((String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION)));
+        return MojoExec.prepareEgl(library(), nsBypass, true, glesVersion());
     }
 
     public static class LTWRenderSpec extends GLESRenderSpec {
@@ -57,6 +58,9 @@ public abstract class GLESRenderSpec implements RenderSpec {
         public String library() {
             return "libltw.so";
         }
+        protected int glesVersion() {
+            return 3;
+        }
     }
 
     public static class GL4ESRenderSpec extends GLESRenderSpec {
@@ -74,6 +78,9 @@ public abstract class GLESRenderSpec implements RenderSpec {
         }
         public String library() {
             return "libgl4es_114.so";
+        }
+        protected int glesVersion() {
+            return 2;
         }
     }
 }
