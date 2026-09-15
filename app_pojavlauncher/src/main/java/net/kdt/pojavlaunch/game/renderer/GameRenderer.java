@@ -69,20 +69,13 @@ public class GameRenderer {
             // For compatibility
             case "opengles2_4":
             case "opengles2_5":
-            case GL4ES_RENDERER:
-                return new GLESRenderSpec.GL4ESRenderSpec();
-            case LTW_RENDERER:
-                return new GLESRenderSpec.LTWRenderSpec();
-            case ZINK_RENDERER:
-                return new MesaRenderSpec.ZinkRenderSpec();
-            case FREEDRENO_RENDERER:
-                return new MesaRenderSpec.FreedrenoRenderSpec();
-            case MESA_RENDERER:
-                return new MesaRenderSpec();
-            case MESA_RENDERER_EXT:
-                return new MesaRenderSpec.ExtMesaRenderSpec();
-            case LEGACYZINK_RENDERER:
-                return new MesaRenderSpec.LegacyZinkRenderSpec();
+            case GL4ES_RENDERER: return new GLESRenderSpec.GL4ESRenderSpec();
+            case LTW_RENDERER: return new GLESRenderSpec.LTWRenderSpec();
+            case ZINK_RENDERER: return new MesaRenderSpec.ZinkRenderSpec();
+            case FREEDRENO_RENDERER: return new MesaRenderSpec.FreedrenoRenderSpec();
+            case MESA_RENDERER: return new MesaRenderSpec();
+            case MESA_RENDERER_EXT: return new MesaRenderSpec.ExtMesaRenderSpec();
+            case LEGACYZINK_RENDERER: return new MesaRenderSpec.LegacyZinkRenderSpec();
             default:
                 Log.e(TAG, "Unknown renderer " + renderer);
                 return null;
@@ -96,8 +89,7 @@ public class GameRenderer {
      * @param additionalPath additional library path to search libs at
      */
     public static void setRendererLibraryPath(String mainPath, String additionalPath) {
-        if (additionalPath != null)
-            mainPath = additionalPath + ":" + mainPath;
+        if (additionalPath != null) mainPath = additionalPath + ":" + mainPath;
         MojoExec.setNativeLibraryDir(mainPath);
     }
 

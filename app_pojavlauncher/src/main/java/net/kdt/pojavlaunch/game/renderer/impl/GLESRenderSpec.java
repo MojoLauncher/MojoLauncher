@@ -45,19 +45,15 @@ public abstract class GLESRenderSpec implements RenderSpec {
         public boolean compatibleDevice(Context context) {
             return JREUtils.getDetectedVersion() >= 3 && new File(Tools.NATIVE_LIB_DIR, this.library()).exists();
         }
-
         public String name() {
             return "OpenLTW";
         }
-
         public int displayName() {
             return R.string.mcl_setting_renderer_ltw;
         }
-
         public String tag() {
             return Renderers.LTW_RENDERER;
         }
-
         public String library() {
             return "libltw.so";
         }
@@ -67,19 +63,15 @@ public abstract class GLESRenderSpec implements RenderSpec {
         public boolean compatibleDevice(Context context) {
             return true;
         }
-
         public String name() {
             return "GL4ES";
         }
-
         public int displayName() {
             return R.string.mcl_setting_renderer_gles2_4;
         }
-
         public String tag() {
             return Renderers.GL4ES_RENDERER;
         }
-
         public String library() {
             return "libgl4es_114.so";
         }
