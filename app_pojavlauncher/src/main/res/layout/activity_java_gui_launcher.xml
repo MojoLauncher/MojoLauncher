@@ -22,23 +22,26 @@
 			tools:ignore="TouchTargetSizeCheck"
 			/>
 
-		<net.kdt.pojavlaunch.AWTCanvasView
+		<net.kdt.pojavlaunch.awt.AWTView
 			android:id="@+id/installmod_surfaceview"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:foregroundGravity="bottom"
-			app:layout_constraintBottom_toBottomOf="@+id/main_touchpad"
+			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent" />
 
 		<LinearLayout
 			android:id="@+id/main_touchpad"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
 			android:orientation="vertical"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent">
+			app:layout_constraintStart_toStartOf="@id/installmod_surfaceview"
+			app:layout_constraintTop_toTopOf="@id/installmod_surfaceview"
+            app:layout_constraintBottom_toBottomOf="@id/installmod_surfaceview"
+            app:layout_constraintEnd_toEndOf="@id/installmod_surfaceview"
+            >
 
 			<ImageView
 				android:id="@+id/main_mouse_pointer"

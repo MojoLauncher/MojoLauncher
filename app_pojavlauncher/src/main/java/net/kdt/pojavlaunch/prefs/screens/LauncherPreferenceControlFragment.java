@@ -53,6 +53,11 @@ public class LauncherPreferenceControlFragment extends LauncherPreferenceFragmen
         deadzoneSeek.setValue((int) (joystickDeadzone * 100f));
         deadzoneSeek.setSuffix(" %");
 
+        CustomSeekBarPreference buttonTransparency = requirePreference("buttonTransparency",
+                CustomSeekBarPreference.class);
+        buttonTransparency.setValue(LauncherPreferences.PREF_BUTTON_TRANSPARENCY);
+        buttonTransparency.setSuffix(" %");
+
 
         Context context = getContext();
         if(context != null) {

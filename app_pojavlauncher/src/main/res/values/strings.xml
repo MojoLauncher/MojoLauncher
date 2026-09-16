@@ -63,10 +63,13 @@
     <string name="mcl_setting_title_javaargs">JVM Launch arguments</string>
     <string name="mcl_setting_subtitle_javaargs">Be careful, this may make game crash if modified without knowledge.</string>
     <string name="mcl_setting_category_renderer">Renderer</string>
-    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - all versions till 1.21.4, fast</string>
-    <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) - all versions, mid</string>
-    <string name="mcl_setting_renderer_freedreno_kgsl">Freedreno - all versions, fast, Adreno-only</string>
+    <string name="mcl_setting_renderer_gles2_4">GL4ES (OpenGL ES 2) - 1.21.4 and lower, fast</string>
     <string name="mcl_setting_renderer_ltw">LTW (OpenGL ES 3) - 1.17+ only, fast</string>
+    <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) - all versions, mid</string>
+    <string name="mcl_setting_renderer_vulkan_lzink">Legacy Zink (Vulkan) - all versions, mid</string>
+    <string name="mcl_setting_renderer_freedreno_kgsl">Freedreno (KGSL) - all versions, fast</string>
+    <string name="mcl_setting_renderer_mesa_desktop">Mesa (DRM) - all versions, fast</string>
+    <string name="mcl_setting_renderer_mesa_desktop_ext">Mesa (DRM, external) - all versions, fast</string>
     <string name="mcl_setting_veroption_release">Release</string>
     <string name="mcl_setting_veroption_snapshot">Snapshot</string>
     <string name="mcl_setting_veroption_oldalpha">Old-alpha</string>
@@ -211,8 +214,6 @@
     <string name="preference_force_vsync_title">Force enable VSync</string>
     <string name="preference_force_vsync_description">Limit thermal throttling by limiting peak performance.</string>
     <string name="preference_use_angle_title">Use ANGLE</string>
-    <string name="preference_force_legacy_zink_title">Use legacy Zink</string>
-    <string name="preference_force_legacy_zink_description">Forcefully use legacy Zink instead of selecting it depending on the current device. Might fix some graphical issues. Disable if the game became slow.</string>
     <string name="preference_use_angle_description">Allows using ANGLE instead of the system driver. Can fix graphical issues with mods on some GPUs</string>
     <string name="preference_force_english_title">Force language to English</string>
     <string name="preference_force_english_description">Allows you to see original strings, as intended by developers. Requires a restart.</string>
@@ -352,6 +353,7 @@
     <string name="modpack_install_modloader_download_failed">Failed to download the mod loader files</string>
     <string name="modpack_install_download_failed">Failed to download modpack files</string>
     <string name="modpack_install_instance_button">Create modpack instance</string>
+    <string name="modpack_install_toast_success">Modpack installation completed!</string>
 
     <string name="notif_error_occured">An error has occurred</string>
     <string name="notif_error_occured_desc">Click to see more details</string>
@@ -505,6 +507,9 @@
     <string name="migration_notice">Looks like you have already used this application in the past. You can import old launcher installation data from miscellaneous settings.</string>
     <string name="preference_alsoft_opensl_title">Forcefully use OpenSL for audio</string>
     <string name="preference_alsoft_opensl_summary">Forcefully enables OpenSL backend in ALSoft instead of Oboe. Can fix audio capture issues on some devices. Disable if you see audio playback/capture issues</string>
+    <string name="preference_show_memory_warning_title">Show memory warning dialog</string>
+    <string name="preference_show_memory_warning_summary">If enabled, displays the warning dialog that is shown during game launch if the amount of free memory is less than allocated to the game</string>
+    <string name="option_do_not_show_again">Don\'t show again</string>
     <string name="preference_custom_resolution_title">Use custom resolution</string>
     <string name="preference_custom_resolution_summary">Allows specifying custom resolution for the game. The window will stretch if the given resolution has different aspect ratio than the screen</string>
     <string name="preference_custom_resolution_width">Screen width</string>
@@ -512,4 +517,11 @@
     <string name="loading_screen_title">Waiting for a game window to appear…</string>
     <string name="loading_screen_booted">Ready - running on %1$s!</string>
     <string name="loading_screen_warning">If you are stuck here, the game might have crashed</string>
+    <string name="preference_metadata_clear">Clear metadata cache</string>
+    <string name="preference_metadata_clear_summary">Removes all strings metadata cache and forces a rebuild. Use this if the launcher can\'t see new game or modloader versions</string>
+    <string name="preference_metadata_clear_fail">Failed to remove cache files</string>
+    <string name="preference_metadata_clear_complete">Completed. Restart the launcher to apply the changes</string>
+    <string name="preference_button_transparency">Buttons transparency</string>
+    <string name="preference_button_transparency_summary">Changes on-screen buttons transparency</string>
+    <string name="main_please_restart">Please restart the game from the launcher homescreen</string>
 </resources>

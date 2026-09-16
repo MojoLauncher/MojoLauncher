@@ -10,9 +10,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import net.kdt.pojavlaunch.AWTCanvasView;
 import net.kdt.pojavlaunch.Architecture;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.awt.AWTView;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.Runtime;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
@@ -31,7 +31,7 @@ public class JavaRunner {
     private static boolean getCacioJavaArgs(List<String> javaArgList, boolean isJava8) {
         // Caciocavallo config AWT-enabled version
         javaArgList.add("-Djava.awt.headless=false");
-        javaArgList.add("-Dcacio.managed.screensize=" + AWTCanvasView.AWT_CANVAS_WIDTH + "x" + AWTCanvasView.AWT_CANVAS_HEIGHT);
+        javaArgList.add("-Dcacio.managed.screensize=" + AWTView.AWT_CANVAS_WIDTH + "x" + AWTView.AWT_CANVAS_HEIGHT);
         javaArgList.add("-Dcacio.font.fontmanager=sun.awt.X11FontManager");
         javaArgList.add("-Dcacio.font.fontscaler=sun.font.FreetypeFontScaler");
         javaArgList.add("-Dswing.defaultlaf=javax.swing.plaf.metal.MetalLookAndFeel");
@@ -238,6 +238,12 @@ public class JavaRunner {
                 case "-XX:+UseLargePages":
                     iterator.remove();
                     break;
+                case "-cp":
+                    // remove classpath and the next argument (which is either garbage or pointless classpath definition)
+                    iterator.remove();
+                    iterator.next();
+                    iterator.remove();
+                    break;
                 default:
                     if(arg.startsWith("-Xms") || arg.startsWith("-Xmx") || arg.startsWith("-XX:ActiveProcessorCount")) iterator.remove();
                     if(!hasJavaAgent && arg.startsWith("-javaagent:")) hasJavaAgent = true;
@@ -275,6 +281,7 @@ public class JavaRunner {
         List<String> runtimeArgs = new ArrayList<>();
         if(getCacioJavaArgs(runtimeArgs,runtime.javaVersion == 8)) hasJavaAgent = true;
         runtimeArgs.addAll(getJavaArgs(runtimeHomeDir.getAbsolutePath(), vmArgs));
+        vmArgs.clear();
 
 
         runtimeArgs.add("-XX:ActiveProcessorCount=" + java.lang.Runtime.getRuntime().availableProcessors());
@@ -286,6 +293,7 @@ public class JavaRunner {
             else classpathBuilder.append(':');
             classpathBuilder.append(entry);
         }
+        classpathEntries.clear();
         runtimeArgs.add(classpathBuilder.toString());
 
         //JREUtils.initializeHooks();
@@ -293,9 +301,26 @@ public class JavaRunner {
         setImmutableEnvVars(runtimeHomeDir);
         relocateLdLibPath(vmPath, null);
 
-        nativeLoadJVM(vmPath.getAbsolutePath(), runtimeArgs.toArray(new String[0]), mainClass, applicationArgs.toArray(new String[0]), hasJavaAgent);
+        // Since this function never returns, under normal circumstances these strings will never be
+        // freed. Move them to manually-managed memory and invalidate references here to reduce memory
+        // footprint
+        long javaArgsL = nativeTransferArguments(runtimeArgs.toArray(new String[0]));
+        runtimeArgs.clear();
+        runtimeArgs = null;
+
+        long appArgsL = nativeTransferArguments(applicationArgs.toArray(new String[0]));
+        applicationArgs.clear();
+
+        if(javaArgsL == 0 || appArgsL == 0)
+            throw new VMLoadException("Failed to transfer arguments", -1, -4);
+
+        System.gc();
+
+        nativeLoadJVM(vmPath.getAbsolutePath(), javaArgsL, mainClass, appArgsL, hasJavaAgent);
     }
 
-    public static native boolean nativeLoadJVM(String vmPath, String[] javaArgs, String mainClass, String[] appArgs, boolean hasJavaAgents) throws VMLoadException;
+    public static native long nativeTransferArguments(String[] args);
+
+    public static native boolean nativeLoadJVM(String vmPath, long javaArgsL, String mainClass, long appArgsL, boolean hasJavaAgents) throws VMLoadException;
     public static native void nativeSetupExit(Context context);
 }

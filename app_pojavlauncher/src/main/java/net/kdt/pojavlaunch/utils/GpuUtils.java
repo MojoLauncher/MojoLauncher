@@ -1,5 +1,8 @@
 package net.kdt.pojavlaunch.utils;
 
+import static android.os.Build.VERSION.SDK_INT;
+
+import android.content.pm.PackageManager;
 import android.opengl.EGL14;
 import android.opengl.EGLConfig;
 import android.opengl.EGLContext;
@@ -7,9 +10,10 @@ import android.opengl.EGLDisplay;
 import android.opengl.EGLSurface;
 import android.opengl.GLES20;
 import android.opengl.GLES30;
+import android.os.Build;
 import android.util.Log;
 
-public class GLInfoUtils {
+public class GpuUtils {
     public static String GLES_VERSION_PREFIX = "OpenGL ES ";
     private static GLInfo info;
 
@@ -136,6 +140,20 @@ public class GLInfoUtils {
         return true;
     }
 
+    public static boolean checkVulkanSupport(PackageManager packageManager) {
+        if(SDK_INT >= Build.VERSION_CODES.N) {
+            return packageManager.hasSystemFeature(PackageManager.FEATURE_VULKAN_HARDWARE_LEVEL) &&
+                    packageManager.hasSystemFeature(PackageManager.FEATURE_VULKAN_HARDWARE_VERSION);
+        }
+        return false;
+    }
+
+    public static boolean checkChromebook(PackageManager packageManager) {
+        return packageManager.hasSystemFeature("org.chromium.arc")
+                || packageManager.hasSystemFeature("org.chromium.arc.device_management")
+                || (Build.MODEL != null && Build.MODEL.startsWith("sdk_gpc_"));
+    }
+
     /**
      * Get the information about the current OpenGL ES device, which consists of the vendor,
      * the renderer and the major GLES version
@@ -171,7 +189,7 @@ public class GLInfoUtils {
          * @return
          */
         public boolean isAdreno() {
-            return renderer.contains("Adreno") && vendor.equals("Qualcomm");
+            return renderer.contains("Adreno") && vendor.contains("Qualcomm");
         }
 
         /**
@@ -179,7 +197,7 @@ public class GLInfoUtils {
          * @return
          */
         public boolean isAdreno500Lower(){
-            return vendor.equals("Qualcomm") &&
+            return vendor.contains("Qualcomm") &&
                     (renderer.contains("Adreno (TM) 5") ||
                     renderer.contains("Adreno (TM) 4") ||
                     renderer.contains("Adreno (TM) 3") ||

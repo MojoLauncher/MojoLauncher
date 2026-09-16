@@ -17,6 +17,7 @@ public class VMLoadException extends Exception {
 
     private static int getLoadStepRes(int loadStep) {
         switch (loadStep) {
+            case -1: return R.string.vml_err_nomem;
             case 0: return R.string.vml_fail_load_runtime;
             case 1: return R.string.vml_fail_create_runtime;
             case 2: return R.string.vml_fail_find_hooks_native;

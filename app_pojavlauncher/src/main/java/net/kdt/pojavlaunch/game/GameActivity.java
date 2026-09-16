@@ -7,6 +7,7 @@ import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_ENABLE_GYRO;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_SUSTAINED_PERFORMANCE;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_USE_ALTERNATE_SURFACE;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_VIRTUAL_MOUSE_START;
+import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -45,7 +46,9 @@ import com.kdt.LoggerView;
 
 import net.kdt.pojavlaunch.BaseActivity;
 import net.kdt.pojavlaunch.CallbackBridge;
-import net.kdt.pojavlaunch.EfficientAndroidLWJGLKeycode;
+import net.kdt.pojavlaunch.game.renderer.GameRenderer;
+import net.kdt.pojavlaunch.utils.GpuUtils;
+import net.kdt.pojavlaunch.utils.KeycodeUtils;
 import net.kdt.pojavlaunch.Logger;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.authenticator.accounts.Accounts;
@@ -56,7 +59,6 @@ import net.kdt.pojavlaunch.customcontrols.ControlJoystickData;
 import net.kdt.pojavlaunch.customcontrols.ControlLayout;
 import net.kdt.pojavlaunch.customcontrols.CustomControls;
 import net.kdt.pojavlaunch.customcontrols.EditorExitable;
-import net.kdt.pojavlaunch.customcontrols.keyboard.LwjglCharSender;
 import net.kdt.pojavlaunch.customcontrols.keyboard.TouchCharInput;
 import net.kdt.pojavlaunch.customcontrols.mouse.GyroControl;
 import net.kdt.pojavlaunch.customcontrols.mouse.HotbarView;
@@ -72,7 +74,6 @@ import net.kdt.pojavlaunch.tasks.AsyncAssetManager;
 import net.kdt.pojavlaunch.utils.JREUtils;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
 import net.kdt.pojavlaunch.authenticator.accounts.Account;
-import net.kdt.pojavlaunch.utils.RendererCompatUtil;
 import net.kdt.pojavlaunch.utils.jre.GameRunner;
 
 import java.io.File;
@@ -97,6 +98,7 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
     private ControlLayout mControlLayout;
     private HotbarView mHotbarView;
     private View mLoadingScreen;
+    private GameRenderer mGameRenderer;
 
     Instance instance;
     Account account;
@@ -122,6 +124,12 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
             finish();
             return;
         }
+        mGameRenderer = new GameRenderer(instance.getLaunchRenderer());
+
+        if(GpuUtils.getGlInfo().isAdreno() && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
+            mGameRenderer.overrideVulkanDriver();
+        }
+
         AsyncAssetManager.extractDefaultSettings(this, instance.getGameDirectory());
         MCOptionUtils.load(instance.getGameDirectory().getAbsolutePath());
 
@@ -228,11 +236,15 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
                 throw new IOException("Failed to create a new log file");
             Logger.begin(latestLogFile.getAbsolutePath());
 
-            touchCharInput.setCharacterSender(new LwjglCharSender());
-
-            Bundle extras = Objects.requireNonNull(getIntent().getExtras());
+            Intent activityIntent = getIntent();
+            Bundle extras = Objects.requireNonNull(activityIntent.getExtras());
             String version = extras.getString(INTENT_LAUNCH_VERSION);
             File[] classpath = (File[]) extras.getSerializable(INTENT_LAUNCH_CLASSPATH);
+
+            activityIntent.removeExtra(INTENT_LAUNCH_VERSION);
+            activityIntent.removeExtra(INTENT_LAUNCH_CLASSPATH);
+
+            setIntent(activityIntent);
 
             setTitle("MojoLauncher (" + version + ")");
 
@@ -256,6 +268,13 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
             launcherGLView.setSurfaceReadyListener(() -> {
                 try {
                     Tools.runOnUiThread(() -> { if(PREF_VIRTUAL_MOUSE_START) launcherGLView.mCursorView.setVisibility(View.VISIBLE); });
+                    if(version == null || classpath == null) {
+                        Tools.runOnUiThread(()->{
+                            Toast.makeText(this, R.string.main_please_restart, Toast.LENGTH_LONG).show();
+                            finish();
+                        });
+                        return;
+                    }
                     runCraft(version, classpath);
                 }catch (Throwable e){
                     Tools.showErrorRemote(e);
@@ -391,17 +410,10 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
     }
 
     private void runCraft(String versionId, File[] classpath) throws Throwable {
-        String renderer = instance.getLaunchRenderer();
-        if(!RendererCompatUtil.checkRendererCompatible(this, renderer)) {
-            RendererCompatUtil.RenderersList renderersList = RendererCompatUtil.getCompatibleRenderers(this);
-            String firstCompatibleRenderer = renderersList.rendererIds.get(0);
-            Log.w("runCraft","Incompatible renderer "+renderer+ " will be replaced with "+firstCompatibleRenderer);
-            renderer = firstCompatibleRenderer;
-        }
         Logger.appendToLog("--------- Starting game with Launcher Debug!");
-        Tools.printLauncherInfo(versionId, instance.getLaunchArgs(), renderer, this);
+        Tools.printLauncherInfo(versionId, instance.getLaunchArgs(), mGameRenderer.getCurrentRenderer(), this);
         JREUtils.redirectAndPrintJRELog();
-        GameRunner.launchGame(this, account, instance, versionId, classpath, renderer);
+        GameRunner.launchGame(this, account, instance, versionId, classpath, mGameRenderer);
         //Note that we actually stall in the above function, even if the game crashes. But let's be safe.
         Tools.runOnUiThread(()-> mServiceBinder.isActive = false);
     }
@@ -409,7 +421,7 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
     private void dialogSendCustomKey() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle(R.string.control_customkey);
-        dialog.setItems(EfficientAndroidLWJGLKeycode.generateKeyName(), (dInterface, position) -> EfficientAndroidLWJGLKeycode.execKeyIndex(position));
+        dialog.setItems(KeycodeUtils.generateKeyName(), (dInterface, position) -> KeycodeUtils.execKeyIndex(position));
         dialog.show();
     }
 
@@ -445,6 +457,11 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
                     } else {
                         mGyroControl.disable();
                     }
+                }
+
+                @Override
+                public void onButtonTransparencyChanged() {
+                    mControlLayout.updateButtonOpacity();
                 }
             };
         }

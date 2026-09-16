@@ -16,6 +16,7 @@ public class LibraryPlugin {
     public static final String ID_ANGLE_PLUGIN = "git.mojo.angle";
     public static final String ID_FFMPEG_PLUGIN = "git.mojo.ffmpeg";
     public static final String ID_ZINK_PLUGIN = "git.mojo.zink";
+    public static final String ID_MESA_PLUGIN = "git.mojo.mesa";
 
     private String appId;
     private String libraryPath;
@@ -46,6 +47,9 @@ public class LibraryPlugin {
     }
     public String resolveAbsolutePath(String library) {
         return new File(libraryPath, library).getAbsolutePath();
+    }
+    public File resolve(String library) {
+        return new File(libraryPath, library);
     }
 
     public boolean checkLibraries(String... libs){

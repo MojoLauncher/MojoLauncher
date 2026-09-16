@@ -1,5 +1,7 @@
 package net.kdt.pojavlaunch.utils.jre;
 
+import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER;
+
 import android.util.ArrayMap;
 import android.util.Log;
 import android.widget.Toast;
@@ -9,23 +11,25 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import net.kdt.pojavlaunch.Architecture;
 import net.kdt.pojavlaunch.JVersionList;
-import net.kdt.pojavlaunch.LauncherActivity;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.authenticator.accounts.Account;
+import net.kdt.pojavlaunch.game.renderer.def.Renderers;
+import net.kdt.pojavlaunch.game.renderer.impl.GLESRenderSpec;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.LifecycleAwareAlertDialog;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.Runtime;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.game.renderer.GameRenderer;
+import net.kdt.pojavlaunch.game.renderer.RenderSpec;
 import net.kdt.pojavlaunch.utils.DateUtils;
 import net.kdt.pojavlaunch.utils.FileUtils;
-import net.kdt.pojavlaunch.utils.GLInfoUtils;
+import net.kdt.pojavlaunch.utils.GpuUtils;
 import net.kdt.pojavlaunch.utils.GameOptionsUtils;
 import net.kdt.pojavlaunch.utils.JREUtils;
 import net.kdt.pojavlaunch.utils.JSONUtils;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
 import net.kdt.pojavlaunch.utils.OldVersionsUtils;
-import net.kdt.pojavlaunch.utils.RendererCompatUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -88,7 +92,7 @@ public class GameRunner {
 
     private static boolean affectedByRenderDistanceIssue(JVersionList.Version version) throws ParseException {
         if(LauncherPreferences.PREF_USE_ANGLE) return false;
-        GLInfoUtils.GLInfo info = GLInfoUtils.getGlInfo();
+        GpuUtils.GLInfo info = GpuUtils.getGlInfo();
         return info.isAdreno() &&
                 info.glesMajorVersion >= 3 &&
                 // 1.21.5 fixes the RD issue, released on march 25 2025
@@ -126,68 +130,86 @@ public class GameRunner {
         return LifecycleAwareAlertDialog.haltOnDialog(activity.getLifecycle(), activity, dialogCreator);
     }
 
-    // Autoswitch to LTW if supported, otherwise - crash with resId dialog message. Returns LTW renderer strings if succeeded
-    private static String switchLtw(boolean hasLtw, Instance instance, AppCompatActivity activity, int resId) throws InterruptedException, IOException {
-        if(hasLtw) {
-            String ltwRenderer = "opengles3_ltw";
-            instance.renderer = ltwRenderer;
+    // Autoswitch to provided renderer if supported, otherwise - crash with resId dialog message
+    private static void switchRendererIfSupported(boolean support,
+                                                  RenderSpec renderer,
+                                                  GameRenderer gameRenderer,
+                                                  Instance instance,
+                                                  AppCompatActivity activity,
+                                                  int resId) throws InterruptedException, IOException {
+        if(support) {
+            instance.renderer = renderer.tag();
             instance.write();
-            return ltwRenderer;
+            gameRenderer.setCurrentRenderer(renderer);
         }else {
             showDialog(activity, resId);
             System.exit(0);
-            return null;
         }
     }
 
     public static void launchGame(final AppCompatActivity activity, Account account,
-                                  Instance instance, String versionId, File[] classpath, String rendererName) throws Throwable {
+                                  Instance instance, String versionId, File[] classpath, GameRenderer gameRenderer) throws Throwable {
         int freeDeviceMemory = Tools.getFreeDeviceMemory(activity);
         int localeString;
         int freeAddressSpace = Architecture.is32BitsDevice() ? Tools.getMaxContinuousAddressSpaceSize() : -1;
         Log.i("MemStat", "Free RAM: " + freeDeviceMemory + " Addressable: " + freeAddressSpace);
-        if(freeDeviceMemory > freeAddressSpace && freeAddressSpace != -1) {
+        boolean showAddressMemoryWarning = freeDeviceMemory > freeAddressSpace && freeAddressSpace != -1;
+        if(showAddressMemoryWarning) {
             freeDeviceMemory = freeAddressSpace;
             localeString = R.string.address_memory_warning_msg;
         } else {
             localeString = R.string.memory_warning_msg;
         }
 
-        if(LauncherPreferences.PREF_RAM_ALLOCATION > freeDeviceMemory) {
+        if(LauncherPreferences.PREF_RAM_ALLOCATION > freeDeviceMemory && (showAddressMemoryWarning || LauncherPreferences.PREF_SHOW_MEMORY_WARNING_DIALOG)) {
             int finalDeviceMemory = freeDeviceMemory;
-            LifecycleAwareAlertDialog.DialogCreator dialogCreator = (dialog, builder) ->
+            LifecycleAwareAlertDialog.DialogCreator dialogCreator = (dialog, builder) -> {
                 builder.setMessage(activity.getString(localeString, finalDeviceMemory, LauncherPreferences.PREF_RAM_ALLOCATION))
-                        .setPositiveButton(android.R.string.ok, (d, w)->{});
+                        .setPositiveButton(android.R.string.ok, (d, w) -> {
+                        });
 
-            if(LifecycleAwareAlertDialog.haltOnDialog(activity.getLifecycle(), activity, dialogCreator)) {
-                return; // If the dialog's lifecycle has ended, return without
-                // actually launching the game, thus giving us the opportunity
-                // to start after the activity is shown again
+                if (!showAddressMemoryWarning) {
+                    builder.setNegativeButton(R.string.option_do_not_show_again, (d, w) -> {
+                        LauncherPreferences.DEFAULT_PREF.edit().putBoolean("showMemoryWarning", false).apply();
+                        Toast.makeText(activity, R.string.notification_permission_toast, Toast.LENGTH_SHORT).show();
+                    });
+                }
+            };
+
+
+                if (LifecycleAwareAlertDialog.haltOnDialog(activity.getLifecycle(), activity, dialogCreator)) {
+                    return; // If the dialog's lifecycle has ended, return without
+                    // actually launching the game, thus giving us the opportunity
+                    // to start after the activity is shown again
+                }
             }
-        }
         File gamedir = instance.getGameDirectory();
         JVersionList.Version versionInfo = Tools.getVersionInfo(versionId);
+        // We don't need the library list, the asset index, client download info for the code below
+        versionInfo.libraries = null;
+        versionInfo.downloads = null;
+
+        RenderSpec renderer = gameRenderer.getCurrentRenderer();
 
         // Switch renderer to GL4ES when running a compat context version on LTW
-        if(isCompatContext(versionInfo) && !hasAngelica(gamedir) && rendererName.equals("opengles3_ltw")) {
-            instance.renderer = rendererName = "opengles2";
-            instance.write();
+        if(isCompatContext(versionInfo) && !hasAngelica(gamedir) && renderer instanceof GLESRenderSpec.LTWRenderSpec) {
+            switchRendererIfSupported(true, GameRenderer.getKnownRenderer(Renderers.GL4ES_RENDERER), gameRenderer, instance, activity, 0);
         }
 
-        boolean isGl4es = rendererName.equals("opengles2");
-        boolean ltwSupported = RendererCompatUtil.getCompatibleRenderers(activity).rendererIds.contains("opengles3_ltw");
+        boolean isGl4es = renderer instanceof GLESRenderSpec.GL4ESRenderSpec;
+        RenderSpec ltw = GameRenderer.getKnownRenderer(Renderers.LTW_RENDERER);
+        boolean ltwSupported = ltw != null && ltw.compatibleDevice(activity);
         // Block Sodium from running with GL4ES on 1.17+
         if(!isCompatContext(versionInfo) && isGl4es && hasSodium(gamedir)) {
-            rendererName = switchLtw(ltwSupported, instance, activity, R.string.compat_sodium_not_supported);
+            switchRendererIfSupported(ltwSupported, ltw, gameRenderer, instance, activity, R.string.compat_sodium_not_supported);
         }
 
         // Switch renderer to LTW when running 1.21.5
         if(!isGl4esCompatible(versionInfo) && isGl4es) {
-            rendererName = switchLtw(ltwSupported, instance, activity, R.string.compat_version_not_supported);
+            switchRendererIfSupported(ltwSupported, ltw, gameRenderer, instance, activity, R.string.compat_sodium_not_supported);
         }
-        RendererCompatUtil.releaseRenderersCache();
 
-        boolean isLtw = rendererName.equals("opengles3_ltw");
+        boolean isLtw = renderer instanceof GLESRenderSpec.LTWRenderSpec;
 
         if(isLtw && checkRenderDistance(versionInfo, gamedir)) {
             if(showDialog(activity, R.string.ltw_render_distance_warning_msg)) return;
@@ -202,7 +224,7 @@ public class GameRunner {
 
         GameOptionsUtils.fixOptions(isLtw);
 
-        if(isLtw && GLInfoUtils.getGlInfo().forcedMsaa) {
+        if(isLtw && GpuUtils.getGlInfo().forcedMsaa) {
             if(showDialog(activity, R.string.ltw_4x_msaa_warning_msg)) return;
         }
 
@@ -219,12 +241,15 @@ public class GameRunner {
         OldVersionsUtils.selectOpenGlVersion(versionInfo);
 
         ArrayList<String> launchClassPath = new ArrayList<>(classpath.length);
-        for(File classpathEntry : classpath) {
+        for(int i = 0; i < classpath.length; i++) {
+            File classpathEntry = classpath[i];
             String entryPath = classpathEntry.getAbsolutePath();
             if(!classpathEntry.exists()) {
                 Log.w("GameRunner", "Skipped classpath entry " + entryPath + " because it is missing");
             }
             launchClassPath.add(entryPath);
+            // Unreference the classpath entry to avoid retaining it on heap
+            classpath[i] = null;
         }
         launchClassPath.trimToSize();
 
@@ -238,11 +263,15 @@ public class GameRunner {
             javaArgList.add("-Dlog4j.configurationFile=" + configFile);
         }
 
+        versionInfo.logging = null;
+
         File versionSpecificNativesDir = new File(Tools.DIR_CACHE, "natives/"+versionId);
         if(versionSpecificNativesDir.exists()) {
             String dirPath = versionSpecificNativesDir.getAbsolutePath();
             javaArgList.add("-Djava.library.path="+dirPath+":"+Tools.NATIVE_LIB_DIR);
             javaArgList.add("-Djna.boot.library.path="+dirPath);
+            // Sometimes, the game can extract natives itself onto this path
+            javaArgList.add("-Dorg.lwjgl.librarypath="+dirPath);
         }
 
         File lwjglExtractDir = new File(Tools.DIR_CACHE, "lwjgl_native/"+versionId);
@@ -251,20 +280,21 @@ public class GameRunner {
 
         addAuthlibInjectorArgs(javaArgList, account);
 
-        javaArgList.addAll(getMoJsonJvmArgs(versionId));
+        mergeMoJsonArgs(javaArgList, getMoJsonJvmArgs(versionId));
+
+        versionInfo.arguments = null;
+        versionInfo.minecraftArguments = null;
+        versionInfo.assets = null;
+        versionInfo.assetIndex = null;
 
         javaArgList.addAll(JREUtils.parseJavaArguments(instance.getLaunchArgs()));
 
-        JREUtils.setEnviroimentForGame(activity, rendererName);
+        // TODO: this should be decoupled from GameRunner completely
+        gameRenderer.setupEnvironment(activity);
+        JREUtils.setGameEnvironment(activity, gameRenderer);
         JREUtils.chdir(instance.getGameDirectory().getAbsolutePath());
 
-        String rendererLibrary = JREUtils.loadGraphicsLibrary(rendererName);
-        if(rendererLibrary == null) {
-            Log.i("GameRunner", "Falling back to GL4ES 1.1.4");
-            rendererName = "opengles2";
-            rendererLibrary = JREUtils.loadGraphicsLibrary(rendererName);
-        }
-        if(rendererLibrary == null) {
+        if(!gameRenderer.maybeSetupRenderer()) {
             if(showDialog(activity, R.string.gr_err_renderer_load_Failed)) return;
             System.exit(0);
         }
@@ -275,9 +305,11 @@ public class GameRunner {
 
         Log.i("GameRunner", "Running with "+ launchArgs.toString());
 
+        String mainClass = versionInfo.mainClass;
+
         try {
             JavaRunner.nativeSetupExit(activity);
-            JavaRunner.startJvm(runtime, javaArgList, launchClassPath, versionInfo.mainClass, launchArgs);
+            JavaRunner.startJvm(runtime, javaArgList, launchClassPath, mainClass, launchArgs);
         }catch (VMLoadException e) {
             LifecycleAwareAlertDialog.DialogCreator dialogCreator = (dialog, builder) ->
                 builder.setMessage(e.toString(activity)).setPositiveButton(android.R.string.ok, (d, w)->{});
@@ -318,10 +350,31 @@ public class GameRunner {
         javaArgList.add("-javaagent:"+Tools.DIR_DATA+"/authlib-injector/authlib-injector.jar="+injectorUrl);
     }
 
+    // Skip setting essential flags from the version JSON as we already override them
+    private static boolean shouldSkipArg(String arg) {
+        final String[] args = {
+                "-Djava.library.path=",
+                "-Djna.tmpdir=",
+                "-Dorg.lwjgl.system.SharedLibraryExtractPath=",
+                "-Dio.netty.native.workdir="
+        };
+        for(String s : args) {
+            if(arg.startsWith(s)) return true;
+        }
+        return false;
+    }
+
+    private static void mergeMoJsonArgs(List<String> userArgs, List<String> moJsonArgs) {
+        for(String arg : moJsonArgs) {
+            if(shouldSkipArg(arg)) continue;
+            userArgs.add(arg);
+        }
+    }
+
     private static List<String> getMoJsonJvmArgs(String versionName) {
         JVersionList.Version versionInfo = Tools.getVersionInfo(versionName, true);
         // Parse Forge 1.17+ additional JVM Arguments
-        if (versionInfo.inheritsFrom == null || versionInfo.arguments == null || versionInfo.arguments.jvm == null) {
+        if (versionInfo.arguments == null || versionInfo.arguments.jvm == null) {
             return Collections.emptyList();
         }
 

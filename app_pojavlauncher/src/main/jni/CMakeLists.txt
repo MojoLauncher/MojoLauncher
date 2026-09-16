@@ -23,8 +23,8 @@ target_compile_options(glfw PRIVATE -Wno-nullability-completeness)
 
 set(SDL_SHARED       ON CACHE BOOL "" FORCE)
 set(SDL_VIDEO        ON CACHE BOOL "" FORCE)
+set(SDL_AUDIO		 ON CACHE BOOL "" FORCE)
 set(SDL_STATIC       OFF CACHE BOOL "" FORCE)
-set(SDL_AUDIO		 OFF CACHE BOOL "" FORCE)
 set(SDL_CAMERA		 OFF CACHE BOOL "" FORCE)
 set(SDL_TESTS		 OFF CACHE BOOL "" FORCE)
 set(SDL_EXAMPLES	 OFF CACHE BOOL "" FORCE)
@@ -54,8 +54,15 @@ target_include_directories(pojavexec PRIVATE .)
 target_link_libraries(pojavexec PRIVATE log mojoexec)
 
 add_library(pojavexec_awt SHARED
-        awt_bridge.c
+		awt/awt.c
+		awt/awt_window.c
+		awt/awt_util.c
+		awt/awt_input.c
+		awt/awt_clipboard.c
+        awt/awt_mapper.c
 )
+
+target_link_libraries(pojavexec_awt PRIVATE android log)
 
 add_library(awt_headless SHARED 
 	awt_xawt/dummy.c

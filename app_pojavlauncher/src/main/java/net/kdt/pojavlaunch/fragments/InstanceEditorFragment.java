@@ -25,6 +25,7 @@ import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
+import net.kdt.pojavlaunch.game.renderer.RendererCache;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
@@ -32,8 +33,8 @@ import net.kdt.pojavlaunch.multirt.RTSpinnerAdapter;
 import net.kdt.pojavlaunch.multirt.Runtime;
 import net.kdt.pojavlaunch.instances.InstanceIconProvider;
 import net.kdt.pojavlaunch.profiles.VersionSelectorDialog;
+import net.kdt.pojavlaunch.game.renderer.GameRenderer;
 import net.kdt.pojavlaunch.utils.CropperUtils;
-import net.kdt.pojavlaunch.utils.RendererCompatUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -75,10 +76,10 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         bindViews(view);
 
-        RendererCompatUtil.RenderersList renderersList = RendererCompatUtil.getCompatibleRenderers(view.getContext());
-        mRenderNames = renderersList.rendererIds;
-        List<String> renderList = new ArrayList<>(renderersList.rendererDisplayNames.length + 1);
-        renderList.addAll(Arrays.asList(renderersList.rendererDisplayNames));
+        RendererCache list = RendererCache.getCompatibleRenderers(view.getContext());
+        mRenderNames = list.rendererIds;
+        List<String> renderList = new ArrayList<>(list.rendererDisplayNames.length + 1);
+        renderList.addAll(Arrays.asList(list.rendererDisplayNames));
         renderList.add(view.getContext().getString(R.string.global_default));
         mDefaultRenderer.setAdapter(new ArrayAdapter<>(view.getContext(), R.layout.item_simple_list_1, renderList));
 
@@ -198,9 +199,9 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         //First, check for potential issues in the inputs
         mInstance.versionId = mDefaultVersion.getText().toString();
         mInstance.controlLayout = mDefaultControl.getText().toString();
-        mInstance.name = mDefaultName.getText().toString();
         mInstance.jvmArgs = mDefaultJvmArgument.getText().toString();
 
+        String newName = mDefaultName.getText().toString();
         if(mInstance.controlLayout.isEmpty()) mInstance.controlLayout = null;
         if(mInstance.jvmArgs.isEmpty()) mInstance.jvmArgs = null;
 
@@ -212,8 +213,11 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         else mInstance.renderer = mRenderNames.get(mDefaultRenderer.getSelectedItemPosition());
 
         try {
+            if(!newName.isEmpty() && !newName.equals(mInstance.name))
+                Instances.renameInstanceDirectory(mInstance, newName);
+            mInstance.name = newName;
             mInstance.write();
-        }catch (IOException e) {
+        }catch (Exception e) {
             Tools.showErrorRemote(e);
         }
     }

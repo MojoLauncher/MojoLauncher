@@ -25,17 +25,24 @@ public interface PlatformBackend {
 
     /**
      * Send current mouse position set in Platform to an implementation
+     *
+     * @param x        cursor X position
+     * @param y        cursor Y position
+     * @param relative whether the input is relative
      */
-    void sendMousePosition();
+    void sendMousePosition(double x, double y, boolean relative);
 
     /**
      * Send mouse event to an implementation
      *
-     * @param button Android mouse button to send
-     * @param state  State (down/up)
-     * @param mods   Modifier keys
+     * @param button   Android mouse button to send
+     * @param state    State (down/up)
+     * @param mods     Modifier keys
+     * @param x        cursor X position
+     * @param y        cursor Y position
+     * @param relative whether the input is relative
      */
-    void sendMouseEvent(int button, int state, int mods);
+    void sendMouseEvent(int button, int state, int mods, double x, double y, boolean relative);
 
     /**
      * Send keyboard key press event to an implementation

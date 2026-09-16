@@ -36,10 +36,13 @@
     <string name="mcl_setting_title_javaargs">Аргументы запуска JVM</string>
     <string name="mcl_setting_subtitle_javaargs">Осторожно, необдуманное изменение может привести к сбою игры.</string>
     <string name="mcl_setting_category_renderer">Визуализатор</string>
-    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - все версии до 1.21.4, быстрый</string>
-    <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) - все версии, средний</string>
-    <string name="mcl_setting_renderer_freedreno_kgsl">Freedreno - все версии, быстрый, только Adreno</string>
+    <string name="mcl_setting_renderer_gles2_4">GL4ES (OpenGL ES 2) - 1.21.4 и ниже, быстрый</string>
     <string name="mcl_setting_renderer_ltw">LTW (OpenGL ES 3) - 1.17 и выше, быстрый</string>
+    <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) - все версии, средний</string>
+    <string name="mcl_setting_renderer_vulkan_lzink">Старый Zink (Vulkan) - все версии, средний</string>
+    <string name="mcl_setting_renderer_freedreno_kgsl">Freedreno (KGSL) - все версии, быстрый</string>
+    <string name="mcl_setting_renderer_mesa_desktop">Mesa (DRM) - все версии, быстрый</string>
+    <string name="mcl_setting_renderer_mesa_desktop_ext">Mesa (DRM, внешний) - все версии, быстрый</string>
     <string name="mcl_setting_veroption_release">Релизы</string>
     <string name="mcl_setting_veroption_snapshot">Снапшоты</string>
     <string name="mcl_setting_veroption_oldalpha">Старые альфа</string>
@@ -163,8 +166,6 @@
     <string name="preference_force_vsync_title">Принудительная вертикальная синхронизация</string>
     <string name="preference_force_vsync_description">Уменьшает перегрев устройства за счёт ограничения максимальной производительности.</string>
     <string name="preference_use_angle_title">Использовать ANGLE</string>
-    <string name="preference_force_legacy_zink_title">Принудительно использовать старый Zink</string>
-    <string name="preference_force_legacy_zink_description">Включает принудительное использование старой версии Zink вне зависимости от текущего устройства. Может исправить некоторые графические проблемы. Выключите, если игра стала работать медленно.</string>
     <string name="preference_use_angle_description">Позволяет использовать ANGLE вместо системного драйвера. Может исправить некоторые графические проблемы при использовании модов на некоторых видеоядрах</string>
     <string name="preference_force_english_title">Принудительно включить английский</string>
     <string name="preference_force_english_description">Позволяет увидеть оригинальные строки такими, какими их задумали разработчики. Требуется перезапуск.</string>
@@ -290,6 +291,7 @@
     <string name="modpack_install_modloader_download_failed">Не удалось загрузить файлы загрузчика модов</string>
     <string name="modpack_install_download_failed">Не удалось загрузить файлы сборки</string>
     <string name="modpack_install_instance_button">Установка со сборкой модов</string>
+    <string name="modpack_install_toast_success">Установка сборки модов завершена!</string>
     <string name="notif_error_occured">Возникла ошибка</string>
     <string name="notif_error_occured_desc">Нажмите для получения дополнительных сведений</string>
     <string name="fabric_dl_only_stable">Только стабильные версии</string>
@@ -445,7 +447,16 @@
     <string name="preference_custom_resolution_summary">Позволяет ввести пользовательский размер экрана для игры. В случае несоответствия соотношения сторон окно игры будет растянуто</string>
     <string name="preference_custom_resolution_width">Ширина экрана</string>
     <string name="preference_custom_resolution_height">Высота экрана</string>
+    <string name="preference_show_memory_warning_summary">Если опция включена, при запуске игры отображается предупреждение если игре выделено больше памяти чем доступно в системе</string>
+    <string name="option_do_not_show_again">Больше не показывать</string>
+    <string name="preference_show_memory_warning_title">Показывать предупреждение о недостатке памяти</string>
     <string name="loading_screen_title">Ожидание появления окна игры…</string>
     <string name="loading_screen_booted">Запущено - используется %1$s!</string>
     <string name="loading_screen_warning">Если окно долго не появляется - возможно игра вылетела</string>
+    <string name="preference_metadata_clear">Очистить кэш метаданных</string>
+    <string name="preference_metadata_clear_summary">Полностью удаляет кэш метаданных строк. Используйте, если лаунчер не видит новые версии игры или загрузчиков модов</string>
+    <string name="preference_metadata_clear_fail">Не удалось удалить файлы кэша</string>
+    <string name="preference_metadata_clear_complete">Очистка завершена. Перезапустите лаунчер для применения изменений</string>
+    <string name="preference_button_transparency">Прозрачность кнопок</string>
+    <string name="preference_button_transparency_summary">Изменяет прозрачность наэкранных кнопок управления</string>
 </resources>

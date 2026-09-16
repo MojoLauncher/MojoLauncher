@@ -8,7 +8,7 @@ import android.os.Bundle;
 
 import com.kdt.mcgui.ProgressLayout;
 
-import net.kdt.pojavlaunch.JavaGUILauncherActivity;
+import net.kdt.pojavlaunch.awt.AWTActivity;
 import net.kdt.pojavlaunch.LauncherActivity;
 import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.Tools;
@@ -157,7 +157,7 @@ public class InstanceInstaller implements ContextExecutorTask {
             Tools.showError(activity, e);
             return;
         }
-        Intent intent = new Intent(activity, JavaGUILauncherActivity.class);
+        Intent intent = new Intent(activity, AWTActivity.class);
         Bundle extras = new Bundle();
         extras.putStringArrayList("javaArgs", new ArrayList<>(commandLineArgs));
         extras.putString("modPath", installerJar);

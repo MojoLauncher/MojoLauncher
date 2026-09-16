@@ -22,7 +22,7 @@ public class GameOptionsUtils {
      * Decrease cloud rendering distance in order to avoid the Mali cloud rendering slowdown bug
      */
     private static void fixDeathCloud() {
-        GLInfoUtils.GLInfo info = GLInfoUtils.getGlInfo();
+        GpuUtils.GLInfo info = GpuUtils.getGlInfo();
         if(!info.isArm()) return; // Not an affected GPU
         int cloudRange = parseIntDefault(MCOptionUtils.get("cloudRange"), 128);
         if(cloudRange <= 64) return; // Not affected below 117 (but let's err on the safe side)

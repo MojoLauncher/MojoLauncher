@@ -3,6 +3,8 @@ package net.kdt.pojavlaunch.customcontrols.keyboard;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
+import static net.kdt.pojavlaunch.game.platform.Platform.PLATFORM;
+
 import android.content.Context;
 import android.text.Editable;
 import android.text.Selection;
@@ -12,6 +14,8 @@ import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import net.kdt.pojavlaunch.CallbackBridge;
 
 import git.artdeell.mojo.R;
 
@@ -33,7 +37,6 @@ public class TouchCharInput extends androidx.appcompat.widget.AppCompatEditText 
 
 
     private boolean mIsDoingInternalChanges = false;
-    private CharacterSenderStrategy mCharacterSender;
 
     /**
      * When we change from app to app, the keyboard gets disabled.
@@ -123,13 +126,8 @@ public class TouchCharInput extends androidx.appcompat.widget.AppCompatEditText 
 
     /** Send the enter key. */
     private void sendEnter(){
-        mCharacterSender.sendEnter();
+        CallbackBridge.sendKeyPress(KeyEvent.KEYCODE_ENTER);
         clear();
-    }
-
-    /** Just sets the char sender that should be used. */
-    public void setCharacterSender(CharacterSenderStrategy characterSender){
-        mCharacterSender = characterSender;
     }
 
     /** This function deals with anything that has to be executed when the constructor is called */
@@ -160,15 +158,11 @@ public class TouchCharInput extends androidx.appcompat.widget.AppCompatEditText 
         @Override
         public void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
             if(mIsDoingInternalChanges) return;
-            if(mCharacterSender != null){
-                for(int i=0; i < lengthBefore; ++i){
-                    mCharacterSender.sendBackspace();
-                }
-
-
-
-                mCharacterSender.sendChars(text.subSequence(start, start + lengthAfter));
+            for(int i=0; i < lengthBefore; ++i){
+                CallbackBridge.sendKeyPress(KeyEvent.KEYCODE_DEL);
             }
+
+            PLATFORM.sendBulkUnicodeEvent(text.subSequence(start, start + lengthAfter).toString(), CallbackBridge.getCurrentMods());
         }
 
         @Override

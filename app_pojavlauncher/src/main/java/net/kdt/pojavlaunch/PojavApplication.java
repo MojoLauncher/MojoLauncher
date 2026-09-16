@@ -22,14 +22,17 @@ import net.kdt.pojavlaunch.utils.LocaleUtils;
 
 import java.io.File;
 import java.io.PrintStream;
-import java.text.DateFormat;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import git.artdeell.mojo.BuildConfig;
+import git.artdeell.mojo.R;
 
 public class PojavApplication extends Application {
 	public static final String CRASH_REPORT_TAG = "PojavCrashReport";
@@ -44,12 +47,14 @@ public class PojavApplication extends Application {
 				// Write to file, since some devices may not able to show error
 				FileUtils.ensureParentDirectory(crashFile);
 				PrintStream crashStream = new PrintStream(crashFile);
-				crashStream.append("PojavLauncher crash report\n");
-				crashStream.append(" - Time: ").append(DateFormat.getDateTimeInstance().format(new Date())).append("\n");
+				crashStream.append(getString(R.string.app_short_name)).append(" crash report\n");
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z", Locale.US);
+				crashStream.append(" - Time: ").append(sdf.format(new Date())).append("\n");
 				crashStream.append(" - Device: ").append(Build.PRODUCT).append(" ").append(Build.MODEL).append("\n");
 				crashStream.append(" - Android version: ").append(Build.VERSION.RELEASE).append("\n");
-				crashStream.append(" - Crash stack trace:\n");
 				crashStream.append(" - Launcher version: " + BuildConfig.VERSION_NAME + "\n");
+				crashStream.append(" - Build type: " + BuildConfig.BUILD_TYPE + "\n");
+				crashStream.append(" - Crash stack trace:\n");
 				crashStream.append(Log.getStackTraceString(th));
 				crashStream.close();
 			} catch (Throwable throwable) {
@@ -83,13 +88,12 @@ public class PojavApplication extends Application {
 			}
 			Tools.DEVICE_ARCHITECTURE = Architecture.getDeviceArchitecture();
 			//Force x86 lib directory for Asus x86 based zenfones
-			if(Architecture.isx86Device() && Architecture.is32BitsDevice()){
+			if(Architecture.isx86Device() && Architecture.is32BitsDevice()) {
 				String originalJNIDirectory = getApplicationInfo().nativeLibraryDir;
 				getApplicationInfo().nativeLibraryDir = originalJNIDirectory.substring(0,
-												originalJNIDirectory.lastIndexOf("/"))
-												.concat("/x86");
+								originalJNIDirectory.lastIndexOf("/"))
+						.concat("/x86");
 			}
-            MoJsonDownloader.prepareSubstitutionMap(getAssets());
 			AsyncAssetManager.unpackRuntime(getAssets());
 		} catch (Throwable throwable) {
 			Intent ferrorIntent = new Intent(this, FatalErrorActivity.class);

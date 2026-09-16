@@ -57,6 +57,8 @@ public class ControlLayout extends FrameLayout {
 	private boolean mIsModified;
 	private boolean mControlVisible = false;
 
+	private float mButtonsOpacity = 1.0f;
+
 	private EditControlSideDialog mControlDialog = null;
 	private ControlHandleView mHandleView;
 	private ControlButtonMenuListener mMenuListener;
@@ -88,6 +90,7 @@ public class ControlLayout extends FrameLayout {
 	}
 
 	public void loadLayout(CustomControls controlLayout) {
+		this.mButtonsOpacity = (float) LauncherPreferences.PREF_BUTTON_TRANSPARENCY / 100;
 		boolean sanitizedModified = false;
 		if(controlLayout != null) {
 			sanitizedModified = LayoutSanitizer.sanitizeLayout(controlLayout);
@@ -145,7 +148,7 @@ public class ControlLayout extends FrameLayout {
 		final ControlButton view = new ControlButton(this, controlButton);
 
 		if (!mModifiable) {
-			view.setAlpha(view.getProperties().opacity);
+			view.setAlpha(view.getProperties().opacity * mButtonsOpacity);
 			view.setFocusable(false);
 			view.setFocusableInTouchMode(false);
 		}
@@ -169,7 +172,7 @@ public class ControlLayout extends FrameLayout {
 		final ControlDrawer view = new ControlDrawer(this,drawerData == null ? mLayout.mDrawerDataList.get(mLayout.mDrawerDataList.size()-1) : drawerData);
 
 		if (!mModifiable) {
-			view.setAlpha(view.getProperties().opacity);
+			view.setAlpha(view.getProperties().opacity * mButtonsOpacity);
 			view.setFocusable(false);
 			view.setFocusableInTouchMode(false);
 		}
@@ -194,7 +197,7 @@ public class ControlLayout extends FrameLayout {
 		final ControlSubButton view = new ControlSubButton(this, controlButton, drawer);
 
 		if (!mModifiable) {
-			view.setAlpha(view.getProperties().opacity);
+			view.setAlpha(view.getProperties().opacity * mButtonsOpacity);
 			view.setFocusable(false);
 			view.setFocusableInTouchMode(false);
 		}else{
@@ -218,7 +221,7 @@ public class ControlLayout extends FrameLayout {
 		ControlJoystick view = new ControlJoystick(this, data);
 
 		if (!mModifiable) {
-			view.setAlpha(view.getProperties().opacity);
+			view.setAlpha(view.getProperties().opacity * mButtonsOpacity);
 			view.setFocusable(false);
 			view.setFocusableInTouchMode(false);
 		}
@@ -261,7 +264,6 @@ public class ControlLayout extends FrameLayout {
 		mControlVisible = isVisible;
 		for(ControlInterface button : getButtonChildren()){
             // Avoid going through the JNI each time.
-            // Avoid going through the JNI each time.
             button.setVisible(((button.getProperties().displayInGame && Platform.isGrabbing()) || (button.getProperties().displayInMenu && !Platform.isGrabbing())) && isVisible);
 		}
 	}
@@ -271,12 +273,7 @@ public class ControlLayout extends FrameLayout {
 			removeEditWindow();
 		}
 		mModifiable = isModifiable;
-		if(isModifiable){
-			// In edit mode, all controls have to be shown
-			for(ControlInterface button : getButtonChildren()){
-				button.setVisible(true);
-			}
-		}
+		updateButtonOpacity();
 	}
 
 	public boolean getModifiable(){
@@ -706,5 +703,14 @@ public class ControlLayout extends FrameLayout {
 
 	public LayoutBitmaps getBitmaps() {
 		return mLayout.mLayoutBitmaps;
+	}
+
+	public void updateButtonOpacity() {
+		mButtonsOpacity = Math.clamp((float) LauncherPreferences.PREF_BUTTON_TRANSPARENCY / 100, 0, 1);
+		for(ControlInterface button : getButtonChildren()) {
+			// In edit mode, all controls have to be shown
+			if(mModifiable) button.setVisible(true);
+			button.getControlView().setAlpha(mModifiable ? button.getProperties().opacity : mButtonsOpacity * button.getProperties().opacity);
+		}
 	}
 }
