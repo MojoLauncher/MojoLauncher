@@ -12,6 +12,8 @@
 
 static jint (*orig_ProcessImpl_forkAndExec)(JNIEnv *env, jobject process, jint mode, jbyteArray helperpath, jbyteArray prog, jbyteArray argBlock, jint argc, jbyteArray envBlock, jint envc, jbyteArray dir, jintArray std_fds, jboolean redirectErrorStream);
 
+static char* ffmpeg_path;
+
 // Turn a C-style string into a Java byte array
 static jbyteArray stringToBytes(JNIEnv *env, const char* string) {
     const jsize string_data_len = (jsize)(strlen(string) + 1);
@@ -62,7 +64,6 @@ static jint hooked_ProcessImpl_forkAndExec(JNIEnv *env, jobject process, jint mo
 
         // Also add LD_LIBRARY_PATH and PATH for the lib in order to override the ones from the launcher, since
         // they may interfere with ffmpeg dependencies.
-        const char* ffmpeg_path = getenv("POJAV_FFMPEG_PATH");
         if(ffmpeg_path != NULL) {
             replaceLibPathInEnvBlock(env, &envBlock, &envc, dirname(ffmpeg_path));
             prog = stringToBytes(env, ffmpeg_path);
@@ -101,4 +102,10 @@ void hookExec(JNIEnv *env) {
     }else {
         printf("Registered forkAndExec\n");
     }
+}
+
+JNIEXPORT void JNICALL
+Java_net_kdt_pojavlaunch_utils_JREUtils_setFfmpegPath(JNIEnv *env, jclass clazz, jstring path) {
+    save_jni_string(env, path, &ffmpeg_path);
+    if(ffmpeg_path) printf("exec hooks: overriden ffmpeg path: %s\n", ffmpeg_path);
 }

@@ -12,6 +12,8 @@ heap_str_array* hstr_from_jni(JNIEnv *env, jobjectArray jstringArray);
 jobjectArray    hstr_to_jni(JNIEnv *env, heap_str_array* array, bool autofree);
 void            hstr_free(heap_str_array* arr);
 
+void save_jni_string(JNIEnv *env, jstring src, char** dest);
+
 void openLink(const char* link);
 
 JNIEnv* get_attached_env(JavaVM* jvm);
