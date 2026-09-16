@@ -2,7 +2,6 @@ package net.kdt.pojavlaunch.prefs.screens;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -19,7 +18,6 @@ import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
 import net.kdt.pojavlaunch.tasks.DataMigrator;
-import net.kdt.pojavlaunch.utils.GpuUtils;
 
 import org.apache.commons.io.FileUtils;
 
