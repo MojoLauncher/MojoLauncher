@@ -236,9 +236,15 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
                 throw new IOException("Failed to create a new log file");
             Logger.begin(latestLogFile.getAbsolutePath());
 
-            Bundle extras = Objects.requireNonNull(getIntent().getExtras());
+            Intent activityIntent = getIntent();
+            Bundle extras = Objects.requireNonNull(activityIntent.getExtras());
             String version = extras.getString(INTENT_LAUNCH_VERSION);
             File[] classpath = (File[]) extras.getSerializable(INTENT_LAUNCH_CLASSPATH);
+
+            activityIntent.removeExtra(INTENT_LAUNCH_VERSION);
+            activityIntent.removeExtra(INTENT_LAUNCH_CLASSPATH);
+
+            setIntent(activityIntent);
 
             setTitle("MojoLauncher (" + version + ")");
 
@@ -262,6 +268,13 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
             launcherGLView.setSurfaceReadyListener(() -> {
                 try {
                     Tools.runOnUiThread(() -> { if(PREF_VIRTUAL_MOUSE_START) launcherGLView.mCursorView.setVisibility(View.VISIBLE); });
+                    if(version == null || classpath == null) {
+                        Tools.runOnUiThread(()->{
+                            Toast.makeText(this, R.string.main_please_restart, Toast.LENGTH_LONG).show();
+                            finish();
+                        });
+                        return;
+                    }
                     runCraft(version, classpath);
                 }catch (Throwable e){
                     Tools.showErrorRemote(e);

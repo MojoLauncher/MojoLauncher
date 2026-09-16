@@ -281,6 +281,7 @@ public class JavaRunner {
         List<String> runtimeArgs = new ArrayList<>();
         if(getCacioJavaArgs(runtimeArgs,runtime.javaVersion == 8)) hasJavaAgent = true;
         runtimeArgs.addAll(getJavaArgs(runtimeHomeDir.getAbsolutePath(), vmArgs));
+        vmArgs.clear();
 
 
         runtimeArgs.add("-XX:ActiveProcessorCount=" + java.lang.Runtime.getRuntime().availableProcessors());
@@ -292,6 +293,7 @@ public class JavaRunner {
             else classpathBuilder.append(':');
             classpathBuilder.append(entry);
         }
+        classpathEntries.clear();
         runtimeArgs.add(classpathBuilder.toString());
 
         //JREUtils.initializeHooks();
@@ -299,9 +301,26 @@ public class JavaRunner {
         setImmutableEnvVars(runtimeHomeDir);
         relocateLdLibPath(vmPath, null);
 
-        nativeLoadJVM(vmPath.getAbsolutePath(), runtimeArgs.toArray(new String[0]), mainClass, applicationArgs.toArray(new String[0]), hasJavaAgent);
+        // Since this function never returns, under normal circumstances these strings will never be
+        // freed. Move them to manually-managed memory and invalidate references here to reduce memory
+        // footprint
+        long javaArgsL = nativeTransferArguments(runtimeArgs.toArray(new String[0]));
+        runtimeArgs.clear();
+        runtimeArgs = null;
+
+        long appArgsL = nativeTransferArguments(applicationArgs.toArray(new String[0]));
+        applicationArgs.clear();
+
+        if(javaArgsL == 0 || appArgsL == 0)
+            throw new VMLoadException("Failed to transfer arguments", -1, -4);
+
+        System.gc();
+
+        nativeLoadJVM(vmPath.getAbsolutePath(), javaArgsL, mainClass, appArgsL, hasJavaAgent);
     }
 
-    public static native boolean nativeLoadJVM(String vmPath, String[] javaArgs, String mainClass, String[] appArgs, boolean hasJavaAgents) throws VMLoadException;
+    public static native long nativeTransferArguments(String[] args);
+
+    public static native boolean nativeLoadJVM(String vmPath, long javaArgsL, String mainClass, long appArgsL, boolean hasJavaAgents) throws VMLoadException;
     public static native void nativeSetupExit(Context context);
 }

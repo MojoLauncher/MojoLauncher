@@ -62,7 +62,8 @@ public class MoJsonDownloader extends Downloader {
     private LinkedHashSet<DependentLibrary> mAllLibraries;
     private LinkedHashSet<File> mClassPath;
     private SubstitutionMap mSubstitutionMap;
-    private File mClientJarFile;
+    private File mSourceJarFile; // The source client JAR picked during the inheritance process
+    private File mTargetJarFile; // The destination client JAR to which the source will be copied to.
 
     public MoJsonDownloader() {
         super(ProgressLayout.DOWNLOAD_GAME);
@@ -113,6 +114,7 @@ public class MoJsonDownloader extends Downloader {
         // work to keep the launcher alive. We will replace this line when we will start downloading stuff.
         ProgressLayout.setProgress(ProgressLayout.DOWNLOAD_GAME, 0, R.string.newdl_starting);
 
+        mTargetJarFile = createGameJarPath(versionName);
         mScheduledDownloadTasks = new ArrayList<>();
         mDeclaredNatives = new ArrayList<>();
         mAllLibraries = new LinkedHashSet<>();
@@ -129,10 +131,11 @@ public class MoJsonDownloader extends Downloader {
         prepareLibraryDownloads(downloadLibCount);
 
         mAllLibraries.clear();
-        mClassPath.add(mClientJarFile);
+        mClassPath.add(mTargetJarFile);
 
         runDownloads(mScheduledDownloadTasks);
 
+        ensureJarFileCopy();
         extractNatives(versionName);
     }
 
@@ -142,6 +145,21 @@ public class MoJsonDownloader extends Downloader {
 
     public static File createGameJarPath(String versionId) {
         return new File(Tools.DIR_HOME_VERSION, versionId + File.separator + versionId + ".jar");
+    }
+
+    /**
+     * Ensure that there is a copy of the client JAR file in the version folder, if a copy is
+     * needed.
+     * @throws IOException if the copy fails
+     */
+    private void ensureJarFileCopy() throws IOException {
+        if (mSourceJarFile == null) return;
+        if (mSourceJarFile.equals(mTargetJarFile)) return;
+        if (mTargetJarFile.exists()) return;
+        FileUtils.ensureParentDirectory(mTargetJarFile);
+
+        Log.i("NewMCDownloader", "Copying " + mSourceJarFile.getName() + " to " + mTargetJarFile.getAbsolutePath());
+        org.apache.commons.io.FileUtils.copyFile(mSourceJarFile, mTargetJarFile, false);
     }
 
     private void prepareLibraryDownloads(int downloadLibCount) throws IOException {
@@ -434,6 +452,6 @@ public class MoJsonDownloader extends Downloader {
                 clientInfo.size
         );
         // Store the path of the JAR to copy it into our new version folder later.
-        mClientJarFile = clientJar;
+        mSourceJarFile = clientJar;
     }
 }

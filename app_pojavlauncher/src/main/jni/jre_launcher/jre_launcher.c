@@ -101,7 +101,7 @@ void vm_hinter_free(vm_hinter_t* hinter, bool hasJavaAgents) {
     }
 }
 
-static bool initializeJavaVM(java_vm_t* java_vm, JNIEnv *env, jstring* vmpath, jobjectArray java_args, bool hasJavaAgents) {
+static bool initializeJavaVM(java_vm_t* java_vm, JNIEnv *env, jstring* vmpath, heap_str_array* vmargs, bool hasJavaAgents) {
     char* fail_msg;
 #define FAIL(msg) {fail_msg = msg; goto fail;}
 
@@ -111,14 +111,12 @@ static bool initializeJavaVM(java_vm_t* java_vm, JNIEnv *env, jstring* vmpath, j
         return false;
     }
 
-    jint userArgsCount = (*env)->GetArrayLength(env, java_args);
+    jint userArgsCount = vmargs->length;
     jint javaVmArgsCount = userArgsCount + 2; // for exit and abort hooks
     JavaVMOption javaVmOptions[javaVmArgsCount];
 
-    const char** user_args = convert_to_char_array(env, java_args);
-    if(user_args == NULL) FAIL("Failed to read user arguments")
     for(jint i = 0; i < userArgsCount; i++) {
-        const char* arg = user_args[i];
+        const char* arg = vmargs->strings[i];
         LOGI("VM arg: %s",arg);
         if(arg == NULL) FAIL("Unexpected NULL argument")
         javaVmOptions[i].optionString = arg;
@@ -140,7 +138,7 @@ static bool initializeJavaVM(java_vm_t* java_vm, JNIEnv *env, jstring* vmpath, j
     jint result = java_vm->JNI_CreateJavaVM(&java_vm->vm, &java_vm->vm_env, &initArgs);
     vm_hinter_free(&vh, hasJavaAgents);
 
-    free_char_array(env, java_args, user_args);
+    hstr_free(vmargs);
 
     if(result < 0) {
         dlclose(java_vm->handle);
@@ -150,7 +148,7 @@ static bool initializeJavaVM(java_vm_t* java_vm, JNIEnv *env, jstring* vmpath, j
     return true;
 
     fail:
-    if(user_args != NULL) free_char_array(env, java_args, user_args);
+    hstr_free(vmargs);
     dlclose(java_vm->handle);
     throwException(env, STAGE_CREATE_RUNTIME, JNI_ERR, fail_msg);
     return false;
@@ -197,21 +195,25 @@ static void prepareSignalHandlers() {
 extern bool installClassLoaderHooks(JNIEnv *env, JNIEnv* vm_env);
 
 JNIEXPORT jboolean JNICALL
-Java_net_kdt_pojavlaunch_utils_jre_JavaRunner_nativeLoadJVM(JNIEnv *env, jclass clazz, jstring vmpath, jobjectArray java_args, jstring mainClass, jobjectArray appArgs, jboolean hasJavaAgents) {
+Java_net_kdt_pojavlaunch_utils_jre_JavaRunner_nativeLoadJVM(JNIEnv *env, jclass clazz, jstring vmpath, jlong vmArgsL, jstring mainClass, jlong appArgsL, jboolean hasJavaAgents) {
+    heap_str_array* vmArgs = (heap_str_array*) vmArgsL;
+    heap_str_array* appArgs = (heap_str_array*) appArgsL;
     java_vm_t java_vm;
     setup_abort_wait();
     prepareSignalHandlers();
-    if(!initializeJavaVM(&java_vm, env, vmpath, java_args, hasJavaAgents)) return JNI_FALSE;
+    if(!initializeJavaVM(&java_vm, env, vmpath, vmArgs, hasJavaAgents)) {
+        hstr_free(appArgs);
+        return JNI_FALSE;
+    }
     JNIEnv *vm_env = java_vm.vm_env;
-    if(!installClassLoaderHooks(env, vm_env)) return JNI_FALSE;
-
+    if(!installClassLoaderHooks(env, vm_env)) {
+        hstr_free(appArgs);
+        return JNI_FALSE;
+    }
 
     hookExec(vm_env);
 
-    jint numAppArgs = (*env)->GetArrayLength(env, appArgs);
-    const char** appArgsChar = convert_to_char_array(env, appArgs);
-    jobjectArray vm_appArgs = convert_from_char_array(vm_env, appArgsChar, numAppArgs);
-    free_char_array(env, appArgs, appArgsChar);
+    jobjectArray vm_appArgs = hstr_to_jni(vm_env, appArgs, true);
 
     const char* mainClassNameBuf = (*env)->GetStringUTFChars(env, mainClass, NULL);
     size_t mainClassLen = strlen(mainClassNameBuf) + 1;
@@ -230,4 +232,10 @@ Java_net_kdt_pojavlaunch_utils_jre_JavaRunner_nativeLoadJVM(JNIEnv *env, jclass 
         return JNI_TRUE;
     }
     // If the main method exits
+}
+
+JNIEXPORT jlong JNICALL
+Java_net_kdt_pojavlaunch_utils_jre_JavaRunner_nativeTransferArguments(JNIEnv *env, jclass clazz,
+                                                                      jobjectArray args) {
+    return (jlong) hstr_from_jni(env, args);
 }

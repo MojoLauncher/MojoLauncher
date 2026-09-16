@@ -88,13 +88,12 @@ public class PojavApplication extends Application {
 			}
 			Tools.DEVICE_ARCHITECTURE = Architecture.getDeviceArchitecture();
 			//Force x86 lib directory for Asus x86 based zenfones
-			if(Architecture.isx86Device() && Architecture.is32BitsDevice()){
+			if(Architecture.isx86Device() && Architecture.is32BitsDevice()) {
 				String originalJNIDirectory = getApplicationInfo().nativeLibraryDir;
 				getApplicationInfo().nativeLibraryDir = originalJNIDirectory.substring(0,
-												originalJNIDirectory.lastIndexOf("/"))
-												.concat("/x86");
+								originalJNIDirectory.lastIndexOf("/"))
+						.concat("/x86");
 			}
-            MoJsonDownloader.prepareSubstitutionMap(getAssets());
 			AsyncAssetManager.unpackRuntime(getAssets());
 		} catch (Throwable throwable) {
 			Intent ferrorIntent = new Intent(this, FatalErrorActivity.class);

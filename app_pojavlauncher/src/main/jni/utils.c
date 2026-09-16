@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "log.h"
 
@@ -10,65 +11,71 @@
 
 typedef void (*android_update_LD_LIBRARY_PATH_t)(const char*);
 
-const char** convert_to_char_array(JNIEnv *env, jobjectArray jstringArray) {
-	int num_rows = (*env)->GetArrayLength(env, jstringArray);
-	const char **cArray = (const char **) malloc(num_rows * sizeof(char*));
-    if(cArray == NULL) return NULL;
-    jint last = 0;
-	for (jint i = 0; i < num_rows; i++) {
-        jstring row = (*env)->GetObjectArrayElement(env, jstringArray, i);
-        if(row != NULL) {
-            cArray[i] = (*env)->GetStringUTFChars(env, row, 0);
-            if(cArray[i] == NULL) goto fail;
-        }else {
-            cArray[i] = NULL;
-        }
-        last = i;
+static inline void hstr_free_part(heap_str_array* arr, jint start, jint end) {
+    for(jint f = start; f < end; f++) {
+        if(arr->strings[f]) free((void*) arr->strings[f]);
     }
-    return cArray;
+    free(arr);
+}
+
+heap_str_array* hstr_from_jni(JNIEnv *env, jobjectArray jstringArray) {
+    jint num_entries = (*env)->GetArrayLength(env, jstringArray), i = 0;
+    heap_str_array* ret_array = (heap_str_array*) malloc(sizeof(heap_str_array*) + num_entries * sizeof(const char*));
+
+    (*env)->PushLocalFrame(env, num_entries);
+    for(i = 0; i < num_entries; i++) {
+        jstring entry = (*env)->GetObjectArrayElement(env, jstringArray, i);
+        const char* str_content = (*env)->GetStringUTFChars(env, entry, NULL);
+        if(str_content == NULL) goto fail;
+        const char* str_copy = strdup(str_content);
+        (*env)->ReleaseStringUTFChars(env, entry, str_content);
+        if(str_copy == NULL) goto fail;
+        ret_array->strings[i] = str_copy;
+    }
+    (*env)->PopLocalFrame(env, NULL);
+
+    ret_array->length = num_entries;
+
+    printf("allocated array %p length %i\n", ret_array, ret_array->length);
+
+    return ret_array;
 
     fail:
-    for(jint i = 0; i < last + 1; i++) {
-        jstring row = (*env)->GetObjectArrayElement(env, jstringArray, i);
-        if(row == NULL) continue;
-        (*env)->ReleaseStringUTFChars(env, row, cArray[i]);
-    }
-    free(cArray);
+    hstr_free_part(ret_array, 0, i);
     return NULL;
 }
 
-jobjectArray convert_from_char_array(JNIEnv *env, const char **charArray, jint num_rows) {
-	jobjectArray resultArr = (*env)->NewObjectArray(env, num_rows, (*env)->FindClass(env, "java/lang/String"), NULL);
+jobjectArray hstr_to_jni(JNIEnv *env, heap_str_array* array, bool autofree) {
+    jclass class_String = (*env)->FindClass(env, "java/lang/String");
+    jobjectArray dstArray = (*env)->NewObjectArray(env, array->length, class_String, NULL);
+    (*env)->DeleteLocalRef(env, class_String);
+    (*env)->PushLocalFrame(env, array->length);
+    jint i;
 
-	for (int i = 0; i < num_rows; i++) {
-        jstring row = (jstring) (*env)->NewStringUTF(env, charArray[i]);
-        if(row == NULL) return NULL;
-		(*env)->SetObjectArrayElement(env, resultArr, i, row);
+    for(i = 0; i < array->length; i++) {
+        const char* str = array->strings[i];
+        if(str == NULL) continue;
+        jstring new_str = (*env)->NewStringUTF(env, str);
+        if(new_str == NULL) goto fail;
+        (*env)->SetObjectArrayElement(env, dstArray, i, new_str);
+        if(autofree) {
+            free((void*) str);
+            array->strings[i] = NULL;
+        }
     }
+    if(autofree) free(array);
+    (*env)->PopLocalFrame(env, NULL);
+    return dstArray;
 
-	return resultArr;
+    fail:
+    hstr_free_part(array, i, array->length);
+    (*env)->PopLocalFrame(env, NULL);
+    return NULL;
 }
 
-void free_char_array(JNIEnv *env, jobjectArray jstringArray, const char **charArray) {
-	int num_rows = (*env)->GetArrayLength(env, jstringArray);
-	for (int i = 0; i < num_rows; i++) {
-        jstring row = (jstring) (*env)->GetObjectArrayElement(env, jstringArray, i);
-		(*env)->ReleaseStringUTFChars(env, row, charArray[i]);
-	}
-    free(charArray);
+void hstr_free(heap_str_array* arr) {
+    hstr_free_part(arr, 0, arr->length);
 }
-
-jstring convertStringJVM(JNIEnv* srcEnv, JNIEnv* dstEnv, jstring srcStr) {
-    if (srcStr == NULL) {
-        return NULL;
-    }
-    
-    const char* srcStrC = (*srcEnv)->GetStringUTFChars(srcEnv, srcStr, 0);
-    jstring dstStr = (*dstEnv)->NewStringUTF(dstEnv, srcStrC);
-	(*srcEnv)->ReleaseStringUTFChars(srcEnv, srcStr, srcStrC);
-    return dstStr;
-}
-
 
 JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_setLdLibraryPath(JNIEnv *env, jclass clazz, jstring ldLibraryPath) {
 	// jclass exception_cls = (*env)->FindClass(env, "java/lang/UnsatisfiedLinkError");

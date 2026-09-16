@@ -185,6 +185,9 @@ public class GameRunner {
             }
         File gamedir = instance.getGameDirectory();
         JVersionList.Version versionInfo = Tools.getVersionInfo(versionId);
+        // We don't need the library list, the asset index, client download info for the code below
+        versionInfo.libraries = null;
+        versionInfo.downloads = null;
 
         RenderSpec renderer = gameRenderer.getCurrentRenderer();
 
@@ -238,12 +241,15 @@ public class GameRunner {
         OldVersionsUtils.selectOpenGlVersion(versionInfo);
 
         ArrayList<String> launchClassPath = new ArrayList<>(classpath.length);
-        for(File classpathEntry : classpath) {
+        for(int i = 0; i < classpath.length; i++) {
+            File classpathEntry = classpath[i];
             String entryPath = classpathEntry.getAbsolutePath();
             if(!classpathEntry.exists()) {
                 Log.w("GameRunner", "Skipped classpath entry " + entryPath + " because it is missing");
             }
             launchClassPath.add(entryPath);
+            // Unreference the classpath entry to avoid retaining it on heap
+            classpath[i] = null;
         }
         launchClassPath.trimToSize();
 
@@ -256,6 +262,8 @@ public class GameRunner {
             }
             javaArgList.add("-Dlog4j.configurationFile=" + configFile);
         }
+
+        versionInfo.logging = null;
 
         File versionSpecificNativesDir = new File(Tools.DIR_CACHE, "natives/"+versionId);
         if(versionSpecificNativesDir.exists()) {
@@ -273,6 +281,11 @@ public class GameRunner {
         addAuthlibInjectorArgs(javaArgList, account);
 
         mergeMoJsonArgs(javaArgList, getMoJsonJvmArgs(versionId));
+
+        versionInfo.arguments = null;
+        versionInfo.minecraftArguments = null;
+        versionInfo.assets = null;
+        versionInfo.assetIndex = null;
 
         javaArgList.addAll(JREUtils.parseJavaArguments(instance.getLaunchArgs()));
 
@@ -292,9 +305,11 @@ public class GameRunner {
 
         Log.i("GameRunner", "Running with "+ launchArgs.toString());
 
+        String mainClass = versionInfo.mainClass;
+
         try {
             JavaRunner.nativeSetupExit(activity);
-            JavaRunner.startJvm(runtime, javaArgList, launchClassPath, versionInfo.mainClass, launchArgs);
+            JavaRunner.startJvm(runtime, javaArgList, launchClassPath, mainClass, launchArgs);
         }catch (VMLoadException e) {
             LifecycleAwareAlertDialog.DialogCreator dialogCreator = (dialog, builder) ->
                 builder.setMessage(e.toString(activity)).setPositiveButton(android.R.string.ok, (d, w)->{});
