@@ -31,7 +31,7 @@ public class DeleteConfirmDialogFragment extends DialogFragment {
                     InstanceIconProvider.dropIcon(mInstance);
                     Tools.removeCurrentFragment(requireActivity());
                     try {
-                        Instances.removeInstance(mInstance);
+                        Instances.removeInstance(mInstance, getContext());
                     } catch (IOException e) {
                         Tools.showErrorRemote(e);
                     }

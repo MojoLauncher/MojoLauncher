@@ -28,6 +28,7 @@ public class Instance extends DisplayInstance {
     public String selectedRuntime;
     public String controlLayout;
     public boolean sharedData;
+    public String shortcutUuid;
 
     protected Instance() {
     }
@@ -112,6 +113,9 @@ public class Instance extends DisplayInstance {
 
     public File getGameDirectory() {
         if(sharedData) return Instances.SHARED_DATA_DIRECTORY;
+        return mInstanceRoot;
+    }
+    File getInstanceRoot(){
         return mInstanceRoot;
     }
 }

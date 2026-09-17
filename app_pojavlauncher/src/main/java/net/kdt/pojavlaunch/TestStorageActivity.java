@@ -98,6 +98,8 @@ public class TestStorageActivity extends Activity {
         AsyncAssetManager.unpackSingleFiles(this);
 
         Intent intent =  new Intent(this, LauncherActivity.class);
+        String instance = getIntent().getStringExtra("bootInstance");
+        if(instance != null) intent.putExtra("bootInstance", instance);
         startActivity(intent);
         finish();
     }
