@@ -31,7 +31,7 @@ import git.artdeell.mojoexec.MojoExec;
  2. Add all requires locale strings and wire them up inside your freshly cooked RenderSpec
  3. Add the renderer tag onto the getKnownRenderer() mapping
  4. (Optional): Add the renderer tag into constant list in Renderers class
- 5. Add the renderer tag onto the list of renderers to check for the compatibility (see getCompatibleRenderers())
+ 5. Add the renderer tag onto the list of renderers to check for the compatibility (see RendererCache)
  6. ???
  7. PROFIT
 
@@ -161,11 +161,5 @@ public class GameRenderer {
     public void overrideVulkanDriver() {
         if(LauncherPreferences.PREF_FREEDRENO_SYSMEM) environment.put("TU_DEBUG", "sysmem");
         MojoExec.setUseTurnip(true);
-    }
-
-    /**
-     * Compatible renderers list
-     */
-    public static class RenderersList {
     }
 }

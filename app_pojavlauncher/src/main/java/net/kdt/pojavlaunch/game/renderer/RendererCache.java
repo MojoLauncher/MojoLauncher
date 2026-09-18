@@ -30,7 +30,7 @@ public class RendererCache {
 
     /**
      * Return a list of renderers compatible with the current device
-     * Don't forget to clean the cache when the list isn't needed anymore (i.e. when starting the game) - {@link GameRenderer#releaseRendererCache()}
+     * Don't forget to clean the cache when the list isn't needed anymore
      *
      * @param context application context
      * @return RenderersList containing all compatible renderers
