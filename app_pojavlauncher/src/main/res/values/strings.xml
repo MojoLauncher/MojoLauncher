@@ -520,6 +520,6 @@
     <string name="preference_button_transparency">Buttons transparency</string>
     <string name="preference_button_transparency_summary">Changes on-screen buttons transparency</string>
     <string name="main_please_restart">Please restart the game from the launcher homescreen</string>
-    <string name="preference_ubwc_title">Enable TP UBWC hint workaround</string>
-    <string name="preference_ubwc_summary">Enables "tp_ubwc_flag_hint" flag needed for some Adreno GPUs (e.g. Adreno 740). Enable if you see rendering issues on freedreno or Turnip</string>
+    <string name="preference_ubwc_title">Enable UBWC compression workaround</string>
+    <string name="preference_ubwc_summary">Enables \"tp_ubwc_flag_hint\" flag needed for select Adreno GPUs (Adreno 740). Enable if you see rendering issues on freedreno or Turnip</string>
 </resources>
