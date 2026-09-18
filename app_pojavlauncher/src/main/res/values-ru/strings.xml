@@ -455,4 +455,6 @@
     <string name="preference_metadata_clear_complete">Очистка завершена. Перезапустите лаунчер для применения изменений</string>
     <string name="preference_button_transparency">Прозрачность кнопок</string>
     <string name="preference_button_transparency_summary">Изменяет прозрачность наэкранных кнопок управления</string>
+    <string name="preference_ubwc_title">Включить исправление сжатия UBWC</string>
+    <string name="preference_ubwc_summary">Включает флаг \"tp_ubwc_flag_hint\" необходимый для некоторых ускорителей (Adreno 740). Включите, если вы наблюдаете проблемы отрисовки с freedreno или Turnip</string>
 </resources>
