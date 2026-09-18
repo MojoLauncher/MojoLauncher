@@ -13,8 +13,10 @@ public class LauncherPreferenceExperimentalFragment extends LauncherPreferenceFr
     @Override
     public void onCreatePreferences(Bundle b, String str) {
         addPreferencesFromResource(R.xml.pref_experimental);
-        SwitchPreference pref = requirePreference("freedrenoSysmem", SwitchPreference.class);
+        SwitchPreference sysmem = requirePreference("freedrenoSysmem", SwitchPreference.class);
+        SwitchPreference ubwc = requirePreference("ubwcWorkaround", SwitchPreference.class);
         boolean hasFreedreno = GpuUtils.getGlInfo().isAdreno();
-        pref.setVisible(hasFreedreno);
+        sysmem.setVisible(hasFreedreno);
+        ubwc.setVisible(hasFreedreno);
     }
 }
