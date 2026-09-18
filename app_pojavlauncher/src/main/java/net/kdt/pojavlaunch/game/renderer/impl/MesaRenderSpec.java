@@ -60,8 +60,9 @@ public class MesaRenderSpec implements RenderSpec {
         }
         public void setupEnvironment(Context context, Map<String, String> envMap) {
             envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
-            // HACK: GLSL version override for Mesa-based renderers (i.e. Zink)
-            // Required to run the game properly on some mobile Vulkan drivers (Minecraft fails to compile shaders without)
+            // This is needed because mobile drivers often don't implement required features for zink
+            // hence making it fall back to OpenGL 2.1 and break the modern game completely
+            // We don't care much about passing CTS hence this is fine
             envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
             envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6");
             super.setupEnvironment(context, envMap);
@@ -93,7 +94,7 @@ public class MesaRenderSpec implements RenderSpec {
                 envMap.put("FD_MESA_DEBUG", "sysmem");
             envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "kgsl");
             // On Adreno 5XX and lower only Core 3.1 is exposed by default due to missing hardware extensions.
-            // 3.3 is required for modern Minecraft so let's force 3.3 if running on such GPU - it's known to be working.
+            // 3.3 is required for modern games so let's force 3.3 if running on such GPU - it's known to be working.
             if (GpuUtils.getGlInfo().isAdreno500Lower()) {
                 envMap.put("MESA_GL_VERSION_OVERRIDE", "3.3");
                 envMap.put("MESA_GLSL_VERSION_OVERRIDE", "330");
