@@ -110,7 +110,8 @@ JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_chdir(JNIEnv *env
 }
 
 void save_jni_string(JNIEnv *env, jstring src, char** dest) {
-    char* _s = (*env)->GetStringUTFChars(env, src, NULL);
+    if(*dest) free(*dest);
+    const char* _s = (*env)->GetStringUTFChars(env, src, NULL);
     if(!_s) return;
     *dest = strdup(_s);
     (*env)->ReleaseStringUTFChars(env, src, _s);
