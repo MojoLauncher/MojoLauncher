@@ -43,17 +43,20 @@ You can get MojoLauncher via four methods:
 ```
 ./gradlew :app_pojavlauncher:assembleDebug
 ```
-(Replace `./gradlew` with `.\gradlew.bat` if you are building on Windows).
+If you are building on Windows:
+* Replace `./gradlew` with `.\gradlew.bat`
+* Make sure `mojoexec`, `sdl`, `glfw` are symlinked into `app_pojavlauncher/src/main/jni/`
 
 ## Current roadmap
 - [x] Instance system in favor of profiles
 - [x] Out-of-the box 1.21.5 support
 - [x] mrpack/CurseForge zip import
+- [x] LTW: enable compute shader/image extensions
 - [ ] LTW: resolve issues with Create
-- [ ] LTW: enable compute shader/image extensions
 - [ ] LTW: switch to a color-renderable format for framebuffers
 - [ ] Modpack/mod management tool
 - [ ] MMC-compatible instance import
+- [ ] Vintage Story support
 - [ ] Implement common native library standard
 
 ## Known Issues
@@ -72,7 +75,6 @@ Any code change to this repository should be submitted as a pull request. The de
 
 ## Third party components, licenses and sources (when applicable)
 - [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher): [GNU LGPLv3 License](https://github.com/PojavLauncherTeam/PojavLauncher/blob/v3_openjdk/LICENSE)
-- [Boardwalk](https://github.com/zhuowei/Boardwalk) (JVM Launcher): Unknown License/[Apache License 2.0](https://github.com/zhuowei/Boardwalk/blob/master/LICENSE) or GNU GPLv2.
 - Android Support Libraries: [Apache License 2.0](https://android.googlesource.com/platform/prebuilts/maven_repo/android/+/master/NOTICE.txt).
 - [Holy GL4ES](https://github.com/artdeell/gl4es_extra_extra/): [MIT License](https://github.com/ptitSeb/gl4es/blob/master/LICENSE).<br>
 - [OpenJDK](https://github.com/PojavLauncherTeam/openjdk-multiarch-jdk8u): [GNU GPLv2 License](https://openjdk.java.net/legal/gplv2+ce.html).<br>
