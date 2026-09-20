@@ -510,6 +510,10 @@
     <string name="preference_show_memory_warning_title">Show memory warning dialog</string>
     <string name="preference_show_memory_warning_summary">If enabled, displays the warning dialog that is shown during game launch if the amount of free memory is less than allocated to the game</string>
     <string name="option_do_not_show_again">Don\'t show again</string>
+    <string name="preference_custom_resolution_title">Use custom resolution</string>
+    <string name="preference_custom_resolution_summary">Allows specifying custom resolution for the game. The window will stretch if the given resolution has different aspect ratio than the screen</string>
+    <string name="preference_custom_resolution_width">Screen width</string>
+    <string name="preference_custom_resolution_height">Screen height</string>
     <string name="loading_screen_title">Waiting for a game window to appear…</string>
     <string name="loading_screen_booted">Ready - running on %1$s!</string>
     <string name="loading_screen_warning">If you are stuck here, the game might have crashed</string>

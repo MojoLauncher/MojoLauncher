@@ -73,6 +73,9 @@ public class LauncherPreferences {
     public static boolean PREF_KEYBOARD_AUTOPANNING = true;
     public static boolean PREF_MIGRATION_NOTICE = true;
     public static boolean PREF_ALSOFT_FORCE_OPENSL = false;
+    public static boolean PREF_CUSTOM_RESOLUTION = false;
+    public static String PREF_CUSTOM_RES_WIDTH = "";
+    public static String PREF_CUSTOM_RES_HEIGHT = "";
     public static boolean PREF_SHOW_MEMORY_WARNING_DIALOG = true;
     public static short PREF_BUTTON_TRANSPARENCY = 100;
 
@@ -120,6 +123,9 @@ public class LauncherPreferences {
         PREF_KEYBOARD_AUTOPANNING = DEFAULT_PREF.getBoolean("keyboardAutoPanning", true);
         PREF_MIGRATION_NOTICE = DEFAULT_PREF.getBoolean("migrationNotice", true);
         PREF_ALSOFT_FORCE_OPENSL = DEFAULT_PREF.getBoolean("alsoftForceOpenSL", false);
+        PREF_CUSTOM_RESOLUTION = DEFAULT_PREF.getBoolean("customResolution", false);
+        PREF_CUSTOM_RES_WIDTH = DEFAULT_PREF.getString("customResWidth", "");
+        PREF_CUSTOM_RES_HEIGHT = DEFAULT_PREF.getString("customResHeight", "");
         PREF_SHOW_MEMORY_WARNING_DIALOG = DEFAULT_PREF.getBoolean("showMemoryWarning", true);
         PREF_BUTTON_TRANSPARENCY = (short) DEFAULT_PREF.getInt("buttonTransparency", 100);
 
