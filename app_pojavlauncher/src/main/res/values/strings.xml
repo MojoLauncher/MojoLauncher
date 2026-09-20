@@ -159,6 +159,11 @@
     <string name="customctrl_export">Export controlmap</string>
 
     <string name="main_share_logs">Share log file</string>
+    <string name="share_log_dialog_title">Share log</string>
+    <string name="share_log_mclogs_option">Share to mclo.gs</string>
+    <string name="share_log_mclogs_uploading">Uploading log to mclo.gs…</string>
+    <string name="share_log_mclogs_copied">mclo.gs link copied to clipboard</string>
+    <string name="share_log_mclogs_error">Failed to upload log to mclo.gs</string>
     <string name="main_install_jar_file">Execute a .jar</string>
     <string name="main_play">Play</string>
     <string name="autoram_info_msg">Memory set to %d MB</string>
