@@ -62,7 +62,7 @@ public class EditControlSideDialog extends SideDialogView {
             internalChanges = false;
         }
     };
-    private EditText mNameEditText, mWidthEditText, mHeightEditText;
+    private EditText mNameEditText, mWidthEditText, mHeightEditText, mCodepointEditText;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch mToggleSwitch, mPassthroughSwitch, mSwipeableSwitch, mForwardLockSwitch, mAbsoluteTrackingSwitch;
     private Spinner mOrientationSpinner;
@@ -77,7 +77,7 @@ public class EditControlSideDialog extends SideDialogView {
     // Decorative textviews
     private TextView mOrientationTextView, mMappingTextView, mNameTextView,
             mCornerRadiusTextView, mVisibilityTextView, mSizeTextview,
-            mSizeXTextView, mStrokeWidthTextView, mColorSelectWarningTextView;
+            mSizeXTextView, mStrokeWidthTextView, mColorSelectWarningTextView, mCodepointTextView;
 
     // Color selector related stuff
     private ColorSelector mColorSelector;
@@ -169,6 +169,7 @@ public class EditControlSideDialog extends SideDialogView {
         mNameEditText.setText(data.name);
         mWidthEditText.setText(String.valueOf(data.getWidth()));
         mHeightEditText.setText(String.valueOf(data.getHeight()));
+        mCodepointEditText.setText(data.text);
 
         mAlphaSeekbar.setProgress((int) (data.opacity * 100));
         mStrokeWidthSeekbar.setProgress((int) data.strokeWidth * 10);
@@ -224,6 +225,9 @@ public class EditControlSideDialog extends SideDialogView {
         mSwipeableSwitch.setVisibility(View.GONE);
         mPassthroughSwitch.setVisibility(View.GONE);
         mToggleSwitch.setVisibility(View.GONE);
+
+        mCodepointTextView.setVisibility(View.GONE);
+        mCodepointEditText.setVisibility(View.GONE);
     }
 
     /**
@@ -256,6 +260,9 @@ public class EditControlSideDialog extends SideDialogView {
         mAbsoluteTrackingSwitch.setChecked(data.absolute);
 
         mSelectBackgroundBitmap.setVisibility(GONE);
+
+        mCodepointTextView.setVisibility(View.GONE);
+        mCodepointEditText.setVisibility(View.GONE);
     }
 
     /**
@@ -355,6 +362,8 @@ public class EditControlSideDialog extends SideDialogView {
         mCornerRadiusPercentTextView = mDialogContent.findViewById(R.id.editCornerRadius_textView_percent);
         mDisplayInGameCheckbox = mDialogContent.findViewById(R.id.visibility_game_checkbox);
         mDisplayInMenuCheckbox = mDialogContent.findViewById(R.id.visibility_menu_checkbox);
+        mCodepointTextView = mDialogContent.findViewById(R.id.editCodepoint_textview);
+        mCodepointEditText = mDialogContent.findViewById(R.id.editCodepoint_edittext);
 
         //Decorative stuff
         mMappingTextView = mDialogContent.findViewById(R.id.editMapping_textView);
@@ -390,6 +399,11 @@ public class EditControlSideDialog extends SideDialogView {
             // Cheap and unoptimized, doesn't break the abstraction layer
             mCurrentlyEditedButton.setProperties(mCurrentlyEditedButton.getProperties(), false);
         });
+
+        mCodepointEditText.addTextChangedListener(((SimpleTextWatcher) s -> {
+            mCurrentlyEditedButton.getProperties().text = s.toString();
+            mCurrentlyEditedButton.setProperties(mCurrentlyEditedButton.getProperties(), false);
+        }));
 
         mWidthEditText.addTextChangedListener((SimpleTextWatcher) s -> {
             if (internalChanges) return;
