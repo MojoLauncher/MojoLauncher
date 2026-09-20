@@ -916,4 +916,10 @@ public final class Tools {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.getApplicationContext().startActivity(intent);
     }
+
+    public static void maybeClearList(List<?> list) {
+        try {
+            list.clear();
+        } catch (UnsupportedOperationException ignored) {}
+    }
 }

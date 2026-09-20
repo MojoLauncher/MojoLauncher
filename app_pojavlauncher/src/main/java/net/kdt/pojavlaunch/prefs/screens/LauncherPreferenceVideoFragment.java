@@ -2,9 +2,11 @@ package net.kdt.pojavlaunch.prefs.screens;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 import androidx.preference.SwitchPreference;
 import androidx.preference.SwitchPreferenceCompat;
 
@@ -17,6 +19,7 @@ import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.CustomSeekBarPreference;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.game.renderer.GameRenderer;
+import net.kdt.pojavlaunch.utils.GpuUtils;
 
 /**
  * Fragment for any settings video related
@@ -47,6 +50,11 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
 
         requirePreference("alternate_surface", SwitchPreferenceCompat.class).setChecked(LauncherPreferences.PREF_USE_ALTERNATE_SURFACE);
         requirePreference("force_vsync", SwitchPreferenceCompat.class).setChecked(LauncherPreferences.PREF_FORCE_VSYNC);
+
+        Preference driverPreference = requirePreference("zinkPreferSystemDriver");
+        PackageManager packageManager = driverPreference.getContext().getPackageManager();
+        boolean supportsTurnip = GpuUtils.checkVulkanSupport(packageManager) && GpuUtils.getGlInfo().isAdreno();
+        driverPreference.setVisible(supportsTurnip);
 
         // Show ANGLE switch only if AnglePlugin is available
         if(hasAngle == null) {
