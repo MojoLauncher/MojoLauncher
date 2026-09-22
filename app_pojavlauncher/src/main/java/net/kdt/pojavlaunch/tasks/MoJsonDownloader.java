@@ -21,12 +21,14 @@ import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.downloader.Downloader;
 import net.kdt.pojavlaunch.downloader.TaskMetadata;
+import net.kdt.pojavlaunch.downloader.VerificationException;
 import net.kdt.pojavlaunch.mirrors.DownloadMirror;
 import net.kdt.pojavlaunch.mirrors.MirrorTamperedException;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
 import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.JSONUtils;
+import net.kdt.pojavlaunch.utils.PresentableException;
 import net.kdt.pojavlaunch.utils.jre.RuntimeSelectionException;
 import net.kdt.pojavlaunch.utils.maven.MavenName;
 import net.kdt.pojavlaunch.value.DependentLibrary;
@@ -40,6 +42,7 @@ import net.kdt.pojavlaunch.value.SubstitutionMap;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -95,6 +98,7 @@ public class MoJsonDownloader extends Downloader {
                 listener.onDownloadFailed(e); // Handled separately from the general case because it subclasses RuntimeException. Ugh.
             } catch(RuntimeException e) {
                 throw e; // log fatal errors to Google Play
+            } catch (InterruptedException ignored) {
             } catch (Exception e) {
                 listener.onDownloadFailed(e);
             }
@@ -107,9 +111,9 @@ public class MoJsonDownloader extends Downloader {
      * @param assetManager AssetManager, used for automatic installation of JRE 17 if needed
      * @param verInfo The JMinecraftVersionList.Version from the version list, if available
      * @param versionName The version ID (necessary)
-     * @throws Exception when an exception occurs in the function body or in any of the downloading threads.
      */
-    private void downloadGame(AssetManager assetManager, JVersionList.Version verInfo, String versionName) throws Exception {
+    private void downloadGame(AssetManager assetManager, JVersionList.Version verInfo, String versionName)
+            throws PresentableException, RuntimeSelectionException, MirrorTamperedException, InterruptedException {
         // Put up a dummy progress line, for the activity to start the service and do all the other necessary
         // work to keep the launcher alive. We will replace this line when we will start downloading stuff.
         ProgressLayout.setProgress(ProgressLayout.DOWNLOAD_GAME, 0, R.string.newdl_starting);
@@ -119,24 +123,43 @@ public class MoJsonDownloader extends Downloader {
         mDeclaredNatives = new ArrayList<>();
         mAllLibraries = new LinkedHashSet<>();
 
-        if(sSubstitutionMapFuture == null) throw new RuntimeException("SubstitutionMap not prepared");
-        mSubstitutionMap = sSubstitutionMapFuture.get();
+        try {
+            mSubstitutionMap = sSubstitutionMapFuture.get();
+        } catch (Exception e) {
+            throw new PresentableException(e, R.string.mjdl_submap_error_title, R.string.mjdl_submap_error_subtitle);
+        }
 
-        downloadAndProcessMetadata(assetManager, verInfo, versionName);
+        try {
+            downloadAndProcessMetadata(assetManager, verInfo, versionName);
 
-        int downloadLibCount = mAllLibraries.size();
-        mClassPath = new LinkedHashSet<>(downloadLibCount);
-        growDownloadList(downloadLibCount);
+            int downloadLibCount = mAllLibraries.size();
+            mClassPath = new LinkedHashSet<>(downloadLibCount);
+            growDownloadList(downloadLibCount);
 
-        prepareLibraryDownloads(downloadLibCount);
+            prepareLibraryDownloads(downloadLibCount);
 
-        mAllLibraries.clear();
-        mClassPath.add(mTargetJarFile);
+            mAllLibraries.clear();
+            mClassPath.add(mTargetJarFile);
 
-        runDownloads(mScheduledDownloadTasks);
+            runDownloads(mScheduledDownloadTasks);
 
-        ensureJarFileCopy();
-        extractNatives(versionName);
+        } catch (VerificationException e) {
+            throw new PresentableException(R.string.mjdl_download_error_title, R.string.mjdl_download_error_subtitle_2);
+        } catch (IOException e) {
+            throw new PresentableException(R.string.mjdl_download_error_title, R.string.mjdl_download_error_subtitle);
+        }
+
+        try {
+            ensureJarFileCopy();
+        } catch (IOException e) {
+            throw new PresentableException(e, R.string.mjdl_disk_error_title, R.string.mjdl_disk_error_subtitle_3);
+        }
+
+        try {
+            extractNatives(versionName);
+        } catch (Exception e) {
+            throw new PresentableException(e, R.string.mjdl_native_error_title, R.string.mjdl_native_error_subtitle_2);
+        }
     }
 
     public static File createGameJsonPath(String versionId) {
@@ -152,17 +175,17 @@ public class MoJsonDownloader extends Downloader {
      * needed.
      * @throws IOException if the copy fails
      */
-    private void ensureJarFileCopy() throws IOException {
+    private void ensureJarFileCopy() throws IOException, PresentableException {
         if (mSourceJarFile == null) return;
         if (mSourceJarFile.equals(mTargetJarFile)) return;
         if (mTargetJarFile.exists()) return;
-        FileUtils.ensureParentDirectory(mTargetJarFile);
+        checkedCreateDirectory(mTargetJarFile);
 
         Log.i("NewMCDownloader", "Copying " + mSourceJarFile.getName() + " to " + mTargetJarFile.getAbsolutePath());
         org.apache.commons.io.FileUtils.copyFile(mSourceJarFile, mTargetJarFile, false);
     }
 
-    private void prepareLibraryDownloads(int downloadLibCount) throws IOException {
+    private void prepareLibraryDownloads(int downloadLibCount) throws PresentableException {
         HashSet<MavenName> processedLibraries = new HashSet<>(downloadLibCount);
 
         for(DependentLibrary dependentLibrary : mAllLibraries) {
@@ -223,37 +246,35 @@ public class MoJsonDownloader extends Downloader {
         }
     }
 
-    private File downloadGameJson(JVersionList.Version verInfo) throws IOException, MirrorTamperedException {
+    private File downloadGameJson(JVersionList.Version verInfo) throws IOException, PresentableException, MirrorTamperedException {
         File targetFile = createGameJsonPath(verInfo.id);
         if(verInfo.sha1 == null && targetFile.canRead() && targetFile.isFile())
             return targetFile;
-        FileUtils.ensureParentDirectory(targetFile);
+        checkedCreateDirectory(targetFile);
         try {
             DownloadUtils.ensureSha1(targetFile, LauncherPreferences.PREF_VERIFY_MANIFEST ? verInfo.sha1 : null, () -> {
                 ProgressLayout.setProgress(ProgressLayout.DOWNLOAD_GAME, 0,
                         R.string.newdl_downloading_metadata, targetFile.getName());
                 DownloadMirror.downloadFileMirrored(DownloadMirror.DOWNLOAD_CLASS_METADATA, verInfo.url, targetFile);
-                return null;
             });
-        }catch (DownloadUtils.SHA1VerificationException e) {
+        }catch (VerificationException e) {
             if(DownloadMirror.isMirrored()) throw new MirrorTamperedException();
             else throw e;
         }
         return targetFile;
     }
 
-    private JAssets downloadAssetsIndex(JVersionList.Version verInfo) throws IOException{
+    private JAssets downloadAssetsIndex(JVersionList.Version verInfo) throws IOException, PresentableException {
         JVersionList.AssetIndex assetIndex = verInfo.assetIndex;
         if(assetIndex == null || verInfo.assets == null) return null;
         File targetFile = new File(Tools.ASSETS_PATH, "indexes"+ File.separator + verInfo.assets + ".json");
-        FileUtils.ensureParentDirectory(targetFile);
+        checkedCreateDirectory(targetFile);
         DownloadUtils.ensureSha1(targetFile, assetIndex.sha1, ()-> {
             ProgressLayout.setProgress(ProgressLayout.DOWNLOAD_GAME, 0,
                     R.string.newdl_downloading_metadata, targetFile.getName());
             DownloadMirror.downloadFileMirrored(DownloadMirror.DOWNLOAD_CLASS_METADATA, assetIndex.url, targetFile);
-            return null;
         });
-        return Tools.GLOBAL_GSON.fromJson(Tools.read(targetFile), JAssets.class);
+        return checkedParseJson(targetFile, JAssets.class);
     }
     
     private ClientInfo getClientInfo(JVersionList.Version verInfo) {
@@ -270,19 +291,21 @@ public class MoJsonDownloader extends Downloader {
      * @param versionName The version ID (necessary)
      * @throws IOException if the download of any of the metadata files fails
      */
-    private void downloadAndProcessMetadata(AssetManager assetManager, JVersionList.Version verInfo, String versionName) throws IOException, MirrorTamperedException, RuntimeSelectionException, JsonParseException {
+    private void downloadAndProcessMetadata(AssetManager assetManager, JVersionList.Version verInfo, String versionName)
+            throws PresentableException, MirrorTamperedException, RuntimeSelectionException, IOException {
         File versionJsonFile;
         if(verInfo != null) versionJsonFile = downloadGameJson(verInfo);
         else versionJsonFile = createGameJsonPath(versionName);
-        if(versionJsonFile.canRead()) {
-            verInfo = JSONUtils.readFromFile(versionJsonFile, JVersionList.Version.class);
-            if(verInfo == null) throw new IOException("Deserialized json is null. Contact developer.");
-        } else {
-            throw new IOException("Unable to read Version JSON for version " + versionName);
-        }
 
-        if(assetManager != null)
-            NewJREUtil.installNewJreIfNeeded(assetManager, verInfo);
+        if(!versionJsonFile.canRead()) metadataAccessException();
+        verInfo = checkedParseJson(versionJsonFile, JVersionList.Version.class);
+
+        try {
+            if (assetManager != null)
+                NewJREUtil.installNewJreIfNeeded(assetManager, verInfo);
+        }catch (IOException e) {
+            throw new PresentableException(R.string.mjdl_disk_error_title, R.string.mjdl_disk_error_subtitle_2);
+        }
 
         JAssets assets = downloadAssetsIndex(verInfo);
         if(assets != null) scheduleAssetDownloads(assets);
@@ -308,11 +331,17 @@ public class MoJsonDownloader extends Downloader {
     }
 
     private void scheduleDownload(File targetFile, int downloadClass, String url, String sha1,
-                                  long size) throws IOException {
-        FileUtils.ensureParentDirectory(targetFile);
+                                  long size) throws PresentableException {
+
+
         if(!Tools.isValidString(sha1)) sha1 = null;
         URL urlObject = null;
-        if(Tools.isValidString(url)) urlObject = new URL(url);
+        try {
+            if(Tools.isValidString(url)) urlObject = new URL(url);
+        } catch (MalformedURLException e) {
+            genericSyntaxException(url + " is not a valid URL");
+        }
+
         TaskMetadata taskMetadata = new TaskMetadata(targetFile, urlObject, size, sha1, downloadClass);
         mScheduledDownloadTasks.add(taskMetadata);
     }
@@ -324,7 +353,7 @@ public class MoJsonDownloader extends Downloader {
      * @param dependentLibrary the DependentLibrary to get the path from
      * @throws IOException in case if download scheduling fails.
      */
-    private void scheduleAarDownload(String baseRepository, DependentLibrary dependentLibrary) throws IOException {
+    private void scheduleAarDownload(String baseRepository, DependentLibrary dependentLibrary) throws PresentableException {
         String path = dependentLibrary.name.toPath(null, ".aar");
         String downloadUrl = baseRepository + path;
         File targetPath = new File(Tools.DIR_HOME_LIBRARY, path);
@@ -332,7 +361,7 @@ public class MoJsonDownloader extends Downloader {
         scheduleDownload(targetPath, DownloadMirror.DOWNLOAD_CLASS_LIBRARIES, downloadUrl, null, -1);
     }
 
-    private void submitBareLibrary(String path, String baseUrl) throws IOException {
+    private void submitBareLibrary(String path, String baseUrl) throws PresentableException {
         File artifactPath = new File(Tools.DIR_HOME_LIBRARY, path);
         if(!mClassPath.add(artifactPath)) {
             Log.w("MoJsonDownloader", "Repeated classpath entry "+ path +" skipped");
@@ -344,7 +373,7 @@ public class MoJsonDownloader extends Downloader {
         );
     }
 
-    private File submitArtifact(LibraryArtifact artifact, String subPath) throws IOException {
+    private File submitArtifact(LibraryArtifact artifact, String subPath) throws PresentableException {
         File artifactPath = new File(Tools.DIR_HOME_LIBRARY, subPath);
         if(!mClassPath.add(artifactPath)) {
             Log.w("MoJsonDownloader", "Repeated classpath entry " + artifact.path +" skipped");
@@ -362,17 +391,18 @@ public class MoJsonDownloader extends Downloader {
         return name.provider.equals("com.mojang") && name.module.equals("text2speech");
     }
 
-    private void processNatives(DependentLibrary library) throws IOException {
+    private void processNatives(DependentLibrary library) throws PresentableException {
         String libraryClassifier = library.natives.get(mNativeName);
         if(libraryClassifier == null) {
             boolean canIgnore = canIgnoreNatives(library.name);
-            if(!canIgnore) throw new IOException("library "+library.name +" does not include native "+mNativeName);
-            Log.i("MoJsonDownloader", "Library "+library.name + " doesn't have an "+mNativeName+" natives-classifier (skipped)");
+            if(!canIgnore)
+                throw new PresentableException(R.string.mjdl_native_error_title, R.string.mjdl_native_error_subtitle_1, library.name.toString(), mNativeName);
             return;
         }
 
         LibraryArtifact artifact = library.downloads.classifiers.get(libraryClassifier);
-        if(artifact == null) throw new IOException("library "+library.name +" is missing required classifier "+ libraryClassifier);
+        if(artifact == null)
+            genericSyntaxException("library "+library.name +" is missing required classifier "+ libraryClassifier);
 
         String subPath = artifact.path;
         if(subPath == null) subPath = library.name.toPath(libraryClassifier);
@@ -383,7 +413,7 @@ public class MoJsonDownloader extends Downloader {
         }
     }
 
-    private void processLibraryWithDownloads(DependentLibrary library) throws IOException {
+    private void processLibraryWithDownloads(DependentLibrary library) throws PresentableException {
         DependentLibrary.LibraryDownloads downloads = library.downloads;
         if(downloads.artifact != null) {
 
@@ -395,7 +425,7 @@ public class MoJsonDownloader extends Downloader {
         if(library.natives != null && downloads.classifiers != null) processNatives(library);
     }
 
-    private void processRawLibrary(DependentLibrary library) throws IOException{
+    private void processRawLibrary(DependentLibrary library) throws PresentableException {
         String path = library.name.toPath();
         String baseUrl = library.url;
         if(baseUrl != null) baseUrl = baseUrl.replace("http://","https://");
@@ -403,7 +433,7 @@ public class MoJsonDownloader extends Downloader {
         submitBareLibrary(path, baseUrl);
     }
     
-    private void scheduleAssetDownloads(JAssets assets) throws IOException {
+    private void scheduleAssetDownloads(JAssets assets) throws PresentableException {
         Map<String, JAssetInfo> assetObjects = assets.objects;
         if(assetObjects == null) return;
         Set<String> assetNames = assetObjects.keySet();
@@ -427,7 +457,7 @@ public class MoJsonDownloader extends Downloader {
         }
     }
 
-    private void scheduleLoggingAssetDownloadIfNeeded(JVersionList.LoggingConfig loggingConfig) throws IOException {
+    private void scheduleLoggingAssetDownloadIfNeeded(JVersionList.LoggingConfig loggingConfig) throws PresentableException {
         if(loggingConfig.client == null || loggingConfig.client.file == null) return;
         JVersionList.FileProperties loggingFileProperties = loggingConfig.client.file;
         File internalLoggingConfig = new File(Tools.DIR_DATA + File.separator + "security",
@@ -442,7 +472,7 @@ public class MoJsonDownloader extends Downloader {
         );
     }
 
-    private void scheduleGameJarDownload(ClientInfo clientInfo, String versionName) throws IOException {
+    private void scheduleGameJarDownload(ClientInfo clientInfo, String versionName) throws PresentableException {
         File clientJar = createGameJarPath(versionName);
         growDownloadList(1);
         scheduleDownload(clientJar,
@@ -453,5 +483,34 @@ public class MoJsonDownloader extends Downloader {
         );
         // Store the path of the JAR to copy it into our new version folder later.
         mSourceJarFile = clientJar;
+    }
+
+    private static <T> T checkedParseJson(File file, Class<T> targetClass) throws PresentableException {
+        try {
+            T rv = JSONUtils.readFromFile(file, targetClass);
+            if(rv == null)
+                throw new PresentableException(R.string.mjdl_json_error_title, R.string.mjdl_json_error_subtitle_3);
+            return rv;
+        } catch (IOException e) {
+            throw new PresentableException(R.string.mjdl_disk_error_title, R.string.mjdl_disk_error_subtitle_4);
+        } catch (JsonParseException e) {
+            throw new PresentableException(R.string.mjdl_json_error_title, R.string.mjdl_json_error_subtitle_3);
+        }
+    }
+
+    private static void checkedCreateDirectory(File targetFile) throws PresentableException {
+        try {
+            FileUtils.ensureParentDirectory(targetFile);
+        } catch (IOException e) {
+            throw new PresentableException(R.string.mjdl_disk_error_title, R.string.mjdl_disk_error_subtitle_1, targetFile.getAbsolutePath());
+        }
+    }
+
+    private void genericSyntaxException(String info) throws PresentableException {
+        throw new PresentableException(R.string.mjdl_json_error_title, R.string.mjdl_json_error_subtitle_2, info);
+    }
+
+    private void metadataAccessException() throws PresentableException {
+        throw new PresentableException(R.string.mjdl_json_error_title, R.string.mjdl_json_error_subtitle_1);
     }
 }

@@ -26,7 +26,7 @@ public class CheckFileOnDiskTask extends DownloaderTask {
             mDownloader.fileComplete();
         }else {
             if(!mAfterDownload) mDownloader.submitFileForDownload(mMetadata);
-            else throw new IOException("Failed to verify "+mMetadata.toString());
+            else throw new VerificationException("Failed to verify "+mMetadata.toString());
         }
     }
 
