@@ -275,6 +275,7 @@
     <string name="preference_gyro_sample_rate_title">Gyroscope sampling rate</string>
     <string name="preference_gyro_sample_rate_description">If you have performance issues with gyroscope controls, increase this.</string>
     <string name="microsoft_login_retry_later">Too many requests, please try again later.</string>
+    <string name="microsoft_login_generic">Error: %s</string>
     <string name="storage_required">MJLauncher requires external storage to be attached. Please reconnect it and restart the app.</string>
     <string name="mcl_setting_title_buttonallcaps">Only use capital letters in button labels</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Disable this if you want to use lowercase letters in your controls.</string>

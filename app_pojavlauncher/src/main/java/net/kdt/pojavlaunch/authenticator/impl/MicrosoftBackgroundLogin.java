@@ -17,6 +17,7 @@ import net.kdt.pojavlaunch.authenticator.accounts.Accounts;
 import net.kdt.pojavlaunch.authenticator.listener.LoginListener;
 import net.kdt.pojavlaunch.authenticator.model.OAuthTokenResponse;
 import net.kdt.pojavlaunch.authenticator.accounts.Account;
+import net.kdt.pojavlaunch.utils.PresentableException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -124,7 +125,7 @@ public class MicrosoftBackgroundLogin implements BackgroundLogin{
         }, account.refreshToken, true);
     }
 
-    private String acquireAccessToken(boolean isRefresh, String code) throws IOException {
+    private String acquireAccessToken(boolean isRefresh, String code) throws IOException, PresentableException {
         URL url = new URL(authTokenUrl);
         Log.i("MicrosoftLogin", "isRefresh=" + isRefresh + ", authCode= "+code);
 
@@ -141,7 +142,7 @@ public class MicrosoftBackgroundLogin implements BackgroundLogin{
         return response.accessToken;
     }
 
-    private String acquireXBLToken(String accessToken) throws IOException, JSONException {
+    private String acquireXBLToken(String accessToken) throws IOException, JSONException, PresentableException {
         URL url = new URL(xblAuthUrl);
 
         JSONObject data = new JSONObject();
@@ -173,7 +174,7 @@ public class MicrosoftBackgroundLogin implements BackgroundLogin{
     }
 
     /** @return [uhs, token]*/
-    private @NonNull String[] acquireXsts(String xblToken) throws IOException, JSONException {
+    private @NonNull String[] acquireXsts(String xblToken) throws IOException, JSONException, PresentableException {
         URL url = new URL(xstsAuthUrl);
 
         JSONObject data = new JSONObject();
@@ -209,15 +210,15 @@ public class MicrosoftBackgroundLogin implements BackgroundLogin{
             long xerr = jo.optLong("XErr", -1);
             Integer locale_id = XSTS_ERRORS.get(xerr);
             if(locale_id != null) {
-                throw new PresentedException(new RuntimeException(responseContents), locale_id);
+                throw new PresentableException(new RuntimeException(responseContents), locale_id);
             }
-            throw new PresentedException(new RuntimeException(responseContents), R.string.xerr_unknown, xerr);
+            throw new PresentableException(new RuntimeException(responseContents), R.string.xerr_unknown, xerr);
         }else{
             throw CommonLoginUtils.getResponseThrowable(conn);
         }
     }
 
-    private String acquireToken(String xblUhs, String xblXsts) throws IOException, JSONException {
+    private String acquireToken(String xblUhs, String xblXsts) throws IOException, JSONException, PresentableException {
         URL url = new URL(mcLoginUrl);
 
         JSONObject data = new JSONObject();
@@ -245,7 +246,7 @@ public class MicrosoftBackgroundLogin implements BackgroundLogin{
         }
     }
 
-    private void fetchOwnedItems(String mcAccessToken) throws IOException {
+    private void fetchOwnedItems(String mcAccessToken) throws IOException, PresentableException {
         URL url = new URL(mcStoreUrl);
 
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -260,7 +261,7 @@ public class MicrosoftBackgroundLogin implements BackgroundLogin{
         // as it does not indicate whether the user owns the game through Game Pass.
     }
 
-    private void checkProfile(String mcAccessToken) throws IOException, JSONException {
+    private void checkProfile(String mcAccessToken) throws IOException, JSONException, PresentableException {
         URL url = new URL(mcProfileUrl);
 
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -286,7 +287,7 @@ public class MicrosoftBackgroundLogin implements BackgroundLogin{
         }else{
             Log.i("MicrosoftLogin","It seems that this Microsoft Account does not own the game.");
             doesOwnGame = false;
-            throw new PresentedException(new RuntimeException(conn.getResponseMessage()), R.string.mc_not_owned);
+            throw new PresentableException(new RuntimeException(conn.getResponseMessage()), R.string.mc_not_owned);
             //throwResponseError(conn);
         }
     }

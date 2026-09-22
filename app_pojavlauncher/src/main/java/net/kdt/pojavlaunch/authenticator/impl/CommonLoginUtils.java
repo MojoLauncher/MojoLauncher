@@ -4,6 +4,7 @@ import android.util.Log;
 
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.authenticator.model.OAuthTokenResponse;
+import net.kdt.pojavlaunch.utils.PresentableException;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,7 +19,7 @@ import git.artdeell.mojo.R;
 
 public class CommonLoginUtils {
 
-    public static OAuthTokenResponse exchangeAuthCode(URL url, String formData) throws IOException {
+    public static OAuthTokenResponse exchangeAuthCode(URL url, String formData) throws IOException, PresentableException {
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         conn.setRequestProperty("charset", "utf-8");
@@ -58,11 +59,11 @@ public class CommonLoginUtils {
         return builder.toString();
     }
 
-    public static RuntimeException getResponseThrowable(HttpURLConnection conn) throws IOException {
+    public static PresentableException getResponseThrowable(HttpURLConnection conn) throws IOException {
         Log.i("MicrosoftLogin", "Error code: " + conn.getResponseCode() + ": " + conn.getResponseMessage());
         if(conn.getResponseCode() == 429) {
-            return new PresentedException(R.string.microsoft_login_retry_later);
+            return new PresentableException(R.string.microsoft_login_retry_later);
         }
-        return new RuntimeException(conn.getResponseMessage());
+        return new PresentableException(R.string.microsoft_login_generic, conn.getResponseMessage());
     }
 }

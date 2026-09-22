@@ -15,6 +15,7 @@ import net.kdt.pojavlaunch.authenticator.accounts.Accounts;
 import net.kdt.pojavlaunch.authenticator.accounts.Account;
 import net.kdt.pojavlaunch.authenticator.listener.LoginListener;
 import net.kdt.pojavlaunch.authenticator.model.OAuthTokenResponse;
+import net.kdt.pojavlaunch.utils.PresentableException;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -85,7 +86,7 @@ public class ElyByBackgroundLogin implements BackgroundLogin {
         }, account.refreshToken, true);
     }
 
-    private void acquireTokens(boolean isRefresh, String code) throws IOException {
+    private void acquireTokens(boolean isRefresh, String code) throws IOException, PresentableException {
         URL url = new URL(authTokenUrl);
         Log.i("MicrosoftLogin", "isRefresh=" + isRefresh + ", authCode= "+code);
 
@@ -100,7 +101,7 @@ public class ElyByBackgroundLogin implements BackgroundLogin {
         mExpiresAt = mOAuthData.expiresIn*1000 + System.currentTimeMillis();
     }
 
-    private ElyAccountInfo acquireAccountData(String accessToken) throws IOException {
+    private ElyAccountInfo acquireAccountData(String accessToken) throws IOException, PresentableException {
         URL url = new URL(accountInfoUrl);
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         conn.setRequestProperty("Authorization", "Bearer " + accessToken);
@@ -117,7 +118,7 @@ public class ElyByBackgroundLogin implements BackgroundLogin {
         }
     }
 
-    private void notifyProgress(LoginListener listener, int step){
+    private void notifyProgress(LoginListener listener, int step) {
         Tools.runOnUiThread(() -> listener.onLoginProgress(step));
         ProgressLayout.setProgress(ProgressLayout.AUTHENTICATE, step*50);
     }
