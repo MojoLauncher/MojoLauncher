@@ -3,3 +3,4 @@
 2. This app does not collect any sensitive data while you are running the game.
 3. Some sensitive data is stored in crash reports after the game crashes, but it's not shared to the developer or any third parties
 4. MojoLauncher developers reserve the right to update this privacy policy without prior notification.
+5. MJLauncher has an option to share your logs to a third-party service (https://mclo.gs/) at your request. Once shared, we have no control over that data.
