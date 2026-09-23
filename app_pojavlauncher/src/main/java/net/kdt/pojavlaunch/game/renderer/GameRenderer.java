@@ -159,7 +159,9 @@ public class GameRenderer {
      * Enable custom Vulkan driver (Turnip) usage
      */
     public void overrideVulkanDriver() {
+        // In most cases we load Turnip so use Turnip environment variables
         if(LauncherPreferences.PREF_FREEDRENO_SYSMEM) environment.put("TU_DEBUG", "sysmem");
+        if(LauncherPreferences.PREF_UBWC_WORKAROUND) environment.put("FD_DEV_FEATURES", "enable_tp_ubwc_flag_hint=1");
         MojoExec.setUseTurnip(true);
     }
 }

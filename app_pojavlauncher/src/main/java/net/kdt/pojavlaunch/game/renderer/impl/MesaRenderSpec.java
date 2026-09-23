@@ -90,8 +90,8 @@ public class MesaRenderSpec implements RenderSpec {
             return hasMesa() && GpuUtils.getGlInfo().isAdreno();
         }
         public void setupEnvironment(Context context, Map<String, String> envMap) {
-            if (LauncherPreferences.PREF_FREEDRENO_SYSMEM)
-                envMap.put("FD_MESA_DEBUG", "sysmem");
+            if (LauncherPreferences.PREF_FREEDRENO_SYSMEM) envMap.put("FD_MESA_DEBUG", "sysmem");
+            if(LauncherPreferences.PREF_UBWC_WORKAROUND) envMap.put("FD_DEV_FEATURES", "enable_tp_ubwc_flag_hint=1");
             envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "kgsl");
             // On Adreno 5XX and lower only Core 3.1 is exposed by default due to missing hardware extensions.
             // 3.3 is required for modern games so let's force 3.3 if running on such GPU - it's known to be working.
