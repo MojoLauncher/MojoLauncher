@@ -109,6 +109,14 @@ JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_chdir(JNIEnv *env
 	return retval;
 }
 
+void save_jni_string(JNIEnv *env, jstring src, char** dest) {
+    if(*dest) free(*dest);
+    const char* _s = (*env)->GetStringUTFChars(env, src, NULL);
+    if(!_s) return;
+    *dest = strdup(_s);
+    (*env)->ReleaseStringUTFChars(env, src, _s);
+}
+
 JNIEnv* get_attached_env(JavaVM* jvm) {
     JNIEnv *jvm_env = NULL;
     jint env_result = (*jvm)->GetEnv(jvm, (void**)&jvm_env, JNI_VERSION_1_4);
