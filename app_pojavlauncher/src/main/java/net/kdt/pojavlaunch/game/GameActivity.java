@@ -392,7 +392,7 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
     private void kickstart() throws Throwable {
         Logger.appendToLog("--------- Starting game with Launcher Debug!");
         Tools.printLauncherInfo(instance.versionId, instance.getLaunchArgs(), mGameRenderer.getCurrentRenderer(), this);
-        GameRunner runner = new LwjglRunner();
+        GameRunner runner = GameRunner.pickGameRunner(GameType.LWJGL);
         runner.init(this, instance);
         if(!runner.ensureRendererCompatible(mGameRenderer)) Tools.fullyExit();
         mGameRenderer.setupEnvironment(this);
