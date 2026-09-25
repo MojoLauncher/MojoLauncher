@@ -1,7 +1,8 @@
 package net.kdt.pojavlaunch.lifecycle;
 
-import static net.kdt.pojavlaunch.game.GameActivity.INTENT_LAUNCH_CLASSPATH;
-import static net.kdt.pojavlaunch.game.GameActivity.INTENT_LAUNCH_VERSION;
+
+import static net.kdt.pojavlaunch.game.runner.LwjglRunner.INTENT_LAUNCH_CLASSPATH;
+import static net.kdt.pojavlaunch.game.runner.LwjglRunner.INTENT_LAUNCH_VERSION;
 
 import android.app.Activity;
 import android.content.Context;

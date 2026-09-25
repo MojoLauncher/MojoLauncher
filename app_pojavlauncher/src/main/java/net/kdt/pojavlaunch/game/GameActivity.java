@@ -47,6 +47,7 @@ import com.kdt.LoggerView;
 import net.kdt.pojavlaunch.BaseActivity;
 import net.kdt.pojavlaunch.CallbackBridge;
 import net.kdt.pojavlaunch.game.renderer.GameRenderer;
+import net.kdt.pojavlaunch.game.runner.GameRunner;
 import net.kdt.pojavlaunch.utils.GpuUtils;
 import net.kdt.pojavlaunch.utils.KeycodeUtils;
 import net.kdt.pojavlaunch.Logger;
@@ -71,21 +72,17 @@ import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.prefs.QuickSettingSideDialog;
 import net.kdt.pojavlaunch.services.GameService;
 import net.kdt.pojavlaunch.tasks.AsyncAssetManager;
-import net.kdt.pojavlaunch.utils.JREUtils;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
 import net.kdt.pojavlaunch.authenticator.accounts.Account;
-import net.kdt.pojavlaunch.utils.jre.GameRunner;
+import net.kdt.pojavlaunch.game.runner.LwjglRunner;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.Objects;
 
 import git.artdeell.mojo.R;
 
 public class GameActivity extends BaseActivity implements ControlButtonMenuListener, EditorExitable, ServiceConnection {
-    public static final String INTENT_LAUNCH_VERSION = "intent_version";
-    public static final String INTENT_LAUNCH_CLASSPATH = "intent_classpath";
 
     public static TouchCharInput touchCharInput;
     private GameView launcherGLView;
@@ -236,17 +233,7 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
                 throw new IOException("Failed to create a new log file");
             Logger.begin(latestLogFile.getAbsolutePath());
 
-            Intent activityIntent = getIntent();
-            Bundle extras = Objects.requireNonNull(activityIntent.getExtras());
-            String version = extras.getString(INTENT_LAUNCH_VERSION);
-            File[] classpath = (File[]) extras.getSerializable(INTENT_LAUNCH_CLASSPATH);
 
-            activityIntent.removeExtra(INTENT_LAUNCH_VERSION);
-            activityIntent.removeExtra(INTENT_LAUNCH_CLASSPATH);
-
-            setIntent(activityIntent);
-
-            setTitle("MojoLauncher (" + version + ")");
 
             // Menu
             gameActionArrayAdapter = new ArrayAdapter<>(this,
@@ -268,14 +255,7 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
             launcherGLView.setSurfaceReadyListener(() -> {
                 try {
                     Tools.runOnUiThread(() -> { if(PREF_VIRTUAL_MOUSE_START) launcherGLView.mCursorView.setVisibility(View.VISIBLE); });
-                    if(version == null || classpath == null) {
-                        Tools.runOnUiThread(()->{
-                            Toast.makeText(this, R.string.main_please_restart, Toast.LENGTH_LONG).show();
-                            finish();
-                        });
-                        return;
-                    }
-                    runCraft(version, classpath);
+                    this.kickstart();
                 }catch (Throwable e){
                     Tools.showErrorRemote(e);
                 }
@@ -409,13 +389,22 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
         }
     }
 
-    private void runCraft(String versionId, File[] classpath) throws Throwable {
+    private void kickstart() throws Throwable {
         Logger.appendToLog("--------- Starting game with Launcher Debug!");
-        Tools.printLauncherInfo(versionId, instance.getLaunchArgs(), mGameRenderer.getCurrentRenderer(), this);
-        JREUtils.redirectAndPrintJRELog();
-        GameRunner.launchGame(this, account, instance, versionId, classpath, mGameRenderer);
-        //Note that we actually stall in the above function, even if the game crashes. But let's be safe.
+        Tools.printLauncherInfo(instance.versionId, instance.getLaunchArgs(), mGameRenderer.getCurrentRenderer(), this);
+        GameRunner runner = GameRunner.pickGameRunner(GameType.LWJGL);
+        runner.init(this, instance);
+        if(!runner.ensureRendererCompatible(mGameRenderer)) Tools.fullyExit();
+        mGameRenderer.setupEnvironment(this);
+        if(!mGameRenderer.maybeSetupRenderer()) {
+            if(Tools.showDialogAndHalt(this, R.string.gr_err_renderer_load_Failed)) return;
+            System.exit(0);
+        }
+        runner.checkRendererQuirks(mGameRenderer);
+        runner.launchGame();
         Tools.runOnUiThread(()-> mServiceBinder.isActive = false);
+        Tools.restartLauncherActivity(this);
+        Tools.fullyExit();
     }
 
     private void dialogSendCustomKey() {

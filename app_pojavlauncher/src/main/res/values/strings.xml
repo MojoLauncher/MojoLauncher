@@ -520,4 +520,5 @@
     <string name="preference_button_transparency">Buttons transparency</string>
     <string name="preference_button_transparency_summary">Changes on-screen buttons transparency</string>
     <string name="main_please_restart">Please restart the game from the launcher homescreen</string>
+    <string name="vintagestory_unsupported_device">Your device does not support Vintage Story on the current renderer</string>
 </resources>

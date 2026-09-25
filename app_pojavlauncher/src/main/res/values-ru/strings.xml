@@ -455,4 +455,5 @@
     <string name="preference_metadata_clear_complete">Очистка завершена. Перезапустите лаунчер для применения изменений</string>
     <string name="preference_button_transparency">Прозрачность кнопок</string>
     <string name="preference_button_transparency_summary">Изменяет прозрачность наэкранных кнопок управления</string>
+    <string name="vintagestory_unsupported_device">Ваше устройство не поддерживает Vintage Story на текущем визуализаторе</string>
 </resources>
