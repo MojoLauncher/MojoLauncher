@@ -217,6 +217,8 @@ public class ControlButton extends TextView implements ControlInterface {
                 sendSpecialKey(keycode, isDown);
             }
         }
+        if(isDown && mProperties.text != null)
+            PLATFORM.sendBulkUnicodeEvent(mProperties.text, CallbackBridge.getCurrentMods());
     }
 
     private void sendSpecialKey(int keycode, boolean isDown){
