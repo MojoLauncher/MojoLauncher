@@ -217,8 +217,7 @@ public class MainMenuFragment extends Fragment {
                 Instances.setSelectedInstance(mList.get(pos));
                 ExtraCore.setValue(ExtraConstants.LAUNCH_GAME, true);
             });
-            }
-            
+
             vh.menuButton.setOnClickListener(v -> {
                 int pos = vh.getBindingAdapterPosition();
                 if (pos == RecyclerView.NO_POSITION) return;
