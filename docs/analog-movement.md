@@ -1,9 +1,9 @@
 # 360° joystick movement API
 
-Mojo 360 lets any game-side mod receive the on-screen joystick as an analog vector
+MojoLauncher lets any game-side mod receive the on-screen joystick as an analog vector
 instead of W/A/S/D key presses. The API is open: every mod can implement it, and several mods can use it together.
 
-Reference implementation: the `mojo360` Fabric mod (`mojo360-mod/` in this repo).
+Reference implementation: the [Mojo joystick 360](https://github.com/Evga314/Mojo-joystick-360) Fabric mod.
 
 ## How it works
 
@@ -15,7 +15,7 @@ Reference implementation: the `mojo360` Fabric mod (`mojo360-mod/` in this repo)
 ## Java side
 
 Copy this class into your mod **unchanged**: its package, class and method names are the JNI symbol names.
-Source: [`AnalogMovement.java`](../mojo360-mod/src/main/java/git/mojo/api/AnalogMovement.java).
+Source: [`AnalogMovement.java`](https://github.com/Evga314/Mojo-joystick-360/blob/main/src/main/java/git/mojo/api/AnalogMovement.java).
 
 ```java
 package git.mojo.api;
@@ -30,7 +30,7 @@ public final class AnalogMovement {
 1. Load the library from your mod: `System.loadLibrary("pojavexec")`. If that fails, search `LD_LIBRARY_PATH` for `libpojavexec.so` and load it with `System.load`.
    Loading it again when another mod already loaded it is harmless.
 2. Call `registerAnalogMovement()`:
-   - `UnsatisfiedLinkError` (no library or no method): not Mojo 360, or an old launcher. Do nothing.
+   - `UnsatisfiedLinkError` (no library or no method): not MojoLauncher, or an old launcher. Do nothing.
    - `0`: the launcher side is not visible. Do nothing.
    - `> 0`: the handshake succeeded. The value is the launcher's API version.
 3. Poll every tick with `pollAnalogMovement()`:
