@@ -54,13 +54,19 @@ target_include_directories(pojavexec PRIVATE .)
 target_link_libraries(pojavexec PRIVATE log mojoexec)
 
 add_library(pojavexec_awt SHARED
-		awt/awt.c
-		awt/awt_window.c
-		awt/awt_util.c
-		awt/awt_input.c
-		awt/awt_clipboard.c
+        awt/awt.c
+        awt/awt_window.c
+        awt/awt_util.c
+        awt/awt_input.c
+        awt/awt_clipboard.c
         awt/awt_mapper.c
 )
+
+# Keep JNI entry points visible on Android. In particular, JNI_OnLoad must
+# remain exported so AWTBridge's RegisterNatives() is executed when the
+# library is loaded.
+target_compile_options(pojavexec_awt PRIVATE -fvisibility=default)
+target_link_options(pojavexec_awt PRIVATE -Wl,--export-dynamic)
 
 target_link_libraries(pojavexec_awt PRIVATE android log)
 
