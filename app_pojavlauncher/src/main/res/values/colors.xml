@@ -6,11 +6,11 @@
     <color name="minebutton_color">#3D93FF</color>
     <color name="accent_blue">#3D93FF</color>
     <color name="accent_purple">#7B61FF</color>
-    <color name="background_app">#050505</color>
+    <color name="background_app">#050B16</color>
     <color name="divider">@color/background_overlay</color>
-    <color name="background_overlay">#464646</color>
-    <color name="background_status_bar">#0A0A0A</color>
-    <color name="background_bottom_bar">#232323</color>
+    <color name="background_overlay">#14243D</color>
+    <color name="background_status_bar">#030811</color>
+    <color name="background_bottom_bar">#0A1526</color>
     <color name="icon_outline_color">#FFFFFF</color>
 
     <color name="primary_text">#FFFFFF</color>
