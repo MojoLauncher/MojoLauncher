@@ -67,10 +67,11 @@ public class MainMenuFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Button mNewsButton = view.findViewById(R.id.news_button);
         Button mDiscordButton = view.findViewById(R.id.social_media_button);
-        Button mCustomControlButton = view.findViewById(R.id.custom_control_button);
-        Button mInstallJarButton = view.findViewById(R.id.install_jar_button);
-        Button mShareLogsButton = view.findViewById(R.id.share_logs_button);
-        Button mOpenDirectoryButton = view.findViewById(R.id.open_files_button);
+        // Sidebar actions are ImageButtons in the new Cryonix home UI.
+        View mCustomControlButton = view.findViewById(R.id.custom_control_button);
+        View mInstallJarButton = view.findViewById(R.id.install_jar_button);
+        View mShareLogsButton = view.findViewById(R.id.share_logs_button);
+        View mOpenDirectoryButton = view.findViewById(R.id.open_files_button);
 
         ImageButton mEditProfileButton = view.findViewById(R.id.edit_profile_button);
         Button mPlayButton = view.findViewById(R.id.play_button);
@@ -86,7 +87,7 @@ public class MainMenuFragment extends Fragment {
         if (mDiscordButton != null) mDiscordButton.setOnClickListener(v -> Tools.openURL(requireActivity(), getString(R.string.social_media_invite)));
         if (mCustomControlButton != null) mCustomControlButton.setOnClickListener(v -> startActivity(new Intent(requireContext(), CustomControlsActivity.class)));
         if (mInstallJarButton != null) mInstallJarButton.setOnClickListener(v -> runInstallerWithConfirmation());
-        if (mEditProfileButton != null) mEditProfileButton.setOnClickListener(v -> mVersionSpinner.openProfileEditor(requireActivity()));
+        if (mEditProfileButton != null && mVersionSpinner != null) mEditProfileButton.setOnClickListener(v -> mVersionSpinner.openProfileEditor(requireActivity()));
 
         if (mPlayButton != null) mPlayButton.setOnClickListener(v -> ExtraCore.setValue(ExtraConstants.LAUNCH_GAME, true));
 
@@ -210,12 +211,13 @@ public class MainMenuFragment extends Fragment {
                 Tools.swapFragment(requireActivity(), InstanceEditorFragment.class, InstanceEditorFragment.TAG, null);
             });
 
-            vh.playButton.setOnClickListener(v -> {
+            if (vh.playButton != null) vh.playButton.setOnClickListener(v -> {
                 int pos = vh.getBindingAdapterPosition();
                 if (pos == RecyclerView.NO_POSITION) return;
                 Instances.setSelectedInstance(mList.get(pos));
                 ExtraCore.setValue(ExtraConstants.LAUNCH_GAME, true);
             });
+            }
             
             vh.menuButton.setOnClickListener(v -> {
                 int pos = vh.getBindingAdapterPosition();
