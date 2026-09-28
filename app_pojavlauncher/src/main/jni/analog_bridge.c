@@ -1,7 +1,8 @@
 //
 // Мост 360° движения: лаунчер (Dalvik) <-> мод (игровая JVM).
 // libpojavexec грузят обе VM в одном процессе -> статики ниже общие.
-// Нет мода -> флаг false -> джойстик шлёт WASD как раньше.
+// Нет мода -> счётчик 0 -> джойстик шлёт WASD как раньше.
+// Публичный API для любых модов: класс git.mojo.api.AnalogMovement, см. docs/analog-movement.md
 //
 
 #include <jni.h>
@@ -14,7 +15,7 @@
 #define ANALOG_API_VERSION 1
 
 static atomic_bool launcher_seen = false;  // ставит minibridgeInit (сторона Dalvik)
-static atomic_bool analog_enabled = false; // ставит/снимает мод
+static atomic_int analog_users = 0;       // сколько модов сейчас включили аналог
 static _Atomic uint64_t analog_xy = 0;     // x,y float в одном слове -> читаем целиком
 
 static uint64_t pack_xy(float x, float y) {
@@ -33,7 +34,7 @@ void analog_bridge_mark_launcher() {
 
 JNIEXPORT jboolean JNICALL
 Java_net_kdt_pojavlaunch_CallbackBridge_isAnalogMovement(JNIEnv *env, jclass clazz) {
-    return atomic_load(&analog_enabled);
+    return atomic_load(&analog_users) > 0;
 }
 
 // x: вправо +, y: вперёд +, длина 0..1
@@ -42,25 +43,28 @@ Java_net_kdt_pojavlaunch_CallbackBridge_sendAnalogMovement(JNIEnv *env, jclass c
     atomic_store(&analog_xy, pack_xy(x, y));
 }
 
-// ---- сторона игры (ru.evga314.mojo360.bridge.AnalogBridge в моде) ----
+// ---- сторона игры (git.mojo.api.AnalogMovement, копия класса в каждом моде) ----
 
-// вернёт версию API; 0 = лаунчер не виден (флаг тогда не ставим)
+// вернёт версию API; 0 = лаунчер не виден (счётчик тогда не трогаем)
+// каждый register парный с одним unregister
 JNIEXPORT jint JNICALL
-Java_ru_evga314_mojo360_bridge_AnalogBridge_registerAnalogMovement(JNIEnv *env, jclass clazz) {
+Java_git_mojo_api_AnalogMovement_registerAnalogMovement(JNIEnv *env, jclass clazz) {
     if(!atomic_load(&launcher_seen)) return 0;
-    atomic_store(&analog_xy, 0);
-    atomic_store(&analog_enabled, true);
+    atomic_fetch_add(&analog_users, 1);
     return ANALOG_API_VERSION;
 }
 
+// последний ушёл -> обнуляем вектор, лаунчер вернётся к WASD
 JNIEXPORT void JNICALL
-Java_ru_evga314_mojo360_bridge_AnalogBridge_unregisterAnalogMovement(JNIEnv *env, jclass clazz) {
-    atomic_store(&analog_enabled, false);
-    atomic_store(&analog_xy, 0);
+Java_git_mojo_api_AnalogMovement_unregisterAnalogMovement(JNIEnv *env, jclass clazz) {
+    int users = atomic_load(&analog_users);
+    // не уходим в минус при лишнем unregister
+    while(users > 0 && !atomic_compare_exchange_weak(&analog_users, &users, users - 1));
+    if(users == 1) atomic_store(&analog_xy, 0);
 }
 
 // x,y упакованы как в pack_xy, распаковка на стороне Java
 JNIEXPORT jlong JNICALL
-Java_ru_evga314_mojo360_bridge_AnalogBridge_pollAnalogMovement(JNIEnv *env, jclass clazz) {
+Java_git_mojo_api_AnalogMovement_pollAnalogMovement(JNIEnv *env, jclass clazz) {
     return (jlong) atomic_load(&analog_xy);
 }
