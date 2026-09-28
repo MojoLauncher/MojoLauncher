@@ -22,7 +22,7 @@ _Atomic bool isVmConnected = false;
 // This is used across all PojavExec AWT library
 JNIEnv* JNIEnv_InputRuntime;
 
-jint JNI_OnLoad(JavaVM* vm, void* reserved) {
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
     if (androidVM == NULL) {
         //Save dalvik global JavaVM pointer
         androidVM = vm;
