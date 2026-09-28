@@ -39,7 +39,7 @@ public class ControlJoystick extends JoystickView implements ControlInterface {
     private ControlJoystickData mControlData;
     private int mLastDirectionInt = GamepadJoystick.DIRECTION_NONE;
     private int mCurrentDirectionInt = GamepadJoystick.DIRECTION_NONE;
-    // режим прошлого onMove: true = аналог в мод, false = WASD
+    // mode of the previous onMove: true = analog to the mod, false = WASD
     private boolean mAnalogActive = false;
     public ControlJoystick(ControlLayout parent, ControlJoystickData data) {
         super(parent.getContext());
@@ -65,7 +65,7 @@ public class ControlJoystick extends JoystickView implements ControlInterface {
         setOnMoveListener(new OnMoveListener() {
             @Override
             public void onMove(int angle, int strength) {
-                // флаг ставит мод; без мода всегда false -> старый WASD
+                // enabled by a mod; without one always false -> legacy WASD
                 boolean analog = CallbackBridge.isAnalogMovement();
                 if (analog != mAnalogActive) switchMode(analog);
                 if (analog) {
@@ -141,7 +141,7 @@ public class ControlJoystick extends JoystickView implements ControlInterface {
         editControlPopup.loadJoystickValues(mControlData);
     }
 
-    // мод включили/выключили на ходу: отпускаем то, что держал старый режим
+    // mod toggled mid-gesture: release whatever the previous mode was holding
     private void switchMode(boolean analog) {
         if (analog) {
             sendDirectionalKeycode(mCurrentDirectionInt, false);
@@ -152,14 +152,14 @@ public class ControlJoystick extends JoystickView implements ControlInterface {
         mAnalogActive = analog;
     }
 
-    // угол 0 = вправо, 90 = вперёд; сила 0 или DEADZONE..100 (ниже зоны библиотека шлёт 0)
+    // angle 0 = right, 90 = forward; strength is 0 or DEADZONE..100 (the library sends 0 inside the deadzone)
     private static void sendAnalog(int angle, int strength) {
         if (strength <= 0) {
             CallbackBridge.sendAnalogMovement(0, 0);
             return;
         }
         double rad = Math.toRadians(angle);
-        // DEADZONE..100 -> 0..1, чтобы не было скачка на краю зоны
+        // DEADZONE..100 -> 0..1, so speed doesn't jump at the deadzone edge
         float power = (Math.min(strength, 100) - DEADZONE) / (100f - DEADZONE);
         power = Math.max(power, 0.05f);
         CallbackBridge.sendAnalogMovement((float) Math.cos(rad) * power, (float) Math.sin(rad) * power);

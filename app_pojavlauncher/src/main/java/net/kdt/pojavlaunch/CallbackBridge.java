@@ -130,9 +130,9 @@ public class CallbackBridge {
 
     public static native void minibridgeInit();
 
-    // 360° движение (analog_bridge.c): флаг ставит мод в игре, без мода всегда false
+    // 360° movement (analog_bridge.c): enabled by a game-side mod, always false without one
     public static native boolean isAnalogMovement();
-    // x: вправо +, y: вперёд +, длина 0..1
+    // x: right +, y: forward +, length 0..1
     public static native void sendAnalogMovement(float x, float y);
 
     static {
