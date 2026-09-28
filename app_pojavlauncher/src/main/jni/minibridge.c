@@ -13,6 +13,8 @@ static JavaVM* dalivk;
 static jclass class_CallbackBridge;
 static jmethodID method_openLink;
 
+extern void analog_bridge_mark_launcher(); // analog_bridge.c
+
 
 void openLink(const char* link) {
     JNIEnv *attachedEnv = get_attached_env(dalivk);
@@ -24,4 +26,5 @@ Java_net_kdt_pojavlaunch_CallbackBridge_minibridgeInit(JNIEnv *env, jclass clazz
     (*env)->GetJavaVM(env, &dalivk);
     class_CallbackBridge = (*env)->NewGlobalRef(env, clazz);
     method_openLink = (*env)->GetStaticMethodID(env, clazz, "openLink", "(Ljava/lang/String;)V");
+    analog_bridge_mark_launcher();
 }
