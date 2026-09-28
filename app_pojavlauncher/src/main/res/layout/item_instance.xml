@@ -4,16 +4,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/instance_card_root"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
-    android:layout_marginBottom="8dp"
+    android:layout_height="78dp"
+    android:layout_marginBottom="10dp"
     android:background="@drawable/launcher_card_flat"
     android:padding="10dp">
 
     <ImageView
         android:id="@+id/instance_icon"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:contentDescription="Icon"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:contentDescription="Instance icon"
         android:scaleType="centerInside"
         android:src="@drawable/cryonixlauncher"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,48 +28,45 @@
         android:ellipsize="end"
         android:fontFamily="sans-serif-medium"
         android:singleLine="true"
-        android:text="Instance Name"
-        android:textColor="#FFFFFF"
+        android:text="Instance"
+        android:textColor="@android:color/white"
         android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@+id/instance_menu"
+        app:layout_constraintEnd_toStartOf="@id/instance_menu"
         app:layout_constraintStart_toEndOf="@id/instance_icon"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/instance_version"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/instance_version"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="1.20.1"
-        android:textColor="#8A8A8A"
+        android:layout_marginTop="3dp"
+        android:text="Version"
+        android:textColor="@color/secondary_text"
         android:textSize="11sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/instance_menu"
         app:layout_constraintStart_toStartOf="@id/instance_name"
         app:layout_constraintTop_toBottomOf="@id/instance_name" />
 
     <ImageButton
         android:id="@+id/instance_menu"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="More"
+        android:contentDescription="Instance options"
         android:src="@drawable/ic_px_sliders"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="#4DFFFFFF" />
+        app:tint="@color/secondary_text" />
 
     <ImageButton
         android:id="@+id/instance_play_small"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@drawable/launcher_sidebar_home_bg"
-        android:contentDescription="Play"
-        android:padding="7dp"
-        android:scaleType="centerInside"
+        android:contentDescription="Launch instance"
+        android:padding="8dp"
         android:src="@drawable/ic_px_play"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:tint="#FFFFFF" />
-
+        app:tint="@android:color/white" />
 </androidx.constraintlayout.widget.ConstraintLayout>
