@@ -14,9 +14,9 @@
 
 <p align="center">
 
-[![GitHub Downloads](https://img.shields.io/github/downloads/cryonixlauncherteam/CryonixLauncher2/total?label=Downloads&logo=github&color=blue)](https://github.com/cryonixlauncherteam/CryonixLauncher2/realese)
+[![GitHub Downloads](https://img.shields.io/github/downloads/cryonixlauncherteam/CryonixLauncherV2/total?label=Downloads&logo=github&color=blue)](https://github.com/cryonixlauncherteam/CryonixLauncherV2/releases)
 
-[![GitHub Release](https://img.shields.io/github/v/release/cryonixlauncherteam/CryonixLauncher2?logo=github)](https://github.com/cryonixlauncherteam/CryonixLauncher2/releases/tag/Beta_v2)
+[![GitHub Release](https://img.shields.io/github/v/release/cryonixlauncherteam/CryonixLauncherV2?logo=github)](https://github.com/cryonixlauncherteam/CryonixLauncherV2/releases/tag/Beta_v2)
 
 [![License](https://img.shields.io/badge/license-CryonixLauncherV2-blue.svg)](LICENSE)
 
