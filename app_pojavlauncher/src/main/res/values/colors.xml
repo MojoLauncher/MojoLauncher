@@ -5,7 +5,7 @@
 
     <color name="minebutton_color">#3D93FF</color>
     <color name="accent_blue">#3D93FF</color>
-    <color name="accent_purple">#7B61FF</color>
+    <color name="accent_purple">#3D93FF</color>
     <color name="background_app">#050B16</color>
     <color name="divider">@color/background_overlay</color>
     <color name="background_overlay">#14243D</color>
@@ -14,5 +14,5 @@
     <color name="icon_outline_color">#FFFFFF</color>
 
     <color name="primary_text">#FFFFFF</color>
-    <color name="secondary_text">#B2B2B2</color>
+    <color name="secondary_text">#9FB5D8</color>
 </resources>
