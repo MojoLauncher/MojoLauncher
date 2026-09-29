@@ -14,7 +14,7 @@
 #include <log.h>
 
 static void create_hooks(bytehook_hook_all_t bytehook_hook_all_p) {
-    // Only apply chmod hooks on devices where the game directory is in games/PojavLauncher
+    // Only apply chmod hooks on devices where the game directory is in games/mjlaunch
     // which is below API 29
     if(android_get_device_api_level() < 29) {
         create_chmod_hooks(bytehook_hook_all_p);
