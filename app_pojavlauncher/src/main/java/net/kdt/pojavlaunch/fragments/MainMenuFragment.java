@@ -97,9 +97,18 @@ public class MainMenuFragment extends Fragment {
 
         mInstancesList = view.findViewById(R.id.instances_list);
         if (mInstancesList != null) {
-            mInstancesList.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+            mInstancesList.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
             reloadInstances();
         }
+
+        Button rightLaunchButton = view.findViewById(R.id.right_launch_button);
+        Button sideEditButton = view.findViewById(R.id.side_edit_profile);
+        Button sideOpenFolderButton = view.findViewById(R.id.side_open_folder);
+        if (rightLaunchButton != null) rightLaunchButton.setOnClickListener(v -> ExtraCore.setValue(ExtraConstants.LAUNCH_GAME, true));
+        if (sideEditButton != null) sideEditButton.setOnClickListener(v -> {
+            if (Instances.loadSelectedInstance() != null) Tools.swapFragment(requireActivity(), InstanceEditorFragment.class, InstanceEditorFragment.TAG, null);
+        });
+        if (sideOpenFolderButton != null) sideOpenFolderButton.setOnClickListener(v -> openGameDirectory(v.getContext()));
 
         View instancesPanel = view.findViewById(R.id.instances_panel);
         ImageButton toggleBtn = view.findViewById(R.id.btn_toggle_instances);
@@ -160,8 +169,32 @@ public class MainMenuFragment extends Fragment {
             Instances instances = Instances.loadDisplay();
             mAdapter = new InstanceAdapter(instances.list, instances.selectedIndex);
             mInstancesList.setAdapter(mAdapter);
+            updateSelectedPanel();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void updateSelectedPanel() {
+        if (!isAdded() || getView() == null) return;
+        Instance selected = Instances.loadSelectedInstance();
+        TextView label = getView().findViewById(R.id.current_instance_label);
+        TextView version = getView().findViewById(R.id.current_instance_version);
+        if (selected == null) {
+            if (label != null) label.setText("Select an instance");
+            if (version != null) version.setText("—");
+            return;
+        }
+        DisplayInstance display = null;
+        try {
+            Instances data = Instances.loadDisplay();
+            if (data.selectedIndex >= 0 && data.selectedIndex < data.list.size()) display = data.list.get(data.selectedIndex);
+        } catch (Exception ignored) { }
+        if (display != null) {
+            if (label != null) label.setText(display.name);
+            if (version != null) version.setText(display.versionId);
+        } else if (label != null) {
+            label.setText(selected.getName());
         }
     }
 
@@ -206,9 +239,7 @@ public class MainMenuFragment extends Fragment {
                 Instances.setSelectedInstance(mList.get(pos));
                 mSelectedIndex = pos;
                 notifyDataSetChanged();
-                
-                // Open Instance Editor (Fabric etc. settings)
-                Tools.swapFragment(requireActivity(), InstanceEditorFragment.class, InstanceEditorFragment.TAG, null);
+                updateSelectedPanel();
             });
 
             if (vh.playButton != null) vh.playButton.setOnClickListener(v -> {
