@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Main Background -->
-    <item>
-        <shape android:shape="rectangle">
-            <solid android:color="#CC0D0D0D" />
-            <corners android:radius="4dp" />
-        </shape>
-    </item>
-    <!-- Bottom Accent Line -->
-    <item android:top="68dp">
-        <shape android:shape="rectangle">
-            <solid android:color="#3D93FF" />
-        </shape>
-    </item>
-</layer-list>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <corners android:radius="18dp"/>
+    <solid android:color="#E0102038"/>
+    <stroke android:width="2dp" android:color="#3D93FF"/>
+</shape>
