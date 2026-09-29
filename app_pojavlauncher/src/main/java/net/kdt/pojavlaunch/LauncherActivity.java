@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.system.Os;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -26,7 +27,11 @@ import androidx.fragment.app.FragmentManager;
 
 import com.kdt.mcgui.ProgressLayout;
 
+import java.io.IOException;
+
+import net.kdt.pojavlaunch.authenticator.accounts.Account;
 import net.kdt.pojavlaunch.authenticator.accounts.Accounts;
+import net.kdt.pojavlaunch.authenticator.accounts.AuthFallback;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.extra.ExtraListener;
@@ -125,11 +130,50 @@ public class LauncherActivity extends BaseActivity {
             return false;
         }
 
-        if(Accounts.getCurrent() == null){
+        Account currentAccount = Accounts.getCurrent();
+        if(currentAccount == null){
             Toast.makeText(this, R.string.no_saved_accounts, Toast.LENGTH_LONG).show();
             ExtraCore.setValue(ExtraConstants.SELECT_AUTH_METHOD, true);
             return false;
         }
+        checkAuthServiceAndLaunch(currentAccount, selectedInstance);
+        return false;
+    };
+
+    private void checkAuthServiceAndLaunch(final Account account, final Instance selectedInstance) {
+        ProgressLayout.setProgress(ProgressLayout.AUTHENTICATE, 0, getString(R.string.auth_checking_service));
+        PojavApplication.sExecutorService.execute(() -> {
+            Account offlineAccount = null;
+            IOException failure = null;
+            if(!AuthFallback.isAuthServiceReachable(account.authType)) {
+                try {
+                    offlineAccount = AuthFallback.switchToOfflineAccount(account);
+                } catch (IOException e) {
+                    Log.e(AuthFallback.TAG, "Could not switch to an offline account", e);
+                    failure = e;
+                }
+            }
+            final Account finalOfflineAccount = offlineAccount;
+            final IOException finalFailure = failure;
+            Tools.runOnUiThread(() -> {
+                ProgressLayout.clearProgress(ProgressLayout.AUTHENTICATE);
+                if(isFinishing() || isDestroyed()) return;
+                if(finalFailure != null) {
+                    Tools.showError(this, finalFailure);
+                    return;
+                }
+                if(finalOfflineAccount != null) {
+                    Toast.makeText(this, getString(R.string.auth_fallback_offline,
+                            AuthFallback.getServiceName(account.authType), finalOfflineAccount.username),
+                            Toast.LENGTH_LONG).show();
+                    ExtraCore.setValue(ExtraConstants.REFRESH_ACCOUNT_SPINNER, true);
+                }
+                downloadGameFiles(selectedInstance);
+            });
+        });
+    }
+
+    private void downloadGameFiles(Instance selectedInstance) {
         String normalizedVersionId = MoJsonExtras.normalizeVersionId(selectedInstance.versionId);
         JVersionList.Version mcVersion = MoJsonExtras.getListedVersion(normalizedVersionId);
         new MoJsonDownloader().start(
@@ -138,8 +182,7 @@ public class LauncherActivity extends BaseActivity {
                 normalizedVersionId,
                 new ContextAwareDoneListener(this, normalizedVersionId)
         );
-        return false;
-    };
+    }
 
     private final TaskCountListener mDoubleLaunchPreventionListener = taskCount -> {
         // Hide the notification that starts the game if there are tasks executing.

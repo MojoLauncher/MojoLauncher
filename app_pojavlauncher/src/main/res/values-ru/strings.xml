@@ -207,6 +207,8 @@
     <string name="main_add_account">Добавить учётную запись</string>
     <string name="tasks_ongoing">Производится подготовка, подождите…</string>
     <string name="no_saved_accounts">Нет сохранённых учётных записей</string>
+    <string name="auth_checking_service">Проверка сервиса авторизации…</string>
+    <string name="auth_fallback_offline">Сервис авторизации %1$s недоступен, вместо него используется локальный аккаунт \"%2$s\"</string>
     <string name="mc_download_failed">Не удалось загрузить Minecraft! Это может возникать из-за медленного интернет-соединения или ошибок в размещении файлов.</string>
     <string name="xerr_unknown">Неизвестная ошибка API Xbox Live %d</string>
     <string name="xerr_no_account">Похоже, у вас нет учётной записи Xbox Live. Единожды войдите на https://minecraft.net и попробуйте ещё раз.</string>
