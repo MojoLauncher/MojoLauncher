@@ -14,11 +14,11 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name='PojavLauncher'
+rootProject.name='CryonixLauncher'
 include ':app_pojavlauncher'
 
 include ':forge_installer'
 include ':glfw:jni_bindings'
 include ':mojoexec:jni_bindings'
 include ':sdl:jni_bindings'
-// Updated for Cryonix V2
+// Cryonix Launcher project configuration
