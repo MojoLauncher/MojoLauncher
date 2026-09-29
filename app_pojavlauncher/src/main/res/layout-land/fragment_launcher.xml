@@ -15,15 +15,15 @@
         android:background="@drawable/launcher_sidebar_bg"
         android:gravity="top|center_horizontal"
         android:orientation="vertical"
-        android:paddingTop="28dp"
-        android:paddingBottom="28dp"
+        android:paddingTop="22dp"
+        android:paddingBottom="22dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:layout_width="62dp"
-            android:layout_height="62dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:contentDescription="Cryonix"
             android:scaleType="centerInside"
             android:src="@drawable/cryonixlauncher" />
@@ -32,10 +32,10 @@
             android:id="@+id/sidebar_home"
             android:layout_width="62dp"
             android:layout_height="62dp"
-            android:layout_marginTop="34dp"
+            android:layout_marginTop="28dp"
             android:background="@drawable/launcher_sidebar_home_bg"
             android:contentDescription="Home"
-            android:padding="16dp"
+            android:padding="14dp"
             android:src="@drawable/ic_px_home"
             app:tint="@android:color/white" />
 
@@ -43,10 +43,10 @@
             android:id="@+id/sidebar_instances"
             android:layout_width="62dp"
             android:layout_height="62dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="10dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Instances"
-            android:padding="17dp"
+            android:padding="15dp"
             android:src="@drawable/ic_px_book"
             app:tint="#A9C0EA" />
 
