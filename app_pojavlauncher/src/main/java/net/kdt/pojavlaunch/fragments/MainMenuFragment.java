@@ -169,6 +169,9 @@ public class MainMenuFragment extends Fragment {
             Instances instances = Instances.loadDisplay();
             mAdapter = new InstanceAdapter(instances.list, instances.selectedIndex);
             mInstancesList.setAdapter(mAdapter);
+            View root = getView();
+            TextView counter = root == null ? null : root.findViewById(R.id.instance_counter);
+            if (counter != null) counter.setText((instances.selectedIndex + 1) + "/" + instances.list.size());
             updateSelectedPanel();
         } catch (Exception e) {
             e.printStackTrace();
@@ -194,7 +197,7 @@ public class MainMenuFragment extends Fragment {
             if (label != null) label.setText(display.name);
             if (version != null) version.setText(display.versionId);
         } else if (label != null) {
-            label.setText(selected.getName());
+            label.setText("Selected instance");
         }
     }
 
