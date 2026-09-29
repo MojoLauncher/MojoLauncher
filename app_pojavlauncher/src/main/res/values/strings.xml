@@ -44,7 +44,7 @@
     <string name="mcl_launch_downloading_progress">"Downloading %s (%.2f MB / %.2f MB)"</string>
     <string name="mcl_launch_download_assets">Preparing to download resources</string>
 
-    <string name="mcl_options">Options</string>
+    <string name="mcl_options">Cryonix Options</string>
     <string name="mcl_option_customcontrol">Custom controls</string>
 
 
@@ -155,9 +155,9 @@
     <string name="customctrl_selectdefault">Select default controlmap</string>
     <string name="customctrl_export">Export controlmap</string>
 
-    <string name="main_share_logs">Share log file</string>
-    <string name="main_install_jar_file">Execute a .jar</string>
-    <string name="main_play">Play</string>
+    <string name="main_share_logs">Share Cryonix log file</string>
+    <string name="main_install_jar_file">Run Java .jar</string>
+    <string name="main_play">Launch</string>
     <string name="autoram_info_msg">Memory set to %d MB</string>
     <string name="mcl_setting_check_libraries">Check libraries after downloading</string>
     <string name="mcl_setting_check_libraries_subtitle">This option forces the launcher to check the library hash if it\'s available. Prevents broken downloads.</string>
@@ -182,7 +182,7 @@
     <string name="multirt_runtime_incompatiblearch">Incompatible architecture: %s</string>
     <string name="multirt_config_title">Java Runtimes</string>
     <string name="multirt_config_add">Add new</string>
-    <string name="multirt_title">Runtime Manager</string>
+    <string name="multirt_title">Cryonix Runtime Manager</string>
     <string name="multirt_subtitle">Manage installed Java Runtimes.</string>
     <string name="multirt_progress_caching">Caching...</string>
     <string name="multirt_config_setdefault">Set default</string>
