@@ -3,49 +3,23 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/instance_card_root"
-    android:layout_width="match_parent"
-    android:layout_height="78dp"
-    android:layout_marginBottom="10dp"
+    android:layout_width="260dp"
+    android:layout_height="194dp"
+    android:layout_marginEnd="12dp"
     android:background="@drawable/launcher_card_flat"
-    android:padding="10dp">
+    android:padding="14dp">
 
     <ImageView
         android:id="@+id/instance_icon"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/launcher_icon_tile"
         android:contentDescription="Instance icon"
+        android:padding="7dp"
         android:scaleType="centerInside"
         android:src="@drawable/cryonixlauncher"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/instance_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:ellipsize="end"
-        android:fontFamily="sans-serif-medium"
-        android:singleLine="true"
-        android:text="Instance"
-        android:textColor="@android:color/white"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@id/instance_menu"
-        app:layout_constraintStart_toEndOf="@id/instance_icon"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/instance_version"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:text="Version"
-        android:textColor="@color/secondary_text"
-        android:textSize="11sp"
-        app:layout_constraintEnd_toStartOf="@id/instance_menu"
-        app:layout_constraintStart_toStartOf="@id/instance_name"
-        app:layout_constraintTop_toBottomOf="@id/instance_name" />
 
     <ImageButton
         android:id="@+id/instance_menu"
@@ -53,20 +27,69 @@
         android:layout_height="34dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="Instance options"
-        android:src="@drawable/ic_px_sliders"
+        android:padding="7dp"
+        android:src="@drawable/ic_launcher_more"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/secondary_text" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/instance_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:singleLine="true"
+        android:text="Instance"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/instance_icon" />
+
+    <TextView
+        android:id="@+id/instance_version"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="Version"
+        android:textColor="@color/secondary_text"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/instance_name" />
+
+    <View
+        android:id="@+id/instance_status_dot"
+        android:layout_width="9dp"
+        android:layout_height="9dp"
+        android:layout_marginBottom="3dp"
+        android:background="@drawable/launcher_status_ready"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/instance_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:text="Ready"
+        android:textColor="#00D6A0"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/instance_status_dot"
+        app:layout_constraintStart_toEndOf="@id/instance_status_dot"
+        app:layout_constraintTop_toTopOf="@id/instance_status_dot" />
 
     <ImageButton
         android:id="@+id/instance_play_small"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
         android:background="@drawable/launcher_sidebar_home_bg"
         android:contentDescription="Launch instance"
-        android:padding="8dp"
-        android:src="@drawable/ic_px_play"
+        android:padding="9dp"
+        android:src="@drawable/ic_launcher_play"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@android:color/white" />
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
