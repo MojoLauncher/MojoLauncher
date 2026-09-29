@@ -48,6 +48,7 @@ add_library(pojavexec SHARED
         utils.c
         stdio_is.c
         minibridge.c
+        analog_bridge.c
 )
 
 target_include_directories(pojavexec PRIVATE .)

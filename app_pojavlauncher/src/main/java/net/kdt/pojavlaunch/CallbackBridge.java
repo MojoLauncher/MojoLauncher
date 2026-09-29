@@ -130,6 +130,11 @@ public class CallbackBridge {
 
     public static native void minibridgeInit();
 
+    // 360° movement (analog_bridge.c): enabled by a game-side mod, always false without one
+    public static native boolean isAnalogMovement();
+    // x: right +, y: forward +, length 0..1
+    public static native void sendAnalogMovement(float x, float y);
+
     static {
         System.loadLibrary("pojavexec");
         minibridgeInit();
