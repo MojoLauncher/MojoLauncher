@@ -15,23 +15,25 @@ import java.util.Locale;
 public class DateUtils {
     /**
      * Parse the release date of a game version from the JMinecraftVersionList.Version time or releaseTime fields
+     *
      * @param releaseTime the time or releaseTime string from JMinecraftVersionList.Version
      * @return the date object
      * @throws ParseException if date parsing fails
      */
     public static Date parseReleaseDate(String releaseTime) throws ParseException {
-        if(releaseTime == null) return null;
+        if (releaseTime == null) return null;
         int tIndexOf = releaseTime.indexOf('T');
-        if(tIndexOf != -1) releaseTime = releaseTime.substring(0, tIndexOf);
+        if (tIndexOf != -1) releaseTime = releaseTime.substring(0, tIndexOf);
         return new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(releaseTime);
     }
 
     /**
      * Checks if the Date object is before the date denoted by
      * year, month, dayOfMonth parameters
-     * @param date the Date object that we compare against
-     * @param year the year
-     * @param month the month (zero-based)
+     *
+     * @param date       the Date object that we compare against
+     * @param year       the year
+     * @param month      the month (zero-based)
      * @param dayOfMonth the day of the month
      * @return true if the Date is before year, month, dayOfMonth, false otherwise
      */
@@ -41,13 +43,14 @@ public class DateUtils {
 
     /**
      * Extracts the original release date of a game version, ignoring any mods (if present)
+     *
      * @param gameVersion the JMinecraftVersionList.Version object
      * @return the game's original release date
      */
     public static Date getOriginalReleaseDate(JVersionList.Version gameVersion) throws ParseException {
-        if(Tools.isValidString(gameVersion.inheritsFrom)) {
+        if (Tools.isValidString(gameVersion.inheritsFrom)) {
             gameVersion = Tools.getVersionInfo(gameVersion.inheritsFrom, true);
-        }else {
+        } else {
             // The launcher's inheritor mutilates the version object, causing it to have the original
             // version's ID but modded version's dates. Work around it by re-reading the version without
             // inheriting.

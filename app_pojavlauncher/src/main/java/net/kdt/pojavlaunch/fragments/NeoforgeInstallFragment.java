@@ -10,6 +10,7 @@ import git.artdeell.mojo.R;
 
 public class NeoforgeInstallFragment extends ForgelikeInstallFragment {
     public static final String TAG = "NeoforgeInstallFragment";
+
     public NeoforgeInstallFragment() {
         super(ForgelikeUtils.NEOFORGE_UTILS, TAG);
     }

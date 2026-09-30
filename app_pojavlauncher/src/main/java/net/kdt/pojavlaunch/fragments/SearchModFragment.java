@@ -27,8 +27,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.kdt.mcgui.ProgressLayout;
 
-import git.artdeell.mojo.R;
-
 import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.modloaders.modpacks.ModItemAdapter;
@@ -47,20 +45,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import git.artdeell.mojo.R;
+
 
 public class SearchModFragment extends Fragment implements ModItemAdapter.SearchResultCallback {
 
     public static final String TAG = "SearchModFragment";
+    private final SearchFilters mSearchFilters;
     private View mOverlay;
     private float mOverlayTopCache; // Padding cache reduce resource lookup
-
     private final RecyclerView.OnScrollListener mOverlayPositionListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
             mOverlay.setY(MathUtils.clamp(mOverlay.getY() - dy, -mOverlay.getHeight(), mOverlayTopCache));
         }
     };
-
     private EditText mSearchEditText;
     private ImageButton mFilterButton;
     private RecyclerView mRecyclerview;
@@ -69,12 +68,6 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
     private TextView mStatusTextView;
     private ColorStateList mDefaultTextColor;
     private ModpackApi modpackApi;
-
-    private final SearchFilters mSearchFilters;
-
-    private Button mImportButton;
-    private TaskCountListener mTaskCountListener;
-
     ActivityResultLauncher<String> mImportLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
             uri -> {
                 if (uri == null) return;
@@ -84,36 +77,38 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
                     performLocalInstall(uri, context, contentResolver);
                 });
             });
+    private Button mImportButton;
+    private TaskCountListener mTaskCountListener;
 
-    public void performLocalInstall(Uri uri, Context context, ContentResolver contentResolver) {
-            String fileName = Tools.getFileName(context, uri);
-            if (fileName == null) return;
-            File outFile = new File(Tools.DIR_CACHE, fileName + ".cf");
-            ProgressLayout.setProgress(ProgressLayout.INSTALL_MODPACK, R.string.multirt_progress_caching);
-            try (InputStream inputStream = contentResolver.openInputStream(uri);
-                 OutputStream outputStream = new FileOutputStream(outFile)) {
-                if (inputStream == null) return;
-                IOUtils.copy(inputStream, outputStream);
-                outputStream.flush();
-            } catch (IOException e) {
-                Tools.showErrorRemote("Error", e);
-                ProgressLayout.clearProgress(ProgressLayout.INSTALL_MODPACK);
-                return;
-            }
-            try {
-                modpackApi.installLocalModpack(fileName, outFile, null);
-            } catch (IOException e) {
-                Tools.showErrorRemote("Error", e);
-            } finally {
-                outFile.delete();
-                ProgressLayout.clearProgress(ProgressLayout.INSTALL_MODPACK);
-            }
-    }
-
-    public SearchModFragment(){
+    public SearchModFragment() {
         super(R.layout.fragment_mod_search);
         mSearchFilters = new SearchFilters();
         mSearchFilters.isModpack = true;
+    }
+
+    public void performLocalInstall(Uri uri, Context context, ContentResolver contentResolver) {
+        String fileName = Tools.getFileName(context, uri);
+        if (fileName == null) return;
+        File outFile = new File(Tools.DIR_CACHE, fileName + ".cf");
+        ProgressLayout.setProgress(ProgressLayout.INSTALL_MODPACK, R.string.multirt_progress_caching);
+        try (InputStream inputStream = contentResolver.openInputStream(uri);
+             OutputStream outputStream = new FileOutputStream(outFile)) {
+            if (inputStream == null) return;
+            IOUtils.copy(inputStream, outputStream);
+            outputStream.flush();
+        } catch (IOException e) {
+            Tools.showErrorRemote("Error", e);
+            ProgressLayout.clearProgress(ProgressLayout.INSTALL_MODPACK);
+            return;
+        }
+        try {
+            modpackApi.installLocalModpack(fileName, outFile, null);
+        } catch (IOException e) {
+            Tools.showErrorRemote("Error", e);
+        } finally {
+            outFile.delete();
+            ProgressLayout.clearProgress(ProgressLayout.INSTALL_MODPACK);
+        }
     }
 
     @Override
@@ -149,12 +144,12 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
             return false;
         });
 
-        mOverlay.post(()->{
-           int overlayHeight = mOverlay.getHeight();
-           mRecyclerview.setPadding(mRecyclerview.getPaddingLeft(),
-                   mRecyclerview.getPaddingTop() + overlayHeight,
-                   mRecyclerview.getPaddingRight(),
-                   mRecyclerview.getPaddingBottom());
+        mOverlay.post(() -> {
+            int overlayHeight = mOverlay.getHeight();
+            mRecyclerview.setPadding(mRecyclerview.getPaddingLeft(),
+                    mRecyclerview.getPaddingTop() + overlayHeight,
+                    mRecyclerview.getPaddingRight(),
+                    mRecyclerview.getPaddingBottom());
         });
         mFilterButton.setOnClickListener(v -> displayFilterDialog());
         mImportButton = view.findViewById(R.id.mineButton_import_local_modpack);
@@ -175,7 +170,9 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
         super.onDestroyView();
         ProgressKeeper.removeTaskCountListener(mModItemAdapter);
         mRecyclerview.removeOnScrollListener(mOverlayPositionListener);
-        if (mTaskCountListener != null) { ProgressKeeper.removeTaskCountListener(mTaskCountListener); }
+        if (mTaskCountListener != null) {
+            ProgressKeeper.removeTaskCountListener(mTaskCountListener);
+        }
     }
 
     @Override
@@ -222,7 +219,7 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
             assert mApplyButton != null;
 
             // Setup the expendable list behavior
-            mSelectVersionButton.setOnClickListener(v -> VersionSelectorDialog.open(v.getContext(), true, (id, snapshot)-> mSelectedVersion.setText(id)));
+            mSelectVersionButton.setOnClickListener(v -> VersionSelectorDialog.open(v.getContext(), true, (id, snapshot) -> mSelectedVersion.setText(id)));
 
             // Apply visually all the current settings
             mSelectedVersion.setText(mSearchFilters.mcVersion);

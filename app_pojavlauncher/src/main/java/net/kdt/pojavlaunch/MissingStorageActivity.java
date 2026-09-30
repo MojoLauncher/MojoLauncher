@@ -1,8 +1,8 @@
 package net.kdt.pojavlaunch;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import git.artdeell.mojo.R;
 

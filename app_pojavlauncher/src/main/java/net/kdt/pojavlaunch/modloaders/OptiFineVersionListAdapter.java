@@ -54,19 +54,19 @@ public class OptiFineVersionListAdapter extends BaseExpandableListAdapter implem
 
     @Override
     public View getGroupView(int i, boolean b, View convertView, ViewGroup viewGroup) {
-        if(convertView == null)
+        if (convertView == null)
             convertView = mLayoutInflater.inflate(android.R.layout.simple_expandable_list_item_1, viewGroup, false);
 
-        ((TextView) convertView).setText((String)getGroup(i));
+        ((TextView) convertView).setText((String) getGroup(i));
 
         return convertView;
     }
 
     @Override
     public View getChildView(int i, int i1, boolean b, View convertView, ViewGroup viewGroup) {
-        if(convertView == null)
+        if (convertView == null)
             convertView = mLayoutInflater.inflate(android.R.layout.simple_expandable_list_item_1, viewGroup, false);
-        ((TextView) convertView).setText(((OptiFineUtils.OptiFineVersion)getChild(i,i1)).versionName);
+        ((TextView) convertView).setText(((OptiFineUtils.OptiFineVersion) getChild(i, i1)).versionName);
         return convertView;
     }
 

@@ -4,5 +4,5 @@ import androidx.annotation.Keep;
 
 @Keep
 public class LibraryArtifact extends ClientInfo {
-	public String path;
+    public String path;
 }

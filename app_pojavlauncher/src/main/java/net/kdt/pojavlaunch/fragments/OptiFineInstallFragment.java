@@ -6,8 +6,6 @@ import android.widget.ExpandableListAdapter;
 
 import com.kdt.mcgui.ProgressLayout;
 
-import git.artdeell.mojo.R;
-
 import net.kdt.pojavlaunch.instances.InstanceInstaller;
 import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.modloaders.ModloaderListenerProxy;
@@ -18,11 +16,15 @@ import net.kdt.pojavlaunch.modloaders.OptiFineVersionListAdapter;
 import java.io.File;
 import java.io.IOException;
 
+import git.artdeell.mojo.R;
+
 public class OptiFineInstallFragment extends ModVersionListFragment<OptiFineUtils.OptiFineVersions> {
     public static final String TAG = "OptiFineInstallFragment";
+
     public OptiFineInstallFragment() {
         super(TAG);
     }
+
     @Override
     public int getTitleText() {
         return R.string.of_dl_select_version;
@@ -32,6 +34,7 @@ public class OptiFineInstallFragment extends ModVersionListFragment<OptiFineUtil
     public int getNoDataMsg() {
         return R.string.of_dl_failed_to_scrape;
     }
+
     @Override
     public OptiFineUtils.OptiFineVersions loadVersionList() throws IOException {
         return OptiFineUtils.downloadOptiFineVersions();
@@ -55,14 +58,14 @@ public class OptiFineInstallFragment extends ModVersionListFragment<OptiFineUtil
             ProgressLayout.clearProgress(ProgressLayout.INSTALL_MODPACK);
             instanceInstaller.start();
             listenerProxy.onDownloadFinished(null);
-        }catch (Exception e) {
+        } catch (Exception e) {
             listenerProxy.onDownloadError(e);
         }
     }
 
     @Override
     public Runnable createDownloadTask(Object selectedVersion, ModloaderListenerProxy listenerProxy) {
-        return ()->createInstance((OptiFineUtils.OptiFineVersion) selectedVersion, listenerProxy);
+        return () -> createInstance((OptiFineUtils.OptiFineVersion) selectedVersion, listenerProxy);
     }
 
     @Override

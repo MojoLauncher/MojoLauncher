@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -21,8 +20,8 @@ import net.kdt.pojavlaunch.Tools;
 import top.defaults.checkerboarddrawable.CheckerboardDrawable;
 
 public class CropperView extends View {
-    private final RectF mSelectionHighlight = new RectF();
     protected final Rect mSelectionRect = new Rect();
+    private final RectF mSelectionHighlight = new RectF();
     public boolean horizontalLock, verticalLock;
     private float mLastTouchX, mLastTouchY;
     private float mHighlightThickness;
@@ -69,7 +68,7 @@ public class CropperView extends View {
     public boolean dispatchGenericMotionEvent(MotionEvent event) {
         float x1 = event.getX(0);
         float y1 = event.getY(0);
-        if(event.getPointerCount() > 1) {
+        if (event.getPointerCount() > 1) {
             // More than 1 pointer = pinching
             // Compute the distance and zoom the image with it
             float x2 = event.getX(1);
@@ -77,14 +76,14 @@ public class CropperView extends View {
             float deltaXSquared = (x2 - x1) * (x2 - x1);
             float deltaYSquared = (y2 - y1) * (y2 - y1);
             float distance = (float) Math.sqrt(deltaXSquared + deltaYSquared);
-            if(mLastDistance != -1) {
+            if (mLastDistance != -1) {
                 float distanceDelta = distance - mLastDistance;
                 float multiplier = 0.005f;
-                if(horizontalLock) {
+                if (horizontalLock) {
                     x1 = mSelectionRect.left;
                     x2 = mSelectionRect.right;
                 }
-                if(verticalLock) {
+                if (verticalLock) {
                     y1 = mSelectionRect.top;
                     y2 = mSelectionRect.bottom;
                 }
@@ -116,11 +115,11 @@ public class CropperView extends View {
                 // By default, we query the X/Y coordinates of pointer index 0. If our tracked
                 // pointer is no longer at index 0 and is still tracked, overwrite the coordinates
                 // with the expected ones
-                if(trackedIndex > 0) {
+                if (trackedIndex > 0) {
                     x1 = event.getX(trackedIndex);
                     y1 = event.getY(trackedIndex);
                 }
-                if(trackedIndex != -1) {
+                if (trackedIndex != -1) {
                     // If we still track out current pointer, pan the image by the movement delta
                     mCropperBehaviour.pan(x1 - mLastTouchX, y1 - mLastTouchY);
                 } else {
@@ -148,9 +147,9 @@ public class CropperView extends View {
         return dispatchGenericMotionEvent(event);
     }
 
-    private int findPointerIndex(MotionEvent event, int id)  {
-        for(int i = 0; i < event.getPointerCount(); i++) {
-            if(event.getPointerId(i) == id) return i;
+    private int findPointerIndex(MotionEvent event, int id) {
+        for (int i = 0; i < event.getPointerCount(); i++) {
+            if (event.getPointerId(i) == id) return i;
         }
         return -1;
     }
@@ -158,18 +157,18 @@ public class CropperView extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldW, int oldH) {
         super.onSizeChanged(w, h, oldW, oldH);
-        int lesserDimension = (int)(Math.min(w, h) - mSelectionPadding);
+        int lesserDimension = (int) (Math.min(w, h) - mSelectionPadding);
         // Calculate the corners of the new selection frame. It should always appear at the center of the view.
         // Accounts for the aspect ratio.
         int targetWidth = lesserDimension;
         int centerShiftX = (w - lesserDimension) / 2;
         int targetHeight = lesserDimension;
         int centerShiftY = (h - lesserDimension) / 2;
-        if(mAspectRatio < 1) {
-            targetWidth = (int)(lesserDimension * mAspectRatio);
+        if (mAspectRatio < 1) {
+            targetWidth = (int) (lesserDimension * mAspectRatio);
             centerShiftX = (w - targetWidth) / 2;
-        }else if(mAspectRatio > 1) {
-            targetHeight = (int)(lesserDimension * (1f / mAspectRatio));
+        } else if (mAspectRatio > 1) {
+            targetHeight = (int) (lesserDimension * (1f / mAspectRatio));
             centerShiftY = (h - targetHeight) / 2;
         }
 
@@ -197,8 +196,8 @@ public class CropperView extends View {
             return;
         }
         int biggestAllowedDimension = mCropperBehaviour.getLargestImageSide();
-        if(widthMode == MeasureSpec.EXACTLY) biggestAllowedDimension = widthSize;
-        if(heightMode == MeasureSpec.EXACTLY) biggestAllowedDimension = heightSize;
+        if (widthMode == MeasureSpec.EXACTLY) biggestAllowedDimension = widthSize;
+        if (heightMode == MeasureSpec.EXACTLY) biggestAllowedDimension = heightSize;
         setMeasuredDimension(
                 pickDesiredDimension(widthMode, widthSize, biggestAllowedDimension),
                 pickDesiredDimension(heightMode, heightSize, biggestAllowedDimension)
@@ -232,6 +231,7 @@ public class CropperView extends View {
     protected void reset() {
         mLastDistance = -1;
     }
+
     public Bitmap crop(int targetMaxSide) {
         return mCropperBehaviour.crop(targetMaxSide);
     }

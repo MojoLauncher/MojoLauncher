@@ -4,6 +4,7 @@ import net.kdt.pojavlaunch.extra.ExtraConstants;
 
 public class ElyByLoginFragment extends OAuthFragment {
     public static final String TAG = "ELYBY_LOGIN_FRAGMENT";
+
     public ElyByLoginFragment() {
         super("internalredirect",
                 "https://account.ely.by/oauth2/v1" +

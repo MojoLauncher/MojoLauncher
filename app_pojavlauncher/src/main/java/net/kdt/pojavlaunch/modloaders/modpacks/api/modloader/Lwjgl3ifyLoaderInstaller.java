@@ -3,8 +3,8 @@ package net.kdt.pojavlaunch.modloaders.modpacks.api.modloader;
 import net.kdt.pojavlaunch.instances.InstanceInstaller;
 import net.kdt.pojavlaunch.modloaders.Lwjgl3ifyUtils;
 
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
 
 public class Lwjgl3ifyLoaderInstaller implements LoaderInstaller {
     private final File lwjgl3ifyJarPath;

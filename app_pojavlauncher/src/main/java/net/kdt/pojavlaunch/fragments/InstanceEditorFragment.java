@@ -21,19 +21,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.game.renderer.RendererCache;
 import net.kdt.pojavlaunch.instances.Instance;
+import net.kdt.pojavlaunch.instances.InstanceIconProvider;
 import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.RTSpinnerAdapter;
 import net.kdt.pojavlaunch.multirt.Runtime;
-import net.kdt.pojavlaunch.instances.InstanceIconProvider;
 import net.kdt.pojavlaunch.profiles.VersionSelectorDialog;
-import net.kdt.pojavlaunch.game.renderer.GameRenderer;
 import net.kdt.pojavlaunch.utils.CropperUtils;
 
 import java.io.IOException;
@@ -41,9 +39,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import git.artdeell.mojo.R;
+
 public class InstanceEditorFragment extends Fragment implements CropperUtils.CropperReceiver {
     public static final String TAG = "InstanceEditorFragment";
-
+    private final ActivityResultLauncher<?> mCropperLauncher = CropperUtils.registerCropper(this, this);
     private Instance mInstance;
     private String mSelectedControlLayout;
     private Button mSaveButton, mDeleteButton, mControlSelectButton, mVersionSelectButton;
@@ -53,12 +53,15 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
     private ImageView mInstanceIcon;
     private CheckBox mSharedDataCheckbox;
     private int mRecommendedIconSize;
-    private final ActivityResultLauncher<?> mCropperLauncher = CropperUtils.registerCropper(this, this);
-
     private List<String> mRenderNames;
 
-    public InstanceEditorFragment(){
+    public InstanceEditorFragment() {
         super(R.layout.fragment_instance_editor);
+    }
+
+    private static String nullToEmpty(String in) {
+        if (in == null) return "";
+        return in;
     }
 
     @Nullable
@@ -66,7 +69,7 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Paths, which can be changed
         String value = (String) ExtraCore.consumeValue(ExtraConstants.FILE_SELECTOR);
-        if(value != null){
+        if (value != null) {
             mSelectedControlLayout = value;
         }
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -111,19 +114,19 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
             CropperUtils.startCropper(mCropperLauncher);
         });
 
-        mSharedDataCheckbox.setOnCheckedChangeListener((v,checked) ->{
+        mSharedDataCheckbox.setOnCheckedChangeListener((v, checked) -> {
             mInstance.sharedData = checked;
             int text = R.string.instance_shared_data_off;
-            if(checked) text = R.string.instance_shared_data_on;
+            if (checked) text = R.string.instance_shared_data_on;
             mSharedDataCheckbox.setText(text);
         });
 
         Instance selectedInstance = Instances.loadSelectedInstance();
         Context context = view.getContext();
-        if(selectedInstance == null) {
+        if (selectedInstance == null) {
             Toast.makeText(context, R.string.no_instance, Toast.LENGTH_LONG).show();
             getParentFragmentManager().popBackStack();
-        }else {
+        } else {
             loadValues(selectedInstance, context);
         }
     }
@@ -140,15 +143,10 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
     }
 
     private View.OnClickListener getVersionSelectListener() {
-        return v -> VersionSelectorDialog.open(v.getContext(), false, (id, snapshot)-> mDefaultVersion.setText(id));
+        return v -> VersionSelectorDialog.open(v.getContext(), false, (id, snapshot) -> mDefaultVersion.setText(id));
     }
 
-    private static String nullToEmpty(String in) {
-        if(in == null) return "";
-        return in;
-    }
-
-    private void loadValues(@NonNull Instance instance, @NonNull Context context){
+    private void loadValues(@NonNull Instance instance, @NonNull Context context) {
         mInstance = instance;
         mInstanceIcon.setImageDrawable(
                 InstanceIconProvider.fetchIcon(getResources(), instance)
@@ -157,16 +155,16 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         // Runtime spinner
         List<Runtime> runtimes = MultiRTUtils.getRuntimes();
         int jvmIndex = -1;
-        if(instance.selectedRuntime != null) {
+        if (instance.selectedRuntime != null) {
             jvmIndex = runtimes.indexOf(new Runtime(instance.selectedRuntime));
         }
         mDefaultRuntime.setAdapter(new RTSpinnerAdapter(context, runtimes));
-        if(jvmIndex == -1) jvmIndex = runtimes.size() - 1;
+        if (jvmIndex == -1) jvmIndex = runtimes.size() - 1;
         mDefaultRuntime.setSelection(jvmIndex);
 
         // Renderer spinner
         int rendererIndex = mRenderNames.indexOf(instance.getLaunchRenderer());
-        if(rendererIndex == -1) {
+        if (rendererIndex == -1) {
             rendererIndex = mDefaultRenderer.getAdapter().getCount() - 1;
         }
         mDefaultRenderer.setSelection(rendererIndex);
@@ -178,7 +176,7 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         mSharedDataCheckbox.setChecked(instance.sharedData);
     }
 
-    private void bindViews(@NonNull View view){
+    private void bindViews(@NonNull View view) {
         mDefaultControl = view.findViewById(R.id.vprof_editor_ctrl_spinner);
         mDefaultRuntime = view.findViewById(R.id.vprof_editor_spinner_runtime);
         mDefaultRenderer = view.findViewById(R.id.vprof_editor_instance_renderer);
@@ -195,29 +193,30 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         mSharedDataCheckbox = view.findViewById(R.id.vprof_editor_data_checkbox_container);
     }
 
-    private void save(){
+    private void save() {
         //First, check for potential issues in the inputs
         mInstance.versionId = mDefaultVersion.getText().toString();
         mInstance.controlLayout = mDefaultControl.getText().toString();
         mInstance.jvmArgs = mDefaultJvmArgument.getText().toString();
 
         String newName = mDefaultName.getText().toString();
-        if(mInstance.controlLayout.isEmpty()) mInstance.controlLayout = null;
-        if(mInstance.jvmArgs.isEmpty()) mInstance.jvmArgs = null;
+        if (mInstance.controlLayout.isEmpty()) mInstance.controlLayout = null;
+        if (mInstance.jvmArgs.isEmpty()) mInstance.jvmArgs = null;
 
         Runtime selectedRuntime = (Runtime) mDefaultRuntime.getSelectedItem();
         mInstance.selectedRuntime = (selectedRuntime.name.equals("<Default>") || selectedRuntime.versionString == null)
                 ? null : selectedRuntime.name;
 
-        if(mDefaultRenderer.getSelectedItemPosition() == mRenderNames.size()) mInstance.renderer = null;
+        if (mDefaultRenderer.getSelectedItemPosition() == mRenderNames.size())
+            mInstance.renderer = null;
         else mInstance.renderer = mRenderNames.get(mDefaultRenderer.getSelectedItemPosition());
 
         try {
-            if(!newName.isEmpty() && !newName.equals(mInstance.name))
+            if (!newName.isEmpty() && !newName.equals(mInstance.name))
                 Instances.renameInstanceDirectory(mInstance, newName);
             mInstance.name = newName;
             mInstance.write();
-        }catch (Exception e) {
+        } catch (Exception e) {
             Tools.showErrorRemote(e);
         }
     }
@@ -235,10 +234,10 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
     @Override
     public void onCropped(Bitmap contentBitmap) {
         mInstanceIcon.setImageBitmap(contentBitmap);
-        Log.i("bitmap", "w="+contentBitmap.getWidth() +" h="+contentBitmap.getHeight());
+        Log.i("bitmap", "w=" + contentBitmap.getWidth() + " h=" + contentBitmap.getHeight());
         try {
             mInstance.encodeNewIcon(contentBitmap);
-        }catch (IOException e) {
+        } catch (IOException e) {
             Tools.showErrorRemote(e);
         }
     }

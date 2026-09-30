@@ -12,23 +12,24 @@ import android.view.ViewParent;
 
 import androidx.annotation.Nullable;
 
-import net.kdt.pojavlaunch.game.platform.input.PlatformGrabListener;
+import net.kdt.pojavlaunch.CallbackBridge;
 import net.kdt.pojavlaunch.game.platform.Platform;
+import net.kdt.pojavlaunch.game.platform.input.PlatformGrabListener;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
 import net.kdt.pojavlaunch.utils.MathUtils;
 
-import net.kdt.pojavlaunch.CallbackBridge;
-
 
 public class HotbarView extends View implements MCOptionUtils.MCOptionListener, View.OnLayoutChangeListener, Runnable {
-    private final TapDetector mDoubleTapDetector = new TapDetector(2, TapDetector.DETECTION_METHOD_DOWN);
-    private View mParentView;
     private static final int[] HOTBAR_KEYS = {
-            KeyEvent.KEYCODE_1, KeyEvent.KEYCODE_2,   KeyEvent.KEYCODE_3,
-            KeyEvent.KEYCODE_4, KeyEvent.KEYCODE_5,   KeyEvent.KEYCODE_6,
+            KeyEvent.KEYCODE_1, KeyEvent.KEYCODE_2, KeyEvent.KEYCODE_3,
+            KeyEvent.KEYCODE_4, KeyEvent.KEYCODE_5, KeyEvent.KEYCODE_6,
             KeyEvent.KEYCODE_7, KeyEvent.KEYCODE_8, KeyEvent.KEYCODE_9};
+    private final TapDetector mDoubleTapDetector = new TapDetector(2, TapDetector.DETECTION_METHOD_DOWN);
     private final DropGesture mDropGesture = new DropGesture(new Handler(Looper.getMainLooper()));
+    private View mParentView;
+    private int mWidth;
+    private int mLastIndex = -1;
     private final PlatformGrabListener mGrabListener = new PlatformGrabListener() {
         @Override
         public void onGrabState(boolean isGrabbing) {
@@ -36,9 +37,6 @@ public class HotbarView extends View implements MCOptionUtils.MCOptionListener, 
             mDropGesture.cancel();
         }
     };
-
-    private int mWidth;
-    private int mLastIndex = -1;
     private int mGuiScale;
 
     public HotbarView(Context context) {
@@ -70,8 +68,8 @@ public class HotbarView extends View implements MCOptionUtils.MCOptionListener, 
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         ViewParent parent = getParent();
-        if(parent == null) return;
-        if(parent instanceof View) {
+        if (parent == null) return;
+        if (parent instanceof View) {
             mParentView = (View) parent;
             mParentView.addOnLayoutChangeListener(this);
         }
@@ -82,7 +80,7 @@ public class HotbarView extends View implements MCOptionUtils.MCOptionListener, 
 
     private void repositionView() {
         ViewGroup.LayoutParams layoutParams = getLayoutParams();
-        if(!(layoutParams instanceof ViewGroup.MarginLayoutParams))
+        if (!(layoutParams instanceof ViewGroup.MarginLayoutParams))
             throw new RuntimeException("Incorrect LayoutParams type, expected ViewGroup.MarginLayoutParams");
         ViewGroup parent = (ViewGroup) getParent();
         ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) layoutParams;
@@ -98,26 +96,27 @@ public class HotbarView extends View implements MCOptionUtils.MCOptionListener, 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Avoid going through the JNI each time.
-        if(!Platform.isGrabbing()) return false;
+        if (!Platform.isGrabbing()) return false;
         boolean hasDoubleTapped = mDoubleTapDetector.onTouchEvent(event);
 
         // Check if we need to cancel the drop event
         int actionMasked = event.getActionMasked();
-        if(isLastEventInGesture(actionMasked)) mDropGesture.cancel();
+        if (isLastEventInGesture(actionMasked)) mDropGesture.cancel();
         else mDropGesture.submit();
         // Determine the hotbar slot
         float x = event.getX();
         // Ignore positions equal to mWidth because they would translate into an out-of-bounds hotbar index
-        if(x < 0 || x >= mWidth) {
+        if (x < 0 || x >= mWidth) {
             // If out of bounds, cancel the hotbar gesture to avoid dropping items on last hotbar slots
             mDropGesture.cancel();
             return true;
         }
-        int hotbarIndex = (int)MathUtils.map(x, 0, mWidth, 0, HOTBAR_KEYS.length);
+        int hotbarIndex = (int) MathUtils.map(x, 0, mWidth, 0, HOTBAR_KEYS.length);
         // Check if the slot changed and we need to make a key press
-        if(hotbarIndex == mLastIndex) {
+        if (hotbarIndex == mLastIndex) {
             // Only check for doubletapping if the slot has not changed
-            if(hasDoubleTapped && !LauncherPreferences.PREF_DISABLE_SWAP_HAND) CallbackBridge.sendKeyPress(KeyEvent.KEYCODE_F);
+            if (hasDoubleTapped && !LauncherPreferences.PREF_DISABLE_SWAP_HAND)
+                CallbackBridge.sendKeyPress(KeyEvent.KEYCODE_F);
             return true;
         }
         mLastIndex = hotbarIndex;
@@ -126,7 +125,7 @@ public class HotbarView extends View implements MCOptionUtils.MCOptionListener, 
         // Cancel the event since we changed hotbar slots.
         mDropGesture.cancel();
         // Only resubmit the gesture only if it isn't the last event we will receive.
-        if(!isLastEventInGesture(actionMasked)) mDropGesture.submit();
+        if (!isLastEventInGesture(actionMasked)) mDropGesture.submit();
         return true;
     }
 
@@ -135,12 +134,14 @@ public class HotbarView extends View implements MCOptionUtils.MCOptionListener, 
     }
 
     private int mcScale(int input) {
-        return (int)((mGuiScale * input) / LauncherPreferences.PREF_SCALE_FACTOR);
+        return (int) ((mGuiScale * input) / LauncherPreferences.PREF_SCALE_FACTOR);
     }
 
-    /** Forces the view to reposition itself. */
+    /**
+     * Forces the view to reposition itself.
+     */
     public void onResolutionChanged() {
-        if(getParent() == null) return;
+        if (getParent() == null) return;
         mGuiScale = MCOptionUtils.getMcScale();
         post(this::repositionView);
     }
@@ -152,9 +153,9 @@ public class HotbarView extends View implements MCOptionUtils.MCOptionListener, 
 
     @Override
     public void run() {
-        if(getParent() == null) return;
+        if (getParent() == null) return;
         int scale = MCOptionUtils.getMcScale();
-        if(scale == mGuiScale) return;
+        if (scale == mGuiScale) return;
         mGuiScale = scale;
         repositionView();
     }
@@ -163,7 +164,7 @@ public class HotbarView extends View implements MCOptionUtils.MCOptionListener, 
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
         // We need to check whether dimensions match or not because here we are looking specifically for changes of dimensions
         // and Android keeps calling this without dimensions actually changing for some reason.
-        if(v.equals(mParentView) && (left != oldLeft || right != oldRight || top != oldTop || bottom != oldBottom)) {
+        if (v.equals(mParentView) && (left != oldLeft || right != oldRight || top != oldTop || bottom != oldBottom)) {
             // Need to post this, because it is not correct to resize the view
             // during a layout pass.
             post(this::repositionView);

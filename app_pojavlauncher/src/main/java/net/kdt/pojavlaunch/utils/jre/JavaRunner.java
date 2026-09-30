@@ -43,11 +43,11 @@ public class JavaRunner {
             return false;
         } else {
             File caciocavallo17AgentDir = new File(Tools.DIR_GAME_HOME, "caciocavallo17");
-            File[] cacioJars = caciocavallo17AgentDir.listFiles((file, s) ->s.endsWith(".jar"));
-            if(cacioJars == null || cacioJars.length < 1) {
+            File[] cacioJars = caciocavallo17AgentDir.listFiles((file, s) -> s.endsWith(".jar"));
+            if (cacioJars == null || cacioJars.length < 1) {
                 return false;
             }
-            javaArgList.add("-javaagent:"+cacioJars[0].getAbsolutePath());
+            javaArgList.add("-javaagent:" + cacioJars[0].getAbsolutePath());
             javaArgList.add("-Dawt.toolkit=com.github.caciocavallosilano.cacio.ctc.CTCToolkit");
             javaArgList.add("-Djava.awt.graphicsenv=com.github.caciocavallosilano.cacio.ctc.CTCGraphicsEnvironment");
 
@@ -87,16 +87,17 @@ public class JavaRunner {
     }
 
     /**
-     *  Gives an argument list filled with both the user args
-     *  and the auto-generated ones (eg. the window resolution).
+     * Gives an argument list filled with both the user args
+     * and the auto-generated ones (eg. the window resolution).
+     *
      * @return A list filled with args.
      */
     private static List<String> getJavaArgs(String runtimeHome, List<String> userArguments) {
         String resolvFile;
-        resolvFile = new File(Tools.DIR_DATA,"resolv.conf").getAbsolutePath();
+        resolvFile = new File(Tools.DIR_DATA, "resolv.conf").getAbsolutePath();
 
-        userArguments.add(0, "-Xms"+LauncherPreferences.PREF_RAM_ALLOCATION+"M");
-        userArguments.add(0, "-Xmx"+LauncherPreferences.PREF_RAM_ALLOCATION+"M");
+        userArguments.add(0, "-Xms" + LauncherPreferences.PREF_RAM_ALLOCATION + "M");
+        userArguments.add(0, "-Xmx" + LauncherPreferences.PREF_RAM_ALLOCATION + "M");
 
         ArrayList<String> overridableArguments = new ArrayList<>(Arrays.asList(
                 "-Djava.home=" + runtimeHome,
@@ -119,26 +120,26 @@ public class JavaRunner {
                 //"-Dorg.lwjgl.util.Debug=true",
                 //"-Dorg.lwjgl.util.DebugFunctions=true",
                 //"-Dorg.lwjgl.util.DebugLoader=true",
-                "-Dext.net.resolvPath=" +resolvFile,
+                "-Dext.net.resolvPath=" + resolvFile,
                 "-Dlog4j2.formatMsgNoLookups=true", //Log4j RCE mitigation
                 "-Dfml.earlyprogresswindow=false", //Forge 1.14+ workaround
                 "-Dloader.disable_forked_guis=true",
                 "-Djdk.lang.Process.launchMechanism=FORK" // Default is POSIX_SPAWN which requires starting jspawnhelper, which doesn't work on Android
         ));
         List<String> additionalArguments = new ArrayList<>();
-        for(String arg : overridableArguments) {
-            String strippedArg = arg.substring(0,arg.indexOf('='));
+        for (String arg : overridableArguments) {
+            String strippedArg = arg.substring(0, arg.indexOf('='));
             boolean add = true;
-            for(String uarg : userArguments) {
-                if(uarg.startsWith(strippedArg)) {
+            for (String uarg : userArguments) {
+                if (uarg.startsWith(strippedArg)) {
                     add = false;
                     break;
                 }
             }
-            if(add)
+            if (add)
                 additionalArguments.add(arg);
             else
-                Log.i("ArgProcessor","Arg skipped: "+arg);
+                Log.i("ArgProcessor", "Arg skipped: " + arg);
         }
 
         //Add all the arguments
@@ -147,28 +148,32 @@ public class JavaRunner {
     }
 
     private static File getVmPath(File runtimeHomeDir, String arch, String flavor) {
-        if(arch != null) return new File(runtimeHomeDir, "lib/"+arch+"/"+flavor+"/libjvm.so");
-        else return new File(runtimeHomeDir, "lib/"+flavor+"/libjvm.so");
+        if (arch != null)
+            return new File(runtimeHomeDir, "lib/" + arch + "/" + flavor + "/libjvm.so");
+        else return new File(runtimeHomeDir, "lib/" + flavor + "/libjvm.so");
     }
 
     private static File findVmForArch(File runtimeHomeDir, String arch) {
         File finalPath;
-        if((finalPath = getVmPath(runtimeHomeDir, arch, "server")).exists()) return finalPath;
-        if((finalPath = getVmPath(runtimeHomeDir, arch, "client")).exists()) return finalPath;
+        if ((finalPath = getVmPath(runtimeHomeDir, arch, "server")).exists()) return finalPath;
+        if ((finalPath = getVmPath(runtimeHomeDir, arch, "client")).exists()) return finalPath;
         return null;
     }
 
     public static File findVmPath(File runtimeHomeDir, String runtimeArch) {
         File finalPath;
-        if((finalPath = findVmForArch(runtimeHomeDir, null)) != null) return finalPath;
+        if ((finalPath = findVmForArch(runtimeHomeDir, null)) != null) return finalPath;
         switch (runtimeArch) {
-            case "i386": case "i486": case "i586":
-                if((finalPath = findVmForArch(runtimeHomeDir, "i386")) != null) return finalPath;
-                if((finalPath = findVmForArch(runtimeHomeDir, "i486")) != null) return finalPath;
-                if((finalPath = findVmForArch(runtimeHomeDir, "i586")) != null) return finalPath;
+            case "i386":
+            case "i486":
+            case "i586":
+                if ((finalPath = findVmForArch(runtimeHomeDir, "i386")) != null) return finalPath;
+                if ((finalPath = findVmForArch(runtimeHomeDir, "i486")) != null) return finalPath;
+                if ((finalPath = findVmForArch(runtimeHomeDir, "i586")) != null) return finalPath;
                 break;
             default:
-                if((finalPath = findVmForArch(runtimeHomeDir, runtimeArch)) != null) return finalPath;
+                if ((finalPath = findVmForArch(runtimeHomeDir, runtimeArch)) != null)
+                    return finalPath;
         }
         return null;
     }
@@ -180,20 +185,20 @@ public class JavaRunner {
         // and so on. Hotspot itself relies on this we also rely on this.
         File vmDir = Objects.requireNonNull(vmPath.getParentFile());
         File libsDir = Objects.requireNonNull(vmDir.getParentFile());
-        StringBuilder libPathBuilder =  new StringBuilder()
+        StringBuilder libPathBuilder = new StringBuilder()
                 .append(libsDir.getAbsolutePath()).append(":")
                 .append(NATIVE_LIB_DIR).append(':')
                 .append(vmDir.getAbsolutePath()).append(':')
                 .append(new File(libsDir, "jli").getAbsolutePath());
 
-        if(extraDirs != null) for(String path : extraDirs) {
+        if (extraDirs != null) for (String path : extraDirs) {
             libPathBuilder.append(':').append(path);
         }
 
         String ldLibPath = libPathBuilder.toString();
         try {
             Os.setenv("LD_LIBRARY_PATH", ldLibPath, true);
-        }catch (ErrnoException e) {
+        } catch (ErrnoException e) {
             throw new RuntimeException(e);
         }
         JREUtils.setLdLibraryPath(ldLibPath);
@@ -204,7 +209,7 @@ public class JavaRunner {
             Os.setenv("JAVA_HOME", jreHome.getAbsolutePath(), true);
             Os.setenv("HOME", Tools.DIR_GAME_HOME, true);
             Os.setenv("TMPDIR", Tools.DIR_CACHE.getAbsolutePath(), true);
-        }catch (ErrnoException e) {
+        } catch (ErrnoException e) {
             throw new RuntimeException(e);
         }
     }
@@ -212,7 +217,7 @@ public class JavaRunner {
     private static boolean preprocessUserArgs(List<String> args) {
         ListIterator<String> iterator = args.listIterator();
         boolean hasJavaAgent = false;
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             String arg = iterator.next();
             switch (arg) {
                 case "-p":
@@ -228,7 +233,7 @@ public class JavaRunner {
                     iterator.remove();
                     String argValue = iterator.next();
                     iterator.remove();
-                    iterator.add(arg+"="+argValue);
+                    iterator.add(arg + "=" + argValue);
                     break;
                 case "-d32":
                 case "-d64":
@@ -245,16 +250,17 @@ public class JavaRunner {
                     iterator.remove();
                     break;
                 default:
-                    if(arg.startsWith("-Xms") || arg.startsWith("-Xmx") || arg.startsWith("-XX:ActiveProcessorCount")) iterator.remove();
-                    if(!hasJavaAgent && arg.startsWith("-javaagent:")) hasJavaAgent = true;
+                    if (arg.startsWith("-Xms") || arg.startsWith("-Xmx") || arg.startsWith("-XX:ActiveProcessorCount"))
+                        iterator.remove();
+                    if (!hasJavaAgent && arg.startsWith("-javaagent:")) hasJavaAgent = true;
             }
         }
         return hasJavaAgent;
     }
 
     private static void addx86SignalWorkaround(List<String> args) {
-        if(Build.VERSION.SDK_INT != 23) return;
-        if(Architecture.getDeviceArchitecture() != Architecture.ARCH_X86) return;
+        if (Build.VERSION.SDK_INT != 23) return;
+        if (Architecture.getDeviceArchitecture() != Architecture.ARCH_X86) return;
         // On Marshmallow x86, something related to signal handling is broken inside of ART/sigchain library
         // is broken, causing unclaimed signals to be sent into the sigchain. This drops the whole launcher into an abort.
         // Enabling -Xrs prevents the VM from sending those signals (
@@ -263,23 +269,24 @@ public class JavaRunner {
 
     /**
      * Start the Java(tm) Virtual Machine.
-     * @param runtime the Runtime that we're starting.
-     * @param vmArgs the command line parameters for the virtual machine
+     *
+     * @param runtime          the Runtime that we're starting.
+     * @param vmArgs           the command line parameters for the virtual machine
      * @param classpathEntries the absolute path for each classpath entry
-     * @param mainClass the application main class
-     * @param applicationArgs the application arguments
+     * @param mainClass        the application main class
+     * @param applicationArgs  the application arguments
      * @throws VMLoadException if an error occurred during VM loading
      */
-    public static void startJvm(Runtime runtime, List<String> vmArgs, List<String> classpathEntries, String mainClass, List<String> applicationArgs) throws VMLoadException{
+    public static void startJvm(Runtime runtime, List<String> vmArgs, List<String> classpathEntries, String mainClass, List<String> applicationArgs) throws VMLoadException {
         File runtimeHomeDir = MultiRTUtils.getRuntimeHome(runtime.name);
         File vmPath = findVmPath(runtimeHomeDir, runtime.arch);
-        if(vmPath == null) {
+        if (vmPath == null) {
             throw new VMLoadException("Unable to find the Java VM", 0, -1);
         }
 
         boolean hasJavaAgent = preprocessUserArgs(vmArgs);
         List<String> runtimeArgs = new ArrayList<>();
-        if(getCacioJavaArgs(runtimeArgs,runtime.javaVersion == 8)) hasJavaAgent = true;
+        if (getCacioJavaArgs(runtimeArgs, runtime.javaVersion == 8)) hasJavaAgent = true;
         runtimeArgs.addAll(getJavaArgs(runtimeHomeDir.getAbsolutePath(), vmArgs));
         vmArgs.clear();
 
@@ -288,8 +295,8 @@ public class JavaRunner {
         addx86SignalWorkaround(runtimeArgs);
         StringBuilder classpathBuilder = new StringBuilder().append("-Djava.class.path=");
         boolean first = true;
-        for(String entry : classpathEntries) {
-            if(first) first = false;
+        for (String entry : classpathEntries) {
+            if (first) first = false;
             else classpathBuilder.append(':');
             classpathBuilder.append(entry);
         }
@@ -310,7 +317,7 @@ public class JavaRunner {
         long appArgsL = nativeTransferArguments(applicationArgs.toArray(new String[0]));
         Tools.maybeClearList(applicationArgs);
 
-        if(javaArgsL == 0 || appArgsL == 0)
+        if (javaArgsL == 0 || appArgsL == 0)
             throw new VMLoadException("Failed to transfer arguments", -1, -4);
 
         System.gc();
@@ -321,5 +328,6 @@ public class JavaRunner {
     public static native long nativeTransferArguments(String[] args);
 
     public static native boolean nativeLoadJVM(String vmPath, long javaArgsL, String mainClass, long appArgsL, boolean hasJavaAgents) throws VMLoadException;
+
     public static native void nativeSetupExit(Context context);
 }

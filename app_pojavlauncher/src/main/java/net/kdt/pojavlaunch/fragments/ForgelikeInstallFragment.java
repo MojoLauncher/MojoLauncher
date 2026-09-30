@@ -18,6 +18,7 @@ import java.util.List;
 
 public abstract class ForgelikeInstallFragment extends ModVersionListFragment<List<String>> {
     private final ForgelikeUtils mUtils;
+
     public ForgelikeInstallFragment(ForgelikeUtils utils, String mFragmentTag) {
         super(mFragmentTag);
         this.mUtils = utils;
@@ -30,7 +31,7 @@ public abstract class ForgelikeInstallFragment extends ModVersionListFragment<Li
 
     @Override
     public Runnable createDownloadTask(Object selectedVersion, ModloaderListenerProxy listenerProxy) {
-        return ()->createInstance((String) selectedVersion, listenerProxy);
+        return () -> createInstance((String) selectedVersion, listenerProxy);
     }
 
     @Override
@@ -54,7 +55,7 @@ public abstract class ForgelikeInstallFragment extends ModVersionListFragment<Li
             ProgressLayout.clearProgress(ProgressLayout.INSTALL_MODPACK);
             instanceInstaller.start();
             listenerProxy.onDownloadFinished(null);
-        }catch (IOException e) {
+        } catch (IOException e) {
             listenerProxy.onDownloadError(e);
         }
     }

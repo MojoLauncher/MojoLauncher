@@ -18,12 +18,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.kdt.pojavlaunch.Architecture;
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 import java.io.IOException;
 import java.util.List;
+
+import git.artdeell.mojo.R;
 
 public class RTRecyclerViewAdapter extends RecyclerView.Adapter<RTRecyclerViewAdapter.RTViewHolder> {
 
@@ -32,14 +33,14 @@ public class RTRecyclerViewAdapter extends RecyclerView.Adapter<RTRecyclerViewAd
     @NonNull
     @Override
     public RTViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View recyclableView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_multirt_runtime,parent,false);
+        View recyclableView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_multirt_runtime, parent, false);
         return new RTViewHolder(recyclableView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RTViewHolder holder, int position) {
         final List<Runtime> runtimes = MultiRTUtils.getRuntimes();
-        holder.bindRuntime(runtimes.get(position),position);
+        holder.bindRuntime(runtimes.get(position), position);
     }
 
     @Override
@@ -52,10 +53,14 @@ public class RTRecyclerViewAdapter extends RecyclerView.Adapter<RTRecyclerViewAd
     }
 
     @SuppressLint("NotifyDataSetChanged") //not a problem, given the typical size of the list
-    public void setDefault(Runtime rt){
+    public void setDefault(Runtime rt) {
         LauncherPreferences.PREF_DEFAULT_RUNTIME = rt.name;
-        LauncherPreferences.DEFAULT_PREF.edit().putString("defaultRuntime",LauncherPreferences.PREF_DEFAULT_RUNTIME).apply();
+        LauncherPreferences.DEFAULT_PREF.edit().putString("defaultRuntime", LauncherPreferences.PREF_DEFAULT_RUNTIME).apply();
         notifyDataSetChanged();
+    }
+
+    public boolean getIsEditing() {
+        return mIsDeleting;
     }
 
     @SuppressLint("NotifyDataSetChanged") //not a problem, given the typical size of the list
@@ -63,11 +68,6 @@ public class RTRecyclerViewAdapter extends RecyclerView.Adapter<RTRecyclerViewAd
         mIsDeleting = isEditing;
         notifyDataSetChanged();
     }
-
-    public boolean getIsEditing(){
-        return mIsDeleting;
-    }
-
 
     public class RTViewHolder extends RecyclerView.ViewHolder {
         final TextView mJavaVersionTextView;
@@ -86,16 +86,16 @@ public class RTRecyclerViewAdapter extends RecyclerView.Adapter<RTRecyclerViewAd
             mSetDefaultButton = itemView.findViewById(R.id.multirt_view_setdefaultbtn);
             mDeleteButton = itemView.findViewById(R.id.multirt_view_removebtn);
 
-            mDefaultColors =  mFullJavaVersionTextView.getTextColors();
+            mDefaultColors = mFullJavaVersionTextView.getTextColors();
             mContext = itemView.getContext();
 
             setupOnClickListeners();
         }
 
         @SuppressLint("NotifyDataSetChanged") // same as all the other ones
-        private void setupOnClickListeners(){
+        private void setupOnClickListeners() {
             mSetDefaultButton.setOnClickListener(v -> {
-                if(mCurrentRuntime != null) {
+                if (mCurrentRuntime != null) {
                     setDefault(mCurrentRuntime);
                     RTRecyclerViewAdapter.this.notifyDataSetChanged();
                 }
@@ -104,11 +104,11 @@ public class RTRecyclerViewAdapter extends RecyclerView.Adapter<RTRecyclerViewAd
             mDeleteButton.setOnClickListener(v -> {
                 if (mCurrentRuntime == null) return;
 
-                if(MultiRTUtils.getRuntimes().size() < 2) {
+                if (MultiRTUtils.getRuntimes().size() < 2) {
                     new AlertDialog.Builder(mContext)
                             .setTitle(R.string.global_error)
                             .setMessage(R.string.multirt_config_removeerror_last)
-                            .setPositiveButton(android.R.string.ok,(adapter, which)->adapter.dismiss())
+                            .setPositiveButton(android.R.string.ok, (adapter, which) -> adapter.dismiss())
                             .show();
                     return;
                 }
@@ -117,7 +117,7 @@ public class RTRecyclerViewAdapter extends RecyclerView.Adapter<RTRecyclerViewAd
                     try {
                         MultiRTUtils.removeRuntimeNamed(mCurrentRuntime.name);
                         mDeleteButton.post(() -> {
-                            if(getBindingAdapter() != null)
+                            if (getBindingAdapter() != null)
                                 getBindingAdapter().notifyDataSetChanged();
                         });
 
@@ -132,7 +132,7 @@ public class RTRecyclerViewAdapter extends RecyclerView.Adapter<RTRecyclerViewAd
         public void bindRuntime(Runtime runtime, int pos) {
             mCurrentRuntime = runtime;
             mCurrentPosition = pos;
-            if(runtime.versionString != null && Tools.DEVICE_ARCHITECTURE == Architecture.archAsInt(runtime.arch)) {
+            if (runtime.versionString != null && Tools.DEVICE_ARCHITECTURE == Architecture.archAsInt(runtime.arch)) {
                 mJavaVersionTextView.setText(runtime.name
                         .replace(".tar.xz", "")
                         .replace("-", " "));
@@ -143,15 +143,15 @@ public class RTRecyclerViewAdapter extends RecyclerView.Adapter<RTRecyclerViewAd
 
                 boolean defaultRuntime = isDefaultRuntime(runtime);
                 mSetDefaultButton.setEnabled(!defaultRuntime);
-                mSetDefaultButton.setText(defaultRuntime ? R.string.multirt_config_setdefault_already:R.string.multirt_config_setdefault);
+                mSetDefaultButton.setText(defaultRuntime ? R.string.multirt_config_setdefault_already : R.string.multirt_config_setdefault);
                 return;
             }
 
             // Problematic runtime moment, force propose deletion
             mDeleteButton.setVisibility(View.VISIBLE);
-            if(runtime.versionString == null){
+            if (runtime.versionString == null) {
                 mFullJavaVersionTextView.setText(R.string.multirt_runtime_corrupt);
-            }else{
+            } else {
                 mFullJavaVersionTextView.setText(mContext.getString(R.string.multirt_runtime_incompatiblearch, runtime.arch));
             }
             mJavaVersionTextView.setText(runtime.name);
@@ -159,7 +159,7 @@ public class RTRecyclerViewAdapter extends RecyclerView.Adapter<RTRecyclerViewAd
             mSetDefaultButton.setVisibility(View.GONE);
         }
 
-        private void updateButtonsVisibility(){
+        private void updateButtonsVisibility() {
             mSetDefaultButton.setVisibility(mIsDeleting ? View.GONE : View.VISIBLE);
             mDeleteButton.setVisibility(mIsDeleting ? View.VISIBLE : View.GONE);
         }

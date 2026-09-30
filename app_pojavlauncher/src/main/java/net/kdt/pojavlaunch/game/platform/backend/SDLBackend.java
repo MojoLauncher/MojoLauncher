@@ -17,6 +17,9 @@ import git.mojo.sdl.SDLInputConnection;
  */
 public class SDLBackend implements PlatformBackend {
 
+    private double prevX;
+    private double prevY;
+
     public SDLBackend() {
         SDLActivity.setGrabListener(SDLBackend::handleGrabStateChange);
         SDLActivity.setCursorCallback(cursor -> {
@@ -69,15 +72,12 @@ public class SDLBackend implements PlatformBackend {
         SDLActivity.onNativeSurfaceDestroyed();
     }
 
-    private double prevX;
-    private double prevY;
-
     @Override
     public void sendMousePosition(double x, double y, boolean relative) {
         // In grabbing (relative) mode SDL expects relative cursor coordinates with center located at 0,0
         // We need to accumulate a delta between mouse positions to correctly handle such position changes
         double deltaX, deltaY;
-        if(relative) {
+        if (relative) {
             deltaX = x - prevX;
             deltaY = y - prevY;
         } else {
@@ -92,7 +92,7 @@ public class SDLBackend implements PlatformBackend {
 
     @Override
     public void sendMouseEvent(int button, int state, int mods, double x, double y, boolean relative) {
-        if(relative)
+        if (relative)
             // In relative mode we need to send mouse clicks at zero position to not accidentally trigger a motion event
             SDLActivity.onNativeMouseButton(button, state, 0, 0, true);
         else

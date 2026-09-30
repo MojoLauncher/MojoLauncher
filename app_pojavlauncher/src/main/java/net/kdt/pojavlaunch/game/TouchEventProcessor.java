@@ -1,13 +1,13 @@
 package net.kdt.pojavlaunch.game;
 
 import android.view.MotionEvent;
-import android.view.View;
 
 import net.kdt.pojavlaunch.game.platform.Platform;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 public abstract class TouchEventProcessor {
     private final GameView mHostView;
+
     public TouchEventProcessor(GameView hostView) {
         mHostView = hostView;
     }
@@ -29,5 +29,6 @@ public abstract class TouchEventProcessor {
     }
 
     abstract public boolean processTouchEvent(MotionEvent motionEvent);
+
     abstract public void cancelPendingActions();
 }

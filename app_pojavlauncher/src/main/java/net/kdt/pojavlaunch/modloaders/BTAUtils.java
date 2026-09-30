@@ -23,6 +23,7 @@ public class BTAUtils {
     private static final String BUILD_TYPE_RELEASE = "release";
     private static final String BUILD_TYPE_NIGHTLY = "nightly";
     private static final List<String> BTA_TESTED_VERSIONS = new ArrayList<>();
+
     static {
         BTA_TESTED_VERSIONS.add("v7.3");
         BTA_TESTED_VERSIONS.add("v7.2_01");
@@ -32,8 +33,8 @@ public class BTAUtils {
     }
 
     private static String getIconUrl(String version, String buildType) {
-        String iconName = version.replace('.','_');
-        if(buildType.equals("nightly")) iconName = "v"+iconName;
+        String iconName = version.replace('.', '_');
+        if (buildType.equals("nightly")) iconName = "v" + iconName;
         return String.format(ICON_URL, buildType, version, iconName);
     }
 
@@ -48,7 +49,7 @@ public class BTAUtils {
     private static <T> T getManifest(String buildType, DownloadUtils.ParseCallback<T> parser)
             throws DownloadUtils.ParseException, IOException {
         String manifestUrl = getManifestUrl(buildType);
-        return DownloadUtils.downloadStringCached(manifestUrl,"bta_"+manifestUrl, parser);
+        return DownloadUtils.downloadStringCached(manifestUrl, "bta_" + manifestUrl, parser);
     }
 
     private static List<BTAVersion> createVersionList(List<String> versionStrings, String buildType) {
@@ -57,9 +58,9 @@ public class BTAUtils {
         // The original list is guaranteed to be in ascending order - the earliest versions
         // are at the top, but for user convenience we need to put the newest versions at the top,
         // so the BTAVersion list is made from the reverse of the string list.
-        while(iterator.hasPrevious()) {
+        while (iterator.hasPrevious()) {
             String version = iterator.previous();
-            if(version == null) continue;
+            if (version == null) continue;
             btaVersions.add(new BTAVersion(
                     version,
                     getClientJarUrl(version, buildType),
@@ -80,13 +81,13 @@ public class BTAUtils {
         List<String> stringVersions = manifest.versions;
         List<String> testedVersions = new ArrayList<>();
         List<String> untestedVersions = new ArrayList<>();
-        for(String version : stringVersions) {
-            if(version == null) break;
+        for (String version : stringVersions) {
+            if (version == null) break;
             // Checking for presence in testing array here to avoid accidentally adding nonexistent
             // versions if some of them end up getting removed.
-            if(BTA_TESTED_VERSIONS.contains(version)) {
+            if (BTA_TESTED_VERSIONS.contains(version)) {
                 testedVersions.add(version);
-            }else {
+            } else {
                 untestedVersions.add(version);
             }
         }
@@ -103,7 +104,7 @@ public class BTAUtils {
             BTAVersionList releases = getManifest(BUILD_TYPE_RELEASE, BTAUtils::processReleasesJson);
             List<BTAVersion> nightlies = getManifest(BUILD_TYPE_NIGHTLY, BTAUtils::processNightliesJson);
             return new BTAVersionList(releases.testedVersions, releases.untestedVersions, nightlies);
-        }catch (DownloadUtils.ParseException e) {
+        } catch (DownloadUtils.ParseException e) {
             Log.e("BTAUtils", "Failed to process json", e);
             return null;
         }
@@ -128,6 +129,7 @@ public class BTAUtils {
             this.iconUrl = iconUrl;
         }
     }
+
     public static class BTAVersionList {
         public final List<BTAVersion> testedVersions;
         public final List<BTAVersion> untestedVersions;

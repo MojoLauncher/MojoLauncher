@@ -7,15 +7,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.instances.Instances;
 
 import java.io.IOException;
 
+import git.artdeell.mojo.R;
+
 public class ProfileTypeSelectFragment extends Fragment {
     public static final String TAG = "ProfileTypeSelectFragment";
+
     public ProfileTypeSelectFragment() {
         super(R.layout.fragment_profile_type);
     }
@@ -29,7 +31,7 @@ public class ProfileTypeSelectFragment extends Fragment {
                 Instances.setSelectedInstance(instance);
                 Tools.swapFragment(requireActivity(), InstanceEditorFragment.class,
                         InstanceEditorFragment.TAG, new Bundle(1));
-            }catch (IOException e) {
+            } catch (IOException e) {
                 Tools.showError(view.getContext(), e);
             }
         });
@@ -39,17 +41,17 @@ public class ProfileTypeSelectFragment extends Fragment {
         // in FabricInstallFragment.onDownloadFinished() and ModVersionListFragment.onDownloadFinished()
         view.findViewById(R.id.optifine_profile).setOnClickListener(v -> Tools.swapFragment(requireActivity(), OptiFineInstallFragment.class,
                 OptiFineInstallFragment.TAG, null));
-        view.findViewById(R.id.modded_profile_fabric).setOnClickListener((v)->
+        view.findViewById(R.id.modded_profile_fabric).setOnClickListener((v) ->
                 Tools.swapFragment(requireActivity(), FabricInstallFragment.class, FabricInstallFragment.TAG, null));
-        view.findViewById(R.id.modded_profile_forge).setOnClickListener((v)->
+        view.findViewById(R.id.modded_profile_forge).setOnClickListener((v) ->
                 Tools.swapFragment(requireActivity(), ForgeInstallFragment.class, ForgeInstallFragment.TAG, null));
-        view.findViewById(R.id.modded_profile_modpack).setOnClickListener((v)->
+        view.findViewById(R.id.modded_profile_modpack).setOnClickListener((v) ->
                 Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG, null));
-        view.findViewById(R.id.modded_profile_quilt).setOnClickListener((v)->
+        view.findViewById(R.id.modded_profile_quilt).setOnClickListener((v) ->
                 Tools.swapFragment(requireActivity(), QuiltInstallFragment.class, QuiltInstallFragment.TAG, null));
-        view.findViewById(R.id.modded_profile_bta).setOnClickListener((v)->
+        view.findViewById(R.id.modded_profile_bta).setOnClickListener((v) ->
                 Tools.swapFragment(requireActivity(), BTAInstallFragment.class, BTAInstallFragment.TAG, null));
-        view.findViewById(R.id.modded_profile_neoforge).setOnClickListener((v)->
+        view.findViewById(R.id.modded_profile_neoforge).setOnClickListener((v) ->
                 Tools.swapFragment(requireActivity(), NeoforgeInstallFragment.class, NeoforgeInstallFragment.TAG, null));
         view.findViewById(R.id.modded_profile_legacy_fabric).setOnClickListener((v) ->
                 Tools.swapFragment(requireActivity(), LegacyFabricInstallFragment.class, LegacyFabricInstallFragment.TAG, null));

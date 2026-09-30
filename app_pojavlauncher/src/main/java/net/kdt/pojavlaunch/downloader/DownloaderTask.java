@@ -15,7 +15,7 @@ public abstract class DownloaderTask implements Runnable {
     public final void run() {
         try {
             performTask();
-        }catch (IOException e) {
+        } catch (IOException e) {
             mDownloader.taskException(e);
         }
     }

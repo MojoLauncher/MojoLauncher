@@ -32,8 +32,8 @@ public class AWTBridge {
 
     @SuppressWarnings("unused") // Used from native
     public static void notifyWindowOpened() {
-        if(enableRunnable == null) return;
-        if(windowCreated) return;
+        if (enableRunnable == null) return;
+        if (windowCreated) return;
         windowCreated = true;
         enableRunnable.run();
     }
@@ -43,12 +43,20 @@ public class AWTBridge {
     }
 
     public static native void nativeClipboardReceived(String data, String mimeTypeSub);
+
     public static native void nativeMoveWindow(int xoff, int yoff);
+
     public static native void nativeBeginRendering(Surface surface, int bridgeWidth, int bridgeHeight);
+
     public static native void nativeEndRendering();
+
     public static native void nativeSendCursorPos(int x, int y);
+
     public static native boolean nativeSendKeyEvent(int keycode, int state, int mods, int codepoint);
+
     public static native void nativeSendMouseEvent(int button, int state, int mods);
+
     public static native void nativeResize(int bridgeWidth, int bridgeHeight);
+
     public static native void nativeTypeChars(String chars);
 }

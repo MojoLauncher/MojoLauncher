@@ -9,6 +9,7 @@ public class FabriclikeLoaderInstaller implements LoaderInstaller {
     private final FabriclikeUtils mUtils;
     private final String gameVersion;
     private final String loaderVersion;
+
     public FabriclikeLoaderInstaller(FabriclikeUtils utils, String gameVersion, String loaderVersion) {
         mUtils = utils;
         this.gameVersion = gameVersion;

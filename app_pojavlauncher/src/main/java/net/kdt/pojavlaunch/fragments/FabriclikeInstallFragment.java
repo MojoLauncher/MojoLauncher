@@ -19,12 +19,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import net.kdt.pojavlaunch.PojavApplication;
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.instances.Instances;
-import net.kdt.pojavlaunch.modloaders.FabriclikeUtils;
 import net.kdt.pojavlaunch.modloaders.FabricVersion;
+import net.kdt.pojavlaunch.modloaders.FabriclikeUtils;
 import net.kdt.pojavlaunch.modloaders.ModloaderDownloadListener;
 import net.kdt.pojavlaunch.modloaders.ModloaderListenerProxy;
 import net.kdt.pojavlaunch.modloaders.modpacks.SelfReferencingFuture;
@@ -34,6 +33,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.Future;
+
+import git.artdeell.mojo.R;
 
 public abstract class FabriclikeInstallFragment extends Fragment implements ModloaderDownloadListener, CompoundButton.OnCheckedChangeListener {
     private final FabriclikeUtils mFabriclikeUtils;
@@ -50,6 +51,7 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
     private Button mStartButton;
     private View mRetryView;
     private CheckBox mOnlyStableCheckbox;
+
     protected FabriclikeInstallFragment(FabriclikeUtils mFabriclikeUtils, String mFragmentTag) {
         super(R.layout.fragment_fabric_install);
         this.mFabriclikeUtils = mFabriclikeUtils;
@@ -75,9 +77,9 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
         mOnlyStableCheckbox = view.findViewById(R.id.fabric_installer_only_stable_checkbox);
         mOnlyStableCheckbox.setOnCheckedChangeListener(this);
         view.findViewById(R.id.fabric_installer_retry_button).setOnClickListener(this::onClickRetry);
-        ((TextView)view.findViewById(R.id.fabric_installer_label_loader_ver)).setText(getString(R.string.fabric_dl_loader_version, mFabriclikeUtils.getName()));
+        ((TextView) view.findViewById(R.id.fabric_installer_label_loader_ver)).setText(getString(R.string.fabric_dl_loader_version, mFabriclikeUtils.getName()));
         ModloaderListenerProxy proxy = getListenerProxy();
-        if(proxy != null) {
+        if (proxy != null) {
             mStartButton.setEnabled(false);
             proxy.attachListener(this);
         }
@@ -89,14 +91,14 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
         cancelFutureChecked(mGameVersionFuture);
         cancelFutureChecked(mLoaderVersionFuture);
         ModloaderListenerProxy proxy = getListenerProxy();
-        if(proxy != null) {
+        if (proxy != null) {
             proxy.detachListener();
         }
         super.onStop();
     }
 
     private void onClickStart(View v) {
-        if(ProgressKeeper.hasOngoingTasks()) {
+        if (ProgressKeeper.hasOngoingTasks()) {
             Toast.makeText(v.getContext(), R.string.tasks_ongoing, Toast.LENGTH_LONG).show();
             return;
         }
@@ -110,17 +112,17 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
     private void performInstallation() {
         try {
             String versionId = mFabriclikeUtils.install(mSelectedGameVersion, mSelectedLoaderVersion);
-            if(versionId == null) {
+            if (versionId == null) {
                 getListenerProxy().onDataNotAvailable();
                 return;
             }
-            Instances.createInstance((i)->{
+            Instances.createInstance((i) -> {
                 i.name = mFabriclikeUtils.getName();
                 i.icon = mFabriclikeUtils.getIconName();
                 i.versionId = versionId;
             }, versionId);
             getListenerProxy().onDownloadFinished(null);
-        }catch (IOException e) {
+        } catch (IOException e) {
             Tools.showErrorRemote(e);
         }
     }
@@ -130,7 +132,7 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
         mStartButton.setEnabled(false);
         mRetryView.setVisibility(View.GONE);
         mLoaderVersionSpinner.setAdapter(null);
-        if(mGameVersionArray == null) {
+        if (mGameVersionArray == null) {
             mGameVersionSpinner.setAdapter(null);
             updateGameVersions();
             return;
@@ -140,7 +142,7 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
 
     @Override
     public void onDownloadFinished(File downloadedFile) {
-        Tools.runOnUiThread(()->{
+        Tools.runOnUiThread(() -> {
 
             getListenerProxy().detachListener();
             setListenerProxy(null);
@@ -157,7 +159,7 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
 
     @Override
     public void onDataNotAvailable() {
-        Tools.runOnUiThread(()->{
+        Tools.runOnUiThread(() -> {
             Context context = requireContext();
             getListenerProxy().detachListener();
             setListenerProxy(null);
@@ -170,7 +172,7 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
 
     @Override
     public void onDownloadError(Exception e) {
-        Tools.runOnUiThread(()-> {
+        Tools.runOnUiThread(() -> {
             Context context = requireContext();
             getListenerProxy().detachListener();
             setListenerProxy(null);
@@ -180,7 +182,7 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
     }
 
     private void cancelFutureChecked(Future<?> future) {
-        if(future != null && !future.isCancelled()) future.cancel(true);
+        if (future != null && !future.isCancelled()) future.cancel(true);
     }
 
     private void startLoading() {
@@ -195,18 +197,18 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
 
     private ArrayAdapter<FabricVersion> createAdapter(FabricVersion[] fabricVersions, boolean onlyStable) {
         ArrayList<FabricVersion> filteredVersions = new ArrayList<>(fabricVersions.length);
-        for(FabricVersion fabricVersion : fabricVersions) {
-            if(!onlyStable || fabricVersion.stable) filteredVersions.add(fabricVersion);
+        for (FabricVersion fabricVersion : fabricVersions) {
+            if (!onlyStable || fabricVersion.stable) filteredVersions.add(fabricVersion);
         }
         filteredVersions.trimToSize();
         return new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, filteredVersions);
     }
 
     private void onException(Future<?> myFuture, Exception e) {
-        Tools.runOnUiThread(()->{
-            if(myFuture.isCancelled()) return;
+        Tools.runOnUiThread(() -> {
+            if (myFuture.isCancelled()) return;
             stopLoading();
-            if(e != null) Tools.showError(requireContext(), e);
+            if (e != null) Tools.showError(requireContext(), e);
             mRetryView.setVisibility(View.VISIBLE);
         });
     }
@@ -215,6 +217,34 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
     public void onCheckedChanged(@NonNull CompoundButton compoundButton, boolean b) {
         updateGameSpinner();
         updateLoaderSpinner();
+    }
+
+    private void updateLoaderVersions() {
+        startLoading();
+        mLoaderVersionFuture = new SelfReferencingFuture(new LoadLoaderVersionsTask()).startOnExecutor(PojavApplication.sExecutorService);
+    }
+
+    private void updateLoaderSpinner() {
+        if (mLoaderVersionArray == null || isDetached()) return;
+        mLoaderVersionSpinner.setAdapter(createAdapter(mLoaderVersionArray, mOnlyStableCheckbox.isChecked()));
+    }
+
+    private void updateGameVersions() {
+        startLoading();
+        mGameVersionFuture = new SelfReferencingFuture(new LoadGameVersionsTask()).startOnExecutor(PojavApplication.sExecutorService);
+    }
+
+    private void updateGameSpinner() {
+        if (mGameVersionArray == null || isDetached()) return;
+        mGameVersionSpinner.setAdapter(createAdapter(mGameVersionArray, mOnlyStableCheckbox.isChecked()));
+    }
+
+    private ModloaderListenerProxy getListenerProxy() {
+        return (ModloaderListenerProxy) ExtraCore.getValue(mExtraTag);
+    }
+
+    private void setListenerProxy(ModloaderListenerProxy listenerProxy) {
+        ExtraCore.setValue(mExtraTag, listenerProxy);
     }
 
     class LoaderVersionSelectedListener implements AdapterView.OnItemSelectedListener {
@@ -238,29 +268,20 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
             Log.i("LoadLoaderVersions", "Starting...");
             try {
                 mLoaderVersionArray = mFabriclikeUtils.downloadLoaderVersions(mSelectedGameVersion);
-                if(mLoaderVersionArray != null) onFinished(myFuture);
+                if (mLoaderVersionArray != null) onFinished(myFuture);
                 else onException(myFuture, null);
-            }catch (IOException e) {
+            } catch (IOException e) {
                 onException(myFuture, e);
             }
         }
+
         private void onFinished(Future<?> myFuture) {
-            Tools.runOnUiThread(()->{
-                if(myFuture.isCancelled()) return;
+            Tools.runOnUiThread(() -> {
+                if (myFuture.isCancelled()) return;
                 stopLoading();
                 updateLoaderSpinner();
             });
         }
-    }
-
-    private void updateLoaderVersions() {
-        startLoading();
-        mLoaderVersionFuture = new SelfReferencingFuture(new LoadLoaderVersionsTask()).startOnExecutor(PojavApplication.sExecutorService);
-    }
-
-    private void updateLoaderSpinner() {
-        if(mLoaderVersionArray == null || isDetached()) return;
-        mLoaderVersionSpinner.setAdapter(createAdapter(mLoaderVersionArray, mOnlyStableCheckbox.isChecked()));
     }
 
     class GameVersionSelectedListener implements AdapterView.OnItemSelectedListener {
@@ -274,7 +295,7 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
         @Override
         public void onNothingSelected(AdapterView<?> adapterView) {
             mSelectedGameVersion = null;
-            if(mLoaderVersionFuture != null) mLoaderVersionFuture.cancel(true);
+            if (mLoaderVersionFuture != null) mLoaderVersionFuture.cancel(true);
             adapterView.setAdapter(null);
         }
 
@@ -285,35 +306,19 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
         public void run(Future<?> myFuture) {
             try {
                 mGameVersionArray = mFabriclikeUtils.downloadGameVersions();
-                if(mGameVersionArray != null) onFinished(myFuture);
+                if (mGameVersionArray != null) onFinished(myFuture);
                 else onException(myFuture, null);
-            }catch (IOException e) {
+            } catch (IOException e) {
                 onException(myFuture, e);
             }
         }
+
         private void onFinished(Future<?> myFuture) {
-            Tools.runOnUiThread(()->{
-                if(myFuture.isCancelled()) return;
+            Tools.runOnUiThread(() -> {
+                if (myFuture.isCancelled()) return;
                 stopLoading();
                 updateGameSpinner();
             });
         }
-    }
-
-    private void updateGameVersions() {
-        startLoading();
-        mGameVersionFuture = new SelfReferencingFuture(new LoadGameVersionsTask()).startOnExecutor(PojavApplication.sExecutorService);
-    }
-
-    private void updateGameSpinner() {
-        if(mGameVersionArray == null || isDetached()) return;
-        mGameVersionSpinner.setAdapter(createAdapter(mGameVersionArray, mOnlyStableCheckbox.isChecked()));
-    }
-
-    private ModloaderListenerProxy getListenerProxy() {
-        return (ModloaderListenerProxy) ExtraCore.getValue(mExtraTag);
-    }
-    private void setListenerProxy(ModloaderListenerProxy listenerProxy) {
-        ExtraCore.setValue(mExtraTag, listenerProxy);
     }
 }

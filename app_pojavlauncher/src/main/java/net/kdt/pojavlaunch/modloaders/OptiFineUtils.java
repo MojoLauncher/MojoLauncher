@@ -15,7 +15,7 @@ public class OptiFineUtils {
         try {
             return DownloadUtils.downloadStringCached("https://optifine.net/downloads",
                     "of_downloads_page", new OptiFineScraper());
-        }catch (DownloadUtils.ParseException e) {
+        } catch (DownloadUtils.ParseException e) {
             e.printStackTrace();
             return null;
         }
@@ -23,12 +23,12 @@ public class OptiFineUtils {
 
     public static InstanceInstaller createInstaller(OptiFineVersion version) {
         int installerHash = Objects.hash(version.versionName, version.gameVersion);
-        File installerLocation = new File(Tools.DIR_CACHE, "optifine-installer-"+installerHash+".jar");
+        File installerLocation = new File(Tools.DIR_CACHE, "optifine-installer-" + installerHash + ".jar");
         InstanceInstaller instanceInstaller = new InstanceInstaller();
         instanceInstaller.installerUrlTransformer = "optifine";
         instanceInstaller.installerDownloadUrl = version.downloadUrl;
         instanceInstaller.installerJar = installerLocation.getAbsolutePath();
-        instanceInstaller.commandLineArgs = List.of("-javaagent:"+ Tools.DIR_DATA+"/forge_installer/forge_installer.jar=OF");
+        instanceInstaller.commandLineArgs = List.of("-javaagent:" + Tools.DIR_DATA + "/forge_installer/forge_installer.jar=OF");
         return instanceInstaller;
     }
 
@@ -36,6 +36,7 @@ public class OptiFineUtils {
         public List<String> gameVersions;
         public List<List<OptiFineVersion>> optifineVersions;
     }
+
     public static class OptiFineVersion {
         public String gameVersion;
         public String versionName;

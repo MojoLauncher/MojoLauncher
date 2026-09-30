@@ -1,15 +1,16 @@
 package net.kdt.pojavlaunch.customcontrols.gamepad;
 
 
-import net.kdt.pojavlaunch.game.platform.input.PlatformGrabListener;
 import net.kdt.pojavlaunch.game.platform.Platform;
+import net.kdt.pojavlaunch.game.platform.input.PlatformGrabListener;
 
 
 public class DefaultDataProvider implements GamepadDataProvider {
     public static final DefaultDataProvider INSTANCE = new DefaultDataProvider();
 
     // Cannot instantiate this class publicly
-    private DefaultDataProvider() {}
+    private DefaultDataProvider() {
+    }
 
     @Override
     public GamepadMap getGameMap() {

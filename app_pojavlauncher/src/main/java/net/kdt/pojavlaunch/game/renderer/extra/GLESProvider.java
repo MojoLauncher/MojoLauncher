@@ -111,23 +111,30 @@ public interface GLESProvider {
         public String type() {
             return "Native OpenGL ES Driver";
         }
+
         public String eglPath() {
             return NATIVE_EGL;
         }
+
         public String glesPath() {
             return NATIVE_GLES;
         }
+
         public File egl() {
             return null;
         }
+
         public File gles() {
             return null;
         }
+
         public void setEnvironment(Map<String, String> envMap) {
         }
+
         public boolean supported() {
             return true; // Native GLES is always present even in a form of ANGLE (hello Samsung)
         }
+
         public boolean requiresNamespace() {
             return false;
         }
@@ -138,24 +145,31 @@ public interface GLESProvider {
      */
     class SystemAngleProvider implements GLESProvider {
         private static final String BASE_PATH = Architecture.is64BitsDevice() ? "/system/lib64/" : "/system/lib";
+
         public String type() {
             return "System ANGLE";
         }
+
         public String eglPath() {
             return gles().getAbsolutePath();
         }
+
         public String glesPath() {
             return gles().getAbsolutePath();
         }
+
         public File egl() {
             return new File(BASE_PATH, ANGLE_EGL);
         }
+
         public File gles() {
             return new File(BASE_PATH, ANGLE_EGL);
         }
+
         public boolean supported() {
             return egl().exists() && gles().exists();
         }
+
         public boolean requiresNamespace() {
             return true;
         }
@@ -167,27 +181,35 @@ public interface GLESProvider {
      */
     class ExternalAngleProvider implements GLESProvider {
         private final LibraryPlugin plugin;
+
         public ExternalAngleProvider(LibraryPlugin plugin) {
             this.plugin = plugin;
         }
+
         public String type() {
             return "External ANGLE";
         }
+
         public String eglPath() {
             return plugin.resolve(ANGLE_EGL).getAbsolutePath();
         }
+
         public String glesPath() {
             return gles().getAbsolutePath();
         }
+
         public File egl() {
             return plugin.resolve(ANGLE_EGL);
         }
+
         public File gles() {
             return plugin.resolve(ANGLE_GLES);
         }
+
         public boolean supported() {
             return plugin != null && plugin.checkLibraries(ANGLE_EGL, ANGLE_GLES);
         }
+
         public boolean requiresNamespace() {
             return false;
         }

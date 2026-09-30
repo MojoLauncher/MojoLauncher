@@ -24,13 +24,14 @@ public class OpenDocumentWithExtension extends ActivityResultContract<Object, Ur
      * Create a new OpenDocumentWithExtension contract.
      * If the extension provided to the constructor is not available in the device's MIME
      * type database, the filter will default to "all types"
+     *
      * @param extension the extension to filter by
      */
     public OpenDocumentWithExtension(String extension) {
         // Who would have thought that loading the MIME map takes a significant amount of time?
-        extensionMimeTypeFuture = PojavApplication.sExecutorService.submit(()->{
+        extensionMimeTypeFuture = PojavApplication.sExecutorService.submit(() -> {
             String extensionMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-            if(extensionMimeType == null) extensionMimeType = "*/*";
+            if (extensionMimeType == null) extensionMimeType = "*/*";
             return extensionMimeType;
         });
     }
@@ -42,7 +43,7 @@ public class OpenDocumentWithExtension extends ActivityResultContract<Object, Ur
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         try {
             intent.setType(extensionMimeTypeFuture.get());
-        }catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
         return intent;

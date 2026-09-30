@@ -1,6 +1,9 @@
 package net.kdt.pojavlaunch.customcontrols.buttons;
 
 import static net.kdt.pojavlaunch.CallbackBridge.sendMouseButton;
+import static net.kdt.pojavlaunch.customcontrols.buttons.BackgroundTint.DEFAULT_TINT_LIST;
+import static net.kdt.pojavlaunch.customcontrols.buttons.BackgroundTint.TOGGLE_TINT_LIST;
+import static net.kdt.pojavlaunch.game.platform.Platform.PLATFORM;
 
 import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
@@ -16,33 +19,25 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
-import net.kdt.pojavlaunch.game.GameActivity;
-
-import git.artdeell.mojo.R;
-
+import net.kdt.pojavlaunch.CallbackBridge;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.customcontrols.ControlData;
 import net.kdt.pojavlaunch.customcontrols.ControlLayout;
 import net.kdt.pojavlaunch.customcontrols.handleview.EditControlSideDialog;
+import net.kdt.pojavlaunch.game.GameActivity;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
-import net.kdt.pojavlaunch.CallbackBridge;
-
-import static net.kdt.pojavlaunch.customcontrols.buttons.BackgroundTint.DEFAULT_TINT_LIST;
-import static net.kdt.pojavlaunch.customcontrols.buttons.BackgroundTint.TOGGLE_TINT_LIST;
-import static net.kdt.pojavlaunch.game.platform.Platform.PLATFORM;
+import git.artdeell.mojo.R;
 
 @SuppressLint({"ViewConstructor", "AppCompatCustomView"})
 public class ControlButton extends TextView implements ControlInterface {
     private final Paint mRectPaint = new Paint();
-    protected ControlData mProperties;
     private final ControlLayout mControlLayout;
-
+    protected ControlData mProperties;
+    protected boolean mIsToggled = false;
     /* Cache value from the ControlData radius for drawing purposes */
     private float mComputedRadius;
     private boolean mHasBitmap;
-
-    protected boolean mIsToggled = false;
 
     public ControlButton(ControlLayout layout, ControlData properties) {
         super(layout.getContext());
@@ -63,7 +58,9 @@ public class ControlButton extends TextView implements ControlInterface {
     }
 
     @Override
-    public View getControlView() {return this;}
+    public View getControlView() {
+        return this;
+    }
 
     public ControlData getProperties() {
         return mProperties;
@@ -97,7 +94,7 @@ public class ControlButton extends TextView implements ControlInterface {
 
         mHasBitmap = Tools.isValidString(mProperties.bitmapTag);
 
-        if(mHasBitmap) setupBitmapTint();
+        if (mHasBitmap) setupBitmapTint();
         else setupNormalTint();
 
         setText(properties.name);
@@ -107,7 +104,7 @@ public class ControlButton extends TextView implements ControlInterface {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         // Bitmap uses a tint list, so don't do any custom rendering
-        if(mHasBitmap || !isActivated()) return;
+        if (mHasBitmap || !isActivated()) return;
         canvas.drawRoundRect(0, 0, getWidth(), getHeight(), mComputedRadius, mComputedRadius, mRectPaint);
     }
 
@@ -117,36 +114,40 @@ public class ControlButton extends TextView implements ControlInterface {
         return super.isActivated() || (mProperties.isToggle && mIsToggled);
     }
 
-    public void loadEditValues(EditControlSideDialog editControlPopup){
+    public void loadEditValues(EditControlSideDialog editControlPopup) {
         editControlPopup.loadValues(getProperties());
     }
 
-    /** Add another instance of the ControlButton to the parent layout */
-    public void cloneButton(){
+    /**
+     * Add another instance of the ControlButton to the parent layout
+     */
+    public void cloneButton() {
         ControlData cloneData = new ControlData(getProperties());
         cloneData.dynamicX = "0.5 * ${screen_width}";
         cloneData.dynamicY = "0.5 * ${screen_height}";
         ((ControlLayout) getParent()).addControlButton(cloneData);
     }
 
-    /** Remove any trace of this button from the layout */
+    /**
+     * Remove any trace of this button from the layout
+     */
     public void removeButton() {
         ControlLayout parent = getControlLayoutParent();
-        if(parent == null) return;
+        if (parent == null) return;
         parent.getLayout().mControlDataList.remove(getProperties());
         parent.removeView(this);
     }
 
     @Override
     public void handlePressed() {
-        if(!getProperties().isToggle){
+        if (!getProperties().isToggle) {
             sendKeyPresses(true);
         }
     }
 
     @Override
     public void handleReleased() {
-        if(!triggerToggle()) {
+        if (!triggerToggle()) {
             sendKeyPresses(false);
         }
     }
@@ -161,20 +162,20 @@ public class ControlButton extends TextView implements ControlInterface {
             case MotionEvent.ACTION_UP: // 1
             case MotionEvent.ACTION_CANCEL: // 3
             case MotionEvent.ACTION_POINTER_UP: // 6
-                if(properties.passThruEnabled){
+                if (properties.passThruEnabled) {
                     //Send the event to be taken as a mouse action
                     View gameSurface = getControlLayoutParent().getGameSurface();
-                    if(gameSurface != null) gameSurface.dispatchTouchEvent(event);
+                    if (gameSurface != null) gameSurface.dispatchTouchEvent(event);
                 }
                 break;
         }
 
-        if(getProperties().isSwipeable) {
+        if (getProperties().isSwipeable) {
             getControlLayoutParent().onTouch(this, event);
             return true;
         }
 
-        switch (action){
+        switch (action) {
             case MotionEvent.ACTION_DOWN: // 0
             case MotionEvent.ACTION_POINTER_DOWN: // 5
                 handlePressed();
@@ -192,11 +193,10 @@ public class ControlButton extends TextView implements ControlInterface {
     }
 
 
-
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public boolean triggerToggle(){
+    public boolean triggerToggle() {
         //returns true a the toggle system is triggered
-        if(mProperties.isToggle){
+        if (mProperties.isToggle) {
             mIsToggled = !mIsToggled;
             invalidate();
             sendKeyPresses(mIsToggled);
@@ -205,36 +205,36 @@ public class ControlButton extends TextView implements ControlInterface {
         return false;
     }
 
-    public void sendKeyPresses(boolean isDown){
+    public void sendKeyPresses(boolean isDown) {
         setActivated(isDown);
-        for(int keycode : mProperties.keycodes){
-            if(keycode >= KeyEvent.KEYCODE_UNKNOWN){
+        for (int keycode : mProperties.keycodes) {
+            if (keycode >= KeyEvent.KEYCODE_UNKNOWN) {
                 CallbackBridge.setModifiers(keycode, isDown);
                 int modifiers = CallbackBridge.getCurrentMods();
                 PLATFORM.sendKeyEvent(keycode, isDown ? 1 : 0, modifiers);
-            }else{
-                Log.i("punjabilauncher", "sendSpecialKey("+keycode+","+isDown+")");
+            } else {
+                Log.i("punjabilauncher", "sendSpecialKey(" + keycode + "," + isDown + ")");
                 sendSpecialKey(keycode, isDown);
             }
         }
     }
 
-    private void sendSpecialKey(int keycode, boolean isDown){
+    private void sendSpecialKey(int keycode, boolean isDown) {
         switch (keycode) {
             case ControlData.SPECIALBTN_KEYBOARD:
-                if(isDown) GameActivity.switchKeyboardState(false);
+                if (isDown) GameActivity.switchKeyboardState(false);
                 break;
 
             case ControlData.SPECIALBTN_KEYBOARDPAN:
-                if(isDown) GameActivity.switchKeyboardState(true);
+                if (isDown) GameActivity.switchKeyboardState(true);
                 break;
 
             case ControlData.SPECIALBTN_TOGGLECTRL:
-                if(isDown)getControlLayoutParent().toggleControlVisible();
+                if (isDown) getControlLayoutParent().toggleControlVisible();
                 break;
 
             case ControlData.SPECIALBTN_VIRTUALMOUSE:
-                if(isDown) GameActivity.toggleMouse(getContext());
+                if (isDown) GameActivity.toggleMouse(getContext());
                 break;
 
             case ControlData.SPECIALBTN_MOUSEPRI:

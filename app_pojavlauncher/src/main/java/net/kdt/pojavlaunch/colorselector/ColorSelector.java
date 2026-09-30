@@ -15,17 +15,16 @@ import com.kdt.SideDialogView;
 
 import git.artdeell.mojo.R;
 
-public class ColorSelector extends SideDialogView implements HueSelectionListener, RectangleSelectionListener, AlphaSelectionListener, TextWatcher{
+public class ColorSelector extends SideDialogView implements HueSelectionListener, RectangleSelectionListener, AlphaSelectionListener, TextWatcher {
     private static final int ALPHA_MASK = ~(0xFF << 24);
+    private final float[] mHueTemplate = new float[]{0, 1, 1};
+    private final float[] mHsvSelected = new float[]{360, 1, 1};
     private HueView mHueView;
     private SVRectangleView mLuminosityIntensityView;
     private AlphaView mAlphaView;
     private ColorSideBySideView mColorView;
     private EditText mTextView;
-
     private ColorSelectionListener mColorSelectionListener;
-    private final float[] mHueTemplate = new float[] {0,1,1};
-    private final float[] mHsvSelected = new float[] {360,1,1};
     private int mAlphaSelected = 0xff;
     private ColorStateList mTextColors;
     private boolean mWatch = true;
@@ -36,6 +35,17 @@ public class ColorSelector extends SideDialogView implements HueSelectionListene
     public ColorSelector(Context context, ViewGroup parent, @Nullable ColorSelectionListener colorSelectionListener) {
         super(context, parent, R.layout.dialog_color_selector);
         mColorSelectionListener = colorSelectionListener;
+    }
+
+    /**
+     * Replaces the alpha value of the color passed in, and returns the result.
+     *
+     * @param color the color to replace the alpha of
+     * @param alpha the alpha to use
+     * @return the new color
+     */
+    public static int setAlpha(int color, int alpha) {
+        return color & ALPHA_MASK | ((alpha & 0xFF) << 24);
     }
 
     @Override
@@ -58,7 +68,7 @@ public class ColorSelector extends SideDialogView implements HueSelectionListene
         // Set elevation to show above other side dialogs.
         // Jank, should be done better
         View contentParent = mDialogContent.findViewById(R.id.side_dialog_scrollview);
-        if(contentParent != null) {
+        if (contentParent != null) {
             ViewGroup dialogLayout = (ViewGroup) mDialogContent.getParent();
             dialogLayout.setElevation(11);
             dialogLayout.setTranslationZ(11);
@@ -74,6 +84,7 @@ public class ColorSelector extends SideDialogView implements HueSelectionListene
 
     /**
      * Shows the color selector with the desired ARGB color selected
+     *
      * @param previousColor the desired ARGB color
      */
     public void show(boolean fromRight, int previousColor) {
@@ -102,22 +113,12 @@ public class ColorSelector extends SideDialogView implements HueSelectionListene
         dispatchColorChange();
     }
 
-    /**
-     * Replaces the alpha value of the color passed in, and returns the result.
-     * @param color the color to replace the alpha of
-     * @param alpha the alpha to use
-     * @return the new color
-     */
-    public static int setAlpha(int color, int alpha) {
-        return color & ALPHA_MASK | ((alpha & 0xFF) << 24);
-    }
-
     //IUO: called on all color changes
     protected void dispatchColorChange() {
         int color = Color.HSVToColor(mAlphaSelected, mHsvSelected);
         mColorView.setColor(color);
         mWatch = false;
-        mTextView.setText(String.format("%08X",color));
+        mTextView.setText(String.format("%08X", color));
         notifyColorSelector(color);
     }
 
@@ -134,40 +135,42 @@ public class ColorSelector extends SideDialogView implements HueSelectionListene
     }
 
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
 
     @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+    }
 
     @Override
     public void afterTextChanged(Editable s) {
-        if(mWatch) {
+        if (mWatch) {
             try {
                 int color = Integer.parseInt(s.toString(), 16);
                 mTextView.setTextColor(mTextColors);
                 runColor(color);
-            }catch (NumberFormatException exception) {
+            } catch (NumberFormatException exception) {
                 mTextView.setTextColor(Color.RED);
             }
-        }else{
+        } else {
             mWatch = true;
         }
     }
 
-    public void setColorSelectionListener(ColorSelectionListener listener){
+    public void setColorSelectionListener(ColorSelectionListener listener) {
         mColorSelectionListener = listener;
     }
 
-    public void setAlphaEnabled(boolean alphaEnabled){
+    public void setAlphaEnabled(boolean alphaEnabled) {
         mAlphaEnabled = alphaEnabled;
-        if(mAlphaView != null) {
+        if (mAlphaView != null) {
             mAlphaView.setVisibility(alphaEnabled ? View.VISIBLE : View.GONE);
             mAlphaView.setAlpha(255);
         }
     }
 
-    private void notifyColorSelector(int color){
-        if(mColorSelectionListener != null)
+    private void notifyColorSelector(int color) {
+        if (mColorSelectionListener != null)
             mColorSelectionListener.onColorSelected(color);
     }
 }

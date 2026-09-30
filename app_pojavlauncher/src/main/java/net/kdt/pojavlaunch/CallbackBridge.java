@@ -9,8 +9,8 @@ import android.view.KeyEvent;
 
 import androidx.annotation.Keep;
 
-import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.game.platform.Platform;
+import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 
 import java.io.File;
 
@@ -22,6 +22,11 @@ public class CallbackBridge {
     public volatile static boolean holdingAlt, holdingCapslock, holdingCtrl,
             holdingNumlock, holdingShift;
 
+    static {
+        System.loadLibrary("pojavexec");
+        minibridgeInit();
+    }
+
     public static void performClick(int button) {
         double ox = Platform.cursorX, oy = Platform.cursorY;
         Platform.sendMouseEvent(button, 1, CallbackBridge.getCurrentMods());
@@ -31,7 +36,6 @@ public class CallbackBridge {
             Platform.sendMouseEvent(button, 0, CallbackBridge.getCurrentMods());
         }, 33);
     }
-
 
     public static void sendKeyPress(int keyCode) {
         PLATFORM.sendKeyEvent(keyCode, true, getCurrentMods());
@@ -54,13 +58,17 @@ public class CallbackBridge {
         int currMods = 0;
         if (holdingAlt) {
             currMods |= LwjglGlfwKeycode.GLFW_MOD_ALT;
-        } if (holdingCapslock) {
+        }
+        if (holdingCapslock) {
             currMods |= LwjglGlfwKeycode.GLFW_MOD_CAPS_LOCK;
-        } if (holdingCtrl) {
+        }
+        if (holdingCtrl) {
             currMods |= LwjglGlfwKeycode.GLFW_MOD_CONTROL;
-        } if (holdingNumlock) {
+        }
+        if (holdingNumlock) {
             currMods |= LwjglGlfwKeycode.GLFW_MOD_NUM_LOCK;
-        } if (holdingShift) {
+        }
+        if (holdingShift) {
             currMods |= LwjglGlfwKeycode.GLFW_MOD_SHIFT;
         }
         return currMods;
@@ -74,8 +82,8 @@ public class CallbackBridge {
         CallbackBridge.holdingShift = keyEvent.isShiftPressed();
     }
 
-    public static void setModifiers(int keyCode, boolean isDown){
-        switch (keyCode){
+    public static void setModifiers(int keyCode, boolean isDown) {
+        switch (keyCode) {
             case KeyEvent.KEYCODE_SHIFT_LEFT:
                 CallbackBridge.holdingShift = isDown;
                 return;
@@ -99,14 +107,14 @@ public class CallbackBridge {
 
     @Keep
     public static void openLink(String link) {
-        ContextExecutor.executeActivity(ctx->{
+        ContextExecutor.executeActivity(ctx -> {
             try {
-                if(link.startsWith("file:")) {
+                if (link.startsWith("file:")) {
                     int truncLength = 5;
-                    if(link.startsWith("file://")) truncLength = 7;
+                    if (link.startsWith("file://")) truncLength = 7;
                     String path = link.substring(truncLength);
                     Tools.openPath(ctx, new File(path), false);
-                }else {
+                } else {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setDataAndType(Uri.parse(link), "*/*");
                     ctx.startActivity(intent);
@@ -119,7 +127,7 @@ public class CallbackBridge {
 
     @SuppressWarnings("unused") //TODO: actually use it
     public static void openPath(String path) {
-        ContextExecutor.executeActivity(ctx->{
+        ContextExecutor.executeActivity(ctx -> {
             try {
                 Tools.openPath(ctx, new File(path), false);
             } catch (Throwable th) {
@@ -129,10 +137,5 @@ public class CallbackBridge {
     }
 
     public static native void minibridgeInit();
-
-    static {
-        System.loadLibrary("pojavexec");
-        minibridgeInit();
-    }
 }
 

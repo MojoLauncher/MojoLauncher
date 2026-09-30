@@ -8,9 +8,8 @@ import android.view.ViewTreeObserver;
 
 import androidx.annotation.RequiresApi;
 
-import net.kdt.pojavlaunch.Tools;
-
 import net.kdt.pojavlaunch.CallbackBridge;
+import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.game.platform.Platform;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
@@ -35,11 +34,12 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
     }
 
     private void enableTouchpadIfNecessary() {
-        if(mTouchpadView.getVisibility() != View.VISIBLE) mTouchpadView.setVisibility(View.VISIBLE);
+        if (mTouchpadView.getVisibility() != View.VISIBLE)
+            mTouchpadView.setVisibility(View.VISIBLE);
     }
 
     public void handleAutomaticCapture() {
-        if(!mHostView.hasWindowFocus()) {
+        if (!mHostView.hasWindowFocus()) {
             mHostView.requestFocus();
         } else {
             mHostView.requestPointerCapture();
@@ -50,10 +50,11 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
         float relX = motionEvent.getAxisValue(axisX),
                 relY = motionEvent.getAxisValue(axisY);
 
-        if(motionEvent.getHistorySize() > 1) for(int i = 0; i < motionEvent.getHistorySize(); i++) {
-            relX += motionEvent.getHistoricalAxisValue(axisX, i);
-            relY += motionEvent.getHistoricalAxisValue(axisY, i);
-        }
+        if (motionEvent.getHistorySize() > 1)
+            for (int i = 0; i < motionEvent.getHistorySize(); i++) {
+                relX += motionEvent.getHistoricalAxisValue(axisX, i);
+                relY += motionEvent.getHistoricalAxisValue(axisY, i);
+            }
 
         mVector[0] = relX;
         mVector[1] = relY;
@@ -65,31 +66,31 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
         // Yes, we actually not only receive relative mouse events here, but also absolute touchpad ones!
         // Therefore, we need to know when it's a touchpad and when it's a mouse.
 
-        if((event.getSource() & InputDevice.SOURCE_CLASS_TRACKBALL) != 0) {
+        if ((event.getSource() & InputDevice.SOURCE_CLASS_TRACKBALL) != 0) {
             // If the source claims to be a relative device by belonging to the trackball class,
             // use its coordinates directly.
-            if(mDeviceSupportsRelativeAxis) {
+            if (mDeviceSupportsRelativeAxis) {
                 // If some OEM decides to do a funny and make an absolute touchpad report itself as
                 // a trackball, we will at least have semi-valid relative positions
                 accumulateHistoricalValues(event, MotionEvent.AXIS_RELATIVE_X, MotionEvent.AXIS_RELATIVE_Y);
-            }else {
+            } else {
                 // Otherwise trust the OS, i guess??
                 accumulateHistoricalValues(event, MotionEvent.AXIS_X, MotionEvent.AXIS_Y);
             }
-        }else {
+        } else {
             // If it's not a trackball, it's likely a touchpad and needs tracking like a touchscreen.
             mPointerTracker.trackEvent(event);
             // The relative position will already be written down into the mVector variable.
         }
 
         // Avoid going through the JNI each time.
-        if(!Platform.isGrabbing()) {
+        if (!Platform.isGrabbing()) {
             enableTouchpadIfNecessary();
             // Yes, if the user's touchpad is multi-touch we will also receive events for that.
             // So, handle the scrolling gesture ourselves.
             mVector[0] *= mMousePrescale;
             mVector[1] *= mMousePrescale;
-            if(event.getPointerCount() < 2) {
+            if (event.getPointerCount() < 2) {
                 applyMotionVector(view, LauncherPreferences.PREF_MOUSESPEED);
                 mScroller.resetScrollOvershoot();
             } else {
@@ -103,8 +104,12 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_MOVE:
                 return true;
-            case MotionEvent.ACTION_BUTTON_PRESS: CallbackBridge.sendMouseButton(event.getActionButton(), true); return true;
-            case MotionEvent.ACTION_BUTTON_RELEASE: CallbackBridge.sendMouseButton(event.getActionButton(), false); return true;
+            case MotionEvent.ACTION_BUTTON_PRESS:
+                CallbackBridge.sendMouseButton(event.getActionButton(), true);
+                return true;
+            case MotionEvent.ACTION_BUTTON_RELEASE:
+                CallbackBridge.sendMouseButton(event.getActionButton(), false);
+                return true;
             case MotionEvent.ACTION_SCROLL:
                 CallbackBridge.sendScroll(
                         event.getAxisValue(MotionEvent.AXIS_HSCROLL),
@@ -127,9 +132,9 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
 
     private void checkSameDevice(InputDevice inputDevice) {
         int newIdentifier;
-        if(inputDevice != null) newIdentifier = inputDevice.getId();
+        if (inputDevice != null) newIdentifier = inputDevice.getId();
         else newIdentifier = Integer.MAX_VALUE;
-        if(mInputDeviceIdentifier != newIdentifier) {
+        if (mInputDeviceIdentifier != newIdentifier) {
             reinitializeDeviceSpecificProperties(inputDevice);
             mInputDeviceIdentifier = newIdentifier;
         }
@@ -137,7 +142,7 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
 
     private void reinitializeDeviceSpecificProperties(InputDevice inputDevice) {
         mPointerTracker.cancelTracking();
-        if(inputDevice == null) {
+        if (inputDevice == null) {
             mDeviceSupportsRelativeAxis = false;
             return;
         }
@@ -148,7 +153,7 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
-        if(hasFocus && Tools.isAndroid8OrHigher()) mHostView.requestPointerCapture();
+        if (hasFocus && Tools.isAndroid8OrHigher()) mHostView.requestPointerCapture();
     }
 
     public void detach() {

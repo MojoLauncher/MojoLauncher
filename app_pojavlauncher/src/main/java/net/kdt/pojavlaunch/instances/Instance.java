@@ -39,7 +39,7 @@ public class Instance extends DisplayInstance {
     }
 
     private void sanitizeArgs() {
-        if(argsMode > ARGS_MODE_LAST) {
+        if (argsMode > ARGS_MODE_LAST) {
             argsMode = 0;
             jvmArgs = null;
         }
@@ -47,6 +47,7 @@ public class Instance extends DisplayInstance {
 
     /**
      * Write the current contents of the instance to persistent storage.
+     *
      * @throws IOException in case of write errors
      */
     public void write() throws IOException {
@@ -59,24 +60,25 @@ public class Instance extends DisplayInstance {
     public void maybeWrite() {
         try {
             write();
-        }catch (IOException e) {
-            Log.e("Instance", "Failed to write",e);
+        } catch (IOException e) {
+            Log.e("Instance", "Failed to write", e);
         }
     }
 
     /**
      * Encode the Bitmap as the new profile icon with required encoding settings.
+     *
      * @param bitmap the target bitmap
      * @throws IOException in case of errors while storing the icon
      */
     public void encodeNewIcon(Bitmap bitmap) throws IOException {
-        try(FileOutputStream fileOutputStream = new FileOutputStream(getInstanceIconLocation())) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(getInstanceIconLocation())) {
             bitmap.compress(
                     Build.VERSION.SDK_INT < Build.VERSION_CODES.R ?
                             // On Android < 30, there was no distinction between "lossy" and "lossless",
                             // and the type is picked by the quality parameter. We set the quality to 60.
                             // so it should be lossy,
-                            Bitmap.CompressFormat.WEBP:
+                            Bitmap.CompressFormat.WEBP :
                             // On Android >= 30, we can explicitly specify that we want lossy compression
                             // with the visual quality of 60.
                             Bitmap.CompressFormat.WEBP_LOSSY,
@@ -87,12 +89,12 @@ public class Instance extends DisplayInstance {
     }
 
     public String getLaunchRenderer() {
-        if(Tools.isValidString(renderer)) return renderer;
+        if (Tools.isValidString(renderer)) return renderer;
         return LauncherPreferences.PREF_RENDERER;
     }
 
     public String getLaunchArgs() {
-        if(!Tools.isValidString(jvmArgs)) return LauncherPreferences.PREF_CUSTOM_JAVA_ARGS;
+        if (!Tools.isValidString(jvmArgs)) return LauncherPreferences.PREF_CUSTOM_JAVA_ARGS;
         switch (argsMode) {
             case ARGS_MODE_REPLACE:
                 return jvmArgs;
@@ -101,17 +103,17 @@ public class Instance extends DisplayInstance {
             case ARGS_MODE_MERGE_INSTANCE_FIRST:
                 return jvmArgs + " " + LauncherPreferences.PREF_CUSTOM_JAVA_ARGS;
             default:
-                throw new RuntimeException("Unknown value for argsMode: "+argsMode);
+                throw new RuntimeException("Unknown value for argsMode: " + argsMode);
         }
     }
 
     public String getLaunchControls() {
-        if(!Tools.isValidString(controlLayout)) return LauncherPreferences.PREF_DEFAULTCTRL_PATH;
+        if (!Tools.isValidString(controlLayout)) return LauncherPreferences.PREF_DEFAULTCTRL_PATH;
         return Tools.CTRLMAP_PATH + "/" + controlLayout;
     }
 
     public File getGameDirectory() {
-        if(sharedData) return Instances.SHARED_DATA_DIRECTORY;
+        if (sharedData) return Instances.SHARED_DATA_DIRECTORY;
         return mInstanceRoot;
     }
 }

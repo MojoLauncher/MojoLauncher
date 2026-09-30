@@ -40,6 +40,25 @@ public abstract class ForgelikeUtils {
         this.mVersionOrderInversed = versionOrderInversed;
     }
 
+    private static String getMcVersionForNeoVersion(String neoVersion) {
+        // I feel like it's necessary to explain the NeoForge versioning format
+        // basically, what it does is it trims the major version from minecrafts version
+        // e.g.: 1.20.1 -> 20.1, and then appends its own "patch" version to that
+        // e.g.: 20.1 -> 20.1.8, which means the version string includes both, the minecraft
+        // and the loader version at once
+        try {
+            int firstIndex = neoVersion.indexOf('.');
+            int secondIndex = neoVersion.indexOf('.', firstIndex + 1);
+            if (firstIndex == -1 || secondIndex == -1) {
+                Log.e("NeoforgeUtils", "Failed to parse neoforge version: " + neoVersion + "; not enough '.' found");
+            }
+            return "1." + neoVersion.substring(0, secondIndex);
+        } catch (StringIndexOutOfBoundsException e) {
+            Log.e("NeoforgeUtils", "Failed to parse neoforge version: " + neoVersion, e);
+            return neoVersion;
+        }
+    }
+
     public List<String> downloadVersions() throws IOException {
         SAXParser saxParser;
         try {
@@ -89,7 +108,7 @@ public abstract class ForgelikeUtils {
         String hash = DownloadUtils.downloadString(downloadUrl + ".sha1");
         File installerLocation = new File(Tools.DIR_CACHE, mCachePrefix + "-installer-" + fullVersion + ".jar");
         InstanceInstaller instanceInstaller = new InstanceInstaller();
-        instanceInstaller.commandLineArgs = List.of("-Duser.language=en", "-Duser.country=US", "-javaagent:"+Tools.DIR_DATA+"/forge_installer/forge_installer.jar");
+        instanceInstaller.commandLineArgs = List.of("-Duser.language=en", "-Duser.country=US", "-javaagent:" + Tools.DIR_DATA + "/forge_installer/forge_installer.jar");
         instanceInstaller.installerJar = installerLocation.getAbsolutePath();
         instanceInstaller.installerSha1 = hash;
         instanceInstaller.installerDownloadUrl = downloadUrl;
@@ -110,25 +129,6 @@ public abstract class ForgelikeUtils {
 
     public boolean isVersionOrderInversed() {
         return mVersionOrderInversed;
-    }
-
-    private static String getMcVersionForNeoVersion(String neoVersion) {
-        // I feel like it's necessary to explain the NeoForge versioning format
-        // basically, what it does is it trims the major version from minecrafts version
-        // e.g.: 1.20.1 -> 20.1, and then appends its own "patch" version to that
-        // e.g.: 20.1 -> 20.1.8, which means the version string includes both, the minecraft
-        // and the loader version at once
-        try {
-            int firstIndex = neoVersion.indexOf('.');
-            int secondIndex = neoVersion.indexOf('.', firstIndex + 1);
-            if (firstIndex == -1 || secondIndex == -1) {
-                Log.e("NeoforgeUtils", "Failed to parse neoforge version: " + neoVersion + "; not enough '.' found");
-            }
-            return "1." + neoVersion.substring(0, secondIndex);
-        } catch (StringIndexOutOfBoundsException e) {
-            Log.e("NeoforgeUtils", "Failed to parse neoforge version: " + neoVersion, e);
-            return neoVersion;
-        }
     }
 
     private static class ForgeUtils extends ForgelikeUtils {

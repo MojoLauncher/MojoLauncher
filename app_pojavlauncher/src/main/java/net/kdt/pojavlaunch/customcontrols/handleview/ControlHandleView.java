@@ -12,27 +12,34 @@ import android.view.ViewTreeObserver;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.customcontrols.buttons.ControlInterface;
 
+import git.artdeell.mojo.R;
+
 public class ControlHandleView extends View {
+    private final Drawable mDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_view_handle, getContext().getTheme());
+    private ControlInterface mView;
+    private float mXOffset, mYOffset;
     public ControlHandleView(Context context) {
         super(context);
         init();
     }
-
     public ControlHandleView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    private final Drawable mDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_view_handle, getContext().getTheme());
-    private ControlInterface mView;
-    private float mXOffset, mYOffset;
-    private final ViewTreeObserver.OnPreDrawListener mPositionListener = new ViewTreeObserver.OnPreDrawListener() {
+    private void init() {
+        int size = getResources().getDimensionPixelOffset(R.dimen._22sdp);
+        mDrawable.setBounds(0, 0, size, size);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(size, size);
+        setLayoutParams(params);
+        setBackground(mDrawable);
+        setTranslationZ(10.5F);
+    }    private final ViewTreeObserver.OnPreDrawListener mPositionListener = new ViewTreeObserver.OnPreDrawListener() {
         @Override
         public boolean onPreDraw() {
-            if(mView == null || !mView.getControlView().isShown()){
+            if (mView == null || !mView.getControlView().isShown()) {
                 hide();
                 return true;
             }
@@ -43,17 +50,9 @@ public class ControlHandleView extends View {
         }
     };
 
-    private void init(){
-        int size = getResources().getDimensionPixelOffset(R.dimen._22sdp);
-        mDrawable.setBounds(0,0,size,size);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(size, size);
-        setLayoutParams(params);
-        setBackground(mDrawable);
-        setTranslationZ(10.5F);
-    }
-
-    public void setControlButton(ControlInterface controlInterface){
-        if(mView != null) mView.getControlView().getViewTreeObserver().removeOnPreDrawListener(mPositionListener);
+    public void setControlButton(ControlInterface controlInterface) {
+        if (mView != null)
+            mView.getControlView().getViewTreeObserver().removeOnPreDrawListener(mPositionListener);
 
         setVisibility(VISIBLE);
         mView = controlInterface;
@@ -66,7 +65,7 @@ public class ControlHandleView extends View {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getActionMasked()){
+        switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
                 mXOffset = event.getX();
                 mYOffset = event.getY();
@@ -88,9 +87,11 @@ public class ControlHandleView extends View {
         return true;
     }
 
-    public void hide(){
-        if(mView != null)
+    public void hide() {
+        if (mView != null)
             mView.getControlView().getViewTreeObserver().removeOnPreDrawListener(mPositionListener);
         setVisibility(GONE);
     }
+
+
 }

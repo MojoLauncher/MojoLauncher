@@ -13,15 +13,17 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import net.kdt.pojavlaunch.LauncherActivity;
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+
+import git.artdeell.mojo.R;
 
 /**
  * Preference for the main screen, any sub-screen should inherit this class for consistent behavior,
  * overriding only onCreatePreferences
  */
 public class LauncherPreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
-    protected Runnable mVisibilityUpdater = () -> {};
+    protected Runnable mVisibilityUpdater = () -> {
+    };
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -36,19 +38,19 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
         setupNotificationRequestPreference();
     }
 
-    private void updateVisibility(){
+    private void updateVisibility() {
         requirePreference("notification_permission_request").setVisible(!getLauncherActivity().checkForPermission(33, Manifest.permission.POST_NOTIFICATIONS));
     }
 
     private void setupNotificationRequestPreference() {
         Preference mRequestNotificationPermissionPreference = requirePreference("notification_permission_request");
         Activity activity = getActivity();
-        if(activity instanceof LauncherActivity) {
+        if (activity instanceof LauncherActivity) {
             mRequestNotificationPermissionPreference.setOnPreferenceClickListener(preference -> {
                 ((LauncherActivity) activity).askForPermission(33, Manifest.permission.POST_NOTIFICATIONS);
                 return true;
             });
-        }else{
+        } else {
             mRequestNotificationPermissionPreference.setVisible(false);
         }
         updateVisibility();
@@ -58,14 +60,16 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
     public void onResume() {
         super.onResume();
         SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
-        if(sharedPreferences != null) sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null)
+            sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         mVisibilityUpdater.run();
     }
 
     @Override
     public void onPause() {
         SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
-        if(sharedPreferences != null) sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null)
+            sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         super.onPause();
     }
 
@@ -76,16 +80,18 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
 
     protected Preference requirePreference(CharSequence key) {
         Preference preference = findPreference(key);
-        if(preference != null) return preference;
-        throw new IllegalStateException("Preference "+key+" is null");
+        if (preference != null) return preference;
+        throw new IllegalStateException("Preference " + key + " is null");
     }
+
     @SuppressWarnings("unchecked")
     protected <T extends Preference> T requirePreference(CharSequence key, Class<T> preferenceClass) {
         Preference preference = requirePreference(key);
-        if(preferenceClass.isInstance(preference)) return (T)preference;
-        throw new IllegalStateException("Preference "+key+" is not an instance of "+preferenceClass.getSimpleName());
+        if (preferenceClass.isInstance(preference)) return (T) preference;
+        throw new IllegalStateException("Preference " + key + " is not an instance of " + preferenceClass.getSimpleName());
     }
-    protected LauncherActivity getLauncherActivity(){
+
+    protected LauncherActivity getLauncherActivity() {
         return ((LauncherActivity) getActivity());
     }
 }

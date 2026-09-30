@@ -3,15 +3,16 @@ package net.kdt.pojavlaunch.utils.memory;
 import net.kdt.pojavlaunch.Architecture;
 
 public class MemoryHoleFinder implements SelfMapsParser.Callback {
+    private final long mAddressingLimit = Architecture.getAddressSpaceLimit();
     private long mPreviousEnd = 0;
     private long mLargestHole = -1;
-    private final long mAddressingLimit = Architecture.getAddressSpaceLimit();
+
     @Override
     public boolean process(long begin, long end, String wholeLine) {
-        if(begin >= mAddressingLimit) begin = mAddressingLimit;
+        if (begin >= mAddressingLimit) begin = mAddressingLimit;
         long holeSize = begin - mPreviousEnd;
-        if(mLargestHole < holeSize) mLargestHole = holeSize;
-        if(begin == mAddressingLimit) return false;
+        if (mLargestHole < holeSize) mLargestHole = holeSize;
+        if (begin == mAddressingLimit) return false;
         mPreviousEnd = end;
         return true;
     }

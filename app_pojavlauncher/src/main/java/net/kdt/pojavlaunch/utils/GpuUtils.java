@@ -18,7 +18,7 @@ public class GpuUtils {
     private static GLInfo info;
 
     private static int getMajorGLVersion(String versionString) {
-        if(versionString.startsWith(GLES_VERSION_PREFIX)) {
+        if (versionString.startsWith(GLES_VERSION_PREFIX)) {
             versionString = versionString.substring(GLES_VERSION_PREFIX.length());
         }
         int firstDot = versionString.indexOf('.');
@@ -33,8 +33,8 @@ public class GpuUtils {
         int version = 2;
         try {
             version = getMajorGLVersion(versionString);
-        }catch (NumberFormatException e) {
-            Log.w("GLInfoUtils","Failed to parse GL version number, falling back to 2", e);
+        } catch (NumberFormatException e) {
+            Log.w("GLInfoUtils", "Failed to parse GL version number, falling back to 2", e);
         }
         // LTW depends on the ability to create a context with a major version of 3,
         // and even if the string parse returns 3 while EGL can only create 2,
@@ -49,10 +49,10 @@ public class GpuUtils {
     }
 
     private static EGLContext tryCreateContext(EGLDisplay eglDisplay, EGLConfig config, int majorVersion) {
-        int[] egl_context_attributes = new int[] { EGL14.EGL_CONTEXT_CLIENT_VERSION, majorVersion, EGL14.EGL_NONE };
+        int[] egl_context_attributes = new int[]{EGL14.EGL_CONTEXT_CLIENT_VERSION, majorVersion, EGL14.EGL_NONE};
         EGLContext context = EGL14.eglCreateContext(eglDisplay, config, EGL14.EGL_NO_CONTEXT, egl_context_attributes, 0);
-        if(EGL14.EGL_NO_CONTEXT.equals(context) || context == null) {
-            Log.e("GLInfoUtils", "Failed to create a context with major version "+majorVersion);
+        if (EGL14.EGL_NO_CONTEXT.equals(context) || context == null) {
+            Log.e("GLInfoUtils", "Failed to create a context with major version " + majorVersion);
             return null;
         }
         return context;
@@ -60,12 +60,12 @@ public class GpuUtils {
 
     private static EGLContext tryMakeCurrent(EGLDisplay eglDisplay, EGLConfig config, EGLSurface surface, int majorVersion) {
         EGLContext context = tryCreateContext(eglDisplay, config, majorVersion);
-        if(context == null) return null;
+        if (context == null) return null;
         // Old Mali drivers are broken, and will actually let us create a context with GLES 3
         // But won't let us make it current, which will break the check anyway...
         boolean makeCurrentResult = EGL14.eglMakeCurrent(eglDisplay, surface, surface, context);
-        if(!makeCurrentResult) {
-            Log.i("GLInfoUtils", "Failed to make context GL version "+majorVersion +" current");
+        if (!makeCurrentResult) {
+            Log.i("GLInfoUtils", "Failed to make context GL version " + majorVersion + " current");
             EGL14.eglDestroyContext(eglDisplay, context);
             return null;
         }
@@ -82,8 +82,9 @@ public class GpuUtils {
         // This is here just to satisfy Android M which incorrectly null-checks it
         int[] egl_version = new int[2];
         EGLDisplay eglDisplay = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY);
-        if(eglDisplay == EGL14.EGL_NO_DISPLAY || !EGL14.eglInitialize(eglDisplay, egl_version, 0 , egl_version, 1)) return false;
-        int[] egl_attributes = new int[]  {
+        if (eglDisplay == EGL14.EGL_NO_DISPLAY || !EGL14.eglInitialize(eglDisplay, egl_version, 0, egl_version, 1))
+            return false;
+        int[] egl_attributes = new int[]{
                 EGL14.EGL_BLUE_SIZE, 8,
                 EGL14.EGL_GREEN_SIZE, 8,
                 EGL14.EGL_RED_SIZE, 8,
@@ -95,7 +96,7 @@ public class GpuUtils {
         };
         EGLConfig[] config = new EGLConfig[1];
         int[] num_configs = new int[]{0};
-        if(!EGL14.eglChooseConfig(eglDisplay, egl_attributes, 0, config, 0, 1, num_configs, 0) || num_configs[0] == 0) {
+        if (!EGL14.eglChooseConfig(eglDisplay, egl_attributes, 0, config, 0, 1, num_configs, 0) || num_configs[0] == 0) {
             EGL14.eglTerminate(eglDisplay);
             Log.e("GLInfoUtils", "Failed to choose an EGL config");
             return false;
@@ -104,14 +105,14 @@ public class GpuUtils {
         boolean forcedMsaa = isMSAAConfig(eglDisplay, config[0]);
 
         // Create PBuffer surface as some devices might actually not support surfaceless.
-        int[] pbuffer_attributes = new int[] {
+        int[] pbuffer_attributes = new int[]{
                 EGL14.EGL_WIDTH, 16,
                 EGL14.EGL_HEIGHT, 16,
                 EGL14.EGL_NONE
         };
 
         EGLSurface surface = EGL14.eglCreatePbufferSurface(eglDisplay, config[0], pbuffer_attributes, 0);
-        if(surface == null || surface == EGL14.EGL_NO_SURFACE) {
+        if (surface == null || surface == EGL14.EGL_NO_SURFACE) {
             Log.e("GLInfoUtils", "Failed to create pbuffer surface");
             EGL14.eglTerminate(eglDisplay);
             return false;
@@ -119,13 +120,13 @@ public class GpuUtils {
 
         int contextGLVersion = 3;
         EGLContext context = tryMakeCurrent(eglDisplay, config[0], surface, contextGLVersion);
-        if(context == null) {
+        if (context == null) {
             contextGLVersion = 2;
             context = tryMakeCurrent(eglDisplay, config[0], surface, contextGLVersion);
         }
 
         // Creation/currenting failed in both cases
-        if(context == null) {
+        if (context == null) {
             Log.e("GLInfoUtils", "Failed to create and make context current");
             EGL14.eglDestroySurface(eglDisplay, surface);
             EGL14.eglTerminate(eglDisplay);
@@ -141,7 +142,7 @@ public class GpuUtils {
     }
 
     public static boolean checkVulkanSupport(PackageManager packageManager) {
-        if(SDK_INT >= Build.VERSION_CODES.N) {
+        if (SDK_INT >= Build.VERSION_CODES.N) {
             return packageManager.hasSystemFeature(PackageManager.FEATURE_VULKAN_HARDWARE_LEVEL) &&
                     packageManager.hasSystemFeature(PackageManager.FEATURE_VULKAN_HARDWARE_VERSION);
         }
@@ -157,18 +158,19 @@ public class GpuUtils {
     /**
      * Get the information about the current OpenGL ES device, which consists of the vendor,
      * the renderer and the major GLES version
+     *
      * @return the info
      */
     public static GLInfo getGlInfo() {
-        if(info != null) return info;
+        if (info != null) return info;
         Log.i("GLInfoUtils", "Querying graphics device info...");
         boolean infoQueryResult = false;
         try {
             infoQueryResult = initAndQueryInfo();
-        }catch (Throwable e) {
+        } catch (Throwable e) {
             Log.e("GLInfoUtils", "Throwable when trying to initialize GL info", e);
         }
-        if(!infoQueryResult) initDummyInfo();
+        if (!infoQueryResult) initDummyInfo();
         return info;
     }
 
@@ -177,6 +179,7 @@ public class GpuUtils {
         public final String renderer;
         public final int glesMajorVersion;
         public final boolean forcedMsaa;
+
         protected GLInfo(String vendor, String renderer, int glesMajorVersion, boolean forcedMsaa) {
             this.vendor = vendor;
             this.renderer = renderer;
@@ -186,6 +189,7 @@ public class GpuUtils {
 
         /**
          * Check if this GLInfo belongs to a Qualcomm Adreno graphics adapter
+         *
          * @return
          */
         public boolean isAdreno() {
@@ -194,18 +198,20 @@ public class GpuUtils {
 
         /**
          * Check if this GLInfo belongs to a Qualcomm Adreno 200/300/400/500 graphics adapter
+         *
          * @return
          */
-        public boolean isAdreno500Lower(){
+        public boolean isAdreno500Lower() {
             return vendor.contains("Qualcomm") &&
                     (renderer.contains("Adreno (TM) 5") ||
-                    renderer.contains("Adreno (TM) 4") ||
-                    renderer.contains("Adreno (TM) 3") ||
-                    renderer.contains("Adreno (TM) 2"));
+                            renderer.contains("Adreno (TM) 4") ||
+                            renderer.contains("Adreno (TM) 3") ||
+                            renderer.contains("Adreno (TM) 2"));
         }
 
         /**
          * Check if this GLInfo belongs to a ARM Mali/Immortalis graphics adapter
+         *
          * @return
          */
         public boolean isArm() {

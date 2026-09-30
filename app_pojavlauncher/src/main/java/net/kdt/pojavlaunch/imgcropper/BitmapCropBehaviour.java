@@ -7,23 +7,25 @@ import android.graphics.Rect;
 
 import net.kdt.pojavlaunch.utils.MatrixUtils;
 
-public class BitmapCropBehaviour implements CropperBehaviour{
-    private final Matrix mTranslateInverse = new Matrix();
+public class BitmapCropBehaviour implements CropperBehaviour {
     protected final Matrix mTranslateMatrix = new Matrix();
+    protected final Matrix mZoomMatrix = new Matrix();
+    private final Matrix mTranslateInverse = new Matrix();
     private final Matrix mPrescaleMatrix = new Matrix();
     private final Matrix mImageMatrix = new Matrix();
-    protected final Matrix mZoomMatrix = new Matrix();
-    private boolean mTranslateInverseOutdated = true;
     protected Bitmap mOriginalBitmap;
     protected CropperView mHostView;
+    private boolean mTranslateInverseOutdated = true;
+
     public BitmapCropBehaviour(CropperView hostView) {
         mHostView = hostView;
     }
+
     @Override
     public void pan(float panX, float panY) {
-        if(mHostView.horizontalLock) panX = 0;
-        if(mHostView.verticalLock) panY = 0;
-        if(panX != 0 || panY != 0) {
+        if (mHostView.horizontalLock) panX = 0;
+        if (mHostView.verticalLock) panY = 0;
+        if (panX != 0 || panY != 0) {
             // Actually translate and refresh only if either of the pan deltas are nonzero
             mTranslateMatrix.postTranslate(panX, panY);
             mTranslateInverseOutdated = true;
@@ -33,11 +35,11 @@ public class BitmapCropBehaviour implements CropperBehaviour{
 
     public void zoom(float zoomLevel, float midpointX, float midpointY) {
         // Do this to avoid constantly inverting the same matrix on each touch event.
-        if(mTranslateInverseOutdated) {
+        if (mTranslateInverseOutdated) {
             MatrixUtils.inverse(mTranslateMatrix, mTranslateInverse);
             mTranslateInverseOutdated = false;
         }
-        float[] zoomCenter = new float[] {
+        float[] zoomCenter = new float[]{
                 midpointX,
                 midpointY
         };
@@ -48,7 +50,7 @@ public class BitmapCropBehaviour implements CropperBehaviour{
     }
 
     public int getLargestImageSide() {
-        if(mOriginalBitmap == null) return 0;
+        if (mOriginalBitmap == null) return 0;
         return Math.max(mOriginalBitmap.getWidth(), mOriginalBitmap.getHeight());
     }
 
@@ -90,11 +92,11 @@ public class BitmapCropBehaviour implements CropperBehaviour{
         // Pick the best dimensions for the crop result, shrinking the target if necessary.
         int targetWidth, targetHeight;
         int targetMinDimension = Math.min(targetRect.width(), targetRect.height());
-        if(targetMaxSide < targetMinDimension) {
+        if (targetMaxSide < targetMinDimension) {
             float ratio = (float) targetMaxSide / targetMinDimension;
             targetWidth = (int) (targetRect.width() * ratio);
             targetHeight = (int) (targetRect.height() * ratio);
-        }else {
+        } else {
             targetWidth = targetRect.width();
             targetHeight = targetRect.height();
         }
@@ -121,16 +123,16 @@ public class BitmapCropBehaviour implements CropperBehaviour{
      * Mainly intended for convenience of implementing a "Reset" button.
      */
     protected void computePrescaleMatrix(Matrix inMatrix, int imageWidth, int imageHeight) {
-        if(mOriginalBitmap == null) return;
+        if (mOriginalBitmap == null) return;
         int selectionRectWidth = mHostView.mSelectionRect.width();
         int selectionRectHeight = mHostView.mSelectionRect.height();
         // A basic "scale to fit while preserving aspect ratio" I have taken from
         // https://stackoverflow.com/a/23105310
-        float hRatio =  (float)selectionRectWidth / imageWidth ;
-        float vRatio =  (float)selectionRectHeight / imageHeight;
-        float ratio  = Math.min (hRatio, vRatio);
-        float centerShift_x = (selectionRectWidth - imageWidth*ratio) / 2;
-        float centerShift_y = (selectionRectHeight - imageHeight*ratio) / 2;
+        float hRatio = (float) selectionRectWidth / imageWidth;
+        float vRatio = (float) selectionRectHeight / imageHeight;
+        float ratio = Math.min(hRatio, vRatio);
+        float centerShift_x = (selectionRectWidth - imageWidth * ratio) / 2;
+        float centerShift_y = (selectionRectHeight - imageHeight * ratio) / 2;
         centerShift_x += mHostView.mSelectionRect.left;
         centerShift_y += mHostView.mSelectionRect.top;
         // By doing setScale() we don't have to reset() the matrix beforehand saving us a

@@ -5,14 +5,16 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.text.Html;
 
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.ShowErrorActivity;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutorTask;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
+import git.artdeell.mojo.R;
+
 public class MirrorTamperedException extends Exception implements ContextExecutorTask {
     // Do not change. Android really hates when this value changes for some reason.
     private static final long serialVersionUID = -7482301619612640658L;
+
     @Override
     public void executeWithActivity(Activity activity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -24,18 +26,20 @@ public class MirrorTamperedException extends Exception implements ContextExecuto
     }
 
     private void addButtons(AlertDialog.Builder builder) {
-        builder.setPositiveButton(R.string.dl_switch_to_official_site,(d,w)->{
+        builder.setPositiveButton(R.string.dl_switch_to_official_site, (d, w) -> {
             LauncherPreferences.DEFAULT_PREF.edit().putString("downloadSource", "default").apply();
             LauncherPreferences.PREF_DOWNLOAD_SOURCE = "default";
 
         });
-        builder.setNegativeButton(R.string.dl_turn_off_manifest_checks,(d,w)->{
+        builder.setNegativeButton(R.string.dl_turn_off_manifest_checks, (d, w) -> {
             LauncherPreferences.DEFAULT_PREF.edit().putBoolean("verifyManifest", false).apply();
             LauncherPreferences.PREF_VERIFY_MANIFEST = false;
         });
-        builder.setNeutralButton(android.R.string.cancel, (d,w)->{});
+        builder.setNeutralButton(android.R.string.cancel, (d, w) -> {
+        });
     }
 
     @Override
-    public void executeWithApplication(Context context) {}
+    public void executeWithApplication(Context context) {
+    }
 }

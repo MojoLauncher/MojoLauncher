@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.ExpandableListAdapter;
 
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.modloaders.BTADownloadTask;
 import net.kdt.pojavlaunch.modloaders.BTAUtils;
 import net.kdt.pojavlaunch.modloaders.BTAVersionListAdapter;
@@ -12,6 +11,8 @@ import net.kdt.pojavlaunch.modloaders.ModloaderListenerProxy;
 
 import java.io.File;
 import java.io.IOException;
+
+import git.artdeell.mojo.R;
 
 public class BTAInstallFragment extends ModVersionListFragment<BTAUtils.BTAVersionList> {
     public static final String TAG = "BTAInstallFragment";

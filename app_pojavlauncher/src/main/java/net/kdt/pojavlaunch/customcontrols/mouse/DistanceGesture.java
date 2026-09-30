@@ -13,8 +13,8 @@ public abstract class DistanceGesture extends ValidatorGesture {
     }
 
     public void inputEvent() {
-        if(!shouldSubmitGesture()) return;
-        if(submit()) {
+        if (!shouldSubmitGesture()) return;
+        if (submit()) {
             mGestureTravelX = 0;
             mGestureTravelY = 0;
             onGestureSubmitted();
@@ -31,5 +31,6 @@ public abstract class DistanceGesture extends ValidatorGesture {
     }
 
     abstract void onGestureSubmitted();
+
     abstract boolean shouldSubmitGesture();
 }

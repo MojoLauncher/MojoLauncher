@@ -8,10 +8,10 @@ import android.os.Bundle;
 
 import com.kdt.mcgui.ProgressLayout;
 
-import net.kdt.pojavlaunch.awt.AWTActivity;
 import net.kdt.pojavlaunch.LauncherActivity;
 import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.awt.AWTActivity;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.instances.profcompat.ProfileWatcher;
@@ -34,31 +34,59 @@ import git.artdeell.mojo.R;
 public class InstanceInstaller implements ContextExecutorTask {
     private static final File sLastInstallInfo = new File(Tools.DIR_CACHE, "last_installer.json");
 
-    private static final String[] TRUSTED_URLS = new String[] {
+    private static final String[] TRUSTED_URLS = new String[]{
             "https://maven.neoforged.net/releases/net/neoforged/neoforge/",
             "https://maven.minecraftforge.net/net/minecraftforge/forge/",
             "https://optifine.net/adloadx"
     };
 
     public String installerJar;
-    private transient File installerJarFile;
-    private transient String mTransformedUrl;
     public List<String> commandLineArgs;
     public String installerUrlTransformer;
     public String installerDownloadUrl;
     public String installerSha1;
+    private transient File installerJarFile;
+    private transient String mTransformedUrl;
+
+    public static void postInstallCheck(AssetManager assetManager) throws IOException {
+        if (!sLastInstallInfo.exists() || !sLastInstallInfo.isFile()) return;
+        InstanceInstaller lastInstaller = JSONUtils.readFromFile(sLastInstallInfo, InstanceInstaller.class);
+        boolean ignored = lastInstaller.installerJar().delete();
+        if (!sLastInstallInfo.delete())
+            throw new IOException("Failed to delete mod installer info");
+        String targetVersionId = ProfileWatcher.consumePendingVersion(assetManager);
+        if (targetVersionId == null) return;
+        for (Instance instance : Instances.loadAllInstances()) {
+            if (!lastInstaller.equals(instance.installer)) continue;
+            instance.installer = null;
+            instance.versionId = targetVersionId;
+            instance.write();
+        }
+        ExtraCore.setValue(ExtraConstants.REFRESH_VERSION_SPINNER, null);
+    }
+
+    public static void postInstallCheck(Context context) {
+        try {
+            InstanceInstaller.postInstallCheck(context.getAssets());
+        } catch (Exception e) {
+            Tools.showError(context, e);
+            if (sLastInstallInfo.isFile()) {
+                boolean ignored = sLastInstallInfo.delete();
+            }
+        }
+    }
 
     private File installerJar() {
-        if(installerJarFile == null) return installerJarFile = new File(installerJar);
+        if (installerJarFile == null) return installerJarFile = new File(installerJar);
         return installerJarFile;
     }
 
-    private String installerDownloadUrl() throws IOException{
-        if(mTransformedUrl != null) return mTransformedUrl;
+    private String installerDownloadUrl() throws IOException {
+        if (mTransformedUrl != null) return mTransformedUrl;
         String newUrl;
         if ("optifine".equals(installerUrlTransformer)) {
             newUrl = OFDownloadPageScraper.run(installerDownloadUrl);
-        }else {
+        } else {
             newUrl = installerDownloadUrl;
         }
         mTransformedUrl = newUrl;
@@ -76,7 +104,7 @@ public class InstanceInstaller implements ContextExecutorTask {
                     R.string.mcl_launch_downloading_progress, ProgressLayout.INSTANCE_INSTALL
             );
             wrapper.extraString = installerJar().getName();
-            DownloadUtils.ensureSha1(installerJar(), installerSha1, ()->{
+            DownloadUtils.ensureSha1(installerJar(), installerSha1, () -> {
                 DownloadUtils.downloadFileMonitored(installerDownloadUrl(), installerJar(), buffer, wrapper);
                 return null;
             });
@@ -86,39 +114,12 @@ public class InstanceInstaller implements ContextExecutorTask {
         }
     }
 
-    public static void postInstallCheck(AssetManager assetManager) throws IOException {
-        if(!sLastInstallInfo.exists() || !sLastInstallInfo.isFile()) return;
-        InstanceInstaller lastInstaller = JSONUtils.readFromFile(sLastInstallInfo, InstanceInstaller.class);
-        boolean ignored = lastInstaller.installerJar().delete();
-        if(!sLastInstallInfo.delete()) throw new IOException("Failed to delete mod installer info");
-        String targetVersionId = ProfileWatcher.consumePendingVersion(assetManager);
-        if(targetVersionId == null) return;
-        for(Instance instance : Instances.loadAllInstances()) {
-            if(!lastInstaller.equals(instance.installer)) continue;
-            instance.installer = null;
-            instance.versionId = targetVersionId;
-            instance.write();
-        }
-        ExtraCore.setValue(ExtraConstants.REFRESH_VERSION_SPINNER, null);
-    }
-
-    public static void postInstallCheck(Context context) {
-        try {
-            InstanceInstaller.postInstallCheck(context.getAssets());
-        }catch (Exception e) {
-            Tools.showError(context, e);
-            if (sLastInstallInfo.isFile()) {
-                boolean ignored = sLastInstallInfo.delete();
-            }
-        }
-    }
-
     public void start() {
         ProgressLayout.setProgress(ProgressLayout.INSTANCE_INSTALL, 0);
-        PojavApplication.sExecutorService.execute(()->{
+        PojavApplication.sExecutorService.execute(() -> {
             try {
                 threadedStart();
-            }catch (Exception e) {
+            } catch (Exception e) {
                 Tools.showErrorRemote(e);
             }
         });
@@ -142,8 +143,8 @@ public class InstanceInstaller implements ContextExecutorTask {
     }
 
     private boolean isTrustedInstaller() {
-        for(String frontTrusted : TRUSTED_URLS) {
-            if(installerDownloadUrl.startsWith(frontTrusted)) return true;
+        for (String frontTrusted : TRUSTED_URLS) {
+            if (installerDownloadUrl.startsWith(frontTrusted)) return true;
         }
         return false;
     }
@@ -153,7 +154,7 @@ public class InstanceInstaller implements ContextExecutorTask {
         try {
             ProfileWatcher.installDefaultProfiles(activity.getAssets());
             writeLastInstaller();
-        }catch (Exception e) {
+        } catch (Exception e) {
             Tools.showError(activity, e);
             return;
         }

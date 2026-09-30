@@ -28,38 +28,60 @@ public class SignatureCheckUtil {
      * fileName1:base64-rsa4096-signature
      * fileName2:base64-rsa4096-signature
      * Invalid signatures aren't included in the resulting Map.
+     *
      * @param bundle the original string of the bundle
      * @return each decoded signature mapped to each file name
      */
-    public static Map<String,byte[]> decodeSignatureBundle(String bundle) {
+    public static Map<String, byte[]> decodeSignatureBundle(String bundle) {
         String[] signatureLines = bundle.split("\n");
         ArrayMap<String, byte[]> signatures = new ArrayMap<>(signatureLines.length);
-        for(String signatureLine : signatureLines) {
+        for (String signatureLine : signatureLines) {
             String[] splitSignLine = signatureLine.split(":");
-            if(splitSignLine.length != 2) continue;
+            if (splitSignLine.length != 2) continue;
             try {
                 byte[] signatureBytes = decodeRsa4096FromBase64(splitSignLine[1]);
-                if(signatureBytes == null) continue;
+                if (signatureBytes == null) continue;
                 signatures.put(splitSignLine[0], signatureBytes);
-            }catch (IllegalArgumentException ignored) {}
+            } catch (IllegalArgumentException ignored) {
+            }
         }
         return signatures;
     }
 
     /**
      * Decode an RSA4096-encrypted signature from a Base64 string
+     *
      * @param base64 the original base64 data
      * @return the decoded bytes, or null if the data length isn't correct
      */
     public static byte[] decodeRsa4096FromBase64(String base64) {
         byte[] rsaBytes = Base64.decode(base64, Base64.DEFAULT);
-        if(rsaBytes.length != 512) return null;
+        if (rsaBytes.length != 512) return null;
         return rsaBytes;
     }
 
     /**
+     * Reads in the cert.pem certificate from application assets and creates a SignatureCheckUtil
+     * to verify data against this certificate
+     *
+     * @param assetManager the AssetManager used to read the cert.pem file
+     * @return the SignatureCheckUtil instance
+     * @throws IOException if reading fails
+     */
+    public static SignatureCheckUtil create(AssetManager assetManager) throws IOException {
+        try (InputStream certificateStream = assetManager.open("cert.pem")) {
+            CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+            Certificate certificate = certificateFactory.generateCertificate(certificateStream);
+            return new SignatureCheckUtil(certificate.getPublicKey());
+        } catch (CertificateException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Verifies the signature of an input stream against the cert.pem certificate from app assets
-     * @param inputStream the original file stream
+     *
+     * @param inputStream    the original file stream
      * @param signatureBytes the bytes of the encrypted signature
      * @return whether the file signature check passed or not
      * @throws IOException if there was an error while reading the file
@@ -73,24 +95,7 @@ public class SignatureCheckUtil {
                 signature.update(ingestionBuffer, 0, i);
             }
             return signature.verify(signatureBytes);
-        }catch (InvalidKeyException | NoSuchAlgorithmException | SignatureException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Reads in the cert.pem certificate from application assets and creates a SignatureCheckUtil
-     * to verify data against this certificate
-     * @param assetManager the AssetManager used to read the cert.pem file
-     * @return the SignatureCheckUtil instance
-     * @throws IOException if reading fails
-     */
-    public static SignatureCheckUtil create(AssetManager assetManager) throws IOException {
-        try (InputStream certificateStream = assetManager.open("cert.pem")) {
-            CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-            Certificate certificate = certificateFactory.generateCertificate(certificateStream);
-            return new SignatureCheckUtil(certificate.getPublicKey());
-        }catch (CertificateException e) {
+        } catch (InvalidKeyException | NoSuchAlgorithmException | SignatureException e) {
             throw new RuntimeException(e);
         }
     }

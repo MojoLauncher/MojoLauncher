@@ -9,12 +9,12 @@ import android.graphics.drawable.Drawable;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
-import git.artdeell.mojo.R;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import git.artdeell.mojo.R;
 
 public class InstanceIconProvider {
     public static final String FALLBACK_ICON_NAME = "default";
@@ -32,18 +32,19 @@ public class InstanceIconProvider {
 
     /**
      * Fetch an icon from the cache, or load it if it's not cached.
+     *
      * @param resources the Resources object, used for creating drawables
-     * @param instance the instance
+     * @param instance  the instance
      * @return an icon drawable
      */
     public static @NonNull Drawable fetchIcon(Resources resources, @NonNull DisplayInstance instance) {
         int identityHashCode = System.identityHashCode(instance);
 
         Drawable cachedIcon = sIconCache.get(identityHashCode);
-        if(cachedIcon != null) return cachedIcon;
+        if (cachedIcon != null) return cachedIcon;
 
         Drawable instanceIcon = fetchInstanceFileIcon(resources, identityHashCode, instance.getInstanceIconLocation());
-        if(instanceIcon != null) return instanceIcon;
+        if (instanceIcon != null) return instanceIcon;
 
         return fetchStaticIcon(resources, identityHashCode, instance.icon);
     }
@@ -51,6 +52,7 @@ public class InstanceIconProvider {
     /**
      * Drop an icon from the icon cache. When dropped, it's Drawable will be re-read from the
      * instance icon file (or re-fetched from the static cache)
+     *
      * @param key the instance
      */
     public static void dropIcon(@NonNull Instance key) {
@@ -58,9 +60,9 @@ public class InstanceIconProvider {
     }
 
     private static Drawable fetchInstanceFileIcon(Resources resources, int identityHash, File iconLocation) {
-        if(!iconLocation.isFile() || !iconLocation.canRead()) return null;
+        if (!iconLocation.isFile() || !iconLocation.canRead()) return null;
         Bitmap iconBitmap = BitmapFactory.decodeFile(iconLocation.getAbsolutePath());
-        if(iconBitmap == null) return null;
+        if (iconBitmap == null) return null;
         Drawable iconDrawable = new BitmapDrawable(resources, iconBitmap);
         sIconCache.put(identityHash, iconDrawable);
         return iconDrawable;
@@ -68,9 +70,9 @@ public class InstanceIconProvider {
 
     private static Drawable fetchStaticIcon(Resources resources, int identityHash, String icon) {
         Drawable staticIcon = sStaticIconCache.get(icon);
-        if(staticIcon == null) {
-            if(icon != null) staticIcon = getStaticIcon(resources, icon);
-            if(staticIcon == null) staticIcon = fetchFallbackIcon(resources);
+        if (staticIcon == null) {
+            if (icon != null) staticIcon = getStaticIcon(resources, icon);
+            if (staticIcon == null) staticIcon = fetchFallbackIcon(resources);
             sStaticIconCache.put(icon, staticIcon);
         }
         sIconCache.put(identityHash, staticIcon);
@@ -79,7 +81,7 @@ public class InstanceIconProvider {
 
     private static @NonNull Drawable fetchFallbackIcon(Resources resources) {
         Drawable fallbackIcon = sStaticIconCache.get(FALLBACK_ICON_NAME);
-        if(fallbackIcon == null) {
+        if (fallbackIcon == null) {
             fallbackIcon = Objects.requireNonNull(getStaticIcon(resources, FALLBACK_ICON_NAME));
             sStaticIconCache.put(FALLBACK_ICON_NAME, fallbackIcon);
         }
@@ -88,18 +90,19 @@ public class InstanceIconProvider {
 
     private static Drawable getStaticIcon(Resources resources, @NonNull String icon) {
         int staticIconResource = getStaticIconResource(icon);
-        if(staticIconResource == -1) return null;
+        if (staticIconResource == -1) return null;
         return ResourcesCompat.getDrawable(resources, staticIconResource, null);
     }
 
     private static int getStaticIconResource(String icon) {
         Integer iconResource = sStaticIcons.get(icon);
-        if(iconResource == null) return -1;
+        if (iconResource == null) return -1;
         return iconResource;
     }
 
     /**
      * Check whether the icon under the specified name is a static icon available in the provider.
+     *
      * @param name static icon name to check
      * @return whether the icon is available or not
      */

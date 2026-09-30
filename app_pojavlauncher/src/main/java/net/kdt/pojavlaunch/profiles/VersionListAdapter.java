@@ -9,7 +9,6 @@ import android.widget.ExpandableListAdapter;
 import android.widget.TextView;
 
 import net.kdt.pojavlaunch.JVersionList;
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.utils.FilteredSubList;
 
@@ -17,8 +16,10 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import git.artdeell.mojo.R;
+
 public class VersionListAdapter extends BaseExpandableListAdapter implements ExpandableListAdapter {
-    
+
     private final LayoutInflater mLayoutInflater;
 
     private final String[] mGroups;
@@ -27,7 +28,7 @@ public class VersionListAdapter extends BaseExpandableListAdapter implements Exp
     private final boolean mHideCustomVersions;
     private final int mSnapshotListPosition;
 
-    public VersionListAdapter(JVersionList.Version[] versionList, boolean hideCustomVersions, Context ctx){
+    public VersionListAdapter(JVersionList.Version[] versionList, boolean hideCustomVersions, Context ctx) {
         mHideCustomVersions = hideCustomVersions;
         mLayoutInflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -38,19 +39,19 @@ public class VersionListAdapter extends BaseExpandableListAdapter implements Exp
 
         // Query installed versions
         mInstalledVersions = new File(Tools.DIR_GAME_NEW + "/versions").list();
-        if(mInstalledVersions != null)
+        if (mInstalledVersions != null)
             Arrays.sort(mInstalledVersions);
 
-        if(!areInstalledVersionsAvailable()){
+        if (!areInstalledVersionsAvailable()) {
             mGroups = new String[]{
                     ctx.getString(R.string.mcl_setting_veroption_release),
                     ctx.getString(R.string.mcl_setting_veroption_snapshot),
                     ctx.getString(R.string.mcl_setting_veroption_oldbeta),
                     ctx.getString(R.string.mcl_setting_veroption_oldalpha)
             };
-            mData = new List[]{ releaseList, snapshotList, betaList, alphaList};
+            mData = new List[]{releaseList, snapshotList, betaList, alphaList};
             mSnapshotListPosition = 1;
-        }else{
+        } else {
             mGroups = new String[]{
                     ctx.getString(R.string.mcl_setting_veroption_installed),
                     ctx.getString(R.string.mcl_setting_veroption_release),
@@ -80,10 +81,10 @@ public class VersionListAdapter extends BaseExpandableListAdapter implements Exp
 
     @Override
     public String getChild(int groupPosition, int childPosition) {
-        if(isInstalledVersionSelected(groupPosition)){
+        if (isInstalledVersionSelected(groupPosition)) {
             return mInstalledVersions[childPosition];
         }
-        return ((JVersionList.Version)mData[groupPosition].get(childPosition)).id;
+        return ((JVersionList.Version) mData[groupPosition].get(childPosition)).id;
     }
 
     @Override
@@ -103,7 +104,7 @@ public class VersionListAdapter extends BaseExpandableListAdapter implements Exp
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        if(convertView == null)
+        if (convertView == null)
             convertView = mLayoutInflater.inflate(android.R.layout.simple_expandable_list_item_1, parent, false);
 
         ((TextView) convertView).setText(mGroups[groupPosition]);
@@ -113,7 +114,7 @@ public class VersionListAdapter extends BaseExpandableListAdapter implements Exp
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        if(convertView == null)
+        if (convertView == null)
             convertView = mLayoutInflater.inflate(android.R.layout.simple_expandable_list_item_1, parent, false);
         ((TextView) convertView).setText(getChild(groupPosition, childPosition));
         return convertView;
@@ -128,12 +129,12 @@ public class VersionListAdapter extends BaseExpandableListAdapter implements Exp
         return groupPosition == mSnapshotListPosition;
     }
 
-    private boolean areInstalledVersionsAvailable(){
-        if(mHideCustomVersions) return false;
+    private boolean areInstalledVersionsAvailable() {
+        if (mHideCustomVersions) return false;
         return !(mInstalledVersions == null || mInstalledVersions.length == 0);
     }
 
-    private boolean isInstalledVersionSelected(int groupPosition){
+    private boolean isInstalledVersionSelected(int groupPosition) {
         return groupPosition == 0 && areInstalledVersionsAvailable();
     }
 }

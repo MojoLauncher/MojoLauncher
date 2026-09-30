@@ -5,15 +5,16 @@ import android.util.Log;
 public class GameOptionsUtils {
     /**
      * Parse an integer. If the input value is null or not a valid integer, return the default value.
-     * @param value the String to parse
+     *
+     * @param value        the String to parse
      * @param defaultValue the default value
      * @return the parsed value or default
      */
     public static int parseIntDefault(String value, int defaultValue) {
-        if(value == null) return defaultValue;
+        if (value == null) return defaultValue;
         try {
             return Integer.parseInt(value);
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             return defaultValue;
         }
     }
@@ -23,9 +24,9 @@ public class GameOptionsUtils {
      */
     private static void fixDeathCloud() {
         GpuUtils.GLInfo info = GpuUtils.getGlInfo();
-        if(!info.isArm()) return; // Not an affected GPU
+        if (!info.isArm()) return; // Not an affected GPU
         int cloudRange = parseIntDefault(MCOptionUtils.get("cloudRange"), 128);
-        if(cloudRange <= 64) return; // Not affected below 117 (but let's err on the safe side)
+        if (cloudRange <= 64) return; // Not affected below 117 (but let's err on the safe side)
         MCOptionUtils.set("cloudRange", "64");
     }
 
@@ -34,7 +35,7 @@ public class GameOptionsUtils {
      * on and causes MC to generate insanely large log files when starting again
      */
     private static void disableNarrator() {
-        if(parseIntDefault(MCOptionUtils.get("narrator"), 0) == 0) return;
+        if (parseIntDefault(MCOptionUtils.get("narrator"), 0) == 0) return;
         MCOptionUtils.set("narrator", "0");
     }
 
@@ -44,25 +45,25 @@ public class GameOptionsUtils {
      */
     private static void disableFullscreen() {
         String fullscreen = MCOptionUtils.get("fullscreen");
-        if(fullscreen == null) return;
-        if(fullscreen.equals("true")) MCOptionUtils.set("fullscreen", "false");
-        else if(fullscreen.equals("1")) MCOptionUtils.set("fullscreen","0");
+        if (fullscreen == null) return;
+        if (fullscreen.equals("true")) MCOptionUtils.set("fullscreen", "false");
+        else if (fullscreen.equals("1")) MCOptionUtils.set("fullscreen", "0");
     }
 
     public static void fixOptions(boolean isLtw) {
         try {
             MCOptionUtils.load();
-        }catch (Exception e) {
+        } catch (Exception e) {
             Log.e("Tools", "Failed to load config", e);
         }
 
-        if(isLtw) fixDeathCloud();
+        if (isLtw) fixDeathCloud();
         disableFullscreen();
         disableNarrator();
 
         try {
             MCOptionUtils.save();
-        }catch (Exception e) {
+        } catch (Exception e) {
             Log.e("Tools", "Failed to save config", e);
         }
     }

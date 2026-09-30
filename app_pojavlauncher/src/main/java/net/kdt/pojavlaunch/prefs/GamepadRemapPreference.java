@@ -8,9 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 
-import git.artdeell.mojo.R;
-
 import fr.spse.gamepad_remapper.Remapper;
+import git.artdeell.mojo.R;
 
 public class GamepadRemapPreference extends Preference {
 
@@ -24,7 +23,7 @@ public class GamepadRemapPreference extends Preference {
         init();
     }
 
-    private void init(){
+    private void init() {
         setOnPreferenceClickListener(preference -> {
             Remapper.wipePreferences(getContext());
             Toast.makeText(getContext(), R.string.preference_controller_map_wiped, Toast.LENGTH_SHORT).show();

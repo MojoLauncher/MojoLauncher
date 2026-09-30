@@ -9,11 +9,11 @@ import java.io.IOException;
 import java.net.URL;
 
 public class OFDownloadPageScraper implements TagNodeVisitor {
-    public static String run(String urlInput) throws IOException{
+    private String mDownloadFullUrl;
+
+    public static String run(String urlInput) throws IOException {
         return new OFDownloadPageScraper().runInner(urlInput);
     }
-
-    private String mDownloadFullUrl;
 
     private String runInner(String url) throws IOException {
         HtmlCleaner htmlCleaner = new HtmlCleaner();
@@ -23,10 +23,10 @@ public class OFDownloadPageScraper implements TagNodeVisitor {
 
     @Override
     public boolean visit(TagNode parentNode, HtmlNode htmlNode) {
-        if(isDownloadUrl(parentNode, htmlNode)) {
+        if (isDownloadUrl(parentNode, htmlNode)) {
             TagNode tagNode = (TagNode) htmlNode;
             String href = tagNode.getAttributeByName("href");
-            if(!href.startsWith("https://")) href = "https://optifine.net/"+href;
+            if (!href.startsWith("https://")) href = "https://optifine.net/" + href;
             this.mDownloadFullUrl = href;
             return false;
         }
@@ -34,11 +34,11 @@ public class OFDownloadPageScraper implements TagNodeVisitor {
     }
 
     public boolean isDownloadUrl(TagNode parentNode, HtmlNode htmlNode) {
-        if(!(htmlNode instanceof TagNode)) return false;
-        if(parentNode == null) return false;
+        if (!(htmlNode instanceof TagNode)) return false;
+        if (parentNode == null) return false;
         TagNode tagNode = (TagNode) htmlNode;
-        if(!(parentNode.getName().equals("span")
-            && "Download".equals(parentNode.getAttributeByName("id")))) return false;
+        if (!(parentNode.getName().equals("span")
+                && "Download".equals(parentNode.getAttributeByName("id")))) return false;
         return tagNode.getName().equals("a") &&
                 "onDownload()".equals(tagNode.getAttributeByName("onclick"));
     }

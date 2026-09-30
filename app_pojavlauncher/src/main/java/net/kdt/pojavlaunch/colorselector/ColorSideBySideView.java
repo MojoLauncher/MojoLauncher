@@ -18,6 +18,7 @@ public class ColorSideBySideView extends View {
     private float mWidth;
     private float mHeight;
     private float mHalfHeight;
+
     public ColorSideBySideView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         mPaint = new Paint();
@@ -33,14 +34,14 @@ public class ColorSideBySideView extends View {
     protected void onDraw(Canvas canvas) {
         mCheckerboardDrawable.draw(canvas);
         mPaint.setColor(mColor);
-        canvas.drawRect(0,0,mWidth, mHalfHeight, mPaint);
+        canvas.drawRect(0, 0, mWidth, mHalfHeight, mPaint);
         mPaint.setColor(mAlphaColor);
-        canvas.drawRect(0,mHalfHeight,mWidth,mHeight, mPaint);
+        canvas.drawRect(0, mHalfHeight, mWidth, mHeight, mPaint);
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int old_w, int old_h) {
-        mHalfHeight = h/2f;
+        mHalfHeight = h / 2f;
         mWidth = w;
         mHeight = h;
     }

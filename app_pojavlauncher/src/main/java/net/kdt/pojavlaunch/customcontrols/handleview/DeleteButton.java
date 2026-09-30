@@ -7,13 +7,23 @@ import android.widget.Button;
 
 import androidx.annotation.Nullable;
 
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.customcontrols.buttons.ControlInterface;
+
+import git.artdeell.mojo.R;
 
 @SuppressLint("AppCompatCustomView")
 public class DeleteButton extends Button implements ActionButtonInterface {
-    public DeleteButton(Context context) {super(context); init();}
-    public DeleteButton(Context context, @Nullable AttributeSet attrs) {super(context, attrs); init();}
+    private ControlInterface mCurrentlySelectedButton = null;
+
+    public DeleteButton(Context context) {
+        super(context);
+        init();
+    }
+
+    public DeleteButton(Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
 
     public void init() {
         setOnClickListener(this);
@@ -21,8 +31,6 @@ public class DeleteButton extends Button implements ActionButtonInterface {
         setText(R.string.global_delete);
 
     }
-
-    private ControlInterface mCurrentlySelectedButton = null;
 
     @Override
     public boolean shouldBeVisible() {
@@ -36,7 +44,7 @@ public class DeleteButton extends Button implements ActionButtonInterface {
 
     @Override
     public void onClick() {
-        if(mCurrentlySelectedButton == null) return;
+        if (mCurrentlySelectedButton == null) return;
 
         mCurrentlySelectedButton.removeButton();
     }

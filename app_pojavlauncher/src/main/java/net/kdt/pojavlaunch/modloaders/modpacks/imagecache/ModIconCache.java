@@ -19,29 +19,58 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class ModIconCache {
+    private final List<WeakReference<ImageReceiver>> mCancelledReceivers = new ArrayList<>();
     ThreadPoolExecutor cacheLoaderPool = new ThreadPoolExecutor(10,
             10,
             1000,
             TimeUnit.MILLISECONDS,
             new LinkedBlockingQueue<>());
     File cachePath;
-    private final List<WeakReference<ImageReceiver>> mCancelledReceivers = new ArrayList<>();
+
     public ModIconCache() {
         cachePath = getImageCachePath();
-        if(!FileUtils.ensureDirectorySilently(cachePath)) {
-                throw new RuntimeException("Failed to create icon cache directory");
+        if (!FileUtils.ensureDirectorySilently(cachePath)) {
+            throw new RuntimeException("Failed to create icon cache directory");
         }
 
     }
+
     static File getImageCachePath() {
         return new File(Tools.DIR_CACHE, "mod_icons");
     }
 
     /**
+     * Get the base64-encoded version of a cached icon by its tag.
+     * Note: this functions performs I/O operations, and should not be called on the UI
+     * thread.
+     *
+     * @param imageTag the icon tag
+     * @return the base64 encoded image or null if not cached
+     */
+
+    public static void writeInstanceImage(Instance instance, String imageTag) {
+        File imagePath = new File(Tools.DIR_CACHE, "mod_icons/" + imageTag + ".ca");
+        Log.i("IconCache", "Creating base64 version of icon " + imageTag);
+        if (!imagePath.canRead() || !imagePath.isFile()) {
+            Log.i("IconCache", "Icon does not exist");
+            return;
+        }
+        try {
+            Bitmap bitmap = BitmapFactory.decodeFile(imagePath.getAbsolutePath());
+            if (bitmap == null) return;
+            instance.encodeNewIcon(bitmap);
+        } catch (IOException e) {
+            Log.i("ModIconCache", "Failed to reencode icon for instance");
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Get an image for a mod with the associated tag and URL to download it in case if its not cached
+     *
      * @param imageReceiver the receiver interface that would get called when the image loads
-     * @param imageTag the tag of the image to keep track of it
-     * @param imageUrl the URL of the image in case if it's not cached
+     * @param imageTag      the tag of the image to keep track of it
+     * @param imageUrl      the URL of the image in case if it's not cached
      */
     public void getImage(ImageReceiver imageReceiver, String imageTag, String imageUrl) {
         cacheLoaderPool.execute(new ReadFromDiskTask(this, imageReceiver, imageTag, imageUrl));
@@ -51,6 +80,7 @@ public class ModIconCache {
      * Mark the image obtainment task requested with this receiver as "cancelled". This means that
      * this receiver will not be called back and that some tasks related to this image may be
      * prevented from happening or interrupted.
+     *
      * @param imageReceiver the receiver to cancel
      */
     public void cancelImage(ImageReceiver imageReceiver) {
@@ -69,37 +99,13 @@ public class ModIconCache {
                     iterator.remove();
                     continue;
                 }
-                if(reference.get() == imageReceiver) {
+                if (reference.get() == imageReceiver) {
                     isCanceled = true;
                 }
             }
         }
-        if(isCanceled) Log.i("IconCache", "checkCancelled("+imageReceiver.hashCode()+") == true");
+        if (isCanceled)
+            Log.i("IconCache", "checkCancelled(" + imageReceiver.hashCode() + ") == true");
         return isCanceled;
-    }
-
-    /**
-     * Get the base64-encoded version of a cached icon by its tag.
-     * Note: this functions performs I/O operations, and should not be called on the UI
-     * thread.
-     * @param imageTag the icon tag
-     * @return the base64 encoded image or null if not cached
-     */
-
-    public static void writeInstanceImage(Instance instance, String imageTag) {
-        File imagePath = new File(Tools.DIR_CACHE, "mod_icons/"+imageTag+".ca");
-        Log.i("IconCache", "Creating base64 version of icon "+imageTag);
-        if(!imagePath.canRead() || !imagePath.isFile()) {
-            Log.i("IconCache", "Icon does not exist");
-            return;
-        }
-        try {
-            Bitmap bitmap = BitmapFactory.decodeFile(imagePath.getAbsolutePath());
-            if(bitmap == null) return;
-            instance.encodeNewIcon(bitmap);
-        }catch (IOException e) {
-            Log.i("ModIconCache", "Failed to reencode icon for instance");
-            e.printStackTrace();
-        }
     }
 }

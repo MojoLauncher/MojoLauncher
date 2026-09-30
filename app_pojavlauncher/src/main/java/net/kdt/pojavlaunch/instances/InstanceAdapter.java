@@ -9,46 +9,48 @@ import android.widget.BaseAdapter;
 
 import androidx.core.graphics.ColorUtils;
 
-import git.artdeell.mojo.R;
-
 import net.kdt.pojavlaunch.Tools;
 
 import fr.spse.extended_view.ExtendedTextView;
+import git.artdeell.mojo.R;
 
 /*
  * Adapter for listing launcher profiles in a Spinner
  */
 public class InstanceAdapter extends BaseAdapter {
+    private final InstanceAdapterExtra[] mExtraEntires;
     private Instances mInstances;
     private int mSelectionIndex;
-    private final InstanceAdapterExtra[] mExtraEntires;
 
 
     public InstanceAdapter(InstanceAdapterExtra[] extraEntries) {
-        if(extraEntries == null) extraEntries = new InstanceAdapterExtra[0];
+        if (extraEntries == null) extraEntries = new InstanceAdapterExtra[0];
         mExtraEntires = extraEntries;
     }
+
     /**
      * @return how much entries (both instances and extra adapter entries) are in the adapter right now
      */
     @Override
     public int getCount() {
-        if(mInstances == null) return mExtraEntires.length;
+        if (mInstances == null) return mExtraEntires.length;
         return mInstances.list.size() + mExtraEntires.length;
     }
+
     /**
      * Gets the adapter entry at a given index
+     *
      * @param position index to retrieve
      * @return Instance, ProfileAdapterExtra or null
      */
     @Override
     public Object getItem(int position) {
-        if(mInstances == null) return mExtraEntires[position];
+        if (mInstances == null) return mExtraEntires[position];
         int instanceListSize = mInstances.list.size();
         int extraPosition = position - instanceListSize;
-        if(position < instanceListSize) {
+        if (position < instanceListSize) {
             return mInstances.list.get(position);
-        }else if(extraPosition >= 0 && extraPosition < mExtraEntires.length){
+        } else if (extraPosition >= 0 && extraPosition < mExtraEntires.length) {
             return mExtraEntires[extraPosition];
         }
         return null;
@@ -62,7 +64,8 @@ public class InstanceAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
-        if (v == null) v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_version_profile_layout,parent,false);
+        if (v == null)
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_version_profile_layout, parent, false);
         setView(v, position, true);
         return v;
     }
@@ -93,9 +96,9 @@ public class InstanceAdapter extends BaseAdapter {
         else extendedTextView.setText(String.format("%s - %s", profileName, versionName));
 
         // Set selected background if needed
-        if(idx == mSelectionIndex && displaySelection) {
+        if (idx == mSelectionIndex && displaySelection) {
             extendedTextView.setBackgroundColor(ColorUtils.setAlphaComponent(Color.WHITE, 60));
-        }else {
+        } else {
             extendedTextView.setBackgroundColor(Color.TRANSPARENT);
         }
     }
@@ -109,9 +112,9 @@ public class InstanceAdapter extends BaseAdapter {
 
     public void setView(View v, int index, boolean displaySelection) {
         Object object = getItem(index);
-        if(object instanceof DisplayInstance) {
+        if (object instanceof DisplayInstance) {
             setViewInstance(v, (DisplayInstance) object, index, displaySelection);
-        }else if(object instanceof InstanceAdapterExtra) {
+        } else if (object instanceof InstanceAdapterExtra) {
             setViewExtra(v, (InstanceAdapterExtra) object);
         }
     }

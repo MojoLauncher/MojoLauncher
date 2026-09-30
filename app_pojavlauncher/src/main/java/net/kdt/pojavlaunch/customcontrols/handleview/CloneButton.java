@@ -7,21 +7,29 @@ import android.widget.Button;
 
 import androidx.annotation.Nullable;
 
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.customcontrols.buttons.ControlInterface;
+
+import git.artdeell.mojo.R;
 
 @SuppressLint("AppCompatCustomView")
 public class CloneButton extends Button implements ActionButtonInterface {
-    public CloneButton(Context context) {super(context); init();}
-    public CloneButton(Context context, @Nullable AttributeSet attrs) {super(context, attrs); init();}
+    private ControlInterface mCurrentlySelectedButton = null;
+
+    public CloneButton(Context context) {
+        super(context);
+        init();
+    }
+
+    public CloneButton(Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
 
     public void init() {
         setOnClickListener(this);
         setAllCaps(true);
         setText(R.string.global_clone);
     }
-
-    private ControlInterface mCurrentlySelectedButton = null;
 
     @Override
     public boolean shouldBeVisible() {
@@ -35,7 +43,7 @@ public class CloneButton extends Button implements ActionButtonInterface {
 
     @Override
     public void onClick() {
-        if(mCurrentlySelectedButton == null) return;
+        if (mCurrentlySelectedButton == null) return;
 
         mCurrentlySelectedButton.cloneButton();
         mCurrentlySelectedButton.getControlLayoutParent().removeEditWindow();

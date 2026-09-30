@@ -16,7 +16,8 @@ public class MavenNameAdapter extends TypeAdapter<MavenName> {
 
     @Override
     public MavenName read(JsonReader reader) throws IOException {
-        if(reader.peek() != JsonToken.STRING) throw new JsonSyntaxException("Expected String for maven name");
+        if (reader.peek() != JsonToken.STRING)
+            throw new JsonSyntaxException("Expected String for maven name");
         return MavenName.parse(reader.nextString());
     }
 }

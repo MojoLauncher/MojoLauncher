@@ -1,11 +1,7 @@
 package net.kdt.pojavlaunch.customcontrols.gamepad;
 
-import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_DEADZONE_SCALE;
-
-import android.util.Log;
 import android.view.InputDevice;
 import android.view.MotionEvent;
-
 
 import net.kdt.pojavlaunch.utils.MathUtils;
 
@@ -30,60 +26,58 @@ public class GamepadJoystick {
     private float mVerticalAxisValue = 0;
     private float mHorizontalAxisValue = 0;
 
-    public GamepadJoystick(int horizontalAxis, int verticalAxis, InputDevice device){
+    public GamepadJoystick(int horizontalAxis, int verticalAxis, InputDevice device) {
         mHorizontalAxis = horizontalAxis;
         mVerticalAxis = verticalAxis;
         this.mInputDevice = device;
     }
 
-    public double getAngleRadian(){
+    public static boolean isJoystickEvent(MotionEvent event) {
+        return (event.getSource() & InputDevice.SOURCE_JOYSTICK) == InputDevice.SOURCE_JOYSTICK
+                && event.getAction() == MotionEvent.ACTION_MOVE;
+    }
+
+    public double getAngleRadian() {
         //From -PI to PI
         // TODO misuse of the deadzone here !
         return -Math.atan2(getVerticalAxis(), getHorizontalAxis());
     }
 
-
-    public double getAngleDegree(){
+    public double getAngleDegree() {
         //From 0 to 360 degrees
         double result = Math.toDegrees(getAngleRadian());
-        if(result < 0) result += 360;
+        if (result < 0) result += 360;
 
         return result;
     }
 
-    public double getMagnitude(){
+    public double getMagnitude() {
         float x = Math.abs(mHorizontalAxisValue);
         float y = Math.abs(mVerticalAxisValue);
 
-        return MathUtils.dist(0,0, x, y);
+        return MathUtils.dist(0, 0, x, y);
     }
 
-    public float getVerticalAxis(){
+    public float getVerticalAxis() {
         return mVerticalAxisValue;
     }
 
-    public float getHorizontalAxis(){
+    public float getHorizontalAxis() {
         return mHorizontalAxisValue;
     }
 
-    public static boolean isJoystickEvent(MotionEvent event){
-        return (event.getSource() & InputDevice.SOURCE_JOYSTICK) == InputDevice.SOURCE_JOYSTICK
-                && event.getAction() == MotionEvent.ACTION_MOVE;
-    }
-
-
-    public int getHeightDirection(){
-        if(getMagnitude() == 0) return DIRECTION_NONE;
-        return ((int) ((getAngleDegree()+22.5)/45)) % 8;
+    public int getHeightDirection() {
+        if (getMagnitude() == 0) return DIRECTION_NONE;
+        return ((int) ((getAngleDegree() + 22.5) / 45)) % 8;
     }
 
 
     /* Setters */
-    public void setXAxisValue(float value){
+    public void setXAxisValue(float value) {
         this.mHorizontalAxisValue = value;
     }
 
-    public void setYAxisValue(float value){
+    public void setYAxisValue(float value) {
         this.mVerticalAxisValue = value;
     }
 }

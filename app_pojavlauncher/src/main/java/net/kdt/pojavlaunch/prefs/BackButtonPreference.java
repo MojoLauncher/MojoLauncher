@@ -5,9 +5,10 @@ import android.util.AttributeSet;
 
 import androidx.preference.Preference;
 
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
+
+import git.artdeell.mojo.R;
 
 public class BackButtonPreference extends Preference {
     public BackButtonPreference(Context context, AttributeSet attrs) {
@@ -15,15 +16,16 @@ public class BackButtonPreference extends Preference {
         init();
     }
 
-    @SuppressWarnings("unused") public BackButtonPreference(Context context) {
+    @SuppressWarnings("unused")
+    public BackButtonPreference(Context context) {
         this(context, null);
     }
 
-    private void init(){
-        if(getTitle() == null){
+    private void init() {
+        if (getTitle() == null) {
             setTitle(R.string.preference_back_title);
         }
-        if(getIcon() == null){
+        if (getIcon() == null) {
             setIcon(R.drawable.ic_px_arrow_left);
         }
     }

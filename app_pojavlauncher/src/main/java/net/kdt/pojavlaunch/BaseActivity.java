@@ -1,14 +1,16 @@
 package net.kdt.pojavlaunch;
 
-import android.content.*;
+import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_IGNORE_NOTCH;
+
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.*;
+import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.*;
-import net.kdt.pojavlaunch.utils.*;
+import androidx.appcompat.app.AppCompatActivity;
 
-import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_IGNORE_NOTCH;
+import net.kdt.pojavlaunch.utils.LocaleUtils;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -25,8 +27,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         Tools.getDisplayMetrics(this);
     }
 
-    /** @return Whether the activity should be set as a fullscreen one */
-    public boolean setFullscreen(){
+    /**
+     * @return Whether the activity should be set as a fullscreen one
+     */
+    public boolean setFullscreen() {
         return true;
     }
 
@@ -63,13 +67,15 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private void onMultiWindowModeChangedInner() {
         boolean wantsFullscreen = setFullscreen();
-        if(wantsFullscreen) {
+        if (wantsFullscreen) {
             Tools.setInsetsMode(this, true, shouldIgnoreNotch());
         }
     }
 
-    /** @return Whether or not the notch should be ignored */
-    protected boolean shouldIgnoreNotch(){
+    /**
+     * @return Whether or not the notch should be ignored
+     */
+    protected boolean shouldIgnoreNotch() {
         return PREF_IGNORE_NOTCH;
     }
 }

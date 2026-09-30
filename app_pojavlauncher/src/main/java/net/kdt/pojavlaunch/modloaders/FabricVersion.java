@@ -6,6 +6,12 @@ public class FabricVersion {
     public String version;
     public boolean stable;
 
+    @NonNull
+    @Override
+    public String toString() {
+        return version;
+    }
+
     public static class LoaderDescriptor extends FabricVersion {
         public FabricVersion loader;
 
@@ -14,11 +20,5 @@ public class FabricVersion {
         public String toString() {
             return loader != null ? loader.toString() : "null";
         }
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return version;
     }
 }

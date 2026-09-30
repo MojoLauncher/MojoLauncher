@@ -6,7 +6,6 @@ import android.content.Context;
 import com.kdt.mcgui.ProgressLayout;
 
 import net.kdt.pojavlaunch.PojavApplication;
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.LoaderInstaller;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
@@ -17,13 +16,15 @@ import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchResult;
 import java.io.File;
 import java.io.IOException;
 
+import git.artdeell.mojo.R;
+
 /**
  *
  */
 public interface ModpackApi {
 
     /**
-     * @param searchFilters Filters
+     * @param searchFilters      Filters
      * @param previousPageResult The result from the previous page
      * @return the list of mod items from specified offset
      */
@@ -39,6 +40,7 @@ public interface ModpackApi {
 
     /**
      * Fetch the mod details
+     *
      * @param item The moditem that was selected
      * @return Detailed data about a mod(pack)
      */
@@ -46,7 +48,8 @@ public interface ModpackApi {
 
     /**
      * Download and install the modpack
-     * @param modDetail The mod detail data
+     *
+     * @param modDetail       The mod detail data
      * @param selectedVersion The selected version
      */
     default void handleModpackInstallation(Context context, ModDetail modDetail, int selectedVersion) {
@@ -56,7 +59,7 @@ public interface ModpackApi {
         PojavApplication.sExecutorService.execute(() -> {
             try {
                 installModpack(modDetail, selectedVersion);
-            }catch (IOException e) {
+            } catch (IOException e) {
                 Tools.showErrorRemote(context, R.string.modpack_install_download_failed, e);
             }
         });
@@ -68,7 +71,8 @@ public interface ModpackApi {
      * Install the mod(pack).
      * May require the download of additional files.
      * May requires launching the installation of a modloader
-     * @param modDetail The mod detail data
+     *
+     * @param modDetail       The mod detail data
      * @param selectedVersion The selected version
      */
     LoaderInstaller installModpack(ModDetail modDetail, int selectedVersion) throws IOException;
