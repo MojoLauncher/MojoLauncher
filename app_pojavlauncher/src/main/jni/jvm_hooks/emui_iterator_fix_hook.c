@@ -6,6 +6,7 @@
 #include <stdlib.h>
 
 #define TAG __FILE_NAME__
+
 #include <log.h>
 
 /**
@@ -30,7 +31,7 @@ jint getLibraryPath_fix(__attribute__((unused)) JNIEnv *env,
 void installEMUIIteratorMititgation(JNIEnv *env) {
     LOGI("Installing...");
     jclass sharedLibraryUtil = (*env)->FindClass(env, "org/lwjgl/system/SharedLibraryUtil");
-    if(sharedLibraryUtil == NULL) {
+    if (sharedLibraryUtil == NULL) {
         LOGE("Failed to find target class");
         (*env)->ExceptionClear(env);
         return;
@@ -38,7 +39,7 @@ void installEMUIIteratorMititgation(JNIEnv *env) {
     JNINativeMethod getLibraryPathMethod[] = {
             {"getLibraryPath", "(JJI)I", &getLibraryPath_fix}
     };
-    if((*env)->RegisterNatives(env, sharedLibraryUtil, getLibraryPathMethod, 1) != 0) {
+    if ((*env)->RegisterNatives(env, sharedLibraryUtil, getLibraryPathMethod, 1) != 0) {
         LOGE("Failed to register the mitigation method");
         (*env)->ExceptionClear(env);
     }

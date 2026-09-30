@@ -15,6 +15,6 @@
 #define STAGE_LOAD_CLASSPATH 5
 #define STAGE_RUN_MAIN 6
 
-extern void throwException(JNIEnv *env, jint loadStage, jint errorCode, const char* textInfo);
+extern void throwException(JNIEnv *env, jint loadStage, jint errorCode, const char *textInfo);
 
 #endif //POJAVLAUNCHER_LOAD_STAGES_H

@@ -235,8 +235,6 @@
 #define VK_CONTEXT_MENU             0x020D
 
 
-
-
 #define VK_FINAL                    0x0018
 
 

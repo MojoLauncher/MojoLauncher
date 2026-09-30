@@ -8,7 +8,9 @@
 #include <jni.h>
 
 void installEMUIIteratorMititgation(JNIEnv *env);
+
 void installLwjglDlopenHook(JNIEnv *env);
+
 void hookExec(JNIEnv *env);
 
 #endif //POJAVLAUNCHER_JVM_HOOKS_H

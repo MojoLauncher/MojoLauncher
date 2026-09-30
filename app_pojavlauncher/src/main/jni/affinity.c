@@ -19,31 +19,32 @@ static cpu_set_t bigcore_affinity_set;
 static bool has_affinity_set;
 
 #define FREQ_MAX 256
-void bigcore_format_cpu_path(char* buffer, unsigned int cpu_core) {
+
+void bigcore_format_cpu_path(char *buffer, unsigned int cpu_core) {
     snprintf(buffer, PATH_MAX, "/sys/devices/system/cpu/cpu%i/cpufreq/cpuinfo_max_freq", cpu_core);
 }
 
 static void create_affinity_set() {
     char path_buffer[PATH_MAX];
     char freq_buffer[FREQ_MAX];
-    char* discard;
+    char *discard;
     unsigned long core_freq;
     unsigned long max_freq = 0;
     unsigned int corecnt = 0;
     unsigned int big_core_id = 0;
-    while(1) {
+    while (1) {
         bigcore_format_cpu_path(path_buffer, corecnt);
         int corefreqfd = open(path_buffer, O_RDONLY);
-        if(corefreqfd != -1) {
+        if (corefreqfd != -1) {
             ssize_t read_count = read(corefreqfd, freq_buffer, FREQ_MAX);
             close(corefreqfd);
             freq_buffer[read_count] = 0;
             core_freq = strtoul(freq_buffer, &discard, 10);
-            if(core_freq >= max_freq) {
+            if (core_freq >= max_freq) {
                 max_freq = core_freq;
                 big_core_id = corecnt;
             }
-        }else{
+        } else {
             break;
         }
         corecnt++;
@@ -55,12 +56,12 @@ static void create_affinity_set() {
 }
 
 void make_big_core_affine() {
-    if(big_core_affine) return;
-    if(!has_affinity_set) create_affinity_set();
+    if (big_core_affine) return;
+    if (!has_affinity_set) create_affinity_set();
     int result = sched_setaffinity(0, CPU_SETSIZE, &bigcore_affinity_set);
-    if(result != 0) {
+    if (result != 0) {
         printf("bigcore: setting affinity failed: %s\n", strerror(result));
-    }else{
+    } else {
         printf("bigcore: forced current thread onto big core\n");
         big_core_affine = true;
     }

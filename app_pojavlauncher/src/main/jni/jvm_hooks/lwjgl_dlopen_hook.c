@@ -11,6 +11,7 @@
 #include <stdlib.h>
 
 #define TAG __FILE_NAME__
+
 #include <log.h>
 
 #include <mojoexec.h>
@@ -21,18 +22,18 @@
  * but with our own additions for stuff like vulkanmod.
  */
 static jlong ndlopen_bugfix(__attribute__((unused)) JNIEnv *env,
-                     __attribute__((unused)) jclass class,
-                     jlong filename_ptr,
-                     jint jmode) {
-    const char* filename = (const char*) filename_ptr;
+                            __attribute__((unused)) jclass class,
+                            jlong filename_ptr,
+                            jint jmode) {
+    const char *filename = (const char *) filename_ptr;
 
     // Oveeride vulkan loading to let us load vulkan ourselves
-    if(strstr(filename, "libvulkan.so") == filename) {
+    if (strstr(filename, "libvulkan.so") == filename) {
         printf("LWJGL linkerhook: replacing load for libvulkan.so with custom driver\n");
         return (jlong) mojoexec_acq_vulkan_handle();
     }
     // Load renderer using egl_acquire
-    if(strstr(filename, "libGLMojo.so") == filename) {
+    if (strstr(filename, "libGLMojo.so") == filename) {
         printf("LWJGL linkerhook: replacing OpenGL with renderspec driver\n");
         return (jlong) mojoexec_acq_egl_handle();
     }
@@ -44,7 +45,7 @@ static jlong ndlopen_bugfix(__attribute__((unused)) JNIEnv *env,
     // it can't load it because the path is not in the allowed paths for the anonymous namesapce.
     // This method fixes the issue by being in libpojavexec, and thus being in the classloader namespace
 
-    int mode = (int)jmode;
+    int mode = (int) jmode;
     return (jlong) dlopen(filename, mode);
 }
 
@@ -54,7 +55,7 @@ static jlong ndlopen_bugfix(__attribute__((unused)) JNIEnv *env,
 void installLwjglDlopenHook(JNIEnv *env) {
     LOGI("Installing LWJGL dlopen() hook");
     jclass dynamicLinkLoader = (*env)->FindClass(env, "org/lwjgl/system/linux/DynamicLinkLoader");
-    if(dynamicLinkLoader == NULL) {
+    if (dynamicLinkLoader == NULL) {
         LOGE("Failed to find the target class");
         (*env)->ExceptionClear(env);
         return;
@@ -62,7 +63,7 @@ void installLwjglDlopenHook(JNIEnv *env) {
     JNINativeMethod ndlopenMethod[] = {
             {"ndlopen", "(JI)J", &ndlopen_bugfix}
     };
-    if((*env)->RegisterNatives(env, dynamicLinkLoader, ndlopenMethod, 1) != 0) {
+    if ((*env)->RegisterNatives(env, dynamicLinkLoader, ndlopenMethod, 1) != 0) {
         LOGE("Failed to register the hooked method");
         (*env)->ExceptionClear(env);
     }
