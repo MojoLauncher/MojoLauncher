@@ -12,9 +12,12 @@ import android.content.Context;
 import net.kdt.pojavlaunch.Architecture;
 import net.kdt.pojavlaunch.game.renderer.impl.GLESRenderSpec;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
+import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 import java.io.File;
 import java.util.Map;
+
+import git.artdeell.mojoexec.MojoExec;
 
 /**
  * OpenGL ES driver provider for {@link GLESRenderSpec} based renderers (a.k.a. wrappers on-top of OpenGL ES)
@@ -189,7 +192,7 @@ public interface GLESProvider {
             return plugin != null && plugin.checkLibraries(ANGLE_EGL, ANGLE_GLES);
         }
         public boolean requiresNamespace() {
-            return false;
+            return !LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER;
         }
     }
     // One might add other OpenGLES providers (such as Mesa and/or bundled ANGLE), but this is not something we want right now

@@ -68,7 +68,6 @@ public class MesaRenderSpec implements RenderSpec {
             super.setupEnvironment(context, envMap);
         }
         public boolean setupRenderer() {
-            MojoExec.preloadVulkan();
             return super.setupRenderer();
         }
         public boolean compatibleDevice(Context context) {
@@ -155,7 +154,6 @@ public class MesaRenderSpec implements RenderSpec {
             envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
         }
         public boolean setupRenderer() {
-            MojoExec.preloadVulkan();
             return super.setupRenderer();
         }
         public boolean compatibleDevice(Context context) {
