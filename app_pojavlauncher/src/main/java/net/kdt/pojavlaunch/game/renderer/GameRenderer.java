@@ -147,6 +147,8 @@ public class GameRenderer {
      */
     public boolean maybeSetupRenderer() {
         setRendererLibraryPath(Tools.NATIVE_LIB_DIR, currentRenderer.librarySearchPath());
+        // Preload Vulkan "mjlvlk" reference so external libraries can pick it up for Turnip
+        if(!LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER) MojoExec.preloadVulkan();
         if (!currentRenderer.setupRenderer()) {
             Log.e(TAG, "Failed to setup renderer " + currentRenderer.name() + ", falling back to " + FALLBACK_RENDERER);
             // Hopefully (yes, it's going to be fun if it returns null for the fallback renderer. Shouldn't happen though)
