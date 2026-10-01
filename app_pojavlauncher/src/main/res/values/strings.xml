@@ -196,6 +196,9 @@
 
     <string name="preference_mouse_start_title">Start with virtual mouse on</string>
     <string name="preference_mouse_start_description">The virtual mouse appears at startup when this option is on.</string>
+    <string name="preference_screen_title">Settings</string>
+    <string name="preference_screen_subtitle">Manage launcher options and behavior</string>
+    <string name="action_back">Back</string>
     <string name="preference_video_title">Video and renderer</string>
     <string name="preference_video_description">Resolution, renderer and performance</string>
     <string name="preference_control_title">Control customization</string>

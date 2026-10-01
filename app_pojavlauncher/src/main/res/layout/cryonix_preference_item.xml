@@ -7,7 +7,10 @@
     android:layout_marginBottom="8dp"
     android:background="@drawable/launcher_preference_item_bg"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    android:padding="12dp">
+    android:paddingStart="14dp"
+    android:paddingTop="12dp"
+    android:paddingEnd="14dp"
+    android:paddingBottom="12dp">
 
     <ImageView
         android:id="@android:id/icon"
@@ -35,17 +38,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp" />
+            android:letterSpacing="0.01"
+            android:textColor="@color/primary_text"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@android:id/summary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/secondary_text"
-            android:textSize="12sp"
+            android:layout_marginTop="1dp"
+            android:ellipsize="end"
             android:maxLines="2"
-            android:ellipsize="end" />
+            android:textColor="@color/secondary_text"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <FrameLayout

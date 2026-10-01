@@ -15,59 +15,101 @@
         android:layout_marginTop="24dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/launcher_card_flat"
-        android:padding="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!-- Back button: circular surface with border, accent press state -->
         <ImageButton
             android:id="@+id/btn_back"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="8dp"
-            android:scaleType="centerInside"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/launcher_settings_back_btn"
+            android:contentDescription="@string/action_back"
+            android:padding="11dp"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_px_arrow_left"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/accent_blue"
-            android:contentDescription="Back" />
+            app:tint="@color/accent_blue" />
 
+        <!-- Title -->
         <TextView
             android:id="@+id/settings_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
+            android:ellipsize="end"
             android:fontFamily="sans-serif-black"
-            android:text="SETTINGS"
-            android:textColor="@color/accent_blue"
-            android:textSize="14sp"
-            android:letterSpacing="0.1"
+            android:letterSpacing="0.02"
+            android:maxLines="1"
+            android:text="@string/preference_screen_title"
+            android:textColor="@color/primary_text"
+            android:textSize="21sp"
+            app:layout_constraintBottom_toTopOf="@+id/settings_subtitle"
+            app:layout_constraintEnd_toStartOf="@+id/settings_icon"
             app:layout_constraintStart_toEndOf="@id/btn_back"
             app:layout_constraintTop_toTopOf="@id/btn_back"
-            app:layout_constraintBottom_toTopOf="@+id/settings_subtitle"
             app:layout_constraintVertical_chainStyle="packed" />
 
+        <!-- Subtitle -->
         <TextView
             android:id="@+id/settings_subtitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Configure your launcher experience"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/preference_screen_subtitle"
             android:textColor="@color/secondary_text"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="@id/settings_title"
-            app:layout_constraintTop_toBottomOf="@id/settings_title"
-            app:layout_constraintBottom_toBottomOf="@id/btn_back" />
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@id/btn_back"
+            app:layout_constraintEnd_toStartOf="@+id/settings_icon"
+            app:layout_constraintStart_toEndOf="@id/btn_back"
+            app:layout_constraintTop_toBottomOf="@id/settings_title" />
 
+        <!-- Decorative settings icon -->
+        <ImageView
+            android:id="@+id/settings_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/launcher_settings_icon_chip"
+            android:contentDescription="@null"
+            android:importantForAccessibility="no"
+            android:padding="9dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_px_alt_sliders"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/accent_blue" />
+
+        <!-- Header divider -->
+        <View
+            android:id="@+id/settings_header_divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="14dp"
+            android:background="#243D6B"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_back" />
+
+        <!-- Preference list -->
         <FrameLayout
             android:id="@+id/list_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="14dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/settings_subtitle" />
+            app:layout_constraintTop_toBottomOf="@id/settings_header_divider" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
