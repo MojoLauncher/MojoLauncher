@@ -113,6 +113,8 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
         if (fm.findFragmentByTag(clazz.getName()) != null) return; // already open
         fm.beginTransaction()
                 .setReorderingAllowed(true)
+                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                        R.anim.slide_in_left, R.anim.slide_out_right)
                 .addToBackStack(clazz.getName())
                 .replace(android.R.id.content, clazz, null, clazz.getName())
                 .commit();

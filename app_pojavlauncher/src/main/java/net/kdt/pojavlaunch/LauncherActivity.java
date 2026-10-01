@@ -25,6 +25,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.kdt.mcgui.ProgressLayout;
 
@@ -272,6 +274,25 @@ public class LauncherActivity extends BaseActivity {
         }
 
         super.onBackPressed();
+    }
+
+    /** Settings sub-screens with the standard push/slide animation (AppCompat's default has none) */
+    @Override
+    public boolean onPreferenceStartFragment(@NonNull PreferenceFragmentCompat caller, @NonNull Preference preference) {
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.isStateSaved()) return false;
+        String fragmentName = preference.getFragment();
+        if (fragmentName == null) return false;
+        Fragment fragment = Fragment.instantiate(fm, fragmentName, preference.getExtras());
+        if (fragment == null) return false;
+        fm.beginTransaction()
+                .setReorderingAllowed(true)
+                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                        R.anim.slide_in_left, R.anim.slide_out_right)
+                .addToBackStack(preference.getKey())
+                .replace(android.R.id.content, fragment)
+                .commit();
+        return true;
     }
 
     @SuppressWarnings("SameParameterValue")

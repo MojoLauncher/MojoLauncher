@@ -23,10 +23,10 @@
         android:id="@+id/settings_sidebar"
         android:layout_width="112dp"
         android:layout_height="0dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/launcher_sidebar_bg"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/launcher_settings_sidebar_bg"
         android:gravity="top|center_horizontal"
         android:orientation="vertical"
         android:paddingTop="28dp"
@@ -174,10 +174,12 @@
 
         <FrameLayout
             android:id="@+id/list_container"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="14dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/settings_header_divider" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
