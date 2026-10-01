@@ -9,7 +9,7 @@
             android:persistent="false"
             android:summary="@string/multirt_subtitle"
             android:title="@string/multirt_title"
-            app2:widgetLayoutResource="@layout/pref_widget_chevron"/>
+            app2:widgetLayout="@layout/pref_widget_chevron"/>
 
         <androidx.preference.EditTextPreference
             android:dialogTitle="@string/mcl_setting_title_javaargs"

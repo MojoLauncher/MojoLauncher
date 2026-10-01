@@ -7,7 +7,7 @@
         android:title="@string/preference_edit_controls_title"
         android:summary="@string/preference_edit_controls_summary"
         app2:icon="@drawable/ic_px_gamepad"
-        app2:widgetLayoutResource="@layout/pref_widget_chevron"
+        app2:widgetLayout="@layout/pref_widget_chevron"
         >
         <intent android:targetPackage="@string/application_package" android:targetClass="net.kdt.pojavlaunch.CustomControlsActivity" android:action=".CustomControlsActivity"/>
     </Preference>
@@ -159,7 +159,7 @@
             android:title="@string/preference_remap_controller_title"
             android:summary="@string/preference_remap_controller_description"
             android:fragment="net.kdt.pojavlaunch.fragments.GamepadMapperFragment"
-            app2:widgetLayoutResource="@layout/pref_widget_chevron"/>
+            app2:widgetLayout="@layout/pref_widget_chevron"/>
         <net.kdt.pojavlaunch.prefs.GamepadRemapPreference
             android:title="@string/preference_wipe_controller_title"
             android:summary="@string/preference_wipe_controller_description"
