@@ -4,7 +4,9 @@ package net.kdt.pojavlaunch.prefs.screens;
 import android.Manifest;
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 
 import android.view.LayoutInflater;
@@ -14,6 +16,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
@@ -82,6 +86,35 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
         if (getListView() != null) {
             getListView().setBackgroundColor(android.graphics.Color.TRANSPARENT);
         }
+
+        // The landscape main settings screen is flat: the activity's sidebar stays
+        // visible for navigation (see layout-land/fragment_preference_custom.xml).
+        // Sub-screens cover the whole screen, so they get the card, the header and
+        // an opaque background back.
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE
+                && this.getClass() != LauncherPreferenceFragment.class) {
+            View content = view.findViewById(R.id.settings_content);
+            View divider = view.findViewById(R.id.settings_header_divider);
+            View backBtn = view.findViewById(R.id.btn_back);
+            TextView title = view.findViewById(R.id.settings_title);
+            TextView subtitle = view.findViewById(R.id.settings_subtitle);
+            if (content != null) {
+                content.setBackgroundResource(R.drawable.launcher_card_flat);
+                content.setPadding(dp(16), dp(14), dp(16), dp(16));
+                ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) content.getLayoutParams();
+                lp.setMargins(dp(48), dp(24), dp(48), dp(24));
+                content.setLayoutParams(lp);
+            }
+            if (backBtn != null) backBtn.setVisibility(View.VISIBLE);
+            if (title != null) title.setVisibility(View.VISIBLE);
+            if (subtitle != null) subtitle.setVisibility(View.VISIBLE);
+            if (divider != null) divider.setVisibility(View.VISIBLE);
+            view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.background_app));
+        }
+    }
+
+    private int dp(float value) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, getResources().getDisplayMetrics());
     }
 
     @Override

@@ -6,25 +6,31 @@
     android:layout_height="match_parent"
     android:background="@android:color/transparent">
 
+    <!--
+        Landscape settings: flat list, no card and no back button on the main
+        settings screen - the activity's sidebar (home / mouse / controls /
+        info / settings) stays visible and is used for navigation, with the
+        settings icon highlighted while this screen is open.
+
+        Sub-screens (video, java, ...) cover the whole screen, so
+        LauncherPreferenceFragment re-enables the card background, the header
+        (back button, title, subtitle, divider) and an opaque background at
+        runtime.
+    -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/settings_content"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="48dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/launcher_card_flat"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingTop="14dp"
-        android:paddingBottom="16dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
+        android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Back button: circular surface with border, accent press state -->
         <ImageButton
             android:id="@+id/btn_back"
             android:layout_width="44dp"
@@ -34,11 +40,11 @@
             android:padding="11dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_px_arrow_left"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/accent_blue" />
 
-        <!-- Title -->
         <TextView
             android:id="@+id/settings_title"
             android:layout_width="0dp"
@@ -52,13 +58,13 @@
             android:text="@string/preference_screen_title"
             android:textColor="@color/primary_text"
             android:textSize="21sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/settings_subtitle"
-            app:layout_constraintEnd_toStartOf="@+id/settings_icon"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/btn_back"
             app:layout_constraintTop_toTopOf="@id/btn_back"
             app:layout_constraintVertical_chainStyle="packed" />
 
-        <!-- Subtitle -->
         <TextView
             android:id="@+id/settings_subtitle"
             android:layout_width="0dp"
@@ -71,38 +77,23 @@
             android:text="@string/preference_screen_subtitle"
             android:textColor="@color/secondary_text"
             android:textSize="13sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/btn_back"
-            app:layout_constraintEnd_toStartOf="@+id/settings_icon"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/btn_back"
             app:layout_constraintTop_toBottomOf="@id/settings_title" />
 
-        <!-- Decorative settings icon -->
-        <ImageView
-            android:id="@+id/settings_icon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/launcher_settings_icon_chip"
-            android:contentDescription="@null"
-            android:importantForAccessibility="no"
-            android:padding="9dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_px_alt_sliders"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/accent_blue" />
-
-        <!-- Header divider -->
         <View
             android:id="@+id/settings_header_divider"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="14dp"
             android:background="#243D6B"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_back" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Preference list -->
         <FrameLayout
             android:id="@+id/list_container"
             android:layout_width="match_parent"
