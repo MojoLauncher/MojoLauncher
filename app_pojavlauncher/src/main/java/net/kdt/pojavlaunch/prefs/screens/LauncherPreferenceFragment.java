@@ -17,8 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainerView;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -69,7 +68,7 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
      * landscape layout, so every lookup is null-safe.
      */
     private void bindSidebar(View view) {
-        Activity activity = getActivity();
+        FragmentActivity activity = getActivity();
         if (activity == null) return;
 
         View sbHome = view.findViewById(R.id.sb_home);
@@ -103,19 +102,19 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
         }
     }
 
-    /** Opens a settings sub-screen inside the same container this fragment lives in */
+    /**
+     * Opens a settings sub-screen as a full-screen overlay on the back stack,
+     * the same way the preference framework opens sub-screens.
+     */
     private void openSubScreen(Class<? extends LauncherPreferenceFragment> clazz) {
-        Activity activity = getActivity();
+        FragmentActivity activity = getActivity();
         if (activity == null) return;
-        FragmentContainerView container = getFragmentContainerView();
-        if (container == null) return;
         FragmentManager fm = activity.getSupportFragmentManager();
-        Fragment current = fm.findFragmentByTag(clazz.getName());
-        if (current != null && current.isVisible()) return;
+        if (fm.findFragmentByTag(clazz.getName()) != null) return; // already open
         fm.beginTransaction()
                 .setReorderingAllowed(true)
                 .addToBackStack(clazz.getName())
-                .replace(container.getId(), clazz, null, clazz.getName())
+                .replace(android.R.id.content, clazz, null, clazz.getName())
                 .commit();
     }
 
