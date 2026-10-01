@@ -180,7 +180,23 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
     public void onCreatePreferences(Bundle b, String str) {
         mVisibilityUpdater = this::updateVisibility;
         addPreferencesFromResource(R.xml.pref_main);
+        // Navigation rows open their sub-screen with a slide animation
+        bindSubScreenNavigation("video_screen_setting", LauncherPreferenceVideoFragment.class);
+        bindSubScreenNavigation("control_screen_setting", LauncherPreferenceControlFragment.class);
+        bindSubScreenNavigation("java_screen_setting", LauncherPreferenceJavaFragment.class);
+        bindSubScreenNavigation("misc_screen_setting", LauncherPreferenceMiscellaneousFragment.class);
+        bindSubScreenNavigation("experimental_screen_setting", LauncherPreferenceExperimentalFragment.class);
         setupNotificationRequestPreference();
+    }
+
+    private void bindSubScreenNavigation(String key, Class<? extends LauncherPreferenceFragment> clazz) {
+        Preference preference = findPreference(key);
+        if (preference != null) {
+            preference.setOnPreferenceClickListener(p -> {
+                openSubScreen(clazz);
+                return true;
+            });
+        }
     }
 
     private void updateVisibility(){
