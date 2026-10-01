@@ -3,11 +3,11 @@ package net.kdt.pojavlaunch.customcontrols.mouse;
 import android.view.MotionEvent;
 
 public class PointerTracker {
+    private final float[] mMotionVector = new float[2];
     private boolean mColdStart = true;
     private int mTrackedPointerId;
     private int mPointerCount;
     private float mLastX, mLastY;
-    private final float[] mMotionVector = new float[2];
 
     public void startTracking(MotionEvent motionEvent) {
         mColdStart = false;
@@ -24,7 +24,7 @@ public class PointerTracker {
     public int trackEvent(MotionEvent motionEvent) {
         int trackedPointerIndex = motionEvent.findPointerIndex(mTrackedPointerId);
         int pointerCount = motionEvent.getPointerCount();
-        if(trackedPointerIndex == -1 || mPointerCount != pointerCount || mColdStart) {
+        if (trackedPointerIndex == -1 || mPointerCount != pointerCount || mColdStart) {
             startTracking(motionEvent);
             trackedPointerIndex = 0;
         }

@@ -4,12 +4,10 @@ import android.widget.Toast;
 
 import com.kdt.mcgui.ProgressLayout;
 
-import git.artdeell.mojo.R;
-
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.instances.InstanceInstaller;
 import net.kdt.pojavlaunch.instances.Instances;
-import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.modloaders.modpacks.api.modloader.LoaderInstaller;
 import net.kdt.pojavlaunch.modloaders.modpacks.imagecache.ModIconCache;
@@ -23,35 +21,39 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.concurrent.Callable;
 
+import git.artdeell.mojo.R;
+
 public class ModpackInstaller {
 
     public static LoaderInstaller installModpack(String modpackName, String title, File modpackFile, String icon, InstallFunction installFunction) throws IOException {
         // Build a new minecraft instance, folder first
         LoaderInstaller loaderInstaller;
-        Instance instance = Instances.createInstance(i-> i.name = title, modpackName.substring(0, Math.min(16,modpackName.length())));
+        Instance instance = Instances.createInstance(i -> i.name = title, modpackName.substring(0, Math.min(16, modpackName.length())));
         try {
             // Install the modpack
             loaderInstaller = installFunction.installModpack(modpackFile, instance.getGameDirectory());
 
-            if(loaderInstaller == null) throw new IOException("Unknown modpack mod loader information");
+            if (loaderInstaller == null)
+                throw new IOException("Unknown modpack mod loader information");
 
-            if(loaderInstaller.requiresGuiInstallation()) {
+            if (loaderInstaller.requiresGuiInstallation()) {
                 InstanceInstaller instanceInstaller = loaderInstaller.createInstaller();
-                if(instanceInstaller == null) throw new IOException("Failed to prepare data for instance installation");
+                if (instanceInstaller == null)
+                    throw new IOException("Failed to prepare data for instance installation");
                 instance.installer = instanceInstaller;
             } else {
                 String versionId = loaderInstaller.installHeadlessly();
-                if(versionId == null) throw new IOException("Unknown mod loader version");
+                if (versionId == null) throw new IOException("Unknown mod loader version");
                 instance.versionId = versionId;
             }
             instance.write();
             ModIconCache.writeInstanceImage(instance, icon);
 
             Instances.setSelectedInstance(instance);
-            if(loaderInstaller.requiresGuiInstallation()) {
+            if (loaderInstaller.requiresGuiInstallation()) {
                 instance.installer.start();
-            }
-            else ContextExecutor.executeActivity(activity -> Toast.makeText(activity, R.string.modpack_install_toast_success, Toast.LENGTH_SHORT).show());
+            } else
+                ContextExecutor.executeActivity(activity -> Toast.makeText(activity, R.string.modpack_install_toast_success, Toast.LENGTH_SHORT).show());
         } catch (IOException e) {
             Instances.removeInstance(instance);
             throw e;
@@ -74,8 +76,8 @@ public class ModpackInstaller {
             modpackName += "_" + versionHash;
         }
 
-        if (modpackName.length() > 255){
-            modpackName = modpackName.substring(0,255);
+        if (modpackName.length() > 255) {
+            modpackName = modpackName.substring(0, 255);
         }
 
         File modpackFile = new File(Tools.DIR_CACHE, modpackName + ".cf");

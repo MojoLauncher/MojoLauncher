@@ -48,8 +48,8 @@ public class GameCursorView extends View implements PlatformCursorImplementor {
     protected void onDraw(@NonNull Canvas canvas) {
         if (noDraw) return;
         // Scale coordinates back to the full unresized screen size
-        int dx = (int) (Platform.cursorX * ((GameView)getParent()).cursorRatioX);
-        int dy = (int) (Platform.cursorY * ((GameView)getParent()).cursorRatioY);
+        int dx = (int) (Platform.cursorX * ((GameView) getParent()).cursorRatioX);
+        int dy = (int) (Platform.cursorY * ((GameView) getParent()).cursorRatioY);
         canvas.translate(dx, dy);
         PlatformCursor cursor = Platform.getCursor();
         canvas.scale(mouseScale, mouseScale);

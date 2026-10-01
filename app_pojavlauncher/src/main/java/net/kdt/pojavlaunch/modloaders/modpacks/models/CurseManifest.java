@@ -9,15 +9,18 @@ public class CurseManifest {
     public CurseFile[] files;
     public CurseMinecraft minecraft;
     public String overrides;
+
     public static class CurseFile {
         public long projectID;
         public long fileID;
         public boolean required;
     }
+
     public static class CurseMinecraft {
         public String version;
         public CurseModLoader[] modLoaders;
     }
+
     public static class CurseModLoader {
         public String id;
         public boolean primary;

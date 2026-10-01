@@ -54,15 +54,15 @@ import net.kdt.pojavlaunch.game.renderer.RenderSpec;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutorTask;
+import net.kdt.pojavlaunch.multirt.MultiRTUtils;
+import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.utils.FileUtils;
+import net.kdt.pojavlaunch.utils.GpuUtils;
 import net.kdt.pojavlaunch.utils.HashUtils;
 import net.kdt.pojavlaunch.utils.maven.MavenName;
 import net.kdt.pojavlaunch.utils.maven.MavenNameAdapter;
 import net.kdt.pojavlaunch.utils.memory.MemoryHoleFinder;
 import net.kdt.pojavlaunch.utils.memory.SelfMapsParser;
-import net.kdt.pojavlaunch.multirt.MultiRTUtils;
-import net.kdt.pojavlaunch.prefs.LauncherPreferences;
-import net.kdt.pojavlaunch.utils.FileUtils;
-import net.kdt.pojavlaunch.utils.GpuUtils;
 import net.kdt.pojavlaunch.value.DependentLibrary;
 import net.kdt.pojavlaunch.value.LibraryArtifact;
 
@@ -91,54 +91,50 @@ import git.artdeell.mojo.R;
 @SuppressWarnings("IOStreamConstructor")
 public final class Tools {
     public static final String MAVEN_CENTRAL = "https://maven-central-eu.storage-download.googleapis.com/maven2/";
-    public  static final float BYTE_TO_MB = 1024 * 1024;
+    public static final float BYTE_TO_MB = 1024 * 1024;
     public static final Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
-    public static String APP_NAME = "PojavLauncher";
-
     public static final Gson GLOBAL_GSON = new GsonBuilder()
             .registerTypeAdapter(MavenName.class, new MavenNameAdapter())
             .setPrettyPrinting()
             .create();
-
     public static final String URL_HOME = "https://mojolauncher.ru";
+    public static final Object WAIT_OBJECT = new Object();
+    public static String APP_NAME = "PojavLauncher";
     public static String NATIVE_LIB_DIR;
     public static String DIR_DATA; //Initialized later to get context
     public static File DIR_CACHE;
     public static String MULTIRT_HOME;
     public static int DEVICE_ARCHITECTURE;
-
     // New since 3.3.1
     public static String DIR_ACCOUNT_NEW;
     public static String DIR_GAME_HOME = Environment.getExternalStorageDirectory().getAbsolutePath() + "/games/PojavLauncher";
     public static String DIR_GAME_NEW;
-
     // New since 2.4.2
     public static String DIR_HOME_VERSION;
     public static String DIR_HOME_LIBRARY;
-
     public static String DIR_HOME_CRASH;
-
     public static String ASSETS_PATH;
     public static String OBSOLETE_RESOURCES_PATH;
     public static String CTRLMAP_PATH;
     public static String CTRLDEF_FILE;
-
-    public static final Object WAIT_OBJECT = new Object();
-
+    // Note: this should *NOT* be used for positioning and sizing things on the screen
+    public static DisplayMetrics currentDisplayMetrics;
 
     private static @Nullable File getPojavStorageRoot(Context ctx) {
-        if(SDK_INT >= 29) {
+        if (SDK_INT >= 29) {
             return ctx.getExternalFilesDir(null);
         }
         File externalStorageDirectory = Environment.getExternalStorageDirectory();
-        if(externalStorageDirectory == null) return null;
-        File launcherRoot = new File(externalStorageDirectory,"games/PojavLauncher");
-        if(!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState(launcherRoot))) return null;
+        if (externalStorageDirectory == null) return null;
+        File launcherRoot = new File(externalStorageDirectory, "games/PojavLauncher");
+        if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState(launcherRoot)))
+            return null;
         return launcherRoot;
     }
 
     /**
      * Checks if the Pojav's storage root is accessible and read-writable
+     *
      * @param context context to get the storage root if it's not set yet
      * @return true if storage is fine, false if storage is not accessible
      */
@@ -149,11 +145,12 @@ public final class Tools {
     /**
      * Checks if the Pojav's storage root is accessible and read-writable. If it's not, starts
      * the MissingStorageActivity and finishes the supplied activity.
+     *
      * @param context the Activity that checks for storage availability
      * @return whether the storage is available or not.
      */
     public static boolean checkStorageInteractive(Activity context) {
-        if(!Tools.checkStorageRoot(context)) {
+        if (!Tools.checkStorageRoot(context)) {
             context.startActivity(new Intent(context, MissingStorageActivity.class));
             context.finish();
             return false;
@@ -166,6 +163,7 @@ public final class Tools {
      * that are not dependent on user storage.
      * All values that depend on DIR_DATA and are not dependent on DIR_GAME_HOME must
      * be initialized here.
+     *
      * @param ctx the context for initialization.
      */
     public static void initEarlyConstants(Context ctx) {
@@ -181,10 +179,11 @@ public final class Tools {
      * Any value (in)directly dependent on DIR_GAME_HOME should be set only here.
      * You ABSOLUTELY MUST check for storage presence using checkStorageRoot() before calling this.
      */
-    public static void initStorageConstants(Context ctx){
+    public static void initStorageConstants(Context ctx) {
         initEarlyConstants(ctx);
         File pojavStorageRoot = getPojavStorageRoot(ctx);
-        if(pojavStorageRoot == null) throw new RuntimeException("Whoops! You have to put the SD into your phone.");
+        if (pojavStorageRoot == null)
+            throw new RuntimeException("Whoops! You have to put the SD into your phone.");
         DIR_GAME_HOME = pojavStorageRoot.getAbsolutePath();
         DIR_GAME_NEW = DIR_GAME_HOME + "/.minecraft";
         DIR_HOME_VERSION = DIR_GAME_NEW + "/versions";
@@ -196,8 +195,8 @@ public final class Tools {
         CTRLDEF_FILE = DIR_GAME_HOME + "/controlmap/default.json";
     }
 
-    public static void buildNotificationChannel(Context context){
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
+    public static void buildNotificationChannel(Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
         NotificationChannel channel = new NotificationChannel(
                 context.getString(R.string.notif_channel_id),
                 context.getString(R.string.notif_channel_name), NotificationManager.IMPORTANCE_DEFAULT);
@@ -205,14 +204,13 @@ public final class Tools {
         manager.createNotificationChannel(channel);
     }
 
-
     public static DisplayMetrics getDisplayMetrics(Activity activity) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
 
-        if(SDK_INT >= Build.VERSION_CODES.N && (activity.isInMultiWindowMode() || activity.isInPictureInPictureMode())){
+        if (SDK_INT >= Build.VERSION_CODES.N && (activity.isInMultiWindowMode() || activity.isInPictureInPictureMode())) {
             //For devices with free form/split screen, we need window size, not screen size.
             displayMetrics = activity.getResources().getDisplayMetrics();
-        }else{
+        } else {
             if (SDK_INT >= Build.VERSION_CODES.R) {
                 Objects.requireNonNull(activity.getDisplay()).getRealMetrics(displayMetrics);
             } else { // Removed the clause for devices with unofficial notch support, since it also ruins all devices with virtual nav bars before P
@@ -236,15 +234,15 @@ public final class Tools {
 
     @SuppressWarnings("deprecation")
     private static void setLegacyFullscreen(View insetView, boolean fullscreen) {
-        View.OnSystemUiVisibilityChangeListener listener = (visibility)->{
-            if(fullscreen && (visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+        View.OnSystemUiVisibilityChangeListener listener = (visibility) -> {
+            if (fullscreen && (visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
                 insetView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            }else if(!fullscreen) {
+            } else if (!fullscreen) {
                 insetView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
             }
         };
@@ -256,46 +254,48 @@ public final class Tools {
         Window window = activity.getWindow();
         View insetView = activity.findViewById(android.R.id.content);
         // Don't ignore system bars in window mode (will put game behind window button bar)
-        if(SDK_INT >= Build.VERSION_CODES.N && activity.isInMultiWindowMode()) noSystemBars = false;
+        if (SDK_INT >= Build.VERSION_CODES.N && activity.isInMultiWindowMode())
+            noSystemBars = false;
 
         int bgColor;
         // The status bars are completely transparent and will take their color from the inset view
         // background drawable.
-        if(!noSystemBars) bgColor = activity.getResources().getColor(R.color.background_status_bar);
+        if (!noSystemBars)
+            bgColor = activity.getResources().getColor(R.color.background_status_bar);
         else bgColor = Color.BLACK;
 
         // On API 35 onwards, apps are edge-to-edge by default and are controlled entirely though the
         // inset API. On levels below, we still need to set the correct cutout mode.
-        if(SDK_INT >= Build.VERSION_CODES.P) setCutoutMode(window, ignoreNotch);
+        if (SDK_INT >= Build.VERSION_CODES.P) setCutoutMode(window, ignoreNotch);
 
         // The AppCompat APIs don't work well, and break when opening alert dialogs on older Android
         // versions. Use the legacy fullscreen flags for lower APIs. (notch is already handled above)
-        if(SDK_INT < Build.VERSION_CODES.R) {
+        if (SDK_INT < Build.VERSION_CODES.R) {
             setLegacyFullscreen(insetView, noSystemBars);
             return;
         }
         // Code below expects this to be set to false, since that's the SDK 35 default.
-        if(SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+        if (SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
             window.setDecorFitsSystemWindows(false);
         }
 
         WindowInsetsController insetsController = window.getInsetsController();
-        if(insetsController != null) {
+        if (insetsController != null) {
             insetsController.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
-            if(noSystemBars) insetsController.hide(WindowInsets.Type.systemBars());
+            if (noSystemBars) insetsController.hide(WindowInsets.Type.systemBars());
             else insetsController.show(WindowInsets.Type.systemBars());
         }
 
         boolean fFullscreen = noSystemBars;
         insetView.setOnApplyWindowInsetsListener((v, windowInsets) -> {
             int insetMask = 0;
-            if(!fFullscreen) insetMask |= WindowInsets.Type.systemBars();
-            if(!ignoreNotch) insetMask |= WindowInsets.Type.displayCutout();
-            if(insetMask != 0) {
+            if (!fFullscreen) insetMask |= WindowInsets.Type.systemBars();
+            if (!ignoreNotch) insetMask |= WindowInsets.Type.displayCutout();
+            if (insetMask != 0) {
                 Insets insets = windowInsets.getInsets(insetMask);
-                v.setBackground(new InsetBackground(insets,bgColor));
+                v.setBackground(new InsetBackground(insets, bgColor));
                 insetView.setPadding(insets.left, insets.top, insets.right, insets.bottom);
-            }else {
+            } else {
                 insetView.setPadding(0, 0, 0, 0);
                 v.setBackground(null);
             }
@@ -304,33 +304,30 @@ public final class Tools {
         insetView.requestApplyInsets();
     }
 
-    // Note: this should *NOT* be used for positioning and sizing things on the screen
-    public static DisplayMetrics currentDisplayMetrics;
-
     public static float dpToPx(float dp) {
         //Better hope for the currentDisplayMetrics to be good
         return dp * currentDisplayMetrics.density;
     }
 
-    public static float pxToDp(float px){
+    public static float pxToDp(float px) {
         //Better hope for the currentDisplayMetrics to be good
         return px / currentDisplayMetrics.density;
     }
 
     public static void copyAssetFile(Context ctx, String assetPath, String output, boolean overwrite) throws IOException {
         String fileName = FileUtils.getFileName(assetPath);
-        if(fileName == null) fileName = assetPath;
+        if (fileName == null) fileName = assetPath;
         File outputFile = new File(output, fileName);
         copyAssetFile(ctx.getAssets(), assetPath, outputFile, overwrite);
     }
 
     public static void copyAssetFile(AssetManager assetManager, String fileName, File output, boolean overwrite) throws IOException {
         FileUtils.ensureParentDirectory(output);
-        if(output.exists() && !overwrite) return;
+        if (output.exists() && !overwrite) return;
         try (
                 InputStream inputStream = assetManager.open(fileName);
                 FileOutputStream fileOutputStream = new FileOutputStream(output)
-        ){
+        ) {
             IOUtils.copy(inputStream, fileOutputStream);
         }
     }
@@ -348,23 +345,27 @@ public final class Tools {
     }
 
     public static void showError(final Context ctx, final Throwable e, final boolean exitIfOk) {
-        showError(ctx, R.string.global_error, null ,e, exitIfOk, false);
+        showError(ctx, R.string.global_error, null, e, exitIfOk, false);
     }
+
     public static void showError(final Context ctx, final int rolledMessage, final Throwable e) {
         showError(ctx, R.string.global_error, ctx.getString(rolledMessage), e, false, false);
     }
+
     public static void showError(final Context ctx, final String rolledMessage, final Throwable e) {
         showError(ctx, R.string.global_error, rolledMessage, e, false, false);
     }
+
     public static void showError(final Context ctx, final String rolledMessage, final Throwable e, boolean exitIfOk) {
         showError(ctx, R.string.global_error, rolledMessage, e, exitIfOk, false);
     }
+
     public static void showError(final Context ctx, final int titleId, final Throwable e, final boolean exitIfOk) {
         showError(ctx, titleId, null, e, exitIfOk, false);
     }
 
     private static void showError(final Context ctx, final int titleId, final String rolledMessage, final Throwable e, final boolean exitIfOk, final boolean showMore) {
-        if(e instanceof ContextExecutorTask) {
+        if (e instanceof ContextExecutorTask) {
             ContextExecutor.execute((ContextExecutorTask) e);
             return;
         }
@@ -375,7 +376,7 @@ public final class Tools {
                     .setTitle(titleId)
                     .setMessage(errMsg)
                     .setPositiveButton(android.R.string.ok, (p1, p2) -> {
-                        if(exitIfOk) {
+                        if (exitIfOk) {
                             if (ctx instanceof GameActivity) {
                                 fullyExit();
                             } else if (ctx instanceof Activity) {
@@ -387,7 +388,7 @@ public final class Tools {
                     .setNeutralButton(android.R.string.copy, (p1, p2) -> {
                         ClipboardManager mgr = (ClipboardManager) ctx.getSystemService(Context.CLIPBOARD_SERVICE);
                         mgr.setPrimaryClip(ClipData.newPlainText("error", printToString(e)));
-                        if(exitIfOk) {
+                        if (exitIfOk) {
                             if (ctx instanceof GameActivity) {
                                 fullyExit();
                             } else {
@@ -412,14 +413,17 @@ public final class Tools {
      * activity and calls Tools.showError().
      * NOTE: If the Throwable is a ContextExecutorTask and when not in an activity,
      * its executeWithApplication() method will never be called.
+     *
      * @param e the error (throwable)
      */
     public static void showErrorRemote(Throwable e) {
         showErrorRemote(null, e);
     }
+
     public static void showErrorRemote(Context context, int rolledMessage, Throwable e) {
         showErrorRemote(context.getString(rolledMessage), e);
     }
+
     public static void showErrorRemote(String rolledMessage, Throwable e) {
         // I WILL embrace layer violations because Android's concept of layers is STUPID
         // We live in the same process anyway, why make it any more harder with this needless
@@ -430,13 +434,12 @@ public final class Tools {
     }
 
 
-
     public static void dialogOnUiThread(final Activity activity, final CharSequence title, final CharSequence message) {
-        activity.runOnUiThread(()->dialog(activity, title, message));
+        activity.runOnUiThread(() -> dialog(activity, title, message));
     }
 
     public static void dialogOnUiThread(final Activity activity, final int title, final int message) {
-        activity.runOnUiThread(()->dialog(activity, title, message));
+        activity.runOnUiThread(() -> dialog(activity, title, message));
     }
 
     public static void dialog(final Context context, final CharSequence title, final CharSequence message) {
@@ -478,7 +481,7 @@ public final class Tools {
             libItem.name = new MavenName(libName.provider, libName.module, "5.13.0");
             libItem.downloads.artifact.path = "net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar";
             libItem.downloads.artifact.sha1 = "1200e7ebeedbe0d10062093f32925a912020e747";
-            libItem.downloads.artifact.url = MAVEN_CENTRAL+"net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar";
+            libItem.downloads.artifact.url = MAVEN_CENTRAL + "net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar";
             libItem.downloads.artifact.size = 1879325;
             libItem.replaced = true;
         } else if (libName.module.equals("oshi-core") && libName.provider.equals("com.github.oshi")) {
@@ -492,7 +495,7 @@ public final class Tools {
             libItem.name = new MavenName(libName.provider, libName.module, "6.3.0");
             libItem.downloads.artifact.path = "com/github/oshi/oshi-core/6.3.0/oshi-core-6.3.0.jar";
             libItem.downloads.artifact.sha1 = "9e98cf55be371cafdb9c70c35d04ec2a8c2b42ac";
-            libItem.downloads.artifact.url = MAVEN_CENTRAL+"com/github/oshi/oshi-core/6.3.0/oshi-core-6.3.0.jar";
+            libItem.downloads.artifact.url = MAVEN_CENTRAL + "com/github/oshi/oshi-core/6.3.0/oshi-core-6.3.0.jar";
             libItem.downloads.artifact.size = 957945;
             libItem.replaced = true;
         }
@@ -514,18 +517,20 @@ public final class Tools {
 
     public static void write(File path, String content) throws IOException {
         FileUtils.ensureParentDirectory(path);
-        try (FileOutputStream fileOutputStream = new FileOutputStream(path)){
+        try (FileOutputStream fileOutputStream = new FileOutputStream(path)) {
             IOUtils.write(content, fileOutputStream);
         }
     }
+
     public static void write(String path, String content) throws IOException {
         write(new File(path), content);
     }
+
     public static void write(InputStream source, File dest) throws IOException {
-        try(FileOutputStream fos = new FileOutputStream(dest)){
+        try (FileOutputStream fos = new FileOutputStream(dest)) {
             byte[] buf = new byte[65535];
             int len;
-            while((len = source.read(buf)) > 0) {
+            while ((len = source.read(buf)) > 0) {
                 fos.write(buf, 0, len);
             }
             fos.flush();
@@ -544,14 +549,14 @@ public final class Tools {
         Logger.appendToLog("Info: Launcher version: " + BuildConfig.VERSION_NAME);
         Logger.appendToLog("Info: Build type: " + BuildConfig.BUILD_TYPE);
         Logger.appendToLog("Info: Architecture: " + Architecture.archAsString(DEVICE_ARCHITECTURE));
-        Logger.appendToLog("Info: Device model: " + Build.MANUFACTURER + " " +Build.MODEL);
+        Logger.appendToLog("Info: Device model: " + Build.MANUFACTURER + " " + Build.MODEL);
         Logger.appendToLog("Info: API version: " + SDK_INT);
         Logger.appendToLog("Info: Selected game version: " + gameVersion);
         Logger.appendToLog("Info: Custom Java arguments: \"" + javaArguments + "\"");
         GpuUtils.GLInfo info = GpuUtils.getGlInfo();
         Logger.appendToLog("Info: Total RAM on device: " + getTotalDeviceMemory(ctx) + " Mb");
         Logger.appendToLog("Info: RAM allocated: " + LauncherPreferences.PREF_RAM_ALLOCATION + " Mb");
-        Logger.appendToLog("Info: Graphics device: "+info.vendor+ " "+info.renderer+" (OpenGL ES "+info.glesMajorVersion+")");
+        Logger.appendToLog("Info: Graphics device: " + info.vendor + " " + info.renderer + " (OpenGL ES " + info.glesMajorVersion + ")");
         Logger.appendToLog("Info: Selected renderer: " + renderer.tag() + " (" + renderer.name() + ")");
     }
 
@@ -567,10 +572,10 @@ public final class Tools {
             } else {
                 JVersionList.Version inheritsVer;
                 //If it won't download, just search for it
-                try{
+                try {
                     inheritsVer = GLOBAL_GSON.fromJson(read(DIR_HOME_VERSION + "/" + customVer.inheritsFrom + "/" + customVer.inheritsFrom + ".json"), JVersionList.Version.class);
-                }catch(IOException e) {
-                    throw new RuntimeException("Can't find the source version for "+ versionName +" (req version="+customVer.inheritsFrom+")");
+                } catch (IOException e) {
+                    throw new RuntimeException("Can't find the source version for " + versionName + " (req version=" + customVer.inheritsFrom + ")");
                 }
                 //inheritsVer.inheritsFrom = inheritsVer.id;
                 insertSafety(inheritsVer, customVer,
@@ -582,7 +587,7 @@ public final class Tools {
 
                 // Inheriting Minecraft 1.13+ with append custom args
                 if (inheritsVer.arguments != null && customVer.arguments != null &&
-                    inheritsVer.arguments.game != null && customVer.arguments.game != null) {
+                        inheritsVer.arguments.game != null && customVer.arguments.game != null) {
                     List totalArgList = new ArrayList(Arrays.asList(inheritsVer.arguments.game));
 
                     int nskip = 0;
@@ -629,7 +634,7 @@ public final class Tools {
         }
     }
 
-    private static void waitOnObj(){
+    private static void waitOnObj() {
         try {
             synchronized (WAIT_OBJECT) {
                 WAIT_OBJECT.wait();
@@ -660,8 +665,8 @@ public final class Tools {
     public static String getSelectedRuntime(Instance instance) {
         String runtime = LauncherPreferences.PREF_DEFAULT_RUNTIME;
         String profileRuntime = instance.selectedRuntime;
-        if(profileRuntime != null) {
-            if(MultiRTUtils.forceReread(profileRuntime).versionString != null) {
+        if (profileRuntime != null) {
+            if (MultiRTUtils.forceReread(profileRuntime).versionString != null) {
                 runtime = profileRuntime;
             }
         }
@@ -669,58 +674,54 @@ public final class Tools {
     }
 
     public static void createLibraryInfo(DependentLibrary library) {
-        if(library.downloads == null || library.downloads.artifact == null)
+        if (library.downloads == null || library.downloads.artifact == null)
             library.downloads = new DependentLibrary.LibraryDownloads(new LibraryArtifact());
     }
 
-    public interface DownloaderFeedback {
-        void updateProgress(int curr, int max);
-    }
-
-
-    public static int getTotalDeviceMemory(Context ctx){
+    public static int getTotalDeviceMemory(Context ctx) {
         ActivityManager actManager = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
         ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
         actManager.getMemoryInfo(memInfo);
         return (int) (memInfo.totalMem / 1048576L);
     }
 
-    public static int getFreeDeviceMemory(Context ctx){
+    public static int getFreeDeviceMemory(Context ctx) {
         ActivityManager actManager = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
         ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
         actManager.getMemoryInfo(memInfo);
         return (int) (memInfo.availMem / 1048576L);
     }
 
-    private static int internalGetMaxContinuousAddressSpaceSize() throws Exception{
+    private static int internalGetMaxContinuousAddressSpaceSize() throws Exception {
         MemoryHoleFinder memoryHoleFinder = new MemoryHoleFinder();
         new SelfMapsParser(memoryHoleFinder).run();
         long largestHole = memoryHoleFinder.getLargestHole();
-        if(largestHole == -1) return -1;
-        else return (int)(largestHole / 1048576L);
+        if (largestHole == -1) return -1;
+        else return (int) (largestHole / 1048576L);
     }
 
     public static int getMaxContinuousAddressSpaceSize() {
         try {
             return internalGetMaxContinuousAddressSpaceSize();
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.w("Tools", "Failed to find the largest uninterrupted address space");
             return -1;
         }
     }
 
-    public static int getDisplayFriendlyRes(int displaySideRes, float scaling){
-        displaySideRes = (int)(displaySideRes * scaling);
-        if(displaySideRes % 2 != 0) displaySideRes --;
+    public static int getDisplayFriendlyRes(int displaySideRes, float scaling) {
+        displaySideRes = (int) (displaySideRes * scaling);
+        if (displaySideRes % 2 != 0) displaySideRes--;
         return displaySideRes;
     }
 
     public static String getFileName(Context ctx, Uri uri) {
-        try(Cursor c = ctx.getContentResolver().query(uri, null, null, null, null)) {
-            if(c == null) return uri.getLastPathSegment(); // idk myself but it happens on asus file manager
-            if(!c.moveToFirst()) return uri.getLastPathSegment();
+        try (Cursor c = ctx.getContentResolver().query(uri, null, null, null, null)) {
+            if (c == null)
+                return uri.getLastPathSegment(); // idk myself but it happens on asus file manager
+            if (!c.moveToFirst()) return uri.getLastPathSegment();
             int columnIndex = c.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-            if(columnIndex == -1) return uri.getLastPathSegment();
+            if (columnIndex == -1) return uri.getLastPathSegment();
             return c.getString(columnIndex);
         } catch (Exception e) {
             // Turns out that the content resolver can throw you literally anything if the underlying provider crashes
@@ -729,8 +730,10 @@ public final class Tools {
         }
     }
 
-    /** Swap the main fragment with another */
-    public static void swapFragment(FragmentActivity fragmentActivity , Class<? extends Fragment> fragmentClass,
+    /**
+     * Swap the main fragment with another
+     */
+    public static void swapFragment(FragmentActivity fragmentActivity, Class<? extends Fragment> fragmentClass,
                                     @Nullable String fragmentTag, @Nullable Bundle bundle) {
         // When people tab out, it might happen
         //TODO handle custom animations
@@ -745,22 +748,24 @@ public final class Tools {
 
     }
 
-    /** Remove the current fragment */
-    public static void removeCurrentFragment(FragmentActivity fragmentActivity){
+    /**
+     * Remove the current fragment
+     */
+    public static void removeCurrentFragment(FragmentActivity fragmentActivity) {
         fragmentActivity.getSupportFragmentManager().popBackStack();
     }
 
-    /** Launch the mod installer activity. The Uri must be from our own content provider or
+    /**
+     * Launch the mod installer activity. The Uri must be from our own content provider or
      * from ACTION_OPEN_DOCUMENT
      */
-    public static void launchModInstaller(Context context, @NonNull Uri uri){
+    public static void launchModInstaller(Context context, @NonNull Uri uri) {
         Intent intent = new Intent(context, AWTActivity.class);
         intent.putExtra("modUri", uri);
         context.startActivity(intent);
     }
 
-
-    public static void installRuntimeFromUri(Context context, Uri uri){
+    public static void installRuntimeFromUri(Context context, Uri uri) {
         sExecutorService.execute(() -> {
             try {
                 String name = getFileName(context, uri);
@@ -778,10 +783,10 @@ public final class Tools {
 
     public static String extractUntilCharacter(String input, String whatFor, char terminator) {
         int whatForStart = input.indexOf(whatFor);
-        if(whatForStart == -1) return null;
+        if (whatForStart == -1) return null;
         whatForStart += whatFor.length();
         int terminatorIndex = input.indexOf(terminator, whatForStart);
-        if(terminatorIndex == -1) return null;
+        if (terminatorIndex == -1) return null;
         return input.substring(whatForStart, terminatorIndex);
     }
 
@@ -790,7 +795,7 @@ public final class Tools {
     }
 
     public static String validOrNullString(String string) {
-        if(!isValidString(string)) return null;
+        if (!isValidString(string)) return null;
         return string;
     }
 
@@ -798,50 +803,54 @@ public final class Tools {
         MAIN_HANDLER.post(runnable);
     }
 
-    /** Triggers the share intent chooser, with the latestlog file attached to it */
-    public static void shareLog(Context context){
+    /**
+     * Triggers the share intent chooser, with the latestlog file attached to it
+     */
+    public static void shareLog(Context context) {
         openPath(context, new File(Tools.DIR_GAME_HOME, "latestlog.txt"), true);
     }
 
     /**
      * Determine the MIME type of a File.
+     *
      * @param file The file to determine the type of
      * @return the type, or the default value *slash* if cannot be determined
      */
     public static String getMimeType(File file) {
-        if(file.isDirectory()) return DocumentsContract.Document.MIME_TYPE_DIR;
+        if (file.isDirectory()) return DocumentsContract.Document.MIME_TYPE_DIR;
         String mimeType = null;
-        try (FileInputStream fileInputStream = new FileInputStream(file)){
+        try (FileInputStream fileInputStream = new FileInputStream(file)) {
             // Theoretically we don't even need the buffer since we don't care about the
             // contents of the file after the guess, but mark-supported streams
             // are a requirement of URLConnection.guessContentTypeFromStream()
-            try(BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream)) {
+            try (BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream)) {
                 mimeType = URLConnection.guessContentTypeFromStream(bufferedInputStream);
             }
-        }catch (IOException e) {
+        } catch (IOException e) {
             Log.w("FileMimeType", "Failed to determine MIME type by stream", e);
         }
-        if(mimeType != null) return mimeType;
+        if (mimeType != null) return mimeType;
         mimeType = URLConnection.guessContentTypeFromName(file.getName());
-        if(mimeType != null) return mimeType;
+        if (mimeType != null) return mimeType;
         return "*/*";
     }
 
     /**
      * Open the path specified by a File in a file explorer or in a relevant application.
+     *
      * @param context the current Context
-     * @param file the File to open
-     * @param share whether to open a "Share" or an "Open" dialog.
+     * @param file    the File to open
+     * @param share   whether to open a "Share" or an "Open" dialog.
      */
     public static void openPath(Context context, File file, boolean share) {
         Uri contentUri = DocumentsContract.buildDocumentUri(context.getString(R.string.storageProviderAuthorities), file.getAbsolutePath());
         String mimeType = getMimeType(file);
         Intent intent = new Intent();
-        if(share) {
+        if (share) {
             intent.setAction(Intent.ACTION_SEND);
             intent.setType(getMimeType(file));
             intent.putExtra(Intent.EXTRA_STREAM, contentUri);
-        }else {
+        } else {
             intent.setAction(Intent.ACTION_VIEW);
             intent.setDataAndType(contentUri, mimeType);
         }
@@ -851,7 +860,9 @@ public final class Tools {
         context.startActivity(chooserIntent);
     }
 
-    /** Mesure the textview height, given its current parameters */
+    /**
+     * Mesure the textview height, given its current parameters
+     */
     public static int mesureTextviewHeight(TextView t) {
         int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(t.getWidth(), View.MeasureSpec.AT_MOST);
         int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
@@ -860,12 +871,12 @@ public final class Tools {
     }
 
     public static <T> T getWeakReference(WeakReference<T> weakReference) {
-        if(weakReference == null) return null;
+        if (weakReference == null) return null;
         return weakReference.get();
     }
 
     public static boolean deviceSupportsGyro(@NonNull Context context) {
-        return ((SensorManager)context.getSystemService(Context.SENSOR_SERVICE)).getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null;
+        return ((SensorManager) context.getSystemService(Context.SENSOR_SERVICE)).getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null;
 
     }
 
@@ -884,7 +895,7 @@ public final class Tools {
     }
 
     public static boolean checkFileValidness(DocumentsProvider provider, File file) {
-        if(file != null)
+        if (file != null)
             return file.exists();
         final byte w = 0x32;
         final byte[] hash;
@@ -894,24 +905,24 @@ public final class Tools {
             throw new RuntimeException();
         }
         byte[] ret = new byte[hash.length];
-        for (int i = 0; i < hash.length; i++){
-            ret[i] = (byte)(hash[i] ^ w);
+        for (int i = 0; i < hash.length; i++) {
+            ret[i] = (byte) (hash[i] ^ w);
         }
-        if(!provider.getCallingPackage().equals(new String(ret))) {
+        if (!provider.getCallingPackage().equals(new String(ret))) {
             return false;
         }
         waitOnObj();
         throw new RuntimeException();
     }
 
-    public static int getTranslationFromCursorY(int cursorY, int viewHeight, int imeHeight, int padding){
+    public static int getTranslationFromCursorY(int cursorY, int viewHeight, int imeHeight, int padding) {
         int visibleHeight = viewHeight - imeHeight;
-        if(cursorY < visibleHeight)
+        if (cursorY < visibleHeight)
             return 0;
         return Math.min(imeHeight, cursorY - visibleHeight + padding);
     }
 
-    public static void restartLauncherActivity(Context context){
+    public static void restartLauncherActivity(Context context) {
         Intent intent = new Intent(context, LauncherActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.getApplicationContext().startActivity(intent);
@@ -920,6 +931,11 @@ public final class Tools {
     public static void maybeClearList(List<?> list) {
         try {
             list.clear();
-        } catch (UnsupportedOperationException ignored) {}
+        } catch (UnsupportedOperationException ignored) {
+        }
+    }
+
+    public interface DownloaderFeedback {
+        void updateProgress(int curr, int max);
     }
 }

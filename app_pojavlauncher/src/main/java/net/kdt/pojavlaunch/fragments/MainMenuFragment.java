@@ -19,8 +19,6 @@ import androidx.fragment.app.Fragment;
 import com.kdt.mcgui.mcVersionSpinner;
 
 import net.kdt.pojavlaunch.CustomControlsActivity;
-import git.artdeell.mojo.R;
-
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.contracts.OpenDocumentWithExtension;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
@@ -32,17 +30,17 @@ import net.kdt.pojavlaunch.utils.FileUtils;
 
 import java.io.File;
 
+import git.artdeell.mojo.R;
+
 public class MainMenuFragment extends Fragment {
     public static final String TAG = "MainMenuFragment";
-
+    private final ActivityResultLauncher<Object> mModInstallerLauncher =
+            registerForActivityResult(new OpenDocumentWithExtension("jar"), (data) -> {
+                if (data != null) Tools.launchModInstaller(requireContext(), data);
+            });
     private mcVersionSpinner mVersionSpinner;
 
-    private final ActivityResultLauncher<Object> mModInstallerLauncher =
-            registerForActivityResult(new OpenDocumentWithExtension("jar"), (data)->{
-                if(data != null) Tools.launchModInstaller(requireContext(), data);
-            });
-
-    public MainMenuFragment(){
+    public MainMenuFragment() {
         super(R.layout.fragment_launcher);
     }
 
@@ -69,10 +67,10 @@ public class MainMenuFragment extends Fragment {
 
         mShareLogsButton.setOnClickListener((v) -> shareLog(requireContext()));
 
-        mOpenDirectoryButton.setOnClickListener((v)-> openGameDirectory(v.getContext()));
+        mOpenDirectoryButton.setOnClickListener((v) -> openGameDirectory(v.getContext()));
 
 
-        mNewsButton.setOnLongClickListener((v)->{
+        mNewsButton.setOnLongClickListener((v) -> {
             Tools.swapFragment(requireActivity(), GamepadMapperFragment.class, GamepadMapperFragment.TAG, null);
             return true;
         });
@@ -80,14 +78,14 @@ public class MainMenuFragment extends Fragment {
 
     private void openGameDirectory(Context context) {
         Instance instance = Instances.loadSelectedInstance();
-        if(instance == null) {
+        if (instance == null) {
             Toast.makeText(context, R.string.no_instance, Toast.LENGTH_LONG).show();
             return;
         }
         File gameDirectory = instance.getGameDirectory();
-        if(FileUtils.ensureDirectorySilently(gameDirectory)) {
+        if (FileUtils.ensureDirectorySilently(gameDirectory)) {
             openPath(context, gameDirectory, false);
-        }else {
+        } else {
             Toast.makeText(context, R.string.gamedir_open_failed, Toast.LENGTH_LONG).show();
         }
     }

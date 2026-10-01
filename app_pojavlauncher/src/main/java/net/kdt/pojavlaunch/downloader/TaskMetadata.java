@@ -6,9 +6,9 @@ import java.io.File;
 import java.net.URL;
 
 public class TaskMetadata {
+    public final int mirrorType;
     public File path;
     public URL url;
-    public final int mirrorType;
     public long size;
     public String sha1Hash;
 
@@ -27,6 +27,6 @@ public class TaskMetadata {
     @NonNull
     @Override
     public String toString() {
-        return "TaskMetadata{\nurl="+url+";\npath="+path+"\nhash="+sha1Hash+";\nsize="+size+"\n}";
+        return "TaskMetadata{\nurl=" + url + ";\npath=" + path + "\nhash=" + sha1Hash + ";\nsize=" + size + "\n}";
     }
 }

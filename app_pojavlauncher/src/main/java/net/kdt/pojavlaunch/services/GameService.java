@@ -13,13 +13,13 @@ import android.os.Process;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import net.kdt.pojavlaunch.game.GameActivity;
-
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.game.GameActivity;
 import net.kdt.pojavlaunch.utils.NotificationUtils;
 
 import java.lang.ref.WeakReference;
+
+import git.artdeell.mojo.R;
 
 public class GameService extends Service {
     private static final WeakReference<Service> sGameService = new WeakReference<>(null);
@@ -32,7 +32,7 @@ public class GameService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if(intent != null && intent.getBooleanExtra("kill", false)) {
+        if (intent != null && intent.getBooleanExtra("kill", false)) {
             stopSelf();
             Process.killProcess(Process.myPid());
             return START_NOT_STICKY;
@@ -40,16 +40,16 @@ public class GameService extends Service {
         Intent killIntent = new Intent(getApplicationContext(), GameService.class);
         killIntent.putExtra("kill", true);
         PendingIntent pendingKillIntent = PendingIntent.getService(this, NotificationUtils.PENDINGINTENT_CODE_KILL_GAME_SERVICE
-                , killIntent, Build.VERSION.SDK_INT >=23 ? PendingIntent.FLAG_IMMUTABLE : 0);
+                , killIntent, Build.VERSION.SDK_INT >= 23 ? PendingIntent.FLAG_IMMUTABLE : 0);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, GameActivity.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT),
-                 PendingIntent.FLAG_IMMUTABLE);
+                PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "channel_id")
                 .setContentTitle(getString(R.string.lazy_service_default_title))
                 .setContentText(getString(R.string.notification_game_runs))
                 .setContentIntent(contentIntent)
-                .addAction(android.R.drawable.ic_menu_close_clear_cancel,  getString(R.string.notification_terminate), pendingKillIntent)
+                .addAction(android.R.drawable.ic_menu_close_clear_cancel, getString(R.string.notification_terminate), pendingKillIntent)
                 .setSmallIcon(R.drawable.notif_icon)
                 .setNotificationSilent();
 

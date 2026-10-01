@@ -4,13 +4,21 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import java.io.*;
-import java.net.*;
-import java.nio.charset.*;
-import java.util.concurrent.Callable;
+import net.kdt.pojavlaunch.Tools;
 
-import net.kdt.pojavlaunch.*;
-import org.apache.commons.io.*;
+import org.apache.commons.io.IOUtils;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.Callable;
 
 @SuppressWarnings("IOStreamConstructor")
 public class DownloadUtils {
@@ -85,17 +93,17 @@ public class DownloadUtils {
 
     }
 
-    public static <T> T downloadStringCached(String url, String cacheName, ParseCallback<T> parseCallback) throws IOException, ParseException{
-        File cacheDestination = new File(Tools.DIR_CACHE, "string_cache/"+cacheName);
-        if(cacheDestination.isFile() &&
+    public static <T> T downloadStringCached(String url, String cacheName, ParseCallback<T> parseCallback) throws IOException, ParseException {
+        File cacheDestination = new File(Tools.DIR_CACHE, "string_cache/" + cacheName);
+        if (cacheDestination.isFile() &&
                 cacheDestination.canRead() &&
                 System.currentTimeMillis() < (cacheDestination.lastModified() + 86400000)) {
             try {
                 String cachedString = Tools.read(new FileInputStream(cacheDestination));
                 return parseCallback.process(cachedString);
-            }catch(IOException e) {
+            } catch (IOException e) {
                 Log.i("DownloadUtils", "Failed to read the cached file", e);
-            }catch (ParseException e) {
+            } catch (ParseException e) {
                 Log.i("DownloadUtils", "Failed to parse the cached file", e);
             }
         }
@@ -106,27 +114,26 @@ public class DownloadUtils {
         T parseResult = parseCallback.process(urlContent);
 
         boolean tryWriteCache;
-        if(cacheDestination.exists()) {
+        if (cacheDestination.exists()) {
             tryWriteCache = cacheDestination.canWrite();
         } else {
             tryWriteCache = FileUtils.ensureParentDirectorySilently(cacheDestination);
         }
 
-        if(tryWriteCache) try {
+        if (tryWriteCache) try {
             Tools.write(cacheDestination, urlContent);
-        }catch(IOException e) {
+        } catch (IOException e) {
             Log.i("DownloadUtils", "Failed to cache the string", e);
         }
         return parseResult;
     }
 
-    private static <T> T downloadFile(Callable<T> downloadFunction) throws IOException{
+    private static <T> T downloadFile(Callable<T> downloadFunction) throws IOException {
         try {
             return downloadFunction.call();
-        } catch (IOException e){
+        } catch (IOException e) {
             throw e;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -137,26 +144,28 @@ public class DownloadUtils {
 
     public static <T> T ensureSha1(File outputFile, @Nullable String sha1, Callable<T> downloadFunction) throws IOException {
         // Skip if needed
-        if(sha1 == null) {
+        if (sha1 == null) {
             // If the file exists and we don't know it's SHA1, don't try to redownload it.
-            if(outputFile.exists()) return null;
+            if (outputFile.exists()) return null;
             else return downloadFile(downloadFunction);
         }
 
         int attempts = 0;
         boolean fileOkay = verifyFile(outputFile, sha1);
         T result = null;
-        while (attempts < 5 && !fileOkay){
+        while (attempts < 5 && !fileOkay) {
             attempts++;
             downloadFile(downloadFunction);
             fileOkay = verifyFile(outputFile, sha1);
         }
-        if(!fileOkay) throw new SHA1VerificationException("SHA1 verifcation failed after 5 download attempts");
+        if (!fileOkay)
+            throw new SHA1VerificationException("SHA1 verifcation failed after 5 download attempts");
         return result;
     }
 
     /**
      * Get the content length for a given URL.
+     *
      * @param url the URL to get the length for
      * @return the length in bytes or -1 if not available
      */
@@ -168,8 +177,8 @@ public class DownloadUtils {
             urlConnection.setDoOutput(false);
             urlConnection.connect();
             int responseCode = urlConnection.getResponseCode();
-            if(responseCode >= 200 && responseCode <= 299) return urlConnection.getContentLength();
-        }catch (IOException e) {
+            if (responseCode >= 200 && responseCode <= 299) return urlConnection.getContentLength();
+        } catch (IOException e) {
             Log.w("DownloadUtils", "Failed to get content length", e);
         }
         return -1;
@@ -178,6 +187,7 @@ public class DownloadUtils {
     public interface ParseCallback<T> {
         T process(String input) throws ParseException;
     }
+
     public static class ParseException extends Exception {
         public ParseException(Exception e) {
             super(e);

@@ -28,9 +28,9 @@ import git.artdeell.mojo.R;
 
 public class NewJREUtil {
     private static final String DOWNLOAD_URL = "https://mojolauncher.github.io/jre-download/";
-    
-    private static String getRemoteRuntimeVersion(InternalRuntime internalRuntime) throws IOException{
-        return DownloadUtils.downloadString(DOWNLOAD_URL+internalRuntime.path+"/version");
+
+    private static String getRemoteRuntimeVersion(InternalRuntime internalRuntime) throws IOException {
+        return DownloadUtils.downloadString(DOWNLOAD_URL + internalRuntime.path + "/version");
     }
 
     private static boolean checkLastUpdateTime(InternalRuntime internalRuntime) {
@@ -46,45 +46,21 @@ public class NewJREUtil {
     private static void checkInternalRuntime(AssetManager assetManager, InternalRuntime internalRuntime) throws RuntimeSelectionException {
         String remote_runtime_version;
         String installed_runtime_version = MultiRTUtils.readInternalRuntimeVersion(internalRuntime.name);
-        if(installed_runtime_version != null && checkLastUpdateTime(internalRuntime)) return;
+        if (installed_runtime_version != null && checkLastUpdateTime(internalRuntime)) return;
         try {
             remote_runtime_version = getRemoteRuntimeVersion(internalRuntime);
-        }catch (IOException exc) {
+        } catch (IOException exc) {
             Log.i("NewJreUtil", "Failed to get remote runtime version", exc);
             // We failed to get the version of the runtime available on the web server.
             // Let's just hope that we have an internal version installed in that case.
-            if(installed_runtime_version == null)
+            if (installed_runtime_version == null)
                 throw new RuntimeSelectionException(RuntimeSelectionException.RUNTIME_STATE_INTERNAL_RUNTIME_MISSING, internalRuntime.majorVersion);
             return;
         }
         // this implicitly checks for null, so it will unpack the runtime even if we don't have one installed
-        if(!remote_runtime_version.equals(installed_runtime_version)) unpackInternalRuntime(assetManager, internalRuntime, remote_runtime_version);
+        if (!remote_runtime_version.equals(installed_runtime_version))
+            unpackInternalRuntime(assetManager, internalRuntime, remote_runtime_version);
         writeLastUpdateTime(internalRuntime);
-    }
-
-    private static class RuntimeDownloaderVerifier {
-        
-        private final Map<String, byte[]> mSignatures;
-        private final String mRuntimePath;
-        private final byte[] mDownloadBuffer = new byte[8192];
-        private final SignatureCheckUtil mSignatureCheckUtil;
-
-        public RuntimeDownloaderVerifier(Map<String, byte[]> signatures, InternalRuntime internalRuntime, SignatureCheckUtil mSignatureCheckUtil) {
-            this.mSignatures = signatures;
-            this.mRuntimePath = DOWNLOAD_URL + internalRuntime.path + "/";
-            this.mSignatureCheckUtil = mSignatureCheckUtil;
-        }
-
-        public boolean downloadAndVerify(String component, File output, int progressString) throws IOException {
-            DownloadUtils.downloadFileMonitored(
-                    mRuntimePath + component, output, mDownloadBuffer,
-                    new DownloaderProgressWrapper(progressString, ProgressLayout.UNPACK_RUNTIME)
-            );
-            byte[] signature = mSignatures.get(component);
-            try (FileInputStream fileInputStream = new FileInputStream(output)){
-                return mSignatureCheckUtil.verify(fileInputStream, signature);
-            }
-        }
     }
 
     private static void throwInstallFail(InternalRuntime internalRuntime, Throwable cause) throws RuntimeSelectionException {
@@ -99,8 +75,8 @@ public class NewJREUtil {
 
     private static void unpackInternalRuntime(AssetManager assetManager, InternalRuntime internalRuntime, String versionSignatures) throws RuntimeSelectionException {
         Map<String, byte[]> signatures = SignatureCheckUtil.decodeSignatureBundle(versionSignatures);
-        String platformBinFile = "bin-"+archAsString(Tools.DEVICE_ARCHITECTURE)+".tar.xz";
-        if(!signatures.containsKey("universal.tar.xz") || !signatures.containsKey(platformBinFile)) {
+        String platformBinFile = "bin-" + archAsString(Tools.DEVICE_ARCHITECTURE) + ".tar.xz";
+        if (!signatures.containsKey("universal.tar.xz") || !signatures.containsKey(platformBinFile)) {
             throwInstallFail(internalRuntime);
         }
 
@@ -125,34 +101,34 @@ public class NewJREUtil {
         } finally {
             ProgressLayout.clearProgress(ProgressLayout.UNPACK_RUNTIME);
             // Those files being deleted are on a "i wish" basis
-            if(universalCache != null && universalCache.isFile()) //noinspection ResultOfMethodCallIgnored
+            if (universalCache != null && universalCache.isFile()) //noinspection ResultOfMethodCallIgnored
                 universalCache.delete();
-            if(platformCache != null && platformCache.isFile()) //noinspection ResultOfMethodCallIgnored
+            if (platformCache != null && platformCache.isFile()) //noinspection ResultOfMethodCallIgnored
                 platformCache.delete();
         }
     }
 
     private static InternalRuntime getInternalRuntime(Runtime runtime) {
-        for(InternalRuntime internalRuntime : InternalRuntime.values()) {
-            if(internalRuntime.name.equals(runtime.name)) return internalRuntime;
+        for (InternalRuntime internalRuntime : InternalRuntime.values()) {
+            if (internalRuntime.name.equals(runtime.name)) return internalRuntime;
         }
         return null;
     }
 
     private static MathUtils.RankedValue<Runtime> getNearestInstalledRuntime(int targetVersion) {
         List<Runtime> runtimes = MultiRTUtils.getRuntimes();
-        return MathUtils.findNearestPositive(targetVersion, runtimes, (runtime)->runtime.javaVersion);
+        return MathUtils.findNearestPositive(targetVersion, runtimes, (runtime) -> runtime.javaVersion);
     }
 
     private static MathUtils.RankedValue<InternalRuntime> getNearestInternalRuntime(int targetVersion) {
         List<InternalRuntime> runtimeList = Arrays.asList(InternalRuntime.values());
-        return MathUtils.findNearestPositive(targetVersion, runtimeList, (runtime)->runtime.majorVersion);
+        return MathUtils.findNearestPositive(targetVersion, runtimeList, (runtime) -> runtime.majorVersion);
     }
-
 
     public static void installNewJreIfNeeded(AssetManager assetManager, JVersionList.Version versionInfo) throws IOException, RuntimeSelectionException {
         //Now we have the reliable information to check if our runtime settings are good enough
-        if (versionInfo.javaVersion == null || versionInfo.javaVersion.component.equalsIgnoreCase("jre-legacy")) return;
+        if (versionInfo.javaVersion == null || versionInfo.javaVersion.component.equalsIgnoreCase("jre-legacy"))
+            return;
 
         int gameRequiredVersion = versionInfo.javaVersion.majorVersion;
 
@@ -164,7 +140,7 @@ public class NewJREUtil {
             // Check whether the selection is an internal runtime
             InternalRuntime internalRuntime = getInternalRuntime(runtime);
             // If it is, check if updates are available from the APK file
-            if(internalRuntime != null) {
+            if (internalRuntime != null) {
                 // Not calling showRuntimeFail on failure here because we did, technically, find the compatible runtime
                 checkInternalRuntime(assetManager, internalRuntime);
             }
@@ -177,11 +153,11 @@ public class NewJREUtil {
         MathUtils.RankedValue<?> nearestInternalRuntime = getNearestInternalRuntime(gameRequiredVersion);
 
         MathUtils.RankedValue<?> selectedRankedRuntime = MathUtils.objectMin(
-                nearestInternalRuntime, nearestInstalledRuntime, (value)->value.rank
+                nearestInternalRuntime, nearestInstalledRuntime, (value) -> value.rank
         );
 
         // No possible selections
-        if(selectedRankedRuntime == null) {
+        if (selectedRankedRuntime == null) {
             throw new RuntimeSelectionException(RuntimeSelectionException.RUNTIME_STATE_SELECTION_FAILED, gameRequiredVersion);
         }
 
@@ -190,7 +166,7 @@ public class NewJREUtil {
         InternalRuntime internalRuntime;
 
         // Perform checks on the picked runtime
-        if(selected instanceof Runtime) {
+        if (selected instanceof Runtime) {
             // If it's an already installed runtime, save its name and check if
             // it's actually an internal one (just in case)
             Runtime selectedRuntime = (Runtime) selected;
@@ -201,17 +177,18 @@ public class NewJREUtil {
             internalRuntime = (InternalRuntime) selected;
             appropriateRuntime = internalRuntime.name;
         } else {
-            throw new RuntimeException("Unexpected type of selected: "+selected.getClass().getName());
+            throw new RuntimeException("Unexpected type of selected: " + selected.getClass().getName());
         }
 
         // If it turns out the selected runtime is actually an internal one, attempt automatic installation or update
-        if(internalRuntime != null) {
+        if (internalRuntime != null) {
             checkInternalRuntime(assetManager, internalRuntime);
         }
 
         instance.selectedRuntime = appropriateRuntime;
         instance.write();
     }
+
 
     private enum InternalRuntime {
         JRE_17(17, "Internal-17", "components/jre-new"),
@@ -220,10 +197,36 @@ public class NewJREUtil {
         public final int majorVersion;
         public final String name;
         public final String path;
+
         InternalRuntime(int majorVersion, String name, String path) {
             this.majorVersion = majorVersion;
             this.name = name;
             this.path = path;
+        }
+    }
+
+    private static class RuntimeDownloaderVerifier {
+
+        private final Map<String, byte[]> mSignatures;
+        private final String mRuntimePath;
+        private final byte[] mDownloadBuffer = new byte[8192];
+        private final SignatureCheckUtil mSignatureCheckUtil;
+
+        public RuntimeDownloaderVerifier(Map<String, byte[]> signatures, InternalRuntime internalRuntime, SignatureCheckUtil mSignatureCheckUtil) {
+            this.mSignatures = signatures;
+            this.mRuntimePath = DOWNLOAD_URL + internalRuntime.path + "/";
+            this.mSignatureCheckUtil = mSignatureCheckUtil;
+        }
+
+        public boolean downloadAndVerify(String component, File output, int progressString) throws IOException {
+            DownloadUtils.downloadFileMonitored(
+                    mRuntimePath + component, output, mDownloadBuffer,
+                    new DownloaderProgressWrapper(progressString, ProgressLayout.UNPACK_RUNTIME)
+            );
+            byte[] signature = mSignatures.get(component);
+            try (FileInputStream fileInputStream = new FileInputStream(output)) {
+                return mSignatureCheckUtil.verify(fileInputStream, signature);
+            }
         }
     }
 

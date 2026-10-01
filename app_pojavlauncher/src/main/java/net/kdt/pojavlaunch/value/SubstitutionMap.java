@@ -1,7 +1,5 @@
 package net.kdt.pojavlaunch.value;
 
-import android.util.Log;
-
 import net.kdt.pojavlaunch.utils.maven.MavenName;
 
 import java.util.HashMap;
@@ -23,13 +21,16 @@ public class SubstitutionMap {
     }
 
     public SubstitutionMap prepare() {
-        for(Map.Entry<MavenName, MavenName> mappingPair : artifactMapping.entrySet()) {
+        for (Map.Entry<MavenName, MavenName> mappingPair : artifactMapping.entrySet()) {
             libraries.put(mappingPair.getKey(), libraries.get(mappingPair.getValue()));
         }
         artifactMapping.clear();
         return this;
     }
 
-    public static class ExtraNameMap extends HashMap<MavenName, MavenName> {}
-    public static class LibraryMap extends HashMap<MavenName, LibrarySubstitution> {}
+    public static class ExtraNameMap extends HashMap<MavenName, MavenName> {
+    }
+
+    public static class LibraryMap extends HashMap<MavenName, LibrarySubstitution> {
+    }
 }

@@ -20,9 +20,10 @@ import android.widget.TextView;
 
 import com.kdt.CustomSeekbar;
 
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.utils.interfaces.SimpleSeekBarListener;
+
+import git.artdeell.mojo.R;
 
 /**
  * Side dialog for quick settings that you can change in game
@@ -45,6 +46,18 @@ public abstract class QuickSettingSideDialog extends com.kdt.SideDialogView {
         super(context, parent, R.layout.dialog_quick_setting);
         setTitle(R.string.quick_setting_title);
         setupCancelButton();
+    }
+
+    private static void setSeekTextMillisecond(TextView target, int value) {
+        setSeekText(target, R.string.millisecond_format, value);
+    }
+
+    private static void setSeekTextPercent(TextView target, int value) {
+        setSeekText(target, R.string.percent_format, value);
+    }
+
+    private static void setSeekText(TextView target, int format, int value) {
+        target.setText(target.getContext().getString(format, value));
     }
 
     @Override
@@ -152,7 +165,7 @@ public abstract class QuickSettingSideDialog extends com.kdt.SideDialogView {
         setSeekTextMillisecond(mGestureDelayText, mGestureDelayBar.getProgress());
 
         mResolutionBar.setOnSeekBarChangeListener((SimpleSeekBarListener) (seekBar, progress, fromUser) -> {
-            PREF_SCALE_FACTOR = progress/100f;
+            PREF_SCALE_FACTOR = progress / 100f;
             mEditor.putInt("resolutionRatio", progress);
             setSeekTextPercent(mResolutionText, progress);
             onResolutionChanged();
@@ -172,18 +185,6 @@ public abstract class QuickSettingSideDialog extends com.kdt.SideDialogView {
 
         updateGyroVisibility(mOriginalGyroEnabled);
         updateGestureVisibility(mOriginalGestureDisabled);
-    }
-
-    private static void setSeekTextMillisecond(TextView target, int value) {
-        setSeekText(target, R.string.millisecond_format, value);
-    }
-
-    private static void setSeekTextPercent(TextView target, int value) {
-        setSeekText(target, R.string.percent_format, value);
-    }
-
-    private static void setSeekText(TextView target, int format, int value) {
-        target.setText(target.getContext().getString(format, value));
     }
 
     private void updateGyroVisibility(boolean isEnabled) {
@@ -232,10 +233,12 @@ public abstract class QuickSettingSideDialog extends com.kdt.SideDialogView {
         });
     }
 
-    /** Resets all settings to their original values */
+    /**
+     * Resets all settings to their original values
+     */
     public void cancel() {
         // Reset all settings if we were editing
-        if(isDisplaying()) {
+        if (isDisplaying()) {
             PREF_ENABLE_GYRO = mOriginalGyroEnabled;
             PREF_GYRO_INVERT_X = mOriginalGyroXEnabled;
             PREF_GYRO_INVERT_Y = mOriginalGyroYEnabled;
@@ -255,10 +258,13 @@ public abstract class QuickSettingSideDialog extends com.kdt.SideDialogView {
         disappear(true);
     }
 
-    /** Called when the resolution is changed. Use {@link LauncherPreferences#PREF_SCALE_FACTOR} */
+    /**
+     * Called when the resolution is changed. Use {@link LauncherPreferences#PREF_SCALE_FACTOR}
+     */
     public abstract void onResolutionChanged();
 
-    /** Called when the gyro state is changed.
+    /**
+     * Called when the gyro state is changed.
      * Use {@link LauncherPreferences#PREF_ENABLE_GYRO}
      * Use {@link LauncherPreferences#PREF_GYRO_INVERT_X}
      * Use {@link LauncherPreferences#PREF_GYRO_INVERT_Y}

@@ -9,17 +9,19 @@ import android.widget.ExpandableListView;
 import androidx.appcompat.app.AlertDialog;
 
 import net.kdt.pojavlaunch.JVersionList;
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
+
+import git.artdeell.mojo.R;
 
 public class VersionSelectorDialog {
     public static void open(Context context, boolean hideCustomVersions, VersionSelectorListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         ExpandableListView expandableListView = (ExpandableListView) LayoutInflater.from(context)
-                .inflate(R.layout.dialog_expendable_list_view , null);
+                .inflate(R.layout.dialog_expendable_list_view, null);
         JVersionList jVersionList = (JVersionList) getValue(ExtraConstants.RELEASE_TABLE);
         JVersionList.Version[] versionArray;
-        if(jVersionList == null || jVersionList.versions == null) versionArray = new JVersionList.Version[0];
+        if (jVersionList == null || jVersionList.versions == null)
+            versionArray = new JVersionList.Version[0];
         else versionArray = jVersionList.versions;
         VersionListAdapter adapter = new VersionListAdapter(versionArray, hideCustomVersions, context);
 

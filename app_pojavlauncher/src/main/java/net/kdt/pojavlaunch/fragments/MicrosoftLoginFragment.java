@@ -4,6 +4,7 @@ import net.kdt.pojavlaunch.extra.ExtraConstants;
 
 public class MicrosoftLoginFragment extends OAuthFragment {
     public static final String TAG = "MICROSOFT_LOGIN_FRAGMENT";
+
     public MicrosoftLoginFragment() {
         super("ms-xal-00000000402b5328",
                 "https://login.live.com/oauth20_authorize.srf" +

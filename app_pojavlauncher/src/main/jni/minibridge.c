@@ -9,14 +9,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-static JavaVM* dalivk;
+static JavaVM *dalivk;
 static jclass class_CallbackBridge;
 static jmethodID method_openLink;
 
 
-void openLink(const char* link) {
+void openLink(const char *link) {
     JNIEnv *attachedEnv = get_attached_env(dalivk);
-    (*attachedEnv)->CallStaticVoidMethod(attachedEnv, class_CallbackBridge, method_openLink, (*attachedEnv)->NewStringUTF(attachedEnv, link));
+    (*attachedEnv)->CallStaticVoidMethod(attachedEnv, class_CallbackBridge, method_openLink,
+                                         (*attachedEnv)->NewStringUTF(attachedEnv, link));
 }
 
 JNIEXPORT void JNICALL

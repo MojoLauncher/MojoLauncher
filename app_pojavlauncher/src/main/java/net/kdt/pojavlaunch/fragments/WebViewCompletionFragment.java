@@ -34,7 +34,7 @@ public abstract class WebViewCompletionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mWebview = (WebView) inflater.inflate(R.layout.fragment_microsoft_login, container, false);
         setWebViewSettings();
-        if(savedInstanceState == null) startNewSession();
+        if (savedInstanceState == null) startNewSession();
         else restoreWebViewState(savedInstanceState);
         return mWebview;
     }
@@ -51,7 +51,7 @@ public abstract class WebViewCompletionFragment extends Fragment {
     }
 
     private void startNewSession() {
-        CookieManager.getInstance().removeAllCookies((b)->{
+        CookieManager.getInstance().removeAllCookies((b) -> {
             mWebview.clearHistory();
             mWebview.clearCache(true);
             mWebview.clearFormData();
@@ -61,8 +61,8 @@ public abstract class WebViewCompletionFragment extends Fragment {
     }
 
     private void restoreWebViewState(Bundle savedInstanceState) {
-        Log.i("MSAuthFragment","Restoring state...");
-        if(mWebview.restoreState(savedInstanceState) == null) {
+        Log.i("MSAuthFragment", "Restoring state...");
+        if (mWebview.restoreState(savedInstanceState) == null) {
             Log.w("MSAuthFragment", "Failed to restore state, starting afresh");
             // if, for some reason, we failed to restore our session,
             // just start afresh
@@ -75,7 +75,7 @@ public abstract class WebViewCompletionFragment extends Fragment {
         super.onStart();
         // If we have switched to a blank client and haven't fully gone though the lifecycle callbacks to restore it,
         // restore it here.
-        if(mBlankClient) mWebview.setWebViewClient(new WebViewTrackClient());
+        if (mBlankClient) mWebview.setWebViewClient(new WebViewTrackClient());
     }
 
     @Override
@@ -92,15 +92,30 @@ public abstract class WebViewCompletionFragment extends Fragment {
     }
 
     /* Expose webview actions to others */
-    public boolean canGoBack(){ return mWebview.canGoBack();}
-    public void goBack(){ mWebview.goBack();}
+    public boolean canGoBack() {
+        return mWebview.canGoBack();
+    }
 
-    /** Client to track when to sent the data to the launcher */
+    public void goBack() {
+        mWebview.goBack();
+    }
+
+    private void internalSignalCompletion(String fullUrl) {
+        if (mIsCompleted) return;
+        mIsCompleted = true;
+        signalCompletion(fullUrl);
+    }
+
+    protected abstract void signalCompletion(String fullUrl);
+
+    /**
+     * Client to track when to sent the data to the launcher
+     */
     class WebViewTrackClient extends WebViewClient {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            if(url.startsWith(mTrackedUrl)) {
+            if (url.startsWith(mTrackedUrl)) {
                 internalSignalCompletion(url);
                 return true;
             }
@@ -109,21 +124,14 @@ public abstract class WebViewCompletionFragment extends Fragment {
         }
 
         @Override
-        public void onPageStarted(WebView view, String url, Bitmap favicon) {}
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+        }
 
         @Override
         public void onPageFinished(WebView view, String url) {
-            if(url.startsWith(mTrackedUrl)) {
+            if (url.startsWith(mTrackedUrl)) {
                 internalSignalCompletion(url);
             }
         }
     }
-
-    private void internalSignalCompletion(String fullUrl) {
-        if(mIsCompleted) return;
-        mIsCompleted = true;
-        signalCompletion(fullUrl);
-    }
-
-    protected abstract void signalCompletion(String fullUrl);
 }

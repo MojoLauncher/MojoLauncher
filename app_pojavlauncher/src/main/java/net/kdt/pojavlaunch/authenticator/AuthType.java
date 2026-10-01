@@ -25,10 +25,10 @@ public enum AuthType {
     @SerializedName("local")
     LOCAL(null, 0, null, null);
 
-    private final BackgroundLogin.Creator mCreator;
     public final int iconResource;
     public final String injectorUrl;
     public final String skinUrl;
+    private final BackgroundLogin.Creator mCreator;
 
     AuthType(BackgroundLogin.Creator creator, int iconResource, String injectorUrl, String skinUrl) {
         this.mCreator = creator;
@@ -42,7 +42,7 @@ public enum AuthType {
     }
 
     public BackgroundLogin createAuth() {
-        if(mCreator == null) throw new RuntimeException("This account does not support login");
+        if (mCreator == null) throw new RuntimeException("This account does not support login");
         return mCreator.create();
     }
 }

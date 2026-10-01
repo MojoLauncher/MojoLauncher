@@ -8,10 +8,11 @@ import java.util.Arrays;
 public class ModDetail extends ModItem {
     /* A cheap way to map from the front facing name to the underlying id */
     public String[] versionNames;
-    public String [] mcVersionNames;
+    public String[] mcVersionNames;
     public String[] versionUrls;
     /* SHA 1 hashes, null if a hash is unavailable */
     public String[] versionHashes;
+
     public ModDetail(ModItem item, String[] versionNames, String[] mcVersionNames, String[] versionUrls, String[] hashes) {
         super(item.apiSource, item.isModpack, item.id, item.title, item.description, item.imageUrl);
         this.versionNames = versionNames;
@@ -20,7 +21,7 @@ public class ModDetail extends ModItem {
         this.versionHashes = hashes;
 
         // Add the mc version to the version model
-        for (int i=0; i<versionNames.length; i++){
+        for (int i = 0; i < versionNames.length; i++) {
             if (!versionNames[i].contains(mcVersionNames[i]))
                 versionNames[i] += " - " + mcVersionNames[i];
         }

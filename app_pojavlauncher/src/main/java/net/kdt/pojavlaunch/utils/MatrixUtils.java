@@ -10,7 +10,8 @@ public class MatrixUtils {
     /**
      * Transform the coordinates of the RectF using the supplied Matrix, and write the result back into
      * the RectF
-     * @param inOutRect the RectF for this operation
+     *
+     * @param inOutRect       the RectF for this operation
      * @param transformMatrix the Matrix for transforming the Rect.
      */
     public static void transformRect(Rect inOutRect, Matrix transformMatrix) {
@@ -20,7 +21,8 @@ public class MatrixUtils {
     /**
      * Transform the coordinates of the RectF using the supplied Matrix, and write the result back into
      * the RectF
-     * @param inOutRect the RectF for this operation
+     *
+     * @param inOutRect       the RectF for this operation
      * @param transformMatrix the Matrix for transforming the Rect.
      */
     public static void transformRect(RectF inOutRect, Matrix transformMatrix) {
@@ -30,13 +32,14 @@ public class MatrixUtils {
     /**
      * Transform the coordinates of the input RectF using the supplied Matrix, and write the result
      * into the output Rect
-     * @param inRect the input RectF for this operation
-     * @param outRect the output Rect for this operation
+     *
+     * @param inRect          the input RectF for this operation
+     * @param outRect         the output Rect for this operation
      * @param transformMatrix the Matrix for transforming the Rect.
      */
     public static void transformRect(RectF inRect, Rect outRect, Matrix transformMatrix) {
         float[] inOutDecodeRect = createInOutDecodeRect(transformMatrix);
-        if(inOutDecodeRect == null) return;
+        if (inOutDecodeRect == null) return;
         writeInputRect(inOutDecodeRect, inRect);
         transformPoints(inOutDecodeRect, transformMatrix);
         readOutputRect(inOutDecodeRect, outRect);
@@ -45,13 +48,14 @@ public class MatrixUtils {
     /**
      * Transform the coordinates of the input Rect using the supplied Matrix, and write the result
      * into the output RectF
-     * @param inRect the input Rect for this operation
-     * @param outRect the output RectF for this operation
+     *
+     * @param inRect          the input Rect for this operation
+     * @param outRect         the output RectF for this operation
      * @param transformMatrix the Matrix for transforming the Rect.
      */
     public static void transformRect(Rect inRect, RectF outRect, Matrix transformMatrix) {
         float[] inOutDecodeRect = createInOutDecodeRect(transformMatrix);
-        if(inOutDecodeRect == null) return;
+        if (inOutDecodeRect == null) return;
         writeInputRect(inOutDecodeRect, inRect);
         transformPoints(inOutDecodeRect, transformMatrix);
         readOutputRect(inOutDecodeRect, outRect);
@@ -60,13 +64,14 @@ public class MatrixUtils {
     /**
      * Transform the coordinates of the input Rect using the supplied Matrix, and write the result
      * into the output Rect
-     * @param inRect the input Rect for this operation
-     * @param outRect the output Rect for this operation
+     *
+     * @param inRect          the input Rect for this operation
+     * @param outRect         the output Rect for this operation
      * @param transformMatrix the Matrix for transforming the Rect.
      */
     public static void transformRect(Rect inRect, Rect outRect, Matrix transformMatrix) {
         float[] inOutDecodeRect = createInOutDecodeRect(transformMatrix);
-        if(inOutDecodeRect == null) return;
+        if (inOutDecodeRect == null) return;
         writeInputRect(inOutDecodeRect, inRect);
         transformPoints(inOutDecodeRect, transformMatrix);
         readOutputRect(inOutDecodeRect, outRect);
@@ -75,13 +80,14 @@ public class MatrixUtils {
     /**
      * Transform the coordinates of the input RectF using the supplied Matrix, and write the result
      * into the output RectF
-     * @param inRect the input RectF for this operation
-     * @param outRect the output RectF for this operation
+     *
+     * @param inRect          the input RectF for this operation
+     * @param outRect         the output RectF for this operation
      * @param transformMatrix the Matrix for transforming the Rect.
      */
     public static void transformRect(RectF inRect, RectF outRect, Matrix transformMatrix) {
         float[] inOutDecodeRect = createInOutDecodeRect(transformMatrix);
-        if(inOutDecodeRect == null) return;
+        if (inOutDecodeRect == null) return;
         writeInputRect(inOutDecodeRect, inRect);
         transformPoints(inOutDecodeRect, transformMatrix);
         readOutputRect(inOutDecodeRect, outRect);
@@ -111,14 +117,14 @@ public class MatrixUtils {
     }
 
     private static void readOutputRect(float[] inOutDecodeRect, Rect outRect) {
-        outRect.left = (int)inOutDecodeRect[4];
-        outRect.top = (int)inOutDecodeRect[5];
-        outRect.right = (int)inOutDecodeRect[6];
-        outRect.bottom = (int)inOutDecodeRect[7];
+        outRect.left = (int) inOutDecodeRect[4];
+        outRect.top = (int) inOutDecodeRect[5];
+        outRect.right = (int) inOutDecodeRect[6];
+        outRect.bottom = (int) inOutDecodeRect[7];
     }
 
     private static float[] createInOutDecodeRect(Matrix transformMatrix) {
-        if(transformMatrix.isIdentity()) return null;
+        if (transformMatrix.isIdentity()) return null;
         // We need an array of 8 floats because each point is two floats,
         // we need to transform two points and we need to have a separated input and output
         return new float[8];
@@ -132,12 +138,13 @@ public class MatrixUtils {
      * Invert the source matrix, and write the result into the destination matrix.
      * Android's integrated Matrix.invert() has some unexpected conditions when the matrix
      * can't be inverted, and in that case the method inverts the matrix by hand.
-     * @param source Source matrix
+     *
+     * @param source      Source matrix
      * @param destination The inverse of the source matrix
      * @throws IllegalArgumentException when the matrix is not invertible
      */
     public static void inverse(Matrix source, Matrix destination) throws IllegalArgumentException {
-        if(source.invert(destination)) return;
+        if (source.invert(destination)) return;
         float[] matrix = new float[9];
         source.getValues(matrix);
         inverseMatrix(matrix);

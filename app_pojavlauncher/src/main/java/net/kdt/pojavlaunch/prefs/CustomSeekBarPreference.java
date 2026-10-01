@@ -17,14 +17,22 @@ import git.artdeell.mojo.R;
 
 public class CustomSeekBarPreference extends SeekBarPreference {
 
-    /** The suffix displayed */
-    private String mSuffix = "";
-    /** Custom minimum value to provide the same behavior as the usual setMin */
-    private int mMin;
-    /** The textview associated by default to the preference */
-    private TextView mTextView;
-    /** Seekbar increment in case the max gets set */
+    /**
+     * Seekbar increment in case the max gets set
+     */
     private final int mIncrement;
+    /**
+     * The suffix displayed
+     */
+    private String mSuffix = "";
+    /**
+     * Custom minimum value to provide the same behavior as the usual setMin
+     */
+    private int mMin;
+    /**
+     * The textview associated by default to the preference
+     */
+    private TextView mTextView;
 
 
     @SuppressLint("PrivateResource")
@@ -45,7 +53,8 @@ public class CustomSeekBarPreference extends SeekBarPreference {
         this(context, attrs, R.attr.seekBarPreferenceStyle);
     }
 
-    @SuppressWarnings("unused") public CustomSeekBarPreference(Context context) {
+    @SuppressWarnings("unused")
+    public CustomSeekBarPreference(Context context) {
         this(context, null);
     }
 
@@ -81,7 +90,8 @@ public class CustomSeekBarPreference extends SeekBarPreference {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
@@ -101,6 +111,7 @@ public class CustomSeekBarPreference extends SeekBarPreference {
 
     /**
      * Set a suffix to be appended on the TextView associated to the value
+     *
      * @param suffix The suffix to append as a String
      */
     public void setSuffix(String suffix) {
@@ -109,10 +120,11 @@ public class CustomSeekBarPreference extends SeekBarPreference {
 
     /**
      * Convenience function to set both min and max at the same time.
+     *
      * @param min The minimum value
      * @param max The maximum value
      */
-    public void setRange(int min, int max){
+    public void setRange(int min, int max) {
         setMin(min);
         setMaxKeepIncrement(max);
     }
@@ -123,8 +135,8 @@ public class CustomSeekBarPreference extends SeekBarPreference {
     }
 
 
-    private void updateTextViewWithSuffix(){
-        if(!mTextView.getText().toString().endsWith(mSuffix)){
+    private void updateTextViewWithSuffix() {
+        if (!mTextView.getText().toString().endsWith(mSuffix)) {
             mTextView.setText(String.format("%s%s", mTextView.getText(), mSuffix));
         }
     }

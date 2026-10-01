@@ -16,7 +16,7 @@ public class ReadFromDiskTask implements Runnable {
     ReadFromDiskTask(ModIconCache iconCache, ImageReceiver imageReceiver, String cacheTag, String imageUrl) {
         this.iconCache = iconCache;
         this.imageReceiver = imageReceiver;
-        this.cacheFile = new File(iconCache.cachePath, cacheTag+".ca");
+        this.cacheFile = new File(iconCache.cachePath, cacheTag + ".ca");
         this.imageUrl = imageUrl;
     }
 
@@ -26,15 +26,15 @@ public class ReadFromDiskTask implements Runnable {
 
     @Override
     public void run() {
-        if(cacheFile.isDirectory()) {
+        if (cacheFile.isDirectory()) {
             return;
         }
-        if(cacheFile.canRead()) {
+        if (cacheFile.canRead()) {
             IconCacheJanitor.waitForJanitorToFinish();
             Bitmap bitmap = BitmapFactory.decodeFile(cacheFile.getAbsolutePath());
-            if(bitmap != null) {
-                Tools.runOnUiThread(()->{
-                    if(taskCancelled()) {
+            if (bitmap != null) {
+                Tools.runOnUiThread(() -> {
+                    if (taskCancelled()) {
                         bitmap.recycle(); // do not leak the bitmap if the task got cancelled right at the end
                         return;
                     }
@@ -43,11 +43,12 @@ public class ReadFromDiskTask implements Runnable {
                 return;
             }
         }
-        if(iconCache.cachePath.canWrite() &&
+        if (iconCache.cachePath.canWrite() &&
                 !taskCancelled()) { // don't run the download task if the task got canceled
             runDownloadTask();
         }
     }
+
     @SuppressWarnings("BooleanMethodAlwaysInverted")
     public boolean taskCancelled() {
         return iconCache.checkCancelled(imageReceiver);

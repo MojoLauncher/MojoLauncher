@@ -19,12 +19,12 @@ public class ForgelikeVersionListAdapter extends BaseExpandableListAdapter imple
         this.mLayoutInflater = layoutInflater;
         mGameVersions = new ArrayList<>();
         mLoaderVersions = new ArrayList<>();
-        for(String version : forgeVersions) {
-            if(utils.shouldSkipVersion(version)) continue;
+        for (String version : forgeVersions) {
+            if (utils.shouldSkipVersion(version)) continue;
             String gameVersion = utils.processVersionString(version);
             List<String> versionList;
             int gameVersionIndex = mGameVersions.indexOf(gameVersion);
-            if(gameVersionIndex != -1) {
+            if (gameVersionIndex != -1) {
                 versionList = mLoaderVersions.get(gameVersionIndex);
             } else {
                 versionList = new ArrayList<>();
@@ -33,12 +33,20 @@ public class ForgelikeVersionListAdapter extends BaseExpandableListAdapter imple
             }
             versionList.add(version);
         }
-        if(utils.isVersionOrderInversed()) {
+        if (utils.isVersionOrderInversed()) {
             for (List<String> versionList : mLoaderVersions) {
                 reverseList(versionList);
             }
             reverseList(mLoaderVersions);
             reverseList(mGameVersions);
+        }
+    }
+
+    private static <T> void reverseList(List<T> list) {
+        for (int i = 0, j = list.size() - 1; i < j; i++, j--) {
+            T temp = list.get(i);
+            list.set(i, list.get(j));
+            list.set(j, temp);
         }
     }
 
@@ -79,7 +87,7 @@ public class ForgelikeVersionListAdapter extends BaseExpandableListAdapter imple
 
     @Override
     public View getGroupView(int i, boolean b, View convertView, ViewGroup viewGroup) {
-        if(convertView == null)
+        if (convertView == null)
             convertView = mLayoutInflater.inflate(android.R.layout.simple_expandable_list_item_1, viewGroup, false);
 
         ((TextView) convertView).setText(getGameVersion(i));
@@ -89,7 +97,7 @@ public class ForgelikeVersionListAdapter extends BaseExpandableListAdapter imple
 
     @Override
     public View getChildView(int i, int i1, boolean b, View convertView, ViewGroup viewGroup) {
-        if(convertView == null)
+        if (convertView == null)
             convertView = mLayoutInflater.inflate(android.R.layout.simple_expandable_list_item_1, viewGroup, false);
         ((TextView) convertView).setText(getForgeVersion(i, i1));
         return convertView;
@@ -99,20 +107,12 @@ public class ForgelikeVersionListAdapter extends BaseExpandableListAdapter imple
         return mGameVersions.get(i);
     }
 
-    private String getForgeVersion(int i, int i1){
+    private String getForgeVersion(int i, int i1) {
         return mLoaderVersions.get(i).get(i1);
     }
 
     @Override
     public boolean isChildSelectable(int i, int i1) {
         return true;
-    }
-
-    private static <T> void reverseList(List<T> list) {
-        for (int i = 0, j = list.size() - 1; i < j; i++, j--) {
-            T temp = list.get(i);
-            list.set(i, list.get(j));
-            list.set(j, temp);
-        }
     }
 }

@@ -4,22 +4,20 @@ import static net.kdt.pojavlaunch.CallbackBridge.windowHeight;
 import static net.kdt.pojavlaunch.CallbackBridge.windowWidth;
 
 import android.content.Context;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import net.kdt.pojavlaunch.CallbackBridge;
-
 public class SurfaceViewSurfaceProvider implements SurfaceProvider {
     private SurfaceView mSurfaceView;
+
     @Override
     public View create(Context context, SurfaceCallback callback) {
         mSurfaceView = new SurfaceView(context);
         mSurfaceView.getHolder().addCallback(new CallbackAdapter(callback));
-        if(windowWidth != 0 && windowHeight != 0)
+        if (windowWidth != 0 && windowHeight != 0)
             mSurfaceView.getHolder().setFixedSize(windowWidth, windowHeight);
         return mSurfaceView;
     }

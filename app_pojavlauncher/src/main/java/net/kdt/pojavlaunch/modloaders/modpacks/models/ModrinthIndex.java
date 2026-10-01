@@ -23,6 +23,18 @@ public class ModrinthIndex {
     public ModrinthIndexFile[] files;
     public Map<String, String> dependencies;
 
+    @NonNull
+    @Override
+    public String toString() {
+        return "ModrinthIndex{" +
+                "formatVersion=" + formatVersion +
+                ", game='" + game + '\'' +
+                ", versionId='" + versionId + '\'' +
+                ", name='" + name + '\'' +
+                ", summary='" + summary + '\'' +
+                ", files=" + Arrays.toString(files) +
+                '}';
+    }
 
     public static class ModrinthIndexFile {
         public String path;
@@ -31,7 +43,8 @@ public class ModrinthIndex {
 
         public ModrinthIndexFileHashes hashes;
 
-        @Nullable public ModrinthIndexFileEnv env;
+        @Nullable
+        public ModrinthIndexFileEnv env;
 
         @NonNull
         @Override
@@ -71,19 +84,6 @@ public class ModrinthIndex {
                         '}';
             }
         }
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "ModrinthIndex{" +
-                "formatVersion=" + formatVersion +
-                ", game='" + game + '\'' +
-                ", versionId='" + versionId + '\'' +
-                ", name='" + name + '\'' +
-                ", summary='" + summary + '\'' +
-                ", files=" + Arrays.toString(files) +
-                '}';
     }
 
 }

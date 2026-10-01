@@ -8,15 +8,18 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.instances.Instance;
-import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.instances.InstanceIconProvider;
+import net.kdt.pojavlaunch.instances.Instances;
+
 import java.io.IOException;
+
+import git.artdeell.mojo.R;
 
 
 public class DeleteConfirmDialogFragment extends DialogFragment {
+    public static String TAG = "delete_dialog_confirm";
     private final Instance mInstance = Instances.loadSelectedInstance();
 
     @NonNull
@@ -39,5 +42,4 @@ public class DeleteConfirmDialogFragment extends DialogFragment {
                 .setNegativeButton(R.string.global_no, null)
                 .create();
     }
-    public static String TAG = "delete_dialog_confirm";
 }

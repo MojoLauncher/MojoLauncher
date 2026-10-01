@@ -18,15 +18,6 @@ public class DependentLibrary {
     public Map<String, String> natives;
     public ExtractSettings extract;
 
-    @Keep
-	public static class LibraryDownloads {
-		public LibraryArtifact artifact;
-        public LibraryClassifierMap classifiers;
-		public LibraryDownloads(LibraryArtifact artifact) {
-			this.artifact = artifact;
-		}
-	}
-
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof DependentLibrary)) return false;
@@ -39,6 +30,17 @@ public class DependentLibrary {
         return Objects.hashCode(name);
     }
 
-    public static class LibraryClassifierMap extends HashMap<String, LibraryArtifact> {}
+    @Keep
+    public static class LibraryDownloads {
+        public LibraryArtifact artifact;
+        public LibraryClassifierMap classifiers;
+
+        public LibraryDownloads(LibraryArtifact artifact) {
+            this.artifact = artifact;
+        }
+    }
+
+    public static class LibraryClassifierMap extends HashMap<String, LibraryArtifact> {
+    }
 }
 

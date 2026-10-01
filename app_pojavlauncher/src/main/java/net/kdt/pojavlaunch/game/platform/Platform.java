@@ -8,15 +8,14 @@ import android.view.InputDevice;
 import android.view.Surface;
 import android.view.View;
 
-import net.kdt.pojavlaunch.awt.AWTBridge;
-import net.kdt.pojavlaunch.game.GameView;
-import net.kdt.pojavlaunch.game.GameActivity;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.awt.AWTBridge;
 import net.kdt.pojavlaunch.customcontrols.gamepad.DefaultDataProvider;
 import net.kdt.pojavlaunch.customcontrols.gamepad.Gamepad;
+import net.kdt.pojavlaunch.game.GameActivity;
+import net.kdt.pojavlaunch.game.GameView;
 import net.kdt.pojavlaunch.game.platform.backend.AWTBackend;
 import net.kdt.pojavlaunch.game.platform.backend.DummyBackend;
-import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.game.platform.backend.GLFWBackend;
 import net.kdt.pojavlaunch.game.platform.backend.PlatformBackend;
 import net.kdt.pojavlaunch.game.platform.backend.SDLBackend;
@@ -28,6 +27,7 @@ import net.kdt.pojavlaunch.game.platform.input.PlatformGrabListener;
 import net.kdt.pojavlaunch.game.platform.input.gamepad.GLFWGamepad;
 import net.kdt.pojavlaunch.game.platform.input.gamepad.GenericGamepad;
 import net.kdt.pojavlaunch.game.platform.input.gamepad.SDLGamepad;
+import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +44,10 @@ import git.mojo.sdl.SDLControllerManager;
 public class Platform {
     // Always reset cursor on grab lost - makes it move to the center as should if the game didn't move it
     private static final boolean RESET_CURSOR_UNGRAB = true;
+    private static final List<PlatformGrabListener> grabListeners = new ArrayList<>();
     public static PlatformBackend PLATFORM = new DummyBackend();
     public static double cursorX;
     public static double cursorY;
-    private static final List<PlatformGrabListener> grabListeners = new ArrayList<>();
     private static PlatformCursorImplementor mCursorImplementor = null;
     private static boolean isGrabbing = false;
     private static Surface mPendingSurface;
@@ -61,7 +61,7 @@ public class Platform {
      * Initialize Platform, set platform implementations' init callbacks and fire early initializers
      *
      * @param activity an activity to bind to
-     * @param view a host view used for input handling
+     * @param view     a host view used for input handling
      */
     public static void initialize(Activity activity, GameView view) {
         Platform.mHostView = view;
@@ -131,6 +131,12 @@ public class Platform {
         return mPlatformGamepad;
     }
 
+    private static void setPlatformGamepad(PlatformGamepad gamepad) {
+        if (mPlatformGamepad != null)
+            mPlatformGamepad.onDestroy();
+        mPlatformGamepad = gamepad;
+    }
+
     /**
      * Get Platform custom cursor
      *
@@ -170,20 +176,14 @@ public class Platform {
         mCursorImplementor = implementor;
     }
 
-    private static void setPlatformGamepad(PlatformGamepad gamepad){
-        if(mPlatformGamepad != null)
-            mPlatformGamepad.onDestroy();
-        mPlatformGamepad = gamepad;
-    }
-
     /**
      * Create a generic gamepad implementation
      *
-     * @param device Input device to accept events from
+     * @param device       Input device to accept events from
      * @param touchpadView A view representing on-screen "trackpad"
      */
-    public static void createGenericGamepad(InputDevice device, View touchpadView){
-        if(mHostView == null || mInputManager == null) return; // Running in minimal mode
+    public static void createGenericGamepad(InputDevice device, View touchpadView) {
+        if (mHostView == null || mInputManager == null) return; // Running in minimal mode
         Gamepad gamepad = new Gamepad(device, DefaultDataProvider.INSTANCE, touchpadView);
         setPlatformGamepad(new GenericGamepad(mHostView.getContext(), mInputManager, gamepad));
     }
@@ -224,7 +224,7 @@ public class Platform {
      *
      */
     public static void sendCursorPosition() {
-        if(mCursorImplementor != null) mCursorImplementor.onCursorPosition();
+        if (mCursorImplementor != null) mCursorImplementor.onCursorPosition();
         if (!isGrabbing) clampCursorPosition();
         PLATFORM.sendMousePosition(Math.floor(Platform.cursorX), Math.floor(Platform.cursorY), isGrabbing);
     }
@@ -263,7 +263,7 @@ public class Platform {
      * @param backend implementation backend
      */
     public static void setPlatformLibrary(PlatformBackend backend) {
-        if(PLATFORM != null) PLATFORM.surfaceDestroyed();
+        if (PLATFORM != null) PLATFORM.surfaceDestroyed();
         PLATFORM = backend;
         // To be picked by platform library
         if (mPendingSurface != null)
@@ -272,13 +272,14 @@ public class Platform {
 
     /**
      * Get Platform clipboard
+     *
      * @return clipboard object
      */
     public static AndroidClipboard getClipboard() {
         return mClipboard;
     }
 
-    private static RemapperManager createRemapperManager(View view){
+    private static RemapperManager createRemapperManager(View view) {
         return new RemapperManager(view.getContext(), new RemapperView.Builder(null)
                 .remapA(true)
                 .remapB(true)

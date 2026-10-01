@@ -30,6 +30,91 @@ public class LayoutBitmaps {
         mBitmaps = new HashMap<>();
     }
 
+    public static LayoutBitmaps createEmpty() {
+        return new LayoutBitmaps();
+    }
+
+    private static ControlsContainer createEmpty(String controlsJson) {
+        return new ControlsContainer(controlsJson, new LayoutBitmaps());
+    }
+
+    private static ControlsContainer loadFromZip(ZipInputStream zipIn) throws IOException {
+        LayoutBitmaps layoutBitmaps = new LayoutBitmaps();
+        String layoutContent = null;
+        for (ZipEntry entry = zipIn.getNextEntry(); entry != null; entry = zipIn.getNextEntry()) {
+            if (entry.isDirectory()) continue;
+            String entryName = entry.getName();
+            if (entryName.equals("layout.json")) {
+                layoutContent = IOUtils.toString(zipIn, StandardCharsets.UTF_8);
+                continue;
+            }
+            layoutBitmaps.mBitmaps.put(entryName, BitmapFactory.decodeStream(zipIn));
+            zipIn.closeEntry();
+        }
+        if (layoutContent == null) throw new ZipException("Incorrect ZIP file structure");
+        return new ControlsContainer(layoutContent, layoutBitmaps);
+    }
+
+    private static ControlsContainer load(FileInputStream fileInputStream, long fileSize) throws IOException {
+        try (BufferedInputStream bufferedIn = new BufferedInputStream(fileInputStream)) {
+            boolean isZip;
+            bufferedIn.mark(4096);
+            try {
+                ZipInputStream zipIn = new ZipInputStream(bufferedIn);
+                isZip = zipIn.getNextEntry() != null;
+            } catch (ZipException | EOFException e) {
+                isZip = false;
+            } catch (IOException e) {
+                throw e;
+            } catch (Exception e) {
+                isZip = false;
+            }
+            bufferedIn.reset();
+            if (isZip) {
+                try (ZipInputStream zipIn = new ZipInputStream(bufferedIn)) {
+                    return loadFromZip(zipIn);
+                }
+            } else {
+                long meg = 1024L * 1024L;
+                if (fileSize > (25L * meg))
+                    throw new IOException("Raw JSON control data size too large");
+                return createEmpty(IOUtils.toString(bufferedIn, StandardCharsets.UTF_8));
+            }
+        }
+    }
+
+    private static void storeZip(FileOutputStream fileOutputStream, ControlsContainer controlsContainer) throws IOException {
+        LayoutBitmaps bitmaps = controlsContainer.mLayoutZip;
+        try (ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream)) {
+            zipOutputStream.putNextEntry(new ZipEntry("layout.json"));
+            IOUtils.write(controlsContainer.mControlsJson, zipOutputStream, StandardCharsets.UTF_8);
+            zipOutputStream.closeEntry();
+            for (Map.Entry<String, Bitmap> bitmapEntry : bitmaps.mBitmaps.entrySet()) {
+                Bitmap outBitmap = bitmapEntry.getValue();
+                if (outBitmap == null) continue;
+                zipOutputStream.putNextEntry(new ZipEntry(bitmapEntry.getKey()));
+                outBitmap.compress(Bitmap.CompressFormat.WEBP, 100, zipOutputStream);
+                zipOutputStream.closeEntry();
+            }
+        }
+    }
+
+    public static void store(FileOutputStream fileOutputStream, ControlsContainer controlsContainer) throws IOException {
+        LayoutBitmaps bitmaps = controlsContainer.mLayoutZip;
+        String controlsContent = controlsContainer.mControlsJson;
+        if (bitmaps.mBitmaps.isEmpty()) {
+            IOUtils.write(controlsContent, fileOutputStream, StandardCharsets.UTF_8);
+            return;
+        }
+        storeZip(fileOutputStream, controlsContainer);
+    }
+
+    public static @NonNull ControlsContainer load(File jsonLocation) throws IOException {
+        try (FileInputStream fileInputStream = new FileInputStream(jsonLocation)) {
+            return load(fileInputStream, jsonLocation.length());
+        }
+    }
+
     private String pickKey() {
         String key;
         do {
@@ -45,92 +130,8 @@ public class LayoutBitmaps {
     public String putBitmap(Bitmap bitmap, String oldKey) {
         String newKey = pickKey();
         mBitmaps.remove(oldKey);
-        if(bitmap != null) mBitmaps.put(newKey, bitmap);
+        if (bitmap != null) mBitmaps.put(newKey, bitmap);
         return newKey;
-    }
-
-    public static LayoutBitmaps createEmpty() {
-        return new LayoutBitmaps();
-    }
-
-    private static ControlsContainer createEmpty(String controlsJson) {
-        return new ControlsContainer(controlsJson, new LayoutBitmaps());
-    }
-
-    private static ControlsContainer loadFromZip(ZipInputStream zipIn) throws IOException {
-        LayoutBitmaps layoutBitmaps = new LayoutBitmaps();
-        String layoutContent = null;
-        for(ZipEntry entry = zipIn.getNextEntry(); entry != null; entry = zipIn.getNextEntry()) {
-            if(entry.isDirectory()) continue;
-            String entryName = entry.getName();
-            if(entryName.equals("layout.json")) {
-                layoutContent = IOUtils.toString(zipIn, StandardCharsets.UTF_8);
-                continue;
-            }
-            layoutBitmaps.mBitmaps.put(entryName, BitmapFactory.decodeStream(zipIn));
-            zipIn.closeEntry();
-        }
-        if(layoutContent == null) throw new ZipException("Incorrect ZIP file structure");
-        return new ControlsContainer(layoutContent, layoutBitmaps);
-    }
-
-    private static ControlsContainer load(FileInputStream fileInputStream, long fileSize) throws IOException{
-        try(BufferedInputStream bufferedIn = new BufferedInputStream(fileInputStream)) {
-            boolean isZip;
-            bufferedIn.mark(4096);
-            try {
-                ZipInputStream zipIn = new ZipInputStream(bufferedIn);
-                isZip = zipIn.getNextEntry() != null;
-            } catch (ZipException | EOFException e) {
-                isZip = false;
-            } catch (IOException e) {
-                throw e;
-            } catch (Exception e) {
-                isZip = false;
-            }
-            bufferedIn.reset();
-            if(isZip) {
-                try(ZipInputStream zipIn = new ZipInputStream(bufferedIn)) {
-                    return loadFromZip(zipIn);
-                }
-            } else {
-                long meg = 1024L * 1024L;
-                if(fileSize > (25L * meg)) throw new IOException("Raw JSON control data size too large");
-                return createEmpty(IOUtils.toString(bufferedIn, StandardCharsets.UTF_8));
-            }
-        }
-    }
-
-    private static void storeZip(FileOutputStream fileOutputStream, ControlsContainer controlsContainer) throws IOException {
-        LayoutBitmaps bitmaps = controlsContainer.mLayoutZip;
-        try(ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream)) {
-            zipOutputStream.putNextEntry(new ZipEntry("layout.json"));
-            IOUtils.write(controlsContainer.mControlsJson, zipOutputStream, StandardCharsets.UTF_8);
-            zipOutputStream.closeEntry();
-            for(Map.Entry<String, Bitmap> bitmapEntry : bitmaps.mBitmaps.entrySet()) {
-                Bitmap outBitmap = bitmapEntry.getValue();
-                if(outBitmap == null) continue;
-                zipOutputStream.putNextEntry(new ZipEntry(bitmapEntry.getKey()));
-                outBitmap.compress(Bitmap.CompressFormat.WEBP, 100, zipOutputStream);
-                zipOutputStream.closeEntry();
-            }
-        }
-    }
-
-    public static void store(FileOutputStream fileOutputStream, ControlsContainer controlsContainer) throws IOException {
-        LayoutBitmaps bitmaps = controlsContainer.mLayoutZip;
-        String controlsContent = controlsContainer.mControlsJson;
-        if(bitmaps.mBitmaps.isEmpty()) {
-            IOUtils.write(controlsContent, fileOutputStream, StandardCharsets.UTF_8);
-            return;
-        }
-        storeZip(fileOutputStream, controlsContainer);
-    }
-
-    public static @NonNull ControlsContainer load(File jsonLocation) throws IOException {
-        try (FileInputStream fileInputStream = new FileInputStream(jsonLocation)) {
-            return load(fileInputStream, jsonLocation.length());
-        }
     }
 
     public static final class ControlsContainer {

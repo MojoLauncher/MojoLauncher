@@ -11,6 +11,7 @@ public interface ContextExecutorTask extends ActivityRunnable {
     /**
      * ContextExecutor will execute this function if a foreground Activity is not available, but the app
      * is still running.
+     *
      * @param context the application context
      */
     void executeWithApplication(Context context);

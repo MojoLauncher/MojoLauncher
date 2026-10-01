@@ -7,11 +7,13 @@
 #include <errno.h>
 
 #define TAG __FILE_NAME__
+
 #include <log.h>
 
 // Hooks for chmod and fchmod that always return success.
 // This allows older Android versions to work with Java NIO zipfs inside of the Pojav folder.
-typedef int (*chmod_func)(const char*, mode_t);
+typedef int (*chmod_func)(const char *, mode_t);
+
 typedef int (*fchmod_func)(int, mode_t);
 
 #define TEMPLATE_HOOK(X, Y, Z, W) static int X(Y, mode_t mode) { \
@@ -21,7 +23,9 @@ typedef int (*fchmod_func)(int, mode_t);
     return 0; \
 } \
 
-TEMPLATE_HOOK(custom_chmod, const char* filename, chmod_func, filename)
+
+TEMPLATE_HOOK(custom_chmod, const char *filename, chmod_func, filename)
+
 TEMPLATE_HOOK(custom_fchmod, int fd, fchmod_func, fd)
 
 #undef TEMPLATE_HOOK

@@ -5,27 +5,26 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.SwitchPreference;
 import androidx.preference.SwitchPreferenceCompat;
 
-import git.artdeell.mojo.R;
-
-import net.kdt.pojavlaunch.Architecture;
 import net.kdt.pojavlaunch.game.renderer.RendererCache;
 import net.kdt.pojavlaunch.game.renderer.extra.GLESProvider;
-import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.CustomSeekBarPreference;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
-import net.kdt.pojavlaunch.game.renderer.GameRenderer;
 import net.kdt.pojavlaunch.utils.GpuUtils;
+
+import git.artdeell.mojo.R;
 
 /**
  * Fragment for any settings video related
  */
 public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment {
     private Boolean hasAngle = null;
+
     @Override
     public void onCreatePreferences(Bundle b, String str) {
         addPreferencesFromResource(R.xml.pref_video);
@@ -57,7 +56,7 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         driverPreference.setVisible(supportsTurnip);
 
         // Show ANGLE switch only if AnglePlugin is available
-        if(hasAngle == null) {
+        if (hasAngle == null) {
             GLESProvider provider = GLESProvider.getGlesProvider(getContext(), true);
             hasAngle = provider instanceof GLESProvider.ExternalAngleProvider || provider instanceof GLESProvider.SystemAngleProvider;
         }
@@ -78,7 +77,7 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
     public void onResume() {
         super.onResume();
         Activity activity = getActivity();
-        if(activity != null) {
+        if (activity != null) {
             requirePreference("ignoreNotch").setVisible(LauncherPreferences.hasNotch(activity));
         }
     }
@@ -89,7 +88,7 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         computeVisibility();
     }
 
-    private void computeVisibility(){
+    private void computeVisibility() {
         requirePreference("force_vsync", SwitchPreferenceCompat.class)
                 .setVisible(LauncherPreferences.PREF_USE_ALTERNATE_SURFACE);
     }

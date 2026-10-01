@@ -23,9 +23,8 @@ import net.kdt.pojavlaunch.customcontrols.ControlData;
 import net.kdt.pojavlaunch.customcontrols.ControlLayout;
 import net.kdt.pojavlaunch.customcontrols.LayoutBitmaps;
 import net.kdt.pojavlaunch.customcontrols.handleview.EditControlSideDialog;
-import net.kdt.pojavlaunch.game.platform.input.PlatformGrabListener;
 import net.kdt.pojavlaunch.game.platform.Platform;
-
+import net.kdt.pojavlaunch.game.platform.input.PlatformGrabListener;
 
 
 /**
@@ -34,8 +33,17 @@ import net.kdt.pojavlaunch.game.platform.Platform;
  * sending keys has to be implemented by sub classes.
  */
 public interface ControlInterface extends View.OnLongClickListener, PlatformGrabListener {
+    static float getSnapDistance() {
+        return Tools.dpToPx(6);
+    }
+
+    static float getMarginDistance() {
+        return Tools.dpToPx(2);
+    }
+
     /**
      * Get this ControlInterface implementation as a View.
+     *
      * @return this
      */
     View getControlView();
@@ -59,11 +67,12 @@ public interface ControlInterface extends View.OnLongClickListener, PlatformGrab
     void cloneButton();
 
     default void setVisible(boolean isVisible) {
-        if(getProperties().isHideable)
+        if (getProperties().isHideable)
             getControlView().setVisibility(isVisible ? VISIBLE : GONE);
     }
 
     void handlePressed();
+
     void handleReleased();
 
     /**
@@ -73,7 +82,8 @@ public interface ControlInterface extends View.OnLongClickListener, PlatformGrab
 
     @Override
     default void onGrabState(boolean isGrabbing) {
-        if (getControlLayoutParent() == null || getControlLayoutParent().getModifiable()) return; // Disable when edited
+        if (getControlLayoutParent() == null || getControlLayoutParent().getModifiable())
+            return; // Disable when edited
         setVisible(((getProperties().displayInGame && isGrabbing) || (getProperties().displayInMenu && !isGrabbing))
                 && getControlLayoutParent().areControlVisible());
     }
@@ -103,7 +113,7 @@ public interface ControlInterface extends View.OnLongClickListener, PlatformGrab
     /* This function should be overridden to store the properties */
     @CallSuper
     default void setProperties(ControlData properties, boolean changePos) {
-        if(changePos && !getControlView().isInLayout()) {
+        if (changePos && !getControlView().isInLayout()) {
             getControlView().requestLayout();
         }
     }
@@ -114,19 +124,19 @@ public interface ControlInterface extends View.OnLongClickListener, PlatformGrab
     default void setBackground() {
         Drawable drawable = getControlView().getBackground();
         String bitmapTag = getProperties().bitmapTag;
-        if(Tools.isValidString(bitmapTag)) {
+        if (Tools.isValidString(bitmapTag)) {
             LayoutBitmaps storage = getControlLayoutParent().getBitmaps();
             Bitmap bgBitmap = storage.getBitmap(getProperties().bitmapTag);
-            if(drawable instanceof BitmapDrawable && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                ((BitmapDrawable)drawable).setBitmap(bgBitmap);
-            }else {
+            if (drawable instanceof BitmapDrawable && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                ((BitmapDrawable) drawable).setBitmap(bgBitmap);
+            } else {
                 drawable = new BitmapDrawable(getControlView().getResources(), bgBitmap);
             }
-        }else {
+        } else {
             GradientDrawable gd = drawable instanceof GradientDrawable ?
                     (GradientDrawable) drawable : new GradientDrawable();
             gd.setColor(getProperties().bgColor);
-            gd.setStroke((int) Tools.dpToPx(getProperties().strokeWidth * (getControlLayoutParent().getLayoutScale()/100f)), getProperties().strokeColor);
+            gd.setStroke((int) Tools.dpToPx(getProperties().strokeWidth * (getControlLayoutParent().getLayoutScale() / 100f)), getProperties().strokeColor);
             gd.setCornerRadius(computeCornerRadius(getProperties().cornerRadius));
             drawable = gd;
         }
@@ -208,7 +218,6 @@ public interface ControlInterface extends View.OnLongClickListener, PlatformGrab
                 .replace("${height}", "(px(" + Tools.pxToDp(button.getProperties().getHeight()) + ") /" + PREF_BUTTONSIZE + " * ${preferred_scale})")
                 .replace("${width}", "(px(" + Tools.pxToDp(button.getProperties().getWidth()) + ") / " + PREF_BUTTONSIZE + " * ${preferred_scale})");
     }
-
 
     /**
      * Convert a corner radius percentage into a px corner radius
@@ -332,7 +341,8 @@ public interface ControlInterface extends View.OnLongClickListener, PlatformGrab
             }
 
             @Override
-            public void onViewDetachedFromWindow(@NonNull View v) {}
+            public void onViewDetachedFromWindow(@NonNull View v) {
+            }
         });
 
 
@@ -379,7 +389,7 @@ public interface ControlInterface extends View.OnLongClickListener, PlatformGrab
                         );
                         break;
                     case MotionEvent.ACTION_UP:
-                        if(mCanTriggerLongClick) onLongClick(view);
+                        if (mCanTriggerLongClick) onLongClick(view);
                         // Internally, setX and setY just set the view translation.
                         // Reset before layout to apply the layout pos correctly.
                         view.setTranslationX(0);
@@ -403,13 +413,5 @@ public interface ControlInterface extends View.OnLongClickListener, PlatformGrab
         }
 
         return true;
-    }
-
-    static float getSnapDistance() {
-        return Tools.dpToPx(6);
-    }
-
-    static float getMarginDistance() {
-        return Tools.dpToPx(2);
     }
 }

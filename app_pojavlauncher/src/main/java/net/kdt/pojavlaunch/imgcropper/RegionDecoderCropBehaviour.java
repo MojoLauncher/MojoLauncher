@@ -17,21 +17,21 @@ import net.kdt.pojavlaunch.utils.MatrixUtils;
 import java.util.concurrent.Future;
 
 public class RegionDecoderCropBehaviour extends BitmapCropBehaviour {
-    private BitmapRegionDecoder mBitmapDecoder;
-    private Bitmap mOverlayBitmap;
     private final RectF mOverlayDst = new RectF(0, 0, 0, 0);
-    private boolean mRequiresOverlayBitmap;
     private final Matrix mDecoderPrescaleMatrix = new Matrix();
     private final Handler mHiresLoadHandler = new Handler(Looper.getMainLooper());
+    private BitmapRegionDecoder mBitmapDecoder;
+    private Bitmap mOverlayBitmap;
+    private boolean mRequiresOverlayBitmap;
     private Future<?> mDecodeFuture;
-    private final Runnable mHiresLoadRunnable = ()->{
-        RectF subsectionRect = new RectF(0,0, mHostView.getWidth(), mHostView.getHeight());
+    private final Runnable mHiresLoadRunnable = () -> {
+        RectF subsectionRect = new RectF(0, 0, mHostView.getWidth(), mHostView.getHeight());
         RectF overlayDst = new RectF();
         discardDecodeFuture();
         mDecodeFuture = new SelfReferencingFuture(myFuture -> {
             Bitmap overlayBitmap = decodeRegionBitmap(overlayDst, subsectionRect);
-            mHiresLoadHandler.post(()->{
-                if(myFuture.isCancelled()) return;
+            mHiresLoadHandler.post(() -> {
+                if (myFuture.isCancelled()) return;
                 mOverlayBitmap = overlayBitmap;
                 mOverlayDst.set(overlayDst);
                 mHostView.invalidate();
@@ -39,17 +39,22 @@ public class RegionDecoderCropBehaviour extends BitmapCropBehaviour {
         }).startOnExecutor(PojavApplication.sExecutorService);
     };
 
+    public RegionDecoderCropBehaviour(CropperView hostView) {
+        super(hostView);
+    }
+
     /**
      * Decode a region from this Bitmap based on a subsection in the View coordinate space.
+     *
      * @param targetDrawRect an output Rect. This Rect is the position at which the region must
      *                       be rendered within subsectionRect.
      * @param subsectionRect the subsection in View coordinate space. Note that this Rect is modified
      *                       by this function and shouldn't be re-used.
      * @return null if the resulting region is bigger than the original image
-     *         null if the resulting region is completely out of the original image bounds
-     *         null if the resulting region is smaller than 16x16 pixels
-     *         null if a region decoding error has occurred
-     *         the resulting Bitmap region otherwise.
+     * null if the resulting region is completely out of the original image bounds
+     * null if the resulting region is smaller than 16x16 pixels
+     * null if a region decoding error has occurred
+     * the resulting Bitmap region otherwise.
      */
     private Bitmap decodeRegionBitmap(RectF targetDrawRect, RectF subsectionRect) {
         RectF decoderRect = new RectF(0, 0, mBitmapDecoder.getWidth(), mBitmapDecoder.getHeight());
@@ -59,14 +64,14 @@ public class RegionDecoderCropBehaviour extends BitmapCropBehaviour {
         MatrixUtils.transformRect(subsectionRect, inverse);
         // If our current sub-section is bigger than the decoder rect, skip.
         // We do this to avoid unnecessarily loading the image at full resolution.
-        if(subsectionRect.width() > decoderRect.width()
+        if (subsectionRect.width() > decoderRect.width()
                 || subsectionRect.height() > decoderRect.height()) return null;
         // If our current sub-section doesn't even intersect the decoder rect, we won't even
         // be able to create an overlay. So, skip.
-        if(!subsectionRect.setIntersect(decoderRect, subsectionRect)) return null;
+        if (!subsectionRect.setIntersect(decoderRect, subsectionRect)) return null;
         // In my testing, decoding a region smaller than that breaks the current region decoder instance.
         // So, if it is smaller, skip.
-        if(subsectionRect.width() < 16 || subsectionRect.height() < 16) return null;
+        if (subsectionRect.width() < 16 || subsectionRect.height() < 16) return null;
         // We can't really create a floating-point subsection from a bitmap, so convert the intersected
         // rectangle that we want to get from the decoder into an integer Rect.
         Rect bitmapRegionRect = new Rect(
@@ -81,14 +86,10 @@ public class RegionDecoderCropBehaviour extends BitmapCropBehaviour {
     }
 
     private void discardDecodeFuture() {
-        if(mDecodeFuture != null) {
+        if (mDecodeFuture != null) {
             // Putting false here as I don't know how BitmapRegionDecoder will behave when interrupted
             mDecodeFuture.cancel(false);
         }
-    }
-
-    public RegionDecoderCropBehaviour(CropperView hostView) {
-        super(hostView);
     }
 
     public void setRegionDecoder(BitmapRegionDecoder bitmapRegionDecoder) {
@@ -97,7 +98,7 @@ public class RegionDecoderCropBehaviour extends BitmapCropBehaviour {
 
     @Override
     public int getLargestImageSide() {
-        if(mBitmapDecoder == null) return 0;
+        if (mBitmapDecoder == null) return 0;
         return Math.max(mBitmapDecoder.getWidth(), mBitmapDecoder.getHeight());
     }
 
@@ -112,13 +113,13 @@ public class RegionDecoderCropBehaviour extends BitmapCropBehaviour {
 
     @Override
     protected void refresh() {
-        if(mOverlayBitmap != null) {
+        if (mOverlayBitmap != null) {
             mOverlayBitmap.recycle();
             mOverlayBitmap = null;
         }
         mHiresLoadHandler.removeCallbacks(mHiresLoadRunnable);
         discardDecodeFuture();
-        if(mRequiresOverlayBitmap) {
+        if (mRequiresOverlayBitmap) {
             mHiresLoadHandler.postDelayed(mHiresLoadRunnable, 200);
         }
         super.refresh();
@@ -143,20 +144,20 @@ public class RegionDecoderCropBehaviour extends BitmapCropBehaviour {
      * BitmapCropBehaviour will base its prescale matrix off of this Bitmap.
      */
     private void createScaledSourceBitmap() {
-        if(mBitmapDecoder == null) return;
+        if (mBitmapDecoder == null) return;
         int width = mHostView.getWidth();
         int height = mHostView.getHeight();
         int imageWidth = mBitmapDecoder.getWidth();
         int imageHeight = mBitmapDecoder.getHeight();
-        float hRatio =  (float)width / imageWidth ;
-        float vRatio =  (float)height / imageHeight;
+        float hRatio = (float) width / imageWidth;
+        float vRatio = (float) height / imageHeight;
         float ratio = Math.max(hRatio, vRatio);
         BitmapFactory.Options options = new BitmapFactory.Options();
-        if(ratio < 1 && ratio != 0) {
+        if (ratio < 1 && ratio != 0) {
             ratio = 1 / ratio;
-            options.inSampleSize = (int)Math.floor(ratio);
+            options.inSampleSize = (int) Math.floor(ratio);
             mRequiresOverlayBitmap = true;
-        }else {
+        } else {
             mRequiresOverlayBitmap = false;
         }
         mOriginalBitmap = mBitmapDecoder.decodeRegion(
@@ -193,7 +194,7 @@ public class RegionDecoderCropBehaviour extends BitmapCropBehaviour {
         Rect hostSelection = mHostView.mSelectionRect;
         RectF drawRect = new RectF();
         Bitmap regionBitmap = decodeRegionBitmap(drawRect, new RectF(hostSelection));
-        if(regionBitmap == null) {
+        if (regionBitmap == null) {
             // If we can't decode a hi-res region, just crop out of the low-res preview. Yes, this will in fact
             // cause the image to be low res, but we can't really avoid that in this case.
             return super.crop(targetMaxSide);

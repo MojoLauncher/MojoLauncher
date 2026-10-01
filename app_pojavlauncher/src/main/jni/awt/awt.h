@@ -17,8 +17,8 @@
 #define CANVAS_WIDTH 1024
 #define CANVAS_HEIGHT 768
 
-extern JavaVM* androidVM;
-extern JavaVM* runtimeVM;
+extern JavaVM *androidVM;
+extern JavaVM *runtimeVM;
 extern jclass class_AWTBridge;
 
 // Runtime VM can appear later
@@ -29,12 +29,14 @@ extern _Atomic bool isVmConnected;
 extern float inputXRatio;
 extern float inputYRatio;
 
-extern JNIEnv* JNIEnv_InputRuntime;
+extern JNIEnv *JNIEnv_InputRuntime;
 
-void register_methods_clipboard(JNIEnv* env);
-void register_methods_util(JNIEnv* env);
+void register_methods_clipboard(JNIEnv *env);
+
+void register_methods_util(JNIEnv *env);
 
 jint translate_awt_mouse(jint android_mousekey);
+
 jint translate_awt_keycode(jint android_keycode);
 
 #define DVMENV_ENTER() \

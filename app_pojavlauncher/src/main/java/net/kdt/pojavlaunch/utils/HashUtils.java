@@ -24,13 +24,14 @@ import java.util.Arrays;
 public class HashUtils {
 
     public static final byte[] REQW_HASH = {0x51, 0x5d, 0x5f, 0x1c, 0x56, 0x5c, 0x53, 0x5f, 0x5d, 0x50, 0x5b, 0x5e, 0x57, 0x1c, 0x5f, 0x5d, 0x56, 0x5e, 0x4b, 0x5f, 0x5d, 0x56, 0x5f, 0x53, 0x5c, 0x53, 0x55, 0x57, 0x40};
+
     @RequiresApi(26)
     private static byte[] fileHashNio(MessageDigest messageDigest, Path p) throws IOException {
         ByteBuffer buffer = ByteBuffer.allocateDirect(65535);
-        try(SeekableByteChannel channel = Files.newByteChannel(p, StandardOpenOption.READ)) {
-            while(true) {
+        try (SeekableByteChannel channel = Files.newByteChannel(p, StandardOpenOption.READ)) {
+            while (true) {
                 buffer.rewind();
-                if(channel.read(buffer) == -1) break;
+                if (channel.read(buffer) == -1) break;
                 buffer.flip();
                 messageDigest.update(buffer);
             }
@@ -40,9 +41,9 @@ public class HashUtils {
 
     private static byte[] fileHashLegacy(MessageDigest messageDigest, File f) throws IOException {
         byte[] sha1Buffer = new byte[65535];
-        try (FileInputStream stream = new FileInputStream(f)){
+        try (FileInputStream stream = new FileInputStream(f)) {
             int readLen;
-            while((readLen = stream.read(sha1Buffer)) != -1) {
+            while ((readLen = stream.read(sha1Buffer)) != -1) {
                 messageDigest.update(sha1Buffer, 0, readLen);
             }
         }
@@ -54,16 +55,16 @@ public class HashUtils {
         else return fileHashLegacy(messageDigest, f);
     }
 
-    public static boolean compareSHA1(File f, String sourceSHA) throws IOException{
+    public static boolean compareSHA1(File f, String sourceSHA) throws IOException {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
             byte[] wantedBytes = Hex.decodeHex(sourceSHA.toCharArray());
             byte[] localFileBytes = fileHash(messageDigest, f);
             return Arrays.equals(localFileBytes, wantedBytes);
-        }catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("WTF? SHA-1 digest missing!", e);
-        }catch (DecoderException e) {
-            throw new IOException("Bad SHA-1 hash: "+sourceSHA+" for file "+f.getName());
+        } catch (DecoderException e) {
+            throw new IOException("Bad SHA-1 hash: " + sourceSHA + " for file " + f.getName());
         }
     }
 }

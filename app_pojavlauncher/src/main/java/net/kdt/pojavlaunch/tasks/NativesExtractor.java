@@ -22,20 +22,21 @@ public class NativesExtractor {
 
     public NativesExtractor(File mDestinationDir) {
         this.mDestinationDir = mDestinationDir;
-        this.mLibraryLocation = "jni/"+getAarArchitectureName()+"/";
+        this.mLibraryLocation = "jni/" + getAarArchitectureName() + "/";
     }
 
     /**
      * Create a library blacklist so that downloaded natives are not able to
      * override built-in libraries.
+     *
      * @return the resulting blacklist of library file names
      */
     private static ArrayList<String> createLibraryBlacklist() {
         String[] includedLibraryNames = new File(Tools.NATIVE_LIB_DIR).list();
         ArrayList<String> blacklist = new ArrayList<>(includedLibraryNames.length);
-        for(String libraryName : includedLibraryNames) {
+        for (String libraryName : includedLibraryNames) {
             // allow overriding jnidispatch (as the integrated version may be too old)
-            if(libraryName.equals("libjnidispatch.so")) continue;
+            if (libraryName.equals("libjnidispatch.so")) continue;
             blacklist.add(libraryName);
         }
         blacklist.trimToSize();
@@ -54,7 +55,18 @@ public class NativesExtractor {
             case Architecture.ARCH_X86_64:
                 return "x86_64";
         }
-        throw new RuntimeException("Unknown CPU architecture: "+architecture);
+        throw new RuntimeException("Unknown CPU architecture: " + architecture);
+    }
+
+    private static long fileCrc32(File target, byte[] buffer) throws IOException {
+        try (FileInputStream fileInputStream = new FileInputStream(target)) {
+            CRC32 crc32 = new CRC32();
+            int len;
+            while ((len = fileInputStream.read(buffer)) != -1) {
+                crc32.update(buffer, 0, len);
+            }
+            return crc32.getValue();
+        }
     }
 
     private void extract(File source, ExtractFilter extractFilter) throws IOException {
@@ -65,13 +77,13 @@ public class NativesExtractor {
             // avoid it being closed by processEntry()
             NonCloseableInputStream entryCopyStream = new NonCloseableInputStream(zipInputStream);
             ZipEntry entry;
-            while((entry = zipInputStream.getNextEntry()) != null) {
+            while ((entry = zipInputStream.getNextEntry()) != null) {
                 String entryName = entry.getName();
-                if(!extractFilter.shouldExtract(entryName) || entry.isDirectory()) continue;
+                if (!extractFilter.shouldExtract(entryName) || entry.isDirectory()) continue;
                 // Entry name is actually the full path, so we need to strip the path before extraction
                 entryName = FileUtils.getFileName(entryName);
                 // getFileName may make the file name null, avoid that case.
-                if(entryName == null || LIBRARY_BLACKLIST.contains(entryName)) continue;
+                if (entryName == null || LIBRARY_BLACKLIST.contains(entryName)) continue;
 
                 processEntry(entryCopyStream, entry, new File(mDestinationDir, entryName), buffer);
             }
@@ -79,38 +91,27 @@ public class NativesExtractor {
     }
 
     public void extractFromAar(File source) throws IOException {
-        extract(source, name->name.startsWith(mLibraryLocation));
+        extract(source, name -> name.startsWith(mLibraryLocation));
     }
 
     public void extractMoJson(File source, ExtractSettings settings) throws IOException {
-        extract(source, name->{
-            if(settings.exclude == null) return true;
-            for(String exclude : settings.exclude) {
-                if(name.startsWith(exclude)) return false;
+        extract(source, name -> {
+            if (settings.exclude == null) return true;
+            for (String exclude : settings.exclude) {
+                if (name.startsWith(exclude)) return false;
             }
             return true;
         });
     }
 
-    private static long fileCrc32(File target, byte[] buffer) throws IOException {
-        try(FileInputStream fileInputStream = new FileInputStream(target)) {
-            CRC32 crc32 = new CRC32();
-            int len;
-            while((len = fileInputStream.read(buffer)) != -1) {
-                crc32.update(buffer, 0, len);
-            }
-            return crc32.getValue();
-        }
-    }
-
     private void processEntry(InputStream sourceStream, ZipEntry zipEntry, File entryDestination, byte[] buffer) throws IOException {
-        if(entryDestination.exists()) {
+        if (entryDestination.exists()) {
             long expectedSize = zipEntry.getSize();
             long expectedCrc32 = zipEntry.getCrc();
             long realSize = entryDestination.length();
             long realCrc32 = fileCrc32(entryDestination, buffer);
             // File in archive is the same as the local one, don't extract
-            if(realSize == expectedSize && realCrc32 == expectedCrc32) return;
+            if (realSize == expectedSize && realCrc32 == expectedCrc32) return;
         }
         // copyInputStreamToFile copies the stream to a file and then closes it.
         org.apache.commons.io.FileUtils.copyInputStreamToFile(sourceStream, entryDestination);

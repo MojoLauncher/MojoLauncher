@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 public class SelfMapsParser {
     private final Callback mCallback;
+
     public SelfMapsParser(Callback callback) {
         mCallback = callback;
     }
@@ -13,8 +14,8 @@ public class SelfMapsParser {
     public void run() throws IOException, NumberFormatException {
         try (FileInputStream fileInputStream = new FileInputStream("/proc/self/maps")) {
             Scanner scanner = new Scanner(fileInputStream);
-            while(scanner.hasNextLine()) {
-                if(!forEachLine(scanner.nextLine())) break;
+            while (scanner.hasNextLine()) {
+                if (!forEachLine(scanner.nextLine())) break;
             }
         }
     }
@@ -23,7 +24,7 @@ public class SelfMapsParser {
         int firstSpaceIndex = line.indexOf(' ');
         String addresses = line.substring(0, firstSpaceIndex);
         String[] addressArray = addresses.split("-");
-        if(addressArray.length < 2) return true;
+        if (addressArray.length < 2) return true;
         long begin = Long.parseLong(addressArray[0], 16);
         long end = Long.parseLong(addressArray[1], 16);
         return mCallback.process(begin, end, line);

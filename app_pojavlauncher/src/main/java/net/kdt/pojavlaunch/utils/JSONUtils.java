@@ -8,7 +8,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 public class JSONUtils {
     public static List<String> insertJSONValueList(List<String> args, Map<String, String> keyValueMap) {
@@ -17,7 +18,7 @@ public class JSONUtils {
         }
         return args;
     }
-    
+
     public static String insertSingleJSONValue(String value, Map<String, String> keyValueMap) {
         String valueInserted = value;
         for (Map.Entry<String, String> keyValue : keyValueMap.entrySet()) {
@@ -27,19 +28,19 @@ public class JSONUtils {
     }
 
     public static <T> T readFromStream(InputStream file, Class<T> clazs) throws IOException {
-        try(InputStreamReader streamReader = new InputStreamReader(file)) {
+        try (InputStreamReader streamReader = new InputStreamReader(file)) {
             return Tools.GLOBAL_GSON.fromJson(streamReader, clazs);
         }
     }
 
     public static void writeToFile(File file, Object target) throws IOException {
-        try(FileWriter fileWriter = new FileWriter(file)) {
+        try (FileWriter fileWriter = new FileWriter(file)) {
             Tools.GLOBAL_GSON.toJson(target, fileWriter);
         }
     }
 
     public static <T> T readFromFile(File file, Class<T> clazs) throws IOException {
-        try(FileReader fileReader = new FileReader(file)) {
+        try (FileReader fileReader = new FileReader(file)) {
             return Tools.GLOBAL_GSON.fromJson(fileReader, clazs);
         }
     }

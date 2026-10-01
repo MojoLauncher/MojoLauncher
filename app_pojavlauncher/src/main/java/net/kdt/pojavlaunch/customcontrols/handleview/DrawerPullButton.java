@@ -13,13 +13,19 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import git.artdeell.mojo.R;
 
 public class DrawerPullButton extends View {
-    public DrawerPullButton(Context context) {super(context); init();}
-    public DrawerPullButton(Context context, @Nullable AttributeSet attrs) {super(context, attrs); init();}
-
     private final Paint mBackgroundPaint = new Paint();
     private VectorDrawableCompat mDrawable;
 
-    private void init(){
+    public DrawerPullButton(Context context) {
+        super(context);
+        init();
+    }
+    public DrawerPullButton(Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    private void init() {
         mDrawable = VectorDrawableCompat.create(getContext().getResources(), R.drawable.ic_sharp_settings_24, null);
         setAlpha(0.33f);
         mBackgroundPaint.setColor(Color.BLACK);
@@ -27,11 +33,11 @@ public class DrawerPullButton extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawArc(getPaddingLeft(),-getHeight() + getPaddingBottom(),getWidth() - getPaddingRight(), getHeight() - getPaddingBottom(), 0, 180, true, mBackgroundPaint);
+        canvas.drawArc(getPaddingLeft(), -getHeight() + getPaddingBottom(), getWidth() - getPaddingRight(), getHeight() - getPaddingBottom(), 0, 180, true, mBackgroundPaint);
 
-        mDrawable.setBounds(getPaddingLeft()/2, getPaddingTop()/2, getHeight() - getPaddingRight()/2, getHeight() - getPaddingBottom()/2);
+        mDrawable.setBounds(getPaddingLeft() / 2, getPaddingTop() / 2, getHeight() - getPaddingRight() / 2, getHeight() - getPaddingBottom() / 2);
         canvas.save();
-        canvas.translate((getWidth()-getHeight())/2f, -getPaddingBottom()/2f);
+        canvas.translate((getWidth() - getHeight()) / 2f, -getPaddingBottom() / 2f);
         mDrawable.draw(canvas);
         canvas.restore();
     }
@@ -41,6 +47,6 @@ public class DrawerPullButton extends View {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         int parentWidth = ((View) getParent()).getWidth();
-        setTranslationX((int)(parentWidth * 0.25));
+        setTranslationX((int) (parentWidth * 0.25));
     }
 }

@@ -29,7 +29,7 @@ public class SelfReferencingFuture {
                 if (mMyFuture == null) mFutureLock.wait();
             }
             mFutureInterface.run(mMyFuture);
-        }catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             Log.i("SelfReferencingFuture", "Interrupted while acquiring own Future");
         }
     }

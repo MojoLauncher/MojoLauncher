@@ -10,7 +10,7 @@ public class ControlJoystickData extends ControlData {
      */
     public boolean absolute = false;
 
-    public ControlJoystickData(){
+    public ControlJoystickData() {
         super();
     }
 

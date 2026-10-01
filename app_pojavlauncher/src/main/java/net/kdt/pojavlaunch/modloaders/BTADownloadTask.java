@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.kdt.mcgui.ProgressLayout;
 
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.instances.Instances;
@@ -16,6 +15,8 @@ import net.kdt.pojavlaunch.utils.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+
+import git.artdeell.mojo.R;
 
 public class BTADownloadTask implements Runnable {
     private static final String BASE_JSON = "{\"inheritsFrom\":\"b1.7.3\",\"mainClass\":\"net.minecraft.client.Minecraft\",\"libraries\":[{\"name\":\"bta-client:bta-client:%1$s\",\"downloads\":{\"artifact\":{\"path\":\"bta-client/bta-client-%1$s.jar\",\"url\":\"%2$s\"}}}],\"id\":\"%3$s\"}";
@@ -31,9 +32,9 @@ public class BTADownloadTask implements Runnable {
     public void run() {
         ProgressKeeper.submitProgress(ProgressLayout.INSTALL_MODPACK, 0, R.string.fabric_dl_progress, "BTA");
         try {
-            runCatching() ;
+            runCatching();
             mListener.onDownloadFinished(null);
-        }catch (IOException e) {
+        } catch (IOException e) {
             mListener.onDownloadError(e);
         }
         ProgressLayout.clearProgress(ProgressLayout.INSTALL_MODPACK);
@@ -43,7 +44,7 @@ public class BTADownloadTask implements Runnable {
         try {
             Bitmap iconBitmap = BitmapFactory.decodeStream(new URL(mBtaVersion.iconUrl).openStream());
             targetInstance.encodeNewIcon(iconBitmap);
-        }catch (IOException e) {
+        } catch (IOException e) {
             Log.w("BTADownloadTask", "Failed to download bta icon", e);
         }
     }
@@ -51,7 +52,7 @@ public class BTADownloadTask implements Runnable {
     private void createJson(String btaVersionId) throws IOException {
         String btaJson = String.format(BASE_JSON, mBtaVersion.versionName, mBtaVersion.downloadUrl, btaVersionId);
         File jsonDir = new File(Tools.DIR_HOME_VERSION, btaVersionId);
-        File jsonFile = new File(jsonDir, btaVersionId+".json");
+        File jsonFile = new File(jsonDir, btaVersionId + ".json");
         FileUtils.ensureDirectory(jsonDir);
         Tools.write(jsonFile, btaJson);
     }
@@ -59,9 +60,9 @@ public class BTADownloadTask implements Runnable {
     // BTA doesn't have SHA1 checksums in its repositories, so the user may try to reinstall it
     // if it didn't work due to a broken download. So, for reinstalls like that to work,
     // we need to delete the old client jar to force the download of a new one.
-    private void removeOldClient() throws IOException{
+    private void removeOldClient() throws IOException {
         File btaClientPath = new File(Tools.DIR_HOME_LIBRARY, String.format("bta-client/bta-client-%1$s.jar", mBtaVersion.versionName));
-        if(btaClientPath.exists() && !btaClientPath.delete())
+        if (btaClientPath.exists() && !btaClientPath.delete())
             throw new IOException("Failed to delete old client jar");
     }
 
@@ -69,13 +70,13 @@ public class BTADownloadTask implements Runnable {
         Instance instance = Instances.createInstance(i -> {
             i.versionId = btaVersionId;
             i.name = "Better than Adventure!";
-        }, "BTA-"+btaVersionId);
+        }, "BTA-" + btaVersionId);
         tryDownloadIcon(instance);
     }
 
     public void runCatching() throws IOException {
         removeOldClient();
-        String btaVersionId = "bta-"+mBtaVersion.versionName;
+        String btaVersionId = "bta-" + mBtaVersion.versionName;
         createJson(btaVersionId);
         createProfile(btaVersionId);
     }

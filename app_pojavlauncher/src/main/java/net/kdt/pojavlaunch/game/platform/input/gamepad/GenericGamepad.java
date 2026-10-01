@@ -17,11 +17,13 @@ public class GenericGamepad implements PlatformGamepad {
     private final Context mContext;
     private final RemapperManager mRemapperManager;
     private final GamepadHandler mGamepadHandler;
-    public GenericGamepad(Context context, RemapperManager remapperManager, GamepadHandler gamepadHandler){
+
+    public GenericGamepad(Context context, RemapperManager remapperManager, GamepadHandler gamepadHandler) {
         this.mRemapperManager = remapperManager;
         this.mGamepadHandler = gamepadHandler;
         this.mContext = context;
     }
+
     @Override
     public void sendKeyEvent(KeyEvent event) {
         mRemapperManager.handleKeyEventInput(mContext, event, mGamepadHandler);

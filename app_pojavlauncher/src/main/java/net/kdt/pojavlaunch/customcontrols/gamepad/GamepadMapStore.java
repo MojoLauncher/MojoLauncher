@@ -15,6 +15,7 @@ public class GamepadMapStore {
     private static GamepadMapStore sMapStore;
     private GamepadMap mInMenuMap;
     private GamepadMap mInGameMap;
+
     private static GamepadMapStore createDefault() {
         GamepadMapStore mapStore = new GamepadMapStore();
         mapStore.mInGameMap = GamepadMap.getDefaultGameMap();
@@ -23,13 +24,13 @@ public class GamepadMapStore {
     }
 
     private static void loadIfNecessary() {
-        if(sMapStore == null) return;
+        if (sMapStore == null) return;
         load();
     }
 
     public static void load() {
         GamepadMapStore mapStore = null;
-        if(STORE_FILE.exists() && STORE_FILE.canRead()) {
+        if (STORE_FILE.exists() && STORE_FILE.canRead()) {
             try {
                 String storeFileContent = Tools.read(STORE_FILE);
                 mapStore = Tools.GLOBAL_GSON.fromJson(storeFileContent, GamepadMapStore.class);
@@ -37,12 +38,12 @@ public class GamepadMapStore {
                 Log.w("GamepadMapStore", "Map store failed to load!", e);
             }
         }
-        if(mapStore == null) mapStore = createDefault();
+        if (mapStore == null) mapStore = createDefault();
         sMapStore = mapStore;
     }
 
     public static void save() throws IOException {
-        if(sMapStore == null) throw new RuntimeException("Must load map store first!");
+        if (sMapStore == null) throw new RuntimeException("Must load map store first!");
         FileUtils.ensureParentDirectory(STORE_FILE);
         String jsonData = Tools.GLOBAL_GSON.toJson(sMapStore);
         Tools.write(STORE_FILE, jsonData);

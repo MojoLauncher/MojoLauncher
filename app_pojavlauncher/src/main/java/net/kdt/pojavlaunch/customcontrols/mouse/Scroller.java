@@ -4,8 +4,8 @@ import net.kdt.pojavlaunch.CallbackBridge;
 
 public class Scroller {
 
-    private float mScrollOvershootH, mScrollOvershootV;
     private final float mScrollThreshold;
+    private float mScrollOvershootH, mScrollOvershootV;
 
     public Scroller(float mScrollThreshold) {
         this.mScrollThreshold = mScrollThreshold;
@@ -13,6 +13,7 @@ public class Scroller {
 
     /**
      * Perform a scrolling gesture.
+     *
      * @param dx the X coordinate of the primary pointer's vector
      * @param dy the Y coordinate of the primary pointer's vector
      */
@@ -20,13 +21,14 @@ public class Scroller {
         float hScroll = (dx / mScrollThreshold) + mScrollOvershootH;
         float vScroll = (dy / mScrollThreshold) + mScrollOvershootV;
         int hScrollRound = (int) hScroll, vScrollRound = (int) vScroll;
-        if(hScrollRound != 0 || vScrollRound != 0) CallbackBridge.sendScroll(hScroll, vScroll);
+        if (hScrollRound != 0 || vScrollRound != 0) CallbackBridge.sendScroll(hScroll, vScroll);
         mScrollOvershootH = hScroll - hScrollRound;
         mScrollOvershootV = vScroll - vScrollRound;
     }
 
     /**
      * Perform a scrolling gesture.
+     *
      * @param vector a 2-component vector that stores the relative position of the primary pointer.
      */
     public void performScroll(float[] vector) {

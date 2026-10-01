@@ -35,22 +35,6 @@ public class ApiHandler {
         additionalHeaders.put("x-api-key", apiKey);
     }
 
-    public <T> T get(String endpoint, Class<T> tClass) {
-        return getFullUrl(additionalHeaders, baseUrl + "/" + endpoint, tClass);
-    }
-
-    public <T> T get(String endpoint, HashMap<String, Object> query, Class<T> tClass) {
-        return getFullUrl(additionalHeaders, baseUrl + "/" + endpoint, query, tClass);
-    }
-
-    public <T> T post(String endpoint, T body, Class<T> tClass) {
-        return postFullUrl(additionalHeaders, baseUrl + "/" + endpoint, body, tClass);
-    }
-
-    public <T> T post(String endpoint, HashMap<String, Object> query, T body, Class<T> tClass) {
-        return postFullUrl(additionalHeaders, baseUrl + "/" + endpoint, query, body, tClass);
-    }
-
     //Make a get request and return the response as a raw string;
     public static String getRaw(String url) {
         return getRaw(null, url);
@@ -104,8 +88,8 @@ public class ApiHandler {
     }
 
     private static void addHeaders(HttpURLConnection connection, Map<String, String> headers) {
-        if(headers != null) {
-            for(String key : headers.keySet())
+        if (headers != null) {
+            for (String key : headers.keySet())
                 connection.addRequestProperty(key, headers.get(key));
         }
     }
@@ -157,8 +141,24 @@ public class ApiHandler {
     private static String urlEncodeUTF8(String input) {
         try {
             return URLEncoder.encode(input, "UTF-8");
-        }catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("UTF-8 is required");
         }
+    }
+
+    public <T> T get(String endpoint, Class<T> tClass) {
+        return getFullUrl(additionalHeaders, baseUrl + "/" + endpoint, tClass);
+    }
+
+    public <T> T get(String endpoint, HashMap<String, Object> query, Class<T> tClass) {
+        return getFullUrl(additionalHeaders, baseUrl + "/" + endpoint, query, tClass);
+    }
+
+    public <T> T post(String endpoint, T body, Class<T> tClass) {
+        return postFullUrl(additionalHeaders, baseUrl + "/" + endpoint, body, tClass);
+    }
+
+    public <T> T post(String endpoint, HashMap<String, Object> query, T body, Class<T> tClass) {
+        return postFullUrl(additionalHeaders, baseUrl + "/" + endpoint, query, body, tClass);
     }
 }

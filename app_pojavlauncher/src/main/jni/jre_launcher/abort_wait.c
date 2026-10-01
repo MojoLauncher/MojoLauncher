@@ -28,11 +28,11 @@ struct {
 _Noreturn static void callExit() {
     JavaVM *vm = vm_exit_data.vm;
     JNIEnv *env;
-    jint result = (*vm)->GetEnv(vm, (void**)&env, JNI_VERSION_1_6);
-    if(result == JNI_EDETACHED) {
+    jint result = (*vm)->GetEnv(vm, (void **) &env, JNI_VERSION_1_6);
+    if (result == JNI_EDETACHED) {
         result = (*vm)->AttachCurrentThread(vm, &env, NULL);
     }
-    if(result != JNI_OK) {
+    if (result != JNI_OK) {
         abort();
     }
     // This will call System.exit()
@@ -41,7 +41,7 @@ _Noreturn static void callExit() {
     while (true) {}
 }
 
-static void* abort_wait(void* unused) {
+static void *abort_wait(void *unused) {
     syscall(SYS_futex, &futex_word, FUTEX_WAIT, 1, NULL);
     callExit();
     return NULL;
@@ -57,7 +57,7 @@ _Noreturn void abort_call(int code, bool is_signal) {
     abort_info.is_signal = is_signal;
     futex_word = 0;
     syscall(SYS_futex, &futex_word, FUTEX_WAKE, NULL);
-    while(true) {}
+    while (true) {}
 }
 
 JNIEXPORT void JNICALL
@@ -65,13 +65,14 @@ Java_net_kdt_pojavlaunch_utils_jre_JavaRunner_nativeSetupExit(JNIEnv *env, jclas
                                                               jobject context) {
     (*env)->GetJavaVM(env, &vm_exit_data.vm);
     jclass class = (*env)->FindClass(env, "net/kdt/pojavlaunch/ExitActivity");
-    vm_exit_data.exit_class  = (*env)->NewGlobalRef(env, class);
-    vm_exit_data.exit_method = (*env)->GetStaticMethodID(env, class, "showExitMessage", "(Landroid/content/Context;IZ)V");
-    if(vm_exit_data.context != NULL) {
+    vm_exit_data.exit_class = (*env)->NewGlobalRef(env, class);
+    vm_exit_data.exit_method = (*env)->GetStaticMethodID(env, class, "showExitMessage",
+                                                         "(Landroid/content/Context;IZ)V");
+    if (vm_exit_data.context != NULL) {
         jobject oldRef = vm_exit_data.context;
         vm_exit_data.context = (*env)->NewGlobalRef(env, context);
         (*env)->DeleteGlobalRef(env, oldRef);
-    }else {
+    } else {
         vm_exit_data.context = (*env)->NewGlobalRef(env, context);
     }
 }

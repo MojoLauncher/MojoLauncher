@@ -44,11 +44,11 @@ public class MavenName {
 
         components[componentIndex] = name.substring(start);
 
-        if(componentIndex < 2)
+        if (componentIndex < 2)
             throw new IllegalArgumentException("Not a valid library name");
 
         String version = components[2];
-        if(version.equals("*")) version = null;
+        if (version.equals("*")) version = null;
 
         return new MavenName(components[0], components[1], version, components[3]);
     }
@@ -64,7 +64,8 @@ public class MavenName {
     /**
      * Arranges the library name components into a file system path.
      * For example, org.lwjgl:lwjgl:3.3.1 will become org/lwjgl/lwjgl/lwjgl-3.3.1[suffix][fileExtension]
-     *              org.lwjgl:lwjgl:3.3.1:natives-linux will become org/lwjgl/lwjgl/lwjgl-3.3.1-natives-linux[suffix][fileExtension]
+     * org.lwjgl:lwjgl:3.3.1:natives-linux will become org/lwjgl/lwjgl/lwjgl-3.3.1-natives-linux[suffix][fileExtension]
+     *
      * @return the resulting path
      */
     public String toPath(String suffix, @NotNull String fileExtension) {
@@ -78,14 +79,14 @@ public class MavenName {
                 .append('/').append(module)
                 .append('/').append(version)
                 .append('/').append(module).append('-').append(version);
-        if(extra != null) {
+        if (extra != null) {
             builder.append('-').append(extra.replace(':', '-'));
         }
-        if(suffix != null) {
+        if (suffix != null) {
             builder.append('-').append(suffix);
         }
-        String path =  builder.append(fileExtension).toString();
-        Log.i("MojoLauncher", "Path:"+path);
+        String path = builder.append(fileExtension).toString();
+        Log.i("MojoLauncher", "Path:" + path);
         return path;
     }
 
@@ -104,7 +105,7 @@ public class MavenName {
         String version = this.version != null ? this.version : "*";
         StringBuilder builder = new StringBuilder(provider.length() + 1 + module.length() + 1 + version.length() + extrasLen)
                 .append(provider).append(':').append(module).append(':').append(version);
-        if(extrasLen != 0) {
+        if (extrasLen != 0) {
             builder.append(':').append(extra);
         }
         return builder.toString();

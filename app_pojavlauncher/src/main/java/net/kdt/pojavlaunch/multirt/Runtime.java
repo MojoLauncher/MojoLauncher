@@ -7,19 +7,20 @@ public class Runtime {
     public final String versionString;
     public final String arch;
     public final int javaVersion;
+
     public Runtime(String name) {
         this.name = name;
         this.versionString = null;
         this.arch = null;
         this.javaVersion = 0;
     }
+
     Runtime(String name, String versionString, String arch, int javaVersion) {
         this.name = name;
         this.versionString = versionString;
         this.arch = arch;
         this.javaVersion = javaVersion;
     }
-    
 
 
     @Override
@@ -29,6 +30,7 @@ public class Runtime {
         Runtime runtime = (Runtime) o;
         return name.equals(runtime.name);
     }
+
     @Override
     public int hashCode() {
         return Objects.hash(name);

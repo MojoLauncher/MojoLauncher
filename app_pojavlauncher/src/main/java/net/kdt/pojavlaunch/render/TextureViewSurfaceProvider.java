@@ -30,9 +30,9 @@ public class TextureViewSurfaceProvider implements SurfaceProvider {
     @Override
     public void updateSize() {
         SurfaceTexture surfaceTexture = mTextureView.getSurfaceTexture();
-        if(surfaceTexture != null) {
+        if (surfaceTexture != null) {
             surfaceTexture.setDefaultBufferSize(windowWidth, windowHeight);
-            Tools.runOnUiThread(()->mCallback.onSurfaceResized());
+            Tools.runOnUiThread(() -> mCallback.onSurfaceResized());
         }
     }
 
@@ -40,7 +40,7 @@ public class TextureViewSurfaceProvider implements SurfaceProvider {
 
         @Override
         public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
-            if(windowWidth != 0 && windowHeight != 0)
+            if (windowWidth != 0 && windowHeight != 0)
                 surfaceTexture.setDefaultBufferSize(windowWidth, windowHeight);
             mCallback.onSurfaceAvailable(new Surface(surfaceTexture));
         }

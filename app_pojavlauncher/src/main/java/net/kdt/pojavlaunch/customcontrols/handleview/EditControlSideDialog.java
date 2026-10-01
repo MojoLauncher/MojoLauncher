@@ -21,8 +21,6 @@ import android.widget.TextView;
 import com.kdt.SideDialogView;
 
 import net.kdt.pojavlaunch.CustomControlsActivity;
-import net.kdt.pojavlaunch.utils.KeycodeUtils;
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.colorselector.ColorSelector;
 import net.kdt.pojavlaunch.customcontrols.ControlData;
@@ -33,15 +31,20 @@ import net.kdt.pojavlaunch.customcontrols.LayoutBitmaps;
 import net.kdt.pojavlaunch.customcontrols.buttons.ControlDrawer;
 import net.kdt.pojavlaunch.customcontrols.buttons.ControlInterface;
 import net.kdt.pojavlaunch.utils.CropperUtils;
+import net.kdt.pojavlaunch.utils.KeycodeUtils;
 import net.kdt.pojavlaunch.utils.interfaces.SimpleItemSelectedListener;
 import net.kdt.pojavlaunch.utils.interfaces.SimpleSeekBarListener;
 import net.kdt.pojavlaunch.utils.interfaces.SimpleTextWatcher;
 
 import java.util.List;
 
+import git.artdeell.mojo.R;
+
 public class EditControlSideDialog extends SideDialogView {
 
     private final Spinner[] mKeycodeSpinners = new Spinner[4];
+    private final TextView[] mKeycodeTextviews = new TextView[4];
+    private final ViewGroup mParent;
     public boolean internalChanges = false; // True when we programmatically change stuff.
     private final View.OnLayoutChangeListener mLayoutChangedListener = new View.OnLayoutChangeListener() {
         @Override
@@ -66,7 +69,6 @@ public class EditControlSideDialog extends SideDialogView {
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch mToggleSwitch, mPassthroughSwitch, mSwipeableSwitch, mForwardLockSwitch, mAbsoluteTrackingSwitch;
     private Spinner mOrientationSpinner;
-    private final TextView[] mKeycodeTextviews = new TextView[4];
     private SeekBar mStrokeWidthSeekbar, mCornerRadiusSeekbar, mAlphaSeekbar;
     private TextView mStrokePercentTextView, mCornerRadiusPercentTextView, mAlphaPercentTextView;
     private TextView mSelectBackgroundBitmap, mSelectBackgroundColor, mSelectStrokeColor;
@@ -78,14 +80,16 @@ public class EditControlSideDialog extends SideDialogView {
     private TextView mOrientationTextView, mMappingTextView, mNameTextView,
             mCornerRadiusTextView, mVisibilityTextView, mSizeTextview,
             mSizeXTextView, mStrokeWidthTextView, mColorSelectWarningTextView;
-
     // Color selector related stuff
     private ColorSelector mColorSelector;
-    private final ViewGroup mParent;
 
     public EditControlSideDialog(Context context, ViewGroup parent) {
         super(context, parent, R.layout.dialog_control_button_setting);
         mParent = parent;
+    }
+
+    public static void setPercentageText(TextView textView, int progress) {
+        textView.setText(textView.getContext().getString(R.string.percent_format, progress));
     }
 
     @Override
@@ -138,20 +142,16 @@ public class EditControlSideDialog extends SideDialogView {
      * Switch the panels position if needed
      */
     public void adaptPanelPosition() {
-        if(!mDisplaying) return;
-        if(mCurrentlyEditedButton == null) return;
+        if (!mDisplaying) return;
+        if (mCurrentlyEditedButton == null) return;
         ControlLayout parent = mCurrentlyEditedButton.getControlLayoutParent();
-        if(parent == null) return;
+        if (parent == null) return;
 
         boolean isAtRight = mCurrentlyEditedButton.getControlView().getX() + mCurrentlyEditedButton.getControlView().getWidth() / 2f < mCurrentlyEditedButton.getControlLayoutParent().getWidth() / 2f;
         appear(isAtRight);
         if (mColorSelector.isDisplaying()) {
             Tools.runOnUiThread(() -> appearColor(isAtRight, mCurrentlyEditedButton.getProperties().bgColor));
         }
-    }
-
-    public static void setPercentageText(TextView textView, int progress) {
-        textView.setText(textView.getContext().getString(R.string.percent_format, progress));
     }
 
     /* LOADING VALUES */
@@ -199,7 +199,7 @@ public class EditControlSideDialog extends SideDialogView {
 
         // Don't allow editing the bitmap in-game (i don't want to bother with implementing that,
         // and it has potential to kill the game during icon selection)
-        if(!(viewContext instanceof CustomControlsActivity))
+        if (!(viewContext instanceof CustomControlsActivity))
             mSelectBackgroundBitmap.setVisibility(GONE);
     }
 
@@ -265,7 +265,7 @@ public class EditControlSideDialog extends SideDialogView {
         loadValues(data);
 
         // Size linked to the parent drawer depending on the drawer settings
-        if(drawerOrientation != ControlDrawerData.Orientation.FREE){
+        if (drawerOrientation != ControlDrawerData.Orientation.FREE) {
             mSizeTextview.setVisibility(GONE);
             mSizeXTextView.setVisibility(GONE);
             mWidthEditText.setVisibility(GONE);
@@ -300,10 +300,10 @@ public class EditControlSideDialog extends SideDialogView {
     }
 
     private void setDefaultVisibilitySetting() {
-        for (int i = 0; i < ((ViewGroup)mDialogContent).getChildCount(); ++i) {
-            ((ViewGroup)mDialogContent).getChildAt(i).setVisibility(VISIBLE);
+        for (int i = 0; i < ((ViewGroup) mDialogContent).getChildCount(); ++i) {
+            ((ViewGroup) mDialogContent).getChildAt(i).setVisibility(VISIBLE);
         }
-        for(Spinner s : mKeycodeSpinners) {
+        for (Spinner s : mKeycodeSpinners) {
             s.setVisibility(View.INVISIBLE);
         }
         mColorSelectWarningTextView.setVisibility(GONE);
@@ -379,6 +379,7 @@ public class EditControlSideDialog extends SideDialogView {
     /**
      * A long function linking all the displayed data on the popup and,
      * the currently edited mCurrentlyEditedButton
+     *
      * @noinspection SuspiciousNameCombination
      */
     private void setupRealTimeListeners() {
@@ -400,12 +401,12 @@ public class EditControlSideDialog extends SideDialogView {
                 mCurrentlyEditedButton.getProperties().setWidth(width);
                 if (mCurrentlyEditedButton.getProperties() instanceof ControlJoystickData) {
                     // Joysticks are square
-                     mCurrentlyEditedButton.getProperties().setHeight(width);
+                    mCurrentlyEditedButton.getProperties().setHeight(width);
                 }
                 mCurrentlyEditedButton.updateProperties();
             }
             // Unset after the layout pass, to avoid resetting the text in the edittext
-            mCurrentlyEditedButton.getControlView().post(()->internalChanges = false);
+            mCurrentlyEditedButton.getControlView().post(() -> internalChanges = false);
         });
 
         mHeightEditText.addTextChangedListener((SimpleTextWatcher) s -> {
@@ -421,7 +422,7 @@ public class EditControlSideDialog extends SideDialogView {
                 }
                 mCurrentlyEditedButton.updateProperties();
             }
-            mCurrentlyEditedButton.getControlView().post(()->internalChanges = false);
+            mCurrentlyEditedButton.getControlView().post(() -> internalChanges = false);
         });
 
         mSwipeableSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -438,13 +439,13 @@ public class EditControlSideDialog extends SideDialogView {
         });
         mForwardLockSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (internalChanges) return;
-            if(mCurrentlyEditedButton.getProperties() instanceof ControlJoystickData){
+            if (mCurrentlyEditedButton.getProperties() instanceof ControlJoystickData) {
                 ((ControlJoystickData) mCurrentlyEditedButton.getProperties()).forwardLock = isChecked;
             }
         });
         mAbsoluteTrackingSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (internalChanges) return;
-            if(mCurrentlyEditedButton.getProperties() instanceof ControlJoystickData){
+            if (mCurrentlyEditedButton.getProperties() instanceof ControlJoystickData) {
                 ((ControlJoystickData) mCurrentlyEditedButton.getProperties()).absolute = isChecked;
             }
         });
@@ -518,7 +519,7 @@ public class EditControlSideDialog extends SideDialogView {
             appearColor(isAtRight(), mCurrentlyEditedButton.getProperties().strokeColor);
         });
 
-        mSelectBackgroundBitmap.setOnClickListener(v ->  {
+        mSelectBackgroundBitmap.setOnClickListener(v -> {
             final View mTargetView = mCurrentlyEditedButton.getControlView();
             CropperUtils.CropperReceiver receiver = new CropperUtils.CropperReceiver() {
                 @Override
@@ -547,8 +548,8 @@ public class EditControlSideDialog extends SideDialogView {
                 }
             };
             Context context = mTargetView.getContext();
-            if(context instanceof CustomControlsActivity) {
-                ((CustomControlsActivity)context).startCropping(receiver);
+            if (context instanceof CustomControlsActivity) {
+                ((CustomControlsActivity) context).startCropping(receiver);
             }
         });
 

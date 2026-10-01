@@ -153,7 +153,7 @@ public class KeycodeUtils {
     public static String[] generateKeyName() {
         if (androidKeyNameArray == null) {
             androidKeyNameArray = new String[sAndroidKeycodes.length];
-            for(int i=0; i < androidKeyNameArray.length; ++i){
+            for (int i = 0; i < androidKeyNameArray.length; ++i) {
                 androidKeyNameArray[i] = KeyEvent.keyCodeToString(sAndroidKeycodes[i]).replace("KEYCODE_", "");
             }
         }
@@ -171,16 +171,18 @@ public class KeycodeUtils {
     }
 
 
-    /** @return the index at which the key is in the array, searching binary */
+    /**
+     * @return the index at which the key is in the array, searching binary
+     */
     public static int getIndexByValue(int lwjglKey) {
         //You should avoid using this function on performance critical areas
         int ret = Arrays.binarySearch(sAndroidKeycodes, lwjglKey);
-        if(ret < 1) return 0;
+        if (ret < 1) return 0;
         return ret;
     }
 
-    private static void add(int androidKeycode){
+    private static void add(int androidKeycode) {
         sAndroidKeycodes[mTmpCount] = androidKeycode;
-        mTmpCount ++;
+        mTmpCount++;
     }
 }

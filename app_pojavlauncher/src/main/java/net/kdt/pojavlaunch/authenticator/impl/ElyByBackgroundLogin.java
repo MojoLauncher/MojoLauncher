@@ -11,8 +11,8 @@ import com.kdt.mcgui.ProgressLayout;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.authenticator.AuthType;
 import net.kdt.pojavlaunch.authenticator.BackgroundLogin;
-import net.kdt.pojavlaunch.authenticator.accounts.Accounts;
 import net.kdt.pojavlaunch.authenticator.accounts.Account;
+import net.kdt.pojavlaunch.authenticator.accounts.Accounts;
 import net.kdt.pojavlaunch.authenticator.listener.LoginListener;
 import net.kdt.pojavlaunch.authenticator.model.OAuthTokenResponse;
 
@@ -32,7 +32,8 @@ public class ElyByBackgroundLogin implements BackgroundLogin {
     private ElyAccountInfo mAccountInfo;
     private long mExpiresAt;
 
-    private ElyByBackgroundLogin() {}
+    private ElyByBackgroundLogin() {
+    }
 
     private void acquireAccountDetails(
             @NonNull LoginListener loginListener, Callable<Void> continuation,
@@ -47,9 +48,9 @@ public class ElyByBackgroundLogin implements BackgroundLogin {
                 notifyProgress(loginListener, 2);
                 mAccountInfo = acquireAccountData(mOAuthData.accessToken);
                 continuation.call();
-            }catch (Exception e){
+            } catch (Exception e) {
                 Log.e("MicroAuth", "Exception thrown during authentication", e);
-                Tools.runOnUiThread(()->loginListener.onLoginError(e));
+                Tools.runOnUiThread(() -> loginListener.onLoginError(e));
             }
             ProgressLayout.clearProgress(ProgressLayout.AUTHENTICATE);
         });
@@ -68,7 +69,7 @@ public class ElyByBackgroundLogin implements BackgroundLogin {
 
     @Override
     public void createAccount(@NonNull LoginListener loginListener, String code) {
-        acquireAccountDetails(loginListener, ()->{
+        acquireAccountDetails(loginListener, () -> {
             Account account = Accounts.create(this::fillAccount);
             Tools.runOnUiThread(() -> loginListener.onLoginDone(account));
             return null;
@@ -77,7 +78,7 @@ public class ElyByBackgroundLogin implements BackgroundLogin {
 
     @Override
     public void refreshAccount(@NonNull LoginListener loginListener, Account account) {
-        acquireAccountDetails(loginListener, ()->{
+        acquireAccountDetails(loginListener, () -> {
             fillAccount(account);
             account.save();
             Tools.runOnUiThread(() -> loginListener.onLoginDone(account));
@@ -87,7 +88,7 @@ public class ElyByBackgroundLogin implements BackgroundLogin {
 
     private void acquireTokens(boolean isRefresh, String code) throws IOException {
         URL url = new URL(authTokenUrl);
-        Log.i("MicrosoftLogin", "isRefresh=" + isRefresh + ", authCode= "+code);
+        Log.i("MicrosoftLogin", "isRefresh=" + isRefresh + ", authCode= " + code);
 
         String formData = CommonLoginUtils.convertToFormData(
                 "client_id", "mojolauncher2",
@@ -97,29 +98,29 @@ public class ElyByBackgroundLogin implements BackgroundLogin {
                 "grant_type", isRefresh ? "refresh_token" : "authorization_code"
         );
         mOAuthData = CommonLoginUtils.exchangeAuthCode(url, formData);
-        mExpiresAt = mOAuthData.expiresIn*1000 + System.currentTimeMillis();
+        mExpiresAt = mOAuthData.expiresIn * 1000 + System.currentTimeMillis();
     }
 
     private ElyAccountInfo acquireAccountData(String accessToken) throws IOException {
         URL url = new URL(accountInfoUrl);
-        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestProperty("Authorization", "Bearer " + accessToken);
         conn.setUseCaches(false);
         conn.connect();
-        if(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
             try (InputStreamReader reader = new InputStreamReader(conn.getInputStream())) {
                 return Tools.GLOBAL_GSON.fromJson(reader, ElyAccountInfo.class);
             } finally {
                 conn.disconnect();
             }
-        }else{
+        } else {
             throw CommonLoginUtils.getResponseThrowable(conn);
         }
     }
 
-    private void notifyProgress(LoginListener listener, int step){
+    private void notifyProgress(LoginListener listener, int step) {
         Tools.runOnUiThread(() -> listener.onLoginProgress(step));
-        ProgressLayout.setProgress(ProgressLayout.AUTHENTICATE, step*50);
+        ProgressLayout.setProgress(ProgressLayout.AUTHENTICATE, step * 50);
     }
 
     private static class ElyAccountInfo {

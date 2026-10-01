@@ -16,12 +16,14 @@ import androidx.fragment.app.Fragment;
 import com.kdt.pickafile.FileListView;
 import com.kdt.pickafile.FileSelectedListener;
 
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 
 import java.io.File;
+
+import git.artdeell.mojo.R;
+
 public class FileSelectorFragment extends Fragment {
     public static final String TAG = "FileSelectorFragment";
     public static final String BUNDLE_SELECT_FOLDER = "select_folder";
@@ -42,7 +44,7 @@ public class FileSelectorFragment extends Fragment {
             : Environment.getExternalStorageDirectory().getAbsolutePath();
 
 
-    public FileSelectorFragment(){
+    public FileSelectorFragment() {
         super(R.layout.fragment_file_selector);
     }
 
@@ -50,13 +52,13 @@ public class FileSelectorFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         bindViews(view);
         parseBundle();
-        if(!mSelectFolder) mSelectFolderButton.setVisibility(View.GONE);
+        if (!mSelectFolder) mSelectFolderButton.setVisibility(View.GONE);
         else mSelectFolderButton.setVisibility(View.VISIBLE);
 
         mFileListView.setShowFiles(mShowFiles);
         mFileListView.setShowFolders(mShowFolders);
         mFileListView.lockPathAt(new File(mRootPath));
-        mFileListView.setDialogTitleListener((title)->mFilePathView.setText(removeLockPath(title)));
+        mFileListView.setDialogTitleListener((title) -> mFilePathView.setText(removeLockPath(title)));
         mFileListView.refreshPath();
 
         mCreateFolderButton.setOnClickListener(v -> {
@@ -68,9 +70,9 @@ public class FileSelectorFragment extends Fragment {
                     .setPositiveButton(R.string.folder_dialog_create, (dialog, which) -> {
                         File folder = new File(mFileListView.getFullPath(), editText.getText().toString());
                         boolean success = folder.mkdir();
-                        if(success){
-                            mFileListView.listFileAt(new File(mFileListView.getFullPath(),editText.getText().toString()));
-                        }else{
+                        if (success) {
+                            mFileListView.listFileAt(new File(mFileListView.getFullPath(), editText.getText().toString()));
+                        } else {
                             mFileListView.refreshPath();
                         }
                     }).show();
@@ -90,20 +92,20 @@ public class FileSelectorFragment extends Fragment {
         });
     }
 
-    private String removeLockPath(String path){
+    private String removeLockPath(String path) {
         return path.replace(mRootPath, ".");
     }
 
-    private void parseBundle(){
+    private void parseBundle() {
         Bundle bundle = getArguments();
-        if(bundle == null) return;
+        if (bundle == null) return;
         mSelectFolder = bundle.getBoolean(BUNDLE_SELECT_FOLDER, mSelectFolder);
         mShowFiles = bundle.getBoolean(BUNDLE_SHOW_FILE, mShowFiles);
         mShowFolders = bundle.getBoolean(BUNDLE_SHOW_FOLDER, mShowFolders);
         mRootPath = bundle.getString(BUNDLE_ROOT_PATH, mRootPath);
     }
 
-    private void bindViews(@NonNull View view){
+    private void bindViews(@NonNull View view) {
         mSelectFolderButton = view.findViewById(R.id.file_selector_select_folder);
         mCreateFolderButton = view.findViewById(R.id.file_selector_create_folder);
         mFileListView = view.findViewById(R.id.file_selector);

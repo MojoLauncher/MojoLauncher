@@ -7,14 +7,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
-import net.kdt.pojavlaunch.game.GameActivity;
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.game.GameActivity;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
 import net.kdt.pojavlaunch.tasks.MoJsonExtras;
 import net.kdt.pojavlaunch.utils.NotificationUtils;
 
 import java.io.File;
+
+import git.artdeell.mojo.R;
 
 public class ContextAwareDoneListener implements MoJsonExtras.DoneListener, ContextExecutorTask {
     private final String mErrorString;
@@ -37,7 +38,7 @@ public class ContextAwareDoneListener implements MoJsonExtras.DoneListener, Cont
     @Override
     public void onDownloadDone(File[] classpath) {
         this.classpath = classpath;
-        ProgressKeeper.waitUntilDone(()->ContextExecutor.execute(this));
+        ProgressKeeper.waitUntilDone(() -> ContextExecutor.execute(this));
     }
 
     @Override

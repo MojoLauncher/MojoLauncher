@@ -4,12 +4,13 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import git.artdeell.mojo.R;
-
 import net.kdt.pojavlaunch.modloaders.ForgelikeUtils;
+
+import git.artdeell.mojo.R;
 
 public class ForgeInstallFragment extends ForgelikeInstallFragment {
     public static final String TAG = "ForgeInstallFragment";
+
     public ForgeInstallFragment() {
         super(ForgelikeUtils.FORGE_UTILS, TAG);
     }

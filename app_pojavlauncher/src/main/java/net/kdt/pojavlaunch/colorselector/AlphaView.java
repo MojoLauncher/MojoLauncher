@@ -23,14 +23,15 @@ public class AlphaView extends View {
     private final Drawable mCheckerboardDrawable = CheckerboardDrawable.create();
     private final Paint mShaderPaint = new Paint();
     private final Paint mBlackPaint;
-    private final RectF mViewSize = new RectF(0,0,0,0);
+    private final RectF mViewSize = new RectF(0, 0, 0, 0);
     private AlphaSelectionListener mAlphaSelectionListener;
     private int mSelectedAlpha;
     private float mAlphaDiv; // for quick pos->alpha multiplication
     private float mScreenDiv; // for quick alpha->pos multiplication
     private float mWidthThird; // 1/3 of the view size for cursor
+
     public AlphaView(Context ctx, AttributeSet attrs) {
-        super(ctx,attrs);
+        super(ctx, attrs);
         mBlackPaint = new Paint();
         mBlackPaint.setStrokeWidth(Tools.dpToPx(3));
         mBlackPaint.setColor(Color.BLACK);
@@ -49,7 +50,8 @@ public class AlphaView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         mSelectedAlpha = (int) MathUtils.clamp(mAlphaDiv * event.getY(), 0, 0xff);
-        if(mAlphaSelectionListener != null) mAlphaSelectionListener.onAlphaSelected(mSelectedAlpha);
+        if (mAlphaSelectionListener != null)
+            mAlphaSelectionListener.onAlphaSelected(mSelectedAlpha);
         invalidate();
         return true;
     }
@@ -58,7 +60,7 @@ public class AlphaView extends View {
     protected void onSizeChanged(int w, int h, int old_w, int old_h) {
         mViewSize.right = w;
         mViewSize.bottom = h;
-        mShaderPaint.setShader(new LinearGradient(0,0,0,h, 0, Color.WHITE, Shader.TileMode.REPEAT));
+        mShaderPaint.setShader(new LinearGradient(0, 0, 0, h, 0, Color.WHITE, Shader.TileMode.REPEAT));
         mAlphaDiv = 255f / mViewSize.bottom;
         mScreenDiv = mViewSize.bottom / 255f;
         mWidthThird = mViewSize.right / 3f;
@@ -69,7 +71,7 @@ public class AlphaView extends View {
         mCheckerboardDrawable.draw(canvas);
         canvas.drawRect(mViewSize, mShaderPaint);
         float linePos = mSelectedAlpha * mScreenDiv;
-        canvas.drawLine(0, linePos , mWidthThird, linePos, mBlackPaint);
-        canvas.drawLine(mWidthThird * 2, linePos, getRight(),linePos, mBlackPaint);
+        canvas.drawLine(0, linePos, mWidthThird, linePos, mBlackPaint);
+        canvas.drawLine(mWidthThird * 2, linePos, getRight(), linePos, mBlackPaint);
     }
 }

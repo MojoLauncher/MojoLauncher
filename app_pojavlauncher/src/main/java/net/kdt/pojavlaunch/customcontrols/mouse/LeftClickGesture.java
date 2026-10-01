@@ -5,7 +5,6 @@ import static net.kdt.pojavlaunch.CallbackBridge.sendMouseButton;
 import android.os.Handler;
 import android.view.MotionEvent;
 
-import net.kdt.pojavlaunch.LwjglGlfwKeycode;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.MathUtils;
@@ -17,6 +16,15 @@ public class LeftClickGesture extends DistanceGesture {
 
     public LeftClickGesture(Handler handler) {
         super(handler);
+    }
+
+    public static boolean isFingerStill(float startX, float startY, float endX, float endY, float threshold) {
+        return MathUtils.dist(
+                endX,
+                endY,
+                startX,
+                startY
+        ) <= threshold;
     }
 
     @Override
@@ -38,7 +46,7 @@ public class LeftClickGesture extends DistanceGesture {
     public boolean checkAndTrigger() {
         boolean fingerStill = travelBelowThreshold(LeftClickGesture.FINGER_STILL_THRESHOLD);
         // If the finger is still, fire the gesture.
-        if(fingerStill) {
+        if (fingerStill) {
             sendMouseButton(MotionEvent.BUTTON_PRIMARY, true);
             mMouseActivated = true;
         }
@@ -48,18 +56,9 @@ public class LeftClickGesture extends DistanceGesture {
 
     @Override
     public void onGestureCancelled(boolean isSwitching) {
-        if(mMouseActivated) {
+        if (mMouseActivated) {
             sendMouseButton(MotionEvent.BUTTON_PRIMARY, false);
             mMouseActivated = false;
         }
-    }
-
-    public static boolean isFingerStill(float startX, float startY, float endX, float endY, float threshold) {
-        return MathUtils.dist(
-                endX,
-                endY,
-                startX,
-                startY
-        ) <= threshold;
     }
 }

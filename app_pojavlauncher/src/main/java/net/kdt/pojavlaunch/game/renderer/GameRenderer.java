@@ -48,8 +48,9 @@ public class GameRenderer {
 
     public GameRenderer(String currentRenderer) {
         this.currentRenderer = getKnownRenderer(currentRenderer);
-        if(this.currentRenderer == null) this.currentRenderer = getKnownRenderer(GL4ES_RENDERER);
-        if(this.currentRenderer == null) throw new IllegalStateException("Failed to create the current renderer!");
+        if (this.currentRenderer == null) this.currentRenderer = getKnownRenderer(GL4ES_RENDERER);
+        if (this.currentRenderer == null)
+            throw new IllegalStateException("Failed to create the current renderer!");
     }
 
     /**
@@ -63,13 +64,20 @@ public class GameRenderer {
             // For compatibility
             case "opengles2_4":
             case "opengles2_5":
-            case GL4ES_RENDERER: return new GLESRenderSpec.GL4ESRenderSpec();
-            case LTW_RENDERER: return new GLESRenderSpec.LTWRenderSpec();
-            case ZINK_RENDERER: return new MesaRenderSpec.ZinkRenderSpec();
-            case FREEDRENO_RENDERER: return new MesaRenderSpec.FreedrenoRenderSpec();
-            case MESA_RENDERER: return new MesaRenderSpec();
-            case MESA_RENDERER_EXT: return new MesaRenderSpec.ExtMesaRenderSpec();
-            case LEGACYZINK_RENDERER: return new MesaRenderSpec.LegacyZinkRenderSpec();
+            case GL4ES_RENDERER:
+                return new GLESRenderSpec.GL4ESRenderSpec();
+            case LTW_RENDERER:
+                return new GLESRenderSpec.LTWRenderSpec();
+            case ZINK_RENDERER:
+                return new MesaRenderSpec.ZinkRenderSpec();
+            case FREEDRENO_RENDERER:
+                return new MesaRenderSpec.FreedrenoRenderSpec();
+            case MESA_RENDERER:
+                return new MesaRenderSpec();
+            case MESA_RENDERER_EXT:
+                return new MesaRenderSpec.ExtMesaRenderSpec();
+            case LEGACYZINK_RENDERER:
+                return new MesaRenderSpec.LegacyZinkRenderSpec();
             default:
                 Log.e(TAG, "Unknown renderer " + renderer);
                 return null;
@@ -88,7 +96,6 @@ public class GameRenderer {
     }
 
 
-
     /**
      * Setup current selected renderer environment. Call before using {@link GameRenderer#maybeSetupRenderer()}
      *
@@ -96,12 +103,12 @@ public class GameRenderer {
      * @throws ErrnoException if underlying Os#setenv call threw an exception
      */
     public void setupEnvironment(Context context) throws ErrnoException {
-        if(environment == null) {
+        if (environment == null) {
             Log.w(TAG, "Tried to call setupEnvironment in already initialized environment");
             return;
         }
         currentRenderer.setupEnvironment(context, environment);
-        for(Map.Entry<String, String> e : environment.entrySet()) {
+        for (Map.Entry<String, String> e : environment.entrySet()) {
             Logger.appendToLog("Added renderer env: " + e.getKey() + '=' + e.getValue());
             Os.setenv(e.getKey(), e.getValue(), true);
         }
@@ -136,7 +143,8 @@ public class GameRenderer {
      */
     public void setCurrentRenderer(String renderer) throws IllegalArgumentException {
         RenderSpec spec = getKnownRenderer(renderer);
-        if(spec == null) throw new IllegalArgumentException("Invalid renderer string" + renderer + "!");
+        if (spec == null)
+            throw new IllegalArgumentException("Invalid renderer string" + renderer + "!");
         this.setCurrentRenderer(spec);
     }
 
@@ -159,7 +167,7 @@ public class GameRenderer {
      * Enable custom Vulkan driver (Turnip) usage
      */
     public void overrideVulkanDriver() {
-        if(LauncherPreferences.PREF_FREEDRENO_SYSMEM) environment.put("TU_DEBUG", "sysmem");
+        if (LauncherPreferences.PREF_FREEDRENO_SYSMEM) environment.put("TU_DEBUG", "sysmem");
         MojoExec.setUseTurnip(true);
     }
 }

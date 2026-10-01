@@ -2,8 +2,6 @@ package net.kdt.pojavlaunch.customcontrols.gamepad;
 
 import android.view.KeyEvent;
 
-import net.kdt.pojavlaunch.LwjglGlfwKeycode;
-
 public class GamepadMap {
 
 
@@ -25,38 +23,10 @@ public class GamepadMap {
    */
 
     public GamepadButton BUTTON_A, BUTTON_B, BUTTON_X, BUTTON_Y, BUTTON_START, BUTTON_SELECT,
-                         TRIGGER_RIGHT, TRIGGER_LEFT, SHOULDER_RIGHT, SHOULDER_LEFT, THUMBSTICK_RIGHT,
-                         THUMBSTICK_LEFT, DPAD_UP, DPAD_DOWN, DPAD_RIGHT, DPAD_LEFT;
+            TRIGGER_RIGHT, TRIGGER_LEFT, SHOULDER_RIGHT, SHOULDER_LEFT, THUMBSTICK_RIGHT,
+            THUMBSTICK_LEFT, DPAD_UP, DPAD_DOWN, DPAD_RIGHT, DPAD_LEFT;
 
     public GamepadEmulatedButton DIRECTION_FORWARD, DIRECTION_BACKWARD, DIRECTION_RIGHT, DIRECTION_LEFT;
-
-    /*
-     * Sets all buttons to a not pressed state, sending an input if needed
-     */
-    public void resetPressedState(){
-        BUTTON_A.resetButtonState();
-        BUTTON_B.resetButtonState();
-        BUTTON_X.resetButtonState();
-        BUTTON_Y.resetButtonState();
-
-        BUTTON_START.resetButtonState();
-        BUTTON_SELECT.resetButtonState();
-
-        TRIGGER_LEFT.resetButtonState();
-        TRIGGER_RIGHT.resetButtonState();
-
-        SHOULDER_LEFT.resetButtonState();
-        SHOULDER_RIGHT.resetButtonState();
-
-        THUMBSTICK_LEFT.resetButtonState();
-        THUMBSTICK_RIGHT.resetButtonState();
-
-        DPAD_UP.resetButtonState();
-        DPAD_RIGHT.resetButtonState();
-        DPAD_DOWN.resetButtonState();
-        DPAD_LEFT.resetButtonState();
-
-    }
 
     private static GamepadMap createAndInitializeButtons() {
         GamepadMap gamepadMap = new GamepadMap();
@@ -92,7 +62,7 @@ public class GamepadMap {
     /*
      * Returns a pre-done mapping used when the mouse is grabbed by the game.
      */
-    public static GamepadMap getDefaultGameMap(){
+    public static GamepadMap getDefaultGameMap() {
         GamepadMap gameMap = GamepadMap.createEmptyMap();
 
         gameMap.BUTTON_A.keycodes[0] = KeyEvent.KEYCODE_SPACE;
@@ -129,7 +99,7 @@ public class GamepadMap {
     /*
      * Returns a pre-done mapping used when the mouse is NOT grabbed by the game.
      */
-    public static GamepadMap getDefaultMenuMap(){
+    public static GamepadMap getDefaultMenuMap() {
         GamepadMap menuMap = GamepadMap.createEmptyMap();
 
         menuMap.BUTTON_A.keycodes[0] = GamepadMap.MOUSE_LEFT;
@@ -163,30 +133,59 @@ public class GamepadMap {
     }
 
     /*
-     * Returns all GamepadEmulatedButtons of the controller key map.
-     */
-    public GamepadEmulatedButton[] getButtons(){
-        return new GamepadEmulatedButton[]{ BUTTON_A, BUTTON_B, BUTTON_X, BUTTON_Y,
-                                    BUTTON_SELECT, BUTTON_START,
-                                    TRIGGER_LEFT, TRIGGER_RIGHT,
-                                    SHOULDER_LEFT, SHOULDER_RIGHT,
-                                    THUMBSTICK_LEFT, THUMBSTICK_RIGHT,
-                                    DPAD_UP, DPAD_RIGHT, DPAD_DOWN, DPAD_LEFT,
-                                    DIRECTION_FORWARD, DIRECTION_BACKWARD,
-                                    DIRECTION_LEFT, DIRECTION_RIGHT};
-    }
-
-    /*
      * Returns an pre-initialized GamepadMap with only empty keycodes
      */
-    @SuppressWarnings("unused") public static GamepadMap createEmptyMap(){
+    @SuppressWarnings("unused")
+    public static GamepadMap createEmptyMap() {
         GamepadMap emptyMap = createAndInitializeButtons();
-        for(GamepadEmulatedButton button : emptyMap.getButtons())
-            button.keycodes = new int[] {UNSPECIFIED, UNSPECIFIED, UNSPECIFIED, UNSPECIFIED};
+        for (GamepadEmulatedButton button : emptyMap.getButtons())
+            button.keycodes = new int[]{UNSPECIFIED, UNSPECIFIED, UNSPECIFIED, UNSPECIFIED};
         return emptyMap;
     }
 
     public static String[] getSpecialKeycodeNames() {
-        return new String[] {"UNSPECIFIED", "MOUSE_RIGHT", "MOUSE_MIDDLE", "MOUSE_LEFT", "SCROLL_UP", "SCROLL_DOWN"};
+        return new String[]{"UNSPECIFIED", "MOUSE_RIGHT", "MOUSE_MIDDLE", "MOUSE_LEFT", "SCROLL_UP", "SCROLL_DOWN"};
+    }
+
+    /*
+     * Sets all buttons to a not pressed state, sending an input if needed
+     */
+    public void resetPressedState() {
+        BUTTON_A.resetButtonState();
+        BUTTON_B.resetButtonState();
+        BUTTON_X.resetButtonState();
+        BUTTON_Y.resetButtonState();
+
+        BUTTON_START.resetButtonState();
+        BUTTON_SELECT.resetButtonState();
+
+        TRIGGER_LEFT.resetButtonState();
+        TRIGGER_RIGHT.resetButtonState();
+
+        SHOULDER_LEFT.resetButtonState();
+        SHOULDER_RIGHT.resetButtonState();
+
+        THUMBSTICK_LEFT.resetButtonState();
+        THUMBSTICK_RIGHT.resetButtonState();
+
+        DPAD_UP.resetButtonState();
+        DPAD_RIGHT.resetButtonState();
+        DPAD_DOWN.resetButtonState();
+        DPAD_LEFT.resetButtonState();
+
+    }
+
+    /*
+     * Returns all GamepadEmulatedButtons of the controller key map.
+     */
+    public GamepadEmulatedButton[] getButtons() {
+        return new GamepadEmulatedButton[]{BUTTON_A, BUTTON_B, BUTTON_X, BUTTON_Y,
+                BUTTON_SELECT, BUTTON_START,
+                TRIGGER_LEFT, TRIGGER_RIGHT,
+                SHOULDER_LEFT, SHOULDER_RIGHT,
+                THUMBSTICK_LEFT, THUMBSTICK_RIGHT,
+                DPAD_UP, DPAD_RIGHT, DPAD_DOWN, DPAD_LEFT,
+                DIRECTION_FORWARD, DIRECTION_BACKWARD,
+                DIRECTION_LEFT, DIRECTION_RIGHT};
     }
 }

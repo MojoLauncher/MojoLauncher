@@ -1,8 +1,12 @@
 package net.kdt.pojavlaunch;
 
 import androidx.annotation.Keep;
-import java.util.*;
-import net.kdt.pojavlaunch.value.*;
+
+import net.kdt.pojavlaunch.value.ClientInfo;
+import net.kdt.pojavlaunch.value.DependentLibrary;
+import net.kdt.pojavlaunch.value.MoJsonRule;
+
+import java.util.Map;
 
 @Keep
 @SuppressWarnings("unused") // all unused fields here are parts of JSON structures
@@ -35,12 +39,14 @@ public class JVersionList {
         public String time;
         public String type;
     }
+
     @Keep
     public static class JavaVersionInfo {
         public String component;
         public int majorVersion;
         public int version; // parameter used by LabyMod 4
     }
+
     @Keep
     public static class LoggingConfig {
         public LoggingClientConfig client;
@@ -52,6 +58,7 @@ public class JVersionList {
             public String type;
         }
     }
+
     // Since 1.13
     @Keep
     public static class Arguments {
@@ -67,6 +74,7 @@ public class JVersionList {
             public String[] values;
         }
     }
+
     @Keep
     public static class AssetIndex extends FileProperties {
         public long totalSize;

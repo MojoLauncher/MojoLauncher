@@ -28,105 +28,117 @@ import git.artdeell.mojo.R;
 
 
 public class CustomControlsActivity extends BaseActivity implements EditorExitable, CropperUtils.CropperReceiver {
-	private DrawerLayout mDrawerLayout;
-	private ListView mDrawerNavigationView;
-	private ControlLayout mControlLayout;
-	private CropperUtils.CropperReceiver mCropperReceiver;
-	private ActivityResultLauncher<?> mCropperLauncher;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerNavigationView;
+    private ControlLayout mControlLayout;
+    private CropperUtils.CropperReceiver mCropperReceiver;
+    private ActivityResultLauncher<?> mCropperLauncher;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		mCropperLauncher = CropperUtils.registerCropper(this, this);
+        mCropperLauncher = CropperUtils.registerCropper(this, this);
 
-		setContentView(R.layout.activity_custom_controls);
+        setContentView(R.layout.activity_custom_controls);
 
-		mControlLayout = findViewById(R.id.customctrl_controllayout);
-		mDrawerLayout = findViewById(R.id.customctrl_drawerlayout);
-		mDrawerNavigationView = findViewById(R.id.customctrl_navigation_view);
-		View mPullDrawerButton = findViewById(R.id.drawer_button);
+        mControlLayout = findViewById(R.id.customctrl_controllayout);
+        mDrawerLayout = findViewById(R.id.customctrl_drawerlayout);
+        mDrawerNavigationView = findViewById(R.id.customctrl_navigation_view);
+        View mPullDrawerButton = findViewById(R.id.drawer_button);
 
-		mPullDrawerButton.setOnClickListener(v -> mDrawerLayout.openDrawer(mDrawerNavigationView));
-		mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        mPullDrawerButton.setOnClickListener(v -> mDrawerLayout.openDrawer(mDrawerNavigationView));
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
-		mDrawerNavigationView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.menu_customcontrol_customactivity)));
-		mDrawerNavigationView.setOnItemClickListener((parent, view, position, id) -> {
-			switch(position) {
-				case 0: mControlLayout.addControlButton(new ControlData("New")); break;
-				case 1: mControlLayout.addDrawer(new ControlDrawerData()); break;
-				case 2: mControlLayout.addJoystickButton(new ControlJoystickData()); break;
-				case 3: mControlLayout.openLoadDialog(); break;
-				case 4: mControlLayout.openSaveDialog(this); break;
-				case 5: mControlLayout.openSetDefaultDialog(); break;
-				case 6: // Saving the currently shown control
-					try {
-						Uri contentUri = DocumentsContract.buildDocumentUri(getString(R.string.storageProviderAuthorities), mControlLayout.saveToDirectory(mControlLayout.mLayoutFileName));
+        mDrawerNavigationView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu_customcontrol_customactivity)));
+        mDrawerNavigationView.setOnItemClickListener((parent, view, position, id) -> {
+            switch (position) {
+                case 0:
+                    mControlLayout.addControlButton(new ControlData("New"));
+                    break;
+                case 1:
+                    mControlLayout.addDrawer(new ControlDrawerData());
+                    break;
+                case 2:
+                    mControlLayout.addJoystickButton(new ControlJoystickData());
+                    break;
+                case 3:
+                    mControlLayout.openLoadDialog();
+                    break;
+                case 4:
+                    mControlLayout.openSaveDialog(this);
+                    break;
+                case 5:
+                    mControlLayout.openSetDefaultDialog();
+                    break;
+                case 6: // Saving the currently shown control
+                    try {
+                        Uri contentUri = DocumentsContract.buildDocumentUri(getString(R.string.storageProviderAuthorities), mControlLayout.saveToDirectory(mControlLayout.mLayoutFileName));
 
-						Intent shareIntent = new Intent();
-						shareIntent.setAction(Intent.ACTION_SEND);
-						shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-						shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-						shareIntent.setType("application/json");
-						startActivity(shareIntent);
+                        Intent shareIntent = new Intent();
+                        shareIntent.setAction(Intent.ACTION_SEND);
+                        shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+                        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        shareIntent.setType("application/json");
+                        startActivity(shareIntent);
 
-						Intent sendIntent = Intent.createChooser(shareIntent, mControlLayout.mLayoutFileName);
-						startActivity(sendIntent);
-					}catch (Exception e) {
-						Tools.showError(this, e);
-					}
-					break;
-			}
-			mDrawerLayout.closeDrawers();
-		});
-		mControlLayout.setModifiable(true);
-	}
+                        Intent sendIntent = Intent.createChooser(shareIntent, mControlLayout.mLayoutFileName);
+                        startActivity(sendIntent);
+                    } catch (Exception e) {
+                        Tools.showError(this, e);
+                    }
+                    break;
+            }
+            mDrawerLayout.closeDrawers();
+        });
+        mControlLayout.setModifiable(true);
+    }
 
-	@Override
-	public void onAttachedToWindow() {
-		mControlLayout.post(()->{
-			try {
-				mControlLayout.loadLayout(LauncherPreferences.PREF_DEFAULTCTRL_PATH);
-			}catch (IOException | JsonSyntaxException e) {
-				Tools.showError(this, e);
-			}
-		});
-	}
+    @Override
+    public void onAttachedToWindow() {
+        mControlLayout.post(() -> {
+            try {
+                mControlLayout.loadLayout(LauncherPreferences.PREF_DEFAULTCTRL_PATH);
+            } catch (IOException | JsonSyntaxException e) {
+                Tools.showError(this, e);
+            }
+        });
+    }
 
-	public void startCropping(CropperUtils.CropperReceiver cropperReceiver) {
-		mCropperReceiver = cropperReceiver;
-		CropperUtils.startCropper(mCropperLauncher);
-	}
+    public void startCropping(CropperUtils.CropperReceiver cropperReceiver) {
+        mCropperReceiver = cropperReceiver;
+        CropperUtils.startCropper(mCropperLauncher);
+    }
 
-	@Override
-	public void onBackPressed() {
-		mControlLayout.askToExit(this);
-	}
+    @Override
+    public void onBackPressed() {
+        mControlLayout.askToExit(this);
+    }
 
-	@Override
-	public void exitEditor() {
-		super.onBackPressed();
-	}
+    @Override
+    public void exitEditor() {
+        super.onBackPressed();
+    }
 
-	@Override
-	public float getAspectRatio() {
-		if(mCropperReceiver != null) return mCropperReceiver.getAspectRatio();
-		return 1f;
-	}
+    @Override
+    public float getAspectRatio() {
+        if (mCropperReceiver != null) return mCropperReceiver.getAspectRatio();
+        return 1f;
+    }
 
-	@Override
-	public int getTargetMaxSide() {
-		if(mCropperReceiver != null) return mCropperReceiver.getTargetMaxSide();
-		return 128;
-	}
+    @Override
+    public int getTargetMaxSide() {
+        if (mCropperReceiver != null) return mCropperReceiver.getTargetMaxSide();
+        return 128;
+    }
 
-	@Override
-	public void onCropped(Bitmap contentBitmap) {
-		if(mCropperReceiver != null) mCropperReceiver.onCropped(contentBitmap);
-	}
+    @Override
+    public void onCropped(Bitmap contentBitmap) {
+        if (mCropperReceiver != null) mCropperReceiver.onCropped(contentBitmap);
+    }
 
-	@Override
-	public void onFailed(Exception exception) {
-		if(mCropperReceiver != null) mCropperReceiver.onFailed(exception);
-	}
+    @Override
+    public void onFailed(Exception exception) {
+        if (mCropperReceiver != null) mCropperReceiver.onFailed(exception);
+    }
 }

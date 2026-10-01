@@ -27,22 +27,22 @@ public class OAuthFragment extends WebViewCompletionFragment {
 
     private void displayError(Context context, Uri uri) {
         String errorMessage = uri.getQueryParameter(QUERY_ERROR_DECRIPTION);
-        if(errorMessage == null) errorMessage = uri.getQueryParameter(QUERY_ERROR_NAME);
-        if(errorMessage == null) errorMessage = getString(R.string.oauth_unknown_error);
+        if (errorMessage == null) errorMessage = uri.getQueryParameter(QUERY_ERROR_NAME);
+        if (errorMessage == null) errorMessage = getString(R.string.oauth_unknown_error);
         Tools.dialog(context, getString(R.string.global_error), errorMessage);
     }
 
     @Override
     protected void signalCompletion(String fullUrl) {
         FragmentActivity activity = getActivity();
-        if(activity == null) return;
+        if (activity == null) return;
         Uri uri = Uri.parse(fullUrl);
         String error = uri.getQueryParameter(QUERY_ERROR_NAME);
         String code = uri.getQueryParameter(QUERY_OAUTH_CODE);
-        if(code == null) {
+        if (code == null) {
             activity.onBackPressed();
             // Access denied - means the user exited out of the oauth dialog. Just leave the fragment
-            if(ERROR_ACCESS_DENIED.equals(error)) return;
+            if (ERROR_ACCESS_DENIED.equals(error)) return;
             // On other unknown errors, show a dialog
             displayError(activity, uri);
             return;

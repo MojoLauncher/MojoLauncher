@@ -3,7 +3,6 @@ package net.kdt.pojavlaunch.game;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.MotionEvent;
-import android.view.View;
 
 import net.kdt.pojavlaunch.customcontrols.mouse.LeftClickGesture;
 import net.kdt.pojavlaunch.customcontrols.mouse.PointerTracker;
@@ -13,10 +12,10 @@ import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 public class InGameEventProcessor extends TouchEventProcessor {
     private final Handler mGestureHandler = new Handler(Looper.getMainLooper());
     private final double mSensitivity;
-    private boolean mEventTransitioned = true;
     private final PointerTracker mTracker = new PointerTracker();
     private final LeftClickGesture mLeftClickGesture = new LeftClickGesture(mGestureHandler);
     private final RightClickGesture mRightClickGesture = new RightClickGesture(mGestureHandler);
+    private boolean mEventTransitioned = true;
 
     public InGameEventProcessor(GameView hostView, double sensitivity) {
         super(hostView);
@@ -28,7 +27,7 @@ public class InGameEventProcessor extends TouchEventProcessor {
         switch (motionEvent.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
                 mTracker.startTracking(motionEvent);
-                if(LauncherPreferences.PREF_DISABLE_GESTURES) break;
+                if (LauncherPreferences.PREF_DISABLE_GESTURES) break;
                 mEventTransitioned = false;
                 checkGestures();
                 break;
@@ -40,7 +39,7 @@ public class InGameEventProcessor extends TouchEventProcessor {
                 mLeftClickGesture.setMotion(deltaX, deltaY);
                 mRightClickGesture.setMotion(deltaX, deltaY);
                 applyMoveVector(deltaX, deltaY);
-                if(LauncherPreferences.PREF_DISABLE_GESTURES) break;
+                if (LauncherPreferences.PREF_DISABLE_GESTURES) break;
                 checkGestures();
                 break;
             case MotionEvent.ACTION_UP:
@@ -61,7 +60,7 @@ public class InGameEventProcessor extends TouchEventProcessor {
         // Only register right click events if it's a fresh event stream, not one after a transition.
         // This is done to avoid problems when people hold the button for just a bit too long after
         // exiting a menu for example.
-        if(!mEventTransitioned) mRightClickGesture.inputEvent();
+        if (!mEventTransitioned) mRightClickGesture.inputEvent();
     }
 
     private void cancelGestures(boolean isSwitching) {

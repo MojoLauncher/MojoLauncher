@@ -18,12 +18,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.customcontrols.gamepad.Gamepad;
 import net.kdt.pojavlaunch.customcontrols.gamepad.GamepadMapperAdapter;
 
 import fr.spse.gamepad_remapper.RemapperManager;
 import fr.spse.gamepad_remapper.RemapperView;
+import git.artdeell.mojo.R;
 
 public class GamepadMapperFragment extends Fragment implements
         View.OnKeyListener, View.OnGenericMotionListener, AdapterView.OnItemSelectedListener {
@@ -45,12 +45,13 @@ public class GamepadMapperFragment extends Fragment implements
     private final Handler mExitHandler = new Handler(Looper.getMainLooper());
     private final Runnable mExitRunnable = () -> {
         Activity activity = getActivity();
-        if(activity == null) return;
+        if (activity == null) return;
         activity.onBackPressed();
     };
     private RemapperManager mInputManager;
     private GamepadMapperAdapter mMapperAdapter;
     private Gamepad mGamepad;
+
     public GamepadMapperFragment() {
         super(R.layout.fragment_controller_remapper);
     }
@@ -78,7 +79,7 @@ public class GamepadMapperFragment extends Fragment implements
         mGamepad = new Gamepad(inputDevice, mMapperAdapter, null) {
             @Override
             public void handleGamepadInput(int keycode, float value) {
-                if(keycode == KeyEvent.KEYCODE_BUTTON_SELECT) {
+                if (keycode == KeyEvent.KEYCODE_BUTTON_SELECT) {
                     handleExitButton(value > 0.5);
                 }
                 super.handleGamepadInput(keycode, value);
@@ -87,15 +88,15 @@ public class GamepadMapperFragment extends Fragment implements
     }
 
     private void handleExitButton(boolean isPressed) {
-        if(isPressed) mExitHandler.postDelayed(mExitRunnable, 400);
+        if (isPressed) mExitHandler.postDelayed(mExitRunnable, 400);
         else mExitHandler.removeCallbacks(mExitRunnable);
     }
 
     @Override
     public boolean onKey(View view, int i, KeyEvent keyEvent) {
         View mainView = getView();
-        if(!Gamepad.isGamepadEvent(keyEvent) || mainView == null) return false;
-        if(mGamepad == null) createGamepad(keyEvent.getDevice());
+        if (!Gamepad.isGamepadEvent(keyEvent) || mainView == null) return false;
+        if (mGamepad == null) createGamepad(keyEvent.getDevice());
         mInputManager.handleKeyEventInput(mainView.getContext(), keyEvent, mGamepad);
         return true;
     }
@@ -103,8 +104,8 @@ public class GamepadMapperFragment extends Fragment implements
     @Override
     public boolean onGenericMotion(View view, MotionEvent motionEvent) {
         View mainView = getView();
-        if(!Gamepad.isGamepadEvent(motionEvent) || mainView == null) return false;
-        if(mGamepad == null) createGamepad(motionEvent.getDevice());
+        if (!Gamepad.isGamepadEvent(motionEvent) || mainView == null) return false;
+        if (mGamepad == null) createGamepad(motionEvent.getDevice());
         mInputManager.handleMotionEventInput(mainView.getContext(), motionEvent, mGamepad);
         return true;
     }

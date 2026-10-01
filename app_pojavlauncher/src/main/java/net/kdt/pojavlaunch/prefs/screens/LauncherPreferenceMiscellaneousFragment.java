@@ -11,8 +11,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.Preference;
 
-import git.artdeell.mojo.R;
-
 import net.kdt.pojavlaunch.LauncherActivity;
 import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.Tools;
@@ -24,11 +22,13 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 
+import git.artdeell.mojo.R;
+
 public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceFragment {
 
     private final ActivityResultLauncher<Uri> mMigrateLauncher = registerForActivityResult(
             new ActivityResultContracts.OpenDocumentTree(), (uri) -> {
-                if(uri != null) {
+                if (uri != null) {
                     new AlertDialog.Builder(getLauncherActivity())
                             .setTitle(R.string.migration_progress_warning_title)
                             .setMessage(R.string.migration_progress_warning_summary)
@@ -45,7 +45,7 @@ public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceF
         addPreferencesFromResource(R.xml.pref_misc);
         Preference importPreference = requirePreference("runDataMigration");
         importPreference.setOnPreferenceClickListener(preference -> {
-            if(ProgressKeeper.getTaskCount() > 0) {
+            if (ProgressKeeper.getTaskCount() > 0) {
                 Toast.makeText(getContext(), R.string.tasks_ongoing, Toast.LENGTH_SHORT).show();
                 return true;
             }
@@ -57,7 +57,7 @@ public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceF
         updateVisibility();
     }
 
-    private void updateVisibility(){
+    private void updateVisibility() {
         requirePreference("microphoneAccessRequest").setVisible(!getLauncherActivity().checkForPermissionRationale(33, Manifest.permission.RECORD_AUDIO));
         requirePreference("clearMetadataCache").setVisible(new File(Tools.DIR_CACHE, "string_cache").exists());
     }
@@ -70,7 +70,7 @@ public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceF
     private void setupMicrophoneRequestPreference() {
         Preference mRequestMicrophonePermissionPreference = requirePreference("microphoneAccessRequest");
         Activity activity = getActivity();
-        if(activity instanceof LauncherActivity) {
+        if (activity instanceof LauncherActivity) {
             mRequestMicrophonePermissionPreference.setOnPreferenceClickListener(preference -> {
                 ((LauncherActivity) activity).askForPermission(23, Manifest.permission.RECORD_AUDIO);
                 return true;
@@ -79,10 +79,11 @@ public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceF
             mRequestMicrophonePermissionPreference.setVisible(false);
         }
     }
+
     private void setupCacheClearPreference() {
         Preference clearPreference = requirePreference("clearMetadataCache");
         clearPreference.setOnPreferenceClickListener(preference -> {
-            if(ProgressKeeper.getTaskCount() > 0) {
+            if (ProgressKeeper.getTaskCount() > 0) {
                 Toast.makeText(getContext(), R.string.tasks_ongoing, Toast.LENGTH_SHORT).show();
                 return true;
             }
