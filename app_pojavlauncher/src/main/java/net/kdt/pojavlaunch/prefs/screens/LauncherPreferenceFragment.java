@@ -16,13 +16,16 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import net.kdt.pojavlaunch.LauncherActivity;
 import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
 /**
@@ -55,7 +58,65 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
             });
         }
 
+        // Landscape sidebar (see layout-land/fragment_preference_custom.xml)
+        bindSidebar(view);
+
         return view;
+    }
+
+    /**
+     * Wires up the landscape sidebar navigation. The buttons only exist in the
+     * landscape layout, so every lookup is null-safe.
+     */
+    private void bindSidebar(View view) {
+        Activity activity = getActivity();
+        if (activity == null) return;
+
+        View sbHome = view.findViewById(R.id.sb_home);
+        if (sbHome != null) {
+            sbHome.setOnClickListener(v -> Tools.backToMainMenu(activity));
+        }
+
+        View sbSettings = view.findViewById(R.id.sb_settings);
+        if (sbSettings != null) {
+            sbSettings.setOnClickListener(v -> {
+                // On a sub-screen, go back to the main settings list
+                if (this.getClass() != LauncherPreferenceFragment.class) {
+                    activity.onBackPressed();
+                }
+            });
+        }
+
+        View sbControls = view.findViewById(R.id.sb_controls);
+        if (sbControls != null) {
+            sbControls.setOnClickListener(v -> openSubScreen(LauncherPreferenceControlFragment.class));
+        }
+
+        View sbJava = view.findViewById(R.id.sb_java);
+        if (sbJava != null) {
+            sbJava.setOnClickListener(v -> openSubScreen(LauncherPreferenceJavaFragment.class));
+        }
+
+        View sbInfo = view.findViewById(R.id.sb_info);
+        if (sbInfo != null) {
+            sbInfo.setOnClickListener(v -> Tools.shareLog(activity));
+        }
+    }
+
+    /** Opens a settings sub-screen inside the same container this fragment lives in */
+    private void openSubScreen(Class<? extends LauncherPreferenceFragment> clazz) {
+        Activity activity = getActivity();
+        if (activity == null) return;
+        FragmentContainerView container = getFragmentContainerView();
+        if (container == null) return;
+        FragmentManager fm = activity.getSupportFragmentManager();
+        Fragment current = fm.findFragmentByTag(clazz.getName());
+        if (current != null && current.isVisible()) return;
+        fm.beginTransaction()
+                .setReorderingAllowed(true)
+                .addToBackStack(clazz.getName())
+                .replace(container.getId(), clazz, null, clazz.getName())
+                .commit();
     }
 
     protected void updateHeader(TextView title, TextView subtitle) {
@@ -87,10 +148,10 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
             getListView().setBackgroundColor(android.graphics.Color.TRANSPARENT);
         }
 
-        // The landscape main settings screen is flat: the activity's sidebar stays
-        // visible for navigation (see layout-land/fragment_preference_custom.xml).
-        // Sub-screens cover the whole screen, so they get the card, the header and
-        // an opaque background back.
+        // The landscape settings screen is flat (sidebar + list, see
+        // layout-land/fragment_preference_custom.xml). Sub-screens open on top
+        // of everything, so they get the card, the header and an opaque
+        // background back.
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE
                 && this.getClass() != LauncherPreferenceFragment.class) {
             View content = view.findViewById(R.id.settings_content);
@@ -101,9 +162,6 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
             if (content != null) {
                 content.setBackgroundResource(R.drawable.launcher_card_flat);
                 content.setPadding(dp(16), dp(14), dp(16), dp(16));
-                ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) content.getLayoutParams();
-                lp.setMargins(dp(48), dp(24), dp(48), dp(24));
-                content.setLayoutParams(lp);
             }
             if (backBtn != null) backBtn.setVisibility(View.VISIBLE);
             if (title != null) title.setVisibility(View.VISIBLE);
