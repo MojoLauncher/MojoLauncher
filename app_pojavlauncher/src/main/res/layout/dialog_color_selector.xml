@@ -39,7 +39,6 @@
         android:layout_height="wrap_content"
         android:background="@drawable/cryonix_input_field"
         android:hint="@string/color_default_hex"
-        android:hintTextColor="#5E769C"
         android:textColor="@color/primary_text"
         android:gravity="center"
         android:importantForAutofill="no"

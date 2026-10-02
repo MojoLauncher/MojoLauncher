@@ -57,7 +57,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_large"
                 android:background="@drawable/cryonix_input_field"
-                android:hintTextColor="#5E769C"
                 android:textColor="@color/primary_text"
                 android:textSize="@dimen/_14ssp"
 
@@ -85,7 +84,6 @@
                 android:layout_marginEnd="@dimen/padding_medium"
                 android:background="@drawable/cryonix_input_field"
                 android:hint="@string/version_select_hint"
-                android:hintTextColor="#5E769C"
                 android:textColor="@color/primary_text"
                 android:paddingHorizontal="@dimen/padding_heavy"
                 android:textSize="@dimen/_14ssp"
@@ -130,7 +128,6 @@
 
                 android:background="@drawable/cryonix_input_field"
                 android:hint="@string/use_global_default"
-                android:hintTextColor="#5E769C"
                 android:textColor="@color/primary_text"
                 android:paddingHorizontal="@dimen/padding_heavy"
                 android:textSize="@dimen/_14ssp"
@@ -193,7 +190,6 @@
                 android:background="@drawable/cryonix_input_field"
                 android:ems="10"
                 android:hint="@string/use_global_default"
-                android:hintTextColor="#5E769C"
                 android:textColor="@color/primary_text"
                 android:inputType="text"
                 android:paddingHorizontal="@dimen/padding_heavy"

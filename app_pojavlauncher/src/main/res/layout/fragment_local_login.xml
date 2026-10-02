@@ -39,7 +39,6 @@
         android:layout_marginHorizontal="@dimen/_25sdp"
 
         android:layout_marginTop="@dimen/_60sdp"
-        android:hintTextColor="#5E769C"
         android:textColor="@color/primary_text"
         android:imeOptions="flagNoExtractUi"
         android:inputType="textEmailAddress"

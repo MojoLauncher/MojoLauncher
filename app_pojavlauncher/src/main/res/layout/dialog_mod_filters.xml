@@ -29,7 +29,6 @@
 
         android:background="@drawable/cryonix_input_field"
         android:hint="@string/version_select_hint"
-        android:hintTextColor="#5E769C"
         android:textColor="@color/primary_text"
         android:paddingHorizontal="@dimen/padding_heavy"
         android:textSize="@dimen/_14ssp"

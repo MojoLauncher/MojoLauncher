@@ -44,7 +44,6 @@
             android:layout_marginHorizontal="35dp"
             android:layout_marginBottom="20dp"
             android:hint="File name"
-            android:hintTextColor="#5E769C"
             android:textColor="@color/primary_text"
             android:imeOptions="flagForceAscii"
 
