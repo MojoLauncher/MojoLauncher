@@ -49,12 +49,18 @@
 
     <TextView
         android:id="@+id/file_selector_current_path"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="middle"
+        android:singleLine="true"
         android:text="."
-        android:textColor="@color/primary_text"
+        android:textColor="@color/secondary_text"
+        android:textSize="@dimen/_12ssp"
+        android:fontFamily="monospace"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -32,6 +32,7 @@
         android:layout_width="@dimen/padding_extra_large"
         android:layout_height="@dimen/padding_extra_large"
         android:layout_marginEnd="@dimen/_8sdp"
+        android:tint="@color/secondary_text"
         app:layout_constraintBottom_toBottomOf="@id/progress_generic_progressbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/progress_generic_progressbar"

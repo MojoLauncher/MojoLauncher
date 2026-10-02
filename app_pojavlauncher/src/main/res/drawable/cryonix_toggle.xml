@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cryonix toggle button (ToggleButton): checked = filled blue, unchecked = navy outline -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="10dp" />
+            <solid android:color="@color/accent_blue" />
+        </shape>
+    </item>
+    <item android:state_checked="false" android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="10dp" />
+            <solid android:color="#16305A" />
+            <stroke android:width="1dp" android:color="@color/accent_blue" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="10dp" />
+            <solid android:color="#0E1C38" />
+            <stroke android:width="1dp" android:color="#2C5AA0" />
+        </shape>
+    </item>
+</selector>

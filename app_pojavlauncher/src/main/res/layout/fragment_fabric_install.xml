@@ -10,10 +10,11 @@
 
     <TextView
         android:id="@+id/title_textview"
-        style="@style/TextAppearance.AppCompat.Title"
+        style="@style/CryonixScreenTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/padding_large"
+        android:gravity="center"
         android:text="@string/fabric_dl_loader_title"
 
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,6 +30,7 @@
 
     <TextView
         android:id="@+id/fabric_installer_label_game_ver"
+        style="@style/CryonixFieldLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/fabric_dl_game_version"
@@ -40,7 +42,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/padding_extra_large"
-        android:background="@drawable/background_line"
+        android:background="@drawable/cryonix_spinner_bg"
+        android:dropDownWidth="match_parent"
+        android:popupBackground="#0A1526"
+        android:textColor="@color/primary_text"
         android:minHeight="48dp"
         android:paddingVertical="0dp"
         android:paddingStart="7dp"
@@ -62,6 +67,7 @@
 
     <TextView
         android:id="@+id/fabric_installer_label_loader_ver"
+        style="@style/CryonixFieldLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -74,7 +80,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/padding_extra_large"
-        android:background="@drawable/background_line"
+        android:background="@drawable/cryonix_spinner_bg"
+        android:dropDownWidth="match_parent"
+        android:popupBackground="#0A1526"
+        android:textColor="@color/primary_text"
         android:minHeight="48dp"
         android:paddingVertical="0dp"
         android:paddingStart="7dp"
@@ -96,6 +105,7 @@
 
     <TextView
         android:id="@+id/fabric_installer_label_options"
+        style="@style/CryonixFieldLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -107,6 +117,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/fabric_dl_only_stable"
+        android:textColor="@color/primary_text"
         android:layout_marginTop="@dimen/padding_extra_large"
         android:minHeight="@dimen/_30sdp"
         android:checked="true"
@@ -131,13 +142,16 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="@string/modloader_dl_failed_to_load_list"
-            android:textColor="#FFFF0000"
+            android:textColor="@color/cryonix_error"
             android:textStyle="bold" />
 
         <Button
             android:id="@+id/fabric_installer_retry_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/cryonix_button_secondary"
+            android:textAllCaps="false"
+            android:textColor="@color/accent_blue"
             android:text="@string/global_retry" />
     </LinearLayout>
 

@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/title_textview"
-        style="@style/TextAppearance.AppCompat.Title"
+        style="@style/CryonixScreenTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
@@ -39,7 +39,11 @@
         android:id="@+id/mod_dl_expandable_version_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:clipToPadding="false"
+        android:paddingVertical="@dimen/_4sdp">
 
     </ExpandableListView>
 
@@ -59,13 +63,16 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="@string/modloader_dl_failed_to_load_list"
-            android:textColor="#FFFF0000"
+            android:textColor="@color/cryonix_error"
             android:textStyle="bold" />
 
         <Button
             android:id="@+id/forge_installer_retry_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/cryonix_button_secondary"
+            android:textAllCaps="false"
+            android:textColor="@color/accent_blue"
             android:text="@string/global_retry" />
     </LinearLayout>
 

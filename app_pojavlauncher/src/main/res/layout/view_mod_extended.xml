@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/search_modpack_download_error"
-        android:textColor="#FFFF0000"
+        android:textColor="@color/cryonix_error"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -19,6 +19,9 @@
         android:id="@+id/mod_extended_version_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/cryonix_spinner_bg_arrow"
+        android:popupBackground="#0A1526"
+        android:textColor="@color/primary_text"
         android:minHeight="@dimen/_30sdp"
         android:layout_marginVertical="@dimen/padding_moderate"
         app:layout_constraintTop_toBottomOf="@+id/mod_extended_error_textview"

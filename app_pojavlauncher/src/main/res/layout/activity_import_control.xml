@@ -6,13 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+    <View
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="-10dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_setting_sign_in_background" />
+        android:background="@drawable/cryonix_screen_bg" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,7 +19,7 @@
 
 
         android:layout_marginHorizontal="@dimen/_15sdp"
-        android:background="@drawable/menu_background"
+        android:background="@drawable/cryonix_card"
         android:paddingVertical="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -29,6 +28,7 @@
 
         <TextView
             android:id="@+id/textView_import_control_file_name"
+            style="@style/CryonixFieldLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -44,6 +44,8 @@
             android:layout_marginHorizontal="35dp"
             android:layout_marginBottom="20dp"
             android:hint="File name"
+            android:hintTextColor="#5E769C"
+            android:textColor="@color/primary_text"
             android:imeOptions="flagForceAscii"
 
             app:layout_constraintBottom_toTopOf="@+id/mineButton_import_control" />

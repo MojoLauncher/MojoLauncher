@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cryonix full screen background: deep navy vertical gradient -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <gradient
+        android:angle="270"
+        android:startColor="#0B1B36"
+        android:centerColor="#071224"
+        android:endColor="@color/background_app" />
+</shape>

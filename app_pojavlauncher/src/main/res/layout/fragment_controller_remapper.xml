@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:textColor="?android:attr/textColorPrimary"
+            android:textColor="@color/secondary_text"
             android:text="@string/controller_remapper_exit_part1" />
 
         <ImageView
@@ -27,13 +27,14 @@
             android:layout_height="30sp"
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/controller_button_select"
-            app:srcCompat="@drawable/button_select" />
+            app:srcCompat="@drawable/button_select"
+            app:tint="@color/accent_blue" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:textColor="?android:attr/textColorPrimary"
+            android:textColor="@color/secondary_text"
             android:text="@string/controller_remapper_exit_part2" />
 
     </LinearLayout>
@@ -50,16 +51,19 @@
 
         <TextView
             android:id="@+id/gamepad_remapper_mode_label"
+            style="@style/CryonixFieldLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/controller_remapper_operating_mode"
-            android:textColor="?android:attr/textColorPrimary" />
+            android:text="@string/controller_remapper_operating_mode" />
 
         <Spinner
             android:id="@+id/gamepad_remapper_mode_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/cryonix_spinner_bg_arrow"
+            android:popupBackground="#0A1526"
+            android:textColor="@color/primary_text"
             android:minHeight="48dp" />
     </LinearLayout>
 

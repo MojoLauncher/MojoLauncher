@@ -23,6 +23,10 @@
         android:layout_marginEnd="@dimen/padding_medium"
         android:layout_marginBottom="@dimen/padding_medium">
         <ToggleButton
+            android:background="@drawable/cryonix_toggle"
+            android:textColor="@color/primary_text"
+            android:textAllCaps="false"
+            android:textSize="@dimen/_12ssp"
             android:id="@+id/crop_dialog_hlock"
             android:layout_weight="1"
             android:layout_width="0dp"
@@ -30,6 +34,10 @@
             android:textOn="@string/cropper_lock_horizontal"
             android:textOff="@string/cropper_lock_horizontal"/>
         <ToggleButton
+            android:background="@drawable/cryonix_toggle"
+            android:textColor="@color/primary_text"
+            android:textAllCaps="false"
+            android:textSize="@dimen/_12ssp"
             android:id="@+id/crop_dialog_vlock"
             android:layout_weight="1"
             android:layout_width="0dp"
@@ -41,6 +49,10 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:background="@drawable/cryonix_button_secondary"
+            android:textAllCaps="false"
+            android:textColor="@color/accent_blue"
+            android:textSize="@dimen/_12ssp"
             android:text="@string/cropper_reset"/>
     </LinearLayout>
     <ProgressBar

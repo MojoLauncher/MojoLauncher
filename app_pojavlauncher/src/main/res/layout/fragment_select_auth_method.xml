@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/background_card"
+        android:background="@drawable/cryonix_card"
         android:gravity="center"
         android:orientation="vertical"
         android:paddingVertical="@dimen/padding_extra_extra_large">
