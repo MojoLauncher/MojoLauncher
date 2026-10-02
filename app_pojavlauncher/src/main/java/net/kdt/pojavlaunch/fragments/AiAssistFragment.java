@@ -5,6 +5,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -14,7 +16,6 @@ import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -57,7 +58,7 @@ public class AiAssistFragment extends Fragment {
         if (backButton != null) {
             backButton.setOnClickListener(v -> {
                 Tools.jellyClick(v);
-                requireActivity().onBackPressedDispatcher().onBackPressed();
+                requireActivity().onBackPressed();
             });
         }
 
@@ -84,7 +85,13 @@ public class AiAssistFragment extends Fragment {
             });
         }
         if (input != null) {
-            TextViewCompat.setImeActionListener(input, (t, actionId, event) -> sendUserMessage());
+            input.setOnEditorActionListener((t, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_SEND || actionId == EditorInfo.IME_ACTION_DONE) {
+                    sendUserMessage();
+                    return true;
+                }
+                return false;
+            });
         }
 
         // Greeting
@@ -160,7 +167,7 @@ public class AiAssistFragment extends Fragment {
             if (!isAdded()) {
                 return;
             }
-            View row = list.findViewByPosition(index);
+            View row = list.getLayoutManager() != null ? list.getLayoutManager().findViewByPosition(index) : null;
             if (row != null) {
                 Animation a = AnimationUtils.loadAnimation(row.getContext(), R.anim.cryonix_bubble_in);
                 row.startAnimation(a);
@@ -231,9 +238,15 @@ public class AiAssistFragment extends Fragment {
 
         @NonNull
         @Override
-        public VH onCreateViewHolder(@NonNull RecyclerView parent, int viewType) {
+        public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View v = View.inflate(parent.getContext(), R.layout.item_ai_message, null);
             return new VH(v);
+        }
+
+        @NonNull
+        public VH onCreateViewHolder(@NonNull RecyclerView parent, int viewType) {
+            // Compatibility overload for newer RecyclerView (1.2+) versions.
+            return onCreateViewHolder((ViewGroup) parent, viewType);
         }
 
         @Override
