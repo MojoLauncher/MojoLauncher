@@ -162,14 +162,14 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
-                android:layout_weight="0.98"
+                android:layout_weight="1.28"
                 android:background="@drawable/cursor_screen_bg"
                 android:orientation="vertical"
-                android:padding="12dp">
+                android:padding="14dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="44dp"
+                    android:layout_height="48dp"
                     android:gravity="center_vertical">
 
                     <TextView
@@ -193,7 +193,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Move your finger across the panel to test size, color, motion and effects."
+                    android:text="Large live preview • drag to test your cursor style, color, motion and effects."
                     android:textColor="#7189AE"
                     android:textSize="10sp"/>
 
@@ -201,7 +201,7 @@
                     android:id="@+id/cursor_preview"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="10dp"
                     android:layout_weight="1"/>
 
                 <LinearLayout
@@ -238,7 +238,7 @@
             <ScrollView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1.12"
+                android:layout_weight="0.92"
                 android:fillViewport="true"
                 android:overScrollMode="never"
                 android:scrollbars="none">
@@ -260,7 +260,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="◈  Cursor Templates"
+                            android:text="◈  Cursor Shapes"
                             android:textColor="@android:color/white"
                             android:textSize="13sp"/>
 
@@ -268,13 +268,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Choose a style or upload your own cursor."
+                            android:text="Classic, dot, triangle, square, star, ring, hand and more."
                             android:textColor="#6E86AA"
                             android:textSize="9sp"/>
 
                         <HorizontalScrollView
                             android:layout_width="match_parent"
-                            android:layout_height="82dp"
+                            android:layout_height="94dp"
                             android:layout_marginTop="7dp"
                             android:overScrollMode="never"
                             android:scrollbars="none">
@@ -522,6 +522,81 @@
                             android:text="Choose PNG"
                             android:textColor="#BBD0F4"
                             android:textSize="10sp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/cursor_section_bg"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="✦  Quick Presets"
+                            android:textColor="@android:color/white"
+                            android:textSize="13sp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Ready-made cursor looks. Fine-tune anything below."
+                            android:textColor="#6E86AA"
+                            android:textSize="9sp"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="7dp"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/cursor_preset_clean"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginEnd="4dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/launcher_action_button"
+                                android:text="Clean"
+                                android:textColor="#BBD0F4"
+                                android:textSize="9sp"/>
+
+                            <Button
+                                android:id="@+id/cursor_preset_neon"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginHorizontal="4dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/launcher_action_button"
+                                android:text="Neon"
+                                android:textColor="#BBD0F4"
+                                android:textSize="9sp"/>
+
+                            <Button
+                                android:id="@+id/cursor_preset_gamer"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginHorizontal="4dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/launcher_action_button"
+                                android:text="Gamer"
+                                android:textColor="#BBD0F4"
+                                android:textSize="9sp"/>
+
+                            <Button
+                                android:id="@+id/cursor_preset_minimal"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="4dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/launcher_action_button"
+                                android:text="Minimal"
+                                android:textColor="#BBD0F4"
+                                android:textSize="9sp"/>
+                        </LinearLayout>
                     </LinearLayout>
 
                     <Button
