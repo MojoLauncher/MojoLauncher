@@ -10,25 +10,47 @@ public final class CursorStyleUtils {
     public static final String COLOR_KEY = "cryonix_cursor_color";
     public static final String TEMPLATE_KEY = "cryonix_cursor_template";
     public static final String CUSTOM_PATH_KEY = "cryonix_cursor_custom_path";
+    public static final String OUTLINE_KEY = "cryonix_cursor_outline";
+    public static final String TRAIL_KEY = "cryonix_cursor_trail";
+    public static final String OPACITY_KEY = "cryonix_cursor_opacity";
+    public static final String ROTATION_KEY = "cryonix_cursor_rotation";
+    public static final String SHADOW_KEY = "cryonix_cursor_shadow";
 
     public static final String[] TEMPLATES = {
-            "Classic", "Dot", "Crosshair", "Diamond", "Hand"
+            "Classic", "Dot", "Crosshair", "Diamond", "Arrow", "Hand"
     };
 
     public static final int[] COLORS = {
             0xFFFFFFFF, 0xFF4A9BFF, 0xFF00D6A0, 0xFFFFD166,
-            0xFFFF6B8A, 0xFFB98CFF, 0xFFFF8C42, 0xFF00E5FF
+            0xFFFF6B8A, 0xFFB98CFF, 0xFFFF8C42, 0xFF00E5FF,
+            0xFF8EEBFF, 0xFF7DFF5B, 0xFFFF8ACB
     };
 
     private CursorStyleUtils() {}
 
     public static void drawTemplate(Canvas canvas, Paint paint, String template, int color) {
+        drawTemplate(canvas, paint, template, color, false);
+    }
+
+    public static void drawTemplate(Canvas canvas, Paint paint, String template, int color, boolean outline) {
+        if (outline) {
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setStrokeWidth(5f);
+            paint.setColor(0xCC020713);
+            paint.setStrokeCap(Paint.Cap.ROUND);
+            paint.setStrokeJoin(Paint.Join.ROUND);
+            drawShape(canvas, paint, template);
+        }
+
         paint.setColor(color);
         paint.setStyle(Paint.Style.FILL);
         paint.setStrokeWidth(3f);
         paint.setStrokeCap(Paint.Cap.ROUND);
         paint.setStrokeJoin(Paint.Join.ROUND);
+        drawShape(canvas, paint, template);
+    }
 
+    private static void drawShape(Canvas canvas, Paint paint, String template) {
         if ("Dot".equals(template)) {
             canvas.drawCircle(8f, 8f, 8f, paint);
             return;
