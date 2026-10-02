@@ -10,6 +10,7 @@ import androidx.lifecycle.LifecycleEventObserver;
 import androidx.lifecycle.LifecycleOwner;
 
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.utils.JellyAnimations;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -44,6 +45,7 @@ public abstract class LifecycleAwareAlertDialog implements LifecycleEventObserve
         dialogCreator.createDialog(this, builder);
         mLifecycle.addObserver(this);
         mDialog = builder.show();
+        JellyAnimations.animateDialog(mDialog.getWindow() != null ? mDialog.getWindow().getDecorView() : mDialog.getWindow());
     }
 
     /**
