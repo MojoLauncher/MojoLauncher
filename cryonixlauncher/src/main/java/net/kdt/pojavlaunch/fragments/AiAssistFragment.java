@@ -237,7 +237,10 @@ public class AiAssistFragment extends Fragment {
         try {
             File crash = new File(Tools.DIR_GAME_HOME, "latestcrash.txt");
             File log = new File(Tools.DIR_GAME_HOME, "latestlog.txt");
-            File file = crash.exists() && crash.isFile() ? crash : log;
+            File privateCrash = Tools.DIR_DATA != null
+                    ? new File(Tools.DIR_DATA, "latestcrash.txt") : null;
+            File file = crash.exists() && crash.isFile() ? crash
+                    : privateCrash != null && privateCrash.isFile() ? privateCrash : log;
             if (!file.exists() || !file.isFile()) {
                 return "No latestcrash.txt or latestlog.txt was found. Paste the crash text or log into the message box instead.";
             }
