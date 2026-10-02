@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment;
 
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.utils.JellyAnimations;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.instances.InstanceIconProvider;
@@ -17,6 +18,15 @@ import java.io.IOException;
 
 
 public class DeleteConfirmDialogFragment extends DialogFragment {
+    @Override
+    public void onStart() {
+        super.onStart();
+        Dialog dialog = getDialog();
+        if (dialog != null && dialog.getWindow() != null) {
+            JellyAnimations.animateDialog(dialog.getWindow().getDecorView());
+        }
+    }
+
     private final Instance mInstance = Instances.loadSelectedInstance();
 
     @NonNull
