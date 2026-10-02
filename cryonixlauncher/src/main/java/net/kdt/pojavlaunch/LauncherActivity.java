@@ -7,18 +7,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.system.Os;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -52,7 +49,6 @@ import net.kdt.pojavlaunch.tasks.MoJsonDownloader;
 import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.NotificationUtils;
 import net.kdt.pojavlaunch.fragments.GamepadMapperFragment;
-import net.kdt.pojavlaunch.CustomControlsActivity;
 
 import git.artdeell.mojo.R;
 
@@ -61,30 +57,11 @@ public class LauncherActivity extends BaseActivity {
 
     private FragmentContainerView mFragmentView;
     private ImageButton mSettingsButton;
-    private VideoView mVideoBackground;
     private ProgressLayout mProgressLayout;
 
-    private ImageButton mSidebarHome, mSidebarMouse, mSidebarControls, mSidebarInfo, mSidebarSettings;
     private ProgressServiceKeeper mProgressServiceKeeper;
     private NotificationManager mNotificationManager;
     private static ActivityResultLauncher<String> mRequestPermissionLauncher;
-
-    /* Allows to switch from one button "type" to another */
-    private final FragmentManager.FragmentLifecycleCallbacks mFragmentCallbackListener = new FragmentManager.FragmentLifecycleCallbacks() {
-        @Override
-        public void onFragmentResumed(@NonNull FragmentManager fm, @NonNull Fragment f) {
-            boolean isMain = f instanceof MainMenuFragment;
-            boolean isSettings = f instanceof LauncherPreferenceFragment;
-            if (mSidebarHome != null) {
-                mSidebarHome.setBackgroundResource(isMain ? R.drawable.launcher_sidebar_home_bg : 0);
-                mSidebarHome.setColorFilter(isMain ? 0xFFFFFFFF : 0xFF8A8A8A);
-            }
-            if (mSidebarSettings != null) {
-                mSidebarSettings.setBackgroundResource(isSettings ? R.drawable.launcher_sidebar_home_bg : 0);
-                mSidebarSettings.setColorFilter(isSettings ? 0xFFFFFFFF : 0xFF8A8A8A);
-            }
-        }
-    };
 
     /* Listener for the back button in settings */
     private final ExtraListener<String> mBackPreferenceListener = (key, value) -> {
@@ -214,8 +191,6 @@ public class LauncherActivity extends BaseActivity {
 
         ExtraCore.addExtraListener(ExtraConstants.LAUNCH_GAME, mLaunchGameListener);
 
-        setupVideoBackground();
-        setupNavigationListeners();
 
         new AsyncVersionList().getVersionList(versions -> ExtraCore.setValue(ExtraConstants.RELEASE_TABLE, versions));
 
@@ -244,7 +219,6 @@ public class LauncherActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        getSupportFragmentManager().registerFragmentLifecycleCallbacks(mFragmentCallbackListener, true);
     }
 
     @Override
@@ -257,7 +231,6 @@ public class LauncherActivity extends BaseActivity {
         ExtraCore.removeExtraListenerFromValue(ExtraConstants.SELECT_AUTH_METHOD, mSelectAuthMethod);
         ExtraCore.removeExtraListenerFromValue(ExtraConstants.LAUNCH_GAME, mLaunchGameListener);
 
-        getSupportFragmentManager().unregisterFragmentLifecycleCallbacks(mFragmentCallbackListener);
     }
 
     /** Custom implementation to feel more natural when a backstack isn't present */
@@ -350,37 +323,8 @@ public class LauncherActivity extends BaseActivity {
     private void bindViews(){
         mFragmentView = findViewById(R.id.container_fragment);
         mSettingsButton = findViewById(R.id.setting_button);
-        mVideoBackground = findViewById(R.id.video_background);
         mProgressLayout = findViewById(R.id.progress_layout);
 
-        mSidebarHome = findViewById(R.id.sidebar_home);
-        mSidebarMouse = findViewById(R.id.sidebar_mouse);
-        mSidebarControls = findViewById(R.id.sidebar_controls);
-        mSidebarInfo = findViewById(R.id.sidebar_info);
-        mSidebarSettings = findViewById(R.id.sidebar_settings);
-    }
-
-    private void setupNavigationListeners() {
-        View.OnClickListener homeListener = v -> Tools.backToMainMenu(this);
-        View.OnClickListener settingsListener = v -> {
-            if (!(getVisibleFragment(mFragmentView.getId()) instanceof LauncherPreferenceFragment)) {
-                Tools.swapFragment(this, LauncherPreferenceFragment.class, SETTING_FRAGMENT_TAG, null);
-            }
-        };
-
-        if (mSidebarHome != null) mSidebarHome.setOnClickListener(homeListener);
-        if (mSidebarSettings != null) mSidebarSettings.setOnClickListener(settingsListener);
-        if (mSettingsButton != null) mSettingsButton.setOnClickListener(settingsListener);
-
-        if (mSidebarControls != null) mSidebarControls.setOnClickListener(v -> startActivity(new Intent(this, CustomControlsActivity.class)));
-
-        View.OnClickListener infoListener = v -> Tools.shareLog(this);
-        if (mSidebarInfo != null) mSidebarInfo.setOnClickListener(infoListener);
-
-        if (mSidebarMouse != null) mSidebarMouse.setOnClickListener(v -> {
-             // Toggle mouse or something? For now just home
-             Tools.backToMainMenu(this);
-        });
     }
 
     private void runInstallerWithConfirmation() {
@@ -389,15 +333,4 @@ public class LauncherActivity extends BaseActivity {
         } else Toast.makeText(this, R.string.tasks_ongoing, Toast.LENGTH_LONG).show();
     }
 
-    private void setupVideoBackground() {
-        if (mVideoBackground == null) return;
-        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.cryonix);
-        mVideoBackground.setVideoURI(uri);
-        mVideoBackground.setOnPreparedListener(mp -> {
-            mp.setLooping(true);
-            // Mute video if preferred, otherwise remove this line
-            mp.setVolume(0, 0); 
-            mVideoBackground.start();
-        });
-    }
 }
