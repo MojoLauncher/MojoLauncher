@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -305,35 +304,28 @@ public class MainMenuFragment extends Fragment {
         View mainContent = root.findViewById(R.id.main_content);
         View profilePanel = root.findViewById(R.id.profile_panel);
 
-        if (sidebar != null) {
-            sidebar.setTranslationX(-80f);
-            sidebar.setAlpha(0f);
-            sidebar.animate().translationX(0f).alpha(1f).setDuration(450)
-                    .setInterpolator(new OvershootInterpolator(1.1f)).start();
-        }
-        if (brand != null) {
-            brand.setTranslationY(-30f);
-            brand.setAlpha(0f);
-            brand.animate().translationY(0f).alpha(1f).setDuration(400).start();
-        }
-        if (profileChip != null) {
-            profileChip.setTranslationY(-30f);
-            profileChip.setAlpha(0f);
-            profileChip.animate().translationY(0f).alpha(1f).setDuration(400).start();
-        }
-        if (mainContent != null) {
-            mainContent.setScaleX(0.94f);
-            mainContent.setScaleY(0.94f);
-            mainContent.setAlpha(0f);
-            mainContent.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(500)
-                    .setInterpolator(new OvershootInterpolator(1.05f)).start();
-        }
-        if (profilePanel != null) {
-            profilePanel.setTranslationX(100f);
-            profilePanel.setAlpha(0f);
-            profilePanel.animate().translationX(0f).alpha(1f).setDuration(500)
-                    .setInterpolator(new OvershootInterpolator(1.1f)).start();
-        }
+        animateJellyIn(sidebar, -18f, 1f);
+        animateJellyIn(brand, -10f, 1f);
+        animateJellyIn(profileChip, -10f, 1f);
+        animateJellyIn(mainContent, 4f, 0.985f);
+        animateJellyIn(profilePanel, 18f, 1f);
+    }
+
+    private void animateJellyIn(View view, float startTranslationX, float startScale) {
+        if (view == null) return;
+        view.animate().cancel();
+        view.setAlpha(0f);
+        view.setTranslationX(startTranslationX);
+        view.setScaleX(startScale);
+        view.setScaleY(startScale);
+        view.animate()
+                .translationX(0f)
+                .scaleX(1f)
+                .scaleY(1f)
+                .alpha(1f)
+                .setDuration(260L)
+                .setInterpolator(new android.view.animation.DecelerateInterpolator(1.5f))
+                .start();
     }
 
     private void applyJellyTouch(View view) {
@@ -346,7 +338,7 @@ public class MainMenuFragment extends Fragment {
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
                     v.animate().scaleX(1.06f).scaleY(1.06f).setDuration(160)
-                            .withEndAction(() -> v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(120).start())
+                            .withEndAction(() -> v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(80).start())
                             .start();
                     break;
             }
