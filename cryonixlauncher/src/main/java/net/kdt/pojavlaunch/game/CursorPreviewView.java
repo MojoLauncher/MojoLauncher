@@ -61,7 +61,7 @@ public class CursorPreviewView extends View implements SharedPreferences.OnShare
         super.onDraw(canvas);
         if (prefs == null) prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        float scale = Math.max(0.5f, Math.min(2f, prefs.getFloat(CursorStyleUtils.SCALE_KEY, 1f)));
+        float scale = Math.max(0.5f, Math.min(2f, prefs.getFloat(CursorStyleUtils.SCALE_KEY, 1f))) * 1.75f;
         boolean motion = prefs.getBoolean(CursorStyleUtils.MOTION_KEY, true);
         boolean outline = prefs.getBoolean(CursorStyleUtils.OUTLINE_KEY, false);
         boolean trail = prefs.getBoolean(CursorStyleUtils.TRAIL_KEY, false);
@@ -130,7 +130,7 @@ public class CursorPreviewView extends View implements SharedPreferences.OnShare
         }
 
         if (bitmap != null && !bitmap.isRecycled() && main) {
-            float maxSize = 42f;
+            float maxSize = 78f;
             float fit = Math.min(maxSize / Math.max(1f, bitmap.getWidth()),
                     maxSize / Math.max(1f, bitmap.getHeight()));
             canvas.drawBitmap(bitmap, null,
