@@ -3,8 +3,6 @@ package net.kdt.pojavlaunch;
 import android.content.*;
 import android.content.res.Configuration;
 import android.os.*;
-import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.*;
 import net.kdt.pojavlaunch.utils.*;
@@ -42,9 +40,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onResume();
         Tools.checkStorageInteractive(this);
 
-        // Replay the shared jelly entrance whenever this activity becomes visible.
-        // Posting it lets the layout finish measuring before the animation starts.
-        getWindow().getDecorView().post(this::playJellyEntrance);
     }
 
     @Override
@@ -54,10 +49,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         Tools.getDisplayMetrics(this);
     }
 
-    private void playJellyEntrance() {
-        View content = findViewById(android.R.id.content);
-        JellyAnimations.animateScreen(content);
-    }
 
     @Override
     public void onMultiWindowModeChanged(boolean isInMultiWindowMode) {
