@@ -23,7 +23,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
-import net.kdt.pojavlaunch.CursorCustomizationDialog;
 import net.kdt.pojavlaunch.CustomControlsActivity;
 import net.kdt.pojavlaunch.LauncherActivity;
 import net.kdt.pojavlaunch.Tools;
@@ -149,6 +148,7 @@ public class CursorCustomizationFragment extends Fragment {
             bg.setStroke(color == selected ? 5 : 2, Color.WHITE);
             swatch.setBackground(bg);
             swatch.setContentDescription("Cursor color");
+            swatch.setTag(color);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(40, 40);
             lp.setMargins(5, 0, 12, 0);
             container.addView(swatch, lp);
@@ -248,7 +248,9 @@ public class CursorCustomizationFragment extends Fragment {
             sizeBar.setProgress(50);
             updateSizeText(1f);
             customName.setText("Not selected");
-            bindTemplates(root.findViewById(R.id.cursor_templates));
+            LinearLayout templates = root.findViewById(R.id.cursor_templates);
+            templates.removeAllViews();
+            bindTemplates(templates);
         });
     }
 
