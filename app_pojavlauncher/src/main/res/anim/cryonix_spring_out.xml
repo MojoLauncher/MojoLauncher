@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Cryonix spring motion: screen slides out to the right with a fade (back navigation) -->
+<!-- Cryonix spring motion: back-navigation exit, shrink + fade (objectAnimator-only format) -->
 <set xmlns:android="http://schemas.android.com/apk/res/android"
-    android:duration="340">
+    android:duration="340"
+    android:fillAfter="true">
 
-    <translate
-        android:fromXDelta="0%"
-        android:toXDelta="30%"
+    <objectAnimator
+        android:propertyName="scaleX"
         android:duration="340"
-        android:interpolator="@android:anim/accelerate_interpolator" />
+        android:valueFrom="1"
+        android:valueTo="0.94" />
 
-    <alpha
-        android:fromAlpha="1"
-        android:toAlpha="0"
+    <objectAnimator
+        android:propertyName="scaleY"
+        android:duration="340"
+        android:valueFrom="1"
+        android:valueTo="0.94" />
+
+    <objectAnimator
+        android:propertyName="alpha"
         android:duration="260"
-        android:startOffset="40" />
+        android:startOffset="40"
+        android:valueFrom="1"
+        android:valueTo="0" />
 </set>

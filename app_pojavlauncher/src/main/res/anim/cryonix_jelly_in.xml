@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Cryonix jelly motion: new screen enters with a bouncy squash-and-stretch wobble -->
+<!-- Cryonix jelly motion: new screen enters with a bouncy squash-and-stretch wobble.
+     objectAnimator-only so it loads with BOTH AnimationUtils (res/anim) and AnimatorInflater. -->
 <set xmlns:android="http://schemas.android.com/apk/res/android"
     android:duration="520"
     android:fillAfter="true">
 
-    <alpha
+    <objectAnimator
+        android:propertyName="alpha"
         android:duration="180"
-        android:fromAlpha="0"
-        android:toAlpha="1" />
+        android:valueFrom="0"
+        android:valueTo="1" />
 
     <objectAnimator
         android:propertyName="scaleX"

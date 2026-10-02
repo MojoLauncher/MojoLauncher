@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Cryonix jelly motion: old screen shrinks away with a wobble -->
+<!-- Cryonix jelly motion: old screen shrinks away with a wobble (objectAnimator-only format) -->
 <set xmlns:android="http://schemas.android.com/apk/res/android"
     android:duration="400"
     android:fillAfter="true">
@@ -31,9 +31,10 @@
         <propertyValuesHolder android:fraction="1" android:value="0" />
     </objectAnimator>
 
-    <alpha
+    <objectAnimator
+        android:propertyName="alpha"
         android:duration="220"
         android:startOffset="140"
-        android:fromAlpha="1"
-        android:toAlpha="0" />
+        android:valueFrom="1"
+        android:valueTo="0" />
 </set>

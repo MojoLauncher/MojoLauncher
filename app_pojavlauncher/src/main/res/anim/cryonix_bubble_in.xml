@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Cryonix bubble pop: chat message bubbles bounce in -->
+<!-- Cryonix bubble pop: chat message bubbles bounce in (objectAnimator-only format) -->
 <set xmlns:android="http://schemas.android.com/apk/res/android"
     android:duration="340"
     android:fillAfter="true">
 
-    <alpha
-        android:fromAlpha="0"
-        android:toAlpha="1"
-        android:duration="120" />
+    <objectAnimator
+        android:propertyName="alpha"
+        android:duration="120"
+        android:valueFrom="0"
+        android:valueTo="1" />
 
     <objectAnimator
         android:propertyName="scaleX"

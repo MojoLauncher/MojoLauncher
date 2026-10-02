@@ -92,6 +92,24 @@ public class MainMenuFragment extends Fragment {
             Tools.jellyClick(v);
             Tools.swapFragment(requireActivity(), AiAssistFragment.class, AiAssistFragment.TAG, null);
         });
+
+        View aiAssistCard = view.findViewById(R.id.ai_assist_card);
+        if (aiAssistCard != null) aiAssistCard.setOnClickListener(v -> {
+            Tools.jellyClick(v);
+            Tools.swapFragment(requireActivity(), AiAssistFragment.class, AiAssistFragment.TAG, null);
+        });
+
+        TextView profileName = view.findViewById(R.id.profile_name);
+        if (profileName != null) {
+            try {
+                net.kdt.pojavlaunch.authenticator.accounts.Account current =
+                        net.kdt.pojavlaunch.authenticator.accounts.Accounts.getCurrent();
+                if (current != null && current.username != null && !current.username.isEmpty()) {
+                    profileName.setText(current.username);
+                }
+            } catch (Throwable ignored) {
+            }
+        }
         if (mEditProfileButton != null && mVersionSpinner != null) mEditProfileButton.setOnClickListener(v -> mVersionSpinner.openProfileEditor(requireActivity()));
 
         if (mPlayButton != null) mPlayButton.setOnClickListener(v -> ExtraCore.setValue(ExtraConstants.LAUNCH_GAME, true));

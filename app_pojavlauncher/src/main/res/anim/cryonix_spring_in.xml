@@ -1,16 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Cryonix spring motion: screen slides in from the left with an overshoot bounce (back navigation) -->
+<!-- Cryonix spring motion: back-navigation pop with fade + squash (objectAnimator-only format) -->
 <set xmlns:android="http://schemas.android.com/apk/res/android"
-    android:duration="460">
+    android:duration="460"
+    android:fillAfter="true">
 
-    <translate
-        android:fromXDelta="-100%"
-        android:toXDelta="0%"
-        android:duration="460"
-        android:interpolator="@android:anim/overshoot_interpolator" />
+    <objectAnimator
+        android:propertyName="alpha"
+        android:duration="160"
+        android:valueFrom="0"
+        android:valueTo="1" />
 
-    <alpha
-        android:fromAlpha="0"
-        android:toAlpha="1"
-        android:duration="160" />
+    <objectAnimator
+        android:propertyName="scaleX"
+        android:duration="460">
+        <propertyValuesHolder android:fraction="0" android:value="0.92" />
+        <propertyValuesHolder android:fraction="0.7" android:value="1.04" />
+        <propertyValuesHolder android:fraction="1" android:value="1" />
+    </objectAnimator>
+
+    <objectAnimator
+        android:propertyName="scaleY"
+        android:duration="460">
+        <propertyValuesHolder android:fraction="0" android:value="0.94" />
+        <propertyValuesHolder android:fraction="0.7" android:value="1.05" />
+        <propertyValuesHolder android:fraction="1" android:value="1" />
+    </objectAnimator>
+
+    <objectAnimator
+        android:propertyName="rotation"
+        android:duration="460">
+        <propertyValuesHolder android:fraction="0" android:value="-1.5" />
+        <propertyValuesHolder android:fraction="0.7" android:value="0.8" />
+        <propertyValuesHolder android:fraction="1" android:value="0" />
+    </objectAnimator>
 </set>
