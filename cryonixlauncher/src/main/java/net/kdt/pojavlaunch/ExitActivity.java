@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.utils.JellyAnimations;
 
 @Keep
 public class ExitActivity extends AppCompatActivity {
