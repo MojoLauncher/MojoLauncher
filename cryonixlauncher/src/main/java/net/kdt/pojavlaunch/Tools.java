@@ -371,8 +371,16 @@ public final class Tools {
             AlertDialog.Builder builder = new AlertDialog.Builder(ctx)
                     .setTitle(titleId)
                     .setMessage(errMsg)
-                    .setPositiveButton(android.R.string.ok, (p1, p2) -> {
-                        if(exitIfOk) {
+                    .setPositiveButton("Ask AI", (p1, p2) -> {
+                        if (ctx instanceof FragmentActivity) {
+                            Bundle args = new Bundle();
+                            args.putString(net.kdt.pojavlaunch.fragments.AiAssistFragment.ARG_ERROR_TEXT,
+                                    printToString(e));
+                            swapFragment((FragmentActivity) ctx,
+                                    net.kdt.pojavlaunch.fragments.AiAssistFragment.class,
+                                    net.kdt.pojavlaunch.fragments.AiAssistFragment.TAG,
+                                    args);
+                        } else if (exitIfOk) {
                             if (ctx instanceof GameActivity) {
                                 fullyExit();
                             } else if (ctx instanceof Activity) {
