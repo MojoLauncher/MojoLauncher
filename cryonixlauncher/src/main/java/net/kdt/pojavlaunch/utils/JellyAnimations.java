@@ -102,7 +102,8 @@ public final class JellyAnimations {
                             .scaleY(1f)
                             .setDuration(70L)
                             .setInterpolator(new DecelerateInterpolator())
-                            .start());
+                            .start())
+                    .start();
 
             if (child instanceof ViewGroup && !(child instanceof ScrollView)) {
                 animateChildren((ViewGroup) child);
