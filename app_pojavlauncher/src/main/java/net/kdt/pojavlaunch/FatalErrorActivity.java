@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.utils.JellyAnimations;
 
 public class FatalErrorActivity extends AppCompatActivity {
 
@@ -42,7 +43,22 @@ public class FatalErrorActivity extends AppCompatActivity {
 				finish();
 			})
 			.setCancelable(false)
-			.show();
+			.create();
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+            .setTitle(R.string.error_fatal)
+            .setMessage(errHeader + "\n\n" + stackTrace)
+            .setPositiveButton(android.R.string.ok, (p1, p2) -> finish())
+            .setNegativeButton(R.string.global_restart, (p1, p2) -> startActivity(new Intent(FatalErrorActivity.this, LauncherActivity.class)))
+            .setNeutralButton(android.R.string.copy, (p1, p2) -> {
+                ClipboardManager mgr = (ClipboardManager) FatalErrorActivity.this.getSystemService(CLIPBOARD_SERVICE);
+                mgr.setPrimaryClip(ClipData.newPlainText("error", stackTrace));
+                finish();
+            })
+            .setCancelable(false)
+            .create();
+        dialog.show();
+        if (dialog.getWindow() != null) JellyAnimations.animateDialog(dialog.getWindow().getDecorView());
 	}
 
 	public static void showError(Context ctx, String savePath, boolean storageAllow, Throwable th) {
