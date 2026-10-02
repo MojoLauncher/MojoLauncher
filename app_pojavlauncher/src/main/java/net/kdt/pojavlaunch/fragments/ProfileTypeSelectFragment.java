@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.utils.JellyAnimations;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.instances.Instances;
 
@@ -23,6 +24,7 @@ public class ProfileTypeSelectFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        JellyAnimations.animateScreen(view);
         view.findViewById(R.id.vanilla_profile).setOnClickListener(v -> {
             try {
                 Instance instance = Instances.createDefaultInstance();
