@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.utils.JellyAnimations;
 
 public class MultiRTConfigDialog {
     private AlertDialog mDialog;
@@ -19,6 +20,7 @@ public class MultiRTConfigDialog {
     public void show(){
         refresh();
         mDialog.show();
+        if (mDialog.getWindow() != null) JellyAnimations.animateDialog(mDialog.getWindow().getDecorView());
     }
 
     @SuppressLint("NotifyDataSetChanged") //only used to completely refresh the list, it is necessary
