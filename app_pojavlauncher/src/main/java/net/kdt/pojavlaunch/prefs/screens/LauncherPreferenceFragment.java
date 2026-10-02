@@ -18,6 +18,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import net.kdt.pojavlaunch.LauncherActivity;
+import net.kdt.pojavlaunch.utils.JellyAnimations;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
@@ -114,6 +115,13 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
         SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
         if(sharedPreferences != null) sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         mVisibilityUpdater.run();
+
+        // Settings screens are fragments inside LauncherActivity, so animate the
+        // fragment itself whenever a settings page becomes visible.
+        View settingsView = getView();
+        if (settingsView != null) {
+            settingsView.postDelayed(() -> JellyAnimations.animateScreen(settingsView), 70L);
+        }
     }
 
     @Override
