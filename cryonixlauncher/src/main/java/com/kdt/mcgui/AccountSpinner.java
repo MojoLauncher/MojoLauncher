@@ -188,23 +188,7 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
     }
 
     private void updateTopBar(Account account) {
-        if (account == null) return;
-        if (!(getContext() instanceof Activity)) return;
-        Activity activity = (Activity) getContext();
-
-        final TextView nameTop = activity.findViewById(R.id.profile_name_top);
-        final ImageView avatarTop = activity.findViewById(R.id.profile_avatar_top);
-
-        if (nameTop != null) nameTop.setText(account.username);
-        if (avatarTop != null) {
-            Bitmap face = account.getSkinFace();
-            if (face != null) {
-                avatarTop.setImageBitmap(face);
-            } else {
-                // Default fallback if no skin is found
-                avatarTop.setImageResource(R.drawable.cryonixlauncher);
-            }
-        }
+        // The current launcher layout has no separate top profile views.
     }
 
     private void createAccount() {
