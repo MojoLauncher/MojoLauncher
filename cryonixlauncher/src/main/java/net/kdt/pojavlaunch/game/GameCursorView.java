@@ -113,7 +113,7 @@ public class GameCursorView extends View implements PlatformCursorImplementor {
         }
 
         if (bitmap != null && !bitmap.isRecycled() && main) {
-            float maxSize = 40f;
+            float maxSize = 52f;
             float fit = Math.min(maxSize / Math.max(1f, bitmap.getWidth()),
                     maxSize / Math.max(1f, bitmap.getHeight()));
             float drawW = bitmap.getWidth() * fit;
