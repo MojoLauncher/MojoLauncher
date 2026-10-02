@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.system.Os;
 import android.view.View;
+import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -184,9 +185,10 @@ public class LauncherActivity extends BaseActivity {
 
         try {
             Os.setenv("TMPDIR", Tools.DIR_CACHE.getAbsolutePath(), true);
-         }
+        }
         catch (Exception e) {
-            throw new RuntimeException(e);
+            // TMPDIR is optional; do not prevent the launcher UI from opening if it fails.
+            Log.w("CryonixLauncher", "Unable to set TMPDIR; continuing with the default temp directory.", e);
         }
 
         IconCacheJanitor.runJanitor();
