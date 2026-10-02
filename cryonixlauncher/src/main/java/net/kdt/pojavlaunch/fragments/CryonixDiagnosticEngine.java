@@ -137,7 +137,7 @@ public final class CryonixDiagnosticEngine {
                .append("4. Tell me what you were doing immediately before the crash (launch, login, OptiFine, mod install, etc.).\n\n");
         }
 
-        String version = firstMatch(log, "(?i)Minecraft(?: version)?[:= ]+([0-9][0-9A-Za-z.\-]+)");
+        String version = firstMatch(log, "(?i)Minecraft(?: version)?[:= ]+([0-9][0-9A-Za-z.-]+)");
         String java = firstMatch(log, "(?i)Java(?: version)?[:= ]+([^\\n]+)");
         if (version != null || java != null) {
             out.append("Context found:\n");
