@@ -290,6 +290,19 @@ class AssetTaskRegistrar {
     }
 }
 
+// Keep the legacy Android Studio build task available after the module directory rename.
+afterEvaluate {
+    if (!tasks.names.contains("assembleFullDebug")) {
+        def fullDebugVariant = android.applicationVariants.find { it.name == "fullDebug" }
+        if (fullDebugVariant != null) {
+            tasks.register("assembleFullDebug") {
+                dependsOn fullDebugVariant.assembleProvider
+            }
+        }
+    }
+}
+
+
 afterEvaluate {
     def registrar = new AssetTaskRegistrar(project)
 
