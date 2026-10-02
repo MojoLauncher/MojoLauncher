@@ -5,83 +5,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/launcher_home_background"
+    android:background="@drawable/cryonix_screen_bg"
     android:padding="30dp">
 
     <LinearLayout
         android:id="@+id/launcher_sidebar"
-        android:layout_width="112dp"
+        android:layout_width="84dp"
         android:layout_height="0dp"
-        android:background="@drawable/launcher_sidebar_bg"
-        android:gravity="top|center_horizontal"
+        android:background="@drawable/cryonix_sidebar_pill"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:paddingTop="28dp"
-        android:paddingBottom="28dp"
+        android:paddingTop="22dp"
+        android:paddingBottom="22dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:layout_width="62dp"
-            android:layout_height="62dp"
-            android:contentDescription="Cryonix"
-            android:scaleType="centerInside"
-            android:src="@drawable/cryonixlauncher" />
-
         <ImageButton
             android:id="@+id/sidebar_home"
-            android:layout_width="62dp"
-            android:layout_height="62dp"
-            android:layout_marginTop="34dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:background="@drawable/launcher_sidebar_home_bg"
             android:contentDescription="Home"
-            android:padding="16dp"
-            android:src="@drawable/ic_px_home"
+            android:padding="13dp"
+            android:src="@drawable/ic_clean_home"
             app:tint="@android:color/white" />
-
-        <ImageButton
-            android:id="@+id/sidebar_instances"
-            android:layout_width="62dp"
-            android:layout_height="62dp"
-            android:layout_marginTop="18dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Instances"
-            android:padding="17dp"
-            android:src="@drawable/ic_px_book"
-            app:tint="#A9C0EA" />
-
-        <ImageButton
-            android:id="@+id/custom_control_button"
-            android:layout_width="62dp"
-            android:layout_height="62dp"
-            android:layout_marginTop="18dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Controls"
-            android:padding="17dp"
-            android:src="@drawable/ic_px_gamepad"
-            app:tint="#A9C0EA" />
-
-        <ImageButton
-            android:id="@+id/install_jar_button"
-            android:layout_width="62dp"
-            android:layout_height="62dp"
-            android:layout_marginTop="18dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Java"
-            android:padding="17dp"
-            android:src="@drawable/ic_px_java_run"
-            app:tint="#A9C0EA" />
-
-        <ImageButton
-            android:id="@+id/sidebar_ai_assist"
-            android:layout_width="62dp"
-            android:layout_height="62dp"
-            android:layout_marginTop="18dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="AI Assist"
-            android:padding="17dp"
-            android:src="@drawable/ic_px_ai"
-            app:tint="#7FD4FF" />
 
         <Space
             android:layout_width="1dp"
@@ -89,24 +37,43 @@
             android:layout_weight="1" />
 
         <ImageButton
-            android:id="@+id/share_logs_button"
-            android:layout_width="62dp"
-            android:layout_height="62dp"
+            android:id="@+id/install_jar_button"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Logs"
-            android:padding="17dp"
-            android:src="@drawable/ic_px_sliders"
+            android:contentDescription="Java"
+            android:padding="14dp"
+            android:src="@drawable/ic_clean_java"
             app:tint="#A9C0EA" />
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/custom_control_button"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Controls"
+            android:padding="14dp"
+            android:src="@drawable/ic_clean_gamepad"
+            app:tint="#A9C0EA" />
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <ImageButton
             android:id="@+id/sidebar_settings"
-            android:layout_width="62dp"
-            android:layout_height="62dp"
-            android:layout_marginTop="12dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Settings"
-            android:padding="17dp"
-            android:src="@drawable/ic_sharp_settings_24"
+            android:padding="14dp"
+            android:src="@drawable/ic_clean_settings"
             app:tint="#A9C0EA" />
     </LinearLayout>
 
@@ -114,7 +81,7 @@
         android:id="@+id/brand_line"
         android:layout_width="2dp"
         android:layout_height="62dp"
-        android:layout_marginStart="44dp"
+        android:layout_marginStart="26dp"
         android:background="@color/accent_blue"
         app:layout_constraintStart_toEndOf="@id/launcher_sidebar"
         app:layout_constraintTop_toTopOf="parent" />
@@ -123,7 +90,7 @@
         android:id="@+id/brand_block"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
+        android:layout_marginStart="26dp"
         android:orientation="vertical"
         app:layout_constraintStart_toEndOf="@id/brand_line"
         app:layout_constraintTop_toTopOf="parent">
@@ -189,7 +156,7 @@
         android:id="@+id/main_content"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="38dp"
+        android:layout_marginStart="26dp"
         android:layout_marginEnd="36dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -295,7 +262,7 @@
                 android:background="@drawable/launcher_sidebar_home_bg"
                 android:contentDescription="AI Assistant"
                 android:padding="10dp"
-                android:src="@drawable/ic_px_ai"
+                android:src="@drawable/ic_clean_ai"
                 app:tint="@android:color/white" />
 
             <LinearLayout

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Clean Java (coffee cup) icon -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M4,9 H16 V13 A5,5 0 0 1 11,18 H9 A5,5 0 0 1 4,13 Z M16,10 H18 A2.5,2.5 0 0 1 18,15 H16 V13.4 H17.6 A0.9,0.9 0 0 0 17.6,11.6 H16 Z M7,3 H8.4 V6.4 H7 Z M11,3 H12.4 V6.4 H11 Z" />
+</vector>

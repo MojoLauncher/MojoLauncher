@@ -22,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.kdt.mcgui.mcVersionSpinner;
 
 import net.kdt.pojavlaunch.CustomControlsActivity;
+import net.kdt.pojavlaunch.LauncherActivity;
+import net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceFragment;
 import git.artdeell.mojo.R;
 
 import net.kdt.pojavlaunch.Tools;
@@ -91,6 +93,20 @@ public class MainMenuFragment extends Fragment {
         if (mAiAssistButton != null) mAiAssistButton.setOnClickListener(v -> {
             Tools.jellyClick(v);
             Tools.swapFragment(requireActivity(), AiAssistFragment.class, AiAssistFragment.TAG, null);
+        });
+
+        View sidebarHome = view.findViewById(R.id.sidebar_home);
+        if (sidebarHome != null) sidebarHome.setOnClickListener(v -> {
+            Tools.jellyClick(v);
+            Tools.backToMainMenu(requireActivity());
+        });
+
+        View sidebarSettings = view.findViewById(R.id.sidebar_settings);
+        if (sidebarSettings != null) sidebarSettings.setOnClickListener(v -> {
+            if (!(requireActivity().getSupportFragmentManager().findFragmentById(R.id.container_fragment) instanceof LauncherPreferenceFragment)) {
+                Tools.jellyClick(v);
+                Tools.swapFragment(requireActivity(), LauncherPreferenceFragment.class, LauncherActivity.SETTING_FRAGMENT_TAG, null);
+            }
         });
 
         View aiAssistCard = view.findViewById(R.id.ai_assist_card);

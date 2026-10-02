@@ -38,7 +38,7 @@
             android:background="@drawable/launcher_icon_tile"
             android:padding="@dimen/_8sdp"
             android:contentDescription="AI Assist"
-            android:src="@drawable/ic_px_ai"
+            android:src="@drawable/ic_clean_ai"
             app:tint="@color/accent_blue" />
 
         <LinearLayout
