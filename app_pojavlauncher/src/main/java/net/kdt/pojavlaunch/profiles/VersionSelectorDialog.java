@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog;
 import net.kdt.pojavlaunch.JVersionList;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
+import net.kdt.pojavlaunch.utils.JellyAnimations;
 
 public class VersionSelectorDialog {
     public static void open(Context context, boolean hideCustomVersions, VersionSelectorListener listener) {
@@ -26,6 +27,7 @@ public class VersionSelectorDialog {
         expandableListView.setAdapter(adapter);
         builder.setView(expandableListView);
         AlertDialog dialog = builder.show();
+        if (dialog.getWindow() != null) JellyAnimations.animateDialog(dialog.getWindow().getDecorView());
 
         expandableListView.setOnChildClickListener((parent, v1, groupPosition, childPosition, id) -> {
             String version = adapter.getChild(groupPosition, childPosition);
