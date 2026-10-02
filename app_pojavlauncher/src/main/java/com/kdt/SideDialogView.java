@@ -22,6 +22,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.utils.JellyAnimations;
 
 /**
  * The base class for side dialog views
@@ -111,6 +112,7 @@ public abstract class SideDialogView {
 
         mDialogLayout.setVisibility(View.VISIBLE);
         mDialogLayout.setBackground(ResourcesCompat.getDrawable(mDialogLayout.getResources(), R.drawable.background_control_editor, null));
+        JellyAnimations.animateDialog(mDialogLayout);
 
         //TODO offset better according to view width
         mDialogLayout.setX(-mDialogLayout.getResources().getDimensionPixelOffset(R.dimen._280sdp));
