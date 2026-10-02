@@ -31,7 +31,6 @@ import com.kdt.mcgui.mcVersionSpinner;
 
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.CustomControlsActivity;
-import net.kdt.pojavlaunch.CursorCustomizationDialog;
 import net.kdt.pojavlaunch.LauncherActivity;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.contracts.OpenDocumentWithExtension;
@@ -116,7 +115,7 @@ public class MainMenuFragment extends Fragment {
             applyJellyTouch(mCursorButton);
             mCursorButton.setOnClickListener(v -> {
                 Tools.jellyClick(v);
-                CursorCustomizationDialog.show(requireContext());
+                Tools.swapFragment(requireActivity(), CursorCustomizationFragment.class, CursorCustomizationFragment.TAG, null);
             });
         }
 
