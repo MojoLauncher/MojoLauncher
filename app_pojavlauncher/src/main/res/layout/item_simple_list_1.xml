@@ -12,8 +12,7 @@
 
     android:paddingTop="@dimen/padding_input_top"
     android:paddingBottom="@dimen/padding_input_bottom"
-    android:textColor="@color/primary_text"
-    android:background="?attr/selectableItemBackground"
+    android:textAppearance="?android:attr/textAppearanceListItemSmall"
 
 
     android:textSize="@dimen/_13ssp"

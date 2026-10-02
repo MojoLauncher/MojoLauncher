@@ -74,15 +74,8 @@ public class LauncherActivity extends BaseActivity {
         @Override
         public void onFragmentResumed(@NonNull FragmentManager fm, @NonNull Fragment f) {
             boolean isMain = f instanceof MainMenuFragment;
-            boolean isSettings = f instanceof LauncherPreferenceFragment;
-            if (mSidebarHome != null) {
-                mSidebarHome.setBackgroundResource(isMain ? R.drawable.launcher_sidebar_home_bg : 0);
-                mSidebarHome.setColorFilter(isMain ? 0xFFFFFFFF : 0xFF8A8A8A);
-            }
-            if (mSidebarSettings != null) {
-                mSidebarSettings.setBackgroundResource(isSettings ? R.drawable.launcher_sidebar_home_bg : 0);
-                mSidebarSettings.setColorFilter(isSettings ? 0xFFFFFFFF : 0xFF8A8A8A);
-            }
+            mSidebarHome.setBackgroundResource(isMain ? R.drawable.launcher_sidebar_home_bg : 0);
+            mSidebarHome.setColorFilter(isMain ? 0xFFFFFFFF : 0xFF8A8A8A);
         }
     };
 

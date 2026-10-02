@@ -20,7 +20,5 @@
         android:paddingTop="@dimen/_10sdp"
         android:paddingEnd="@dimen/_8sdp"
         android:text="@string/storage_required"
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_14ssp"
         android:gravity="center"/>
 </LinearLayout>

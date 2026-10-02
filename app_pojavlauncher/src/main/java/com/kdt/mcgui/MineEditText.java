@@ -5,8 +5,6 @@ import android.util.*;
 import android.graphics.*;
 import android.widget.EditText;
 
-import git.artdeell.mojo.R;
-
 public class MineEditText extends androidx.appcompat.widget.AppCompatEditText {
 	public MineEditText(Context ctx) {
 		super(ctx);
@@ -19,7 +17,7 @@ public class MineEditText extends androidx.appcompat.widget.AppCompatEditText {
 	}
 
 	public void init() {
-		setBackgroundResource(R.drawable.cryonix_input_field);
-		setPadding(16, 5, 16, 5);
+		setBackgroundColor(Color.parseColor("#131313"));
+		setPadding(5, 5, 5, 5);
 	}
 }

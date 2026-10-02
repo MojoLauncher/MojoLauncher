@@ -15,8 +15,6 @@
     <!-- EDIT NAME SECTION -->
     <TextView
         android:id="@+id/editName_textView"
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -28,8 +26,6 @@
 
     <EditText
         android:id="@+id/editName_editText"
-        android:background="@drawable/cryonix_input_field"
-        android:textColor="@color/primary_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -44,8 +40,6 @@
     <!--  SIZE SECTION -->
     <TextView
         android:id="@+id/editSize_textView"
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -58,8 +52,6 @@
 
     <EditText
         android:id="@+id/editSize_editTextX"
-        android:background="@drawable/cryonix_input_field"
-        android:textColor="@color/primary_text"
         android:layout_width="@dimen/_134sdp"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -71,8 +63,6 @@
 
     <EditText
         android:id="@+id/editSize_editTextY"
-        android:background="@drawable/cryonix_input_field"
-        android:textColor="@color/primary_text"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
@@ -99,8 +89,6 @@
     <!-- MAPPING SECTION -->
     <TextView
         android:id="@+id/editMapping_textView"
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -181,9 +169,6 @@
     <TextView
         android:id="@+id/mapping_1_textview"
         style="?android:attr/spinnerItemStyle"
-        android:background="@drawable/cryonix_input_field"
-        android:textColor="@color/primary_text"
-        android:paddingHorizontal="@dimen/padding_moderate"
         android:layout_width="0dp"
         android:layout_height="@dimen/_30sdp"
         android:ellipsize="marquee"
@@ -212,9 +197,6 @@
     <TextView
         android:id="@+id/mapping_2_textview"
         style="?android:attr/spinnerItemStyle"
-        android:background="@drawable/cryonix_input_field"
-        android:textColor="@color/primary_text"
-        android:paddingHorizontal="@dimen/padding_moderate"
         android:layout_width="0dp"
         android:layout_height="@dimen/_30sdp"
         android:ellipsize="marquee"
@@ -231,9 +213,6 @@
     <TextView
         android:id="@+id/mapping_3_textview"
         style="?android:attr/spinnerItemStyle"
-        android:background="@drawable/cryonix_input_field"
-        android:textColor="@color/primary_text"
-        android:paddingHorizontal="@dimen/padding_moderate"
         android:layout_width="0dp"
         android:layout_height="@dimen/_30sdp"
         android:ellipsize="marquee"
@@ -263,9 +242,6 @@
     <TextView
         android:id="@+id/mapping_4_textview"
         style="?android:attr/spinnerItemStyle"
-        android:background="@drawable/cryonix_input_field"
-        android:textColor="@color/primary_text"
-        android:paddingHorizontal="@dimen/padding_moderate"
         android:layout_width="0dp"
         android:layout_height="@dimen/_30sdp"
         android:ellipsize="marquee"
@@ -283,8 +259,6 @@
     <!-- ORIENTATION SECTION -->
     <TextView
         android:id="@+id/editOrientation_textView"
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_2sdp"
@@ -308,8 +282,6 @@
 
     <!-- TOGGLE SECTION -->
     <Switch
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:id="@+id/checkboxToggle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
@@ -321,8 +293,6 @@
 
     <!-- MOUSE PASS THROUGH SECTION -->
     <Switch
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:id="@+id/checkboxPassThrough"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
@@ -334,8 +304,6 @@
 
     <!-- SWIPEABLE BUTTON SECTION -->
     <Switch
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:id="@+id/checkboxSwipeable"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
@@ -347,8 +315,6 @@
 
     <!-- FORWARD LOCK SECTION -->
     <Switch
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:id="@+id/checkboxForwardLock"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
@@ -359,8 +325,6 @@
         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     <Switch
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:id="@+id/checkboxAbsoluteFingerTracking"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
@@ -374,9 +338,7 @@
         android:id="@+id/setBackgroundBitmap_textView"
         android:layout_width="0dp"
         android:layout_height="@dimen/_35sdp"
-        android:background="@drawable/cryonix_list_row"
-        android:textColor="@color/primary_text"
-        android:paddingStart="@dimen/padding_moderate"
+        android:background="?attr/selectableItemBackground"
         android:drawableEnd="@drawable/spinner_arrow_right"
         android:gravity="center_vertical"
         android:paddingEnd="5dp"
@@ -394,9 +356,7 @@
         android:id="@+id/editBackgroundColor_textView"
         android:layout_width="0dp"
         android:layout_height="@dimen/_35sdp"
-        android:background="@drawable/cryonix_list_row"
-        android:textColor="@color/primary_text"
-        android:paddingStart="@dimen/padding_moderate"
+        android:background="?attr/selectableItemBackground"
         android:drawableEnd="@drawable/spinner_arrow_right"
         android:gravity="center_vertical"
         android:paddingEnd="5dp"
@@ -411,8 +371,6 @@
 
     <fr.spse.extended_view.ExtendedTextView
         android:id="@+id/editBackgroundColorWarning_textView"
-        android:textColor="@color/secondary_text"
-        android:textSize="@dimen/_12ssp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
@@ -431,8 +389,6 @@
     <!-- STROKE WIDTH -->
     <TextView
         android:id="@+id/editStrokeWidth_textView"
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_5sdp"
@@ -456,7 +412,6 @@
 
     <TextView
         android:id="@+id/editStrokeWidth_textView_percent"
-        style="@style/CryonixAccentText"
         android:layout_width="50dp"
         android:layout_height="0dp"
         android:gravity="center"
@@ -471,9 +426,7 @@
         android:id="@+id/editStrokeColor_textView"
         android:layout_width="0dp"
         android:layout_height="@dimen/_35sdp"
-        android:background="@drawable/cryonix_list_row"
-        android:textColor="@color/primary_text"
-        android:paddingStart="@dimen/padding_moderate"
+        android:background="?attr/selectableItemBackground"
         android:drawableEnd="@drawable/spinner_arrow_right"
         android:gravity="center_vertical"
         android:paddingEnd="5dp"
@@ -489,8 +442,6 @@
     <!-- CORNER RADIUS SECTION -->
     <TextView
         android:id="@+id/editCornerRadius_textView"
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -513,7 +464,6 @@
 
     <TextView
         android:id="@+id/editCornerRadius_textView_percent"
-        style="@style/CryonixAccentText"
         android:layout_width="50dp"
         android:layout_height="0dp"
         android:gravity="center"
@@ -526,8 +476,6 @@
     <!-- BUTTON OPACITY SECTION -->
     <TextView
         android:id="@+id/editButtonOpacity_textView"
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -549,7 +497,6 @@
 
     <TextView
         android:id="@+id/editButtonOpacity_textView_percent"
-        style="@style/CryonixAccentText"
         android:layout_width="50dp"
         android:layout_height="0dp"
         android:gravity="center"
@@ -562,8 +509,6 @@
     <!-- Button visibility -->
     <TextView
         android:id="@+id/visibility_textview"
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/customctrl_visibility_title"
@@ -571,8 +516,6 @@
         tools:layout_editor_absoluteX="6dp" />
 
     <CheckBox
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:id="@+id/visibility_game_checkbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -580,8 +523,6 @@
         app:layout_constraintTop_toBottomOf="@+id/visibility_textview" />
 
     <CheckBox
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:id="@+id/visibility_menu_checkbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

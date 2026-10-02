@@ -9,10 +9,10 @@
     android:orientation="vertical"
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
-    android:background="@drawable/cryonix_panel">
+    android:background="@drawable/background_control_editor">
     <TextView
         android:id="@+id/side_dialog_title_textview"
-        style="@style/CryonixScreenTitle"
+        style="@style/TextAppearance.AppCompat.Large"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/padding_moderate"
@@ -50,10 +50,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:textAllCaps="false"
-            android:textColor="@color/secondary_text"
-            android:textSize="@dimen/_14ssp"
-            android:fontFamily="sans-serif-medium"
             android:visibility="gone"
 
             tools:visibility="visible"
@@ -66,10 +62,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:textAllCaps="false"
-            android:textColor="@color/accent_blue"
-            android:textSize="@dimen/_14ssp"
-            android:fontFamily="sans-serif-medium"
             android:visibility="gone"
 
             tools:text="Confirm"

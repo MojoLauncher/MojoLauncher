@@ -9,9 +9,6 @@
         android:id="@+id/controller_mapper_default_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_4sdp"
-        android:layout_marginVertical="@dimen/_4sdp"
-        android:background="@drawable/cryonix_list_row"
         android:focusable="true">
 
         <!-- Content description is set in ViewHolder -->
@@ -47,9 +44,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/padding_large"
-            android:textColor="@color/primary_text"
-            android:textSize="@dimen/_14ssp"
-            android:fontFamily="sans-serif-medium"
             android:maxLines="2"
             android:minLines="1"
             android:singleLine="false"
@@ -73,9 +67,7 @@
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginHorizontal="@dimen/padding_moderate"
-            android:background="@drawable/cryonix_spinner_bg_arrow"
-            android:popupBackground="#0A1526"
-            android:textColor="@color/primary_text"
+            android:background="@null"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/controller_mapper_plus_label1" />
@@ -85,9 +77,7 @@
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginHorizontal="@dimen/padding_moderate"
-            android:background="@drawable/cryonix_spinner_bg_arrow"
-            android:popupBackground="#0A1526"
-            android:textColor="@color/primary_text"
+            android:background="@null"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/controller_mapper_plus_label1"
@@ -99,9 +89,7 @@
             android:layout_height="48dp"
             android:layout_marginTop="@dimen/padding_moderate"
             android:layout_marginHorizontal="@dimen/padding_moderate"
-            android:background="@drawable/cryonix_spinner_bg_arrow"
-            android:popupBackground="#0A1526"
-            android:textColor="@color/primary_text"
+            android:background="@null"
             app:layout_constraintTop_toBottomOf="@id/controller_mapper_key_spinner1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/controller_mapper_plus_label2"/>
@@ -112,9 +100,7 @@
             android:layout_height="48dp"
             android:layout_marginTop="@dimen/padding_moderate"
             android:layout_marginHorizontal="@dimen/padding_moderate"
-            android:background="@drawable/cryonix_spinner_bg_arrow"
-            android:popupBackground="#0A1526"
-            android:textColor="@color/primary_text"
+            android:background="@null"
             app:layout_constraintTop_toBottomOf="@id/controller_mapper_key_spinner2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/controller_mapper_plus_label2"/>

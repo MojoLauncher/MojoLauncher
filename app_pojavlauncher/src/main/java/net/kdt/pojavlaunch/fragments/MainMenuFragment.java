@@ -70,7 +70,6 @@ public class MainMenuFragment extends Fragment {
         // Sidebar actions are ImageButtons in the new Cryonix home UI.
         View mCustomControlButton = view.findViewById(R.id.custom_control_button);
         View mInstallJarButton = view.findViewById(R.id.install_jar_button);
-        View mAiAssistButton = view.findViewById(R.id.sidebar_ai_assist);
         View mShareLogsButton = view.findViewById(R.id.share_logs_button);
         View mOpenDirectoryButton = view.findViewById(R.id.open_files_button);
 
@@ -88,7 +87,6 @@ public class MainMenuFragment extends Fragment {
         if (mDiscordButton != null) mDiscordButton.setOnClickListener(v -> Tools.openURL(requireActivity(), getString(R.string.social_media_invite)));
         if (mCustomControlButton != null) mCustomControlButton.setOnClickListener(v -> startActivity(new Intent(requireContext(), CustomControlsActivity.class)));
         if (mInstallJarButton != null) mInstallJarButton.setOnClickListener(v -> runInstallerWithConfirmation());
-        if (mAiAssistButton != null) mAiAssistButton.setOnClickListener(v -> Tools.swapFragment(requireActivity(), AiAssistFragment.class, AiAssistFragment.TAG, null));
         if (mEditProfileButton != null && mVersionSpinner != null) mEditProfileButton.setOnClickListener(v -> mVersionSpinner.openProfileEditor(requireActivity()));
 
         if (mPlayButton != null) mPlayButton.setOnClickListener(v -> ExtraCore.setValue(ExtraConstants.LAUNCH_GAME, true));

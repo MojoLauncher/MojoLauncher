@@ -12,8 +12,6 @@
     <!-- Resolution settings -->
     <TextView
         android:id="@+id/editResolution_textView"
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_5sdp"
@@ -38,7 +36,6 @@
 
     <TextView
         android:id="@+id/editResolution_textView_percent"
-        style="@style/CryonixAccentText"
         android:layout_width="150dp"
         android:layout_height="0dp"
         android:gravity="end"
@@ -50,8 +47,6 @@
 
     <!-- Gyroscope settings -->
     <Switch
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:id="@+id/checkboxGyro"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
@@ -62,8 +57,6 @@
         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     <Switch
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:id="@+id/checkboxGyroX"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
@@ -74,8 +67,6 @@
         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     <Switch
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:id="@+id/checkboxGyroY"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
@@ -88,8 +79,6 @@
     <!-- Gyroscope sensitivity -->
     <TextView
         android:id="@+id/editGyro_textView"
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_5sdp"
@@ -116,7 +105,6 @@
 
     <TextView
         android:id="@+id/editGyro_textView_percent"
-        style="@style/CryonixAccentText"
         android:layout_width="150dp"
         android:layout_height="0dp"
         android:gravity="end"
@@ -130,8 +118,6 @@
     <!-- Mouse settings -->
     <TextView
         android:id="@+id/editMouseSpeed_textView"
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_5sdp"
@@ -158,7 +144,6 @@
 
     <TextView
         android:id="@+id/editMouseSpeed_textView_percent"
-        style="@style/CryonixAccentText"
         android:layout_width="150dp"
         android:layout_height="0dp"
         android:gravity="end"
@@ -170,8 +155,6 @@
 
     <!-- Gesture toggle -->
     <Switch
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:id="@+id/checkboxGesture"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
@@ -184,8 +167,6 @@
     <!-- gesture settings -->
     <TextView
         android:id="@+id/editGestureDelay_textView"
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_5sdp"
@@ -212,7 +193,6 @@
 
     <TextView
         android:id="@+id/editGestureDelay_textView_percent"
-        style="@style/CryonixAccentText"
         android:layout_width="150dp"
         android:layout_height="0dp"
         android:gravity="end"
@@ -225,8 +205,6 @@
     <!-- button transparency seekbar -->
     <TextView
         android:id="@+id/buttonTransparency_textView"
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/_13ssp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_5sdp"
@@ -253,7 +231,6 @@
 
     <TextView
         android:id="@+id/buttonTransparency_textView_percent"
-        style="@style/CryonixAccentText"
         android:layout_width="150dp"
         android:layout_height="0dp"
         android:gravity="end"

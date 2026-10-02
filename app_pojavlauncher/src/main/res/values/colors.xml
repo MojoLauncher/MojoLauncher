@@ -15,7 +15,4 @@
 
     <color name="primary_text">#FFFFFF</color>
     <color name="secondary_text">#9FB5D8</color>
-    <color name="cryonix_error">#FF6B6B</color>
-    <color name="cryonix_field_stroke">#243D6B</color>
-    <color name="cryonix_row_fill">#0E1C38</color>
 </resources>
