@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.utils.JellyAnimations;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 
@@ -30,6 +31,7 @@ public class LocalLoginFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        JellyAnimations.animateScreen(view);
         mUsernameEditText = view.findViewById(R.id.login_edit_email);
         view.findViewById(R.id.login_button).setOnClickListener(v -> {
             if(!checkEditText()) {
