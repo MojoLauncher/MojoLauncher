@@ -62,6 +62,7 @@ import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.GLInfoUtils;
+import net.kdt.pojavlaunch.utils.JellyAnimations;
 import net.kdt.pojavlaunch.value.DependentLibrary;
 import net.kdt.pojavlaunch.value.LibraryArtifact;
 
@@ -392,7 +393,8 @@ public final class Tools {
                         }
                     })
                     .setCancelable(!exitIfOk);
-            builder.show();
+            AlertDialog dialog = builder.show();
+            if (dialog.getWindow() != null) JellyAnimations.animateDialog(dialog.getWindow().getDecorView());
         };
 
         if (ctx instanceof Activity) {
@@ -440,7 +442,8 @@ public final class Tools {
                 .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok, null)
-                .show();
+                .create();
+        if (dialog.getWindow() != null) JellyAnimations.animateDialog(dialog.getWindow().getDecorView());
     }
 
     public static void dialog(final Context context, final int title, final int message) {
