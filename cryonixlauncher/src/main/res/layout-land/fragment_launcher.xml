@@ -99,6 +99,21 @@
             android:layout_weight="1" />
 
         <ImageButton
+            android:id="@+id/sidebar_mouse"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Cursor customization"
+            android:padding="9dp"
+            android:src="@drawable/ic_px_mouse"
+            app:tint="#6B88B4" />
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageButton
             android:id="@+id/sidebar_ai_assist"
             android:layout_width="40dp"
             android:layout_height="40dp"
