@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 
 import net.kdt.pojavlaunch.customcontrols.LayoutBitmaps;
 import net.kdt.pojavlaunch.utils.FileUtils;
+import net.kdt.pojavlaunch.utils.JellyAnimations;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
@@ -52,6 +53,7 @@ public class ImportControlActivity extends Activity {
 
         setContentView(R.layout.activity_import_control);
         mEditText = findViewById(R.id.editText_import_control_file_name);
+        JellyAnimations.animateScreen(findViewById(android.R.id.content));
     }
 
     /**
