@@ -34,6 +34,8 @@ import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -778,10 +780,20 @@ public final class Tools {
         //TODO handle custom animations
         fragmentActivity.getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_left, R.anim.slide_out_right)
+                .setCustomAnimations(R.anim.cryonix_jelly_in, R.anim.cryonix_jelly_out,
+                        R.anim.cryonix_spring_in, R.anim.cryonix_spring_out)
                 .addToBackStack(fragmentClass.getName())
                 .replace(R.id.container_fragment, fragmentClass, bundle, fragmentTag).commit();
+    }
+
+    /** Play the Cryonix jelly squish effect on a tapped view (buttons, chips). */
+    public static void jellyClick(View v) {
+        if (v == null) return;
+        try {
+            Animation a = AnimationUtils.loadAnimation(v.getContext(), R.anim.cryonix_jelly_wobble);
+            v.startAnimation(a);
+        } catch (Throwable ignored) {
+        }
     }
 
     public static void backToMainMenu(FragmentActivity fragmentActivity) {

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cryonix jelly motion: old screen shrinks away with a wobble -->
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="400"
+    android:fillAfter="true">
+
+    <objectAnimator
+        android:propertyName="scaleX"
+        android:duration="400">
+        <propertyValuesHolder android:fraction="0" android:value="1" />
+        <propertyValuesHolder android:fraction="0.3" android:value="0.97" />
+        <propertyValuesHolder android:fraction="0.5" android:value="1.03" />
+        <propertyValuesHolder android:fraction="1" android:value="0.86" />
+    </objectAnimator>
+
+    <objectAnimator
+        android:propertyName="scaleY"
+        android:duration="400">
+        <propertyValuesHolder android:fraction="0" android:value="1" />
+        <propertyValuesHolder android:fraction="0.3" android:value="1.03" />
+        <propertyValuesHolder android:fraction="0.5" android:value="0.97" />
+        <propertyValuesHolder android:fraction="1" android:value="0.84" />
+    </objectAnimator>
+
+    <objectAnimator
+        android:propertyName="rotation"
+        android:duration="400">
+        <propertyValuesHolder android:fraction="0" android:value="0" />
+        <propertyValuesHolder android:fraction="0.4" android:value="2" />
+        <propertyValuesHolder android:fraction="0.7" android:value="-1.5" />
+        <propertyValuesHolder android:fraction="1" android:value="0" />
+    </objectAnimator>
+
+    <alpha
+        android:duration="220"
+        android:startOffset="140"
+        android:fromAlpha="1"
+        android:toAlpha="0" />
+</set>

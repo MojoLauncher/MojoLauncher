@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cryonix jelly motion: new screen enters with a bouncy squash-and-stretch wobble -->
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="520"
+    android:fillAfter="true">
+
+    <alpha
+        android:duration="180"
+        android:fromAlpha="0"
+        android:toAlpha="1" />
+
+    <objectAnimator
+        android:propertyName="scaleX"
+        android:duration="520">
+        <propertyValuesHolder android:fraction="0" android:value="0.82" />
+        <propertyValuesHolder android:fraction="0.45" android:value="1.07" />
+        <propertyValuesHolder android:fraction="0.7" android:value="0.95" />
+        <propertyValuesHolder android:fraction="0.88" android:value="1.03" />
+        <propertyValuesHolder android:fraction="1" android:value="1" />
+    </objectAnimator>
+
+    <objectAnimator
+        android:propertyName="scaleY"
+        android:duration="520">
+        <propertyValuesHolder android:fraction="0" android:value="0.82" />
+        <propertyValuesHolder android:fraction="0.45" android:value="0.93" />
+        <propertyValuesHolder android:fraction="0.7" android:value="1.09" />
+        <propertyValuesHolder android:fraction="0.88" android:value="0.97" />
+        <propertyValuesHolder android:fraction="1" android:value="1" />
+    </objectAnimator>
+
+    <objectAnimator
+        android:propertyName="rotation"
+        android:duration="520">
+        <propertyValuesHolder android:fraction="0" android:value="-3" />
+        <propertyValuesHolder android:fraction="0.5" android:value="2.5" />
+        <propertyValuesHolder android:fraction="0.75" android:value="-1.2" />
+        <propertyValuesHolder android:fraction="1" android:value="0" />
+    </objectAnimator>
+</set>

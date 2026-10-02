@@ -9,6 +9,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +40,7 @@ public class AiAssistFragment extends Fragment {
     private final Handler handler = new Handler(Looper.getMainLooper());
     private ChatAdapter adapter;
     private EditText input;
+    private RecyclerView messageList;
     private int typingPosition = -1;
 
     public AiAssistFragment() {
@@ -48,9 +51,14 @@ public class AiAssistFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        messageList = view.findViewById(R.id.ai_message_list);
+
         ImageButton backButton = view.findViewById(R.id.ai_assist_back);
         if (backButton != null) {
-            backButton.setOnClickListener(v -> requireActivity().onBackPressedDispatcher().onBackPressed());
+            backButton.setOnClickListener(v -> {
+                Tools.jellyClick(v);
+                requireActivity().onBackPressedDispatcher().onBackPressed();
+            });
         }
 
         RecyclerView list = view.findViewById(R.id.ai_message_list);
@@ -70,7 +78,10 @@ public class AiAssistFragment extends Fragment {
 
         ImageButton sendButton = view.findViewById(R.id.ai_send_button);
         if (sendButton != null) {
-            sendButton.setOnClickListener(v -> sendUserMessage());
+            sendButton.setOnClickListener(v -> {
+                Tools.jellyClick(v);
+                sendUserMessage();
+            });
         }
         if (input != null) {
             TextViewCompat.setImeActionListener(input, (t, actionId, event) -> sendUserMessage());
@@ -98,6 +109,7 @@ public class AiAssistFragment extends Fragment {
             lp.setMargins(0, 0, dp(8), 0);
             tv.setLayoutParams(lp);
             tv.setOnClickListener(v -> {
+                Tools.jellyClick(v);
                 input.setText(query);
                 sendUserMessage();
             });
@@ -124,6 +136,7 @@ public class AiAssistFragment extends Fragment {
         if (adapter != null) {
             adapter.notifyItemInserted(pos);
             scrollToEnd();
+            animateRow(pos);
         }
     }
 
@@ -133,7 +146,26 @@ public class AiAssistFragment extends Fragment {
         if (adapter != null) {
             adapter.notifyItemInserted(pos);
             scrollToEnd();
+            animateRow(pos);
         }
+    }
+
+    /** Bounce a newly added message bubble in with the jelly pop animation. */
+    private void animateRow(int index) {
+        final RecyclerView list = messageList;
+        if (list == null) {
+            return;
+        }
+        handler.postDelayed(() -> {
+            if (!isAdded()) {
+                return;
+            }
+            View row = list.findViewByPosition(index);
+            if (row != null) {
+                Animation a = AnimationUtils.loadAnimation(row.getContext(), R.anim.cryonix_bubble_in);
+                row.startAnimation(a);
+            }
+        }, 40);
     }
 
     private void respond(String userText) {

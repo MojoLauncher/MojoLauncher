@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cryonix spring motion: screen slides out to the right with a fade (back navigation) -->
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="340">
+
+    <translate
+        android:fromXDelta="0%"
+        android:toXDelta="30%"
+        android:duration="340"
+        android:interpolator="@android:anim/accelerate_interpolator" />
+
+    <alpha
+        android:fromAlpha="1"
+        android:toAlpha="0"
+        android:duration="260"
+        android:startOffset="40" />
+</set>
