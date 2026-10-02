@@ -72,6 +72,17 @@
             android:src="@drawable/ic_px_java_run"
             app:tint="#A9C0EA" />
 
+        <ImageButton
+            android:id="@+id/sidebar_ai_assist"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:layout_marginTop="18dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="AI Assist"
+            android:padding="17dp"
+            android:src="@drawable/ic_px_ai"
+            app:tint="#7FD4FF" />
+
         <Space
             android:layout_width="1dp"
             android:layout_height="0dp"
