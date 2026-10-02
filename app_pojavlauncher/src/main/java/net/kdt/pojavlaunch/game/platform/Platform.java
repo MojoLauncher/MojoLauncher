@@ -42,8 +42,6 @@ import git.mojo.sdl.SDLControllerManager;
  * Launcher Platform frontend used to manage different window system & input implementations. Currently supports SDL&GLFW
  */
 public class Platform {
-    // Always reset cursor on grab lost - makes it move to the center as should if the game didn't move it
-    private static final boolean RESET_CURSOR_UNGRAB = true;
     public static PlatformBackend PLATFORM = new DummyBackend();
     public static double cursorX;
     public static double cursorY;
@@ -114,7 +112,6 @@ public class Platform {
         boolean wasGrabbing = isGrabbing;
         isGrabbing = grabbing;
         Tools.runOnUiThread(() -> {
-            if (RESET_CURSOR_UNGRAB && wasGrabbing && !isGrabbing) resetCursorPosition();
             if (mCursorImplementor != null) mCursorImplementor.onGrabState(grabbing);
             for (PlatformGrabListener listener : grabListeners) {
                 listener.onGrabState(grabbing);
