@@ -58,8 +58,8 @@ public class GameCursorView extends View implements PlatformCursorImplementor {
         mouseScale = Math.max(0.5f, Math.min(2.0f, prefs.getFloat("cryonix_cursor_scale", 1.0f)));
         boolean motionJelly = prefs.getBoolean("cryonix_cursor_motion_jelly", true);
 
-        float targetX = Platform.cursorX * ((GameView) getParent()).cursorRatioX;
-        float targetY = Platform.cursorY * ((GameView) getParent()).cursorRatioY;
+        float targetX = (float) (Platform.cursorX * ((GameView) getParent()).cursorRatioX);
+        float targetY = (float) (Platform.cursorY * ((GameView) getParent()).cursorRatioY);
         if (Float.isNaN(renderedX) || !motionJelly) {
             renderedX = targetX;
             renderedY = targetY;
