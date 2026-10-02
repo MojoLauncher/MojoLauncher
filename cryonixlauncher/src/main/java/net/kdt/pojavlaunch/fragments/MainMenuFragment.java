@@ -70,8 +70,7 @@ public class MainMenuFragment extends Fragment {
         Button mDiscordButton = view.findViewById(R.id.social_media_button);
         View mCustomControlButton = view.findViewById(R.id.custom_control_button);
         View mInstallJarButton = view.findViewById(R.id.install_jar_button);
-        View mAiAssistButton = view.findViewById(R.id.sidebar_ai_assist);
-        View mCursorButton = view.findViewById(R.id.sidebar_mouse);
+        View mCursorButton = view.findViewById(R.id.sidebar_ai_assist);
         View mShareLogsButton = view.findViewById(R.id.share_logs_button);
         View mOpenDirectoryButton = view.findViewById(R.id.open_files_button);
 
@@ -110,14 +109,6 @@ public class MainMenuFragment extends Fragment {
             mInstallJarButton.setOnClickListener(v -> {
                 Tools.jellyClick(v);
                 runInstallerWithConfirmation();
-            });
-        }
-
-        if (mAiAssistButton != null) {
-            applyJellyTouch(mAiAssistButton);
-            mAiAssistButton.setOnClickListener(v -> {
-                Tools.jellyClick(v);
-                Tools.swapFragment(requireActivity(), AiAssistFragment.class, AiAssistFragment.TAG, null);
             });
         }
 
