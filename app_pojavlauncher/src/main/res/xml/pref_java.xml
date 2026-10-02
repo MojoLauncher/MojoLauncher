@@ -8,8 +8,7 @@
             android:icon="@drawable/ic_px_runtime_mgr"
             android:persistent="false"
             android:summary="@string/multirt_subtitle"
-            android:title="@string/multirt_title"
-            app2:widgetLayout="@layout/pref_widget_chevron"/>
+            android:title="@string/multirt_title"/>
 
         <androidx.preference.EditTextPreference
             android:dialogTitle="@string/mcl_setting_title_javaargs"
