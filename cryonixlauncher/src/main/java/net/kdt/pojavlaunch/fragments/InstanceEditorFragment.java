@@ -64,8 +64,6 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        JellyAnimations.animateScreen(view);
-
         // Paths, which can be changed
         String value = (String) ExtraCore.consumeValue(ExtraConstants.FILE_SELECTOR);
         if(value != null){
@@ -76,6 +74,7 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        JellyAnimations.animateScreen(view);
         bindViews(view);
 
         RendererCompatUtil.RenderersList renderersList = RendererCompatUtil.getCompatibleRenderers(view.getContext());
