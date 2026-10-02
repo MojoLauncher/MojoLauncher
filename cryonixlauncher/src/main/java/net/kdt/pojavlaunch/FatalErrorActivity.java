@@ -34,7 +34,13 @@ public class FatalErrorActivity extends AppCompatActivity {
 		AlertDialog dialog = new AlertDialog.Builder(this)
 			.setTitle(R.string.error_fatal)
 			.setMessage(errHeader + "\n\n" + stackTrace)
-			.setPositiveButton(android.R.string.ok, (p1, p2) -> finish())
+			.setPositiveButton("Ask AI", (p1, p2) -> {
+                    Intent intent = new Intent(FatalErrorActivity.this, LauncherActivity.class);
+                    intent.putExtra("open_ai_assist", true);
+                    intent.putExtra("ai_error_text", stackTrace);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                })
 			.setNegativeButton(R.string.global_restart, (p1, p2) -> startActivity(new Intent(FatalErrorActivity.this, LauncherActivity.class)))
 			.setNeutralButton(android.R.string.copy, (p1, p2) -> {
 				ClipboardManager mgr = (ClipboardManager) FatalErrorActivity.this.getSystemService(CLIPBOARD_SERVICE);
