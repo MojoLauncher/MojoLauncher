@@ -2,7 +2,6 @@ package net.kdt.pojavlaunch.fragments;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
 import android.view.View;
