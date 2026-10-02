@@ -115,9 +115,9 @@ public class MainMenuFragment extends Fragment {
             Tools.swapFragment(requireActivity(), AiAssistFragment.class, AiAssistFragment.TAG, null);
         });
 
-        View profileChip = view.findViewById(R.id.profile_chip);
-        if (profileChip != null) {
-            profileChip.setOnClickListener(v -> {
+        View accountChip = view.findViewById(R.id.profile_chip);
+        if (accountChip != null) {
+            accountChip.setOnClickListener(v -> {
                 Tools.jellyClick(v);
                 ExtraCore.setValue(ExtraConstants.SELECT_AUTH_METHOD, true);
             });
