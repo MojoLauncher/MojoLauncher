@@ -32,12 +32,16 @@ public class ExitActivity extends AppCompatActivity {
 
         String message = isSignal ? getString(R.string.mcn_abort_title) : getString(R.string.mcn_exit_title, code);
 
-        new AlertDialog.Builder(this)
+.setOnDismissListener(dialog -> ExitActivity.this.finish())
+                .create();
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
                 .setMessage(message)
-                .setPositiveButton(R.string.main_share_logs, (dialog, which) -> shareLog(this))
-                .setOnDismissListener(dialog -> ExitActivity.this.finish())
-                .show();
-    }
+                .setPositiveButton(R.string.main_share_logs, (d, which) -> shareLog(this))
+                .setOnDismissListener(d -> ExitActivity.this.finish())
+                .create();
+        dialog.show();
+        if (dialog.getWindow() != null) JellyAnimations.animateDialog(dialog.getWindow().getDecorView());    }
 
     @SuppressWarnings("unused") //used by native jre_launcher_new
     public static void showExitMessage(Context ctx, int code, boolean isSignal) {
