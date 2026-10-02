@@ -45,7 +45,9 @@ public abstract class LifecycleAwareAlertDialog implements LifecycleEventObserve
         dialogCreator.createDialog(this, builder);
         mLifecycle.addObserver(this);
         mDialog = builder.show();
-        JellyAnimations.animateDialog(mDialog.getWindow() != null ? mDialog.getWindow().getDecorView() : mDialog.getWindow());
+        if (mDialog.getWindow() != null) {
+            JellyAnimations.animateDialog(mDialog.getWindow().getDecorView());
+        }
     }
 
     /**
