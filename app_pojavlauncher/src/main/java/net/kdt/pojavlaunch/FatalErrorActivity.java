@@ -17,7 +17,7 @@ public class FatalErrorActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		Bundle extras = getIntent().getExtras();
 		if(extras == null) {
 			finish();
@@ -30,8 +30,8 @@ public class FatalErrorActivity extends AppCompatActivity {
 		String errHeader = storageAllow ?
 			"Crash stack trace saved to " + strSavePath + "." :
 			"Storage permission is required to save crash stack trace!";
-		
-		new AlertDialog.Builder(this)
+
+		AlertDialog dialog = new AlertDialog.Builder(this)
 			.setTitle(R.string.error_fatal)
 			.setMessage(errHeader + "\n\n" + stackTrace)
 			.setPositiveButton(android.R.string.ok, (p1, p2) -> finish())
@@ -39,26 +39,12 @@ public class FatalErrorActivity extends AppCompatActivity {
 			.setNeutralButton(android.R.string.copy, (p1, p2) -> {
 				ClipboardManager mgr = (ClipboardManager) FatalErrorActivity.this.getSystemService(CLIPBOARD_SERVICE);
 				mgr.setPrimaryClip(ClipData.newPlainText("error", stackTrace));
-
 				finish();
 			})
 			.setCancelable(false)
 			.create();
-
-        AlertDialog dialog = new AlertDialog.Builder(this)
-            .setTitle(R.string.error_fatal)
-            .setMessage(errHeader + "\n\n" + stackTrace)
-            .setPositiveButton(android.R.string.ok, (p1, p2) -> finish())
-            .setNegativeButton(R.string.global_restart, (p1, p2) -> startActivity(new Intent(FatalErrorActivity.this, LauncherActivity.class)))
-            .setNeutralButton(android.R.string.copy, (p1, p2) -> {
-                ClipboardManager mgr = (ClipboardManager) FatalErrorActivity.this.getSystemService(CLIPBOARD_SERVICE);
-                mgr.setPrimaryClip(ClipData.newPlainText("error", stackTrace));
-                finish();
-            })
-            .setCancelable(false)
-            .create();
-        dialog.show();
-        if (dialog.getWindow() != null) JellyAnimations.animateDialog(dialog.getWindow().getDecorView());
+		dialog.show();
+		if (dialog.getWindow() != null) JellyAnimations.animateDialog(dialog.getWindow().getDecorView());
 	}
 
 	public static void showError(Context ctx, String savePath, boolean storageAllow, Throwable th) {
