@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Cryonix spring motion: back-navigation exit, shrink + fade (objectAnimator-only format) -->
+<!-- Cryonix spring motion: back-navigation exit slides away, shrink + fade (objectAnimator-only format) -->
 <set xmlns:android="http://schemas.android.com/apk/res/android"
     android:duration="340"
     android:fillAfter="true">
+
+    <objectAnimator
+        android:propertyName="translationX"
+        android:duration="340"
+        android:valueFrom="0"
+        android:valueTo="-80" />
 
     <objectAnimator
         android:propertyName="scaleX"

@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Cryonix jelly motion: old screen shrinks away with a wobble (objectAnimator-only format) -->
+<!-- Cryonix motion jelly: old screen slides out to the left with a wobble (objectAnimator-only format) -->
 <set xmlns:android="http://schemas.android.com/apk/res/android"
     android:duration="400"
     android:fillAfter="true">
+
+    <objectAnimator
+        android:propertyName="translationX"
+        android:duration="400">
+        <propertyValuesHolder android:fraction="0" android:value="0" />
+        <propertyValuesHolder android:fraction="0.55" android:value="-70" />
+        <propertyValuesHolder android:fraction="1" android:value="-110" />
+    </objectAnimator>
 
     <objectAnimator
         android:propertyName="scaleX"
@@ -26,8 +34,8 @@
         android:propertyName="rotation"
         android:duration="400">
         <propertyValuesHolder android:fraction="0" android:value="0" />
-        <propertyValuesHolder android:fraction="0.4" android:value="2" />
-        <propertyValuesHolder android:fraction="0.7" android:value="-1.5" />
+        <propertyValuesHolder android:fraction="0.4" android:value="1.5" />
+        <propertyValuesHolder android:fraction="0.7" android:value="-1.2" />
         <propertyValuesHolder android:fraction="1" android:value="0" />
     </objectAnimator>
 
