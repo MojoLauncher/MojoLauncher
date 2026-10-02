@@ -80,6 +80,7 @@ public class CursorCustomizationFragment extends Fragment {
         bindColors(view.findViewById(R.id.cursor_colors));
         bindSidebar(view);
         bindCustomPng(view);
+        bindPresets(view);
         bindReset(view);
 
         JellyAnimations.animateScreen(view);
@@ -298,6 +299,42 @@ public class CursorCustomizationFragment extends Fragment {
         } catch (Exception e) {
             Toast.makeText(requireContext(), "Could not import PNG", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void bindPresets(View root) {
+        bindPreset(root, R.id.cursor_preset_clean, "Classic", CursorStyleUtils.COLORS[0], 1f, false, false, true);
+        bindPreset(root, R.id.cursor_preset_neon, "Dot", 0xFF39FF88, 1.15f, true, true, true);
+        bindPreset(root, R.id.cursor_preset_gamer, "Triangle", 0xFF00E5FF, 1.2f, true, true, true);
+        bindPreset(root, R.id.cursor_preset_minimal, "Ring", 0xFFFFFFFF, 0.9f, false, false, false);
+    }
+
+    private void bindPreset(View root, int id, String template, int color, float scale,
+                            boolean outline, boolean trail, boolean shadow) {
+        Button button = root.findViewById(id);
+        if (button == null) return;
+        applyJellyTouch(button);
+        button.setOnClickListener(v -> {
+            prefs.edit()
+                    .putString(CursorStyleUtils.TEMPLATE_KEY, template)
+                    .putInt(CursorStyleUtils.COLOR_KEY, color)
+                    .putFloat(CursorStyleUtils.SCALE_KEY, scale)
+                    .putBoolean(CursorStyleUtils.OUTLINE_KEY, outline)
+                    .putBoolean(CursorStyleUtils.TRAIL_KEY, trail)
+                    .putBoolean(CursorStyleUtils.SHADOW_KEY, shadow)
+                    .putInt(CursorStyleUtils.OPACITY_KEY, 100)
+                    .putInt(CursorStyleUtils.ROTATION_KEY, 0)
+                    .remove(CursorStyleUtils.CUSTOM_PATH_KEY)
+                    .apply();
+            sizeBar.setProgress(Math.round((scale - 0.5f) * 100f));
+            opacityBar.setProgress(100);
+            rotationBar.setProgress(0);
+            updateSizeText(scale);
+            updateOpacityText(100);
+            updateRotationText(0);
+            customName.setText("Not selected");
+            refreshTemplateSelection(root.findViewById(R.id.cursor_templates), template);
+            Toast.makeText(requireContext(), template + " preset applied", Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void bindReset(View root) {
