@@ -33,7 +33,7 @@ import git.artdeell.mojo.R;
 
 /**
  * Cryonix AI Assist — an offline chatbot that guides users through
- * setting up Cryonix Launcher V3 (Java, profiles, controls, login,
+ * setting up Cryonix Launcher V2 (Java, profiles, controls, login,
  * mods and troubleshooting). No network access is used; answers come
  * from a built-in keyword knowledge base.
  */
@@ -376,14 +376,14 @@ public class AiAssistFragment extends Fragment {
     }
 
     // ------------------------------------------------------------------
-    // Knowledge base — Cryonix Launcher V3 setup guide (offline)
+    // Knowledge base — Cryonix Launcher V2 setup guide (offline)
     // ------------------------------------------------------------------
 
     private static class CryonixBrain {
 
         static String greeting() {
             return "Hi! I'm the Cryonix AI Assist bot 🤖\n\n"
-                    + "I can walk you through setting up Cryonix Launcher V3, step by step — "
+                    + "I can walk you through setting up Cryonix Launcher V2, step by step — "
                     + "Java runtime, profiles, controls, login, mods and troubleshooting.\n\n"
                     + "Tap a topic below or type your question. "
                     + "To see the complete setup guide, just ask: “setup”";
@@ -433,7 +433,7 @@ public class AiAssistFragment extends Fragment {
                 return profileGuide();
             }
             if (q.contains("hello") || q.contains("hi") || q.contains("hey")) {
-                return "Hello! 👋 Ready to help you set up Cryonix Launcher V3. "
+                return "Hello! 👋 Ready to help you set up Cryonix Launcher V2. "
                         + "Ask me “setup guide” for the full walkthrough, or tap a topic chip below.";
             }
             if (q.contains("thank")) {
@@ -444,7 +444,7 @@ public class AiAssistFragment extends Fragment {
         }
 
         static String setupGuide() {
-            return "Here's how to set up Cryonix Launcher V3 properly ✅\n\n"
+            return "Here's how to set up Cryonix Launcher V2 properly ✅\n\n"
                     + "1️⃣ Storage permission — if Android asks for storage (Android 13+: “All files access”), allow it. "
                     + "The launcher needs it to save game data.\n\n"
                     + "2️⃣ Java runtime — tap the Java icon in the left sidebar and download an OpenJDK runtime "
