@@ -3,6 +3,9 @@ package net.kdt.pojavlaunch.game;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -17,6 +20,7 @@ import androidx.core.content.ContextCompat;
 import net.kdt.pojavlaunch.game.platform.Platform;
 import net.kdt.pojavlaunch.game.platform.cursor.PlatformCursor;
 import net.kdt.pojavlaunch.game.platform.cursor.PlatformCursorImplementor;
+import net.kdt.pojavlaunch.utils.CursorStyleUtils;
 
 import git.artdeell.mojo.R;
 
@@ -30,6 +34,8 @@ public class GameCursorView extends View implements PlatformCursorImplementor {
     private float mouseScale = 1f;
     private float renderedX = Float.NaN;
     private float renderedY = Float.NaN;
+    private Bitmap customCursorBitmap;
+    private String cachedCustomPath = "";
 
     public GameCursorView(Context context, AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
@@ -53,32 +59,50 @@ public class GameCursorView extends View implements PlatformCursorImplementor {
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
         if (noDraw) return;
-        // Read the persisted Cryonix cursor settings so customization also applies in-game.
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        mouseScale = Math.max(0.5f, Math.min(2.0f, prefs.getFloat("cryonix_cursor_scale", 1.0f)));
-        boolean motionJelly = prefs.getBoolean("cryonix_cursor_motion_jelly", true);
+        mouseScale = Math.max(0.5f, Math.min(2.0f,
+                prefs.getFloat(CursorStyleUtils.SCALE_KEY, 1.0f)));
+        boolean motionJelly = prefs.getBoolean(CursorStyleUtils.MOTION_KEY, true);
+        String template = prefs.getString(CursorStyleUtils.TEMPLATE_KEY, "Classic");
+        int color = prefs.getInt(CursorStyleUtils.COLOR_KEY, CursorStyleUtils.COLORS[0]);
+        String customPath = prefs.getString(CursorStyleUtils.CUSTOM_PATH_KEY, "");
 
         float targetX = (float) (Platform.cursorX * ((GameView) getParent()).cursorRatioX);
         float targetY = (float) (Platform.cursorY * ((GameView) getParent()).cursorRatioY);
+
         if (Float.isNaN(renderedX) || !motionJelly) {
             renderedX = targetX;
             renderedY = targetY;
         } else {
-            // Small critically-damped trailing motion: smooth without making the cursor feel delayed.
             renderedX += (targetX - renderedX) * 0.34f;
             renderedY += (targetY - renderedY) * 0.34f;
             if (Math.abs(targetX - renderedX) > 0.5f || Math.abs(targetY - renderedY) > 0.5f) {
                 postInvalidateOnAnimation();
             }
         }
-        canvas.translate((int) renderedX, (int) renderedY);
-        PlatformCursor cursor = Platform.getCursor();
-        canvas.scale(mouseScale, mouseScale);
-        if (cursor == null) {
-            cursorDrawable.draw(canvas);
-        } else {
-            canvas.drawBitmap(cursor.bitmap, -cursor.hotX, -cursor.hotY, customCursorPaint);
+
+        if (!customPath.equals(cachedCustomPath)) {
+            cachedCustomPath = customPath;
+            customCursorBitmap = customPath.isEmpty() ? null : BitmapFactory.decodeFile(customPath);
         }
+
+        canvas.save();
+        canvas.translate(renderedX, renderedY);
+        canvas.scale(mouseScale, mouseScale);
+
+        if (customCursorBitmap != null && !customCursorBitmap.isRecycled()) {
+            float width = Math.min(40f, customCursorBitmap.getWidth());
+            float height = Math.min(40f, customCursorBitmap.getHeight());
+            float scale = Math.min(width / Math.max(1f, customCursorBitmap.getWidth()),
+                    height / Math.max(1f, customCursorBitmap.getHeight()));
+            float drawW = customCursorBitmap.getWidth() * scale;
+            float drawH = customCursorBitmap.getHeight() * scale;
+            canvas.drawBitmap(customCursorBitmap, null, new RectF(0, 0, drawW, drawH), customCursorPaint);
+        } else {
+            CursorStyleUtils.drawTemplate(canvas, customCursorPaint, template, color);
+        }
+        canvas.restore();
     }
 
     @Override
