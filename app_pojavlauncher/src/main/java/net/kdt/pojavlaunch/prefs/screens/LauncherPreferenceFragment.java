@@ -120,7 +120,7 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
         // fragment itself whenever a settings page becomes visible.
         View settingsView = getView();
         if (settingsView != null) {
-            settingsView.postDelayed(() -> JellyAnimations.animateScreen(settingsView), 70L);
+            settingsView.post(() -> JellyAnimations.animateScreen(settingsView));
         }
     }
 
