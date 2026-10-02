@@ -76,9 +76,6 @@ public class MainMenuFragment extends Fragment {
         Button mPlayButton = view.findViewById(R.id.play_button);
         mVersionSpinner = view.findViewById(R.id.mc_version_spinner);
 
-        // Every home-screen element gets its own staggered fade/jelly entrance.
-        net.kdt.pojavlaunch.utils.JellyAnimations.animateScreen(view);
-
         // Click listeners with jelly motion
         if (mNewsButton != null) {
             applyJellyTouch(mNewsButton);
