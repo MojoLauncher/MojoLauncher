@@ -235,9 +235,11 @@ public class AiAssistFragment extends Fragment {
 
     private String readLatestLog() {
         try {
-            File file = new File(Tools.DIR_GAME_HOME, "latestlog.txt");
+            File crash = new File(Tools.DIR_GAME_HOME, "latestcrash.txt");
+            File log = new File(Tools.DIR_GAME_HOME, "latestlog.txt");
+            File file = crash.exists() && crash.isFile() ? crash : log;
             if (!file.exists() || !file.isFile()) {
-                return "No latestlog.txt was found. Paste the crash text or log into the message box instead.";
+                return "No latestcrash.txt or latestlog.txt was found. Paste the crash text or log into the message box instead.";
             }
 
             long maxBytes = 512L * 1024L;
