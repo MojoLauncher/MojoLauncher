@@ -2,6 +2,7 @@ package net.kdt.pojavlaunch.fragments;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
 import android.view.View;
@@ -22,6 +23,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.kdt.pojavlaunch.Tools;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +41,7 @@ import git.artdeell.mojo.R;
 public class AiAssistFragment extends Fragment {
 
     public static final String TAG = "AiAssistFragment";
+    public static final String ARG_ERROR_TEXT = "error_text";
 
     private final List<AiMessage> messages = new ArrayList<>();
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -75,6 +81,24 @@ public class AiAssistFragment extends Fragment {
         }
         this.input = view.findViewById(R.id.ai_input);
 
+        View analyzeLogButton = view.findViewById(R.id.ai_analyze_log_button);
+        if (analyzeLogButton != null) {
+            analyzeLogButton.setOnClickListener(v -> {
+                Tools.jellyClick(v);
+                analyzeLatestLog();
+            });
+        }
+
+        View clearButton = view.findViewById(R.id.ai_clear_button);
+        if (clearButton != null) {
+            clearButton.setOnClickListener(v -> {
+                Tools.jellyClick(v);
+                messages.clear();
+                if (adapter != null) adapter.notifyDataSetChanged();
+                addBotMessage("Ready. Paste a crash, error, or latest launcher log and I’ll break it into likely cause + exact next steps.");
+            });
+        }
+
         buildChips(view);
 
         ImageButton sendButton = view.findViewById(R.id.ai_send_button);
@@ -94,8 +118,14 @@ public class AiAssistFragment extends Fragment {
             });
         }
 
-        // Greeting
-        addBotMessage(CryonixBrain.greeting());
+        String incomingError = getArguments() != null
+                ? getArguments().getString(ARG_ERROR_TEXT) : null;
+        if (incomingError != null && !incomingError.trim().isEmpty()) {
+            if (input != null) input.setText(incomingError);
+            addBotMessage(CryonixDiagnosticEngine.analyze(incomingError));
+        } else {
+            addBotMessage(CryonixBrain.greeting());
+        }
     }
 
     private void buildChips(View view) {
@@ -117,8 +147,12 @@ public class AiAssistFragment extends Fragment {
             tv.setLayoutParams(lp);
             tv.setOnClickListener(v -> {
                 Tools.jellyClick(v);
-                input.setText(query);
-                sendUserMessage();
+                if ("Analyze latest log".equals(query)) {
+                    analyzeLatestLog();
+                } else {
+                    input.setText(query);
+                    sendUserMessage();
+                }
             });
             container.addView(tv);
         }
@@ -179,6 +213,62 @@ public class AiAssistFragment extends Fragment {
         }, 40);
     }
 
+    private void analyzeLatestLog() {
+        addUserMessage("Analyze my latest launcher log");
+        addBotMessage("Reading latestlog.txt…");
+        final int statusIndex = messages.size() - 1;
+
+        new Thread(() -> {
+            String log = readLatestLog();
+            String answer = CryonixDiagnosticEngine.analyze(log);
+            handler.post(() -> {
+                if (!isAdded()) return;
+                if (statusIndex >= 0 && statusIndex < messages.size()) {
+                    messages.set(statusIndex, new AiMessage(false, answer));
+                    if (adapter != null) {
+                        adapter.notifyItemChanged(statusIndex);
+                        scrollToEnd();
+                    }
+                }
+            });
+        }, "CryonixLogAnalyzer").start();
+    }
+
+    private String readLatestLog() {
+        try {
+            File file = new File(Tools.DIR_GAME_HOME, "latestlog.txt");
+            if (!file.exists() || !file.isFile()) {
+                return "No latestlog.txt was found. Paste the crash text or log into the message box instead.";
+            }
+
+            long maxBytes = 512L * 1024L;
+            try (FileInputStream in = new FileInputStream(file);
+                 ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+                byte[] buffer = new byte[8192];
+                long total = 0;
+                int read;
+                while ((read = in.read(buffer)) != -1 && total < maxBytes) {
+                    int allowed = (int) Math.min(read, maxBytes - total);
+                    out.write(buffer, 0, allowed);
+                    total += allowed;
+                    if (allowed < read) break;
+                }
+                return new String(out.toByteArray(), StandardCharsets.UTF_8);
+            }
+        } catch (Throwable e) {
+            return "I couldn't read latestlog.txt: " + e.getClass().getSimpleName()
+                    + " — " + String.valueOf(e.getMessage());
+        }
+    }
+
+    private boolean looksLikeCrash(String text) {
+        String q = text.toLowerCase();
+        return q.contains("exception") || q.contains("error:")
+                || q.contains("caused by:") || q.contains("stacktrace")
+                || q.contains("fatal") || q.contains("unsatisfiedlinkerror")
+                || q.contains("crash-report") || q.contains("exit code");
+    }
+
     private void respond(String userText) {
         // "Typing…" bubble that is replaced by the real answer shortly after,
         // so the bot feels alive.
@@ -189,7 +279,7 @@ public class AiAssistFragment extends Fragment {
             scrollToEnd();
         }
         final int index = typingPosition;
-        final String answer = CryonixBrain.respond(userText);
+        final String answer = looksLikeCrash(userText) ? CryonixDiagnosticEngine.analyze(userText) : CryonixBrain.respond(userText);
         long delay = 450 + Math.min(450, answer.length() / 4L);
         handler.postDelayed(() -> {
             if (!isAdded()) {
@@ -302,7 +392,8 @@ public class AiAssistFragment extends Fragment {
                     "Login / Account",
                     "Controls",
                     "Mods & Modpacks",
-                    "Troubleshooting"
+                    "Troubleshooting",
+                    "Analyze latest log"
             };
         }
 
