@@ -13,8 +13,6 @@ import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_IGNORE_NOTCH;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-    private boolean jellyAnimationPlayed;
-
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleUtils.setLocale(newBase));
@@ -43,6 +41,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Tools.checkStorageInteractive(this);
+
+        // Replay the shared jelly entrance whenever this activity becomes visible.
+        // Posting it lets the layout finish measuring before the animation starts.
+        getWindow().getDecorView().postDelayed(this::playJellyEntrance, 70L);
     }
 
     @Override
@@ -50,13 +52,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onPostResume();
         Tools.setInsetsMode(this, setFullscreen(), shouldIgnoreNotch());
         Tools.getDisplayMetrics(this);
-        playJellyEntranceIfNeeded();
     }
 
-    private void playJellyEntranceIfNeeded() {
-        if (jellyAnimationPlayed) return;
-        jellyAnimationPlayed = true;
-
+    private void playJellyEntrance() {
         View content = findViewById(android.R.id.content);
         JellyAnimations.animateScreen(content);
     }
