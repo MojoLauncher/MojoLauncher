@@ -44,7 +44,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         // Replay the shared jelly entrance whenever this activity becomes visible.
         // Posting it lets the layout finish measuring before the animation starts.
-        getWindow().getDecorView().postDelayed(this::playJellyEntrance, 70L);
+        getWindow().getDecorView().post(this::playJellyEntrance);
     }
 
     @Override
