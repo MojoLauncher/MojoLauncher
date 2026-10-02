@@ -8,14 +8,16 @@
 
     <com.kdt.mcgui.AccountSpinner
         android:id="@+id/account_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_42sdp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
 
         android:dropDownWidth="wrap_content"
         android:dropDownVerticalOffset="@dimen/_42sdp"
 
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/setting_button"
+        app:layout_constraintEnd_toEndOf="@+id/setting_button"/>
 
     <ImageButton
         android:id="@+id/setting_button"
@@ -25,8 +27,8 @@
         android:src="@drawable/ic_px_sliders"
         android:scaleType="fitCenter"
 
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 
 
@@ -34,10 +36,12 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/container_fragment"
         android:name="net.kdt.pojavlaunch.fragments.MainMenuFragment"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/progress_layout"
-        app:layout_constraintTop_toBottomOf="@+id/account_spinner" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/account_spinner"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <com.kdt.mcgui.ProgressLayout
