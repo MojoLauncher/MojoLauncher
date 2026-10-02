@@ -15,7 +15,11 @@ dependencyResolutionManagement {
 }
 
 rootProject.name='CryonixLauncher'
-include ':cryonixlauncher'
+
+// Keep the original CryonixLauncher module directory while preserving
+// compatibility with existing Android Studio build configurations.
+include ':app_pojavlauncher'
+project(':app_pojavlauncher').projectDir = file('cryonixlauncher')
 
 include ':forge_installer'
 include ':glfw:jni_bindings'
