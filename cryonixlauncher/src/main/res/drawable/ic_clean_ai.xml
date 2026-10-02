@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Clean AI (robot head) icon -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M10.6,1.8 a1.4,1.4 0 1 0 2.8,0 a1.4,1.4 0 1 0 -2.8,0 Z M11,3.4 H13 V6 H11 Z M1,11 H3 V16 H1 Z M21,11 H23 V16 H21 Z M6,8 H18 A3,3 0 0 1 21,11 V16 A3,3 0 0 1 18,19 H6 A3,3 0 0 1 3,16 V11 A3,3 0 0 1 6,8 Z M7,13.5 a1.5,1.5 0 1 0 3,0 a1.5,1.5 0 1 0 -3,0 Z M14,13.5 a1.5,1.5 0 1 0 3,0 a1.5,1.5 0 1 0 -3,0 Z" />
+</vector>

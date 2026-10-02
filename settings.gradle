@@ -15,7 +15,7 @@ dependencyResolutionManagement {
 }
 
 rootProject.name='CryonixLauncher'
-include ':app_pojavlauncher'
+include ':cryonixlauncher'
 
 include ':forge_installer'
 include ':glfw:jni_bindings'

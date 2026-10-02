@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cryonix spring motion: back-navigation pop slides back with fade + squash (objectAnimator-only format) -->
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="460"
+    android:fillAfter="true">
+
+    <objectAnimator
+        android:propertyName="alpha"
+        android:duration="160"
+        android:valueFrom="0"
+        android:valueTo="1" />
+
+    <objectAnimator
+        android:propertyName="translationX"
+        android:duration="460">
+        <propertyValuesHolder android:fraction="0" android:value="90" />
+        <propertyValuesHolder android:fraction="0.6" android:value="-6" />
+        <propertyValuesHolder android:fraction="1" android:value="0" />
+    </objectAnimator>
+
+    <objectAnimator
+        android:propertyName="scaleX"
+        android:duration="460">
+        <propertyValuesHolder android:fraction="0" android:value="0.94" />
+        <propertyValuesHolder android:fraction="0.7" android:value="1.04" />
+        <propertyValuesHolder android:fraction="1" android:value="1" />
+    </objectAnimator>
+
+    <objectAnimator
+        android:propertyName="scaleY"
+        android:duration="460">
+        <propertyValuesHolder android:fraction="0" android:value="0.95" />
+        <propertyValuesHolder android:fraction="0.7" android:value="1.04" />
+        <propertyValuesHolder android:fraction="1" android:value="1" />
+    </objectAnimator>
+
+    <objectAnimator
+        android:propertyName="rotation"
+        android:duration="460">
+        <propertyValuesHolder android:fraction="0" android:value="-1.2" />
+        <propertyValuesHolder android:fraction="0.7" android:value="0.6" />
+        <propertyValuesHolder android:fraction="1" android:value="0" />
+    </objectAnimator>
+</set>

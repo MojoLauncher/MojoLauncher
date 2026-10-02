@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cryonix mod version list: header card + card rows -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@drawable/cryonix_screen_bg"
+    android:clipToPadding="false">
+
+    <!-- Header card -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_14sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/cryonix_card"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/_14sdp">
+
+        <ImageView
+            android:layout_width="@dimen/_44sdp"
+            android:layout_height="@dimen/_44sdp"
+            android:background="@drawable/launcher_icon_tile"
+            android:padding="@dimen/_9sdp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_px_file_dl" />
+
+        <TextView
+            android:id="@+id/title_textview"
+            style="@style/CryonixScreenTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:text="@string/forge_dl_select_version" />
+    </LinearLayout>
+
+    <ExpandableListView
+        android:scrollbarThumbVertical="@color/minebutton_color"
+        android:id="@+id/mod_dl_expandable_version_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginHorizontal="@dimen/_12sdp"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:clipToPadding="false"
+        android:paddingVertical="@dimen/_8sdp">
+
+    </ExpandableListView>
+
+    <!-- Retry strip -->
+    <LinearLayout
+        android:id="@+id/mod_dl_retry_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_14sdp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:background="@drawable/cryonix_card"
+        android:padding="@dimen/padding_moderate"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/modloader_dl_failed_to_load_list"
+            android:textColor="@color/cryonix_error"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/forge_installer_retry_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/cryonix_button_secondary"
+            android:textAllCaps="false"
+            android:textColor="@color/accent_blue"
+            android:text="@string/global_retry" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/mod_dl_list_progress"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_14sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:indeterminate="true" />
+</LinearLayout>

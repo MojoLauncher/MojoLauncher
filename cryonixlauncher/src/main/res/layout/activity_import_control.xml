@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cryonix import controls: centered card on gradient -->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/cryonix_screen_bg">
+
+    <LinearLayout
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:background="@drawable/cryonix_card"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/_20sdp"
+        android:paddingVertical="@dimen/_22sdp"
+        android:translationZ="1dp">
+
+        <ImageView
+            android:layout_width="@dimen/_56sdp"
+            android:layout_height="@dimen/_56sdp"
+            android:background="@drawable/launcher_icon_tile"
+            android:padding="@dimen/_11sdp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_px_data_import"
+            app:tint="@color/accent_blue" />
+
+        <TextView
+            style="@style/CryonixScreenTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:gravity="center"
+            android:text="@string/import_control_label" />
+
+        <TextView
+            android:id="@+id/textView_import_control_file_name"
+            style="@style/CryonixFieldLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:text="File name:" />
+
+        <com.kdt.mcgui.MineEditText
+            android:id="@+id/editText_import_control_file_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_44sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:gravity="center"
+            android:hint="File name"
+            android:textColor="@color/primary_text"
+            android:imeOptions="flagForceAscii"
+            android:textSize="@dimen/_14ssp" />
+
+        <com.kdt.mcgui.MineButton
+            android:id="@+id/mineButton_import_control"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_44sdp"
+            android:layout_marginTop="@dimen/_18sdp"
+            android:background="@drawable/mine_button_background"
+            android:onClick="startImport"
+            android:text="@string/import_control_import_button"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+</FrameLayout>

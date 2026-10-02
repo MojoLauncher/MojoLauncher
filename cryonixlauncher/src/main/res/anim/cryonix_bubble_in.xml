@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cryonix bubble pop: chat message bubbles bounce in (objectAnimator-only format) -->
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="340"
+    android:fillAfter="true">
+
+    <objectAnimator
+        android:propertyName="alpha"
+        android:duration="120"
+        android:valueFrom="0"
+        android:valueTo="1" />
+
+    <objectAnimator
+        android:propertyName="scaleX"
+        android:duration="340">
+        <propertyValuesHolder android:fraction="0" android:value="0.6" />
+        <propertyValuesHolder android:fraction="0.6" android:value="1.08" />
+        <propertyValuesHolder android:fraction="0.82" android:value="0.97" />
+        <propertyValuesHolder android:fraction="1" android:value="1" />
+    </objectAnimator>
+
+    <objectAnimator
+        android:propertyName="scaleY"
+        android:duration="340">
+        <propertyValuesHolder android:fraction="0" android:value="0.6" />
+        <propertyValuesHolder android:fraction="0.6" android:value="1.08" />
+        <propertyValuesHolder android:fraction="0.82" android:value="0.97" />
+        <propertyValuesHolder android:fraction="1" android:value="1" />
+    </objectAnimator>
+</set>

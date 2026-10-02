@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cryonix profile editor: card-based layout -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/cryonix_screen_bg"
+    android:orientation="vertical"
+    android:clipToPadding="false">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fadeScrollbars="true"
+        android:scrollbarThumbVertical="@color/minebutton_color"
+        android:clipToPadding="false"
+        android:paddingHorizontal="@dimen/_14sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Profile header card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/cryonix_card"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/_14sdp">
+
+                <FrameLayout
+                    android:layout_width="@dimen/_56sdp"
+                    android:layout_height="@dimen/_56sdp">
+
+                    <ImageView
+                        android:id="@+id/vprof_editor_instance_icon"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/launcher_icon_tile"
+                        android:padding="@dimen/padding_small"
+                        tools:src="@tools:sample/avatars" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_22sdp"
+                        android:layout_height="@dimen/_22sdp"
+                        android:layout_gravity="bottom|end"
+                        android:background="@drawable/cryonix_icon_edit"
+                        android:padding="@dimen/_3sdp"
+                        android:src="@drawable/ic_px_edit"
+                        app:tint="@color/accent_blue" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/_14sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/vprof_editor_profile_name_sub"
+                        style="@style/CryonixFieldLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/profiles_profile_name" />
+
+                    <EditText
+                        android:id="@+id/vprof_editor_instance_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:background="@drawable/cryonix_input_field"
+                        android:textColor="@color/primary_text"
+                        android:textSize="@dimen/_14ssp"
+
+                        android:ems="10"
+                        android:hint="@string/unnamed"
+                        android:inputType="textPersonName"
+                        android:paddingHorizontal="@dimen/padding_heavy" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Version card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/cryonix_card"
+                android:orientation="vertical"
+                android:padding="@dimen/_14sdp">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    style="@style/CryonixFieldLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profiles_profile_version" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/vprof_editor_version_spinner"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="@dimen/padding_medium"
+                        android:background="@drawable/cryonix_input_field"
+                        android:hint="@string/version_select_hint"
+                        android:textColor="@color/primary_text"
+                        android:paddingHorizontal="@dimen/padding_heavy"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <Button
+                        android:id="@+id/vprof_editor_version_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/cryonix_button_secondary"
+                        android:paddingHorizontal="@dimen/padding_large"
+                        android:textAllCaps="false"
+                        android:textColor="@color/accent_blue"
+                        android:text="@string/global_select" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Controls card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/cryonix_card"
+                android:orientation="vertical"
+                android:padding="@dimen/_14sdp">
+
+                <TextView
+                    android:id="@+id/textView7"
+                    style="@style/CryonixFieldLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/default_control" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/vprof_editor_ctrl_spinner"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="@dimen/padding_medium"
+                        android:background="@drawable/cryonix_input_field"
+                        android:hint="@string/use_global_default"
+                        android:textColor="@color/primary_text"
+                        android:paddingHorizontal="@dimen/padding_heavy"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <Button
+                        android:id="@+id/vprof_editor_ctrl_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/cryonix_button_secondary"
+                        android:paddingHorizontal="@dimen/padding_large"
+                        android:textAllCaps="false"
+                        android:textColor="@color/accent_blue"
+                        android:text="@string/global_select" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Shared data card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/cryonix_card"
+                android:orientation="vertical"
+                android:padding="@dimen/_14sdp">
+
+                <TextView
+                    style="@style/CryonixFieldLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/instance_shared_data" />
+
+                <CheckBox
+                    android:id="@+id/vprof_editor_data_checkbox_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:background="@drawable/cryonix_input_field"
+                    android:button="@null"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/primary_text"
+                    android:textSize="@dimen/_14ssp"
+                    android:paddingHorizontal="@dimen/padding_heavy"
+                    android:text="@string/instance_shared_data_off" />
+            </LinearLayout>
+
+            <!-- JVM args card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/cryonix_card"
+                android:orientation="vertical"
+                android:padding="@dimen/_14sdp">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    style="@style/CryonixFieldLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pvc_jvmArgs" />
+
+                <EditText
+                    android:id="@+id/vprof_editor_jre_args"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:background="@drawable/cryonix_input_field"
+                    android:ems="10"
+                    android:hint="@string/use_global_default"
+                    android:textColor="@color/primary_text"
+                    android:inputType="text"
+                    android:paddingHorizontal="@dimen/padding_heavy"
+                    android:textSize="@dimen/_14ssp" />
+            </LinearLayout>
+
+            <!-- Java runtime card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/cryonix_card"
+                android:orientation="vertical"
+                android:padding="@dimen/_14sdp">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    style="@style/CryonixFieldLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pedit_java_runtime" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/vprof_editor_spinner_runtime"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="@dimen/_16sdp"
+                        android:background="@drawable/cryonix_spinner_bg"
+                        android:dropDownWidth="match_parent"
+                        android:popupBackground="#0A1526"
+                        android:textColor="@color/primary_text" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_8sdp"
+                        android:rotation="180"
+                        android:src="@drawable/spinner_arrow" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Renderer card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@drawable/cryonix_card"
+                android:orientation="vertical"
+                android:padding="@dimen/_14sdp">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    style="@style/CryonixFieldLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pedit_renderer" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/vprof_editor_instance_renderer"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="@dimen/_16sdp"
+                        android:background="@drawable/cryonix_spinner_bg"
+                        android:dropDownWidth="match_parent"
+                        android:popupBackground="#0A1526"
+                        android:textColor="@color/primary_text" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_8sdp"
+                        android:rotation="180"
+                        android:src="@drawable/spinner_arrow" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Action bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_14sdp"
+        android:paddingVertical="@dimen/_10sdp">
+
+        <com.kdt.mcgui.MineButton
+            android:id="@+id/vprof_editor_save_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="@dimen/padding_medium"
+            android:text="@string/global_save" />
+
+        <com.kdt.mcgui.MineButton
+            android:id="@+id/vprof_editor_delete_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/padding_medium"
+            android:background="@drawable/cryonix_button_secondary"
+            android:textColor="@color/primary_text"
+            android:text="@string/global_delete" />
+    </LinearLayout>
+</LinearLayout>
