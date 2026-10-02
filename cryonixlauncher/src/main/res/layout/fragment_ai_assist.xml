@@ -60,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_2sdp"
-                android:text="Cryonix Launcher V3 • Setup assistant"
+                android:text="Cryonix Launcher V2 • Setup assistant"
                 android:textColor="@color/secondary_text"
                 android:textSize="@dimen/_11ssp" />
         </LinearLayout>
