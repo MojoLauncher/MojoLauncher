@@ -31,6 +31,7 @@ import com.kdt.mcgui.mcVersionSpinner;
 
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.CustomControlsActivity;
+import net.kdt.pojavlaunch.CursorCustomizationDialog;
 import net.kdt.pojavlaunch.LauncherActivity;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.contracts.OpenDocumentWithExtension;
@@ -70,6 +71,7 @@ public class MainMenuFragment extends Fragment {
         View mCustomControlButton = view.findViewById(R.id.custom_control_button);
         View mInstallJarButton = view.findViewById(R.id.install_jar_button);
         View mAiAssistButton = view.findViewById(R.id.sidebar_ai_assist);
+        View mCursorButton = view.findViewById(R.id.sidebar_mouse);
         View mShareLogsButton = view.findViewById(R.id.share_logs_button);
         View mOpenDirectoryButton = view.findViewById(R.id.open_files_button);
 
@@ -116,6 +118,14 @@ public class MainMenuFragment extends Fragment {
             mAiAssistButton.setOnClickListener(v -> {
                 Tools.jellyClick(v);
                 Tools.swapFragment(requireActivity(), AiAssistFragment.class, AiAssistFragment.TAG, null);
+            });
+        }
+
+        if (mCursorButton != null) {
+            applyJellyTouch(mCursorButton);
+            mCursorButton.setOnClickListener(v -> {
+                Tools.jellyClick(v);
+                CursorCustomizationDialog.show(requireContext());
             });
         }
 
