@@ -438,20 +438,23 @@ public final class Tools {
     }
 
     public static void dialog(final Context context, final CharSequence title, final CharSequence message) {
-        new AlertDialog.Builder(context)
+        AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok, null)
                 .create();
+        dialog.show();
         if (dialog.getWindow() != null) JellyAnimations.animateDialog(dialog.getWindow().getDecorView());
     }
 
     public static void dialog(final Context context, final int title, final int message) {
-        new AlertDialog.Builder(context)
+        AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok, null)
-                .show();
+                .create();
+        dialog.show();
+        if (dialog.getWindow() != null) JellyAnimations.animateDialog(dialog.getWindow().getDecorView());
     }
 
     public static void openURL(Activity act, String url) {
