@@ -217,6 +217,22 @@ public class LauncherActivity extends BaseActivity {
         setupVideoBackground();
         setupNavigationListeners();
 
+        // A fatal crash can relaunch the launcher directly into AI Assist with
+        // the exact stack trace captured by PojavApplication.
+        if (getIntent().getBooleanExtra("open_ai_assist", false)) {
+            final String crashText = getIntent().getStringExtra("ai_error_text");
+            getWindow().getDecorView().postDelayed(() -> {
+                if (!isFinishing()) {
+                    Bundle args = new Bundle();
+                    args.putString(net.kdt.pojavlaunch.fragments.AiAssistFragment.ARG_ERROR_TEXT, crashText);
+                    Tools.swapFragment(this,
+                            net.kdt.pojavlaunch.fragments.AiAssistFragment.class,
+                            net.kdt.pojavlaunch.fragments.AiAssistFragment.TAG,
+                            args);
+                }
+            }, 350L);
+        }
+
         new AsyncVersionList().getVersionList(versions -> ExtraCore.setValue(ExtraConstants.RELEASE_TABLE, versions));
 
         mProgressLayout.observe(ProgressLayout.DOWNLOAD_GAME);
