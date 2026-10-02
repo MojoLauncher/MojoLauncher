@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -96,7 +97,11 @@ public class CursorPreviewView extends View implements SharedPreferences.OnShare
         canvas.scale(scale, scale);
 
         if (customBitmap != null && !customBitmap.isRecycled()) {
-            canvas.drawBitmap(customBitmap, 0, 0, paint);
+            float maxSize = 42f;
+            float fit = Math.min(maxSize / Math.max(1f, customBitmap.getWidth()),
+                    maxSize / Math.max(1f, customBitmap.getHeight()));
+            canvas.drawBitmap(customBitmap, null,
+                    new RectF(0, 0, customBitmap.getWidth() * fit, customBitmap.getHeight() * fit), paint);
         } else {
             CursorStyleUtils.drawTemplate(canvas, paint, template, color);
         }
