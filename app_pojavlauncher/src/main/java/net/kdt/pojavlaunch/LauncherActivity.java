@@ -368,16 +368,16 @@ public class LauncherActivity extends BaseActivity {
             }
         };
 
-        mSidebarHome.setOnClickListener(homeListener);
-        mSidebarSettings.setOnClickListener(settingsListener);
+        if (mSidebarHome != null) mSidebarHome.setOnClickListener(homeListener);
+        if (mSidebarSettings != null) mSidebarSettings.setOnClickListener(settingsListener);
         if (mSettingsButton != null) mSettingsButton.setOnClickListener(settingsListener);
 
-        mSidebarControls.setOnClickListener(v -> startActivity(new Intent(this, CustomControlsActivity.class)));
-        
+        if (mSidebarControls != null) mSidebarControls.setOnClickListener(v -> startActivity(new Intent(this, CustomControlsActivity.class)));
+
         View.OnClickListener infoListener = v -> Tools.shareLog(this);
-        mSidebarInfo.setOnClickListener(infoListener);
-        
-        mSidebarMouse.setOnClickListener(v -> {
+        if (mSidebarInfo != null) mSidebarInfo.setOnClickListener(infoListener);
+
+        if (mSidebarMouse != null) mSidebarMouse.setOnClickListener(v -> {
              // Toggle mouse or something? For now just home
              Tools.backToMainMenu(this);
         });

@@ -369,7 +369,19 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
                     accountHead = new BitmapDrawable(resources, accountSkinFace);
                     mSkinHeadCache.put(headCacheHash, accountHead);
                 } else {
-                    accountHead = (BitmapDrawable) ResourcesCompat.getDrawable(resources, R.drawable.cryonixlauncher, theme);
+                    // The logo is a vector on this platform; never assume BitmapDrawable.
+                    Drawable fallback = ResourcesCompat.getDrawable(resources, R.drawable.cryonixlauncher, theme);
+                    if (fallback instanceof BitmapDrawable) {
+                        accountHead = (BitmapDrawable) fallback;
+                    } else {
+                        int w = fallback.getIntrinsicWidth() > 0 ? fallback.getIntrinsicWidth() : 96;
+                        int h = fallback.getIntrinsicHeight() > 0 ? fallback.getIntrinsicHeight() : 96;
+                        Bitmap bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+                        Canvas canvas = new Canvas(bmp);
+                        fallback.setBounds(0, 0, w, h);
+                        fallback.draw(canvas);
+                        accountHead = new BitmapDrawable(resources, bmp);
+                    }
                 }
             }
 

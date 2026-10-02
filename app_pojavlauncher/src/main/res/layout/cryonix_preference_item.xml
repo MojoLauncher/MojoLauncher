@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Cryonix preference row: card with icon tile, title, summary, widget -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    android:background="@drawable/launcher_preference_item_bg"
+    android:layout_marginBottom="@dimen/_8sdp"
+    android:background="@drawable/cryonix_card"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    android:padding="12dp">
+    android:padding="@dimen/_14sdp">
 
     <ImageView
         android:id="@android:id/icon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="@dimen/_34sdp"
+        android:layout_height="@dimen/_34sdp"
+        android:background="@drawable/launcher_icon_tile"
         android:contentDescription="Icon"
+        android:padding="@dimen/_7sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -23,7 +26,7 @@
         android:id="@+id/text_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="@dimen/_14sdp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@android:id/widget_frame"
@@ -35,24 +38,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp" />
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/_14ssp" />
 
         <TextView
             android:id="@android:id/summary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/secondary_text"
-            android:textSize="12sp"
+            android:ellipsize="end"
             android:maxLines="2"
-            android:ellipsize="end" />
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 
     <FrameLayout
         android:id="@android:id/widget_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="@dimen/_12sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

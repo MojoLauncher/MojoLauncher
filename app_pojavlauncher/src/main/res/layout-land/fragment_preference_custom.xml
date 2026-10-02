@@ -1,74 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<!-- Cryonix settings screen (landscape): header card + card preference rows -->
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent">
+    android:background="@drawable/cryonix_screen_bg"
+    android:clipToPadding="false"
+    android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/settings_content"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="48dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/launcher_card_flat"
-        android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <!-- Header card -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_18sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_18sdp"
+        android:background="@drawable/cryonix_card"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/_12sdp">
 
         <ImageButton
             android:id="@+id/btn_back"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="8dp"
+            android:contentDescription="Back"
+            android:padding="@dimen/_8sdp"
             android:scaleType="centerInside"
             android:src="@drawable/ic_px_arrow_left"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/accent_blue"
-            android:contentDescription="Back" />
+            app:tint="@color/accent_blue" />
 
-        <TextView
-            android:id="@+id/settings_title"
-            android:layout_width="wrap_content"
+        <ImageView
+            android:layout_width="@dimen/_44sdp"
+            android:layout_height="@dimen/_44sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:background="@drawable/launcher_icon_tile"
+            android:contentDescription="Settings"
+            android:padding="@dimen/_9sdp"
+            android:src="@drawable/ic_px_sliders"
+            app:tint="@color/accent_blue" />
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:fontFamily="sans-serif-black"
-            android:text="SETTINGS"
-            android:textColor="@color/accent_blue"
-            android:textSize="14sp"
-            android:letterSpacing="0.1"
-            app:layout_constraintStart_toEndOf="@id/btn_back"
-            app:layout_constraintTop_toTopOf="@id/btn_back"
-            app:layout_constraintBottom_toTopOf="@+id/settings_subtitle"
-            app:layout_constraintVertical_chainStyle="packed" />
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/settings_subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Configure your launcher experience"
-            android:textColor="@color/secondary_text"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="@id/settings_title"
-            app:layout_constraintTop_toBottomOf="@id/settings_title"
-            app:layout_constraintBottom_toBottomOf="@id/btn_back" />
+            <TextView
+                android:id="@+id/settings_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="Settings"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/_16ssp" />
 
-        <FrameLayout
-            android:id="@+id/list_container"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/settings_subtitle" />
+            <TextView
+                android:id="@+id/settings_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:text="Configure your launcher experience"
+                android:textColor="@color/secondary_text"
+                android:textSize="@dimen/_11ssp" />
+        </LinearLayout>
+    </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Preference list -->
+    <FrameLayout
+        android:id="@+id/list_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginHorizontal="@dimen/_18sdp"
+        android:layout_marginVertical="@dimen/_10sdp"
+        android:background="@android:color/transparent"
+        android:clipToPadding="false" />
+</LinearLayout>

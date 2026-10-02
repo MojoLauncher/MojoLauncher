@@ -75,7 +75,6 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        view.setBackgroundColor(android.graphics.Color.TRANSPARENT);
         super.onViewCreated(view, savedInstanceState);
         
         // Remove standard background from the RecyclerView itself if it has one
