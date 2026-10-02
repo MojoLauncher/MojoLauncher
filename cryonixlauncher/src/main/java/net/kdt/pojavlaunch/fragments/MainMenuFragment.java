@@ -76,8 +76,8 @@ public class MainMenuFragment extends Fragment {
         Button mPlayButton = view.findViewById(R.id.play_button);
         mVersionSpinner = view.findViewById(R.id.mc_version_spinner);
 
-        // Entrance motion animations
-        animateEntrance(view);
+        // Every home-screen element gets its own staggered fade/jelly entrance.
+        net.kdt.pojavlaunch.utils.JellyAnimations.animateScreen(view);
 
         // Click listeners with jelly motion
         if (mNewsButton != null) {
@@ -297,36 +297,6 @@ public class MainMenuFragment extends Fragment {
         });
     }
 
-    private void animateEntrance(@NonNull View root) {
-        View sidebar = root.findViewById(R.id.launcher_sidebar);
-        View brand = root.findViewById(R.id.brand_block);
-        View profileChip = root.findViewById(R.id.profile_chip);
-        View mainContent = root.findViewById(R.id.main_content);
-        View profilePanel = root.findViewById(R.id.profile_panel);
-
-        animateJellyIn(sidebar, -18f, 1f);
-        animateJellyIn(brand, -10f, 1f);
-        animateJellyIn(profileChip, -10f, 1f);
-        animateJellyIn(mainContent, 4f, 0.985f);
-        animateJellyIn(profilePanel, 18f, 1f);
-    }
-
-    private void animateJellyIn(View view, float startTranslationX, float startScale) {
-        if (view == null) return;
-        view.animate().cancel();
-        view.setAlpha(0f);
-        view.setTranslationX(startTranslationX);
-        view.setScaleX(startScale);
-        view.setScaleY(startScale);
-        view.animate()
-                .translationX(0f)
-                .scaleX(1f)
-                .scaleY(1f)
-                .alpha(1f)
-                .setDuration(260L)
-                .setInterpolator(new android.view.animation.DecelerateInterpolator(1.5f))
-                .start();
-    }
 
     private void applyJellyTouch(View view) {
         // Use the shared CS-style motion language: quick press-in + soft jelly settle.
