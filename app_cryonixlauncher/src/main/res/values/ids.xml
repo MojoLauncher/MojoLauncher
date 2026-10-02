@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="video_background" type="id" />
+    <item name="sidebar_info" type="id" />
+    <item name="sidebar_controls" type="id" />
+    <item name="sidebar_mouse" type="id" />
+    <item name="profile_avatar_top" type="id" />
+    <item name="profile_name_top" type="id" />
+</resources>

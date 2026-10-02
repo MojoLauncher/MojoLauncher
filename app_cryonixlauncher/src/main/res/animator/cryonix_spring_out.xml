@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:ordering="together">
+
+    <objectAnimator
+        android:propertyName="translationX"
+        android:duration="340"
+        android:valueFrom="0"
+        android:valueTo="-80" />
+
+    <objectAnimator
+        android:propertyName="scaleX"
+        android:duration="340"
+        android:valueFrom="1"
+        android:valueTo="0.94" />
+
+    <objectAnimator
+        android:propertyName="scaleY"
+        android:duration="340"
+        android:valueFrom="1"
+        android:valueTo="0.94" />
+
+    <objectAnimator
+        android:propertyName="alpha"
+        android:duration="260"
+        android:startOffset="40"
+        android:valueFrom="1"
+        android:valueTo="0" />
+</set>

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Cryonix text input field -->
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_focused="true" android:drawable="@drawable/cryonix_input_field_focused" />
-    <item android:state_pressed="true" android:drawable="@drawable/cryonix_input_field_focused" />
-    <item android:state_selected="true" android:drawable="@drawable/cryonix_input_field_focused" />
-    <item android:drawable="@drawable/cryonix_input_field_normal" />
-</selector>

@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_launcher_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/cryonix_screen_bg"
+    android:padding="16dp">
+
+    <!-- BRAND BLOCK TOP LEFT -->
+    <LinearLayout
+        android:id="@+id/brand_block"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="Logo"
+            android:padding="5dp"
+            android:src="@drawable/cryonixlauncher" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="sans-serif-black"
+            android:letterSpacing="0.03"
+            android:text="CRYONIX LAUNCHER V3"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <!-- PROFILE CHIP TOP RIGHT -->
+    <LinearLayout
+        android:id="@+id/profile_chip"
+        android:layout_width="wrap_content"
+        android:layout_height="42dp"
+        android:background="@drawable/launcher_profile_badge_bg"
+        android:gravity="center_vertical"
+        android:paddingStart="6dp"
+        android:paddingEnd="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/launcher_icon_tile"
+            android:contentDescription="Profile"
+            android:padding="4dp"
+            android:src="@drawable/cryonixlauncher" />
+
+        <TextView
+            android:id="@+id/profile_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="nemosteikwzh"
+            android:textColor="@android:color/white"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <!-- LEFT SIDEBAR -->
+    <LinearLayout
+        android:id="@+id/launcher_sidebar"
+        android:layout_width="58dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/cryonix_sidebar_pill"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="12dp"
+        android:paddingBottom="9dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/brand_block">
+
+        <ImageButton
+            android:id="@+id/sidebar_home"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/launcher_sidebar_home_bg"
+            android:contentDescription="Home"
+            android:padding="9dp"
+            android:src="@drawable/ic_clean_home"
+            app:tint="@android:color/white" />
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/sidebar_ai_assist"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="AI Assist"
+            android:padding="9dp"
+            android:src="@drawable/ic_sidebar_pointer"
+            app:tint="#6B88B4" />
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/custom_control_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Controls"
+            android:padding="9dp"
+            android:src="@drawable/ic_clean_gamepad"
+            app:tint="#6B88B4" />
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/install_jar_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Info"
+            android:padding="9dp"
+            android:src="@drawable/ic_sidebar_info"
+            app:tint="#6B88B4" />
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/sidebar_settings"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Settings"
+            android:padding="9dp"
+            android:src="@drawable/ic_sidebar_sliders"
+            app:tint="#6B88B4" />
+    </LinearLayout>
+
+    <!-- MAIN CENTER CONTENT -->
+    <LinearLayout
+        android:id="@+id/main_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="12dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/profile_panel"
+        app:layout_constraintStart_toEndOf="@id/launcher_sidebar"
+        app:layout_constraintTop_toBottomOf="@id/brand_block">
+
+        <LinearLayout
+            android:id="@+id/instances_panel"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- INSTANCES HEADER -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:contentDescription="Instances"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_launcher_cube"
+                    app:tint="#8BA3CB" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/instances_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-black"
+                        android:text="Instances"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="instances"
+                        android:textColor="#5E789E"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/instance_counter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/launcher_counter_bg"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp"
+                    android:text="2/2"
+                    android:textColor="#8BA3CB"
+                    android:textSize="12sp" />
+
+                <ImageButton
+                    android:id="@+id/btn_prev_instance"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Previous"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_launcher_chevron_left"
+                    app:tint="#8BA3CB" />
+
+                <ImageButton
+                    android:id="@+id/btn_next_instance"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="4dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Next"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_launcher_chevron_right"
+                    app:tint="#8BA3CB" />
+
+                <ImageButton
+                    android:id="@+id/btn_add_instance_panel"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/launcher_btn_play_circle"
+                    android:contentDescription="Add Instance"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_add"
+                    app:tint="@android:color/white" />
+            </LinearLayout>
+
+            <!-- RECYCLER VIEW FOR INSTANCES -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/instances_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="8dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                tools:listitem="@layout/item_instance" />
+        </LinearLayout>
+
+        <!-- AI ASSISTANT CARD -->
+        <LinearLayout
+            android:id="@+id/ai_assist_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/launcher_card_flat"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/launcher_btn_play_circle"
+                android:contentDescription="AI Assistant"
+                android:padding="8dp"
+                android:src="@drawable/ic_clean_ai"
+                app:tint="@android:color/white" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-bold"
+                    android:text="Ai Assistant"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:text="Follow AI Commands To setup Launcher properly!"
+                    android:textColor="#5E789E"
+                    android:textSize="10sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- RIGHT INSTANCE / PROFILE PANEL -->
+    <LinearLayout
+        android:id="@+id/profile_panel"
+        android:layout_width="250dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/launcher_card_flat"
+        android:orientation="vertical"
+        android:padding="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_chip">
+
+        <ImageView
+            android:id="@+id/selected_instance_preview"
+            android:layout_width="match_parent"
+            android:layout_height="105dp"
+            android:background="@drawable/launcher_world_preview"
+            android:contentDescription="Selected instance preview"
+            android:scaleType="centerCrop"
+            android:src="@drawable/cryonix_world_sunset" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/current_instance_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-bold"
+                android:singleLine="true"
+                android:text="Fabric"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+
+            <ImageButton
+                android:id="@+id/side_menu_button"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Options"
+                android:padding="4dp"
+                android:src="@drawable/ic_launcher_more"
+                app:tint="#5E789E" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/current_instance_version"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="fabric-loader-0.19.5-26.3"
+            android:textColor="#5E789E"
+            android:textSize="11sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center_vertical">
+
+            <View
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:background="@drawable/launcher_status_ready" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="Ready"
+                android:textColor="#00D6A0"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/right_launch_button"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/launcher_play_pill_white"
+            android:fontFamily="sans-serif-black"
+            android:stateListAnimator="@null"
+            android:text="▶  Launch"
+            android:textColor="#07101E"
+            android:textSize="15sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/side_edit_profile"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/launcher_action_button"
+                android:drawableStart="@drawable/ic_launcher_edit"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:text="Edit"
+                android:textColor="#BBD0F4"
+                android:textSize="11sp" />
+
+            <Button
+                android:id="@+id/side_duplicate"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/launcher_action_button"
+                android:drawableStart="@drawable/ic_launcher_copy"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="Duplicate"
+                android:textColor="#BBD0F4"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/side_delete"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/launcher_action_button"
+                android:drawableStart="@drawable/ic_launcher_delete"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:text="Delete"
+                android:textColor="#BBD0F4"
+                android:textSize="11sp" />
+
+            <Button
+                android:id="@+id/side_open_folder"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/launcher_action_button"
+                android:drawableStart="@drawable/ic_launcher_folder"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:text="Open folder"
+                android:textColor="#BBD0F4"
+                android:textSize="11sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- SAFE HIDDEN BACKWARD-COMPATIBLE VIEWS -->
+    <com.kdt.mcgui.mcVersionSpinner
+        android:id="@+id/mc_version_spinner"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/edit_profile_button"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:src="@drawable/ic_px_edit"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/btn_toggle_instances"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/play_button"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:visibility="gone" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
