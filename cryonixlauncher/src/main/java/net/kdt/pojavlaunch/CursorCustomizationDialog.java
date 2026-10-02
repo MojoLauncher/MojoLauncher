@@ -13,7 +13,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.PreferenceManager;
 
-import git.artdeell.mojo.R;
 
 public final class CursorCustomizationDialog {
     private static final String SCALE_KEY = "cryonix_cursor_scale";
@@ -83,8 +82,7 @@ public final class CursorCustomizationDialog {
 
         dialog.setOnShowListener(d -> {
             if (dialog.getButton(AlertDialog.BUTTON_POSITIVE) != null) {
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                        context.getResources().getColor(R.color.cryo_blue, context.getTheme()));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.rgb(70, 150, 255));
             }
         });
         dialog.show();
