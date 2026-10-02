@@ -68,7 +68,7 @@
 			android:id="@+id/main_loading_screen"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:background="#BB000000"
+			android:background="#CC050B16"
 			android:visibility="visible"
 			>
 
@@ -99,7 +99,7 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="@string/loading_screen_warning"
-					android:textColor="@android:color/darker_gray"
+					android:textColor="@color/secondary_text"
 					android:textSize="12sp" />
 			</LinearLayout>
 		</FrameLayout>
@@ -117,7 +117,9 @@
 		android:layout_width="200dp"
 		android:layout_height="match_parent"
 		android:layout_gravity="right"
-		android:background="?attr/colorBackgroundFloating"
+		android:background="#0A1526"
+		android:divider="#243D6B"
+		android:dividerHeight="1dp"
 		android:fitsSystemWindows="false"
 		android:id="@+id/main_navigation_view"/>
 

@@ -6,7 +6,7 @@
         android:id="@+id/top_log_view"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="#555555"
+        android:background="@drawable/cryonix_log_header"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -15,7 +15,9 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="25dp"
         android:text="@string/log_view_label_log_output"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/_15ssp"
+        android:fontFamily="sans-serif-medium"
         app:layout_constraintBottom_toBottomOf="@+id/top_log_view"
         app:layout_constraintStart_toStartOf="@+id/top_log_view"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,6 +27,10 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginHorizontal="10dp"
+        android:background="@drawable/cryonix_toggle"
+        android:textAllCaps="false"
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/_11ssp"
         android:textOff="@string/log_view_button_scroll_off"
         android:textOn="@string/log_view_button_scroll_on"
         app:layout_constraintBottom_toBottomOf="@+id/top_log_view"
@@ -36,6 +42,10 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginHorizontal="10dp"
+        android:background="@drawable/cryonix_toggle"
+        android:textAllCaps="false"
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/_11ssp"
         android:textOff="@string/log_view_button_output_off"
         android:textOn="@string/log_view_button_output_on"
         app:layout_constraintBottom_toBottomOf="@+id/top_log_view"
@@ -48,6 +58,7 @@
         android:layout_height="70dp"
         android:scaleType="centerCrop"
         android:src="@android:drawable/ic_delete"
+        android:tint="#8AA0C8"
         app:layout_constraintBottom_toBottomOf="@+id/top_log_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -57,7 +68,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:alpha="0.8"
-        android:background="#000000"
+        android:background="@color/background_app"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/top_log_view">
 
@@ -65,6 +76,8 @@
             android:id="@+id/content_log_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/secondary_text"
+            android:fontFamily="monospace"
             android:textIsSelectable="true"/>
 
     </com.kdt.DefocusableScrollView>

@@ -12,6 +12,7 @@
     <!-- Version filter -->
     <TextView
         android:id="@+id/search_mod_mc_version_textview"
+        style="@style/CryonixFieldLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/profiles_profile_version"
@@ -26,10 +27,11 @@
 
         android:layout_marginEnd="@dimen/padding_medium"
 
-        android:background="@drawable/background_line"
+        android:background="@drawable/cryonix_input_field"
         android:hint="@string/version_select_hint"
+        android:textColor="@color/primary_text"
         android:paddingHorizontal="@dimen/padding_heavy"
-        android:textSize="@dimen/_13ssp"
+        android:textSize="@dimen/_14ssp"
 
         app:layout_constraintEnd_toStartOf="@+id/search_mod_mc_version_button"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +41,10 @@
         android:id="@+id/search_mod_mc_version_button"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:background="@drawable/cryonix_button_secondary"
         android:paddingHorizontal="@dimen/padding_large"
+        android:textAllCaps="false"
+        android:textColor="@color/accent_blue"
 
         android:text="@string/global_select"
 

@@ -1,72 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<!-- Cryonix import controls: centered card on gradient -->
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/cryonix_screen_bg">
 
-    <ImageView
+    <LinearLayout
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="-10dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_setting_sign_in_background" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:background="@drawable/cryonix_card"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/_20sdp"
+        android:paddingVertical="@dimen/_22sdp"
+        android:translationZ="1dp">
 
+        <ImageView
+            android:layout_width="@dimen/_56sdp"
+            android:layout_height="@dimen/_56sdp"
+            android:background="@drawable/launcher_icon_tile"
+            android:padding="@dimen/_11sdp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_px_data_import"
+            app:tint="@color/accent_blue" />
 
-        android:layout_marginHorizontal="@dimen/_15sdp"
-        android:background="@drawable/menu_background"
-        android:paddingVertical="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3"
-        tools:layout_editor_absoluteX="16dp">
+        <TextView
+            style="@style/CryonixScreenTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:gravity="center"
+            android:text="@string/import_control_label" />
 
         <TextView
             android:id="@+id/textView_import_control_file_name"
+            style="@style/CryonixFieldLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="5dp"
-            android:text="File name:"
-            app:layout_constraintBottom_toTopOf="@+id/editText_import_control_file_name"
-            app:layout_constraintStart_toStartOf="@+id/editText_import_control_file_name" />
+            android:layout_marginTop="@dimen/_20sdp"
+            android:text="File name:" />
 
         <com.kdt.mcgui.MineEditText
             android:id="@+id/editText_import_control_file_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="35dp"
-            android:layout_marginBottom="20dp"
+            android:layout_height="@dimen/_44sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:gravity="center"
             android:hint="File name"
+            android:textColor="@color/primary_text"
             android:imeOptions="flagForceAscii"
-
-            app:layout_constraintBottom_toTopOf="@+id/mineButton_import_control" />
+            android:textSize="@dimen/_14ssp" />
 
         <com.kdt.mcgui.MineButton
             android:id="@+id/mineButton_import_control"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
-
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_44sdp"
+            android:layout_marginTop="@dimen/_18sdp"
             android:background="@drawable/mine_button_background"
             android:onClick="startImport"
-
             android:text="@string/import_control_import_button"
-            android:textColor="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/editText_import_control_file_name"
-
-            app:layout_constraintStart_toStartOf="@+id/editText_import_control_file_name"
-
-            app:layout_constraintVertical_bias="0.70" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
-
-
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+</FrameLayout>

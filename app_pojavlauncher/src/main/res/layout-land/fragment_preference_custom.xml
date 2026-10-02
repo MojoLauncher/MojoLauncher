@@ -6,68 +6,181 @@
     android:layout_height="match_parent"
     android:background="@android:color/transparent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/settings_content"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="48dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/launcher_card_flat"
-        android:padding="16dp"
+    <!--
+        Landscape settings screen with its own sidebar, like the reference:
+        home / settings (active, blue chip) / controls / info, plus a java
+        entry pinned to the bottom. The navigation handlers live in
+        LauncherPreferenceFragment#bindSidebar.
+
+        Sub-screens (video, java, ...) cover the whole screen, so
+        LauncherPreferenceFragment re-enables the card background, the header
+        (back button, title, subtitle, divider) and an opaque background at
+        runtime.
+    -->
+
+    <!-- Sidebar -->
+    <LinearLayout
+        android:id="@+id/settings_sidebar"
+        android:layout_width="112dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/launcher_settings_sidebar_bg"
+        android:gravity="top|center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="28dp"
+        android:paddingBottom="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/btn_back"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="8dp"
+            android:id="@+id/sb_home"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="8dp"
-            android:scaleType="centerInside"
+            android:contentDescription="@string/settings_nav_home"
+            android:padding="17dp"
+            android:src="@drawable/ic_px_home"
+            app:tint="#A9C0EA" />
+
+        <ImageButton
+            android:id="@+id/sb_settings"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/launcher_sidebar_home_bg"
+            android:contentDescription="@string/preference_screen_title"
+            android:padding="17dp"
+            android:src="@drawable/ic_sharp_settings_24"
+            app:tint="@android:color/white" />
+
+        <ImageButton
+            android:id="@+id/sb_controls"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:layout_marginTop="18dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/preference_control_title"
+            android:padding="17dp"
+            android:src="@drawable/ic_px_gamepad"
+            app:tint="#A9C0EA" />
+
+        <ImageButton
+            android:id="@+id/sb_info"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:layout_marginTop="18dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/main_share_logs"
+            android:padding="17dp"
+            android:src="@drawable/ic_px_sharelog"
+            app:tint="#A9C0EA" />
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/sb_java"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/preference_java_title"
+            android:padding="17dp"
+            android:src="@drawable/ic_px_java_run"
+            app:tint="#A9C0EA" />
+    </LinearLayout>
+
+    <!-- Content -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/settings_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/settings_sidebar"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/launcher_settings_back_btn"
+            android:contentDescription="@string/action_back"
+            android:padding="11dp"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_px_arrow_left"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/accent_blue"
-            android:contentDescription="Back" />
+            app:tint="@color/accent_blue" />
 
         <TextView
             android:id="@+id/settings_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
+            android:ellipsize="end"
             android:fontFamily="sans-serif-black"
-            android:text="SETTINGS"
-            android:textColor="@color/accent_blue"
-            android:textSize="14sp"
-            android:letterSpacing="0.1"
+            android:letterSpacing="0.02"
+            android:maxLines="1"
+            android:text="@string/preference_screen_title"
+            android:textColor="@color/primary_text"
+            android:textSize="21sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/settings_subtitle"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/btn_back"
             app:layout_constraintTop_toTopOf="@id/btn_back"
-            app:layout_constraintBottom_toTopOf="@+id/settings_subtitle"
             app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
             android:id="@+id/settings_subtitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Configure your launcher experience"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/preference_screen_subtitle"
             android:textColor="@color/secondary_text"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="@id/settings_title"
-            app:layout_constraintTop_toBottomOf="@id/settings_title"
-            app:layout_constraintBottom_toBottomOf="@id/btn_back" />
+            android:textSize="13sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/btn_back"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_back"
+            app:layout_constraintTop_toBottomOf="@id/settings_title" />
+
+        <View
+            android:id="@+id/settings_header_divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="14dp"
+            android:background="#243D6B"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <FrameLayout
             android:id="@+id/list_container"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="14dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/settings_subtitle" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/settings_header_divider" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

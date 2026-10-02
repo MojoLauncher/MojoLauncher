@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:translationZ="10dp"
-        android:background="@drawable/background_overlay"
+        android:background="@drawable/cryonix_panel"
         android:paddingHorizontal="@dimen/padding_medium"
         android:paddingVertical="@dimen/padding_medium"
         android:layout_marginTop="@dimen/fragment_padding_medium"
@@ -33,8 +33,9 @@
             android:id="@+id/search_mod_edittext"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/background_line"
-            android:textSize="@dimen/_13ssp"
+            android:background="@drawable/cryonix_input_field"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/_14ssp"
             android:translationZ="2dp"
 
             android:ems="10"
@@ -53,6 +54,7 @@
             android:background="?android:attr/selectableItemBackground"
             android:minWidth="@dimen/_38sdp"
             android:src="@drawable/ic_filter"
+            app:tint="@color/secondary_text"
 
             android:paddingHorizontal="@dimen/padding_medium"
 
@@ -97,6 +99,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
+        android:textColor="@color/secondary_text"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/search_mod_list"
         app:layout_constraintEnd_toEndOf="@+id/search_mod_list"

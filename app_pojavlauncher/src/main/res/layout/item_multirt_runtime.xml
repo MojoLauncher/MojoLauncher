@@ -4,14 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/_60sdp"
+    android:layout_marginHorizontal="@dimen/_2sdp"
+    android:layout_marginVertical="@dimen/_4sdp"
+    android:background="@drawable/cryonix_list_row"
     android:paddingHorizontal="@dimen/padding_medium"
     >
 
     <TextView
         android:id="@+id/multirt_view_java_version"
-        style="@style/TextAppearance.AppCompat.Body1"
         android:layout_width="@dimen/_150sdp"
         android:layout_height="wrap_content"
+        android:textColor="@color/primary_text"
+        android:fontFamily="sans-serif-medium"
 
 
         android:layout_marginEnd="@dimen/_8sdp"
@@ -32,6 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:textColor="@color/secondary_text"
 
         android:layout_marginTop="8dp"
         android:textSize="@dimen/_10ssp"
@@ -61,7 +66,10 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
 
-        android:background="?attr/selectableItemBackground"
+        android:background="@drawable/cryonix_button_secondary"
+        android:textAllCaps="false"
+        android:textColor="@color/accent_blue"
+        android:textSize="@dimen/_11ssp"
         android:text="@string/multirt_config_setdefault"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
