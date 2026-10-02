@@ -18,6 +18,7 @@ import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.tasks.AsyncAssetManager;
 
 import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.utils.JellyAnimations;
 
 public class TestStorageActivity extends Activity {
     private final int REQUEST_STORAGE_REQUEST_CODE = 1;
@@ -53,7 +54,9 @@ public class TestStorageActivity extends Activity {
                 .setTitle(R.string.global_error)
                 .setMessage(R.string.toast_permission_denied)
                 .setPositiveButton(android.R.string.ok,(d,i)->requestStoragePermission())
-                .show();
+                .create();
+        mPermissionRequestDialog.show();
+        if (mPermissionRequestDialog.getWindow() != null) JellyAnimations.animateDialog(mPermissionRequestDialog.getWindow().getDecorView());
     }
 
     @Override
