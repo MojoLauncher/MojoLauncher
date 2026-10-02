@@ -12,135 +12,102 @@ public final class JellyAnimations {
     private JellyAnimations() {
     }
 
-    /** Shared jelly-style entrance for full screens. */
+    /** Subtle jelly entrance: fade + tiny elastic scale, without a large bounce. */
     public static void animateScreen(View root) {
         if (root == null) return;
 
+        root.animate().cancel();
         root.setAlpha(0f);
-        root.setScaleX(0.965f);
-        root.setScaleY(0.965f);
-        root.setTranslationY(12f);
+        root.setScaleX(0.985f);
+        root.setScaleY(0.985f);
+        root.setTranslationY(5f);
 
         root.animate()
                 .alpha(1f)
                 .translationY(0f)
-                .scaleX(1.015f)
-                .scaleY(1.015f)
-                .setDuration(420L)
-                .setInterpolator(new OvershootInterpolator(1.25f))
+                .scaleX(1.006f)
+                .scaleY(1.006f)
+                .setDuration(220L)
+                .setInterpolator(new DecelerateInterpolator(1.6f))
                 .withEndAction(() -> root.animate()
                         .scaleX(1f)
                         .scaleY(1f)
-                        .setDuration(220L)
-                        .setInterpolator(new OvershootInterpolator(2.6f))
+                        .setDuration(90L)
+                        .setInterpolator(new DecelerateInterpolator())
                         .start())
                 .start();
 
         if (root instanceof ViewGroup) {
-            animateChildren((ViewGroup) root, 0);
+            animateChildren((ViewGroup) root);
         }
     }
 
-    /** Shared jelly-style entrance for dialogs/popups. */
+    /** Subtle dialog jelly: quick fade and a very small elastic settle. */
     public static void animateDialog(View dialogRoot) {
         if (dialogRoot == null) return;
 
+        dialogRoot.animate().cancel();
         dialogRoot.setAlpha(0f);
-        dialogRoot.setScaleX(0.82f);
-        dialogRoot.setScaleY(0.82f);
-        dialogRoot.setTranslationY(24f);
+        dialogRoot.setScaleX(0.96f);
+        dialogRoot.setScaleY(0.96f);
+        dialogRoot.setTranslationY(6f);
 
         dialogRoot.animate()
                 .alpha(1f)
                 .translationY(0f)
-                .scaleX(1.08f)
-                .scaleY(1.08f)
-                .setDuration(360L)
-                .setInterpolator(new OvershootInterpolator(1.65f))
+                .scaleX(1.012f)
+                .scaleY(1.012f)
+                .setDuration(190L)
+                .setInterpolator(new OvershootInterpolator(1.05f))
                 .withEndAction(() -> dialogRoot.animate()
                         .scaleX(1f)
                         .scaleY(1f)
-                        .setDuration(240L)
-                        .setInterpolator(new OvershootInterpolator(3.0f))
+                        .setDuration(80L)
+                        .setInterpolator(new DecelerateInterpolator())
                         .start())
                 .start();
 
         if (dialogRoot instanceof ViewGroup) {
-            animateChildren((ViewGroup) dialogRoot, 0);
+            animateChildren((ViewGroup) dialogRoot);
         }
     }
 
-    private static void animateChildren(ViewGroup parent, int depth) {
-        if (parent instanceof AdapterView) {
-            return;
-        }
+    private static void animateChildren(ViewGroup parent) {
+        if (parent instanceof AdapterView) return;
 
         long index = 0;
         for (int i = 0; i < parent.getChildCount(); i++) {
             View child = parent.getChildAt(i);
             if (child == null || child.getVisibility() != View.VISIBLE) continue;
+            if (child.getParent() instanceof AdapterView) continue;
 
-            // Scroll containers animate as a single surface; their visible content is
-            // deliberately not treated as individual list rows.
-            if (child instanceof ScrollView) {
-                animateSurface(child, Math.min(index * 35L, 300L));
-                index++;
-                continue;
-            }
-
-            if (child.getParent() instanceof android.widget.AdapterView) continue;
-
+            child.animate().cancel();
             child.setAlpha(0f);
-            child.setTranslationY(24f);
-            child.setScaleX(0.90f);
-            child.setScaleY(0.90f);
+            child.setTranslationY(7f);
+            child.setScaleX(0.99f);
+            child.setScaleY(0.99f);
 
-            long delay = Math.min(index * 35L, 300L);
+            long delay = Math.min(index * 18L, 90L);
 
             child.animate()
                     .alpha(1f)
                     .translationY(0f)
-                    .scaleX(1.055f)
-                    .scaleY(1.055f)
+                    .scaleX(1.003f)
+                    .scaleY(1.003f)
                     .setStartDelay(delay)
-                    .setDuration(460L)
-                    .setInterpolator(new OvershootInterpolator(1.7f))
+                    .setDuration(210L)
+                    .setInterpolator(new DecelerateInterpolator(1.5f))
                     .withEndAction(() -> child.animate()
                             .scaleX(1f)
                             .scaleY(1f)
-                            .setDuration(190L)
-                            .setInterpolator(new OvershootInterpolator(2.8f))
-                            .start())
-                    .start();
+                            .setDuration(70L)
+                            .setInterpolator(new DecelerateInterpolator())
+                            .start());
 
             if (child instanceof ViewGroup && !(child instanceof ScrollView)) {
-                animateChildren((ViewGroup) child, depth + 1);
+                animateChildren((ViewGroup) child);
             }
-
             index++;
         }
-    }
-
-    private static void animateSurface(View view, long delay) {
-        view.setAlpha(0f);
-        view.setTranslationY(20f);
-        view.setScaleX(0.94f);
-        view.setScaleY(0.94f);
-
-        view.animate()
-                .alpha(1f)
-                .translationY(0f)
-                .scaleX(1.035f)
-                .scaleY(1.035f)
-                .setStartDelay(delay)
-                .setDuration(440L)
-                .setInterpolator(new OvershootInterpolator(1.5f))
-                .withEndAction(() -> view.animate()
-                        .scaleX(1f)
-                        .scaleY(1f)
-                        .setDuration(180L)
-                        .setInterpolator(new OvershootInterpolator(2.5f))
-                        .start())
-                .start();
     }
 }
