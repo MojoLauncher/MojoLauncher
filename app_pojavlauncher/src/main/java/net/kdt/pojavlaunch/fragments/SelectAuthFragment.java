@@ -13,6 +13,7 @@ import com.kdt.mcgui.ProgressLayout;
 
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.utils.JellyAnimations;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
 
 public class SelectAuthFragment extends Fragment {
@@ -24,6 +25,8 @@ public class SelectAuthFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        JellyAnimations.animateScreen(view);
+
         Button mMicrosoftButton = view.findViewById(R.id.button_microsoft_authentication);
         Button mLocalButton = view.findViewById(R.id.button_local_authentication);
         Button mElyByButton = view.findViewById(R.id.button_elyby_authentication);
