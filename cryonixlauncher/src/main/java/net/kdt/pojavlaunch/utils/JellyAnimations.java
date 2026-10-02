@@ -39,6 +39,7 @@ public final class JellyAnimations {
     };
 
     private static final Map<View, Boolean> PRESS_ATTACHED = new WeakHashMap<>();
+    private static final Map<View, Long> LAST_SCREEN_ANIMATION = new WeakHashMap<>();
 
     private JellyAnimations() {
     }
@@ -50,34 +51,35 @@ public final class JellyAnimations {
     public static void animateScreen(View root) {
         if (root == null) return;
 
+        // Activity + fragment callbacks can both request an entrance. Avoid
+        // replaying the exact same root twice during one navigation event.
+        synchronized (LAST_SCREEN_ANIMATION) {
+            Long last = LAST_SCREEN_ANIMATION.get(root);
+            long now = android.os.SystemClock.uptimeMillis();
+            if (last != null && now - last < 180L) return;
+            LAST_SCREEN_ANIMATION.put(root, now);
+        }
+
         root.animate().cancel();
-        root.setAlpha(0f);
-        root.setScaleX(0.985f);
-        root.setScaleY(0.985f);
-        root.setTranslationY(5f);
+        root.setAlpha(0.985f);
+        root.setScaleX(0.997f);
+        root.setScaleY(0.997f);
 
         root.animate()
                 .alpha(1f)
-                .translationY(0f)
-                .scaleX(1.006f)
-                .scaleY(1.006f)
-                .setDuration(260L)
+                .scaleX(1f)
+                .scaleY(1f)
+                .setDuration(170L)
                 .setInterpolator(EMPHASIZED_DECELERATE)
-                .withEndAction(() -> root.animate()
-                        .scaleX(1f)
-                        .scaleY(1f)
-                        .setDuration(90L)
-                        .setInterpolator(new DecelerateInterpolator())
-                        .start())
                 .start();
 
         if (root instanceof ViewGroup) {
-            animateChildren((ViewGroup) root);
+            animateCascade((ViewGroup) root, 0L, 0);
         }
 
-        // Apply the same tactile response to newly attached clickable controls.
         root.post(() -> attachTouchFeedback(root));
     }
+
 
     /**
      * CS-style alias for a screen reveal. Existing callers can use the same
@@ -172,23 +174,75 @@ public final class JellyAnimations {
     /** Staggered direct-child entrance for cards/rows. */
     public static void stagger(ViewGroup container) {
         if (container == null) return;
-        for (int i = 0; i < container.getChildCount(); i++) {
-            View child = container.getChildAt(i);
+        animateCascade(container, 0L, 0);
+    }
+
+    /**
+     * Individual screen choreography. Each visible control gets its own
+     * fade + tiny scale + directional jelly motion instead of the whole
+     * screen appearing as one block.
+     */
+    private static void animateCascade(ViewGroup parent, long baseDelay, int depth) {
+        if (parent == null || shouldSkip(parent)) return;
+
+        int visibleIndex = 0;
+        for (int i = 0; i < parent.getChildCount(); i++) {
+            View child = parent.getChildAt(i);
             if (child == null || child.getVisibility() != View.VISIBLE) continue;
 
             child.animate().cancel();
             child.setAlpha(0f);
-            child.setTranslationY(12f);
+            child.setScaleX(0.965f);
+            child.setScaleY(0.965f);
 
+            // Alternate directions so the screen feels assembled rather than
+            // dropping every item from the same point.
+            int direction = (visibleIndex + depth) % 3;
+            float distance = 12f;
+            if (direction == 0) {
+                child.setTranslationX(-distance);
+                child.setTranslationY(5f);
+            } else if (direction == 1) {
+                child.setTranslationX(0f);
+                child.setTranslationY(9f);
+            } else {
+                child.setTranslationX(distance);
+                child.setTranslationY(5f);
+            }
+
+            long delay = Math.min(baseDelay + visibleIndex * 32L, 560L);
             child.animate()
                     .alpha(1f)
+                    .translationX(0f)
                     .translationY(0f)
-                    .setStartDelay(Math.min(i * 34L, 320L))
-                    .setDuration(300L)
-                    .setInterpolator(EMPHASIZED_DECELERATE)
+                    .scaleX(1.006f)
+                    .scaleY(1.006f)
+                    .setStartDelay(delay)
+                    .setDuration(225L)
+                    .setInterpolator(SOFT_JELLY)
+                    .withEndAction(() -> child.animate()
+                            .scaleX(1f)
+                            .scaleY(1f)
+                            .setDuration(85L)
+                            .setInterpolator(new DecelerateInterpolator())
+                            .start())
                     .start();
+
+            // Let nested cards, text, icons and buttons enter separately too.
+            if (child instanceof ViewGroup
+                    && !(child instanceof RecyclerView)
+                    && !(child instanceof AdapterView)
+                    && !(child instanceof ScrollView)
+                    && !(child instanceof android.widget.HorizontalScrollView)
+                    && !(child instanceof android.widget.SeekBar)
+                    && !(child instanceof android.widget.EditText)) {
+                animateCascade((ViewGroup) child,
+                        Math.min(delay + 42L, 600L), depth + 1);
+            }
+            visibleIndex++;
         }
     }
+
 
     private static void attachPress(final View view) {
         if (view == null || !view.isClickable()) return;
