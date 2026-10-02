@@ -42,7 +42,12 @@ public class CursorCustomizationFragment extends Fragment {
 
     private SharedPreferences prefs;
     private SeekBar sizeBar;
+    private SeekBar opacityBar;
+    private SeekBar rotationBar;
     private TextView sizeValue;
+    private TextView opacityValue;
+    private TextView rotationValue;
+    private TextView previewSize;
     private TextView customName;
     private CursorPreviewView preview;
 
@@ -60,11 +65,17 @@ public class CursorCustomizationFragment extends Fragment {
         prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
         preview = view.findViewById(R.id.cursor_preview);
         sizeBar = view.findViewById(R.id.cursor_size);
+        opacityBar = view.findViewById(R.id.cursor_opacity);
+        rotationBar = view.findViewById(R.id.cursor_rotation);
         sizeValue = view.findViewById(R.id.cursor_size_value);
+        opacityValue = view.findViewById(R.id.cursor_opacity_value);
+        rotationValue = view.findViewById(R.id.cursor_rotation_value);
+        previewSize = view.findViewById(R.id.cursor_preview_size);
         customName = view.findViewById(R.id.custom_cursor_name);
 
         bindMotion(view);
         bindSize();
+        bindEffects(view);
         bindTemplates(view.findViewById(R.id.cursor_templates));
         bindColors(view.findViewById(R.id.cursor_colors));
         bindSidebar(view);
@@ -82,8 +93,7 @@ public class CursorCustomizationFragment extends Fragment {
     }
 
     private void bindSize() {
-        float saved = Math.max(0.5f, Math.min(2f,
-                prefs.getFloat(CursorStyleUtils.SCALE_KEY, 1f)));
+        float saved = clamp(prefs.getFloat(CursorStyleUtils.SCALE_KEY, 1f), 0.5f, 2f);
         sizeBar.setProgress(Math.round((saved - 0.5f) * 100f));
         updateSizeText(saved);
 
@@ -98,8 +108,64 @@ public class CursorCustomizationFragment extends Fragment {
         });
     }
 
+    private void bindEffects(View root) {
+        bindSwitch(root, R.id.cursor_outline_switch, CursorStyleUtils.OUTLINE_KEY, false);
+        bindSwitch(root, R.id.cursor_trail_switch, CursorStyleUtils.TRAIL_KEY, false);
+        bindSwitch(root, R.id.cursor_shadow_switch, CursorStyleUtils.SHADOW_KEY, true);
+
+        int opacity = Math.max(20, Math.min(100,
+                prefs.getInt(CursorStyleUtils.OPACITY_KEY, 100)));
+        opacityBar.setProgress(opacity);
+        updateOpacityText(opacity);
+        opacityBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onProgressChanged(SeekBar bar, int progress, boolean fromUser) {
+                int value = Math.max(20, progress);
+                prefs.edit().putInt(CursorStyleUtils.OPACITY_KEY, value).apply();
+                updateOpacityText(value);
+            }
+            @Override public void onStartTrackingTouch(SeekBar bar) {}
+            @Override public void onStopTrackingTouch(SeekBar bar) {}
+        });
+
+        int rotation = ((prefs.getInt(CursorStyleUtils.ROTATION_KEY, 0) % 360) + 360) % 360;
+        rotationBar.setProgress(rotation);
+        updateRotationText(rotation);
+        rotationBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onProgressChanged(SeekBar bar, int progress, boolean fromUser) {
+                prefs.edit().putInt(CursorStyleUtils.ROTATION_KEY, progress).apply();
+                updateRotationText(progress);
+            }
+            @Override public void onStartTrackingTouch(SeekBar bar) {}
+            @Override public void onStopTrackingTouch(SeekBar bar) {}
+        });
+    }
+
+    private void bindSwitch(View root, int id, String key, boolean defaultValue) {
+        Switch sw = root.findViewById(id);
+        sw.setChecked(prefs.getBoolean(key, defaultValue));
+        sw.setOnCheckedChangeListener((button, checked) ->
+                prefs.edit().putBoolean(key, checked).apply());
+    }
+
     private void updateSizeText(float scale) {
-        sizeValue.setText(Math.round(scale * 100f) + "%");
+        int value = Math.round(scale * 100f);
+        sizeValue.setText(value + "%");
+        if (previewSize != null) {
+            String label = value <= 75 ? "Small" : value >= 140 ? "Large" : "Medium";
+            previewSize.setText("Cursor size: " + label);
+        }
+    }
+
+    private void updateOpacityText(int value) {
+        opacityValue.setText(value + "%");
+    }
+
+    private void updateRotationText(int value) {
+        rotationValue.setText(value + "°");
+    }
+
+    private float clamp(float value, float min, float max) {
+        return Math.max(min, Math.min(max, value));
     }
 
     private void bindTemplates(LinearLayout container) {
@@ -108,14 +174,14 @@ public class CursorCustomizationFragment extends Fragment {
             TextView card = new TextView(requireContext());
             card.setText(template);
             card.setTextColor(Color.WHITE);
-            card.setTextSize(12);
+            card.setTextSize(11);
             card.setGravity(android.view.Gravity.CENTER);
-            card.setPadding(20, 0, 20, 0);
-            card.setMinWidth(92);
+            card.setPadding(14, 0, 14, 0);
+            card.setMinWidth(88);
             card.setBackgroundResource(template.equals(selected)
                     ? R.drawable.cursor_selected_bg : R.drawable.cursor_section_bg);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(92, 70);
-            lp.setMargins(0, 0, 8, 0);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(88, 70);
+            lp.setMargins(0, 0, 7, 0);
             container.addView(card, lp);
             applyJellyTouch(card);
 
@@ -149,8 +215,8 @@ public class CursorCustomizationFragment extends Fragment {
             swatch.setBackground(bg);
             swatch.setContentDescription("Cursor color");
             swatch.setTag(color);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(40, 40);
-            lp.setMargins(5, 0, 12, 0);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(38, 38);
+            lp.setMargins(4, 0, 9, 0);
             container.addView(swatch, lp);
             applyJellyTouch(swatch);
 
@@ -241,12 +307,21 @@ public class CursorCustomizationFragment extends Fragment {
             prefs.edit()
                     .putFloat(CursorStyleUtils.SCALE_KEY, 1f)
                     .putBoolean(CursorStyleUtils.MOTION_KEY, true)
+                    .putBoolean(CursorStyleUtils.OUTLINE_KEY, false)
+                    .putBoolean(CursorStyleUtils.TRAIL_KEY, false)
+                    .putBoolean(CursorStyleUtils.SHADOW_KEY, true)
+                    .putInt(CursorStyleUtils.OPACITY_KEY, 100)
+                    .putInt(CursorStyleUtils.ROTATION_KEY, 0)
                     .putInt(CursorStyleUtils.COLOR_KEY, CursorStyleUtils.COLORS[0])
                     .putString(CursorStyleUtils.TEMPLATE_KEY, "Classic")
                     .remove(CursorStyleUtils.CUSTOM_PATH_KEY)
                     .apply();
             sizeBar.setProgress(50);
+            opacityBar.setProgress(100);
+            rotationBar.setProgress(0);
             updateSizeText(1f);
+            updateOpacityText(100);
+            updateRotationText(0);
             customName.setText("Not selected");
             LinearLayout templates = root.findViewById(R.id.cursor_templates);
             templates.removeAllViews();
@@ -258,10 +333,10 @@ public class CursorCustomizationFragment extends Fragment {
         if (v == null) return;
         v.setOnTouchListener((view, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                view.animate().scaleX(.96f).scaleY(.96f).setDuration(90).start();
+                view.animate().scaleX(.97f).scaleY(.97f).setDuration(70).start();
             } else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                view.animate().scaleX(1.02f).scaleY(1.02f).setDuration(110)
-                        .withEndAction(() -> view.animate().scaleX(1f).scaleY(1f).setDuration(80).start()).start();
+                view.animate().scaleX(1.015f).scaleY(1.015f).setDuration(100)
+                        .withEndAction(() -> view.animate().scaleX(1f).scaleY(1f).setDuration(75).start()).start();
             }
             return false;
         });
