@@ -7,6 +7,8 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.AdapterView;
 import android.widget.ScrollView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 public final class JellyAnimations {
 
     private JellyAnimations() {
@@ -73,7 +75,9 @@ public final class JellyAnimations {
     }
 
     private static void animateChildren(ViewGroup parent) {
-        if (parent instanceof AdapterView) return;
+        // Preference screens are backed by RecyclerView. Animating/repositioning
+        // its recycled children can leave preference rows invisible or off-screen.
+        if (parent instanceof AdapterView || parent instanceof RecyclerView) return;
 
         long index = 0;
         for (int i = 0; i < parent.getChildCount(); i++) {
@@ -104,7 +108,7 @@ public final class JellyAnimations {
                             .setInterpolator(new DecelerateInterpolator())
                             .start());
 
-            if (child instanceof ViewGroup && !(child instanceof ScrollView)) {
+            if (child instanceof ViewGroup && !(child instanceof ScrollView) && !(child instanceof RecyclerView)) {
                 animateChildren((ViewGroup) child);
             }
             index++;
