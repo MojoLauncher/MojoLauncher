@@ -17,13 +17,14 @@ public final class CursorStyleUtils {
     public static final String SHADOW_KEY = "cryonix_cursor_shadow";
 
     public static final String[] TEMPLATES = {
-            "Classic", "Dot", "Crosshair", "Diamond", "Arrow", "Hand"
+            "Classic", "Dot", "Triangle", "Square", "Circle", "Crosshair",
+            "Diamond", "Arrow", "Hand", "Star", "Ring", "Plus"
     };
 
     public static final int[] COLORS = {
             0xFFFFFFFF, 0xFF4A9BFF, 0xFF00D6A0, 0xFFFFD166,
             0xFFFF6B8A, 0xFFB98CFF, 0xFFFF8C42, 0xFF00E5FF,
-            0xFF8EEBFF, 0xFF7DFF5B, 0xFFFF8ACB
+            0xFF8EEBFF, 0xFF7DFF5B, 0xFFFF8ACB, 0xFF39FF88, 0xFF64FFDA, 0xFFB7FF00
     };
 
     private CursorStyleUtils() {}
@@ -51,8 +52,58 @@ public final class CursorStyleUtils {
     }
 
     private static void drawShape(Canvas canvas, Paint paint, String template) {
+        if ("Triangle".equals(template)) {
+            Path triangle = new Path();
+            triangle.moveTo(9f, 0f);
+            triangle.lineTo(18f, 18f);
+            triangle.lineTo(0f, 18f);
+            triangle.close();
+            canvas.drawPath(triangle, paint);
+            return;
+        }
+
+        if ("Square".equals(template)) {
+            canvas.drawRoundRect(1f, 1f, 17f, 17f, 3f, 3f, paint);
+            return;
+        }
+
+        if ("Circle".equals(template)) {
+            canvas.drawCircle(9f, 9f, 8f, paint);
+            return;
+        }
+
+        if ("Star".equals(template)) {
+            Path star = new Path();
+            for (int i = 0; i < 10; i++) {
+                double a = -Math.PI / 2d + i * Math.PI / 5d;
+                float r = (i % 2 == 0) ? 9f : 4f;
+                float x = 9f + (float) Math.cos(a) * r;
+                float y = 9f + (float) Math.sin(a) * r;
+                if (i == 0) star.moveTo(x, y); else star.lineTo(x, y);
+            }
+            star.close();
+            canvas.drawPath(star, paint);
+            return;
+        }
+
+        if ("Ring".equals(template)) {
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setStrokeWidth(3f);
+            canvas.drawCircle(9f, 9f, 7f, paint);
+            return;
+        }
+
+        if ("Plus".equals(template)) {
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setStrokeWidth(4f);
+            canvas.drawLine(9f, 1f, 9f, 17f, paint);
+            canvas.drawLine(1f, 9f, 17f, 9f, paint);
+            return;
+        }
+
+
         if ("Dot".equals(template)) {
-            canvas.drawCircle(8f, 8f, 8f, paint);
+            canvas.drawCircle(9f, 9f, 8f, paint);
             return;
         }
 
