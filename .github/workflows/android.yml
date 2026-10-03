@@ -58,6 +58,7 @@ jobs:
           gradle :app_pojavlauncher:bundleFullGplay
           mv cryonixlauncher/build/outputs/bundle/fullGplay/app_pojavlauncher-full-gplay.aab out/app-gplay.aab
 
+      # Cryonix APK build trigger / artifact pipeline.
       - name: Build Debug .apk
         run: |
           # Build the launcher
