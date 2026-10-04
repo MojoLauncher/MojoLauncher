@@ -82,6 +82,7 @@ import java.lang.ref.WeakReference;
 import java.util.Objects;
 
 import git.artdeell.mojo.R;
+import git.artdeell.mojoexec.MojoExec;
 
 public class GameActivity extends BaseActivity implements ControlButtonMenuListener, EditorExitable, ServiceConnection {
     public static final String INTENT_LAUNCH_VERSION = "intent_version";
@@ -141,6 +142,8 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
         Platform.initialize(this, launcherGLView);
 
         mGyroControl = new GyroControl(this);
+
+        if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) MojoExec.setUseBigCoreAffinity(true);
 
         // Enabling this on TextureView results in a broken white result
         if(PREF_USE_ALTERNATE_SURFACE) getWindow().setBackgroundDrawable(null);
