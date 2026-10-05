@@ -82,9 +82,6 @@ public class JREUtils {
         Map<String, String> envMap = new ArrayMap<>();
 		// This is currently required for YSM mod to function
 		File modRuntimeDir = new File(Tools.DIR_CACHE, "app_runtime_mod");
-		if (!modRuntimeDir.exists()) {
-    		modRuntimeDir.mkdirs();
-		}
 		envMap.put("MOD_ANDROID_RUNTIME", modRuntimeDir.getAbsolutePath());
 
         setupFfmpegEnv(context, envMap);
