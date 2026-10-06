@@ -29,6 +29,7 @@ import io.github.controlwear.virtual.joystick.android.JoystickView;
 @SuppressLint("ViewConstructor")
 public class ControlJoystick extends JoystickView implements ControlInterface {
     public final static int DIRECTION_FORWARD_LOCK = 8;
+    private final static int DEADZONE = 35;
     // Directions keycode
     private final int[] mDirectionForwardLock = new int[]{KeyEvent.KEYCODE_CTRL_LEFT};
     private final int[] mDirectionForward = new int[]{KeyEvent.KEYCODE_W};
@@ -38,6 +39,8 @@ public class ControlJoystick extends JoystickView implements ControlInterface {
     private ControlJoystickData mControlData;
     private int mLastDirectionInt = GamepadJoystick.DIRECTION_NONE;
     private int mCurrentDirectionInt = GamepadJoystick.DIRECTION_NONE;
+    // mode of the previous onMove: true = analog to the mod, false = WASD
+    private boolean mAnalogActive = false;
     public ControlJoystick(ControlLayout parent, ControlJoystickData data) {
         super(parent.getContext());
         init(data, parent);
@@ -53,7 +56,7 @@ public class ControlJoystick extends JoystickView implements ControlInterface {
     private void init(ControlJoystickData data, ControlLayout layout) {
         mControlData = data;
         setProperties(preProcessProperties(data, layout));
-        setDeadzone(35);
+        setDeadzone(DEADZONE);
         setFixedCenter(data.absolute);
         setAutoReCenterButton(true);
 
@@ -62,6 +65,14 @@ public class ControlJoystick extends JoystickView implements ControlInterface {
         setOnMoveListener(new OnMoveListener() {
             @Override
             public void onMove(int angle, int strength) {
+                // enabled by a mod; without one always false -> legacy WASD
+                boolean analog = CallbackBridge.isAnalogMovement();
+                if (analog != mAnalogActive) switchMode(analog);
+                if (analog) {
+                    sendAnalog(angle, strength);
+                    return;
+                }
+
                 mLastDirectionInt = mCurrentDirectionInt;
                 mCurrentDirectionInt = getDirectionInt(angle, strength);
 
@@ -128,6 +139,31 @@ public class ControlJoystick extends JoystickView implements ControlInterface {
     @Override
     public void loadEditValues(EditControlSideDialog editControlPopup) {
         editControlPopup.loadJoystickValues(mControlData);
+    }
+
+    // mod toggled mid-gesture: release whatever the previous mode was holding
+    private void switchMode(boolean analog) {
+        if (analog) {
+            sendDirectionalKeycode(mCurrentDirectionInt, false);
+            mLastDirectionInt = mCurrentDirectionInt = DIRECTION_NONE;
+        } else {
+            CallbackBridge.sendAnalogMovement(0, 0);
+        }
+        mAnalogActive = analog;
+    }
+
+    // angle 0 = right, 90 = forward; strength is 0 or DEADZONE..100 (the library sends 0 inside the deadzone)
+    private static void sendAnalog(int angle, int strength) {
+        if (strength <= 0) {
+            CallbackBridge.sendAnalogMovement(0, 0);
+            return;
+        }
+        double rad = Math.toRadians(angle);
+        // DEADZONE..100 -> 0..1, so speed doesn't jump at the deadzone edge
+        float power = (Math.min(strength, 100) - DEADZONE) / (100f - DEADZONE);
+        // small floor: a press past the deadzone always moves the player a little
+        power = Math.max(power, 0.05f);
+        CallbackBridge.sendAnalogMovement((float) Math.cos(rad) * power, (float) Math.sin(rad) * power);
     }
 
     private int getDirectionInt(int angle, int intensity) {

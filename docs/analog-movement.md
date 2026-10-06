@@ -1,0 +1,57 @@
+# 360° joystick movement API
+
+MojoLauncher lets any game-side mod receive the on-screen joystick as an analog vector
+instead of W/A/S/D key presses. The API is open: every mod can implement it, and several mods can use it together.
+
+Reference implementation: the [Mojo joystick 360](https://github.com/Evga314/Mojo-joystick-360) Fabric mod.
+
+## How it works
+
+- `libpojavexec` is loaded by both the launcher and the game JVM in one process, so both see the same memory.
+- The launcher sends W/A/S/D exactly as before as long as no mod has registered.
+- After a mod calls `register`, the joystick sends an `(x, y)` vector instead of keys.
+  When the last registered mod unregisters, the joystick switches back to W/A/S/D on its next event, no restart needed.
+  If the mode changes in the middle of a gesture, the keys or the vector held by the previous mode are released.
+
+## Java side
+
+Copy this class into your mod **unchanged**: its package, class and method names are the JNI symbol names.
+Source: [`AnalogMovement.java`](https://github.com/Evga314/Mojo-joystick-360/blob/main/src/main/java/git/mojo/api/AnalogMovement.java).
+
+```java
+package git.mojo.api;
+
+public final class AnalogMovement {
+    public static final int API_VERSION = 1;              // API version this copy of the class knows
+
+    public static native int  registerAnalogMovement();   // launcher API version, 0 = launcher not visible
+    public static native void unregisterAnalogMovement(); // pairs with one successful register
+    public static native long pollAnalogMovement();       // packed x/y, see below
+
+    public static float x(long packed) { return Float.intBitsToFloat((int) (packed >>> 32)); } // right +
+    public static float y(long packed) { return Float.intBitsToFloat((int) packed); }          // forward +
+}
+```
+
+1. Load the library from your mod: `System.loadLibrary("pojavexec")`. If that fails, search `LD_LIBRARY_PATH` for `libpojavexec.so` and load it with `System.load`.
+   Loading it again when another mod already loaded it is harmless.
+2. Call `registerAnalogMovement()`:
+   - `UnsatisfiedLinkError` (no library or no method): not MojoLauncher, or an old launcher. Do nothing.
+   - `0`: the launcher side is not visible. Do nothing.
+   - `> 0`: the handshake succeeded. The value is the launcher's API version.
+3. Poll every tick with `pollAnalogMovement()`:
+   - high 32 bits: `x` as float bits, right is `+`;
+   - low 32 bits: `y` as float bits, forward is `+`;
+   - vector length is `0..1`; `(0, 0)` means the joystick is released or inside its deadzone.
+4. Call `unregisterAnalogMovement()` exactly once for each successful register: when the user disables the feature, or on shutdown.
+
+Registrations are counted: the launcher stays in analog mode while at least one mod is registered.
+An extra `unregister` never drops the counter below zero.
+
+## Versions
+
+| API | Change |
+|-----|--------|
+| 1   | First version: `register` / `unregister` / `poll`, refcount |
+
+Any incompatible change bumps the version returned by `register`.
