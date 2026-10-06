@@ -33,7 +33,6 @@ import net.kdt.pojavlaunch.authenticator.AuthType;
 import net.kdt.pojavlaunch.authenticator.BackgroundLogin;
 import net.kdt.pojavlaunch.authenticator.accounts.Accounts;
 import net.kdt.pojavlaunch.authenticator.accounts.Account;
-import net.kdt.pojavlaunch.authenticator.impl.PresentedException;
 import net.kdt.pojavlaunch.authenticator.listener.LoginListener;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
@@ -223,17 +222,7 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
             if(state != Lifecycle.State.RESUMED) return;
         }
 
-        if(errorMessage instanceof PresentedException) {
-            PresentedException exception = (PresentedException) errorMessage;
-            Throwable cause = exception.getCause();
-            if(cause == null) {
-                Tools.dialog(context, context.getString(R.string.global_error), exception.toString(context));
-            }else {
-                Tools.showError(context, exception.toString(context), exception.getCause());
-            }
-        }else {
-            Tools.showError(getContext(), errorMessage);
-        }
+        Tools.showErrorRemote(errorMessage);
     }
 
     @Override

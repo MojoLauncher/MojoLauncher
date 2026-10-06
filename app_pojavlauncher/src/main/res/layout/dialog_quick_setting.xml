@@ -46,35 +46,32 @@
         app:layout_constraintTop_toTopOf="@id/editResolution_textView" />
 
     <!-- Gyroscope settings -->
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/checkboxGyro"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
         android:text="@string/preference_enable_gyro_title"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editResolution_seekbar"
-        tools:ignore="UseSwitchCompatOrMaterialXml" />
+        app:layout_constraintTop_toBottomOf="@id/editResolution_seekbar"/>
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/checkboxGyroX"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
         android:text="@string/preference_gyro_invert_x_axis"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/checkboxGyro"
-        tools:ignore="UseSwitchCompatOrMaterialXml" />
+        app:layout_constraintTop_toBottomOf="@id/checkboxGyro"/>
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/checkboxGyroY"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
         android:text="@string/preference_gyro_invert_y_axis"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/checkboxGyroX"
-        tools:ignore="UseSwitchCompatOrMaterialXml" />
+        app:layout_constraintTop_toBottomOf="@id/checkboxGyroX"/>
 
     <!-- Gyroscope sensitivity -->
     <TextView
@@ -154,15 +151,14 @@
         app:layout_constraintTop_toTopOf="@id/editMouseSpeed_textView" />
 
     <!-- Gesture toggle -->
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/checkboxGesture"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
         android:text="@string/mcl_disable_gestures"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editMouseSpeed_seekbar"
-        tools:ignore="UseSwitchCompatOrMaterialXml" />
+        app:layout_constraintTop_toBottomOf="@id/editMouseSpeed_seekbar"/>
 
     <!-- gesture settings -->
     <TextView

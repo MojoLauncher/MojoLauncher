@@ -78,7 +78,6 @@ public class InstanceInstaller implements ContextExecutorTask {
             wrapper.extraString = installerJar().getName();
             DownloadUtils.ensureSha1(installerJar(), installerSha1, ()->{
                 DownloadUtils.downloadFileMonitored(installerDownloadUrl(), installerJar(), buffer, wrapper);
-                return null;
             });
             ContextExecutor.execute(this);
         } finally {

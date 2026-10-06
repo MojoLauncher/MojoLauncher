@@ -254,7 +254,6 @@ public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 mImageReceiver = null;
                 mThumbnailBitmap = bm;
                 RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(mIconView.getResources(), bm);
-                drawable.setCornerRadius(mCornerDimensionCache * bm.getHeight());
                 mIconView.setImageDrawable(drawable);
             };
             mIconCache.getImage(mImageReceiver, mModItem.getIconCacheTag(), mModItem.imageUrl);

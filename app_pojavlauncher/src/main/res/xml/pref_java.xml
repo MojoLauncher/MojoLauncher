@@ -30,7 +30,7 @@
             app2:seekBarIncrement="@integer/memory_seekbar_increment"
             app2:selectable="false"/>
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="true"
             android:icon="@drawable/ic_px_java_run"
             android:key="java_sandbox"

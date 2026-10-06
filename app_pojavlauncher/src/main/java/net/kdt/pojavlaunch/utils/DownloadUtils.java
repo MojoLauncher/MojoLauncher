@@ -10,6 +10,8 @@ import java.nio.charset.*;
 import java.util.concurrent.Callable;
 
 import net.kdt.pojavlaunch.*;
+import net.kdt.pojavlaunch.downloader.VerificationException;
+
 import org.apache.commons.io.*;
 
 @SuppressWarnings("IOStreamConstructor")
@@ -120,39 +122,29 @@ public class DownloadUtils {
         return parseResult;
     }
 
-    private static <T> T downloadFile(Callable<T> downloadFunction) throws IOException{
-        try {
-            return downloadFunction.call();
-        } catch (IOException e){
-            throw e;
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     private static boolean verifyFile(File file, String sha1) throws IOException {
         return file.exists() && HashUtils.compareSHA1(file, sha1);
     }
 
-    public static <T> T ensureSha1(File outputFile, @Nullable String sha1, Callable<T> downloadFunction) throws IOException {
+    public static void ensureSha1(File outputFile, @Nullable String sha1, DownloadFunction downloadFunction) throws IOException {
         // Skip if needed
         if(sha1 == null) {
             // If the file exists and we don't know it's SHA1, don't try to redownload it.
-            if(outputFile.exists()) return null;
-            else return downloadFile(downloadFunction);
+            if(outputFile.exists()) return;
+            else {
+                downloadFunction.download();
+                return;
+            }
         }
 
         int attempts = 0;
         boolean fileOkay = verifyFile(outputFile, sha1);
-        T result = null;
         while (attempts < 5 && !fileOkay){
             attempts++;
-            downloadFile(downloadFunction);
+            downloadFunction.download();
             fileOkay = verifyFile(outputFile, sha1);
         }
-        if(!fileOkay) throw new SHA1VerificationException("SHA1 verifcation failed after 5 download attempts");
-        return result;
+        if(!fileOkay) throw new VerificationException("SHA1 verifcation failed after 5 download attempts");
     }
 
     /**
@@ -178,15 +170,14 @@ public class DownloadUtils {
     public interface ParseCallback<T> {
         T process(String input) throws ParseException;
     }
+
+    public interface DownloadFunction {
+        void download() throws IOException;
+    }
+
     public static class ParseException extends Exception {
         public ParseException(Exception e) {
             super(e);
-        }
-    }
-
-    public static class SHA1VerificationException extends IOException {
-        public SHA1VerificationException(String message) {
-            super(message);
         }
     }
 }

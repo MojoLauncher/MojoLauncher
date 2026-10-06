@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <solid android:color="@color/minebutton_secondary"/>
+        </shape>
+    </item>
+    <item android:id="@android:id/progress">
+        <clip android:clipOrientation="horizontal" android:gravity="left" android:drawable="@color/minebutton_color"/>
+    </item>
+    <item android:id="@android:id/secondaryProgress">
+        <clip android:clipOrientation="horizontal" android:gravity="left" android:drawable="@color/minebutton_color"/>
+    </item>
+</layer-list>

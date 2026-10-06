@@ -10,13 +10,13 @@ import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_LONGPRESS_TRIGG
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_MOUSESPEED;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_SCALE_FACTOR;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Switch;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.kdt.CustomSeekbar;
 
@@ -31,8 +31,8 @@ import net.kdt.pojavlaunch.utils.interfaces.SimpleSeekBarListener;
 public abstract class QuickSettingSideDialog extends com.kdt.SideDialogView {
 
     private SharedPreferences.Editor mEditor;
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
-    private Switch mGyroSwitch, mGyroXSwitch, mGyroYSwitch, mGestureSwitch;
+
+    private SwitchCompat mGyroSwitch, mGyroXSwitch, mGyroYSwitch, mGestureSwitch;
     private CustomSeekbar mGyroSensitivityBar, mMouseSpeedBar, mGestureDelayBar, mResolutionBar, mTransparencyBar;
     private TextView mGyroSensitivityText, mGyroSensitivityDisplayText, mMouseSpeedText, mGestureDelayText, mGestureDelayDisplayText, mResolutionText, mTransparencyText;
 

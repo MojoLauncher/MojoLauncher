@@ -293,7 +293,7 @@ public class JavaRunner {
             else classpathBuilder.append(':');
             classpathBuilder.append(entry);
         }
-        classpathEntries.clear();
+        Tools.maybeClearList(classpathEntries);
         runtimeArgs.add(classpathBuilder.toString());
 
         //JREUtils.initializeHooks();
@@ -306,10 +306,9 @@ public class JavaRunner {
         // footprint
         long javaArgsL = nativeTransferArguments(runtimeArgs.toArray(new String[0]));
         runtimeArgs.clear();
-        runtimeArgs = null;
 
         long appArgsL = nativeTransferArguments(applicationArgs.toArray(new String[0]));
-        applicationArgs.clear();
+        Tools.maybeClearList(applicationArgs);
 
         if(javaArgsL == 0 || appArgsL == 0)
             throw new VMLoadException("Failed to transfer arguments", -1, -4);

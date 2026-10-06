@@ -1088,9 +1088,9 @@
       "downloads": {
         "artifact": {
           "path": "org/lwjgl/lwjgl/2.9.4-mojo/lwjgl.jar",
-          "sha1": "7d0196c1dced717ecae2e933ebcf92986157a0a0",
-          "size": 1052600,
-          "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/v7m/lwjgl.jar"
+          "sha1": "aff6d7e63df7bae082bc8bae3b205205390d6406",
+          "size": 1052773,
+          "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/vv8m/lwjgl.jar"
         }
       }
     },
@@ -1729,27 +1729,27 @@
         "classifiers": {
           "natives-linux-arm32": {
             "path": "org/lwjgl/lwjgl-platform/2.9.4-mojo/lwjgl-native-armeabi-v7a.jar",
-            "sha1": "e305a187c2e85c80c56013c86d0c6e8f3d299a40",
+            "sha1": "290679c0f7e4fcfe71993948e97b5295eaa5a958",
             "size": 76863,
-            "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/v7m/lwjgl-native-armeabi-v7a.jar"
+            "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/vv8m/lwjgl-native-armeabi-v7a.jar"
           },
           "natives-linux-arm64": {
             "path": "org/lwjgl/lwjgl-platform/2.9.4-mojo/lwjgl-native-arm64-v8a.jar",
-            "sha1": "55f5acb54d684973c3ea698f6dabbcbc14318a49",
+            "sha1": "6b98abaa91daa753717c73d93f7c2b2e9b773351",
             "size": 99240,
-            "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/v7m/lwjgl-native-arm64-v8a.jar"
+            "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/vv8m/lwjgl-native-arm64-v8a.jar"
           },
           "natives-linux-x86": {
             "path": "org/lwjgl/lwjgl-platform/2.9.4-mojo/lwjgl-native-x86_64.jar",
-            "sha1": "c0a96ea48ce8ba227486895a4f4ccd54a492f801",
+            "sha1": "26e922ff981072ce9d5154a8d720f98de359aac0",
             "size": 100331,
-            "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/v7m/lwjgl-native-x86_64.jar"
+            "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/vv8m/lwjgl-native-x86_64.jar"
           },
           "natives-linux": {
             "path": "org/lwjgl/lwjgl-platform/2.9.4-mojo/lwjgl-native-x86.jar",
-            "sha1": "2a31bdfa7797b71568924ca2cfeabc878e448870",
+            "sha1": "70d88c536cf5f1d251b7985b7da34a2fc2ff9647",
             "size": 107351,
-            "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/v7m/lwjgl-native-x86.jar"
+            "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/vv8m/lwjgl-native-x86.jar"
           }
         }
       },
@@ -2422,9 +2422,9 @@
       "downloads": {
         "artifact": {
           "path": "org/lwjgl/lwjgl_util/2.9.4-mojo/lwjgl_util.jar",
-          "sha1": "b4ed0e09891ba14fc6718a0b01810313eb13ca23",
+          "sha1": "2540e8010d285cae2cab843c8f88fdf7749aeec8",
           "size": 180578,
-          "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/v7m/lwjgl_util.jar"
+          "url": "https://github.com/MojoLauncher/lwjgl2-glfw/releases/download/vv8m/lwjgl_util.jar"
         }
       }
     },
@@ -2448,6 +2448,7 @@
     "org.lwjgl.lwjgl:lwjgl:2.9.1": "org.lwjgl.lwjgl:lwjgl:2.9.4-mojo",
     "org.lwjgl.lwjgl:lwjgl-platform:2.9.4-nightly-20150209": "org.lwjgl.lwjgl:lwjgl-platform:2.9.4-mojo",
     "org.lwjgl.lwjgl:lwjgl_util:2.9.4-nightly-20150209": "org.lwjgl.lwjgl:lwjgl_util:2.9.4-mojo",
+    "org.lwjgl.lwjgl:lwjgl-platform:2.9.4+legacyfabric.17": "org.lwjgl.lwjgl:lwjgl-platform:2.9.4-mojo",
     "org.lwjgl.lwjgl:lwjgl-platform:2.9.4-babric.1": "org.lwjgl.lwjgl:lwjgl-platform:2.9.4-mojo",
     "org.lwjgl:lwjgl-jemalloc:3.1.6": "org.lwjgl:lwjgl-jemalloc:3.2.3",
     "org.lwjgl:lwjgl-opengl:3.2.2": "org.lwjgl:lwjgl-opengl:3.2.3",
@@ -2464,12 +2465,14 @@
     "org.lwjgl:lwjgl-openal:3.1.2": "org.lwjgl:lwjgl-openal:3.2.3",
     "org.lwjgl:lwjgl-openal:3.2.2": "org.lwjgl:lwjgl-openal:3.2.3",
     "org.lwjgl.lwjgl:lwjgl-platform:2.9.0": "org.lwjgl.lwjgl:lwjgl-platform:2.9.4-mojo",
+    "org.lwjgl.lwjgl:lwjgl:2.9.4+legacyfabric.17": "org.lwjgl.lwjgl:lwjgl:2.9.4-mojo",
     "org.lwjgl:lwjgl:3.4.1-unsafe": "org.lwjgl:lwjgl:3.4.1",
     "org.lwjgl:lwjgl-stb:3.1.6": "org.lwjgl:lwjgl-stb:3.2.3",
     "org.lwjgl.lwjgl:lwjgl:2.9.4-babric.1": "org.lwjgl.lwjgl:lwjgl:2.9.4-mojo",
     "org.lwjgl:lwjgl-jemalloc:3.2.1": "org.lwjgl:lwjgl-jemalloc:3.2.3",
     "org.lwjgl:lwjgl-jemalloc:3.1.2": "org.lwjgl:lwjgl-jemalloc:3.2.3",
     "org.lwjgl.lwjgl:lwjgl_util:2.9.1-nightly-20131120": "org.lwjgl.lwjgl:lwjgl_util:2.9.4-mojo",
+    "org.lwjgl.lwjgl:lwjgl_util:2.9.4+legacyfabric.17": "org.lwjgl.lwjgl:lwjgl_util:2.9.4-mojo",
     "org.lwjgl:lwjgl-jemalloc:3.2.2": "org.lwjgl:lwjgl-jemalloc:3.2.3",
     "org.lwjgl:lwjgl-glfw:3.2.1": "org.lwjgl:lwjgl-glfw:3.2.3",
     "org.lwjgl:lwjgl-glfw:3.1.2": "org.lwjgl:lwjgl-glfw:3.2.3",

@@ -14,7 +14,11 @@ import git.artdeell.dnbootstrap.glfw.GLFW;
  */
 public class GLFWBackend implements PlatformBackend {
     public GLFWBackend() {
-        GLFW.setGrabListener(Platform::grabStateChanged);
+        // GLFW on the main game we support does not send events to center the cursor on grab loss
+        GLFW.setGrabListener(isGrabbing ->  {
+            if(!isGrabbing) Platform.resetCursorPosition();
+            Platform.grabStateChanged(isGrabbing);
+        });
         GLFW.setPositionCallback(Platform::setCursorPosition);
         GLFW.setCursorCallback(cursor -> {
             if (cursor != null)

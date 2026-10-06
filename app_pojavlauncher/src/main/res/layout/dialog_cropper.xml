@@ -21,12 +21,14 @@
         android:layout_marginTop="@dimen/padding_medium"
         android:layout_marginStart="@dimen/padding_medium"
         android:layout_marginEnd="@dimen/padding_medium"
-        android:layout_marginBottom="@dimen/padding_medium">
+        android:layout_marginBottom="@dimen/padding_medium"
+        android:dividerPadding="3dp">
         <ToggleButton
             android:id="@+id/crop_dialog_hlock"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginEnd="3dp"
             android:textOn="@string/cropper_lock_horizontal"
             android:textOff="@string/cropper_lock_horizontal"/>
         <ToggleButton
@@ -34,6 +36,7 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginEnd="3dp"
             android:textOn="@string/cropper_lock_vertical"
             android:textOff="@string/cropper_lock_vertical"/>
         <Button

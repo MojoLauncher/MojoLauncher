@@ -3,6 +3,7 @@ package net.kdt.pojavlaunch.prefs.screens;
 import android.os.Bundle;
 
 import androidx.preference.SwitchPreference;
+import androidx.preference.SwitchPreferenceCompat;
 
 import net.kdt.pojavlaunch.utils.GpuUtils;
 
@@ -13,8 +14,8 @@ public class LauncherPreferenceExperimentalFragment extends LauncherPreferenceFr
     @Override
     public void onCreatePreferences(Bundle b, String str) {
         addPreferencesFromResource(R.xml.pref_experimental);
-        SwitchPreference sysmem = requirePreference("freedrenoSysmem", SwitchPreference.class);
-        SwitchPreference ubwc = requirePreference("ubwcWorkaround", SwitchPreference.class);
+        SwitchPreferenceCompat sysmem = requirePreference("freedrenoSysmem", SwitchPreferenceCompat.class);
+        SwitchPreferenceCompat ubwc = requirePreference("ubwcWorkaround", SwitchPreferenceCompat.class);
         boolean hasFreedreno = GpuUtils.getGlInfo().isAdreno();
         sysmem.setVisible(hasFreedreno);
         ubwc.setVisible(hasFreedreno);

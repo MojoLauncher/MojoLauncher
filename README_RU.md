@@ -44,17 +44,20 @@
 ```
 ./gradlew :app_pojavlauncher:assembleDebug
 ```
-(Замените `./gradlew` на `.\gradlew.bat` если вы компилируете на Windows).
+При сборке на Windows:
+* Замените `./gradlew` на `.\gradlew.bat`
+* Убедитесь, что у вас стоит symlink `mojoexec`, `sdl`, `glfw` в `app_pojavlauncher/src/main/jni/`
 
 ## Текущие планы
 - [x] Система инстансов на замену профилям версий
 - [x] Поддержка 1.21.5 "из коробки"
 - [x] Импорт mrpack/CurseForge zip
+- [x] LTW: добавить поддержку Compute расширений
 - [ ] LTW: исправить проблемы с Create
-- [ ] LTW: добавить поддержку Compute расширений
 - [ ] LTW: использовать форматы с поддержкой Color Attachment для объектов фреймбуфера (FBO)
 - [ ] Менеджер модов/модпаков
 - [ ] Импорт инстансов формата MultiMC
+- [ ] Поддержка Vintage Story
 - [ ] Реализовать общий стандарт библиотек
 
 ## Известные проблемы
@@ -73,13 +76,13 @@
 
 ## Благодарности & Сторонние компоненты и их лицензии (если таковые имеются)
 - [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher): [GNU LGPLv3 License](https://github.com/PojavLauncherTeam/PojavLauncher/blob/v3_openjdk/LICENSE)
-- [Boardwalk](https://github.com/zhuowei/Boardwalk) (JVM Лаунчер): Неизвестная Лицензия/[Apache License 2.0](https://github.com/zhuowei/Boardwalk/blob/master/LICENSE) или GNU GPLv2.
 - Android Support Libraries: [Apache License 2.0](https://android.googlesource.com/platform/prebuilts/maven_repo/android/+/master/NOTICE.txt).
 - [GL4ES](https://github.com/PojavLauncherTeam/gl4es): [MIT License](https://github.com/ptitSeb/gl4es/blob/master/LICENSE).<br>
 - [OpenJDK](https://github.com/PojavLauncherTeam/openjdk-multiarch-jdk8u): [GNU GPLv2 License](https://openjdk.java.net/legal/gplv2+ce.html).<br>
 - [GLFW](https://github.com/MojoLauncher/glfw): [zlib license](https://github.com/MojoLauncher/glfw/blob/glfw34/LICENSE.md)
 - [LWJGL2-GLFW](https://github.com/MojoLauncher/lwjgl2-glfw): 3-Clause BSD license
 - [LWJGL3](https://github.com/LWJGL/lwjgl3): [BSD-3 License](https://github.com/LWJGL/lwjgl3/blob/master/LICENSE.md).
+- [mojoexec](https://github.com/MojoLauncher/mojoexec): [MIT License](https://github.com/MojoLauncher/mojoexec/blob/master/LICENSE)
 - [Mesa 3D Graphics Library](https://gitlab.freedesktop.org/mesa/mesa): [MIT License](https://docs.mesa3d.org/license.html).
 - [pro-grade](https://github.com/pro-grade/pro-grade) (Менеджер контейнеризации Java): [Apache License 2.0](https://github.com/pro-grade/pro-grade/blob/master/LICENSE.txt).
 - [bhook](https://github.com/bytedance/bhook) (Используется для получения кода ошибки): [MIT license](https://github.com/bytedance/bhook/blob/main/LICENSE).

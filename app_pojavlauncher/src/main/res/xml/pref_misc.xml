@@ -5,14 +5,14 @@
     <net.kdt.pojavlaunch.prefs.BackButtonPreference/>
 
     <PreferenceCategory android:title="@string/preference_category_miscellaneous">
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="true"
             android:icon="@drawable/ic_px_hash"
             android:key="checkGameFiles"
             android:summary="@string/preference_verify_game_files_description"
             android:title="@string/preference_verify_game_files_title" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="true"
             android:icon="@drawable/ic_px_zap"
             android:key="fastStartupCheck"
@@ -27,19 +27,12 @@
             android:title="@string/preference_download_source_title"
             android:summary="@string/preference_download_source_description"
             app2:useSimpleSummaryProvider="true"/>
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="true"
             android:icon="@drawable/ic_px_verify_hash"
             android:key="verifyManifest"
             android:title="@string/preference_verify_manifest_title"
             android:summary="@string/preference_verify_manifest_description"/>
-
-        <SwitchPreference
-            android:defaultValue="false"
-            android:icon="@drawable/ic_px_volcano"
-            android:key="zinkPreferSystemDriver"
-            android:summary="@string/preference_vulkan_driver_system_description"
-            android:title="@string/preference_vulkan_driver_system_title"/>
         <Preference
             android:key="microphoneAccessRequest"
             android:icon="@drawable/ic_microphone"
@@ -54,7 +47,7 @@
             android:key="clearMetadataCache"
             android:title="@string/preference_metadata_clear"
             android:summary="@string/preference_metadata_clear_summary" />
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="true"
             android:icon="@drawable/ic_px_memory_warning"
             android:key="showMemoryWarning"

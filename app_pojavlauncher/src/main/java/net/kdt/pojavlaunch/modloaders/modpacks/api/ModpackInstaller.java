@@ -82,13 +82,12 @@ public class ModpackInstaller {
 
         byte[] downloadBuffer = new byte[8192];
         try {
-            DownloadUtils.ensureSha1(modpackFile, versionHash, (Callable<Void>) () -> {
+            DownloadUtils.ensureSha1(modpackFile, versionHash, () -> {
                 DownloadUtils.downloadFileMonitored(versionUrl, modpackFile, downloadBuffer,
                         new DownloaderProgressWrapper(R.string.modpack_download_downloading_metadata,
                                 ProgressLayout.INSTALL_MODPACK
                         )
                 );
-                return null;
             });
         } catch (IOException e) {
             modpackFile.delete();
