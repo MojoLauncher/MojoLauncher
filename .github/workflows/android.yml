@@ -29,6 +29,16 @@ jobs:
           name: output-aar
           path: app_pojavlauncher/libs
 
+      - name: Get MG
+        uses: dawidd6/action-download-artifact@v6
+        continue-on-error: true
+        with:
+          repo: whitebelyash/MobileGlues-AAR
+          workflow: android.yml
+          workflow_conclusion: success
+          name: mg-release
+          path: app_pojavlauncher/libs
+
       - name: Get Mesa
         uses: dawidd6/action-download-artifact@v6  
         continue-on-error: true

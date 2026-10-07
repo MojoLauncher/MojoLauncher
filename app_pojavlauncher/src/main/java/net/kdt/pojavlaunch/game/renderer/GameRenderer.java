@@ -6,6 +6,7 @@ import static net.kdt.pojavlaunch.game.renderer.def.Renderers.LEGACYZINK_RENDERE
 import static net.kdt.pojavlaunch.game.renderer.def.Renderers.LTW_RENDERER;
 import static net.kdt.pojavlaunch.game.renderer.def.Renderers.MESA_RENDERER;
 import static net.kdt.pojavlaunch.game.renderer.def.Renderers.MESA_RENDERER_EXT;
+import static net.kdt.pojavlaunch.game.renderer.def.Renderers.MG_RENDERER;
 import static net.kdt.pojavlaunch.game.renderer.def.Renderers.ZINK_RENDERER;
 
 import android.content.Context;
@@ -65,6 +66,7 @@ public class GameRenderer {
             case "opengles2_5":
             case GL4ES_RENDERER: return new GLESRenderSpec.GL4ESRenderSpec();
             case LTW_RENDERER: return new GLESRenderSpec.LTWRenderSpec();
+            case MG_RENDERER: return new GLESRenderSpec.MGRenderSpec();
             case ZINK_RENDERER: return new MesaRenderSpec.ZinkRenderSpec();
             case FREEDRENO_RENDERER: return new MesaRenderSpec.FreedrenoRenderSpec();
             case MESA_RENDERER: return new MesaRenderSpec();
