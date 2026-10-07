@@ -83,4 +83,29 @@ public abstract class GLESRenderSpec implements RenderSpec {
             return 2;
         }
     }
+
+    public static class MGRenderSpec extends GLESRenderSpec {
+        public boolean compatibleDevice(Context context) {
+            return JREUtils.getDetectedVersion() >= 3 && new File(Tools.NATIVE_LIB_DIR, this.library()).exists();
+        }
+        public void setupEnvironment(Context context, Map<String, String> envMap) {
+            envMap.put("MG_CONFIG_PATH", new File(Tools.DIR_GAME_NEW, "config.json").getAbsolutePath());
+        }
+
+        public String name() {
+            return "MobileGlues";
+        }
+        public int displayName() {
+            return R.string.mcl_setting_renderer_mg;
+        }
+        public String tag() {
+            return Renderers.MG_RENDERER;
+        }
+        public String library() {
+            return "libmobileglues.so";
+        }
+        protected int glesVersion() {
+            return 3;
+        }
+    }
 }

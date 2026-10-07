@@ -38,6 +38,7 @@
     <string name="mcl_setting_category_renderer">Визуализатор</string>
     <string name="mcl_setting_renderer_gles2_4">GL4ES (OpenGL ES 2) - 1.21.4 и ниже</string>
     <string name="mcl_setting_renderer_ltw">LTW (OpenGL ES 3) - 1.17 и выше</string>
+    <string name="mcl_setting_renderer_mg">MobileGlues (OpenGL ES 3) - 1.17 и выше</string>
     <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) - все версии</string>
     <string name="mcl_setting_renderer_vulkan_lzink">Старый Zink (Vulkan) - все версии, медленный</string>
     <string name="mcl_setting_renderer_freedreno_kgsl">Freedreno (KGSL) - все версии</string>
