@@ -260,6 +260,8 @@
     <string name="main_add_account">Add account</string>
     <string name="tasks_ongoing">Tasks are in progress, please wait</string>
     <string name="no_saved_accounts">No saved accounts</string>
+    <string name="auth_checking_service">Checking the authentication service…</string>
+    <string name="auth_fallback_offline">The %1$s authentication service is unavailable, using the offline account \"%2$s\" instead</string>
     <string name="mc_download_failed">Failed to download the game! This could be due to bad network connection, incorrectly placed files, etc..</string>
     <string name="xerr_unknown">Unknown Xbox Live API error %d</string>
     <string name="xerr_no_account">You don\'t seem to have an Xbox Live account. Please log in once on https://minecraft.net/ and try again.</string>
