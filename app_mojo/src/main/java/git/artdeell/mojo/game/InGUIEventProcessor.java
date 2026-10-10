@@ -1,5 +1,7 @@
 package git.artdeell.mojo.game;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -20,6 +22,17 @@ public class InGUIEventProcessor extends TouchEventProcessor {
     private final TapDetector mSingleTapDetector;
     private View mTouchpad;
     private boolean mIsMouseDown = false;
+    private final Handler mPressHandler = new Handler(Looper.getMainLooper());
+    private boolean mPressAwaiting = false;
+    private boolean mReleaseAwaiting = false;
+    private final Runnable mDelayedPress = () -> {
+        mPressAwaiting = false;
+        enableMouse();
+        if (mReleaseAwaiting) {
+            mReleaseAwaiting = false;
+            disableMouse();
+        }
+    };
     private float mStartX, mStartY;
     private final Scroller mScroller = new Scroller(FINGER_SCROLL_THRESHOLD);
 
@@ -39,7 +52,11 @@ public class InGUIEventProcessor extends TouchEventProcessor {
                     sendTouchCoordinates(motionEvent.getX(), motionEvent.getY());
 
                     // disabled gestures means no scrolling possible, send gesture early
-                    if (LauncherPreferences.PREF_DISABLE_GESTURES) enableMouse();
+                    if (LauncherPreferences.PREF_DISABLE_GESTURES) {
+                        // the click is sent 33 ms after cursor movement. The in-game camera will rotate without this delay
+                        mPressAwaiting = true;
+                        mPressHandler.postDelayed(mDelayedPress, 33);
+                    }
                     else setGestureStart(motionEvent);
                 }
                 break;
@@ -55,7 +72,7 @@ public class InGUIEventProcessor extends TouchEventProcessor {
                         float mainPointerY = motionEvent.getY(pointerIndex);
                         sendTouchCoordinates(mainPointerX, mainPointerY);
 
-                        if(!mIsMouseDown) {
+                        if(!mIsMouseDown && !mPressAwaiting) {
                             if(!hasGestureStarted()) setGestureStart(motionEvent);
                             if(!LeftClickGesture.isFingerStill(mStartX, mStartY, mainPointerX, mainPointerY, FINGER_STILL_THRESHOLD))
                                 enableMouse();
@@ -75,7 +92,8 @@ public class InGUIEventProcessor extends TouchEventProcessor {
                     CallbackBridge.performClick(MotionEvent.BUTTON_PRIMARY);
                 }
 
-                if(mIsMouseDown) disableMouse();
+                if (mPressAwaiting) mReleaseAwaiting = true;
+                else if (mIsMouseDown) disableMouse();
                 resetGesture();
         }
 
@@ -116,6 +134,9 @@ public class InGUIEventProcessor extends TouchEventProcessor {
 
     @Override
     public void cancelPendingActions() {
+        mPressHandler.removeCallbacks(mDelayedPress);
+        mPressAwaiting = false;
+        mReleaseAwaiting = false;
         mScroller.resetScrollOvershoot();
         if(mIsMouseDown) disableMouse();
     }
