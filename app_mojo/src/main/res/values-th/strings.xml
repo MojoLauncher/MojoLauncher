@@ -11,7 +11,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">บัญชีนี้จะถูกลบ!</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">เลือกตัวติดตั้งม็อด</string>
     <!-- Error messages -->
     <string name="error_fatal">MJLauncher ได้ขัดข้องโดยไม่คาดคิด</string>
     <string name="error_no_version">ไม่มีเวอร์ชัน!</string>
@@ -19,7 +18,6 @@
     <string name="error_show_less">แสดงน้อยลง</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">ต้องได้รับอนุญาตในการอ่าน/เขียนไปยังที่เก็บข้อมูล!</string>
-    <string name="toast_optifine_success">ติดตั้งสำเร็จแล้ว</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -27,10 +25,7 @@
     <string name="mcl_tab_wiki">วิกิ</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">กำลังล้างแฟ้มแคช</string>
-    <string name="mcl_launch_downloading">กำลังดาวน์โหลด %s</string>
     <string name="mcl_launch_downloading_progress">"กำลังดาวน์โหลด %s (%.2f MB / %.2f MB)"</string>
-    <string name="mcl_launch_download_assets">กำลังเตรียมดาวน์โหลดทรัพยากร</string>
     <string name="mcl_options">ตัวเลือก</string>
     <string name="mcl_option_customcontrol">การควบคุมกำหนดเอง</string>
     <string name="mcl_setting_title_use_surface_view">ใช้การแสดงผลพื้นผิวแบบอื่น</string>
@@ -75,7 +70,6 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">ออกจากแอปพลิเคชัน/เกมเด้งด้วยรหัส %d โปรดตรวจสอบที่ latestlog.txt สำหรับรายละเอียดเพิ่มเติม</string>
     <string name="mcn_exit_confirm">คุณแน่ใจหรือไม่ว่าต้องการบังคับปิด?</string>
-    <string name="mcn_check_fail_vulkan_support">อุปกรณ์นี้ไม่รองรับการแสดงผล Zink (Vulkan) </string>
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">แชต</string>
     <string name="control_debug">ดีบั๊ก</string>
@@ -96,7 +90,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">บังคับปิด</string>
     <string name="control_viewout">ประวัติที่บันทึกไว้</string>
-    <string name="control_adebug">การดีบักอินพุต</string>
     <string name="control_customkey">ส่งคำสั่งที่กำหนตเอง</string>
     <!-- ImportControlActivity Strings -->
     <string name="import_control_label">นำเข้า ควบคุม</string>
@@ -128,11 +121,6 @@
     <string name="main_install_jar_file">ดำเนินการ .jar</string>
     <string name="main_play">เล่น</string>
     <string name="autoram_info_msg">ตั้งหน่วยความจำเป็น %d MB</string>
-    <string name="mcl_setting_check_libraries">ตรวจสอบไฟล์หลังจากดาวโหลด</string>
-    <string name="mcl_setting_check_libraries_subtitle">ตัวเลือกนี้บังคับให้ตัวเรียกใช้งานตรวจสอบแฮชของไลบรารีหากมี\'sป้องกันการดาวน์โหลดที่เสียหาย</string>
-    <string name="dl_library_sha_fail">ไลบรารี %s ได้เสียหายเเละจะทำการดาวโหลดใหม่</string>
-    <string name="dl_library_sha_unknown">ไลบรารี %s ไม่สามารถตรวจสอบได้ ขอให้ดีก็พอ</string>
-    <string name="dl_library_sha_pass">ไลบรารี %s ดีเเละใช้การได้</string>
     <string name="mcl_disable_gestures">ปิดท่าทางสัมผัส</string>
     <string name="mcl_disable_gestures_subtitle">ปิดท่าทางสัมผัส เช่นเเตะค้างเพื่อทำลายบล็อกเเละ เเตะเพื่อวางบล็อก</string>
     <string name="mcl_disable_swap_hand">ปิดกดสองครังเพื่อสลับของในมือ</string>
@@ -156,7 +144,6 @@
     <string name="multirt_config_setdefault">ตั้งค่าเริ่มต้น</string>
     <string name="multirt_config_setdefault_already">ค่าเรื่มต้น</string>
     <string name="multirt_config_removeerror_last">คุณต้องติดตั้งรันไทม์ Java อย่างน้อยหนึ่งรายการ</string>
-    <string name="multirt_nojava8rt">ไม่สามารถหาจาวา 8 ในการใช้ออฟชั่นนี้คุณต้องติดตั้งจาวา 8</string>
     <string name="multirt_delete_runtime">ลบรันไทม์</string>
     <string name="pvc_gameDirectory">ตำเเหน่งโฟรเดอร์เกม</string>
     <string name="pvc_jvmArgs">ตัวคำสั่ง เจวิเอ็ม</string>
@@ -224,7 +211,6 @@
     <string name="preference_enable_gyro_description">การเปิดใช้งานนี้จะช่วยให้คุณสามารถเปิดเกมได้โดยการหมุนโทรศัพท์ของคุณ</string>
     <string name="preference_gyro_sensitivity_title">ความรวดเร็วในการควบคุมไจโร</string>
     <string name="preference_gyro_sensitivity_description">ปรับความไวของตัวควบคุมไจโรสโคป</string>
-    <string name="toast_turn_on_gyro">เปิดใช้งานการควบคุมไจโรสโคปก่อนเพื่อใช้สิ่งนี้!</string>
     <string name="preference_gyro_sample_rate_title">อัตราการสุ่มตัวอย่างไจโร</string>
     <string name="preference_gyro_sample_rate_description">หากคุณมีปัญหาด้านประสิทธิภาพกับการควบคุมไจโรสโคป ให้เพิ่มสิ่งนี้</string>
     <string name="microsoft_login_retry_later">ส่งคำขอบ่อยเกินไป, กรุณาลองอีกครั้งภายหลัง</string>
@@ -249,8 +235,6 @@
     <string name="preference_force_big_core_title">บังคับให้ตัวแสดงผลทำงานบนคอร์ขนาดใหญ่</string>
 
     <string name="version_select_hint">เลือกเวอร์ชัน</string>
-    <string name="forge_dl_progress">กำลังดาวน์โหลดตัวติดตั้งสำหรับ %s</string>
-    <string name="forge_dl_searching">กำลังค้นหาหมายเลขเวอร์ชัน Forge</string>
     <string name="modloader_dl_failed_to_load_list">โหลดรายการเวอร์ชันไม่สำเร็จ!</string>
     <string name="forge_dl_no_installer">ขออภัย Forge เวอร์ชันนี้ไม่มีตัวติดตั้งซึ่งยังไม่รองรับ</string>
     <string name="forge_dl_select_version">เลือกเวอร์ชันฟอร์จ</string>
@@ -264,7 +248,6 @@
     <string name="fabric_dl_loader_title">เลือกเวอร์ชัน</string>
     <string name="of_dl_select_version">เลือกเวอร์ชัน OptiFine</string>
     <string name="of_dl_failed_to_scrape">ไม่สามารถรวบรวมข้อมูลสำหรับการติดตั้ง OptiFine</string>
-    <string name="of_dl_progress">กำลังดาวน์โหลด %s</string>
     <string name="hint_search_modpack">ค้นหา modpack</string>
     <string name="preference_vulkan_driver_system_title">ใช้ไดรเวอร์ระบบ Vulkan</string>
     <string name="preference_vulkan_driver_system_description">บังคับให้ตัวเรียกใช้งานใช้ไดรเวอร์ระบบ Vulkan แทน Turnip บน Adreno GPU มีผลกับ Zink และ mod ที่ใช้ Vulkan เท่านั้น</string>
@@ -275,13 +258,9 @@
     <string name="search_modpack_error">ไม่พบ modpacks</string>
     <string name="search_modpack_download_error">ดาวน์โหลดข้อมูลเมตาของ modpack ไม่สำเร็จ</string>
     <string name="modpack_download_downloading_metadata">กำลังดาวน์โหลดข้อมูลเมตาของ modpack (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods">กำลังดาวน์โหลดม็อด (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods_fc">กำลังดาวน์โหลดม็อด (ไฟล์ %d ออกจาก %d)</string>
     <string name="modpack_download_applying_overrides">กำลังใช้การแทนที่ (%d/%d)</string>
     <string name="modpack_install_notification_title">ตัวติดตั้ง MJ Modpack</string>
     <string name="modpack_install_notification_success">คลิกที่นี่เพื่อเสร็จสิ้นการติดตั้ง modpack</string>
-    <string name="modpack_install_notification_data_not_available">ดาวน์โหลดข้อมูลตัวโหลด mod ไม่สำเร็จ</string>
-    <string name="modpack_install_modloader_download_failed">ไม่สามารถดาวน์โหลดไฟล์ mod loader ได้</string>
     <string name="modpack_install_download_failed">ดาวน์โหลดไฟล์ modpack ไม่สำเร็จ</string>
     <string name="notif_error_occured">เกิดข้อผิดพลาด</string>
     <string name="notif_error_occured_desc">คลิกเพื่อดูรายละเอียดเพิ่มเติม</string>
@@ -311,9 +290,6 @@
     <string name="notification_permission_toast">คุณสามารถเปลี่ยนใจในภายหลังได้ตลอดเวลาโดยไปที่การตั้งค่า</string>
     <string name="preference_ask_for_notification_title">อนุญาตการแจ้งเตือน</string>
     <string name="preference_ask_for_notification_description">คลิกเพื่อขอสิทธิ์การแจ้งเตือนอีกครั้ง ซึ่งจำเป็นสำหรับการดาวน์โหลดเกม/modpack พื้นหลังเพื่อให้ทำงานได้อย่างถูกต้อง</string>
-    <string name="preference_vsync_in_zink_title">อนุญาต V-Sync กับ Zink</string>
-    <string name="preference_vsync_in_zink_description">อนุญาตให้ Launcher ใช้ API ระบบภายในเพื่อเปิดใช้งาน V-Sync สำหรับ Zink ปิดตัวเลือกนี้หาก Launcher ของคุณขัดข้องกับ Zink ทันทีหลังการอัปเดตระบบ</string>
-    <string name="exception_failed_to_unpack_jre17">ไม่สามารถติดตั้ง JRE 17</string>
     <string name="newdl_starting">กำลังอ่านข้อมูลไฟล์เกม...</string>
     <string name="newdl_downloading_metadata">กำลังดาวโหลดข้อมูลไฟล์เกม (%s)</string>
     <string name="controller_button_select">เลือก</string>

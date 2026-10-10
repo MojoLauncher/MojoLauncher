@@ -10,7 +10,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">Овај налог ће бити уклоњен!</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">Селектујте мод инсталер</string>
     <!-- Error messages -->
     <string name="error_fatal">ПојавЛаунчер је неочекивано угасио</string>
     <string name="error_no_version">Нема верзије!</string>
@@ -18,7 +17,6 @@
     <string name="error_show_less">Прикажи мање</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">ПојавЛаунчер треба пиши/читај дозволу!</string>
-    <string name="toast_optifine_success">Инсталирање успјешно</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -26,10 +24,7 @@
     <string name="mcl_tab_wiki">Вики</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">Чишћење кеш фајлова</string>
-    <string name="mcl_launch_downloading">Преузимање %s</string>
     <string name="mcl_launch_downloading_progress">"Преузимање %s (%.2f МБ / %.2f МБ)"</string>
-    <string name="mcl_launch_download_assets">Спремање да се преузимају ресурси</string>
     <string name="mcl_options">Опције</string>
     <string name="mcl_option_customcontrol">Прилагођене контроле</string>
     <string name="mcl_setting_title_use_surface_view">Користите алтернате сурфаце рендеринг</string>
@@ -74,7 +69,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">Форсе затвори</string>
     <string name="control_viewout">Лог Избацивано</string>
-    <string name="control_adebug">Инпут дебаг</string>
     <string name="control_customkey">Пошаљи прилагоћени типка-код</string>
     <!-- ImportControlActivity Strings -->
     <string name="import_control_label">Убаците контроле</string>
@@ -101,10 +95,6 @@
     <string name="customctrl_addsubbutton">Додај суб-дугме</string>
     <string name="main_play">Играј</string>
     <string name="autoram_info_msg">Меморија подешена на %d МБ</string>
-    <string name="mcl_setting_check_libraries">Провери библиотеке послије скидања</string>
-    <string name="dl_library_sha_fail">Библиотека %s је оштећена и опет ће се скидати</string>
-    <string name="dl_library_sha_unknown">Библиотека %s се не може проверити, надамо се да је добро</string>
-    <string name="dl_library_sha_pass">Библиотека %s је добро и може се користити</string>
     <string name="mcl_disable_gestures">Искључи покрете</string>
     <string name="mcl_disable_gestures_subtitle">Искључи покрете, као држи да се уништи блок, и притисни да се стави блок.</string>
     <string name="mcl_setting_title_mousespeed">Брзина миша</string>
@@ -113,6 +103,5 @@
     <string name="mcl_memory_allocation">Подешена меморија</string>
     <string name="profiles_profile_name">Име</string>
     <string name="pedit_renderer">Рендерер</string>
-    <string name="of_dl_progress">Преузимање %s</string>
     <string name="generic_debug">Дебаг</string>
 </resources>

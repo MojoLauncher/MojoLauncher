@@ -10,7 +10,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">Aquesta conta sera eliminada!</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">Selecciona un mod per afegir</string>
     <!-- Error messages -->
     <string name="error_fatal">MJLauncher s’ha parat inesperadament</string>
     <string name="error_no_version">Cap versio!</string>
@@ -18,17 +17,13 @@
     <string name="error_show_less">Mostrar menys</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">Es requireix el permis de llegir/escriure!</string>
-    <string name="toast_optifine_success">Instalació completada</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
     <!-- MCLauncherActivity: Tabs -->
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">Cleaning cache files</string>
-    <string name="mcl_launch_downloading">Downloading %s</string>
     <string name="mcl_launch_downloading_progress">"Descarregant %s (%.2f MB / %.2f MB)"</string>
-    <string name="mcl_launch_download_assets">Preparing to download resources</string>
     <string name="mcl_options">Options</string>
     <string name="mcl_option_customcontrol">Custom controls</string>
     <string name="mcl_setting_title_use_surface_view">Utilitza la renderització de superfície alternativa</string>
@@ -67,7 +62,6 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Aplicació/Joc ha eixit amb codi %d, consulta el latestlog.txt per més detalls.</string>
     <string name="mcn_exit_confirm">Are you sure want to force close?</string>
-    <string name="mcn_check_fail_vulkan_support">El renderitzador Zink (Vulkan) no està suportat a aquest dispositiu!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">Chat</string>
     <string name="control_debug">Debug</string>
@@ -88,7 +82,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">Force close</string>
     <string name="control_viewout">Registra la sortida</string>
-    <string name="control_adebug">PointerCapture Debug</string>
     <string name="control_customkey">Send custom keycode</string>
     <!-- ImportControlActivity Strings -->
     <string name="import_control_label">Importar controls</string>
@@ -119,11 +112,6 @@
     <string name="main_install_jar_file">Executa un .jar</string>
     <string name="main_play">Play</string>
     <string name="autoram_info_msg">Memòria fixada a %d MB</string>
-    <string name="mcl_setting_check_libraries">Comprova les llibreríes després de descarregar-les</string>
-    <string name="mcl_setting_check_libraries_subtitle">Aquesta opció força al llançador comprovar el hash de la llibreria si està disponible. Prevé baixades trencades.</string>
-    <string name="dl_library_sha_fail">La llibreria %s està danyada i es tornarà a baixar</string>
-    <string name="dl_library_sha_unknown">La llibreria %s no es pot comprovar, s\'ha d\'assumir que està bé</string>
-    <string name="dl_library_sha_pass">La llibreria %s està bé i és utilitzable</string>
     <string name="mcl_disable_gestures">Desactiva gestos</string>
     <string name="mcl_disable_gestures_subtitle">Desactiva els gestos, com mantenir per trencar blocs i tocar per col·locar-ne.</string>
     <string name="preference_force_english_description">Et permet veure les cadenes de text originals, com volen els desenvolupadors. Cal reiniciar.</string>
@@ -171,19 +159,14 @@
     <string name="preference_enable_gyro_description">Activar açò permetrà girar-se en el joc girant el telèfon.</string>
     <string name="preference_gyro_sensitivity_title">Sensibilitat de controls del giroscopi</string>
     <string name="preference_gyro_sensitivity_description">Ajusta la sensibilitat dels controls del giroscopi.</string>
-    <string name="toast_turn_on_gyro">Primer has d\'activar els controls del giroscopi!</string>
     <string name="preference_gyro_sample_rate_title">Tassa d\'actualització del giroscopi</string>
     <string name="preference_gyro_sample_rate_description">Si tens problemes de rendiment amb el giroscopi, puja aquest valor.</string>
     <string name="microsoft_login_retry_later">Massa peticions, si us plau, torneu-ho a intentar més tard.</string>
     <string name="storage_required">El MJLauncher requereix que hi hagi emmagatzemament extern connectat. Si us plau, reconnecteu-ho i reinicieu l\'app.</string>
-    <string name="of_dl_progress">Downloading %s</string>
     <string name="generic_debug">Debug</string>
-    <string name="modpack_download_downloading_mods_fc">Baixant mods (Fitxer %d de %d)</string>
     <string name="modpack_download_applying_overrides">Aplicant anul·lacions (%d/%d)</string>
     <string name="modpack_install_notification_title">Instal·lador de Modpacks del MJ</string>
     <string name="modpack_install_notification_success">Prem ací per acabar la instal·lació del modpack</string>
-    <string name="modpack_install_notification_data_not_available">No s\'ha pogut baixar la informació del carregador de mods</string>
-    <string name="modpack_install_modloader_download_failed">No s\'ha pogut baixar els fitxers del carregador de mods</string>
     <string name="modpack_install_download_failed">No s\'han pogut baixar els fitxers del modpack</string>
     <string name="notif_error_occured">Ha ocorregut un error</string>
     <string name="notif_error_occured_desc">Prem per veure més detalls</string>

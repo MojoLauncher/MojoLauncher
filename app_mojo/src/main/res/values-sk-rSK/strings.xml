@@ -10,7 +10,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">Tento účet bude odstránený!</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">Vybrať installer módu</string>
     <!-- Error messages -->
     <string name="error_fatal">MJLauncher neočakávane spadol</string>
     <string name="error_no_version">Žiadne verzie!</string>
@@ -18,7 +17,6 @@
     <string name="error_show_less">Zobraziť menej</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">Je vyžadované oprávnenie pre čítanie/zápis do úložiska!</string>
-    <string name="toast_optifine_success">Inštalácia prebehla úspešne</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -26,10 +24,7 @@
     <string name="mcl_tab_wiki">Wiki</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">Čistí sa vyrovnávacia pamäť</string>
-    <string name="mcl_launch_downloading">Sťahuje sa %s</string>
     <string name="mcl_launch_downloading_progress">"Sťahovanie %s (%.2f MB / %.2f MB)"</string>
-    <string name="mcl_launch_download_assets">Príprava na stiahnutie resources</string>
     <string name="mcl_options">Možnosti</string>
     <string name="mcl_option_customcontrol">Vlastné ovládacie prvky</string>
     <string name="mcl_setting_title_use_surface_view">Použiť alternatívne vykresľovanie (SurfaceView)</string>
@@ -74,7 +69,6 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Hra spadla. Skontroluj latestlog.txt pre viac podrobností.</string>
     <string name="mcn_exit_confirm">Ste si istí, že chcete ukončiť hru?</string>
-    <string name="mcn_check_fail_vulkan_support">Zink (Vulkan) vykresľovač nie je podporovaný na tomto zariadení!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">Čet</string>
     <string name="control_debug">Debug</string>
@@ -95,7 +89,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">Vynútené ukončenie</string>
     <string name="control_viewout">Záznam logu</string>
-    <string name="control_adebug">Debug vstupov</string>
     <string name="control_customkey">Poslať vlastný kláves</string>
     <!-- ImportControlActivity Strings -->
     <string name="import_control_label">Importovať ovládacie prvky</string>
@@ -127,11 +120,6 @@
     <string name="main_install_jar_file">Spustiť .jar</string>
     <string name="main_play">Hrať</string>
     <string name="autoram_info_msg">RAM bola nastavená na %d MB</string>
-    <string name="mcl_setting_check_libraries">Skontrolovať knižnice po stiahnutí</string>
-    <string name="mcl_setting_check_libraries_subtitle">Táto možnosť núti launcher skontrolovať hash knižnice, ak je k dispozícii. Predchádza poškodeným stiahnutiam.</string>
-    <string name="dl_library_sha_fail">Knižnica %s je poškodená a bude znovu stiahnutá</string>
-    <string name="dl_library_sha_unknown">Knižnica %s nemohla byť skontrolovaná, musíme predpokladať, že je v poriadku</string>
-    <string name="dl_library_sha_pass">Knižnica %s je v poriadku a použiteľná</string>
     <string name="mcl_disable_gestures">Zakázať gestá</string>
     <string name="mcl_disable_gestures_subtitle">Zakáže gestá, ako napríklad podržanie pre rozbitie bloku.</string>
     <string name="mcl_disable_swap_hand">Vypnutie dvojitého ťuknutia na výmenu rúk</string>
@@ -155,7 +143,6 @@
     <string name="multirt_config_setdefault">Nastaviť predvolené</string>
     <string name="multirt_config_setdefault_already">Predvolené</string>
     <string name="multirt_config_removeerror_last">Musíte mať aspoň jednu inštaláciu Javy.</string>
-    <string name="multirt_nojava8rt">Nebolo možné nájsť Javu 8. Ak chceš používať túto možnosť, musíš nainštalovať Javu 8.</string>
     <string name="multirt_delete_runtime">Vymaž runtime</string>
     <string name="pvc_gameDirectory">Zložka hry</string>
     <string name="pvc_jvmArgs">JVM argumenty</string>
@@ -221,7 +208,6 @@
     <string name="preference_enable_gyro_description">Povolením tohto sa budete môcť otáčať v hre otáčaním mobilu.</string>
     <string name="preference_gyro_sensitivity_title">Citlivosť gyroskopu</string>
     <string name="preference_gyro_sensitivity_description">Upravte si citlivosť gyroskopu na otáčanie.</string>
-    <string name="toast_turn_on_gyro">Zapnite ovládanie gyroskopom pred použitím tohto nastavenia!</string>
     <string name="preference_gyro_sample_rate_title">Obnovovacia frekvencia gyroskopu</string>
     <string name="preference_gyro_sample_rate_description">Ak máte problémy s výkonom pri používaní ovládania gyroskopom, zvýšte toto.</string>
     <string name="microsoft_login_retry_later">Príliš veľa žiadostí. Skúste to neskôr, prosím.</string>
@@ -246,8 +232,6 @@
     <string name="preference_force_big_core_title">Vynútiť, aby vykresľovač bežal na najrýchlejšom jadre</string>
 
     <string name="version_select_hint">Vyberte verziu</string>
-    <string name="forge_dl_progress">Sťahuje sa inštalačný súbor pre %s</string>
-    <string name="forge_dl_searching">Hľadajú sa čísla verzií Forge</string>
     <string name="modloader_dl_failed_to_load_list">Nepodarilo sa načítať zoznam verzií!</string>
     <string name="forge_dl_no_installer">Táto verzia Forge nemá inštalačný súbor, tento typ inštalácie zatiaľ nie je podporovaný.</string>
     <string name="forge_dl_select_version">Vyberte verziu Forge</string>
@@ -261,7 +245,6 @@
     <string name="fabric_dl_loader_title">Vyberte verziu</string>
     <string name="of_dl_select_version">Vyberte OptiFine verziu</string>
     <string name="of_dl_failed_to_scrape">Nepodarilo sa získať údaje pre OptiFine inštaláciu</string>
-    <string name="of_dl_progress">Sťahuje sa %s</string>
     <string name="hint_search_modpack">Vyhľadať modpacky</string>
     <string name="preference_vulkan_driver_system_title">Použiť systémový Vulkan ovládač</string>
     <string name="preference_vulkan_driver_system_description">Núti launcher používať systémový Vulkan ovládač namiesto Turnipu na Adreno grafických čipoch. Ovplyvňuje len Zink a módy, ktoré používajú Vulkan.</string>
@@ -272,13 +255,9 @@
     <string name="search_modpack_error">Nebolo možné nájsť modpacky</string>
     <string name="search_modpack_download_error">Nebolo možné stiahnuť metadáta modpacku</string>
     <string name="modpack_download_downloading_metadata">Sťahujú sa metadáta modpacku (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods">Sťahujú sa módy (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods_fc">Sťahujú sa módy (Súbor %d z %d)</string>
     <string name="modpack_download_applying_overrides">Aplikovanie overridov (%d/%d)</string>
     <string name="modpack_install_notification_title">MJ inštalátor modpackov</string>
     <string name="modpack_install_notification_success">Ťuknite sem na dokončenie inštalácie modpacku</string>
-    <string name="modpack_install_notification_data_not_available">Nebolo možné stiahnuť informácie o mod loaderi</string>
-    <string name="modpack_install_modloader_download_failed">Nebolo možné stiahnuť súbory mod loaderu</string>
     <string name="modpack_install_download_failed">Nebolo možné stiahnuť súbory modpacku</string>
     <string name="notif_error_occured">Vyskytla sa chyba</string>
     <string name="notif_error_occured_desc">Ťuknutím zobrazíte detaily</string>
@@ -308,9 +287,6 @@
     <string name="notification_permission_toast">Toto povolenie môžete kedykoľvek zmeniť v nastaveniach</string>
     <string name="preference_ask_for_notification_title">Povoliť upozornenia</string>
     <string name="preference_ask_for_notification_description">Kliknutím znova požiadate o povolenie upozornení, ktoré je potrebné na správne fungovanie sťahovania hier/modpackov na pozadí.</string>
-    <string name="preference_vsync_in_zink_title">Povoliť V-Sync so Zinkom</string>
-    <string name="preference_vsync_in_zink_description">Umožňuje spúšťaču používať interné systémové API pre povolenie V-Syncu pre Zink. Vypnite túto možnosť, ak váš spúšťač náhle po aktualizácii systému spadne so Zinkom.</string>
-    <string name="exception_failed_to_unpack_jre17">Nepodarilo sa nainštalovať Javu 17</string>
     <string name="newdl_starting">Čítanie metadát hry…</string>
     <string name="newdl_downloading_metadata">Sťahovanie metadát hry (%s)</string>
     <string name="controller_button_select">Vyber</string>

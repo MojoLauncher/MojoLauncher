@@ -11,7 +11,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">Αυτός ο λογαριασμός θα αφαιρεθεί!</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">Επιλέξτε ένα πρόγραμμα εγκατάστασης mod</string>
     <!-- Error messages -->
     <string name="error_fatal">Ο MJLauncher κατέρρευσε απροσδόκητα</string>
     <string name="error_no_version">Καμία έκδοση!</string>
@@ -19,7 +18,6 @@
     <string name="error_show_less">Εμφάνιση λιγότερων</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">Απαιτείται η ανάγνωση/εγγραφή στον χώρο αποθήκευσης!</string>
-    <string name="toast_optifine_success">Επιτυχής εγκατάσταση</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -27,10 +25,7 @@
     <string name="mcl_tab_wiki">Wiki</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">Εκκαθάριση χώρου προσωρινής αποθήκευσης αρχείων</string>
-    <string name="mcl_launch_downloading">Γίνεται λήψη %s</string>
     <string name="mcl_launch_downloading_progress">"Λήψη %s (%.2f MB / %.2f MB)"</string>
-    <string name="mcl_launch_download_assets">Προετοιμασία για λήψη πόρων</string>
     <string name="mcl_options">Ρυθμίσεις</string>
     <string name="mcl_option_customcontrol">Προσαρμοσμένα controls</string>
     <string name="mcl_setting_title_use_surface_view">Χρησιμοποιήστε εναλλακτική απόδοση επιφανειών</string>
@@ -75,7 +70,6 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Η εφαρμογή/παιχνίδι τερμάτισε με τον κωδικό %d, ελέγξτε το latestlog.txt για περισσότερες λεπτομέρειες.</string>
     <string name="mcn_exit_confirm">Είστε βέβαιοι ότι θέλετε να αναγκάσετε το κλείσιμο;</string>
-    <string name="mcn_check_fail_vulkan_support">Η συσκευή αναπαραγωγής Zink (Vulkan) δεν υποστηρίζεται σε αυτήν τη συσκευή!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">Συνομιλία</string>
     <string name="control_debug">Αποσφαλμάτωση</string>
@@ -96,7 +90,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">Αναγκαστικό κλείσιμο εφαρμογής</string>
     <string name="control_viewout">Αρχείο Καταγραφής</string>
-    <string name="control_adebug">Είσοδος Σφάλματος</string>
     <string name="control_customkey">Αποστολή προσαρμοσμένου κωδικού κλειδιού</string>
     <!-- ImportControlActivity Strings -->
     <string name="import_control_label">Έλεγχοι εισαγωγών</string>
@@ -128,11 +121,6 @@
     <string name="main_install_jar_file">Εκτέλεση ενός .jar</string>
     <string name="main_play">Παίξε</string>
     <string name="autoram_info_msg">Η μνήμη ορίστηκε σε %d MB</string>
-    <string name="mcl_setting_check_libraries">Έλεγχος βιβλιοθηκών μετά τη λήψη</string>
-    <string name="mcl_setting_check_libraries_subtitle">Αυτή η επιλογή αναγκάζει τον εκκινητή να ελέγξει το hash της βιβλιοθήκης αν είναι διαθέσιμο. Αποτρέπει τις κατεστραμμένες λήψεις.</string>
-    <string name="dl_library_sha_fail">Η βιβλιοθήκη %s έχει υποστεί ζημιά και θα γίνει ξανά λήψη</string>
-    <string name="dl_library_sha_unknown">Η βιβλιοθήκη %s δεν μπορεί να ελεγχθεί, πρέπει να υποθέσουμε ότι είναι καλή</string>
-    <string name="dl_library_sha_pass">Η βιβλιοθήκη %s είναι καλή και χρησιμοποιήσιμη</string>
     <string name="mcl_disable_gestures">Απενεργοποίηση χειρονομιών</string>
     <string name="mcl_disable_gestures_subtitle">Απενεργοποιεί χειρονομίες, όπως κράτημα για να σπάσεις έναν κύβο και πατήστε για να τοποθετήσετε κύβο.</string>
     <string name="mcl_disable_swap_hand">Απενεργοποιήστε το διπλό πάτημα για εναλλαγή χεριών</string>
@@ -156,7 +144,6 @@
     <string name="multirt_config_setdefault">Ορισμός ως προεπιλογή</string>
     <string name="multirt_config_setdefault_already">Προεπιλογή</string>
     <string name="multirt_config_removeerror_last">Πρέπει να έχετε τουλάχιστον ένα Java Runtime εγκατεστημένο.</string>
-    <string name="multirt_nojava8rt">Δεν ήταν δυνατή η εύρεση της Java 8. Για να χρησιμοποιήσετε αυτήν την επιλογή, πρέπει να εγκαταστήσετε την Java 8.</string>
     <string name="multirt_delete_runtime">Διαγραφή χρόνου εκτέλεσης</string>
     <string name="pvc_gameDirectory">Κατάλογος παιχνιδιού</string>
     <string name="pvc_jvmArgs">Παράμετροι εκκίνησης JVM</string>
@@ -224,7 +211,6 @@
     <string name="preference_enable_gyro_description">Ενεργοποιώντας το, θα σας επιτρέψει να γυρίσετε τον χαρακτήρα σας μέσα στο παιχνίδι γυρίζοντας το τηλέφωνό σας.</string>
     <string name="preference_gyro_sensitivity_title">Ευαισθησία ελέγχων γυροσκοπίου</string>
     <string name="preference_gyro_sensitivity_description">Προσαρμόστε την ευαισθησία των ελέγχων γυροσκοπίου.</string>
-    <string name="toast_turn_on_gyro">Ενεργοποιήστε πρώτα τα γυροσκοπικά στοιχεία ελέγχου για να το χρησιμοποιήσετε αυτό!</string>
     <string name="preference_gyro_sample_rate_title">Ρυθμός δειγματοληψίας γυροσκοπίου</string>
     <string name="preference_gyro_sample_rate_description">Εάν έχετε προβλήματα απόδοσης με τους ελέγχους γυροσκοπίου, αυξήστε αυτό.</string>
     <string name="microsoft_login_retry_later">Πάρα πολλά αιτήματα, παρακαλώ προσπαθήστε ξανά αργότερα.</string>
@@ -249,8 +235,6 @@
     <string name="preference_force_big_core_title">Εξαναγκασμός του renderer να τρέξει στον μεγάλο πυρήνα</string>
 
     <string name="version_select_hint">Επιλέξτε μια έκδοση</string>
-    <string name="forge_dl_progress">Λήψη εγκαταστάτη για %s</string>
-    <string name="forge_dl_searching">Αναζήτηση αριθμού έκδοσης του Forge</string>
     <string name="modloader_dl_failed_to_load_list">Αποτυχία φόρτωσης της λίστας εκδόσεων!</string>
     <string name="forge_dl_no_installer">Λυπούμαστε, αλλά αυτή η έκδοση του Forge δεν έχει ένα πρόγραμμα εγκατάστασης, το οποίο δεν υποστηρίζεται ακόμα.</string>
     <string name="forge_dl_select_version">Επιλέξτε έκδοση Forge</string>
@@ -264,7 +248,6 @@
     <string name="fabric_dl_loader_title">Επιλέξτε εκδόσεις</string>
     <string name="of_dl_select_version">Επιλέξτε την έκδοση του OptiFine</string>
     <string name="of_dl_failed_to_scrape">Αποτυχία συλλογής δεδομένων για εγκατάσταση του OptiFine</string>
-    <string name="of_dl_progress">Γίνεται λήψη %s</string>
     <string name="hint_search_modpack">Αναζήτηση για modpacks</string>
     <string name="preference_vulkan_driver_system_title">Χρήση προγράμματος οδήγησης Vulkan</string>
     <string name="preference_vulkan_driver_system_description">Εξαναγκάστε τον εκκινητή να χρησιμοποιήσει τον οδηγό Vulkan αντί για το Turnip στις Adreno GPUs. Επηρεάζει μόνο το Zink και τα mods που χρησιμοποιούν το Vulkan.</string>
@@ -275,13 +258,9 @@
     <string name="search_modpack_error">Αποτυχία εύρεσης modpacks</string>
     <string name="search_modpack_download_error">Αποτυχία λήψης μεταδεδομένων modpack</string>
     <string name="modpack_download_downloading_metadata">Λήψη μεταδεδομένων modpack (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods">Λήψη mods (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods_fc">Λήψη mods (Αρχείο %d από %d)</string>
     <string name="modpack_download_applying_overrides">Εφαρμογή παρακάμψεων (%d/%d)</string>
     <string name="modpack_install_notification_title">MJ Modpack Installer</string>
     <string name="modpack_install_notification_success">Κάντε κλικ εδώ για να ολοκληρώσετε την εγκατάσταση modpack</string>
-    <string name="modpack_install_notification_data_not_available">Αποτυχία λήψης πληροφοριών για το mod loader</string>
-    <string name="modpack_install_modloader_download_failed">Αποτυχία λήψης των αρχείων του mod loader</string>
     <string name="modpack_install_download_failed">Αποτυχία λήψης των αρχείων του modpack</string>
     <string name="notif_error_occured">Παρουσιάστηκε ένα σφάλμα</string>
     <string name="notif_error_occured_desc">Κάντε κλικ για να δείτε περισσότερες λεπτομέρειες</string>
@@ -311,9 +290,6 @@
     <string name="notification_permission_toast">Μπορείτε πάντα να αλλάξετε γνώμη αργότερα πηγαίνοντας στις Ρυθμίσεις</string>
     <string name="preference_ask_for_notification_title">Επιτροπή ειδοποιήσεων</string>
     <string name="preference_ask_for_notification_description">Κάντε κλικ για να ζητήσετε ξανά την άδεια ειδοποίησης, που απαιτείται για να λειτουργούν σωστά οι λήψεις παιχνιδιού/modpack.</string>
-    <string name="preference_vsync_in_zink_title">Να επιτρέπεται το V-Sync με το Zink</string>
-    <string name="preference_vsync_in_zink_description">Επιτρέπει στον εκκινητή να χρησιμοποιεί εσωτερικά API συστήματος για την ενεργοποίηση του V-Sync για το Zink. Απενεργοποιήστε το αν ο εκκινητής σας κολλήσει ξαφνικά με το Zink μετά από ενημέρωση του συστήματος.</string>
-    <string name="exception_failed_to_unpack_jre17">Αποτυχία εγκατάστασης JRE 17</string>
     <string name="newdl_starting">Ανάγνωση μεταδεδομένων παιχνιδιού…</string>
     <string name="newdl_downloading_metadata">Λήψη μεταδεδομένων παιχνιδιού (%s)</string>
     <string name="controller_button_a">A</string>

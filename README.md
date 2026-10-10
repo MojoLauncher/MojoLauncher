@@ -45,7 +45,7 @@ You can get MojoLauncher via four methods:
 ```
 If you are building on Windows:
 * Replace `./gradlew` with `.\gradlew.bat`
-* Make sure `mojoexec`, `sdl`, `glfw` are symlinked into `app_pojavlauncher/src/main/jni/`
+* Make sure `mojoexec`, `sdl`, `glfw` are symlinked into `app_mojo/src/main/jni/`
 
 ## Current roadmap
 - [x] Instance system in favor of profiles

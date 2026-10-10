@@ -12,7 +12,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">Ce compte sera retiré !</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">Sélectionnez un installateur de mods</string>
     <!-- Error messages -->
     <string name="error_fatal">MJLauncher a cessé de fonctionner de façon inattendue</string>
     <string name="error_no_version">Aucune version !</string>
@@ -20,7 +19,6 @@
     <string name="error_show_less">Afficher moins</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">L\'autorisation de lecture/écriture sur le stockage est requise !</string>
-    <string name="toast_optifine_success">Installation réussie</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -28,10 +26,7 @@
     <string name="mcl_tab_wiki">Wiki</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">Nettoyage des fichiers cache</string>
-    <string name="mcl_launch_downloading">Téléchargement de %s</string>
     <string name="mcl_launch_downloading_progress">"Téléchargement de %s (%.2f Mo / %.2f Mo)"</string>
-    <string name="mcl_launch_download_assets">Préparation du téléchargement des ressources</string>
     <string name="mcl_options">Options</string>
     <string name="mcl_option_customcontrol">Contrôles personnalisés</string>
     <string name="mcl_setting_title_use_surface_view">Utiliser un rendu sur une surface alternative</string>
@@ -77,7 +72,6 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">L\'Application/Jeu a quitté avec le code %d, vérifiez le fichier latestlog.txt pour plus de détails.</string>
     <string name="mcn_exit_confirm">Voulez-vous vraiment forcer la fermeture ?</string>
-    <string name="mcn_check_fail_vulkan_support">Le moteur de rendu Zink (Vulkan) n\'est pas pris en charge sur votre appareil !</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">Tchat</string>
     <string name="control_debug">Débog.</string>
@@ -98,7 +92,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">Forcer la fermeture</string>
     <string name="control_viewout">Sortie du journal</string>
-    <string name="control_adebug">Entrée de débogage</string>
     <string name="control_customkey">Envoyer une touche personnalisée</string>
     <!-- ImportControlActivity Strings -->
     <string name="import_control_label">Importer des contrôles</string>
@@ -130,11 +123,6 @@
     <string name="main_install_jar_file">Exécute un .jar</string>
     <string name="main_play">Jouer</string>
     <string name="autoram_info_msg">Mémoire définie à %d Mo</string>
-    <string name="mcl_setting_check_libraries">Vérifier les bibliothèques après téléchargement</string>
-    <string name="mcl_setting_check_libraries_subtitle">Cette option force le lanceur à vérifier le hachage de la bibliothèque s\'il est disponible. Empêche les téléchargements corrompus.</string>
-    <string name="dl_library_sha_fail">La bibliothèque %s est endommagée et sera retéléchargée</string>
-    <string name="dl_library_sha_unknown">La bibliothèque %s ne peut pas être vérifiée, et est supposée bonne</string>
-    <string name="dl_library_sha_pass">La bibliothèque %s est en bon état et utilisable</string>
     <string name="mcl_disable_gestures">Désactiver les gestes</string>
     <string name="mcl_disable_gestures_subtitle">Désactive les gestes tels que maintenir enfoncé pour casser le bloc, et appuyer pour placer un bloc.</string>
     <string name="mcl_disable_swap_hand">Désactiver le double appui pour échanger de mains</string>
@@ -160,7 +148,6 @@
     <string name="multirt_config_setdefault_already">Par défaut</string>
     <string name="multirt_config_removeerror_last">Vous devez avoir au moins un Runtime Java installé.</string>
     <string name="multirt_nocompatiblert">Aucune version compatible de Java n\'a été trouvée. Cette version nécessite Java %d ou plus récente.</string>
-    <string name="multirt_nojava8rt">Java 8 est introuvable. Pour utiliser cette option, vous devez installer Java 8.</string>
     <string name="multirt_delete_runtime">Supprimer le runtime</string>
     <string name="pvc_gameDirectory">Répertoire du jeu</string>
     <string name="pvc_jvmArgs">Arguments de la JVM</string>
@@ -228,7 +215,6 @@
     <string name="preference_enable_gyro_description">L\'activation de cette fonction vous permettra de tourner dans le jeu en tournant votre téléphone.</string>
     <string name="preference_gyro_sensitivity_title">Sensibilité des contrôles du gyroscope</string>
     <string name="preference_gyro_sensitivity_description">Ajuster la sensibilité des commandes du gyroscope.</string>
-    <string name="toast_turn_on_gyro">Activez d\'abord les commandes du gyroscope pour l\'utiliser !</string>
     <string name="preference_gyro_sample_rate_title">Taux d\'échantillonnage du gyroscope</string>
     <string name="preference_gyro_sample_rate_description">Si vous avez des problèmes de performance avec les commandes du gyroscope, augmentez cette valeur.</string>
     <string name="microsoft_login_retry_later">Trop de requêtes, s\'il vous plaît réessayez plus tard.</string>
@@ -254,8 +240,6 @@
     <string name="preference_force_big_core_title">Forcer le rendu à s\'exécuter sur le meilleur cœur</string>
 
     <string name="version_select_hint">Sélectionnez une version</string>
-    <string name="forge_dl_progress">Téléchargement de l\'installateur de %s</string>
-    <string name="forge_dl_searching">Recherche du numéro de version Forge</string>
     <string name="modloader_dl_failed_to_load_list">Échec du chargement de la liste des versions !</string>
     <string name="forge_dl_no_installer">Désolé, mais cette version de Forge n\'a pas d\'installateur, qui n\'est pas encore supportée.</string>
     <string name="forge_dl_select_version">Sélectionner une version de Forge</string>
@@ -269,7 +253,6 @@
     <string name="fabric_dl_loader_title">Sélectionner des versions</string>
     <string name="of_dl_select_version">Sélectionnez la version OptiFine</string>
     <string name="of_dl_failed_to_scrape">Échec de la collecte des données pour l\'installation d\'OptiFine</string>
-    <string name="of_dl_progress">Téléchargement de %s</string>
     <string name="hint_search_modpack">Rechercher des modpacks</string>
     <string name="preference_vulkan_driver_system_title">Utiliser le pilote Vulkan du système</string>
     <string name="preference_vulkan_driver_system_description">Force le launcher à utiliser le pilote Vulkan du système au lieu de Turnip sur les GPU Adreno. N\'affecte que Zink et les mods qui utilisent Vulkan.</string>
@@ -280,13 +263,9 @@
     <string name="search_modpack_error">Échec de la recherche des modpacks</string>
     <string name="search_modpack_download_error">Échec du téléchargement des métadonnées du modpack</string>
     <string name="modpack_download_downloading_metadata">Téléchargement des métadonnées du modpack (%.2f Mo / %.2f Mo)</string>
-    <string name="modpack_download_downloading_mods">Téléchargement des mods (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods_fc">Téléchargement des mods (Fichier %d sur %d)</string>
     <string name="modpack_download_applying_overrides">Application des remplacements (%d/%d)</string>
     <string name="modpack_install_notification_title">Installeur MJ de Modpack</string>
     <string name="modpack_install_notification_success">Cliquez ici pour terminer l\'installation du modpack</string>
-    <string name="modpack_install_notification_data_not_available">Échec du téléchargement de l\'information du chargeur de mod</string>
-    <string name="modpack_install_modloader_download_failed">Impossible de télécharger les fichiers du chargeur de mod</string>
     <string name="modpack_install_download_failed">Échec du téléchargement des fichiers de modpack</string>
     <string name="notif_error_occured">Une erreur est survenue</string>
     <string name="notif_error_occured_desc">Cliquez ici pour obtenir plus de détails</string>
@@ -316,13 +295,8 @@
     <string name="notification_permission_toast">Vous pouvez toujours changer d\'avis plus tard en allant dans Paramètres</string>
     <string name="preference_ask_for_notification_title">Autoriser les notifications</string>
     <string name="preference_ask_for_notification_description">Cliquez sur ce bouton pour redemander l\'autorisation de notification, nécessaire au bon fonctionnement des téléchargements en arrière-plan des jeux/modpacks.</string>
-    <string name="preference_vsync_in_zink_title">Autoriser la V-Sync avec Zink</string>
-    <string name="preference_vsync_in_zink_description">Permet au launcher d\'utiliser les API internes du système pour activer V-Sync pour Zink. Désactivez cette option si votre launcher se bloque soudainement avec Zink après une mise à jour du système.</string>
-    <string name="exception_failed_to_unpack_jre17">L\'installation de JRE 17 a échoué</string>
     <string name="newdl_starting">Lecture des métadonnées du jeu …</string>
     <string name="newdl_downloading_metadata">Téléchargement des métadonnées du jeu (%s)</string>
-    <string name="newdl_downloading_game_files">Téléchargement du jeu en cours… (%d/%d, %.2f MB/s)</string>
-    <string name="newdl_downloading_game_files_size">Téléchargement du jeu en cours… (%.2f/%.2f MB, %.2f MB/s)</string>
     <string name="cropper_title">Sélectionnez une version de Forge</string>
     <string name="cropper_lock_vertical">Verrouillage vertical</string>
     <string name="cropper_lock_horizontal">Verrouillage horizontal</string>
@@ -334,7 +308,6 @@
     <string name="log_view_button_output_on">Sortie\nDésactivée</string>
     <string name="log_view_label_log_output">Sortie des logs :</string>
     <string name="execute_jar_failed_to_read_file">Impossible de lire le fichier .jar</string>
-    <string name="execute_jar_incompatible_runtime">La fonction \"Exécuter le fichier .jar\" n\'est pas compatible avec Java%d</string>
     <string name="controller_button_a">A</string>
     <string name="controller_button_b">B</string>
     <string name="controller_button_x">X</string>

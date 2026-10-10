@@ -10,7 +10,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">Detta konto kommer att tas bort!</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">Välj ett mod installationsprogram</string>
     <!-- Error messages -->
     <string name="error_fatal">MJLauncher har oväntat kraschat</string>
     <string name="error_no_version">Ingen version!</string>
@@ -18,17 +17,13 @@
     <string name="error_show_less">Visa mindre</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">Läs/skriv till lagringsbehörighet krävs!</string>
-    <string name="toast_optifine_success">Installationen lyckades</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
     <!-- MCLauncherActivity: Tabs -->
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">Rensar cachefiler</string>
-    <string name="mcl_launch_downloading">Laddar ned %s</string>
     <string name="mcl_launch_downloading_progress">"Laddar ner %s (%.2f MB / %.2f MB)"</string>
-    <string name="mcl_launch_download_assets">Förbereder nedladdning av resurser</string>
     <string name="mcl_options">Alternativ</string>
     <string name="mcl_option_customcontrol">Anpassade kontroller</string>
     <string name="mcl_setting_title_use_surface_view">Använd alternera ytrendering</string>
@@ -57,7 +52,6 @@
 -->
     <string name="customctrl_addbutton">Lägg till knapp</string>
     <string name="main_play">Spela</string>
-    <string name="dl_library_sha_pass">Biblioteket %s är bra och användbart</string>
     <string name="mcl_disable_gestures">Inaktivera gester</string>
     <string name="mcl_disable_gestures_subtitle">Inaktiverar gester, såsom håll för att bryta block, och tryck för att placera ett block.</string>
     <string name="mcl_setting_title_mousespeed">Mus hastighet</string>
@@ -73,5 +67,4 @@
     <string name="multirt_config_setdefault_already">Standard</string>
     <string name="pvc_gameDirectory">Spelkatalog</string>
     <string name="pvc_jvmArgs">JVM argument</string>
-    <string name="of_dl_progress">Laddar ned %s</string>
 </resources>

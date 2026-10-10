@@ -11,7 +11,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">این اکانت حذف خواهد شد!</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">یک نصب کننده ماد را انتخاب کنید</string>
     <!-- Error messages -->
     <string name="error_fatal">پوجاو لانچر بصورت غیرمنتظره کرش خورد</string>
     <string name="error_no_version">بدون ورژن!</string>
@@ -19,7 +18,6 @@
     <string name="error_show_less">نمایش کمتر</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">دسترسی خواندن/نوشتن حافظه مورد نیاز است!</string>
-    <string name="toast_optifine_success">نصب موفقیت آمیز بود</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -27,10 +25,7 @@
     <string name="mcl_tab_wiki">ویکی</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">پاکسازی فایل‌های کَش</string>
-    <string name="mcl_launch_downloading">در حال دانلود %s</string>
     <string name="mcl_launch_downloading_progress">"درحال دانلود %s (%.2f MB / %.2f MB)"</string>
-    <string name="mcl_launch_download_assets">آماده‌سازی برای دانلود منابع</string>
     <string name="mcl_options">گزینه‌ها</string>
     <string name="mcl_option_customcontrol">کنترل‌های شخصی</string>
     <string name="mcl_setting_title_use_surface_view">از رندر گیر سطوح جایگزین استفاده کنید</string>
@@ -76,7 +71,6 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">برنامه یا بازی با کد مرجوعی %d خارج شد. برای جزئیات بیشتر به lastlog.text مراجعت کنید.</string>
     <string name="mcn_exit_confirm">آیا از خروج اجباری اطمینان دارید؟</string>
-    <string name="mcn_check_fail_vulkan_support">پردازشگر Zink (Vulkan) توسط این دستگاه پشتیبانی نمیشود!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">چت</string>
     <string name="control_debug">دیباگ</string>
@@ -91,7 +85,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">توقف اجباری</string>
     <string name="control_viewout">خروجی گزارش (لاگ)</string>
-    <string name="control_adebug">ورودی دیباگ</string>
     <string name="control_customkey">ارسال keycode شخصی</string>
     <!-- ImportControlActivity Strings -->
     <string name="import_control_label">کننترلر ها را وارد کنید</string>
@@ -123,11 +116,6 @@
     <string name="main_install_jar_file">Jar. را اجرا کنید</string>
     <string name="main_play">شروع بازی</string>
     <string name="autoram_info_msg">مموری تنظیم شد روی %d مگابایت</string>
-    <string name="mcl_setting_check_libraries">بررسی کتابخانه‌ها پس از دانلود</string>
-    <string name="mcl_setting_check_libraries_subtitle">این گزینه لانچر را مجبور به چک کردن اشکالات کتابخانه میکند. از دانلود های خراب جلوگیری میکند.</string>
-    <string name="dl_library_sha_fail">کتابخانه %s آسیب دیده است و نیاز به دانلود مجدد دارد</string>
-    <string name="dl_library_sha_unknown">کتابخانه %s نمی‌تواند بررسی شود، باید فرض کرد که سالم است</string>
-    <string name="dl_library_sha_pass">کتابخانه %s سالم و قابل استفاده است</string>
     <string name="mcl_disable_gestures">غیرفعال کردن حسگر ها</string>
     <string name="mcl_disable_gestures_subtitle">حسگر ها را غیرفعال می‌کند، مانند نگه دارید تا بلاک کَنده شود و روی صفحه بزنید تا بلاک قرار داده شود.</string>
     <string name="mcl_disable_swap_hand">دوبار کلیک برای دست به دست را خاموش کنید</string>
@@ -151,7 +139,6 @@
     <string name="multirt_config_setdefault">تنظیم پیش‌فرض</string>
     <string name="multirt_config_setdefault_already">پیش‌فرض</string>
     <string name="multirt_config_removeerror_last">شما باید حداقل یک جاوای نصب شده داشته باشید.</string>
-    <string name="multirt_nojava8rt">جاوا 8 را نمی توان پیدا کرد. برای استفاده از این قابلیت باید جاوا 8 را نصب کنید.</string>
     <string name="multirt_delete_runtime">حذف جاوا</string>
     <string name="pvc_gameDirectory">پوشه بازی</string>
     <string name="pvc_jvmArgs">آرگومان‌های JVM</string>
@@ -224,7 +211,6 @@
     <string name="fabric_dl_loader_title">انتخاب نسخه ها</string>
     <string name="of_dl_select_version">نسخه OptiFine را انتخاب کنید</string>
     <string name="of_dl_failed_to_scrape">ناموفق در دریافت اطلاعات برای نصب OptiFine</string>
-    <string name="of_dl_progress">در حال دانلود %s</string>
     <string name="hint_search_modpack">گشتن به دنبال مادپک ها</string>
     <string name="preference_vulkan_driver_system_title">استفاده از Vulkan درایور دستگاه</string>
     <string name="preference_vulkan_driver_system_description">اجبار لانچر برای استفاده از Vulkan درایور دستگاه به جای Turnip در GPU های Adreno. فقط بر Zink و ماد هایی که از Vulkan استفاده میکنند اثر دارد.</string>
@@ -235,13 +221,9 @@
     <string name="search_modpack_error">ناموفق در یافتن مادپک ها</string>
     <string name="search_modpack_download_error">ناموفق در دانلود metadata مادپک</string>
     <string name="modpack_download_downloading_metadata">در حال دانلود metadata مادپک (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods">درحال دانلود مادها (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods_fc">درحال دانلود ماد ها (File %d out of %d)</string>
     <string name="modpack_download_applying_overrides">اعمال جایگزین ها (%d/%d)</string>
     <string name="modpack_install_notification_title">نصب کننده مادپک پوجاو</string>
     <string name="modpack_install_notification_success">برای اتمام نصب مادپک اینجا کلیک کنید</string>
-    <string name="modpack_install_notification_data_not_available">ناموفق در دانلود اطلاعات اجرا کننده ماد</string>
-    <string name="modpack_install_modloader_download_failed">ناموفق در دانلود فایل‌های اجراکننده ماد</string>
     <string name="modpack_install_download_failed">ناموفق در دانلود فایل‌های مادپک</string>
     <string name="notif_error_occured">مشکلی پیش آمد</string>
     <string name="notif_error_occured_desc">برای اطلاعات بیشتر کلیک کنید</string>
