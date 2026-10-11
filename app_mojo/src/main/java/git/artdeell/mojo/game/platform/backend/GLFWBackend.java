@@ -80,12 +80,12 @@ public class GLFWBackend implements PlatformBackend {
 
     @Override
     public boolean sendKeyEvent(int key, int state, int mods) {
-        return GLFW.sendRawKeyEvent(key, state, mods, KeyboardUtils.getCodepoint(key, mods));
+        return GLFW.sendRawKeyEvent(key, state, mods, state == 1 ? KeyboardUtils.getCodepoint(key, mods) : '\0');
     }
 
     @Override
     public boolean sendKeyEvent(int key, boolean state, int mods) {
-        return GLFW.sendRawKeyEvent(key, state ? 1 : 0, mods, KeyboardUtils.getCodepoint(key, mods));
+        return GLFW.sendRawKeyEvent(key, state ? 1 : 0, mods, state ? KeyboardUtils.getCodepoint(key, mods) : '\0');
     }
 
     @Override

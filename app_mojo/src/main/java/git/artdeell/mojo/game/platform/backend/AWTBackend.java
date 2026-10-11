@@ -48,12 +48,12 @@ public class AWTBackend implements PlatformBackend {
 
     @Override
     public boolean sendKeyEvent(int key, int state, int mods) {
-        return AWTBridge.nativeSendKeyEvent(key, state, mods, KeyboardUtils.getCodepoint(key, mods));
+        return AWTBridge.nativeSendKeyEvent(key, state, mods, state == 1 ? KeyboardUtils.getCodepoint(key, mods) : '\0');
     }
 
     @Override
     public boolean sendKeyEvent(int key, boolean state, int mods) {
-        return AWTBridge.nativeSendKeyEvent(key, state ? 1 : 0, mods, KeyboardUtils.getCodepoint(key, mods));
+        return AWTBridge.nativeSendKeyEvent(key, state ? 1 : 0, mods, state ? KeyboardUtils.getCodepoint(key, mods) : '\0');
     }
 
     @Override
