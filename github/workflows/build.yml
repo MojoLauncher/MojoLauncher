@@ -1,0 +1,67 @@
+name: Build HLauncher
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Название HLauncher
+        run: |
+          for f in $(find . -name strings.xml -path "*values*"); do
+            sed -i -E 's|(<string name="app_name"[^>]*>)[^<]*(</string>)|\1HLauncher\2|' "$f"
+          done
+          for f in $(find . -name build.gradle -o -name build.gradle.kts); do
+            sed -i -E 's|applicationId\s*=?\s*"[^"]*"|applicationId "com.houmiex.hlauncher"|' "$f"
+          done
+
+      - name: Фиолетовая тема
+        run: |
+          for f in $(find . -name colors.xml -path "*values*"); do
+            sed -i -E 's|(<color name="(colorPrimary\|primary\|colorSecondary)">)[^<]*|\1#7B2FF7|' "$f"
+            sed -i -E 's|(<color name="(colorPrimaryDark\|primary_dark\|colorPrimaryVariant)">)[^<]*|\1#4A148C|' "$f"
+            sed -i -E 's|(<color name="(colorAccent\|accent\|colorSecondaryVariant)">)[^<]*|\1#B388FF|' "$f"
+            sed -i -E 's|(<color name="(background\|colorBackground\|windowBackground)">)[^<]*|\1#1A0B2E|' "$f"
+          done
+
+      - name: Скрыть кнопки соцсетей
+        run: |
+          cat > hide_social.py << 'EOF'
+          import re, glob
+          words = "discord|youtube|github|telegram|twitter|vk|facebook|instagram|patreon|social|donate|website"
+          pat = re.compile(r'<([A-Za-z0-9_.]+)((?:\s[^<>]*?)?android:id="@\+id/[^"]*(?:' + words + r')[^"]*"[^<>]*?)(/?)>', re.I | re.S)
+          def fix(m):
+              attrs = re.sub(r'\sandroid:visibility="[^"]*"', '', m.group(2))
+              return '<%s%s android:visibility="gone"%s>' % (m.group(1), attrs, m.group(3))
+          for p in glob.glob('**/res/layout*/*.xml', recursive=True):
+              s = open(p, encoding='utf-8').read()
+              n = pat.sub(fix, s)
+              if n != s:
+                  open(p, 'w', encoding='utf-8').write(n)
+                  print('patched', p)
+          EOF
+          python3 hide_social.py
+
+      - name: Сборка APK
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HLauncher-apk
+          path: "**/build/outputs/apk/**/*.apk"
