@@ -144,15 +144,7 @@ bool installClassLoaderHooks(JNIEnv *env, JNIEnv* vm_env) {
 }
 
 JNIEXPORT void JNICALL
-Java_net_kdt_pojavlaunch_utils_JREUtils_setRedirectLibraryPath(JNIEnv *env, jclass clazz,
-                                                                  jstring path) {
-    const char* _path = (*env)->GetStringUTFChars(env, path, NULL);
-    additional_natives_dir = strdup(_path);
-    (*env)->ReleaseStringUTFChars(env, path, _path);
-}
-
-JNIEXPORT void JNICALL
-Java_net_kdt_pojavlaunch_utils_JREUtils_setLibraryOverrides(JNIEnv *env, jclass clazz,
+Java_git_artdeell_mojo_utils_JREUtils_setLibraryOverrides(JNIEnv *env, jclass clazz,
                                                             jstring base_path, jstring libs) {
     save_jvm_string(env, base_path, &additional_natives_dir);
     save_jvm_string(env, libs, &replacements);
