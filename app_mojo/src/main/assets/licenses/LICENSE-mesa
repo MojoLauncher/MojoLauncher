@@ -1,0 +1,121 @@
+MIT License
+
+Copyright (c) 
+    2005 Aapo Tahkola
+    2011 Adam Rak <adam.rak@streamnovation.com>
+    2014 Adrián Arroyo Calle <adrian.arroyocalle@gmail.com>
+    2010-2018 Advanced Micro Devices, Inc.
+    2002-2012 Apple Inc.
+    2009 Artur Wyszynski <harakash@gmail.com>
+    2000-2001 ATI Technologies Inc.
+    2015-2016 Axel Davy <axel.davy@ens.fr>
+    1988-2004 Bart Massey
+    2016 Bas Nieuwenhuizen
+    2011 Benjamin Franzke
+    2005-2008 Ben Skeggs
+    2015 Boyan Ding
+    1999-2016 Brian Paul
+    2014-2018 Broadcom
+    2011 Bryan Cain
+    2007 Carl Worth
+    2009-2011 Chia-I Wu <olvaffe@gmail.com>
+    2016 Christian Gmeiner <christian.gmeiner@gmail.com>
+    2010-2014 Christian König
+    2010-2012 Christoph Bumiller
+    2014-2017 Connor Abbott
+    2008-2010 Corbin Simpson
+    1999-2016 Dave Airlie
+    2008 Dennis Smit
+    2012-2017 Etnaviv Project
+    2003 Felix Kuehling
+    2009-2016 Francisco Jerez
+    2008-2010 George Sapountzis <gsapountzis@gmail.com>
+    2017 Gert Wollny
+    2013-2017 Google, Inc.
+    2017 Grazvydas Ignotas
+    2013 Gregory Hainaut <gregory.hainaut@gmail.com>
+    2002 Greg Parker
+    2013 Grigori Goronzy <greg@chown.ath.cx>
+    2008-2013 Haiku, Inc.
+    2002-2006 IBM Corporation
+    2011-2017 Ilia Mirkin
+    2006-2018 Intel Corporation
+    2007-2012 Jakob Bornecrantz
+    2017 Jason Ekstrand
+    2008-2010 Jerome Glisse <glisse@freedesktop.org>
+    2009-2013 Joakim Sindholt <opensource@zhasha.com>
+    2007 Joe Perches <joe@perches.com>
+    2006 John Maddock
+    2014-2017 Jon Turney
+    2008-2009 Jose Fonseca
+    1988-2017 Keith Packard
+    1997 Keith Whitwell
+    2011 Lauri Kasanen
+    2010 Luca Barbieri
+    2010-2013 LunarG, Inc.
+    2011-2013 Maarten Lankhorst
+    2008-2010 Maciej Cencora <m.cencora@gmail.com>
+    2010-2014 Marek Olšák <maraeo@gmail.com>
+    2011 Morgan Armand <morgan.devel@gmail.com>
+    2016 Nayan Deshmukh
+    2004-2009 Nicolai Haehnle <nhaehnle@gmail.com>
+    2007-2013 Nouveau Project
+    2012-2018 NVIDIA Corporation
+    2010 Orasanu Lucian
+    2015-2016 Patrick Rudolph <siro@das-labor.org>
+    2009 Pauli Nieminen
+    2006-2008 Philippe Houdoin
+    2015 Philip Taylor <philip@zaynar.co.uk>
+    1998-1999 Precision Insight, Inc.
+    2007-2018 Red Hat, Inc.
+    2018 Rhys Perry
+    2012-2018 Rob Clark <robclark@freedesktop.org>
+    2004 Roland Scheidegger
+    2015 Samuel Pitoiset
+    1991-2000 Silicon Graphics, Inc.
+    2018 Stefan Schake <stschake@gmail.com>
+    2003-2005 Stefan Gustavson
+    2008 Steven G. Johnson
+    2016 Steven Toth <stoth@kernellabs.com>
+    2011-2014 The Chromium OS authors
+    2007-2013 The Nouveau Project
+    2001-2004 The SCons Foundation
+    2002 The Weather Channel, Inc.
+    2006 Thierry Reding <thierry@gilfi.de>
+    2010 Thomas Balling Sörensen
+    2015-2017 Thomas Helland
+    1995 Thorsten Ohl
+    2013-2018 Timothy Arceri
+    2002 Todd C. Miller <Todd.Miller@courtesan.com>
+    2010-2014 Tom Stellard <tstellar@gmail.com>
+    2004 Torrey T. Lyons
+    2003-2008 Tungsten Graphics, Inc.
+    2012-2013 Vadim Girlin <vadimgirlin@gmail.com>
+    2000 VA Linux Systems Inc.
+    2015-2018 Valve Corporation
+    1998-2017 VMware, Inc.
+    1992 Vrije Universiteit, The Netherlands
+    1999 Wittawat Yamwong
+    2005 Zack Rusin
+    2015 Zoltan Gilian
+    2018-2021 Igalia S.L.
+    2017 Dylan Baker
+    2022 Yonggang Luo
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.

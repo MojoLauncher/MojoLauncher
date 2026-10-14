@@ -1,0 +1,92 @@
+package git.artdeell.mojo.prefs.screens;
+
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Bundle;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.SwitchPreferenceCompat;
+
+import git.artdeell.mojo.R;
+
+import git.artdeell.mojo.game.renderer.RendererCache;
+import git.artdeell.mojo.game.renderer.extra.GLESProvider;
+import git.artdeell.mojo.prefs.CustomSeekBarPreference;
+import git.artdeell.mojo.prefs.LauncherPreferences;
+import git.artdeell.mojo.utils.GpuUtils;
+
+/**
+ * Fragment for any settings video related
+ */
+public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment {
+    private Boolean hasAngle = null;
+    @Override
+    public void onCreatePreferences(Bundle b, String str) {
+        addPreferencesFromResource(R.xml.pref_video);
+        int resolution = (int) (LauncherPreferences.PREF_SCALE_FACTOR * 100);
+
+        CustomSeekBarPreference resolutionSeekbar = requirePreference("resolutionRatio",
+                CustomSeekBarPreference.class);
+        resolutionSeekbar.setSuffix(" %");
+
+        // #724 bug fix
+        if (resolution < 25) {
+            resolutionSeekbar.setValue(100);
+        } else {
+            resolutionSeekbar.setValue(resolution);
+        }
+
+        // Sustained performance is only available since Nougat
+        SwitchPreferenceCompat sustainedPerfSwitch = requirePreference("sustainedPerformance",
+                SwitchPreferenceCompat.class);
+        sustainedPerfSwitch.setVisible(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N);
+        sustainedPerfSwitch.setChecked(LauncherPreferences.PREF_SUSTAINED_PERFORMANCE);
+
+        requirePreference("alternate_surface", SwitchPreferenceCompat.class).setChecked(LauncherPreferences.PREF_USE_ALTERNATE_SURFACE);
+        requirePreference("force_vsync", SwitchPreferenceCompat.class).setChecked(LauncherPreferences.PREF_FORCE_VSYNC);
+
+        Preference driverPreference = requirePreference("zinkPreferSystemDriver");
+        PackageManager packageManager = driverPreference.getContext().getPackageManager();
+        boolean supportsTurnip = GpuUtils.checkVulkanSupport(packageManager) && GpuUtils.getGlInfo().isAdreno();
+        driverPreference.setVisible(supportsTurnip);
+
+        // Show ANGLE switch only if AnglePlugin is available
+        if(hasAngle == null) {
+            GLESProvider provider = GLESProvider.getGlesProvider(getContext(), true);
+            hasAngle = provider instanceof GLESProvider.ExternalAngleProvider || provider instanceof GLESProvider.SystemAngleProvider;
+        }
+        SwitchPreferenceCompat angleSwitch = requirePreference("use_angle", SwitchPreferenceCompat.class);
+        angleSwitch.setVisible(hasAngle);
+        angleSwitch.setChecked(LauncherPreferences.PREF_USE_ANGLE);
+
+        ListPreference rendererListPreference = requirePreference("renderer",
+                ListPreference.class);
+        RendererCache list = RendererCache.getCompatibleRenderers(getContext());
+        rendererListPreference.setEntries(list.rendererDisplayNames);
+        rendererListPreference.setEntryValues(list.rendererIds.toArray(new String[0]));
+
+        computeVisibility();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Activity activity = getActivity();
+        if(activity != null) {
+            requirePreference("ignoreNotch").setVisible(LauncherPreferences.hasNotch(activity));
+        }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences p, String s) {
+        super.onSharedPreferenceChanged(p, s);
+        computeVisibility();
+    }
+
+    private void computeVisibility(){
+        requirePreference("force_vsync", SwitchPreferenceCompat.class)
+                .setVisible(LauncherPreferences.PREF_USE_ALTERNATE_SURFACE);
+    }
+}
