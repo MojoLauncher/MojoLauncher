@@ -8,6 +8,7 @@ import git.artdeell.mojo.LwjglGlfwKeycode;
 import git.artdeell.mojo.game.platform.Platform;
 
 import git.artdeell.dnbootstrap.glfw.GLFW;
+import git.artdeell.mojo.utils.KeyboardUtils;
 
 /**
  * GLFW Platform implementation
@@ -79,12 +80,12 @@ public class GLFWBackend implements PlatformBackend {
 
     @Override
     public boolean sendKeyEvent(int key, int state, int mods) {
-        return GLFW.sendRawKeyEvent(key, state, mods, (char) 0);
+        return GLFW.sendRawKeyEvent(key, state, mods, state == 1 ? KeyboardUtils.getCodepoint(key, mods) : '\0');
     }
 
     @Override
     public boolean sendKeyEvent(int key, boolean state, int mods) {
-        return GLFW.sendRawKeyEvent(key, state ? 1 : 0, mods, (char) 0);
+        return GLFW.sendRawKeyEvent(key, state ? 1 : 0, mods, state ? KeyboardUtils.getCodepoint(key, mods) : '\0');
     }
 
     @Override
