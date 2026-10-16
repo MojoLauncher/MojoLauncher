@@ -26,8 +26,11 @@ public class CallbackBridge {
         double ox = Platform.cursorX, oy = Platform.cursorY;
         Platform.sendMouseEvent(button, 1, CallbackBridge.getCurrentMods());
         sChoreographer.postFrameCallbackDelayed(l -> {
-            Platform.cursorX = ox;
-            Platform.cursorY = oy;
+            // do not return the cursor if the game has already captured the mouse and centered it
+            if (!Platform.isGrabbing()) {
+                Platform.cursorX = ox;
+                Platform.cursorY = oy;
+            }
             Platform.sendMouseEvent(button, 0, CallbackBridge.getCurrentMods());
         }, 33);
     }
