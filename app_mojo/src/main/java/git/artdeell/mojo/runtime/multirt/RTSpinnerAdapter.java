@@ -1,4 +1,4 @@
-package git.artdeell.mojo.multirt;
+package git.artdeell.mojo.runtime.multirt;
 
 import android.content.Context;
 import android.database.DataSetObserver;
@@ -20,7 +20,7 @@ public class RTSpinnerAdapter implements SpinnerAdapter {
     final List<Runtime> mRuntimes;
     public RTSpinnerAdapter(@NonNull Context context, List<Runtime> runtimes) {
         mRuntimes = runtimes;
-        Runtime runtime = new Runtime("<Default>", "", null, 0);
+        Runtime runtime = new Runtime("<Default>", "", null, null, 0);
         mRuntimes.add(runtime);
         mContext = context;
     }

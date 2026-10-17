@@ -1,4 +1,4 @@
-package git.artdeell.mojo.multirt;
+package git.artdeell.mojo.runtime.multirt;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;

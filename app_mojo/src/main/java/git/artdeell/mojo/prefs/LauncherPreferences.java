@@ -12,10 +12,8 @@ import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
-import git.artdeell.mojo.*;
-
 import git.artdeell.mojo.Tools;
-import git.artdeell.mojo.multirt.MultiRTUtils;
+import git.artdeell.mojo.runtime.multirt.MultiRTUtils;
 import git.artdeell.mojo.utils.JREUtils;
 
 import java.io.IOException;

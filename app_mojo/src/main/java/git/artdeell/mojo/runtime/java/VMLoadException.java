@@ -1,4 +1,4 @@
-package git.artdeell.mojo.utils.jre;
+package git.artdeell.mojo.runtime.java;
 
 import android.content.Context;
 

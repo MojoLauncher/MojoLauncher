@@ -1,4 +1,4 @@
-package git.artdeell.mojo.utils.jre;
+package git.artdeell.mojo.runtime.java;
 
 import static git.artdeell.mojo.Tools.NATIVE_LIB_DIR;
 
@@ -13,8 +13,8 @@ import androidx.annotation.NonNull;
 import git.artdeell.mojo.Architecture;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.awt.AWTView;
-import git.artdeell.mojo.multirt.MultiRTUtils;
-import git.artdeell.mojo.multirt.Runtime;
+import git.artdeell.mojo.runtime.multirt.MultiRTUtils;
+import git.artdeell.mojo.runtime.multirt.Runtime;
 import git.artdeell.mojo.prefs.LauncherPreferences;
 import git.artdeell.mojo.utils.JREUtils;
 
@@ -279,7 +279,7 @@ public class JavaRunner {
 
         boolean hasJavaAgent = preprocessUserArgs(vmArgs);
         List<String> runtimeArgs = new ArrayList<>();
-        if(getCacioJavaArgs(runtimeArgs,runtime.javaVersion == 8)) hasJavaAgent = true;
+        if(getCacioJavaArgs(runtimeArgs,runtime.version == 8)) hasJavaAgent = true;
         runtimeArgs.addAll(getJavaArgs(runtimeHomeDir.getAbsolutePath(), vmArgs));
         vmArgs.clear();
 

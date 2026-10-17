@@ -11,7 +11,7 @@ import android.util.Log;
 import com.kdt.mcgui.ProgressLayout;
 
 import git.artdeell.mojo.Tools;
-import git.artdeell.mojo.multirt.MultiRTUtils;
+import git.artdeell.mojo.runtime.multirt.MultiRTUtils;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;

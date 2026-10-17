@@ -12,7 +12,7 @@ import git.artdeell.mojo.game.renderer.def.Renderers;
 import git.artdeell.mojo.instances.Instance;
 import git.artdeell.mojo.instances.Instances;
 import git.artdeell.mojo.modding.ModloaderDownloadListener;
-import git.artdeell.mojo.utils.jre.classfile.ClassFormatException;
+import git.artdeell.mojo.runtime.java.classfile.ClassFormatException;
 import git.artdeell.mojo.progresskeeper.DownloaderProgressWrapper;
 import git.artdeell.mojo.progresskeeper.ProgressKeeper;
 import git.artdeell.mojo.utils.DownloadUtils;

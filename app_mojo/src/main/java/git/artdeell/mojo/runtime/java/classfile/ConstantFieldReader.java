@@ -1,4 +1,4 @@
-package git.artdeell.mojo.utils.jre.classfile;
+package git.artdeell.mojo.runtime.java.classfile;
 
 import java.io.DataInputStream;
 import java.io.IOException;

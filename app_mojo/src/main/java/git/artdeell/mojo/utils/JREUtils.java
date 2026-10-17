@@ -11,10 +11,9 @@ import java.util.*;
 
 import git.artdeell.mojo.Logger;
 import git.artdeell.mojo.Tools;
-import git.artdeell.mojo.multirt.Runtime;
+import git.artdeell.mojo.runtime.multirt.Runtime;
 import git.artdeell.mojo.prefs.LauncherPreferences;
 import git.artdeell.mojo.utils.plugins.LibraryPlugin;
-import git.artdeell.mojo.prefs.*;
 
 public class JREUtils {
     public static void redirectAndPrintJRELog() {

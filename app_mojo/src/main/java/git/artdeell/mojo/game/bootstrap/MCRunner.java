@@ -1,22 +1,25 @@
-package git.artdeell.mojo.utils.jre;
+package git.artdeell.mojo.game.bootstrap;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.ArrayMap;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import git.artdeell.mojo.Architecture;
 import git.artdeell.mojo.JVersionList;
+import git.artdeell.mojo.Logger;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.authenticator.accounts.Account;
+import git.artdeell.mojo.authenticator.accounts.Accounts;
 import git.artdeell.mojo.game.renderer.def.Renderers;
 import git.artdeell.mojo.game.renderer.impl.GLESRenderSpec;
 import git.artdeell.mojo.instances.Instance;
 import git.artdeell.mojo.utils.lifecycle.LifecycleAwareAlertDialog;
-import git.artdeell.mojo.multirt.MultiRTUtils;
-import git.artdeell.mojo.multirt.Runtime;
+import git.artdeell.mojo.runtime.multirt.MultiRTUtils;
+import git.artdeell.mojo.runtime.multirt.Runtime;
 import git.artdeell.mojo.prefs.LauncherPreferences;
 import git.artdeell.mojo.game.renderer.GameRenderer;
 import git.artdeell.mojo.game.renderer.RenderSpec;
@@ -27,7 +30,10 @@ import git.artdeell.mojo.utils.GameOptionsUtils;
 import git.artdeell.mojo.utils.JREUtils;
 import git.artdeell.mojo.utils.JSONUtils;
 import git.artdeell.mojo.utils.MCOptionUtils;
+import git.artdeell.mojo.utils.ModUtils;
 import git.artdeell.mojo.utils.OldVersionsUtils;
+import git.artdeell.mojo.runtime.java.JavaRunner;
+import git.artdeell.mojo.runtime.java.VMLoadException;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,43 +43,73 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import git.artdeell.mojo.R;
 
-public class GameRunner {
-    /**
-     * Optimization mods based on Sodium can mitigate the render distance issue. Check if Sodium
-     * or its derivative is currently installed to skip the render distance check.
-     * @param gameDir current game directory
-     * @return whether sodium or a sodium-based mod is installed
-     */
-    private static boolean hasSodium(File gameDir) {
-        File modsDir = new File(gameDir, "mods");
-        File[] mods = modsDir.listFiles(file -> file.isFile() && file.getName().endsWith(".jar"));
-        if(mods == null) return false;
-        for(File file : mods) {
-            String name = file.getName();
-            if(name.contains("sodium") ||
-                    name.contains("embeddium") ||
-                    name.contains("rubidium")) return true;
-        }
-        return false;
+public class MCRunner implements GameRunner {
+    private AppCompatActivity activity;
+    private Instance instance;
+    private JVersionList.Version versionInfo;
+
+    public static final String INTENT_LAUNCH_VERSION = "intent_version";
+    public static final String INTENT_LAUNCH_CLASSPATH = "intent_classpath";
+
+    @Override
+    public void init(AppCompatActivity activity, Instance instance) {
+        this.activity = activity;
+        this.instance = instance;
+        if(instance.versionId != null) this.versionInfo = Tools.getVersionInfo(instance.versionId);
+        else throw new RuntimeException("Cannot init LwjglRunner with null versionId!");
     }
 
-    /**
-     * Check if Angelica is currently installed to allow usage of LTW
-     * @param gameDir current game directory
-     * @return whether Angelica is installed
-     */
-    private static boolean hasAngelica(File gameDir) {
-        File modsDir = new File(gameDir, "mods");
-        File[] mods = modsDir.listFiles(file -> file.isFile() && file.getName().endsWith(".jar"));
-        if(mods == null) return false;
-        for(File file : mods) {
-            String name = file.getName();
-            if(name.contains("angelica")) return true;
+    @Override
+    public boolean ensureRendererCompatible(GameRenderer gameRenderer) throws Exception {
+        if(versionInfo.disableRendererChecks) return true;
+        RenderSpec renderer = gameRenderer.getCurrentRenderer();
+        File gamedir = instance.getGameDirectory();
+
+        // Switch renderer to GL4ES when running a compat context version on LTW
+        if(isCompatContext(versionInfo) && !ModUtils.hasAngelica(gamedir) && renderer instanceof GLESRenderSpec.LTWRenderSpec) {
+            return switchRendererIfSupported(gameRenderer,true, GameRenderer.getKnownRenderer(Renderers.GL4ES_RENDERER), 0);
         }
-        return false;
+
+        boolean isGl4es = renderer instanceof GLESRenderSpec.GL4ESRenderSpec;
+        RenderSpec ltw = GameRenderer.getKnownRenderer(Renderers.LTW_RENDERER);
+        boolean ltwSupported = ltw != null && ltw.compatibleDevice(activity);
+        // Block Sodium from running with GL4ES on 1.17+
+        if(!isCompatContext(versionInfo) && isGl4es && ModUtils.hasSodium(gamedir)) {
+            return switchRendererIfSupported(gameRenderer, ltwSupported, ltw, R.string.compat_sodium_not_supported);
+        }
+
+        // Switch renderer to LTW when running 1.21.5
+        if(!isGl4esCompatible(versionInfo) && isGl4es) {
+            return switchRendererIfSupported(gameRenderer, ltwSupported, ltw, R.string.compat_sodium_not_supported);
+        }
+        return true;
+    }
+
+    @Override
+    public void checkRendererQuirks(GameRenderer gameRenderer) throws Exception {
+        RenderSpec renderer = gameRenderer.getCurrentRenderer();
+        boolean isLtw = renderer instanceof GLESRenderSpec.LTWRenderSpec;
+
+        if(isLtw && checkRenderDistance(versionInfo, instance.getGameDirectory())) {
+            if(Tools.showDialogAndHalt(activity, R.string.ltw_render_distance_warning_msg)) return;
+            // If the code goes here, it means that the user clicked "OK". Fix the render distance.
+            try {
+                MCOptionUtils.set("renderDistance", "7");
+                MCOptionUtils.save();
+            }catch (Exception e) {
+                Log.e("Tools", "Failed to fix render distance setting", e);
+            }
+        }
+
+        GameOptionsUtils.fixOptions(isLtw);
+
+        if(isLtw && GpuUtils.getGlInfo().forcedMsaa) {
+            if(Tools.showDialogAndHalt(activity, R.string.ltw_4x_msaa_warning_msg)) return;
+        }
     }
 
     /**
@@ -99,7 +135,7 @@ public class GameRunner {
 
     private static boolean checkRenderDistance(JVersionList.Version version, File gamedir) throws ParseException {
         if(!affectedByRenderDistanceIssue(version)) return false;
-        if(hasSodium(gamedir)) return false;
+        if(ModUtils.hasSodium(gamedir)) return false;
         try {
             MCOptionUtils.load();
         }catch (Exception e) {
@@ -120,33 +156,20 @@ public class GameRunner {
         return DateUtils.dateBefore(DateUtils.getOriginalReleaseDate(version), 2021, 3, 9);
     }
 
-    private static boolean showDialog(AppCompatActivity activity, int message) throws InterruptedException {
-        LifecycleAwareAlertDialog.DialogCreator dialogCreator = ((alertDialog, dialogBuilder) ->
-                dialogBuilder.setMessage(activity.getString(message))
-                        .setCancelable(false)
-                        .setPositiveButton(android.R.string.ok, (d, w)->{}));
-        return LifecycleAwareAlertDialog.haltOnDialog(activity.getLifecycle(), activity, dialogCreator);
-    }
-
     // Autoswitch to provided renderer if supported, otherwise - crash with resId dialog message
-    private static void switchRendererIfSupported(boolean support,
-                                                  RenderSpec renderer,
-                                                  GameRenderer gameRenderer,
-                                                  Instance instance,
-                                                  AppCompatActivity activity,
-                                                  int resId) throws InterruptedException, IOException {
+    private boolean switchRendererIfSupported(GameRenderer gameRenderer, boolean support, RenderSpec renderer, int resId) throws InterruptedException, IOException {
         if(support) {
             instance.renderer = renderer.tag();
             instance.write();
             gameRenderer.setCurrentRenderer(renderer);
         }else {
-            showDialog(activity, resId);
-            System.exit(0);
+            Tools.showDialogAndHalt(activity, resId);
         }
+        return support;
     }
 
-    public static void launchGame(final AppCompatActivity activity, Account account,
-                                  Instance instance, String versionId, File[] classpath, GameRenderer gameRenderer) throws Throwable {
+    // Check & show memory allocation warning dialog if needed
+    private boolean checkMemoryAllocation() throws InterruptedException {
         int freeDeviceMemory = Tools.getFreeDeviceMemory(activity);
         int localeString;
         int freeAddressSpace = Architecture.is32BitsDevice() ? Tools.getMaxContinuousAddressSpaceSize() : -1;
@@ -173,157 +196,11 @@ public class GameRunner {
                     });
                 }
             };
-
-
-                if (LifecycleAwareAlertDialog.haltOnDialog(activity.getLifecycle(), activity, dialogCreator)) {
-                    return; // If the dialog's lifecycle has ended, return without
-                    // actually launching the game, thus giving us the opportunity
-                    // to start after the activity is shown again
-                }
-            }
-        File gamedir = instance.getGameDirectory();
-        JVersionList.Version versionInfo = Tools.getVersionInfo(versionId);
-        // We don't need the library list, the asset index, client download info for the code below
-        versionInfo.libraries = null;
-        versionInfo.downloads = null;
-
-        RenderSpec renderer = gameRenderer.getCurrentRenderer();
-
-        if(!versionInfo.disableRendererChecks) {
-            // Switch renderer to GL4ES when running a compat context version on LTW
-            if(isCompatContext(versionInfo) && !hasAngelica(gamedir) && renderer instanceof GLESRenderSpec.LTWRenderSpec) {
-                switchRendererIfSupported(true, GameRenderer.getKnownRenderer(Renderers.GL4ES_RENDERER), gameRenderer, instance, activity, 0);
-            }
-
-            boolean isGl4es = renderer instanceof GLESRenderSpec.GL4ESRenderSpec;
-            RenderSpec ltw = GameRenderer.getKnownRenderer(Renderers.LTW_RENDERER);
-            boolean ltwSupported = ltw != null && ltw.compatibleDevice(activity);
-            // Block Sodium from running with GL4ES on 1.17+
-            if(!isCompatContext(versionInfo) && isGl4es && hasSodium(gamedir)) {
-                switchRendererIfSupported(ltwSupported, ltw, gameRenderer, instance, activity, R.string.compat_sodium_not_supported);
-            }
-
-            // Switch renderer to LTW when running 1.21.5
-            if(!isGl4esCompatible(versionInfo) && isGl4es) {
-                switchRendererIfSupported(ltwSupported, ltw, gameRenderer, instance, activity, R.string.compat_version_not_supported);
-            }
+            // If the dialog's lifecycle has ended, return without actually launching the game, thus giving us the opportunity
+            // to start after the activity is shown again
+            return !LifecycleAwareAlertDialog.haltOnDialog(activity.getLifecycle(), activity, dialogCreator);
         }
-
-        boolean isLtw = renderer instanceof GLESRenderSpec.LTWRenderSpec;
-
-        if(isLtw && checkRenderDistance(versionInfo, gamedir)) {
-            if(showDialog(activity, R.string.ltw_render_distance_warning_msg)) return;
-            // If the code goes here, it means that the user clicked "OK". Fix the render distance.
-            try {
-                MCOptionUtils.set("renderDistance", "7");
-                MCOptionUtils.save();
-            }catch (Exception e) {
-                Log.e("Tools", "Failed to fix render distance setting", e);
-            }
-        }
-
-        GameOptionsUtils.fixOptions(isLtw);
-
-        if(isLtw && GpuUtils.getGlInfo().forcedMsaa) {
-            if(showDialog(activity, R.string.ltw_4x_msaa_warning_msg)) return;
-        }
-
-        int requiredJavaVersion = 8;
-        if(versionInfo.javaVersion != null) requiredJavaVersion = versionInfo.javaVersion.majorVersion;
-
-        Runtime runtime = MultiRTUtils.forceReread(pickRuntime(instance, requiredJavaVersion));
-
-        // Pre-process specific files
-        disableSplash(gamedir);
-        List<String> launchArgs = getMoJsonClientArgs(account, versionInfo, gamedir);
-
-        // Select the appropriate openGL version
-        OldVersionsUtils.selectOpenGlVersion(versionInfo);
-
-        ArrayList<String> launchClassPath = new ArrayList<>(classpath.length);
-        for(int i = 0; i < classpath.length; i++) {
-            File classpathEntry = classpath[i];
-            String entryPath = classpathEntry.getAbsolutePath();
-            if(!classpathEntry.exists()) {
-                Log.w("GameRunner", "Skipped classpath entry " + entryPath + " because it is missing");
-            }
-            launchClassPath.add(entryPath);
-            // Unreference the classpath entry to avoid retaining it on heap
-            classpath[i] = null;
-        }
-        launchClassPath.trimToSize();
-
-        List<String> javaArgList = new ArrayList<>();
-
-        if (versionInfo.logging != null && versionInfo.logging.client != null && versionInfo.logging.client.file != null) {
-            String configFile = Tools.DIR_DATA + "/security/" + versionInfo.logging.client.file.id.replace("client", "log4j-rce-patch");
-            if (!new File(configFile).exists()) {
-                configFile = Tools.DIR_GAME_NEW + "/" + versionInfo.logging.client.file.id;
-            }
-            javaArgList.add("-Dlog4j.configurationFile=" + configFile);
-        }
-
-        versionInfo.logging = null;
-
-        File versionSpecificNativesDir = new File(Tools.DIR_CACHE, "natives/"+versionId);
-        if(versionSpecificNativesDir.exists()) {
-            String dirPath = versionSpecificNativesDir.getAbsolutePath();
-            javaArgList.add("-Djava.library.path="+dirPath+":"+Tools.NATIVE_LIB_DIR);
-            javaArgList.add("-Djna.boot.library.path="+dirPath);
-            // Sometimes, the game can extract natives itself onto this path
-            javaArgList.add("-Dorg.lwjgl.librarypath="+dirPath);
-        }
-
-        File lwjglExtractDir = new File(Tools.DIR_CACHE, "lwjgl_native/"+versionId);
-        FileUtils.ensureDirectory(lwjglExtractDir);
-        javaArgList.add("-Dorg.lwjgl.system.SharedLibraryExtractPath="+lwjglExtractDir.getAbsolutePath());
-
-        addAuthlibInjectorArgs(javaArgList, account);
-        addNoBlocklistArgs(javaArgList);
-
-        mergeMoJsonArgs(javaArgList, getMoJsonJvmArgs(versionId));
-
-        versionInfo.arguments = null;
-        versionInfo.minecraftArguments = null;
-        versionInfo.assets = null;
-        versionInfo.assetIndex = null;
-
-        javaArgList.addAll(JREUtils.parseJavaArguments(instance.getLaunchArgs()));
-
-        Map<String, String> versionEnvMap = versionInfo.environment;
-
-        // TODO: this should be decoupled from GameRunner completely
-        gameRenderer.setupEnvironment(activity);
-        JREUtils.setGameEnvironment(activity, versionEnvMap);
-        JREUtils.chdir(instance.getGameDirectory().getAbsolutePath());
-
-        if(!gameRenderer.maybeSetupRenderer()) {
-            if(showDialog(activity, R.string.gr_err_renderer_load_Failed)) return;
-            System.exit(0);
-        }
-        javaArgList.add("-Dorg.lwjgl.opengl.libname=libGLMojo.so");
-        javaArgList.add("-Dorg.lwjgl.freetype.libname="+ Tools.NATIVE_LIB_DIR+"/libfreetype.so");
-
-        activity.runOnUiThread(() -> Toast.makeText(activity, activity.getString(R.string.autoram_info_msg,LauncherPreferences.PREF_RAM_ALLOCATION), Toast.LENGTH_SHORT).show());
-
-        Log.i("GameRunner", "Running with "+ launchArgs.toString());
-
-        String mainClass = versionInfo.mainClass;
-
-        try {
-            JavaRunner.nativeSetupExit(activity);
-            JavaRunner.startJvm(runtime, javaArgList, launchClassPath, mainClass, launchArgs);
-        }catch (VMLoadException e) {
-            LifecycleAwareAlertDialog.DialogCreator dialogCreator = (dialog, builder) ->
-                builder.setMessage(e.toString(activity)).setPositiveButton(android.R.string.ok, (d, w)->{});
-
-            if(LifecycleAwareAlertDialog.haltOnDialog(activity.getLifecycle(), activity, dialogCreator)) {
-                return;
-            }
-        }
-
-        Tools.restartLauncherActivity(activity);
-        Tools.fullyExit();
+        return true;
     }
 
     private static void disableSplash(File dir) {
@@ -351,11 +228,6 @@ public class GameRunner {
         String injectorUrl = account.authType.injectorUrl;
         if(injectorUrl == null) return;
         javaArgList.add("-javaagent:"+Tools.DIR_DATA+"/authlib-injector/authlib-injector.jar="+injectorUrl);
-    }
-
-    private static void addNoBlocklistArgs(List<String> javaArgList) {
-        if(!LauncherPreferences.PREF_DISABLE_BLOCKLIST) return;
-        javaArgList.add("-javaagent:"+Tools.DIR_DATA+"/noblocklist/NoBlocklist-1.0-SNAPSHOT-all.jar");
     }
 
     // Skip setting essential flags from the version JSON as we already override them
@@ -464,19 +336,160 @@ public class GameRunner {
         return strList;
     }
 
-    public static @NonNull String pickRuntime(Instance instance, int targetJavaVersion) {
-        String runtime = Tools.getSelectedRuntime(instance);
-        String profileRuntime = instance.selectedRuntime;
+    // TODO: check if this working right
+    private Runtime pickRuntime(int targetJavaVersion) {
+        String runtime = instance.selectedRuntime == null ? LauncherPreferences.PREF_DEFAULT_RUNTIME : instance.selectedRuntime;
         Runtime pickedRuntime = MultiRTUtils.read(runtime);
-        if(runtime == null || pickedRuntime.javaVersion == 0 || pickedRuntime.javaVersion < targetJavaVersion) {
+        if(pickedRuntime == null || pickedRuntime.version == 0 || pickedRuntime.version < targetJavaVersion) {
             String preferredRuntime = MultiRTUtils.getNearestJreName(targetJavaVersion);
             if(preferredRuntime == null) throw new RuntimeException("Failed to autopick runtime!");
-            if(profileRuntime != null) {
+            if(instance.selectedRuntime != null) {
                 instance.selectedRuntime = preferredRuntime;
                 instance.maybeWrite();
             }
             runtime = preferredRuntime;
+            pickedRuntime = MultiRTUtils.read(runtime);
         }
-        return runtime;
+        return pickedRuntime;
+    }
+
+    private void fixLog4Shell(List<String> javaArgs){
+        // Fix log4shell
+        if (versionInfo.logging != null && versionInfo.logging.client != null && versionInfo.logging.client.file != null) {
+            String configFile = Tools.DIR_DATA + "/security/" + versionInfo.logging.client.file.id.replace("client", "log4j-rce-patch");
+            if (!new File(configFile).exists()) {
+                configFile = Tools.DIR_GAME_NEW + "/" + versionInfo.logging.client.file.id;
+            }
+            javaArgs.add("-Dlog4j.configurationFile=" + configFile);
+        }
+        versionInfo.logging = null;
+    }
+
+    private List<String> prepareClassPath(File[] classpath){
+        ArrayList<String> launchClassPath = new ArrayList<>(classpath.length);
+        for(int i = 0; i < classpath.length; i++) {
+            File classpathEntry = classpath[i];
+            String entryPath = classpathEntry.getAbsolutePath();
+            if(!classpathEntry.exists()) {
+                Log.w("GameRunner", "Skipped classpath entry " + entryPath + " because it is missing");
+            }
+            launchClassPath.add(entryPath);
+            // Unreference the classpath entry to avoid retaining it on heap
+            classpath[i] = null;
+        }
+        launchClassPath.trimToSize();
+        return launchClassPath;
+    }
+
+    private List<String> prepareJvmArgs(Account account) throws IOException {
+        List<String> javaArgList = new ArrayList<>();
+        File versionSpecificNativesDir = new File(Tools.DIR_CACHE, "natives/"+instance.versionId);
+        if(versionSpecificNativesDir.exists()) {
+            String dirPath = versionSpecificNativesDir.getAbsolutePath();
+            javaArgList.add("-Djava.library.path="+dirPath+":"+Tools.NATIVE_LIB_DIR);
+            javaArgList.add("-Djna.boot.library.path="+dirPath);
+            // Legacy LWJGL2 behavior?
+            javaArgList.add("-Dorg.lwjgl.librarypath="+dirPath);
+        }
+
+        // LWJGL extract path setup
+        File lwjglExtractDir = new File(Tools.DIR_CACHE, "lwjgl_native/"+instance.versionId);
+        FileUtils.ensureDirectory(lwjglExtractDir);
+        javaArgList.add("-Dorg.lwjgl.system.SharedLibraryExtractPath="+lwjglExtractDir.getAbsolutePath());
+
+        // LWJGL hook picks this up and replaces with the correct RenderSpec driver
+        javaArgList.add("-Dorg.lwjgl.opengl.libname=libGLMojo.so");
+        javaArgList.add("-Dorg.lwjgl.freetype.libname="+ Tools.NATIVE_LIB_DIR+"/libfreetype.so");
+
+        addAuthlibInjectorArgs(javaArgList, account);
+        mergeMoJsonArgs(javaArgList, getMoJsonJvmArgs(instance.versionId));
+        fixLog4Shell(javaArgList);
+        javaArgList.addAll(JREUtils.parseJavaArguments(instance.getLaunchArgs()));
+        return javaArgList;
+    }
+
+    @Override
+    public void launchGame() throws Throwable {
+        JREUtils.redirectAndPrintJRELog();
+        if(!checkMemoryAllocation()) return;
+        File gamedir = instance.getGameDirectory();
+        Intent intent = activity.getIntent();
+        if(intent == null) throw new RuntimeException("No intent is present!");
+        // Now we get a classpath to boot
+        Intent activityIntent = activity.getIntent();
+        Bundle extras = Objects.requireNonNull(activityIntent.getExtras());
+        String version = extras.getString(INTENT_LAUNCH_VERSION);
+        File[] classpath = (File[]) extras.getSerializable(INTENT_LAUNCH_CLASSPATH);
+
+        if(version == null || classpath == null) {
+            Tools.runOnUiThread(()->{
+                Toast.makeText(activity, R.string.main_please_restart, Toast.LENGTH_LONG).show();
+                activity.finish();
+            });
+            return;
+        }
+
+        activityIntent.removeExtra(INTENT_LAUNCH_VERSION);
+        activityIntent.removeExtra(INTENT_LAUNCH_CLASSPATH);
+
+        activity.runOnUiThread(() -> {
+            activity.setIntent(activityIntent);
+            activity.setTitle("MojoLauncher (LWJGL) (" + version + ")");
+
+        });
+
+        // Fetch selected account
+        Account account = Accounts.getCurrent();
+        if(account == null) throw new RuntimeException("No account is selected!");
+
+        // We don't need the library list, the asset index, client download info for the code below
+        versionInfo.libraries = null;
+        versionInfo.downloads = null;
+
+        int requiredJavaVersion = 8;
+        if(versionInfo.javaVersion != null) requiredJavaVersion = versionInfo.javaVersion.majorVersion;
+
+        Runtime runtime = pickRuntime(requiredJavaVersion);
+
+        disableSplash(gamedir);
+
+        // Select the appropriate openGL version
+        OldVersionsUtils.selectOpenGlVersion(versionInfo);
+
+        List<String> javaArgs = prepareJvmArgs(account);
+        List<String> gameArgs = getMoJsonClientArgs(account, versionInfo, gamedir);
+        List<String> javaClassPath = prepareClassPath(classpath);
+
+        versionInfo.arguments = null;
+        versionInfo.minecraftArguments = null;
+        versionInfo.assets = null;
+        versionInfo.assetIndex = null;
+
+        JREUtils.setGameEnvironment(activity, versionInfo.environment);
+        JREUtils.chdir(instance.getGameDirectory().getAbsolutePath());
+
+        versionInfo.environment.clear();
+        versionInfo.environment = null;
+
+        activity.runOnUiThread(() -> Toast.makeText(activity, activity.getString(R.string.autoram_info_msg,LauncherPreferences.PREF_RAM_ALLOCATION), Toast.LENGTH_SHORT).show());
+
+        // TODO: strip accessToken
+        Log.i("MCRunner", "Running with "+ gameArgs.toString());
+
+        String mainClass = versionInfo.mainClass;
+
+        // Begin JVM
+        try {
+            Logger.appendToLog("=== BEGIN JVM ===");
+            JavaRunner.nativeSetupExit(activity);
+            JavaRunner.startJvm(runtime, javaArgs, javaClassPath, mainClass, gameArgs);
+        }catch (VMLoadException e) {
+            LifecycleAwareAlertDialog.DialogCreator dialogCreator = (dialog, builder) ->
+                    builder.setMessage(e.toString(activity)).setPositiveButton(android.R.string.ok, (d, w)->{});
+
+            if(LifecycleAwareAlertDialog.haltOnDialog(activity.getLifecycle(), activity, dialogCreator)) {
+                return;
+            }
+        }
     }
 }

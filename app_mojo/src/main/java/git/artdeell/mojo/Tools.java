@@ -40,6 +40,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -55,11 +56,12 @@ import git.artdeell.mojo.instances.Instance;
 import git.artdeell.mojo.utils.lifecycle.ContextExecutor;
 import git.artdeell.mojo.utils.lifecycle.ContextExecutorTask;
 import git.artdeell.mojo.utils.HashUtils;
+import git.artdeell.mojo.utils.lifecycle.LifecycleAwareAlertDialog;
 import git.artdeell.mojo.utils.maven.MavenName;
 import git.artdeell.mojo.utils.maven.MavenNameAdapter;
 import git.artdeell.mojo.utils.memory.MemoryHoleFinder;
 import git.artdeell.mojo.utils.memory.SelfMapsParser;
-import git.artdeell.mojo.multirt.MultiRTUtils;
+import git.artdeell.mojo.runtime.multirt.MultiRTUtils;
 import git.artdeell.mojo.prefs.LauncherPreferences;
 import git.artdeell.mojo.utils.FileUtils;
 import git.artdeell.mojo.utils.GpuUtils;
@@ -455,6 +457,14 @@ public final class Tools {
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok, null)
                 .show();
+    }
+
+    public static boolean showDialogAndHalt(AppCompatActivity activity, int message) throws InterruptedException {
+        LifecycleAwareAlertDialog.DialogCreator dialogCreator = ((alertDialog, dialogBuilder) ->
+                dialogBuilder.setMessage(activity.getString(message))
+                        .setCancelable(false)
+                        .setPositiveButton(android.R.string.ok, (d, w)->{}));
+        return LifecycleAwareAlertDialog.haltOnDialog(activity.getLifecycle(), activity, dialogCreator);
     }
 
     public static void openURL(Activity act, String url) {

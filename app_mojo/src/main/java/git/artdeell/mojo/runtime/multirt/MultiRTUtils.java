@@ -1,4 +1,4 @@
-package git.artdeell.mojo.multirt;
+package git.artdeell.mojo.runtime.multirt;
 
 import static git.artdeell.mojo.Tools.NATIVE_LIB_DIR;
 import static org.apache.commons.io.FileUtils.listFiles;
@@ -12,7 +12,7 @@ import com.kdt.mcgui.ProgressLayout;
 import git.artdeell.mojo.R;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.utils.MathUtils;
-import git.artdeell.mojo.utils.jre.JavaRunner;
+import git.artdeell.mojo.runtime.java.JavaRunner;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
@@ -58,14 +58,14 @@ public class MultiRTUtils {
     public static String getExactJreName(int majorVersion) {
         List<Runtime> runtimes = getRuntimes();
         for(Runtime r : runtimes)
-            if(r.javaVersion == majorVersion)return r.name;
+            if(r.version == majorVersion)return r.name;
 
         return null;
     }
 
     public static String getNearestJreName(int majorVersion) {
         List<Runtime> runtimes = getRuntimes();
-        MathUtils.RankedValue<Runtime> nearestRankedRuntime = MathUtils.findNearestPositive(majorVersion, runtimes, (runtime)->runtime.javaVersion);
+        MathUtils.RankedValue<Runtime> nearestRankedRuntime = MathUtils.findNearestPositive(majorVersion, runtimes, (runtime)->runtime.version);
         if(nearestRankedRuntime == null) return null;
         Runtime nearestRuntime = nearestRankedRuntime.value;
         if(nearestRuntime == null) return null;
@@ -192,7 +192,8 @@ public class MultiRTUtils {
                 } else {
                     javaVersionInt = Integer.parseInt(javaVersionSplit[0]);
                 }
-                returnRuntime = new Runtime(name, javaVersion, osArch, javaVersionInt);
+                // TODO: Improve how runtime root is acquired
+                returnRuntime = new Runtime(name, javaVersion, osArch, new File(RUNTIME_FOLDER, name).getAbsolutePath(), javaVersionInt);
             }else{
                 returnRuntime =  new Runtime(name);
             }
@@ -239,6 +240,11 @@ public class MultiRTUtils {
     private static void installRuntimeNamedNoRemove(InputStream runtimeInputStream, File dest) throws IOException {
         uncompressTarXZ(runtimeInputStream,dest);
         runtimeInputStream.close();
+    }
+
+    // TODO: TEMP
+    public static Runtime TEMP_GetDotnet(){
+        return new Runtime("dotnet", "10", "arm64", Tools.MULTIRT_HOME+"/dotnet", 10);
     }
 
     private static void uncompressTarXZ(final InputStream tarFileInputStream, final File dest) throws IOException {

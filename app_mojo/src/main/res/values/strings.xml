@@ -543,4 +543,5 @@
     <string name="bta_configuring">Configuring BTA…</string>
     <string name="pref_blocklist_disable_title">Disable server blocklist</string>
     <string name="pref_blocklist_disable_description">Prevent the MC server blocklist from loading. This allows you to play on blocked servers (like 6b6t.org)</string>
+    <string name="vintagestory_unsupported_device">Your device does not support Vintage Story on the current renderer</string>
 </resources>

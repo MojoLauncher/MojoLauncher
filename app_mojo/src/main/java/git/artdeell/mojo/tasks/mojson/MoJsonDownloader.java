@@ -15,7 +15,7 @@ import git.artdeell.mojo.Architecture;
 import git.artdeell.mojo.JAssetInfo;
 import git.artdeell.mojo.JAssets;
 import git.artdeell.mojo.JVersionList;
-import git.artdeell.mojo.NewJREUtil;
+import git.artdeell.mojo.runtime.RuntimeManager;
 import git.artdeell.mojo.R;
 
 import git.artdeell.mojo.Tools;
@@ -30,7 +30,7 @@ import git.artdeell.mojo.utils.DownloadUtils;
 import git.artdeell.mojo.utils.FileUtils;
 import git.artdeell.mojo.utils.JSONUtils;
 import git.artdeell.mojo.utils.PresentableException;
-import git.artdeell.mojo.utils.jre.RuntimeSelectionException;
+import git.artdeell.mojo.runtime.java.RuntimeSelectionException;
 import git.artdeell.mojo.utils.maven.MavenName;
 import git.artdeell.mojo.value.DependentLibrary;
 import git.artdeell.mojo.value.LibrarySubstitution;
@@ -303,7 +303,7 @@ public class MoJsonDownloader extends Downloader {
 
         try {
             if (assetManager != null)
-                NewJREUtil.installNewJreIfNeeded(assetManager, verInfo);
+                RuntimeManager.installNewJreIfNeeded(assetManager, verInfo);
         }catch (IOException e) {
             throw new PresentableException(R.string.mjdl_disk_error_title, R.string.mjdl_disk_error_subtitle_2);
         }

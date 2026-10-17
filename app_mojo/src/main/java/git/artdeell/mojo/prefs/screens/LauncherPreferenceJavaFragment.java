@@ -12,7 +12,7 @@ import androidx.preference.EditTextPreference;
 import git.artdeell.mojo.R;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.contracts.OpenDocumentWithExtension;
-import git.artdeell.mojo.multirt.MultiRTConfigDialog;
+import git.artdeell.mojo.runtime.multirt.MultiRTConfigDialog;
 import git.artdeell.mojo.prefs.CustomSeekBarPreference;
 import git.artdeell.mojo.prefs.LauncherPreferences;
 

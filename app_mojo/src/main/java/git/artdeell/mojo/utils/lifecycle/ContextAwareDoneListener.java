@@ -1,7 +1,8 @@
 package git.artdeell.mojo.utils.lifecycle;
 
-import static git.artdeell.mojo.game.GameActivity.INTENT_LAUNCH_CLASSPATH;
-import static git.artdeell.mojo.game.GameActivity.INTENT_LAUNCH_VERSION;
+
+import static git.artdeell.mojo.game.bootstrap.MCRunner.INTENT_LAUNCH_CLASSPATH;
+import static git.artdeell.mojo.game.bootstrap.MCRunner.INTENT_LAUNCH_VERSION;
 
 import android.app.Activity;
 import android.content.Context;

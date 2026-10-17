@@ -27,14 +27,14 @@ import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.input.keyboard.TouchCharInput;
 import git.artdeell.mojo.game.platform.Platform;
 import git.artdeell.mojo.game.platform.backend.AWTBackend;
-import git.artdeell.mojo.multirt.MultiRTUtils;
-import git.artdeell.mojo.multirt.Runtime;
+import git.artdeell.mojo.runtime.multirt.MultiRTUtils;
+import git.artdeell.mojo.runtime.multirt.Runtime;
 import git.artdeell.mojo.prefs.LauncherPreferences;
 import git.artdeell.mojo.utils.JREUtils;
 import git.artdeell.mojo.utils.MathUtils;
-import git.artdeell.mojo.utils.jre.JavaRunner;
-import git.artdeell.mojo.utils.jre.classfile.ClassFormatException;
-import git.artdeell.mojo.utils.jre.classfile.ClassVersionReader;
+import git.artdeell.mojo.runtime.java.JavaRunner;
+import git.artdeell.mojo.runtime.java.classfile.ClassFormatException;
+import git.artdeell.mojo.runtime.java.classfile.ClassVersionReader;
 
 import org.apache.commons.io.IOUtils;
 

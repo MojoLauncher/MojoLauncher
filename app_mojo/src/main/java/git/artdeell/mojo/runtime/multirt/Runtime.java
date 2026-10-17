@@ -1,4 +1,4 @@
-package git.artdeell.mojo.multirt;
+package git.artdeell.mojo.runtime.multirt;
 
 import java.util.Objects;
 
@@ -6,18 +6,21 @@ public class Runtime {
     public final String name;
     public final String versionString;
     public final String arch;
-    public final int javaVersion;
+    public final int version;
+    public final String root;
     public Runtime(String name) {
         this.name = name;
         this.versionString = null;
         this.arch = null;
-        this.javaVersion = 0;
+        this.root = null;
+        this.version = 0;
     }
-    Runtime(String name, String versionString, String arch, int javaVersion) {
+    Runtime(String name, String versionString, String arch, String root, int version) {
         this.name = name;
         this.versionString = versionString;
         this.arch = arch;
-        this.javaVersion = javaVersion;
+        this.version = version;
+        this.root = root;
     }
     
 

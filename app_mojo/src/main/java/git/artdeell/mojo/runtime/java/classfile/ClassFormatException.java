@@ -1,4 +1,4 @@
-package git.artdeell.mojo.utils.jre.classfile;
+package git.artdeell.mojo.runtime.java.classfile;
 
 public class ClassFormatException extends Exception {
     public ClassFormatException(String s) {

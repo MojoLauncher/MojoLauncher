@@ -2,9 +2,9 @@ package git.artdeell.mojo.modding.bta;
 
 import com.kdt.mcgui.ProgressLayout;
 
-import git.artdeell.mojo.utils.jre.classfile.ClassFormatException;
-import git.artdeell.mojo.utils.jre.classfile.ClassVersionReader;
-import git.artdeell.mojo.utils.jre.classfile.ConstantFieldReader;
+import git.artdeell.mojo.runtime.java.classfile.ClassFormatException;
+import git.artdeell.mojo.runtime.java.classfile.ClassVersionReader;
+import git.artdeell.mojo.runtime.java.classfile.ConstantFieldReader;
 
 import java.io.File;
 import java.io.FileInputStream;

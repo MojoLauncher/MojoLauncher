@@ -1,4 +1,4 @@
-package git.artdeell.mojo;
+package git.artdeell.mojo.runtime;
 
 import static git.artdeell.mojo.Architecture.archAsString;
 
@@ -7,15 +7,18 @@ import android.util.Log;
 
 import com.kdt.mcgui.ProgressLayout;
 
+import git.artdeell.mojo.JVersionList;
+import git.artdeell.mojo.R;
+import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.instances.Instance;
 import git.artdeell.mojo.instances.Instances;
-import git.artdeell.mojo.multirt.MultiRTUtils;
-import git.artdeell.mojo.multirt.Runtime;
+import git.artdeell.mojo.runtime.multirt.MultiRTUtils;
+import git.artdeell.mojo.runtime.multirt.Runtime;
 import git.artdeell.mojo.progresskeeper.DownloaderProgressWrapper;
 import git.artdeell.mojo.utils.DownloadUtils;
 import git.artdeell.mojo.utils.MathUtils;
 import git.artdeell.mojo.utils.SignatureCheckUtil;
-import git.artdeell.mojo.utils.jre.RuntimeSelectionException;
+import git.artdeell.mojo.runtime.java.RuntimeSelectionException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class NewJREUtil {
+public class RuntimeManager {
     private static final String DOWNLOAD_URL = "https://mojolauncher.github.io/jre-download/";
     
     private static String getRemoteRuntimeVersion(InternalRuntime internalRuntime) throws IOException{
@@ -139,7 +142,7 @@ public class NewJREUtil {
 
     private static MathUtils.RankedValue<Runtime> getNearestInstalledRuntime(int targetVersion) {
         List<Runtime> runtimes = MultiRTUtils.getRuntimes();
-        return MathUtils.findNearestPositive(targetVersion, runtimes, (runtime)->runtime.javaVersion);
+        return MathUtils.findNearestPositive(targetVersion, runtimes, (runtime)->runtime.version);
     }
 
     private static MathUtils.RankedValue<InternalRuntime> getNearestInternalRuntime(int targetVersion) {
@@ -158,7 +161,7 @@ public class NewJREUtil {
         String profileRuntime = Tools.getSelectedRuntime(instance);
         Runtime runtime = MultiRTUtils.read(profileRuntime);
         // Partly trust the user with his own selection, if the game can even try to run in this case
-        if (runtime.javaVersion >= gameRequiredVersion) {
+        if (runtime.version >= gameRequiredVersion) {
             // Check whether the selection is an internal runtime
             InternalRuntime internalRuntime = getInternalRuntime(runtime);
             // If it is, check if updates are available from the APK file
