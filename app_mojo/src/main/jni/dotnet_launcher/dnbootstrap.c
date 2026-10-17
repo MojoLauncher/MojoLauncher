@@ -1,5 +1,4 @@
 #include <jni.h>
-#include <android/log.h>
 #include <linux/limits.h>
 #include <dlfcn.h>
 #include <unistd.h>
@@ -13,9 +12,7 @@
 #include "include/hostfxr.h"
 #include <android/looper.h>
 #include "include/libnethost.h"
-
-#define LOGI(...) __android_log_print(ANDROID_LOG_INFO, __FILE_NAME__, __VA_ARGS__)
-#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, __FILE_NAME__, __VA_ARGS__)
+#include "log.h"
 
 //
 // Created by maks on 14.12.2025.
