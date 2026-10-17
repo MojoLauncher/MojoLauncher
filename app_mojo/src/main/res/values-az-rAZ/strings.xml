@@ -10,7 +10,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">Bu hesab silinəcək!</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">Mod quraşdırıcısını seçin</string>
     <!-- Error messages -->
     <string name="error_fatal">MJLauncher gözlənilmədən çökdü</string>
     <string name="error_no_version">Versiya yoxdur!</string>
@@ -18,7 +17,6 @@
     <string name="error_show_less">Daha az göstər</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">Yaddaşı oxumaq/yazmaq icazəsi tələb olunur!</string>
-    <string name="toast_optifine_success">Uğurlu quraşdırma</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -26,10 +24,7 @@
     <string name="mcl_tab_wiki">Viki</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">Keş faylları təmizlənir</string>
-    <string name="mcl_launch_downloading">Endirilir %s</string>
     <string name="mcl_launch_downloading_progress">"Endirilir %s (%.2f MB / %.2f MB)"</string>
-    <string name="mcl_launch_download_assets">Resursları endirməyə hazırlanır</string>
     <string name="mcl_options">Seçimlər</string>
     <string name="mcl_option_customcontrol">Fərdi idarəetmələr</string>
     <string name="mcl_setting_title_use_surface_view">Alternativ səth renderindən istifadə edin</string>
@@ -74,7 +69,6 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Proqram/Oyun %d kodu ilə çıxdı, ətraflı məlumat üçün latestlog.txt-ə baxın.</string>
     <string name="mcn_exit_confirm">Zorla bağlamaq istədiyinizə əminsiniz?</string>
-    <string name="mcn_check_fail_vulkan_support">Zink (Vulkan) rendereri bu cihazda dəstəklənmir!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">Söhbət</string>
     <string name="control_debug">Sazlama</string>
@@ -95,7 +89,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">Bağlamağa zorla</string>
     <string name="control_viewout">Log çıxışı</string>
-    <string name="control_adebug">Sazlama daxil et</string>
     <string name="control_customkey">Fərdi açar kodunu göndərin</string>
     <!-- ImportControlActivity Strings -->
     <string name="import_control_label">Kontrolları idxal et</string>
@@ -127,11 +120,6 @@
     <string name="main_install_jar_file">.jar icra edin</string>
     <string name="main_play">Oyna</string>
     <string name="autoram_info_msg">Yaddaş %d MB olaraq təyin edildi</string>
-    <string name="mcl_setting_check_libraries">Yüklədikdən sonra kitabxanaları yoxlayın</string>
-    <string name="mcl_setting_check_libraries_subtitle">Bu seçim başlatma qurğusunu kitabxana hashının mövcud olub-olmadığını yoxlamağa məcbur edir. Zədələnmiş endirmələrin qarşısını alır.</string>
-    <string name="dl_library_sha_fail">Kitabxana %s zədələnib və yenidən yüklənəcək</string>
-    <string name="dl_library_sha_unknown">Kitabxananın %s yoxlamaq mümkün deyil, onun yaxşı olduğunu düşünmək lazımdır</string>
-    <string name="dl_library_sha_pass">Kitabxana %s yaxşı və istifadəyə yararlıdır</string>
     <string name="mcl_disable_gestures">Jestləri söndürün</string>
     <string name="mcl_disable_gestures_subtitle">Blokları qırmaq üçün basıb saxlayın və blok qoymaq üçün klikləyin kimi jestləri deaktiv edir.</string>
     <string name="mcl_disable_swap_hand">Əlləri dəyişmək üçün iki dəfə toxunmağı deaktiv edin</string>
@@ -155,7 +143,6 @@
     <string name="multirt_config_setdefault">Defolt təyin edin</string>
     <string name="multirt_config_setdefault_already">Defolt</string>
     <string name="multirt_config_removeerror_last">Ən azı bir Java Runtime quraşdırılmış olmalıdır.</string>
-    <string name="multirt_nojava8rt">Java 8-i tapmaq mümkün deyil. Bu seçimdən istifadə etmək üçün Java 8-i quraşdırmalısınız.</string>
     <string name="multirt_delete_runtime">Runtime-ı silin</string>
     <string name="pvc_gameDirectory">Oyun kataloqu</string>
     <string name="pvc_jvmArgs">JVM arqumentləri</string>
@@ -223,7 +210,6 @@
     <string name="preference_enable_gyro_description">Bunu aktivləşdirmək sizə telefonunuzu çevirərək oyundaxili dönmə eməyə imkan verəcək.</string>
     <string name="preference_gyro_sensitivity_title">Gyroskop həssaslığını idarə edin</string>
     <string name="preference_gyro_sensitivity_description">Giroskop nəzarətlərinin həssaslığını tənzimləyin.</string>
-    <string name="toast_turn_on_gyro">Bunu istifadə etmək üçün əvvəlcə giroskop nəzarətlərini aktiv edin!</string>
     <string name="preference_gyro_sample_rate_title">Gyroskopdan nümunə götürmə dərəcəsi</string>
     <string name="preference_gyro_sample_rate_description">Giroskop idarəetmələri ilə bağlı performans probleminiz varsa, bunu artırın.</string>
     <string name="microsoft_login_retry_later">Həddindən artıq sorğu var, sonra yenidən cəhd edin.</string>
@@ -248,8 +234,6 @@
     <string name="preference_force_big_core_title">Rendereri böyük nüvədə işləməyə məcbur edin</string>
 
     <string name="version_select_hint">Bir versiya seçin</string>
-    <string name="forge_dl_progress">%s üçün quraşdırıcı endirilir</string>
-    <string name="forge_dl_searching">Forge versiya nömrəsi axtarılır</string>
     <string name="modloader_dl_failed_to_load_list">Versiya siyahısını yükləmək alınmadı!</string>
     <string name="forge_dl_no_installer">Üzr istəyirik, lakin Forge-un bu versiyasında hələ dəstəklənməyən quraşdırıcı yoxdur.</string>
     <string name="forge_dl_select_version">Forge versiyasını seçin</string>
@@ -263,7 +247,6 @@
     <string name="fabric_dl_loader_title">Versiyaları seçin</string>
     <string name="of_dl_select_version">OptiFine versiyasını seçin</string>
     <string name="of_dl_failed_to_scrape">OptiFine quraşdırılması üçün məlumat toplamaq alınmadı</string>
-    <string name="of_dl_progress">Endirilir %s</string>
     <string name="hint_search_modpack">Mod paketləri axtarın</string>
     <string name="preference_vulkan_driver_system_title">Sistem vulkan sürücüsündən istifadə edin</string>
     <string name="preference_vulkan_driver_system_description">Başladıcını Adreno GPU-larda Turnip əvəzinə sistem Vulkan sürücüsündən istifadə etməyə məcbur edin. Yalnız Zink və Vulkandan istifadə edən modlara təsir edir.</string>
@@ -274,13 +257,9 @@
     <string name="search_modpack_error">Mod paketləri tapmaq alınmadı</string>
     <string name="search_modpack_download_error">Modpack metadatasını endirmək alınmadı</string>
     <string name="modpack_download_downloading_metadata">Modpack metadatası endirilir (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods">Modlar endirilir (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods_fc">Modlar endirilir (%d fayldan %d fayl)</string>
     <string name="modpack_download_applying_overrides">Ləğvetmələr tətbiq edilir (%d/%d)</string>
     <string name="modpack_install_notification_title">MJ Mod paket quraşdırıcısı</string>
     <string name="modpack_install_notification_success">Modpack quraşdırılmasını başa çatdırmaq üçün bura klikləyin</string>
-    <string name="modpack_install_notification_data_not_available">Mod yükləyicisi məlumatını endirmək alınmadı</string>
-    <string name="modpack_install_modloader_download_failed">Mod yükləyici fayllarını endirmək alınmadı</string>
     <string name="modpack_install_download_failed">Modpack fayllarını yükləmək alınmadı</string>
     <string name="notif_error_occured">Bir xəta baş verdi</string>
     <string name="notif_error_occured_desc">Daha çox təfərrüatları görmək üçün klikləyin</string>
@@ -310,9 +289,6 @@
     <string name="notification_permission_toast">Daha sonra Parametrlərə daxil olaraq fikrinizi dəyişə bilərsiniz</string>
     <string name="preference_ask_for_notification_title">Bildirişlərə icazə verin</string>
     <string name="preference_ask_for_notification_description">Oyun/modpack fon yükləmələrinin düzgün işləməsi üçün tələb olunan bildiriş icazəsini yenidən tələb etmək üçün klikləyin.</string>
-    <string name="preference_vsync_in_zink_title">Zink ilə V-Sync-ə icazə verin</string>
-    <string name="preference_vsync_in_zink_description">Başladıcıya Zink üçün V-Sync-i aktivləşdirmək məqsədilə daxili sistem API-lərindən istifadə etməyə icazə verir. Başladıcınız sistem yeniləməsindən sonra qəfil Zink ilə çökərsə, bunu söndürün.</string>
-    <string name="exception_failed_to_unpack_jre17">JRE 17 quraşdırmaq alınmadı</string>
     <string name="newdl_starting">Oyun metadatası oxunur…</string>
     <string name="newdl_downloading_metadata">Oyun metadatası endirilir (%s)</string>
     <string name="controller_button_a">A</string>
