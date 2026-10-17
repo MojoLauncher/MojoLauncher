@@ -41,7 +41,7 @@ bool apiRequiresHints() {
 }
 
 void throwException(JNIEnv *env, jint loadStage, jint errorCode, const char* errorInfo) {
-    jclass loadException = (*env)->FindClass(env, "git/artdeell/mojo/utils/jre/VMLoadException");
+    jclass loadException = (*env)->FindClass(env, "git/artdeell/mojo/runtime/java/VMLoadException");
     if(loadException == NULL) {
         jthrowable exception = (*env)->ExceptionOccurred(env);
         (*env)->Throw(env, exception);
@@ -195,7 +195,7 @@ static void prepareSignalHandlers() {
 extern bool installClassLoaderHooks(JNIEnv *env, JNIEnv* vm_env);
 
 JNIEXPORT jboolean JNICALL
-Java_git_artdeell_mojo_utils_jre_JavaRunner_nativeLoadJVM(JNIEnv *env, jclass clazz, jstring vmpath, jlong vmArgsL, jstring mainClass, jlong appArgsL, jboolean hasJavaAgents) {
+Java_git_artdeell_mojo_runtime_java_JavaRunner_nativeLoadJVM(JNIEnv *env, jclass clazz, jstring vmpath, jlong vmArgsL, jstring mainClass, jlong appArgsL, jboolean hasJavaAgents) {
     heap_str_array* vmArgs = (heap_str_array*) vmArgsL;
     heap_str_array* appArgs = (heap_str_array*) appArgsL;
     java_vm_t java_vm;
@@ -235,7 +235,7 @@ Java_git_artdeell_mojo_utils_jre_JavaRunner_nativeLoadJVM(JNIEnv *env, jclass cl
 }
 
 JNIEXPORT jlong JNICALL
-Java_git_artdeell_mojo_utils_jre_JavaRunner_nativeTransferArguments(JNIEnv *env, jclass clazz,
+Java_git_artdeell_mojo_runtime_java_JavaRunner_nativeTransferArguments(JNIEnv *env, jclass clazz,
                                                                       jobjectArray args) {
     return (jlong) hstr_from_jni(env, args);
 }
