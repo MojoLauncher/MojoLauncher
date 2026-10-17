@@ -467,9 +467,10 @@ public class MCRunner implements GameRunner {
 
         JREUtils.setGameEnvironment(activity, versionInfo.environment);
         JREUtils.chdir(instance.getGameDirectory().getAbsolutePath());
-
-        versionInfo.environment.clear();
-        versionInfo.environment = null;
+        if(versionInfo.environment != null) {
+            versionInfo.environment.clear();
+            versionInfo.environment = null;
+        }
 
         activity.runOnUiThread(() -> Toast.makeText(activity, activity.getString(R.string.autoram_info_msg,LauncherPreferences.PREF_RAM_ALLOCATION), Toast.LENGTH_SHORT).show());
 
