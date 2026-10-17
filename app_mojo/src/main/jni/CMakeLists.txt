@@ -45,12 +45,13 @@ add_library(pojavexec SHARED
         jre_launcher/native_library_hook.c
         jre_launcher/elf_hinter.c
         jre_launcher/abort_wait.c
+		dotnet_launcher/dnbootstrap.c
         utils.c
         stdio_is.c
         minibridge.c
 )
 
-target_include_directories(pojavexec PRIVATE .)
+target_include_directories(pojavexec PRIVATE . dotnet_launcher/nethost)
 target_link_libraries(pojavexec PRIVATE log mojoexec)
 
 add_library(pojavexec_awt SHARED
