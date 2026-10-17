@@ -98,6 +98,6 @@ public class VintageRunner implements GameRunner {
 
         Logger.appendToLog("=== BEGIN .NET ===");
         Log.i("VintageRunner", "Running VS in:" + trueVsDir);
-        DotnetStarter.runDotnet(dotnet.root, trueVsDir.getAbsolutePath());
+        DotnetStarter.startDotnet(dotnet.root, trueVsDir.getAbsolutePath(), "Vintagestory.dll");
     }
 }

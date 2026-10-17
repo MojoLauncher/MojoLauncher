@@ -13,6 +13,7 @@
 #include <android/looper.h>
 #include "include/libnethost.h"
 #include "log.h"
+#include "utils.h"
 
 //
 // Created by maks on 14.12.2025.
@@ -35,13 +36,13 @@ static int dnb_find_hostfxr(const char* dotnet_root, char_t path_buf[PATH_MAX]) 
 
     void* nethost = dlopen("libnethost.so", RTLD_NOW | RTLD_LOCAL);
     if(!nethost) {
-        LOGI("Cannot dlopen nethost: %s", dlerror());
+        LOGE("Cannot dlopen nethost: %s", dlerror());
         return 9; // idk random number
     }
 
     PFNGET_HOSTFXR_PATH get_path = (PFNGET_HOSTFXR_PATH) dlsym(nethost, "get_hostfxr_path");
     if(!get_path) {
-        LOGI("Cannot resolve nethost symbol");
+        LOGE("Cannot resolve nethost symbol");
         return 10;
     }
 
@@ -50,41 +51,37 @@ static int dnb_find_hostfxr(const char* dotnet_root, char_t path_buf[PATH_MAX]) 
     return result;
 }
 
-// TODO: decouple from VintageStory
-static void dnb_run_v2(void* hostfxr_ptr, const char* dotnetRoot) {
+static void dnb_run_v2(void* hostfxr_ptr, const char* dotnetRoot, heap_str_array* args) {
     hostfxr_main_startupinfo_fn main_startupinfo_fn = dlsym(hostfxr_ptr, "hostfxr_main_startupinfo");
-    //setenv("MONO_ENV_OPTIONS", "--trace=T:Vintagestory.Client.NoObf.ShaderProgramFinal", true);
-    //setenv("MONO_ENV_OPTIONS", "--interpreter", true);
-    char hostPath[PATH_MAX];
-    snprintf(hostPath, PATH_MAX, "%s/%s", dotnetRoot, "dotnet");
     char appPath[PATH_MAX];
     snprintf(appPath, PATH_MAX, "%s/%s", dotnetRoot, "dotnet.dll");
 
-    const char* argv[] = { hostPath, "Vintagestory.dll" };
-    const int argc = 2;
-
     LOGI("dotnetRoot: %s appPath: %s", dotnetRoot, appPath);
-    pthread_setname_np(pthread_self(), "dnb main thread");
-    int rc = main_startupinfo_fn(argc, argv, hostPath, dotnetRoot, appPath);
+    pthread_setname_np(pthread_self(), ".NET Main thread");
+    int rc = main_startupinfo_fn(args->length, args->strings, args->strings[0], dotnetRoot, appPath);
     LOGI("hostfxr done: %x", rc);
 }
 
 JNIEXPORT void JNICALL
-Java_git_artdeell_mojo_runtime_dotnet_DotnetStarter_runDotnet(JNIEnv *env, jobject thiz,
-                                                     jstring dotnetRoot, jstring vsDir) {
+Java_git_artdeell_mojo_runtime_dotnet_DotnetStarter_nrunDotnet(JNIEnv *env, jobject thiz,
+                                                     jstring dotnetRoot, jstring rootDir, jobjectArray args) {
     char_t path_buf[PATH_MAX];
     const char* dotnet_root = (*env)->GetStringUTFChars(env, dotnetRoot, NULL);
     uint32_t result = dnb_find_hostfxr(dotnet_root, path_buf);
 
     if(result != 0) {
-        LOGI("Cannot find hostfxr: %x", result);
+        LOGE("Cannot find hostfxr: %x", result);
+        return;
     }
 
     void* hostfxr_ptr = dlopen(path_buf, RTLD_NOW);
 
-    const char* vs_dir = (*env)->GetStringUTFChars(env, vsDir, NULL);
-    chdir(vs_dir);
-    (*env)->ReleaseStringUTFChars(env, vsDir, vs_dir);
+    heap_str_array* hargs = hstr_from_jni(env, args);
 
-    dnb_run_v2(hostfxr_ptr, dotnet_root);
+    const char* root_dir = (*env)->GetStringUTFChars(env, rootDir, NULL);
+    chdir(root_dir);
+    (*env)->ReleaseStringUTFChars(env, rootDir, root_dir);
+
+    dnb_run_v2(hostfxr_ptr, dotnet_root, hargs);
+    hstr_free(hargs);
 }
