@@ -17,6 +17,7 @@ import git.artdeell.mojo.authenticator.accounts.Accounts;
 import git.artdeell.mojo.game.renderer.def.Renderers;
 import git.artdeell.mojo.game.renderer.impl.GLESRenderSpec;
 import git.artdeell.mojo.instances.Instance;
+import git.artdeell.mojo.utils.RendererUtils;
 import git.artdeell.mojo.utils.lifecycle.LifecycleAwareAlertDialog;
 import git.artdeell.mojo.runtime.multirt.MultiRTUtils;
 import git.artdeell.mojo.runtime.multirt.Runtime;
@@ -71,7 +72,7 @@ public class MCRunner implements GameRunner {
 
         // Switch renderer to GL4ES when running a compat context version on LTW
         if(isCompatContext(versionInfo) && !ModUtils.hasAngelica(gamedir) && renderer instanceof GLESRenderSpec.LTWRenderSpec) {
-            return switchRendererIfSupported(gameRenderer,true, GameRenderer.getKnownRenderer(Renderers.GL4ES_RENDERER), 0);
+            return RendererUtils.switchRendererIfSupported(activity, instance, gameRenderer,true, GameRenderer.getKnownRenderer(Renderers.GL4ES_RENDERER), 0);
         }
 
         boolean isGl4es = renderer instanceof GLESRenderSpec.GL4ESRenderSpec;
@@ -79,12 +80,12 @@ public class MCRunner implements GameRunner {
         boolean ltwSupported = ltw != null && ltw.compatibleDevice(activity);
         // Block Sodium from running with GL4ES on 1.17+
         if(!isCompatContext(versionInfo) && isGl4es && ModUtils.hasSodium(gamedir)) {
-            return switchRendererIfSupported(gameRenderer, ltwSupported, ltw, R.string.compat_sodium_not_supported);
+            return RendererUtils.switchRendererIfSupported(activity, instance, gameRenderer, ltwSupported, ltw, R.string.compat_sodium_not_supported);
         }
 
         // Switch renderer to LTW when running 1.21.5
         if(!isGl4esCompatible(versionInfo) && isGl4es) {
-            return switchRendererIfSupported(gameRenderer, ltwSupported, ltw, R.string.compat_sodium_not_supported);
+            return RendererUtils.switchRendererIfSupported(activity, instance, gameRenderer, ltwSupported, ltw, R.string.compat_sodium_not_supported);
         }
         return true;
     }
@@ -154,18 +155,6 @@ public class MCRunner implements GameRunner {
     private static boolean isCompatContext(JVersionList.Version version) throws Exception{
         // Day before the release date of 21w10a, the first OpenGL 3 Core Minecraft version
         return DateUtils.dateBefore(DateUtils.getOriginalReleaseDate(version), 2021, 3, 9);
-    }
-
-    // Autoswitch to provided renderer if supported, otherwise - crash with resId dialog message
-    private boolean switchRendererIfSupported(GameRenderer gameRenderer, boolean support, RenderSpec renderer, int resId) throws InterruptedException, IOException {
-        if(support) {
-            instance.renderer = renderer.tag();
-            instance.write();
-            gameRenderer.setCurrentRenderer(renderer);
-        }else {
-            Tools.showDialogAndHalt(activity, resId);
-        }
-        return support;
     }
 
     // Check & show memory allocation warning dialog if needed
