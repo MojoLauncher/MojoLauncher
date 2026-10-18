@@ -1,4 +1,4 @@
-<H1 align="center">MojoLauncher (a.k.a. MJLauncher)</H1>
+<H1 align="center">AshishGamerz</H1>
 
 <a href="./README_RU.md">Readme на русском</a>
 
