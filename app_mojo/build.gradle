@@ -80,7 +80,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "git.artdeell.mjlaunch"
+        applicationId "Com.mycustom.craftlauncher"
         minSdkVersion 21
         targetSdkVersion 36
         versionCode getDateSeconds()
