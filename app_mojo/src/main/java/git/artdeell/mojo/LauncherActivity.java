@@ -32,6 +32,8 @@ import git.artdeell.mojo.extra.ExtraListener;
 import git.artdeell.mojo.fragments.MainMenuFragment;
 import git.artdeell.mojo.fragments.MicrosoftLoginFragment;
 import git.artdeell.mojo.fragments.SelectAuthFragment;
+import git.artdeell.mojo.game.GameType;
+import git.artdeell.mojo.game.bootstrap.GameRunner;
 import git.artdeell.mojo.instances.Instance;
 import git.artdeell.mojo.instances.InstanceInstaller;
 import git.artdeell.mojo.instances.Instances;
@@ -101,37 +103,22 @@ public class LauncherActivity extends BaseActivity {
 
     private final ExtraListener<Boolean> mLaunchGameListener = (key, value) -> {
         if(!ProgressLayout.ensureNoOngoingTasks(this)) return false;
-
         Instance selectedInstance = Instances.loadSelectedInstance();
-
         if(selectedInstance == null) {
             Toast.makeText(this, R.string.no_instance, Toast.LENGTH_LONG).show();
             return false;
         }
-
         if(selectedInstance.installer != null) {
             selectedInstance.installer.start();
             return false;
         }
-
-        if (!Tools.isValidString(selectedInstance.versionId)){
-            Toast.makeText(this, R.string.error_no_version, Toast.LENGTH_LONG).show();
-            return false;
-        }
-
-        if(Accounts.getCurrent() == null){
+        GameType game = selectedInstance.type;
+        if(Accounts.getCurrent() == null && game.hasAccounts){
             Toast.makeText(this, R.string.no_saved_accounts, Toast.LENGTH_LONG).show();
             ExtraCore.setValue(ExtraConstants.SELECT_AUTH_METHOD, true);
             return false;
         }
-        String normalizedVersionId = MoJsonExtras.normalizeVersionId(selectedInstance.versionId);
-        JVersionList.Version mcVersion = MoJsonExtras.getListedVersion(normalizedVersionId);
-        new MoJsonDownloader().start(
-                this.getAssets(),
-                mcVersion,
-                normalizedVersionId,
-                new ContextAwareDoneListener(this, normalizedVersionId)
-        );
+        GameRunner.pickGameRunner(game).bootstrapGame();
         return false;
     };
 

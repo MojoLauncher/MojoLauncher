@@ -1,5 +1,11 @@
 package git.artdeell.mojo.game.bootstrap;
 
+import static git.artdeell.mojo.game.bootstrap.MCRunner.INTENT_LAUNCH_CLASSPATH;
+import static git.artdeell.mojo.game.bootstrap.MCRunner.INTENT_LAUNCH_VERSION;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.system.Os;
 import android.util.Log;
 
@@ -7,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import git.artdeell.mojo.Logger;
 import git.artdeell.mojo.Tools;
+import git.artdeell.mojo.game.GameActivity;
 import git.artdeell.mojo.game.renderer.GameRenderer;
 import git.artdeell.mojo.game.renderer.RenderSpec;
 import git.artdeell.mojo.game.renderer.def.Renderers;
@@ -17,13 +24,18 @@ import java.io.File;
 import java.io.IOException;
 
 import git.artdeell.mojo.R;
+import git.artdeell.mojo.progresskeeper.ProgressKeeper;
 import git.artdeell.mojo.runtime.dotnet.DotnetStarter;
 import git.artdeell.mojo.runtime.multirt.MultiRTUtils;
 import git.artdeell.mojo.runtime.multirt.Runtime;
 import git.artdeell.mojo.utils.RendererUtils;
 import git.artdeell.mojo.utils.SymlinkUtils;
+import git.artdeell.mojo.utils.lifecycle.ContextAwareDoneListener;
+import git.artdeell.mojo.utils.lifecycle.ContextExecutor;
+import git.artdeell.mojo.utils.lifecycle.ContextExecutorTask;
+import git.artdeell.mojo.utils.lifecycle.GameStartTask;
 
-public class VintageRunner implements GameRunner {
+public class VintageRunner extends GameStartTask implements GameRunner {
     private AppCompatActivity activity;
     private Instance instance;
     @Override
@@ -87,5 +99,17 @@ public class VintageRunner implements GameRunner {
         Logger.appendToLog("=== BEGIN .NET ===");
         Log.i("VintageRunner", "Running VS in:" + trueVsDir);
         DotnetStarter.startDotnet(dotnet.root, trueVsDir.getAbsolutePath(), "Vintagestory.dll");
+    }
+
+    @Override
+    public void bootstrapGame() {
+        ProgressKeeper.waitUntilDone(() -> ContextExecutor.execute(this));
+    }
+
+    @Override
+    protected Intent createGameStartIntent(Context context) {
+        Intent mainIntent = new Intent(context, GameActivity.class);
+        mainIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        return mainIntent;
     }
 }

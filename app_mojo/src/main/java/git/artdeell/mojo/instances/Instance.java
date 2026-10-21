@@ -5,6 +5,7 @@ import android.os.Build;
 import android.util.Log;
 
 import git.artdeell.mojo.Tools;
+import git.artdeell.mojo.game.GameType;
 import git.artdeell.mojo.prefs.LauncherPreferences;
 import git.artdeell.mojo.utils.JSONUtils;
 
@@ -28,6 +29,8 @@ public class Instance extends DisplayInstance {
     public String selectedRuntime;
     public String controlLayout;
     public boolean sharedData;
+
+    public GameType type;
 
     protected Instance() {
     }

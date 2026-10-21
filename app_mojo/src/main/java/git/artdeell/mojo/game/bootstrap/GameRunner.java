@@ -23,4 +23,5 @@ public interface GameRunner {
     boolean ensureRendererCompatible(GameRenderer gameRenderer) throws Exception;
     void checkRendererQuirks(GameRenderer gameRenderer) throws Exception;
     void launchGame() throws Throwable;
+    void bootstrapGame();
 }

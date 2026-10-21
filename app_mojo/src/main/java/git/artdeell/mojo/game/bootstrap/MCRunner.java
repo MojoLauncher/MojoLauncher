@@ -17,7 +17,10 @@ import git.artdeell.mojo.authenticator.accounts.Accounts;
 import git.artdeell.mojo.game.renderer.def.Renderers;
 import git.artdeell.mojo.game.renderer.impl.GLESRenderSpec;
 import git.artdeell.mojo.instances.Instance;
+import git.artdeell.mojo.tasks.mojson.MoJsonDownloader;
+import git.artdeell.mojo.tasks.mojson.MoJsonExtras;
 import git.artdeell.mojo.utils.RendererUtils;
+import git.artdeell.mojo.utils.lifecycle.ContextAwareDoneListener;
 import git.artdeell.mojo.utils.lifecycle.LifecycleAwareAlertDialog;
 import git.artdeell.mojo.runtime.multirt.MultiRTUtils;
 import git.artdeell.mojo.runtime.multirt.Runtime;
@@ -481,5 +484,21 @@ public class MCRunner implements GameRunner {
                 return;
             }
         }
+    }
+
+    @Override
+    public void bootstrapGame() {
+        String normalizedVersionId = MoJsonExtras.normalizeVersionId(instance.versionId);
+        JVersionList.Version mcVersion = MoJsonExtras.getListedVersion(normalizedVersionId);
+        new MoJsonDownloader().start(
+                activity.getAssets(),
+                mcVersion,
+                normalizedVersionId,
+                new ContextAwareDoneListener(activity, normalizedVersionId)
+        );
+    }
+
+    public static void runMC() {
+
     }
 }
