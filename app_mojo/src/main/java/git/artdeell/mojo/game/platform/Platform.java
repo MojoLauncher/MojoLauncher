@@ -227,12 +227,12 @@ public class Platform {
     }
 
     /**
-     * Send mouse event (click) to the platform implementation
-     * Prefer using this over {@link PlatformBackend#sendMouseEvent(int, int, int, double, double, boolean)}
+     * Send mouse button event to the platform implementation
+     * Prefer using this over {@link PlatformBackend#sendMouseButtonEvent(int, int, int)
      *
      */
-    public static void sendMouseEvent(int button, int state, int mods) {
-        PLATFORM.sendMouseEvent(button, state, mods, Platform.cursorX, Platform.cursorY, isGrabbing);
+    public static void sendMouseButtonEvent(int button, int state, int mods) {
+        PLATFORM.sendMouseButtonEvent(button, state, mods);
     }
 
     /**

@@ -544,4 +544,8 @@
     <string name="pref_blocklist_disable_title">Disable server blocklist</string>
     <string name="pref_blocklist_disable_description">Prevent the MC server blocklist from loading. This allows you to play on blocked servers (like 6b6t.org)</string>
     <string name="vintagestory_unsupported_device">Your device does not support Vintage Story on the current renderer</string>
+    <string name="pref_clean_partfiles_title">Clear download cache</string>
+    <string name="pref_clean_partfiles_subtitle_wait">Clear partially downloaded game files. Calculating used space…</string>
+    <string name="pref_clean_partfiles_subtitle">Clear partially downloaded game files. %.2f MB of space in use</string>
+    <string name="clean_partfiles_wait">Clearing download cache…</string>
 </resources>

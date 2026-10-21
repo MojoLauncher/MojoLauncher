@@ -12,11 +12,12 @@ import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.kdt.mcgui.ProgressLayout;
 
 import git.artdeell.mojo.MojoApplication;
 import git.artdeell.mojo.R;
@@ -28,7 +29,6 @@ import git.artdeell.mojo.modding.fabric.FabricVersion;
 import git.artdeell.mojo.modding.ModloaderDownloadListener;
 import git.artdeell.mojo.modding.ModloaderListenerProxy;
 import git.artdeell.mojo.modding.modpacks.SelfReferencingFuture;
-import git.artdeell.mojo.progresskeeper.ProgressKeeper;
 
 import java.io.File;
 import java.io.IOException;
@@ -96,10 +96,7 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
     }
 
     private void onClickStart(View v) {
-        if(ProgressKeeper.hasOngoingTasks()) {
-            Toast.makeText(v.getContext(), R.string.tasks_ongoing, Toast.LENGTH_LONG).show();
-            return;
-        }
+        if(!ProgressLayout.ensureNoOngoingTasks(getContext())) return;
         ModloaderListenerProxy proxy = new ModloaderListenerProxy();
         proxy.attachListener(this);
         setListenerProxy(proxy);

@@ -479,4 +479,8 @@
     <string name="pref_blocklist_disable_title">Отключить чёрный список серверов</string>
     <string name="pref_blocklist_disable_description">Запрещает загрузку чёрного списка серверов МК. Это позволяет играть на заблокированных серверах (таких, как 6b6t.org)</string>
     <string name="vintagestory_unsupported_device">Ваше устройство не поддерживает Vintage Story на текущем визуализаторе</string>
+    <string name="pref_clean_partfiles_title">Очистить кеш загрузки</string>
+    <string name="pref_clean_partfiles_subtitle_wait">Очистить кеш недозагруженных файлов. Рассчёт используемого места…</string>
+    <string name="pref_clean_partfiles_subtitle">Очистить кеш недозагруженных файлов. В данный момент используется %.2f МБ</string>
+    <string name="clean_partfiles_wait">Очистка кеша скачиваний…</string>
 </resources>

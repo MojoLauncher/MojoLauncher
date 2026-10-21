@@ -2,10 +2,14 @@ package git.artdeell.mojo.game;
 
 import android.view.MotionEvent;
 
+import androidx.annotation.CallSuper;
+
 import git.artdeell.mojo.game.platform.Platform;
+import git.artdeell.mojo.input.mouse.PointerTracker;
 import git.artdeell.mojo.prefs.LauncherPreferences;
 
 public abstract class TouchEventProcessor {
+    protected final PointerTracker mTracker = new PointerTracker();
     private final GameView mHostView;
     public TouchEventProcessor(GameView hostView) {
         mHostView = hostView;
@@ -27,6 +31,11 @@ public abstract class TouchEventProcessor {
         Platform.sendCursorPosition();
     }
 
+    @CallSuper
+    public void prepareForSwitching() {
+        // Ensure that the tracker is in a cold start state when the processor stops being used
+        mTracker.cancelTracking();
+    }
+
     abstract public boolean processTouchEvent(MotionEvent motionEvent);
-    abstract public void cancelPendingActions();
 }

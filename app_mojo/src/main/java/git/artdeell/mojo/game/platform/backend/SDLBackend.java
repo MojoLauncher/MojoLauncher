@@ -1,6 +1,7 @@
 package git.artdeell.mojo.game.platform.backend;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Surface;
 
@@ -24,7 +25,12 @@ public class SDLBackend implements PlatformBackend {
                 Platform.setCursor(cursor.getBitmap(), cursor.getXhot(), cursor.getYhot());
             else Platform.setCursor(null, 0, 0);
         });
-        SDLActivity.setCursorWarpCallback(Platform::setCursorPosition);
+        SDLActivity.setCursorWarpCallback((x, y) ->{
+            Platform.setCursorPosition(x, y);
+            // Avoid sending a huge delta after the cursor warps
+            prevX = Platform.cursorX;
+            prevY = Platform.cursorY;
+        });
     }
 
     private static void handleGrabStateChange(boolean isGrabbing) {
@@ -85,12 +91,8 @@ public class SDLBackend implements PlatformBackend {
 
 
     @Override
-    public void sendMouseEvent(int button, int state, int mods, double x, double y, boolean relative) {
-        if(relative)
-            // In relative mode we need to send mouse clicks at zero position to not accidentally trigger a motion event
-            SDLActivity.onNativeMouseButton(button, state, 0, 0, true);
-        else
-            SDLActivity.onNativeMouseButton(button, state, (float) x, (float) y, false);
+    public void sendMouseButtonEvent(int button, int state, int mods) {
+        SDLActivity.onNativeMouseButton(button, state);
     }
 
     @Override

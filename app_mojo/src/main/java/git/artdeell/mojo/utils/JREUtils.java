@@ -177,7 +177,7 @@ public class JREUtils {
 
     public static native void setLdLibraryPath(String ldLibraryPath);
     static {
-        System.loadLibrary("pojavexec");
-        System.loadLibrary("pojavexec_awt");
+        System.loadLibrary("mojort");
+        System.loadLibrary("mojoawt");
     }
 }

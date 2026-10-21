@@ -319,7 +319,7 @@ public class GameView extends FrameLayout implements PlatformGrabListener, Surfa
     public void onGrabState(boolean isGrabbing) {
         if(mLastGrabState != isGrabbing) {
             Log.i("MGLSurface", "Grabbing state changed! " + mLastGrabState + " -> " + isGrabbing);
-            mCurrentTouchProcessor.cancelPendingActions();
+            mCurrentTouchProcessor.prepareForSwitching();
             mCurrentTouchProcessor = pickEventProcessor(isGrabbing);
             mLastGrabState = isGrabbing;
         }

@@ -47,6 +47,8 @@
             android:key="clearMetadataCache"
             android:title="@string/preference_metadata_clear"
             android:summary="@string/preference_metadata_clear_summary" />
+        <git.artdeell.mojo.prefs.ClearPartfileCachePreference
+            android:title="@string/pref_clean_partfiles_title"/>
         <SwitchPreferenceCompat
             android:defaultValue="true"
             android:icon="@drawable/ic_px_memory_warning"

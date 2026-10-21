@@ -34,10 +34,7 @@ public class SelectAuthFragment extends Fragment {
     }
 
     private void launchAuthFragment(Class<? extends  Fragment> fragmentClass, String fragmentTag) {
-        if(ProgressKeeper.hasProgressKey(ProgressLayout.AUTHENTICATE)) {
-            Toast.makeText(requireContext(), R.string.tasks_ongoing, Toast.LENGTH_SHORT).show();
-            return;
-        }
+        if(!ProgressLayout.ensureNoOngoingTasks(requireContext(), ProgressLayout.AUTHENTICATE)) return;
         Tools.swapFragment(requireActivity(), fragmentClass, fragmentTag, null);
     }
 }

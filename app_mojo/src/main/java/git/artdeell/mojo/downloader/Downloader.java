@@ -2,6 +2,7 @@ package git.artdeell.mojo.downloader;
 
 import com.kdt.mcgui.ProgressLayout;
 
+import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.tasks.SpeedCalculator;
 import git.artdeell.mojo.utils.DownloadUtils;
 
@@ -10,6 +11,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -25,10 +27,12 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import git.artdeell.mojo.R;
+import git.artdeell.mojo.utils.FileUtils;
 
 public class Downloader {
     private static final double ONE_MEGABYTE = (1024d * 1024d);
     private static final ThreadLocal<byte[]> sThreadLocalBuffer = new ThreadLocal<>();
+    protected static final File sPartFileDir = new File(Tools.DIR_GAME_HOME, "partfiles");
     private final String mProgressKey;
     private final AtomicReference<IOException> mThreadException = new AtomicReference<>();
     private final AtomicInteger mDownloadedFileCounter = new AtomicInteger();
@@ -44,16 +48,23 @@ public class Downloader {
     }
 
     protected void runDownloads(ArrayList<? extends TaskMetadata> downloads) throws IOException, InterruptedException {
+        FileUtils.ensureDirectory(sPartFileDir);
         insertMetadata(downloads);
-        performDownloads(downloads);
+        try {
+            performDownloads(downloads);
+        } catch (IOException | InterruptedException e) {
+            mDownloadService.shutdownNow();
+            mVerifyService.shutdownNow();
+            throw e;
+        }
     }
 
     private void performDownloads(ArrayList<? extends TaskMetadata> metadata) throws IOException, InterruptedException {
         mThreadException.set(null);
         mDownloadedFileCounter.set(0);
         mDownloadedSizeCounter.set(0);
-        mDownloadService = Executors.newFixedThreadPool(3);
-        int verifyThreads = Math.max(2, Runtime.getRuntime().availableProcessors() - 2);
+        mDownloadService = Executors.newFixedThreadPool(6);
+        int verifyThreads = Math.max(2, Runtime.getRuntime().availableProcessors());
         mVerifyService = Executors.newFixedThreadPool(verifyThreads, r -> {
             Thread thread = new Thread(r);
             thread.setPriority(10);
@@ -185,6 +196,7 @@ public class Downloader {
 
     protected void downloadFile(File file, URL url, BytesCopiedListener listener) throws IOException {
         HttpURLConnection connection = openConnection(url);
+        if(Thread.interrupted()) throw new InterruptedIOException();
         try(FileOutputStream outputStream = new FileOutputStream(file)) {
             downloadToStream(connection, outputStream, listener);
         }finally {
@@ -202,6 +214,7 @@ public class Downloader {
             if(responseCode != 206) {
                 return false;
             }
+            if(Thread.interrupted()) throw new InterruptedIOException();
             try(FileOutputStream outputStream = new FileOutputStream(file, true)) {
                 downloadToStream(connection, outputStream, listener);
                 return true;
@@ -234,5 +247,26 @@ public class Downloader {
             sThreadLocalBuffer.set(buffer);
         }
         return buffer;
+    }
+
+    public static double calculateCacheSizeMegabytes() {
+        File[] files = Downloader.sPartFileDir.listFiles();
+        if(files == null || files.length == 0) return 0;
+        long usedSpace = 0;
+        for(File f : files) {
+            if(Thread.interrupted()) return -1;
+            long fileLen = f.length();
+            if(fileLen != -1) usedSpace += fileLen;
+        }
+        return usedSpace / ONE_MEGABYTE;
+    }
+
+    public static void clearCache() throws IOException {
+        File[] files = Downloader.sPartFileDir.listFiles();
+        if(files == null) return;
+        for(File f : files) {
+            if(f.isDirectory()) return;
+            if(!f.delete()) throw new IOException("Failed to remove "+f.getName());
+        }
     }
 }

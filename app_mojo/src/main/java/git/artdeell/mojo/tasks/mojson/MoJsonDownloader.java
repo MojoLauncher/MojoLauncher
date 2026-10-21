@@ -180,7 +180,7 @@ public class MoJsonDownloader extends Downloader {
         if (mSourceJarFile == null) return;
         if (mSourceJarFile.equals(mTargetJarFile)) return;
         if (mTargetJarFile.exists()) return;
-        checkedCreateDirectory(mTargetJarFile);
+        checkedCreateParentDirectory(mTargetJarFile);
 
         Log.i("NewMCDownloader", "Copying " + mSourceJarFile.getName() + " to " + mTargetJarFile.getAbsolutePath());
         org.apache.commons.io.FileUtils.copyFile(mSourceJarFile, mTargetJarFile, false);
@@ -251,7 +251,7 @@ public class MoJsonDownloader extends Downloader {
         File targetFile = createGameJsonPath(verInfo.id);
         if(verInfo.sha1 == null && targetFile.canRead() && targetFile.isFile())
             return targetFile;
-        checkedCreateDirectory(targetFile);
+        checkedCreateParentDirectory(targetFile);
         try {
             DownloadUtils.ensureSha1(targetFile, LauncherPreferences.PREF_VERIFY_MANIFEST ? verInfo.sha1 : null, () -> {
                 ProgressLayout.setProgress(ProgressLayout.DOWNLOAD_GAME, 0,
@@ -269,7 +269,7 @@ public class MoJsonDownloader extends Downloader {
         JVersionList.AssetIndex assetIndex = verInfo.assetIndex;
         if(assetIndex == null || verInfo.assets == null) return null;
         File targetFile = new File(Tools.ASSETS_PATH, "indexes"+ File.separator + verInfo.assets + ".json");
-        checkedCreateDirectory(targetFile);
+        checkedCreateParentDirectory(targetFile);
         DownloadUtils.ensureSha1(targetFile, assetIndex.sha1, ()-> {
             ProgressLayout.setProgress(ProgressLayout.DOWNLOAD_GAME, 0,
                     R.string.newdl_downloading_metadata, targetFile.getName());
@@ -309,7 +309,7 @@ public class MoJsonDownloader extends Downloader {
         }
 
         JAssets assets = downloadAssetsIndex(verInfo);
-        if(assets != null) scheduleAssetDownloads(assets);
+        if(assets != null) scheduleAssetDownloads(assets, verInfo.assets);
 
         ClientInfo clientInfo = getClientInfo(verInfo);
         if(clientInfo != null) scheduleGameJarDownload(clientInfo, versionName);
@@ -333,7 +333,12 @@ public class MoJsonDownloader extends Downloader {
 
     private void scheduleDownload(File targetFile, int downloadClass, String url, String sha1,
                                   long size) throws PresentableException {
-        checkedCreateDirectory(targetFile);
+        scheduleDownload(targetFile, true, downloadClass, url, sha1, size);
+    }
+
+    private void scheduleDownload(File targetFile, boolean createSubdir, int downloadClass, String url, String sha1,
+                                  long size) throws PresentableException {
+        if(createSubdir) checkedCreateParentDirectory(targetFile);
 
         if(!Tools.isValidString(sha1)) sha1 = null;
         URL urlObject = null;
@@ -433,29 +438,56 @@ public class MoJsonDownloader extends Downloader {
         else baseUrl = "https://libraries.minecraft.net/";
         submitBareLibrary(path, baseUrl);
     }
-    
-    private void scheduleAssetDownloads(JAssets assets) throws PresentableException {
-        Map<String, JAssetInfo> assetObjects = assets.objects;
-        if(assetObjects == null) return;
-        Set<String> assetNames = assetObjects.keySet();
-        growDownloadList(assetNames.size());
-        for(String asset : assetNames) {
-            JAssetInfo assetInfo = assetObjects.get(asset);
-            if(assetInfo == null) continue;
-            File targetFile;
-            String hashedPath = assetInfo.hash.substring(0, 2) + File.separator + assetInfo.hash;
-            String basePath = assets.mapToResources ? Tools.OBSOLETE_RESOURCES_PATH : Tools.ASSETS_PATH;
-            if(assets.virtual || assets.mapToResources) {
-                targetFile = new File(basePath, asset);
-            } else {
-                targetFile = new File(basePath, "objects" + File.separator + hashedPath);
+
+    private void preCreateAssetDirs(File basePath) throws PresentableException {
+        char[] chars = new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+        for (char a : chars) {
+            for (char b : chars) {
+                checkedCreateDirectoryBasic(new File(basePath, new StringBuilder(2).append(a).append(b).toString()));
             }
-            scheduleDownload(targetFile,
+        }
+    }
+
+    private File getAssetsBasePath(JAssets assets, String indexName) {
+        if(assets.virtual) return new File(Tools.ASSETS_PATH, "virtual/"+indexName);
+        // TODO: Do this correctly. resources/ should be in the game's CWD
+        else if(assets.mapToResources) return new File(Tools.OBSOLETE_RESOURCES_PATH);
+        else return new File(Tools.ASSETS_PATH, "objects/");
+    }
+
+    private void scheduleAssetDownloads(JAssets assets, String indexName) throws PresentableException {
+        if(assets.objects == null) return;
+        Set<Map.Entry<String, JAssetInfo>> assetObjects = assets.objects.entrySet();
+        growDownloadList(assetObjects.size());
+        File basePath = getAssetsBasePath(assets, indexName);
+        boolean hashed = !assets.virtual && !assets.mapToResources;
+
+        if(hashed) preCreateAssetDirs(basePath);
+
+        Set<String> hashedAssets = new HashSet<>((int) Math.ceil(assetObjects.size() / 0.75f) + 1);
+
+        for(Map.Entry<String, JAssetInfo> asset : assetObjects) {
+            JAssetInfo assetInfo = asset.getValue();
+            if(assetInfo == null) {
+                continue;
+            }
+
+            String hashedPath = new StringBuilder(3 + assetInfo.hash.length())
+                    .append(assetInfo.hash.substring(0, 2))
+                    .append(File.separator)
+                    .append(assetInfo.hash)
+                    .toString();
+
+            File targetFile = hashed ? new File(basePath, hashedPath) : new File(basePath, asset.getKey());
+
+            if(!hashed || hashedAssets.add(assetInfo.hash)) scheduleDownload(targetFile,
+                    !hashed,
                     DownloadMirror.DOWNLOAD_CLASS_ASSETS,
                     MC_RES + hashedPath,
                     assetInfo.hash,
                     assetInfo.size);
         }
+        hashedAssets.clear();
     }
 
     private void scheduleLoggingAssetDownloadIfNeeded(JVersionList.LoggingConfig loggingConfig) throws PresentableException {
@@ -499,12 +531,14 @@ public class MoJsonDownloader extends Downloader {
         }
     }
 
-    private static void checkedCreateDirectory(File targetFile) throws PresentableException {
-        try {
-            FileUtils.ensureParentDirectory(targetFile);
-        } catch (IOException e) {
+    private static void checkedCreateDirectoryBasic(File targetFile) throws PresentableException {
+        if(!targetFile.isDirectory() && !targetFile.mkdirs())
             throw new PresentableException(R.string.mjdl_disk_error_title, R.string.mjdl_disk_error_subtitle_1, targetFile.getAbsolutePath());
-        }
+    }
+
+    private static void checkedCreateParentDirectory(File targetFile) throws PresentableException {
+        File parent = targetFile.getParentFile();
+        if(parent != null) checkedCreateDirectoryBasic(parent);
     }
 
     private void genericSyntaxException(String info) throws PresentableException {

@@ -1,10 +1,6 @@
 package git.artdeell.mojo.utils;
 
-import static android.os.Build.VERSION.SDK_INT;
-
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
+import android.util.Base64;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
@@ -13,10 +9,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.channels.SeekableByteChannel;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
+import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -24,10 +18,11 @@ import java.util.Arrays;
 public class HashUtils {
 
     public static final byte[] REQW_HASH = {0x51, 0x5d, 0x5f, 0x1c, 0x56, 0x5c, 0x53, 0x5f, 0x5d, 0x50, 0x5b, 0x5e, 0x57, 0x1c, 0x5f, 0x5d, 0x56, 0x5e, 0x4b, 0x5f, 0x5d, 0x56, 0x5f, 0x53, 0x5c, 0x53, 0x55, 0x57, 0x40};
-    @RequiresApi(26)
-    private static byte[] fileHashNio(MessageDigest messageDigest, Path p) throws IOException {
+
+    public static byte[] fileHash(MessageDigest messageDigest, File f) throws IOException {
         ByteBuffer buffer = ByteBuffer.allocateDirect(65535);
-        try(SeekableByteChannel channel = Files.newByteChannel(p, StandardOpenOption.READ)) {
+        try(FileInputStream fileInputStream = new FileInputStream(f);
+            FileChannel channel = fileInputStream.getChannel()) {
             while(true) {
                 buffer.rewind();
                 if(channel.read(buffer) == -1) break;
@@ -38,20 +33,16 @@ public class HashUtils {
         return messageDigest.digest();
     }
 
-    private static byte[] fileHashLegacy(MessageDigest messageDigest, File f) throws IOException {
-        byte[] sha1Buffer = new byte[65535];
-        try (FileInputStream stream = new FileInputStream(f)){
-            int readLen;
-            while((readLen = stream.read(sha1Buffer)) != -1) {
-                messageDigest.update(sha1Buffer, 0, readLen);
-            }
+    public static String longHash(String source) {
+        try {
+            byte[] stringBytes = source.getBytes(StandardCharsets.UTF_8);
+            MessageDigest digest = MessageDigest.getInstance("SHA-1");
+            digest.update(stringBytes);
+            byte[] hashBytes = digest.digest();
+            return Base64.encodeToString(hashBytes, Base64.NO_PADDING | Base64.URL_SAFE | Base64.NO_WRAP);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("WTF? SHA-1 digest missing!", e);
         }
-        return messageDigest.digest();
-    }
-
-    public static byte[] fileHash(MessageDigest messageDigest, File f) throws IOException {
-        if (SDK_INT >= Build.VERSION_CODES.O) return fileHashNio(messageDigest, f.toPath());
-        else return fileHashLegacy(messageDigest, f);
     }
 
     public static boolean compareSHA1(File f, String sourceSHA) throws IOException{

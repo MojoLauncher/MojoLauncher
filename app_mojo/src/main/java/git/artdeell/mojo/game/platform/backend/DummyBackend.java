@@ -29,7 +29,7 @@ public class DummyBackend implements PlatformBackend {
     }
 
     @Override
-    public void sendMouseEvent(int button, int state, int mods, double x, double y, boolean relative) {
+    public void sendMouseButtonEvent(int button, int state, int mods) {
 
     }
 

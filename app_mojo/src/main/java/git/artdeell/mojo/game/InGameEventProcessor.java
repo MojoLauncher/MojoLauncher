@@ -5,7 +5,6 @@ import android.os.Looper;
 import android.view.MotionEvent;
 
 import git.artdeell.mojo.input.mouse.LeftClickGesture;
-import git.artdeell.mojo.input.mouse.PointerTracker;
 import git.artdeell.mojo.input.mouse.RightClickGesture;
 import git.artdeell.mojo.prefs.LauncherPreferences;
 
@@ -13,7 +12,6 @@ public class InGameEventProcessor extends TouchEventProcessor {
     private final Handler mGestureHandler = new Handler(Looper.getMainLooper());
     private final double mSensitivity;
     private boolean mEventTransitioned = true;
-    private final PointerTracker mTracker = new PointerTracker();
     private final LeftClickGesture mLeftClickGesture = new LeftClickGesture(mGestureHandler);
     private final RightClickGesture mRightClickGesture = new RightClickGesture(mGestureHandler);
 
@@ -51,7 +49,8 @@ public class InGameEventProcessor extends TouchEventProcessor {
     }
 
     @Override
-    public void cancelPendingActions() {
+    public void prepareForSwitching() {
+        super.prepareForSwitching();
         cancelGestures(true);
     }
 
