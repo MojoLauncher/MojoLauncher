@@ -1,12 +1,12 @@
 /.gradle
 /build
 /*/build
-app_pojavlauncher/src/main/assets/components/jre
-/app_pojavlauncher/src/main/assets/components/jre-new/
-/app_pojavlauncher/src/main/assets/components/jre-21/
+app_mojo/src/main/assets/components/jre
+/app_mojo/src/main/assets/components/jre-new/
+/app_mojo/src/main/assets/components/jre-21/
 local.properties
 .idea/
-app_pojavlauncher/.cxx/
+app_mojo/.cxx/
 .vs/
 /curseforge_key.txt
-/app_pojavlauncher/libs/ltw-release.aar
+/app_mojo/libs/ltw-release.aar

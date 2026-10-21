@@ -1,0 +1,82 @@
+package git.artdeell.mojo;
+
+import androidx.annotation.Keep;
+import java.util.*;
+import git.artdeell.mojo.value.*;
+
+import git.artdeell.mojo.value.ClientInfo;
+import git.artdeell.mojo.value.DependentLibrary;
+import git.artdeell.mojo.value.MoJsonRule;
+
+@Keep
+@SuppressWarnings("unused") // all unused fields here are parts of JSON structures
+public class JVersionList {
+    public Map<String, String> latest;
+    public Version[] versions;
+
+    @Keep
+    public static class FileProperties {
+        public String id, sha1, url;
+        public long size;
+    }
+
+    @Keep
+    public static class Version extends FileProperties {
+        // Since 1.13, so it's one of ways to check
+        public Arguments arguments;
+        public AssetIndex assetIndex;
+
+        public String assets;
+        public Map<String, ClientInfo> downloads;
+        public String inheritsFrom;
+        public JavaVersionInfo javaVersion;
+        public DependentLibrary[] libraries;
+        public LoggingConfig logging;
+        public String mainClass;
+        public String minecraftArguments;
+        public int minimumLauncherVersion;
+        public String releaseTime;
+        public String time;
+        public String type;
+        // Our specific stuff for BTA
+        public HashMap<String, String> environment;
+        public boolean disableRendererChecks = false;
+    }
+    @Keep
+    public static class JavaVersionInfo {
+        public String component;
+        public int majorVersion;
+        public int version; // parameter used by LabyMod 4
+    }
+    @Keep
+    public static class LoggingConfig {
+        public LoggingClientConfig client;
+
+        @Keep
+        public static class LoggingClientConfig {
+            public String argument;
+            public FileProperties file;
+            public String type;
+        }
+    }
+    // Since 1.13
+    @Keep
+    public static class Arguments {
+        public Object[] game;
+        public Object[] jvm;
+
+        @Keep
+        public static class ArgValue {
+            public MoJsonRule[] rules;
+            public String value;
+
+            // TLauncher styled argument...
+            public String[] values;
+        }
+    }
+    @Keep
+    public static class AssetIndex extends FileProperties {
+        public long totalSize;
+    }
+}
+
