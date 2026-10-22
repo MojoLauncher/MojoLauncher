@@ -14,6 +14,7 @@ import git.artdeell.mojo.fragments.modding.instance.FabricInstallFragment;
 import git.artdeell.mojo.fragments.modding.instance.ForgeInstallFragment;
 import git.artdeell.mojo.fragments.modding.instance.LegacyFabricInstallFragment;
 import git.artdeell.mojo.fragments.modding.instance.NeoforgeInstallFragment;
+import git.artdeell.mojo.fragments.modding.instance.OptiFineInstallFragment;
 import git.artdeell.mojo.fragments.modding.instance.QuiltInstallFragment;
 import git.artdeell.mojo.fragments.modding.SearchModFragment;
 import git.artdeell.mojo.instances.Instance;
@@ -44,8 +45,8 @@ public class InstanceTypeSelectFragment extends Fragment {
         // NOTE: Special care needed! If you wll decide to add these to the back stack, please read
         // the comment in FabricInstallFragment.onDownloadFinished() and amend the code
         // in FabricInstallFragment.onDownloadFinished() and ModVersionListFragment.onDownloadFinished()
-        view.findViewById(R.id.optifine_profile).setOnClickListener(v -> Tools.swapFragment(requireActivity(), BTAInstallFragment.OptiFineInstallFragment.class,
-                BTAInstallFragment.OptiFineInstallFragment.TAG, null));
+        view.findViewById(R.id.optifine_profile).setOnClickListener(v -> Tools.swapFragment(requireActivity(), OptiFineInstallFragment.class,
+                OptiFineInstallFragment.TAG, null));
         view.findViewById(R.id.modded_profile_fabric).setOnClickListener((v)->
                 Tools.swapFragment(requireActivity(), FabricInstallFragment.class, FabricInstallFragment.TAG, null));
         view.findViewById(R.id.modded_profile_forge).setOnClickListener((v)->
