@@ -1,4 +1,4 @@
-package git.artdeell.mojo.fragments;
+package git.artdeell.mojo.fragments.misc;
 
 import android.app.AlertDialog;
 import android.os.Build;

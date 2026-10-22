@@ -1,4 +1,4 @@
-package git.artdeell.mojo.fragments;
+package git.artdeell.mojo.fragments.modding.instance;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,6 +6,7 @@ import android.widget.ExpandableListAdapter;
 
 import com.kdt.mcgui.ProgressLayout;
 
+import git.artdeell.mojo.fragments.modding.ModVersionListFragment;
 import git.artdeell.mojo.instances.InstanceInstaller;
 import git.artdeell.mojo.instances.Instances;
 import git.artdeell.mojo.modding.forge.ForgelikeUtils;

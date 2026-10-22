@@ -1,4 +1,4 @@
-package git.artdeell.mojo.fragments;
+package git.artdeell.mojo.fragments.modding.instance;
 
 import git.artdeell.mojo.modding.fabric.FabriclikeUtils;
 

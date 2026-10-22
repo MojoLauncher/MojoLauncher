@@ -1,4 +1,4 @@
-package git.artdeell.mojo.fragments;
+package git.artdeell.mojo.fragments.instance;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -25,6 +25,9 @@ import git.artdeell.mojo.R;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.extra.ExtraConstants;
 import git.artdeell.mojo.extra.ExtraCore;
+import git.artdeell.mojo.fragments.misc.DeleteConfirmDialogFragment;
+import git.artdeell.mojo.fragments.misc.FileSelectorFragment;
+import git.artdeell.mojo.fragments.modding.ModManagerFragment;
 import git.artdeell.mojo.game.renderer.RendererCache;
 import git.artdeell.mojo.instances.Instance;
 import git.artdeell.mojo.instances.Instances;

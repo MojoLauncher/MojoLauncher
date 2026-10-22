@@ -1,4 +1,4 @@
-package git.artdeell.mojo.fragments;
+package git.artdeell.mojo.fragments.auth;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;

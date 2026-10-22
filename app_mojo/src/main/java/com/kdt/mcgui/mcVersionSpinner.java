@@ -27,8 +27,8 @@ import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.extra.ExtraConstants;
 import git.artdeell.mojo.extra.ExtraCore;
 import git.artdeell.mojo.extra.ExtraListener;
-import git.artdeell.mojo.fragments.InstanceEditorFragment;
-import git.artdeell.mojo.fragments.ProfileTypeSelectFragment;
+import git.artdeell.mojo.fragments.instance.InstanceEditorFragment;
+import git.artdeell.mojo.fragments.instance.InstanceTypeSelectFragment;
 import git.artdeell.mojo.instances.DisplayInstance;
 import git.artdeell.mojo.instances.Instances;
 import git.artdeell.mojo.instances.InstanceAdapter;
@@ -142,8 +142,8 @@ public class mcVersionSpinner extends ExtendedTextView {
     private void performExtraAction(InstanceAdapterExtra extra) {
         //Replace with switch-case if you want to add more extra actions
         if (extra.id == VERSION_SPINNER_PROFILE_CREATE) {
-            Tools.swapFragment((FragmentActivity) getContext(), ProfileTypeSelectFragment.class,
-                    ProfileTypeSelectFragment.TAG, null);
+            Tools.swapFragment((FragmentActivity) getContext(), InstanceTypeSelectFragment.class,
+                    InstanceTypeSelectFragment.TAG, null);
         }
     }
 

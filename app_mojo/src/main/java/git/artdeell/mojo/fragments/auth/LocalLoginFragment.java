@@ -1,4 +1,4 @@
-package git.artdeell.mojo.fragments;
+package git.artdeell.mojo.fragments.auth;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import git.artdeell.mojo.R;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.extra.ExtraConstants;
 import git.artdeell.mojo.extra.ExtraCore;
+import git.artdeell.mojo.fragments.MainMenuFragment;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

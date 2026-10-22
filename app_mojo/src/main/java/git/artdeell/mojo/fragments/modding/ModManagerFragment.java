@@ -1,4 +1,4 @@
-package git.artdeell.mojo.fragments;
+package git.artdeell.mojo.fragments.modding;
 
 import android.content.Context;
 import android.net.Uri;

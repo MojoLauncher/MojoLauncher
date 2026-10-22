@@ -1,9 +1,8 @@
-package git.artdeell.mojo.fragments;
+package git.artdeell.mojo.fragments.auth;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,7 +12,6 @@ import com.kdt.mcgui.ProgressLayout;
 
 import git.artdeell.mojo.R;
 import git.artdeell.mojo.Tools;
-import git.artdeell.mojo.progresskeeper.ProgressKeeper;
 
 public class SelectAuthFragment extends Fragment {
     public static final String TAG = "AUTH_SELECT_FRAGMENT";

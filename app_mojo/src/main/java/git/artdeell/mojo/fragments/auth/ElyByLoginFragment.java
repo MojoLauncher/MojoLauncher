@@ -1,4 +1,4 @@
-package git.artdeell.mojo.fragments;
+package git.artdeell.mojo.fragments.auth;
 
 import git.artdeell.mojo.extra.ExtraConstants;
 

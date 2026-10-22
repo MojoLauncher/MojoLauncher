@@ -1,4 +1,4 @@
-package git.artdeell.mojo.fragments;
+package git.artdeell.mojo.fragments.misc;
 
 import android.app.Activity;
 import android.os.Bundle;

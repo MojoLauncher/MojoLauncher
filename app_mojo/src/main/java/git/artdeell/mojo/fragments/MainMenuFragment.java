@@ -26,6 +26,7 @@ import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.contracts.OpenDocumentWithExtension;
 import git.artdeell.mojo.extra.ExtraConstants;
 import git.artdeell.mojo.extra.ExtraCore;
+import git.artdeell.mojo.fragments.misc.GamepadMapperFragment;
 import git.artdeell.mojo.instances.Instance;
 import git.artdeell.mojo.instances.Instances;
 import git.artdeell.mojo.utils.FileUtils;

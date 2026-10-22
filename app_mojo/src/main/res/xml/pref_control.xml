@@ -158,7 +158,7 @@
         <Preference
             android:title="@string/preference_remap_controller_title"
             android:summary="@string/preference_remap_controller_description"
-            android:fragment="git.artdeell.mojo.fragments.GamepadMapperFragment"/>
+            android:fragment="git.artdeell.mojo.fragments.misc.GamepadMapperFragment"/>
         <git.artdeell.mojo.prefs.GamepadRemapPreference
             android:title="@string/preference_wipe_controller_title"
             android:summary="@string/preference_wipe_controller_description"
