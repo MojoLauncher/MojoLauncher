@@ -12,7 +12,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">سيتم إزالة هذا الحساب!</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">حدد مشغل مودات لتثبيته</string>
     <!-- Error messages -->
     <string name="error_fatal">لقد توقف MJLauncher بشكل غير متوقع</string>
     <string name="error_no_version">لا يوجد إصدار!</string>
@@ -20,7 +19,6 @@
     <string name="error_show_less">أظهِر أقل</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">مطلوب إذن القراءة و الكتابة للتخزين!</string>
-    <string name="toast_optifine_success">تم التثبيت بنجاح</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -28,10 +26,7 @@
     <string name="mcl_tab_wiki">موسوعة</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">تنظيف ملفات ذاكرة التخزين المؤقت</string>
-    <string name="mcl_launch_downloading">التحميل جارٍ %s</string>
     <string name="mcl_launch_downloading_progress">"جارٍ تنزيل %s (%.2f ميغابايت / %.2f ميغابايت)"</string>
-    <string name="mcl_launch_download_assets">جار الاستعداد لتنزيل الموارد</string>
     <string name="mcl_options">الخيارات</string>
     <string name="mcl_option_customcontrol">تخصيص التحكم</string>
     <string name="mcl_setting_title_use_surface_view">استخدام عرض الأسطح البديل</string>
@@ -77,7 +72,6 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">تم الخروج من التطبيق/اللعبة بخلل %d، تحقق من latestlog.txt لمزيد من التفاصيل.</string>
     <string name="mcn_exit_confirm">هل أنت متأكد من أنك تريد فرض الإغلاق؟</string>
-    <string name="mcn_check_fail_vulkan_support">عارض الرسوميات Zink (Vulkan) غير مدعوم على هذا الجهاز!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">دردشة</string>
     <string name="control_debug">Debug</string>
@@ -98,7 +92,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">فرض الإغلاق</string>
     <string name="control_viewout">سِجل الإخراج</string>
-    <string name="control_adebug">مدخل التصحيح</string>
     <string name="control_customkey">إرسال رمز مفتاحي مخصص</string>
     <!-- ImportControlActivity Strings -->
     <string name="import_control_label">استيراد مخطط أزرار تحكم</string>
@@ -130,11 +123,6 @@
     <string name="main_install_jar_file">نفذ مِلَفّ .jar</string>
     <string name="main_play">ابدأ اللعب</string>
     <string name="autoram_info_msg">تم تعيين الذاكرة إلى %d ميغابايت</string>
-    <string name="mcl_setting_check_libraries">التحقق من المكتبات بعد التحميل</string>
-    <string name="mcl_setting_check_libraries_subtitle">هذا الخِيار يجبر البرنامَج على التحقق من بيانات المِلَفّ إذا كان متاحاً. يمنع الأخطاء من الحدوث خلال التنزيل.</string>
-    <string name="dl_library_sha_fail">المكتبة %s تآلفه وسيتم إعادة تحميلها</string>
-    <string name="dl_library_sha_unknown">لا يمكن التحقق من ملفات المكتبة %s، يجب افتراض أنها بحالة جيدة</string>
-    <string name="dl_library_sha_pass">المكتبة %s بحالة جيدة وقابلة للاستخدام</string>
     <string name="mcl_disable_gestures">تعطيل الإيماءات</string>
     <string name="mcl_disable_gestures_subtitle">تعطيل الإيماءات، مثل تثبيت الضغط لكسر كتلة، والنقر لوضع كتلة.</string>
     <string name="mcl_disable_swap_hand">تعطيل الضغط مرتين لتبديل اليدين</string>
@@ -160,7 +148,6 @@
     <string name="multirt_config_setdefault_already">الافتراضي</string>
     <string name="multirt_config_removeerror_last">يجب أن يكون لديك على الأقل بيئة تشغيل جافا واحدة مثبتة.</string>
     <string name="multirt_nocompatiblert">لم يتم العثور على أي بيئة تشغيل Java متوافقة، هذا الإصدار يتطلب Java %d أو أحدث.</string>
-    <string name="multirt_nojava8rt">لا يمكن العثور على Java 8. لاستخدام هذا الخِيار، تحتاج إلى تثبيت Java 8.</string>
     <string name="multirt_delete_runtime">حذف بيئة التشغيل</string>
     <string name="pvc_gameDirectory">مكان تخزين اللعبة</string>
     <string name="pvc_jvmArgs">مدخلات JVM</string>
@@ -228,7 +215,6 @@
     <string name="preference_enable_gyro_description">هذا الخيار سيجعلك تتحرك باللعبة عن طريق تحريك هاتفك.</string>
     <string name="preference_gyro_sensitivity_title">حساسية التحكم في الغيروسكوب</string>
     <string name="preference_gyro_sensitivity_description">عدل حساسية تحكم الجايروسكوب.</string>
-    <string name="toast_turn_on_gyro">فعل الجايروسكوب اولاً!</string>
     <string name="preference_gyro_sample_rate_title">معدل أخذ العينات من الجايرسكوب</string>
     <string name="preference_gyro_sample_rate_description">اذا كان لديك مشاكل أداء في الجايروسكوب، زد هذا الخيار.</string>
     <string name="microsoft_login_retry_later">طلبات كثيرة جداً، الرجاء المحاولة مرة أخرى لاحقاً.</string>
@@ -254,8 +240,6 @@
     <string name="preference_force_big_core_title">إجبار عارض الرسوميات على تشغيل النواة الكبيرة</string>
 
     <string name="version_select_hint">إختر إصدار</string>
-    <string name="forge_dl_progress">تنزيل المثبت ل %s</string>
-    <string name="forge_dl_searching">البحث عن رقم إصدار Forge</string>
     <string name="modloader_dl_failed_to_load_list">فشل تحميل قائمة الإصدارات!</string>
     <string name="forge_dl_no_installer">عذراً، لكن هذا الإصدار من Forge لا يحتوي على مثبت، الذي لم يتم دعمه بعد.</string>
     <string name="forge_dl_select_version">إختر إصدار Forge</string>
@@ -269,7 +253,6 @@
     <string name="fabric_dl_loader_title">حدد إصدارات</string>
     <string name="of_dl_select_version">حدد إصدار OptiFine</string>
     <string name="of_dl_failed_to_scrape">فشل في جمع البيانات لتثبيت OptiFine</string>
-    <string name="of_dl_progress">التحميل جارٍ %s</string>
     <string name="hint_search_modpack">البحث عن modpack</string>
     <string name="preference_vulkan_driver_system_title">استخدم Vulkan driver الخاص بالنظام</string>
     <string name="preference_vulkan_driver_system_description">اجبر البرنامج على استخدام Vulkan driver الخاص بالنظام بدلاً من Turnip على Adreno GPUs، فقط يؤثر بZink و المودات المستخدمة ل Vulkan.</string>
@@ -280,13 +263,9 @@
     <string name="search_modpack_error">فشل العثور على مودباك</string>
     <string name="search_modpack_download_error">فشل تنزيل البيانات التعريفية للمودباك</string>
     <string name="modpack_download_downloading_metadata">تحميل اابيانات التعريفية للمودباك (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods">تحميل المودات (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods_fc">تحميل المودات (الملف %d من %d)</string>
     <string name="modpack_download_applying_overrides">تطبيق التجاوزات (%d/%d)</string>
     <string name="modpack_install_notification_title">MJ Modpack Installerⁿ</string>
     <string name="modpack_install_notification_success">انقر هنا لإنهاء تثبيت modpack</string>
-    <string name="modpack_install_notification_data_not_available">Не удалось загрузить информацию о загрузчике модов</string>
-    <string name="modpack_install_modloader_download_failed">فشل تنزيل ملفات محمل المودات</string>
     <string name="modpack_install_download_failed">فشل تنزيل ملفات المودباك</string>
     <string name="notif_error_occured">لقد حدث خطأ</string>
     <string name="notif_error_occured_desc">انقر لمشاهدة المزيد من التفاصيل</string>
@@ -313,13 +292,8 @@
     <string name="notification_permission_toast">O</string>
     <string name="preference_ask_for_notification_title">السماح بالإشعارات</string>
     <string name="preference_ask_for_notification_description">.</string>
-    <string name="preference_vsync_in_zink_title">السماح بتفعيل V-Sync مع Zink</string>
-    <string name="preference_vsync_in_zink_description">يسمع للمشغل </string>
-    <string name="exception_failed_to_unpack_jre17">فشل تثبيت JRE 17</string>
     <string name="newdl_starting">قراءة بيانات تعريف اللعبة…</string>
     <string name="newdl_downloading_metadata">تحميل بيانات تعريف اللعبة (%s)</string>
-    <string name="newdl_downloading_game_files">جاري تحميل اللعبة… (%d/%d, %.2f MB/s)</string>
-    <string name="newdl_downloading_game_files_size">جاري تحميل اللعبة… (%.2f/%.2f MB، %.2f MB/s)</string>
     <string name="cropper_title">اختيار منطقة الصورة</string>
     <string name="cropper_lock_vertical">تأمين المحور العمودي</string>
     <string name="cropper_lock_horizontal">تأمين المحور الأفقي</string>
@@ -331,7 +305,6 @@
     <string name="log_view_button_output_on">المخرجات\nمفعلة</string>
     <string name="log_view_label_log_output">سِجل الإخراج:</string>
     <string name="execute_jar_failed_to_read_file">فشل في قراءة ملف .jar</string>
-    <string name="execute_jar_incompatible_runtime">تنفيذ وظيفة .jar غير متوافق مع Java %d</string>
     <string name="controller_button_a">A</string>
     <string name="controller_button_b">B</string>
     <string name="controller_button_x">X</string>

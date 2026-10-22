@@ -10,7 +10,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">This account will be removed!</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">Select a mod installer</string>
     <!-- Error messages -->
     <string name="error_fatal">MJLauncher has unexpectedly crashed</string>
     <string name="error_no_version">No version!</string>
@@ -18,7 +17,6 @@
     <string name="error_show_less">Show less</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">The read/write to storage permission is required!</string>
-    <string name="toast_optifine_success">Install successful</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -26,10 +24,7 @@
     <string name="mcl_tab_wiki">Wiki</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">Cleaning cache files</string>
-    <string name="mcl_launch_downloading">Downloading %s</string>
     <string name="mcl_launch_downloading_progress">"Downloading %s (%.2f MB / %.2f MB)"</string>
-    <string name="mcl_launch_download_assets">Preparing to download resources</string>
     <string name="mcl_options">Options</string>
     <string name="mcl_option_customcontrol">Custom controls</string>
     <string name="mcl_setting_title_use_surface_view">Use alternate surface rendering</string>
@@ -74,7 +69,6 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Application/Game exited with code %d, check latestlog.txt for more details.</string>
     <string name="mcn_exit_confirm">Are you sure want to force close?</string>
-    <string name="mcn_check_fail_vulkan_support">Zink (Vulkan) renderer is not supported on this device!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">Chat</string>
     <string name="control_debug">Debug</string>
@@ -95,7 +89,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">Force close</string>
     <string name="control_viewout">Log output</string>
-    <string name="control_adebug">Input Debug</string>
     <string name="control_customkey">Send custom keycode</string>
     <!-- ImportControlActivity Strings -->
     <string name="import_control_label">Import controls</string>
@@ -127,11 +120,6 @@
     <string name="main_install_jar_file">Execute a .jar</string>
     <string name="main_play">Play</string>
     <string name="autoram_info_msg">Memory set to %d MB</string>
-    <string name="mcl_setting_check_libraries">Check libraries after downloading</string>
-    <string name="mcl_setting_check_libraries_subtitle">This option forces the launcher to check the library hash if it\'s available. Prevents broken downloads.</string>
-    <string name="dl_library_sha_fail">Library %s is damaged and will be redownloaded</string>
-    <string name="dl_library_sha_unknown">Library %s can\'t be checked, have to assume it\'s good</string>
-    <string name="dl_library_sha_pass">Library %s is fine and usable</string>
     <string name="mcl_disable_gestures">Disable gestures</string>
     <string name="mcl_disable_gestures_subtitle">Disables gestures, such as hold to break block, and tap to place a block.</string>
     <string name="mcl_disable_swap_hand">Disable double tap to swap hands</string>
@@ -155,7 +143,6 @@
     <string name="multirt_config_setdefault">Set default</string>
     <string name="multirt_config_setdefault_already">Default</string>
     <string name="multirt_config_removeerror_last">You must have at least one Java Runtime installed.</string>
-    <string name="multirt_nojava8rt">Can\'t find Java 8. In order to use this option, you need to install Java 8.</string>
     <string name="multirt_delete_runtime">Delete runtime</string>
     <string name="pvc_gameDirectory">Game directory</string>
     <string name="pvc_jvmArgs">JVM arguments</string>
@@ -222,7 +209,6 @@
     <string name="preference_enable_gyro_description">Enabling this will allow you to turn in-game by turning your phone.</string>
     <string name="preference_gyro_sensitivity_title">Gyroscope controls sensitivity</string>
     <string name="preference_gyro_sensitivity_description">Adjust the sensitivity of gyroscope controls.</string>
-    <string name="toast_turn_on_gyro">Enable gyroscope controls first to use this!</string>
     <string name="preference_gyro_sample_rate_title">Gyroscope sampling rate</string>
     <string name="preference_gyro_sample_rate_description">If you have performance issues with gyroscope controls, increase this.</string>
     <string name="microsoft_login_retry_later">Too many requests, please try again later.</string>
@@ -247,8 +233,6 @@
     <string name="preference_force_big_core_title">Force the renderer to run on the big core</string>
 
     <string name="version_select_hint">Select a version</string>
-    <string name="forge_dl_progress">Downloading installer for %s</string>
-    <string name="forge_dl_searching">Searching for Forge version number</string>
     <string name="modloader_dl_failed_to_load_list">Failed to load the version list!</string>
     <string name="forge_dl_no_installer">Sorry, but this version of Forge does not have an installer, which is not yet supported.</string>
     <string name="forge_dl_select_version">Select Forge version</string>
@@ -262,7 +246,6 @@
     <string name="fabric_dl_loader_title">Select versions</string>
     <string name="of_dl_select_version">Select OptiFine version</string>
     <string name="of_dl_failed_to_scrape">Failed to collect data for OptiFine installation</string>
-    <string name="of_dl_progress">Downloading %s</string>
     <string name="hint_search_modpack">Search for modpacks</string>
     <string name="preference_vulkan_driver_system_title">Use system Vulkan driver</string>
     <string name="preference_vulkan_driver_system_description">Force the launcher to use the system Vulkan driver instead of Turnip on Adreno GPUs. Only affects Zink and mods that use Vulkan.</string>
@@ -273,13 +256,9 @@
     <string name="search_modpack_error">Failed to find modpacks</string>
     <string name="search_modpack_download_error">Failed to download modpack metadata</string>
     <string name="modpack_download_downloading_metadata">Downloading modpack metadata (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods">Downloading mods (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods_fc">Downloading mods (File %d out of %d)</string>
     <string name="modpack_download_applying_overrides">Applying overrides (%d/%d)</string>
     <string name="modpack_install_notification_title">MJ Modpack Installer</string>
     <string name="modpack_install_notification_success">Click here to finish modpack installation</string>
-    <string name="modpack_install_notification_data_not_available">Failed to download mod loader information</string>
-    <string name="modpack_install_modloader_download_failed">Failed to download the mod loader files</string>
     <string name="modpack_install_download_failed">Failed to download modpack files</string>
     <string name="notif_error_occured">An error has occurred</string>
     <string name="notif_error_occured_desc">Click to see more details</string>
@@ -309,9 +288,6 @@
     <string name="notification_permission_toast">You can always change your mind later by going into Settings</string>
     <string name="preference_ask_for_notification_title">Allow notifications</string>
     <string name="preference_ask_for_notification_description">Click to re-request the notification permission, required for game/modpack background downloads to work properly.</string>
-    <string name="preference_vsync_in_zink_title">Allow V-Sync with Zink</string>
-    <string name="preference_vsync_in_zink_description">Allows the launcher to use internal system APIs to enable V-Sync for Zink. Turn this off if your launcher suddenly crashes with Zink after a system update.</string>
-    <string name="exception_failed_to_unpack_jre17">Failed to install JRE 17</string>
     <string name="newdl_starting">Reading game metadata…</string>
     <string name="newdl_downloading_metadata">Downloading game metadata (%s)</string>
     <string name="controller_button_select">Select</string>

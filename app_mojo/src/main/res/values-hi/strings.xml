@@ -18,7 +18,6 @@
     <string name="warning_remove_account">यह खाता हटा दिया जाएगा!</string>
 
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">मॉड इंस्टॉलर को चुने</string>
 
     <!-- Error messages -->
     <string name="error_fatal">मोजो लांचर अप्रत्याशित क्रैश हो गया है</string>
@@ -28,7 +27,6 @@
 
     <!-- Toast messages -->
     <string name="toast_permission_denied">भंडारण अनुमति आवश्यक है। कृपया पढ़ने और लिखने की अनुमति दें</string>
-    <string name="toast_optifine_success">सफलतापूर्वक स्थापित किया गया</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -39,10 +37,7 @@
     <!-- MCLauncherActivity: Account status -->
 
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">कैशे फ़ाइलों की सफाई</string>
-    <string name="mcl_launch_downloading">डाउनलोड हो रहा है %s</string>
     <string name="mcl_launch_downloading_progress">"%s डाउनलोड हो रहा है (%.2f MB / %.2f MB)"</string>
-    <string name="mcl_launch_download_assets">संसाधन डाउनलोड करने की तैयारी हो रही है</string>
 
     <string name="mcl_options">विकल्प</string>
     <string name="mcl_option_customcontrol">अनुकूलित नियंत्रण</string>
@@ -92,7 +87,6 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">एप्लिकेशन/गेम कोड %d के साथ बंद हो गया, अधिक जानकारी के लिए latestlog.txt देखें।</string>
     <string name="mcn_exit_confirm">क्या आप वाकई ज़बरदस्ती बंद करना चाहते हैं?</string>
-    <string name="mcn_check_fail_vulkan_support">ज़िंक (वल्कन) रेंडरर इस डिवाइस पर समर्थित नहीं/नहीं चलेगा  है!</string>
 
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">Chat</string>
@@ -115,7 +109,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">ज़बरदस्ती बंद करें</string>
     <string name="control_viewout">लॉग आउटपुट</string>
-    <string name="control_adebug">इनपुट डीबग</string>
     <string name="control_customkey">कस्टम कीकोड भेजें</string>
 
     <!-- ImportControlActivity Strings -->
@@ -156,10 +149,6 @@
     <string name="main_install_jar_file"> एक .jar निष्पादित करें</string>
     <string name="main_play">खेले</string>
     <string name="autoram_info_msg">मेमोरी %d MB पर सेट है</string>
-    <string name="mcl_setting_check_libraries"> डाउनलोड करने के बाद लाइब्रेरीज़ जाँचें</string>
-    <string name="mcl_setting_check_libraries_subtitle">यह विकल्प लॉन्चर को उपलब्ध होने पर लाइब्रेरी हैश की जाँच करने के लिए बाध्य करता है। यह टूटे हुए डाउनलोड्स को रोकता है।</string>
-    <string name="dl_library_sha_unknown">लाइब्रेरी %s की जाँच नहीं की जा सकती, इसे सही माना जाएगा</string>
-    <string name="dl_library_sha_pass">लाइब्रेरी %s ठीक है और उपयोग करने योग्य है</string>
     <string name="mcl_disable_gestures">जेस्चर डिसेबल करें</string>
     <string name="mcl_disable_gestures_subtitle">जेस्चर डिसेबल करता है, जैसे ब्लॉक तोड़ने के लिए दबाकर रखना, और ब्लॉक रखने के लिए टैप करना।</string>
     <string name="mcl_disable_swap_hand">हाथ बदलने के लिए डबल टैप बंद करें</string>
@@ -185,7 +174,6 @@
     <string name="multirt_config_setdefault_already">डिफ़ॉल्ट</string>
     <string name="multirt_config_removeerror_last">आपके पास कम से कम एक जावा रनटाइम इंस्टॉल होना चाहिए।</string>
     <string name="multirt_nocompatiblert">कोई संगत जावा रनटाइम नहीं मिल रहा है। इस वर्ज़न के लिए जावा %d या नया चाहिए।</string>
-    <string name="multirt_nojava8rt">जावा 8 नहीं मिल रहा है। इस विकल्प का उपयोग करने के लिए, आपको जावा 8 इंस्टॉल करना होगा।</string>
     <string name="multirt_delete_runtime">रनटाइम डिलीट करें</string>
     <string name="pvc_gameDirectory">गेम डायरेक्टरी</string>
     <string name="pvc_jvmArgs">JVM आर्ग्यूमेंट्स</string>
@@ -262,7 +250,6 @@
     <string name="preference_enable_gyro_description">इसे सक्षम करने से आप अपने फ़ोन को मोड़कर गेम में घूम सकेंगे।</string>
     <string name="preference_gyro_sensitivity_title">गाइरोस्कोप कंट्रोल्स संवेदनशीलता</string>
     <string name="preference_gyro_sensitivity_description">गाइरोस्कोप कंट्रोल्स की संवेदनशीलता समायोजित करें।</string>
-    <string name="toast_turn_on_gyro">इसका उपयोग करने के लिए पहले गाइरोस्कोप कंट्रोल्स सक्षम करें!</string>
     <string name="preference_gyro_sample_rate_title">गाइरोस्कोप सैंपलिंग रेट</string>
     <string name="preference_gyro_sample_rate_description">अगर आपको गाइरोस्कोप कंट्रोल्स के साथ प्रदर्शन संबंधी समस्याएँ आती हैं, तो इसे बढ़ाएँ।</string>
     <string name="microsoft_login_retry_later">बहुत ज़्यादा रिक्वेस्ट हैं, कृपया बाद में फिर से प्रयास करें।</string>
@@ -292,8 +279,6 @@
     <string name="preference_force_big_core_title">रेंडरर को बड़े कोर पर चलाने के लिए बल दें</string>
 
     <string name="version_select_hint">एक संस्करण चुनें</string>
-    <string name="forge_dl_progress">%s के लिए इंस्टॉलर डाउनलोड हो रहा है</string>
-    <string name="forge_dl_searching">फोर्ज संस्करण नंबर खोजा जा रहा है</string>
     <string name="modloader_dl_failed_to_load_list">संस्करण सूची लोड करने में विफल!</string>
     <string name="forge_dl_no_installer">माफ़ करें, लेकिन फोर्ज के इस संस्करण में इंस्टॉलर नहीं है, जो अभी तक समर्थित नहीं है।</string>
     <string name="forge_dl_select_version">फोर्ज संस्करण चुनें</string>
@@ -302,7 +287,6 @@
 
     <string name="fabric_dl_install">इंस्टॉल करें</string>
     <string name="fabric_dl_cant_read_meta">%s लोडर मेटाडेटा पढ़ने में विफल। कृपया बाद में फिर से प्रयास करें।</string>
-    <string name="fabric_dl_cant_read_meta2">फैब्रिक लोडर मेटाडेटा पढ़ने में विफल। कृपया बाद में फिर से प्रयास करें।</string>
     <string name="modloader_dl_install_fabric_instance">फैब्रिक इंस्टेंस बनाएँ</string>
     <string name="modloader_dl_install_quilt_instance">क्विल्ट इंस्टेंस बनाएँ</string>
     <string name="modloader_dl_install_forge_instance">फोर्ज इंस्टेंस बनाएँ</string>
@@ -312,7 +296,6 @@
     <string name="fabric_dl_loader_title">संस्करण चुनें</string>
     <string name="of_dl_select_version">ऑप्टिफाइन संस्करण चुनें</string>
     <string name="of_dl_failed_to_scrape">ऑप्टिफाइन इंस्टॉलेशन के लिए डेटा एकत्र करने में विफल।</string>
-    <string name="of_dl_progress">%s डाउनलोड हो रहा है</string>
     <string name="mod_dl_install_optifine">ऑप्टिफाइन इंस्टॉल करें</string>
 
 
@@ -330,13 +313,9 @@
     <string name="search_modpack_download_error">मॉडपैक मेटाडेटा डाउनलोड करने में विफल</string>
 
     <string name="modpack_download_downloading_metadata">मॉडपैक मेटाडेटा डाउनलोड हो रहा है (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods">मॉड्स डाउनलोड हो रहे हैं (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods_fc">मॉड्स डाउनलोड हो रहे हैं (फ़ाइल %d/%d)</string>
     <string name="modpack_download_applying_overrides">ओवरराइड्स लागू हो रहे हैं (%d/%d)</string>
     <string name="modpack_install_notification_title">मोजो मॉडपैक इंस्टॉलर</string>
     <string name="modpack_install_notification_success">मॉडपैक इंस्टॉलेशन पूरा करने के लिए यहां क्लिक करें</string>
-    <string name="modpack_install_notification_data_not_available">मॉड लोडर जानकारी डाउनलोड करने में विफल</string>
-    <string name="modpack_install_modloader_download_failed">मॉड लोडर फ़ाइलें डाउनलोड करने में विफल</string>
     <string name="modpack_install_download_failed">मॉडपैक फ़ाइलें डाउनलोड करने में विफल</string>
     <string name="modpack_install_instance_button">मॉडपैक इंस्टेंस बनाएँ</string>
 
@@ -366,13 +345,8 @@
     <string name="notification_permission_toast">आप सेटिंग्स में जाकर बाद में कभी भी अपना मन बदल सकते हैं।</string>
     <string name="preference_ask_for_notification_title">नोटिफिकेशन्स की अनुमति दें</string>
     <string name="preference_ask_for_notification_description">नोटिफिकेशन अनुमति को फिर से रिक्वेस्ट करने के लिए क्लिक करें, गेम/मॉडपैक बैकग्राउंड डाउनलोड्स के सही ढंग से काम करने के लिए इसकी आवश्यकता है।</string>
-    <string name="preference_vsync_in_zink_title">ज़िंक के साथ V-Sync की अनुमति दें</string>
-    <string name="preference_vsync_in_zink_description">लॉन्चर को ज़िंक के लिए V-Sync सक्षम करने हेतु इंटरनल सिस्टम API का उपयोग करने की अनुमति देता है। यदि सिस्टम अपडेट के बाद ज़िंक के साथ आपका लॉन्चर अचानक क्रैश हो जाता है, तो इसे बंद कर दें।</string>
-    <string name="exception_failed_to_unpack_jre17">JRE 17 इंस्टॉल करने में विफल</string>
     <string name="newdl_starting">गेम मेटाडेटा पढ़ा जा रहा है…</string>
     <string name="newdl_downloading_metadata">गेम मेटाडेटा डाउनलोड हो रहा है (%s)</string>
-    <string name="newdl_downloading_game_files">गेम डाउनलोड हो रहा है… (%d/%d, %.2f MB/s)</string>
-    <string name="newdl_downloading_game_files_size">गेम डाउनलोड हो रहा है… (%.2f/%.2f MB, %.2f MB/s)</string>
     <string name="cropper_title">छवि क्षेत्र चुनें</string>
     <string name="cropper_lock_vertical">V. लॉक</string>
     <string name="cropper_lock_horizontal">H. लॉक</string>
@@ -384,7 +358,6 @@
     <string name="log_view_button_output_on">आउटपुट\nचालू</string>
     <string name="log_view_label_log_output">लॉग आउटपुट:</string>
     <string name="execute_jar_failed_to_read_file">.jar फ़ाइल पढ़ने में विफल</string>
-    <string name="execute_jar_incompatible_runtime">.jar निष्पादन सुविधा जावा %d के साथ संगत नहीं है</string>
     <string name="controller_button_a">A</string>
     <string name="controller_button_b">B</string>
     <string name="controller_button_x">X</string>
@@ -426,7 +399,6 @@
     <string name="bta_installer_untested_versions">अपरिक्षित BTA संस्करण</string>
     <string name="bta_installer_nightly_versions">नाइटली BTA संस्करण</string>
     <string name="newdl_extracting_native_libraries">नेटिव लाइब्रेरीज़ निकाली जा रही हैं (%d/%d)</string>
-    <string name="compat_version_not_supported">आपका डिवाइस यह संस्करण नहीं चला सकता क्योंकि LTW आपके डिवाइस पर समर्थित नहीं है।</string>
     <string name="oauth_unknown_error">अज्ञात प्रमाणीकरण त्रुटि</string>
     <string name="oauth_web_complete">प्रमाणीकरण हो रहा है…</string>
     <string name="auth_select_microsoft">माइक्रोसॉफ्ट अकाउंट</string>
