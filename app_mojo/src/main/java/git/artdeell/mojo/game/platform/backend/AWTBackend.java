@@ -6,6 +6,7 @@ import android.view.Surface;
 import git.artdeell.mojo.CallbackBridge;
 import git.artdeell.mojo.awt.AWTBridge;
 import git.artdeell.mojo.game.platform.Platform;
+import git.artdeell.mojo.utils.KeyboardUtils;
 
 public class AWTBackend implements PlatformBackend {
     static {
@@ -47,12 +48,12 @@ public class AWTBackend implements PlatformBackend {
 
     @Override
     public boolean sendKeyEvent(int key, int state, int mods) {
-        return AWTBridge.nativeSendKeyEvent(key, state, mods, 0);
+        return AWTBridge.nativeSendKeyEvent(key, state, mods, state == 1 ? KeyboardUtils.getCodepoint(key, mods) : '\0');
     }
 
     @Override
     public boolean sendKeyEvent(int key, boolean state, int mods) {
-        return AWTBridge.nativeSendKeyEvent(key, state ? 1 : 0, mods, 0);
+        return AWTBridge.nativeSendKeyEvent(key, state ? 1 : 0, mods, state ? KeyboardUtils.getCodepoint(key, mods) : '\0');
     }
 
     @Override
