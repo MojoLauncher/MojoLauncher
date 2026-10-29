@@ -11,7 +11,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">¡Esta cuenta será borrada!</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">Seleccione un instalador de modificaciones</string>
     <!-- Error messages -->
     <string name="error_fatal">MJLauncher se ha detenido de forma inesperada</string>
     <string name="error_no_version">¡No hay versiones!</string>
@@ -19,7 +18,6 @@
     <string name="error_show_less">Mostrar menos</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">¡Se requiere el permiso de lectura/escritura al almacenamiento!</string>
-    <string name="toast_optifine_success">Instalación completada</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -27,10 +25,7 @@
     <string name="mcl_tab_wiki">Wiki</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">Limpiando archivos caché</string>
-    <string name="mcl_launch_downloading">Descargando %s</string>
     <string name="mcl_launch_downloading_progress">"Descargando %s (%.2f MB / %.2f MB)"</string>
-    <string name="mcl_launch_download_assets">Preparando para descargar los recursos</string>
     <string name="mcl_options">Opciones</string>
     <string name="mcl_option_customcontrol">Controles personalizados</string>
     <string name="mcl_setting_title_use_surface_view">Usar representación de superficie alternativa</string>
@@ -76,7 +71,6 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">La aplicación/juego ha finalizado con el código %d, mira el archivo latestlog.txt para más detalles.</string>
     <string name="mcn_exit_confirm">¿Estás seguro de que quieres forzar el cierre?</string>
-    <string name="mcn_check_fail_vulkan_support">¡El renderizador Zink (Vulkan) no es compatible con este dispositivo!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">Chat</string>
     <string name="control_debug">Debug</string>
@@ -97,7 +91,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">Forzar el cierre</string>
     <string name="control_viewout">Registro de salida</string>
-    <string name="control_adebug">Ingresar Debug</string>
     <string name="control_customkey">Enviar tecla personalizada</string>
     <!-- ImportControlActivity Strings -->
     <string name="import_control_label">Importar controles</string>
@@ -129,11 +122,6 @@
     <string name="main_install_jar_file">Ejecutar un .jar</string>
     <string name="main_play">Jugar</string>
     <string name="autoram_info_msg">Memoria establecida a %d MB</string>
-    <string name="mcl_setting_check_libraries">Comprobar las librerías después de descargar</string>
-    <string name="mcl_setting_check_libraries_subtitle">Esta opción fuerza al launcher a comprobar si el hash de la librería está disponible. Evita descargas rotas.</string>
-    <string name="dl_library_sha_fail">La librería %s está dañada y se volverá a descargar</string>
-    <string name="dl_library_sha_unknown">La librería %s no puede ser revisada, se asumirá que está en buen estado</string>
-    <string name="dl_library_sha_pass">La librería %s está en buen estado y se puede utilizar</string>
     <string name="mcl_disable_gestures">Desactivar gestos</string>
     <string name="mcl_disable_gestures_subtitle">Quita los gestos, como mantener pulsado para romper el bloque y tocar para colocar un bloque.</string>
     <string name="mcl_disable_swap_hand">Desactivar doble toque para intercambiar manos</string>
@@ -159,7 +147,6 @@
     <string name="multirt_config_setdefault_already">Predeterminado</string>
     <string name="multirt_config_removeerror_last">Debes tener al menos un Runtime de Java instalado.</string>
     <string name="multirt_nocompatiblert">No se encontró ningún Java Runtime compatible. Esta versión requiere de Java %d o superior.</string>
-    <string name="multirt_nojava8rt">No se puede encontrar Java 8. Para utilizar esta opción, necesita instalar Java 8.</string>
     <string name="multirt_delete_runtime">Eliminar runtime</string>
     <string name="pvc_gameDirectory">Directorio del juego</string>
     <string name="pvc_jvmArgs">Argumentos JVM</string>
@@ -227,7 +214,6 @@
     <string name="preference_enable_gyro_description">Activar esto te permitirá mover la cámara al girar tu teléfono.</string>
     <string name="preference_gyro_sensitivity_title">Sensibilidad del giroscopio</string>
     <string name="preference_gyro_sensitivity_description">Ajusta la sensibilidad del giroscopio.</string>
-    <string name="toast_turn_on_gyro">¡Primero debes activar los controles por giroscopio para usar esto!</string>
     <string name="preference_gyro_sample_rate_title">Tasa de muestreo del giroscopio</string>
     <string name="preference_gyro_sample_rate_description">Si tienes problemas de rendimiento con el giroscopio, sube esto.</string>
     <string name="microsoft_login_retry_later">Demasiadas solicitudes, inténtalo de nuevo más tarde.</string>
@@ -253,8 +239,6 @@
     <string name="preference_force_big_core_title">Fuerza al juego para que use el núcleo más rápido</string>
 
     <string name="version_select_hint">Elige una versión</string>
-    <string name="forge_dl_progress">Descargando instalador para %s</string>
-    <string name="forge_dl_searching">Buscando el número de la versión de Forge</string>
     <string name="modloader_dl_failed_to_load_list">Oh no, ¡Ocurrió un error cargando la lista de versiones!</string>
     <string name="forge_dl_no_installer">Lo siento, pero esta versión de Forge no tiene un instalador, lo cúal aún no esta soportado por MJ.</string>
     <string name="forge_dl_select_version">Elige la versión de Forge</string>
@@ -268,7 +252,6 @@
     <string name="fabric_dl_loader_title">Elige versiones</string>
     <string name="of_dl_select_version">Seleciona la versión de OptiFine</string>
     <string name="of_dl_failed_to_scrape">Fallo al recolectar datos para la instalacion de OptiFine</string>
-    <string name="of_dl_progress">Descargando %s</string>
     <string name="hint_search_modpack">Buscar paquetes de mods</string>
     <string name="preference_vulkan_driver_system_title">Usar controlador Vulkan del sistema</string>
     <string name="preference_vulkan_driver_system_description">Forzar al launcher a usar el controlador Vulkan del sistema en lugar de Turnip en GPUs Adreno. Sólo afecta a Zink y mods que usan Vulkan.</string>
@@ -279,13 +262,9 @@
     <string name="search_modpack_error">No se pudo encontrar modpacks</string>
     <string name="search_modpack_download_error">Error al descargar los metadatos del modpack</string>
     <string name="modpack_download_downloading_metadata">Descargando metadatos del modpack (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods">Descargando mods (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods_fc">Descargando mods (Archivo %d de %d)</string>
     <string name="modpack_download_applying_overrides">Aplicando sobrescrituras (%d/%d)</string>
     <string name="modpack_install_notification_title">Instalador de mod pack</string>
     <string name="modpack_install_notification_success">Haz clic aquí para finalizar la instalación del modpack</string>
-    <string name="modpack_install_notification_data_not_available">No se pudo descargar la información del mod loader</string>
-    <string name="modpack_install_modloader_download_failed">Error al descargar los archivos del mod loader</string>
     <string name="modpack_install_download_failed">Error al descargar los archivos de modpack</string>
     <string name="notif_error_occured">Ha ocurrido un error</string>
     <string name="notif_error_occured_desc">Da clic para ver más detalles</string>
@@ -315,13 +294,8 @@
     <string name="notification_permission_toast">Siempre puedes cambiar de opinión más tarde yendo a Ajustes</string>
     <string name="preference_ask_for_notification_title">Permitir notificaciones</string>
     <string name="preference_ask_for_notification_description">Haz clic para volver a solicitar el permiso de notificaciones, necesario para qué las descargas en segundo plano del juego/modpack funcionen correctamente.</string>
-    <string name="preference_vsync_in_zink_title">Permitir V-Sync con Zink</string>
-    <string name="preference_vsync_in_zink_description">Permite al lanzador usar APIs internas del sistema para habilitar V-Sync para Zink. Apague esto si su lanzador se bloquea repentinamente con Zink después de una actualización del sistema.</string>
-    <string name="exception_failed_to_unpack_jre17">Error al instalar JRE 17</string>
     <string name="newdl_starting">Leyendo metadatos…</string>
     <string name="newdl_downloading_metadata">Descargando metadatos del juego (%s)</string>
-    <string name="newdl_downloading_game_files">Descargando el juego...(%d/%d,%.2f MB/s)</string>
-    <string name="newdl_downloading_game_files_size">Descargando el juego...(%.2f/%.2f MB, %.2f MB/s)</string>
     <string name="cropper_title">Seleccione la región de la imagen</string>
     <string name="cropper_reset">Reiniciar</string>
     <string name="cropper_select_cancelled">Selección cancelada</string>
@@ -331,7 +305,6 @@
     <string name="log_view_button_output_on">Salida\nEncendido</string>
     <string name="log_view_label_log_output">Salida del registro:</string>
     <string name="execute_jar_failed_to_read_file">Falló al leer el archivo .jar</string>
-    <string name="execute_jar_incompatible_runtime">La característica para ejecutar .jar no es compatible con Java %d</string>
     <string name="controller_button_a">A</string>
     <string name="controller_button_b">B</string>
     <string name="controller_button_x">X</string>

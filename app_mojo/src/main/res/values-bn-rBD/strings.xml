@@ -18,7 +18,6 @@
     <string name="warning_remove_account">এই একাউন্টটি মুছে যাবে!</string>
 
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">একটি মোড ইনস্টলার নির্বাচন করুন</string>
 
     <!-- Error messages -->
     <string name="error_fatal">MJLauncher অপ্রত্যাশিতভাবে ক্র্যাশ করেছে</string>
@@ -28,7 +27,6 @@
 
     <!-- Toast messages -->
     <string name="toast_permission_denied">স্টোরেজের জন্য রিড/রাইটের অনুমতি প্রয়োজন!</string>
-    <string name="toast_optifine_success">ইনস্টল সফল</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -39,10 +37,7 @@
     <!-- MCLauncherActivity: Account status -->
 
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">ক্যাশ ফাইল পরিষ্কার করা হচ্ছে</string>
-    <string name="mcl_launch_downloading">%s ডাউনলোড হচ্ছে</string>
     <string name="mcl_launch_downloading_progress">"%s (%.2f এমবি / %.2f এমবি) ডাউনলোড হচ্ছে"</string>
-    <string name="mcl_launch_download_assets">রিসোর্স ডাউনলোড করার জন্য প্রস্তুতি করা হচ্ছে</string>
 
     <string name="mcl_options">অপশনসমূহ</string>
     <string name="mcl_option_customcontrol">কাস্টম কন্ট্রোল</string>
@@ -92,7 +87,6 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">অ্যাপ্লিকেশন/গেম কোড %d সহ বন্ধ হয়েছে, আরও বিস্তারিত latestlog.txt ফাইলে দেখুন।</string>
     <string name="mcn_exit_confirm">আপনি কি জোরপূর্বক বন্ধ করতে চান?</string>
-    <string name="mcn_check_fail_vulkan_support">এই ডিভাইসে Zink (Vulkan) রেন্ডারার সমর্থিত নয়!</string>
 
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">Chat</string>
@@ -115,8 +109,7 @@
     <!-- MainActivity: Menu advanced controls -->
   <string name="control_forceclose">জোরপূর্বক বন্ধ করুন</string>
   <string name="control_viewout">লগ আউটপুট</string>
-  <string name="control_adebug">ইনপুট ডিবাগ</string>
-  <string name="control_customkey">কাস্টম কীকোড পাঠান</string>
+    <string name="control_customkey">কাস্টম কীকোড পাঠান</string>
 
 <!-- ImportControlActivity Strings -->
   <string name="import_control_label">কন্ট্রোল ইমপোর্ট করুন</string>
@@ -153,13 +146,6 @@
 
    <string name="autoram_info_msg">মেমরি %d MB এ সেট করা হয়েছে</string>
 
-   <string name="mcl_setting_check_libraries">ডাউনলোডের পরে লাইব্রেরি যাচাই করুন</string>
-   <string name="mcl_setting_check_libraries_subtitle">এই অপশনটি লঞ্চারকে লাইব্রেরির হ্যাশ যাচাই করতে বাধ্য করে যদি পাওয়া যায়। ত্রুটিপূর্ণ ডাউনলোড প্রতিরোধ করে।</string>
-
-    <string name="dl_library_sha_fail">লাইব্রেরি %s ক্ষতিগ্রস্ত এবং পুনরায় ডাউনলোড করা হবে</string>
-    <string name="dl_library_sha_unknown">লাইব্রেরি %s যাচাই করা যায়নি, ভাল আছে ধরে নিতে হবে</string>
-    <string name="dl_library_sha_pass">লাইব্রেরি %s ঠিক আছে এবং ব্যবহারযোগ্য</string>
-
     <string name="mcl_disable_gestures">জেসচার নিষ্ক্রিয় করুন</string>
     <string name="mcl_disable_gestures_subtitle">হোল্ড করে ব্লক ভাঙা বা ট্যাপ করে ব্লক বসানো মতো জেসচার নিষ্ক্রিয় করে।</string>
 
@@ -192,7 +178,6 @@
     <string name="multirt_config_setdefault_already">ডিফল্ট</string>
     <string name="multirt_config_removeerror_last">অন্তত একটি জাভা রানটাইম ইনস্টল থাকতে হবে।</string>
     <string name="multirt_nocompatiblert">কোনও উপযুক্ত জাভা রানটাইম খুঁজে পাওয়া যায়নি। এই ভার্সনের জন্য জাভা %d বা নতুনতর প্রয়োজন।</string>
-    <string name="multirt_nojava8rt">জাভা ৮ খুঁজে পাওয়া যায়নি। এই অপশনটি ব্যবহার করতে হলে জাভা ৮ ইনস্টল করতে হবে।</string>
     <string name="multirt_delete_runtime">রানটাইম মুছুন</string>
 
     <string name="pvc_gameDirectory">গেম ডিরেক্টরি</string>
@@ -265,7 +250,6 @@
     <string name="preference_enable_gyro_description">এটি চালু করলে ফোন ঘুরিয়ে ইন-গেমে ঘুরতে পারবেন।</string>
     <string name="preference_gyro_sensitivity_title">জাইরোস্কোপ সেন্সিটিভিটি</string>
     <string name="preference_gyro_sensitivity_description">জাইরোস্কোপ কন্ট্রোলের সেন্সিটিভিটি সমন্বয় করুন।</string>
-    <string name="toast_turn_on_gyro">এটি ব্যবহার করতে আগে জাইরোস্কোপ কন্ট্রোল চালু করুন!</string>
     <string name="preference_gyro_sample_rate_title">জাইরোস্কোপ স্যাম্পলিং রেট</string>
     <string name="preference_gyro_sample_rate_description">জাইরোস্কোপ কন্ট্রোলে পারফরম্যান্স সমস্যা হলে এটি বাড়ান।</string>
     <string name="microsoft_login_retry_later">অনেক অনুরোধ করা হয়েছে, অনুগ্রহ করে পরে চেষ্টা করুন।</string>
@@ -292,8 +276,6 @@
     <string name="preference_force_big_core_title">রেন্ডারারকে বিগ কোরে চালাতে বাধ্য করুন</string>
 
     <string name="version_select_hint">ভার্সন নির্বাচন করুন</string>
-    <string name="forge_dl_progress">%s এর জন্য ইনস্টলার ডাউনলোড হচ্ছে</string>
-    <string name="forge_dl_searching">Forge ভার্সন খোঁজা হচ্ছে</string>
     <string name="modloader_dl_failed_to_load_list">ভার্সন লিস্ট লোড করতে ব্যর্থ!</string>
     <string name="forge_dl_no_installer">দুঃখিত, এই Forge ভার্সনে ইনস্টলার নেই, যা এখনও সমর্থিত নয়।</string>
     <string name="forge_dl_select_version">Forge ভার্সন নির্বাচন করুন</string>
@@ -302,7 +284,6 @@
 
     <string name="fabric_dl_install">ইনস্টল করুন</string>
     <string name="fabric_dl_cant_read_meta">%s লোডার মেটাডেটা পড়তে ব্যর্থ। পরে আবার চেষ্টা করুন।</string>
-    <string name="fabric_dl_cant_read_meta2">Fabric লোডার মেটাডেটা পড়তে ব্যর্থ। পরে আবার চেষ্টা করুন।</string>
     <string name="modloader_dl_install_fabric_instance">Fabric ইনস্ট্যান্স তৈরি করুন</string>
     <string name="modloader_dl_install_quilt_instance">Quilt ইনস্ট্যান্স তৈরি করুন</string>
     <string name="modloader_dl_install_forge_instance">Forge ইনস্ট্যান্স তৈরি করুন</string>
@@ -312,7 +293,6 @@
     <string name="fabric_dl_loader_title">ভার্সন নির্বাচন করুন</string>
     <string name="of_dl_select_version">OptiFine ভার্সন নির্বাচন করুন</string>
     <string name="of_dl_failed_to_scrape">OptiFine ইনস্টলেশনের জন্য ডেটা আনতে ব্যর্থ</string>
-    <string name="of_dl_progress">%s ডাউনলোড হচ্ছে</string>
     <string name="mod_dl_install_optifine">OptiFine ইনস্টল করুন</string>
     <string name="hint_search_modpack">মডপ্যাক খুঁজুন</string>
     <string name="preference_vulkan_driver_system_title">সিস্টেম Vulkan ড্রাইভার ব্যবহার করুন</string>
@@ -324,13 +304,9 @@
     <string name="search_modpack_error">মডপ্যাক খুঁজতে ব্যর্থ</string>
     <string name="search_modpack_download_error">মডপ্যাক মেটাডেটা ডাউনলোড করতে ব্যর্থ</string>
     <string name="modpack_download_downloading_metadata">মডপ্যাক মেটাডেটা ডাউনলোড হচ্ছে (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods">মডগুলি ডাউনলোড হচ্ছে (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods_fc">মডগুলি ডাউনলোড হচ্ছে (ফাইল %d / %d)</string>
     <string name="modpack_download_applying_overrides">ওভাররাইড প্রয়োগ হচ্ছে (%d/%d)</string>
     <string name="modpack_install_notification_title">MJ Modpack ইনস্টলার</string>
     <string name="modpack_install_notification_success">মডপ্যাক ইনস্টলেশন সম্পূর্ণ করতে এখানে ক্লিক করুন</string>
-    <string name="modpack_install_notification_data_not_available">মড লোডার তথ্য ডাউনলোড ব্যর্থ</string>
-    <string name="modpack_install_modloader_download_failed">মড লোডার ফাইল ডাউনলোড করতে ব্যর্থ</string>
     <string name="modpack_install_download_failed">মডপ্যাক ফাইল ডাউনলোড করতে ব্যর্থ</string>
     <string name="modpack_install_instance_button">মডপ্যাক ইনস্ট্যান্স তৈরি করুন</string>
     <string name="notif_error_occured">একটি ত্রুটি ঘটেছে</string>
@@ -362,13 +338,8 @@
     <string name="notification_permission_toast">আপনি পরে সেটিংস থেকে এটি পরিবর্তন করতে পারবেন</string>
     <string name="preference_ask_for_notification_title">নোটিফিকেশন অনুমোদন দিন</string>
     <string name="preference_ask_for_notification_description">গেম/মডপ্যাক ব্যাকগ্রাউন্ড ডাউনলোডের জন্য প্রয়োজনীয় নোটিফিকেশন অনুমতি পুনরায় অনুরোধ করতে ক্লিক করুন।</string>
-    <string name="preference_vsync_in_zink_title">Zink-এ V-Sync অনুমোদন দিন</string>
-    <string name="preference_vsync_in_zink_description">Zink-এর জন্য V-Sync চালু করতে লঞ্চারকে সিস্টেম API ব্যবহার করতে দেয়। সিস্টেম আপডেটের পর ক্র্যাশ হলে এটি বন্ধ করুন।</string>
-    <string name="exception_failed_to_unpack_jre17">JRE 17 ইনস্টল করতে ব্যর্থ</string>
     <string name="newdl_starting">গেম মেটাডেটা পড়া হচ্ছে…</string>
     <string name="newdl_downloading_metadata">গেম মেটাডেটা ডাউনলোড হচ্ছে (%s)</string>
-    <string name="newdl_downloading_game_files">গেম ডাউনলোড হচ্ছে… (%d/%d, %.2f MB/s)</string>
-    <string name="newdl_downloading_game_files_size">গেম ডাউনলোড হচ্ছে… (%.2f/%.2f MB, %.2f MB/s)</string>
     <string name="cropper_title">ইমেজ এরিয়া নির্বাচন করুন</string>
     <string name="cropper_lock_vertical">ভার্টিকাল লক</string>
     <string name="cropper_lock_horizontal">হরিজন্টাল লক</string>
@@ -380,9 +351,8 @@
     <string name="log_view_button_output_on">আউটপুট\nচালু</string>
     <string name="log_view_label_log_output">লগ আউটপুট:</string>
     <string name="execute_jar_failed_to_read_file">.jar ফাইল পড়তে ব্যর্থ</string>
-    <string name="execute_jar_incompatible_runtime">Execute .jar ফিচার Java %d এর সাথে সামঞ্জস্যপূর্ণ নয়</string>
 
-<!-- Controller buttons -->
+    <!-- Controller buttons -->
     <string name="controller_button_a">A</string>
     <string name="controller_button_b">B</string>
     <string name="controller_button_x">X</string>
@@ -426,7 +396,6 @@
     <string name="bta_installer_untested_versions">পরীক্ষা না করা BTA ভার্সন</string>
     <string name="bta_installer_nightly_versions">Nightly BTA ভার্সন</string>
     <string name="newdl_extracting_native_libraries">নেটিভ লাইব্রেরি এক্সট্র্যাক্ট হচ্ছে (%d/%d)</string>
-    <string name="compat_version_not_supported">আপনার ডিভাইস LTW সমর্থন না করায় এই ভার্সন চালানো যাবে না।</string>
     <string name="oauth_unknown_error">অজানা অথেনটিকেশন ত্রুটি</string>
     <string name="oauth_web_complete">অথেনটিকেট হচ্ছে…</string>
     <string name="auth_select_microsoft">Microsoft অ্যাকাউন্ট</string>
