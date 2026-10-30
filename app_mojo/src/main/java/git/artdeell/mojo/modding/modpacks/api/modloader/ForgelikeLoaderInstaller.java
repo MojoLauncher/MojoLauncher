@@ -1,5 +1,6 @@
 package git.artdeell.mojo.modding.modpacks.api.modloader;
 
+import git.artdeell.mojo.instances.InstanceHint;
 import git.artdeell.mojo.instances.InstanceInstaller;
 import git.artdeell.mojo.modding.forge.ForgelikeUtils;
 
@@ -9,7 +10,6 @@ public class ForgelikeLoaderInstaller implements LoaderInstaller {
     private final ForgelikeUtils mUtils;
     private final String gameVersion;
     private final String loaderVersion;
-
     public ForgelikeLoaderInstaller(ForgelikeUtils utils, String gameVersion, String loaderVersion) {
         this.mUtils = utils;
         this.gameVersion = gameVersion;
@@ -29,5 +29,10 @@ public class ForgelikeLoaderInstaller implements LoaderInstaller {
     @Override
     public String installHeadlessly() throws IOException {
         throw new RuntimeException("ForgelikeLoaderInstaller only supports GUI installation");
+    }
+
+    @Override
+    public InstanceHint getPlatformHint() {
+        return mUtils.getHint();
     }
 }

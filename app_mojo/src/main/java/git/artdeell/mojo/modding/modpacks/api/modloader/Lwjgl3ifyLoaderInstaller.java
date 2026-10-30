@@ -1,5 +1,7 @@
 package git.artdeell.mojo.modding.modpacks.api.modloader;
 
+import git.artdeell.mojo.game.platform.Platform;
+import git.artdeell.mojo.instances.InstanceHint;
 import git.artdeell.mojo.instances.InstanceInstaller;
 import git.artdeell.mojo.modding.lwjgl3ify.Lwjgl3ifyUtils;
 
@@ -26,5 +28,10 @@ public class Lwjgl3ifyLoaderInstaller implements LoaderInstaller {
     @Override
     public String installHeadlessly() throws IOException {
         return Lwjgl3ifyUtils.installRelauncherVersionJson(lwjgl3ifyJarPath);
+    }
+
+    @Override
+    public InstanceHint getPlatformHint() {
+        return InstanceHint.LWJGL3IFY;
     }
 }

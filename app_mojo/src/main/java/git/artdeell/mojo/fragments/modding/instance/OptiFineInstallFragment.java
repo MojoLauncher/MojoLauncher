@@ -9,6 +9,7 @@ import com.kdt.mcgui.ProgressLayout;
 import git.artdeell.mojo.R;
 
 import git.artdeell.mojo.fragments.modding.ModVersionListFragment;
+import git.artdeell.mojo.instances.InstanceHint;
 import git.artdeell.mojo.instances.InstanceInstaller;
 import git.artdeell.mojo.instances.Instances;
 import git.artdeell.mojo.modding.ModloaderListenerProxy;
@@ -52,6 +53,7 @@ public class OptiFineInstallFragment extends ModVersionListFragment<OptiFineUtil
                 instance.name = "OptiFine";
                 instance.installer = instanceInstaller;
                 instance.sharedData = true;
+                instance.platformHint = InstanceHint.OPTIFINE;
             }, "OptiFine");
             ProgressLayout.clearProgress(ProgressLayout.INSTALL_MODPACK);
             instanceInstaller.start();

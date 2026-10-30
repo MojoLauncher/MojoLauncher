@@ -44,6 +44,7 @@ public class ModpackInstaller {
                 if(versionId == null) throw new IOException("Unknown mod loader version");
                 instance.versionId = versionId;
             }
+            instance.platformHint = loaderInstaller.getPlatformHint();
             instance.write();
             ModIconCache.writeInstanceImage(instance, icon);
 

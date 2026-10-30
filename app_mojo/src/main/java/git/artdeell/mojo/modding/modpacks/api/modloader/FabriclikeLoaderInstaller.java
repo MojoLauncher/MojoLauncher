@@ -1,5 +1,6 @@
 package git.artdeell.mojo.modding.modpacks.api.modloader;
 
+import git.artdeell.mojo.instances.InstanceHint;
 import git.artdeell.mojo.instances.InstanceInstaller;
 import git.artdeell.mojo.modding.fabric.FabriclikeUtils;
 
@@ -28,5 +29,10 @@ public class FabriclikeLoaderInstaller implements LoaderInstaller {
     @Override
     public String installHeadlessly() throws IOException {
         return mUtils.install(gameVersion, loaderVersion);
+    }
+
+    @Override
+    public InstanceHint getPlatformHint() {
+        return mUtils.getHint();
     }
 }

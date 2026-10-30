@@ -19,6 +19,7 @@ import git.artdeell.mojo.MojoApplication;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.contracts.OpenDocumentWithExtension;
 import git.artdeell.mojo.instances.Instance;
+import git.artdeell.mojo.instances.InstanceHint;
 import git.artdeell.mojo.instances.Instances;
 import git.artdeell.mojo.modding.modmanager.ModAdapter;
 import git.artdeell.mojo.modding.modmanager.ModInfo;
@@ -35,6 +36,7 @@ import java.io.OutputStream;
 import java.util.List;
 
 import git.artdeell.mojo.R;
+import me.andreasmelone.basicmodinfoparser.platform.Platform;
 
 public class ModManagerFragment extends Fragment {
     public static final String TAG = "ModManagerFragment";
@@ -74,10 +76,11 @@ public class ModManagerFragment extends Fragment {
         mProgressBar.setVisibility(View.VISIBLE);
         MojoApplication.sExecutorService.execute(()->{
             Instance instance = Instances.loadSelectedInstance();
-            List<ModInfo> modInfoList = ModScanner.findMods(mModsFolder, instance.platform);
+            Platform modPlatform = InstanceHint.asPlatform(instance.platformHint, instance.versionId);
+            List<ModInfo> modInfoList = ModScanner.findMods(mModsFolder, modPlatform);
             Tools.runOnUiThread(()->{
                 if(isRemoving() || isDetached()) return;
-                ModAdapter modAdapter = new ModAdapter(modInfoList, instance.platform);
+                ModAdapter modAdapter = new ModAdapter(modInfoList, modPlatform);
                 mModRecyclerView.setAdapter(modAdapter);
                 modAdapter.performSearch(m->true, mProgressBar);
             });

@@ -28,8 +28,10 @@ import git.artdeell.mojo.extra.ExtraCore;
 import git.artdeell.mojo.fragments.misc.DeleteConfirmDialogFragment;
 import git.artdeell.mojo.fragments.misc.FileSelectorFragment;
 import git.artdeell.mojo.fragments.modding.ModManagerFragment;
+import git.artdeell.mojo.game.platform.Platform;
 import git.artdeell.mojo.game.renderer.RendererCache;
 import git.artdeell.mojo.instances.Instance;
+import git.artdeell.mojo.instances.InstanceHint;
 import git.artdeell.mojo.instances.Instances;
 import git.artdeell.mojo.multirt.MultiRTUtils;
 import git.artdeell.mojo.multirt.RTSpinnerAdapter;
@@ -159,7 +161,7 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         mInstanceIcon.setImageDrawable(
                 InstanceIconProvider.fetchIcon(getResources(), instance)
         );
-        if(instance.platform != null) {
+        if(InstanceHint.asPlatform(instance.platformHint, instance.versionId) != null) {
             mVersionSelectButton.setVisibility(View.GONE);
             mDefaultVersion.setVisibility(View.GONE);
             mVersionLabel.setVisibility(View.GONE);

@@ -10,15 +10,19 @@ public enum InstanceHint {
     LEGACY_FABRIC(true),
     FORGE(true),
     NEOFORGE(true),
-    BTA(false);
+    BTA(false),
+    LWJGL3IFY(true);
     public final boolean immutable;
     InstanceHint(boolean immutable) {
         this.immutable = immutable;
     }
 
     public static Platform asPlatform(InstanceHint hint, String versionId){
+        if(hint == null) return null;
         switch(hint) {
             // TODO: detect legacy forge mods
+            // TODO: use legacy forge for lwjgl3ify
+            case LWJGL3IFY:
             case FORGE: return Platform.FORGE;
             case NEOFORGE: return Platform.NEOFORGE;
             case QUILT: return Platform.QUILT;

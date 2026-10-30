@@ -3,6 +3,7 @@ package git.artdeell.mojo.modding.forge;
 import android.util.Log;
 
 import git.artdeell.mojo.Tools;
+import git.artdeell.mojo.instances.InstanceHint;
 import git.artdeell.mojo.instances.InstanceInstaller;
 import git.artdeell.mojo.modding.ComparableVersionString;
 import git.artdeell.mojo.utils.DownloadUtils;
@@ -30,8 +31,9 @@ public abstract class ForgelikeUtils {
     private final String mMetadataUrl;
     private final String mInstallerUrl;
     private final boolean mVersionOrderInversed;
+    private final InstanceHint mHint;
 
-    private ForgelikeUtils(String name, String cachePrefix, String iconName, String versionResolver, String metadataUrl, String installerUrl, boolean versionOrderInversed) {
+    private ForgelikeUtils(String name, String cachePrefix, String iconName, String versionResolver, String metadataUrl, String installerUrl, boolean versionOrderInversed, InstanceHint hint) {
         this.mName = name;
         this.mCachePrefix = cachePrefix;
         this.mIconName = iconName;
@@ -39,6 +41,7 @@ public abstract class ForgelikeUtils {
         this.mMetadataUrl = metadataUrl;
         this.mInstallerUrl = installerUrl;
         this.mVersionOrderInversed = versionOrderInversed;
+        this.mHint = hint;
     }
 
     public List<String> downloadVersions() throws IOException {
@@ -113,6 +116,10 @@ public abstract class ForgelikeUtils {
         return mVersionOrderInversed;
     }
 
+    public InstanceHint getHint() {
+        return mHint;
+    }
+
     private static String getMcVersionForNeoVersion(String neoVersion) {
         // I feel like it's necessary to explain the NeoForge versioning format
         // basically, what it does is it trims the major version from minecrafts version
@@ -138,7 +145,8 @@ public abstract class ForgelikeUtils {
                     "Forge", "forge", "forge", "%1$s-%2$s",
                     "https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml",
                     "https://maven.minecraftforge.net/net/minecraftforge/forge/%1$s/forge-%1$s-installer.jar",
-                    false
+                    false,
+                    InstanceHint.FORGE
             );
         }
 
@@ -160,7 +168,8 @@ public abstract class ForgelikeUtils {
                     "NeoForge", "neoforge", "neoforge", "%2$s",
                     "https://maven.neoforged.net/releases/net/neoforged/neoforge/maven-metadata.xml",
                     "https://maven.neoforged.net/releases/net/neoforged/neoforge/%1$s/neoforge-%1$s-installer.jar",
-                    true
+                    true,
+                    InstanceHint.NEOFORGE
             );
         }
 

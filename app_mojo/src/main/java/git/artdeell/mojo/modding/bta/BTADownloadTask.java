@@ -10,6 +10,7 @@ import git.artdeell.mojo.R;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.game.renderer.def.Renderers;
 import git.artdeell.mojo.instances.Instance;
+import git.artdeell.mojo.instances.InstanceHint;
 import git.artdeell.mojo.instances.Instances;
 import git.artdeell.mojo.modding.ModloaderDownloadListener;
 import git.artdeell.mojo.utils.jre.classfile.ClassFormatException;
@@ -98,6 +99,7 @@ public class BTADownloadTask implements Runnable {
             i.versionId = btaVersionId;
             if(core) i.renderer = Renderers.LTW_RENDERER;
             i.name = "Better than Adventure!";
+            i.platformHint = InstanceHint.BTA;
         }, "BTA-"+btaVersionId);
         tryDownloadIcon(instance);
     }
