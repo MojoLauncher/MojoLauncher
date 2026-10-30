@@ -273,6 +273,14 @@
     <string name="of_dl_progress">Загрузка %s</string>
     <string name="mod_dl_install_optifine">Установить OptiFine</string>
     <string name="hint_search_modpack">Поиск сборок</string>
+    <string name="hint_search_mods">Поиск модов</string>
+    <string name="vprof_editor_manage_mods">Manage mods</string>
+    <string name="mod_manager_import_mod">Добавить</string>
+    <string name="mod_manager_mod_corrupt">Повреждённый мод</string>
+    <string name="mod_manager_mod_corrupt_cant_read">Файл не может быть прочитан</string>
+    <string name="mod_manager_mod_corrupt_not_a_mod">Этот файл не является модом или несовместим с текущим загрузчиком модов</string>
+    <string name="mod_manager_mod_unknown_description">Нет описания</string>
+    <string name="mod_manager_mod_unknown_version">Неизвестная версия</string>
     <string name="preference_vulkan_driver_system_title">Системный драйвер Vulkan</string>
     <string name="preference_vulkan_driver_system_description">Принудительно использовать системный драйвер Vulkan. Повлияет на всё, что использует Vulkan API</string>
     <string name="generic_install">Установить</string>

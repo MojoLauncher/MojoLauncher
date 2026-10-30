@@ -31,7 +31,7 @@
             android:translationZ="2dp"
 
             android:ems="10"
-            android:hint="@string/hint_search_modpack"
+            android:hint="@string/hint_search_mods"
             android:inputType="textPersonName"
             android:paddingHorizontal="@dimen/padding_heavy"
             app:layout_constraintTop_toTopOf="parent"
@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/padding_moderate"
         android:layout_marginHorizontal="@dimen/padding_moderate"
-        android:text="IMPORT"
+        android:text="@string/mod_manager_import_mod"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

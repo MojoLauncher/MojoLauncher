@@ -332,6 +332,7 @@
 
 
     <string name="hint_search_modpack">Search for modpacks</string>
+    <string name="hint_search_mods">Search for mods</string>
 
     <string name="preference_vulkan_driver_system_title">Use system Vulkan driver</string>
     <string name="preference_vulkan_driver_system_description">Force the launcher to use the system Vulkan driver. Affects anything that uses Vulkan API.</string>
