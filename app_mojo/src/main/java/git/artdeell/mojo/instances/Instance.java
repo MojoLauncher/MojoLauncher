@@ -12,8 +12,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import me.andreasmelone.basicmodinfoparser.platform.Platform;
-
 public class Instance extends DisplayInstance {
     public static final int ARGS_MODE_REPLACE = 0;
     public static final int ARGS_MODE_MERGE_DEFAULT_FIRST = 1;
@@ -30,7 +28,7 @@ public class Instance extends DisplayInstance {
     public String selectedRuntime;
     public String controlLayout;
     public boolean sharedData;
-    public Platform platform = null;
+    public InstanceHint platformHint;
 
     protected Instance() {
     }

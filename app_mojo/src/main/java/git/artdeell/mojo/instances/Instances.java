@@ -143,6 +143,7 @@ public class Instances {
         internalCreateInstance((instance)-> {
             instance.sharedData = true;
             instance.versionId = "1.12.2";
+            instance.platformHint = InstanceHint.VANILLA;
         }, null);
     }
 
@@ -154,6 +155,7 @@ public class Instances {
         return createInstance((instance)-> {
             instance.sharedData = true;
             instance.versionId = Instance.VERSION_LATEST_RELEASE;
+            instance.platformHint = InstanceHint.VANILLA;
         }, null);
     }
 
