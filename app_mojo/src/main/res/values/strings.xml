@@ -525,11 +525,8 @@
     <string name="mod_manager_mod_delete_message_deps">Are you sure you want to delete this mod? The mod also has %1$d dependencies, you can either disable them or remove. You cannot undo the remove action.</string>
     <string name="mod_manager_mod_disable">Disable</string>
     <string name="mod_manager_mod_remove">Remove</string>
-    <string name="mod_manager_mod_delete_toast">Mod has been deleted</string>
     <string name="mod_manager_disable_title">Disable mod</string>
     <string name="mod_manager_disable_message">Disabling this mod will also disable %1$d mods dependent on it. Do you want to continue?</string>
-    <string name="mod_manager_disable_toast">Mod has been disabled</string>
-    <string name="mod_manager_enable_toast">Mod has been enabled</string>
     <string name="loading_screen_booted">Ready - running on %1$s!</string>
     <string name="loading_screen_warning">If you are stuck here, the game might have crashed</string>
     <string name="preference_metadata_clear">Clear metadata cache</string>

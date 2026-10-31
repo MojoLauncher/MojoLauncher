@@ -256,7 +256,6 @@ public class ModAdapter extends RecyclerView.Adapter<ModAdapter.ViewHolder> {
         }
         else {
             if(toggleMod(modInfo)) {
-                Toast.makeText(context, modInfo.disabled ? R.string.mod_manager_disable_toast : R.string.mod_manager_enable_toast, Toast.LENGTH_SHORT).show();
                 notifyItemChanged(index);
             }
         }
