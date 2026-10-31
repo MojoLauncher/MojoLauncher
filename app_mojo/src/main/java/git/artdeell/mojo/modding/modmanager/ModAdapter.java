@@ -287,7 +287,7 @@ public class ModAdapter extends RecyclerView.Adapter<ModAdapter.ViewHolder> {
         else {
             new AlertDialog.Builder(context)
                     .setTitle(R.string.mod_manager_mod_delete_title)
-                    .setMessage(R.string.mod_manager_mod_delete_message_deps)
+                    .setMessage(context.getString(R.string.mod_manager_mod_delete_message_deps, deps.size()))
                     .setNeutralButton(android.R.string.cancel, null)
                     .setNegativeButton(R.string.mod_manager_mod_disable, (d, i) -> deleteMods(target, deps, false))
                     .setPositiveButton(R.string.mod_manager_mod_remove, (d, i) -> deleteMods(target, deps, true))
