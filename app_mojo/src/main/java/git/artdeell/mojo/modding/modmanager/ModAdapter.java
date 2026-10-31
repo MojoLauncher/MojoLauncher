@@ -239,18 +239,22 @@ public class ModAdapter extends RecyclerView.Adapter<ModAdapter.ViewHolder> {
         }
         return false;
     }
+
+    private void toggleMods(ModInfo target, List<ModInfo> deps) {
+        for(ModInfo mod : deps) {
+            toggleMod(mod);
+        }
+        toggleMod(target);
+        notifyDataSetChanged();
+    }
+
     private void toggleModWithDependencies(Context context, ModInfo modInfo, int index) {
         List<ModInfo> deps = !modInfo.disabled ? mDependencyScanner.getEnabledDependencies(modInfo) : null;
         if(deps != null && !deps.isEmpty()) {
             new AlertDialog.Builder(context)
                     .setTitle(R.string.mod_manager_disable_title)
                     .setMessage(context.getString(R.string.mod_manager_disable_message, deps.size()))
-                    .setPositiveButton(android.R.string.ok, (d, i) -> {
-                        for(ModInfo mod : deps) {
-                            toggleMod(mod);
-                        }
-                        toggleMod(modInfo);
-                        notifyDataSetChanged(); })
+                    .setPositiveButton(android.R.string.ok, (d, i) -> toggleMods(modInfo, deps))
                     .setNegativeButton(android.R.string.cancel, null)
                     .show();
         }
