@@ -261,6 +261,19 @@ public class ModAdapter extends RecyclerView.Adapter<ModAdapter.ViewHolder> {
         }
     }
 
+    private void deleteMod(Context context, ModInfo target) {
+        new AlertDialog.Builder(context)
+                .setTitle(R.string.mod_manager_mod_delete_title)
+                .setMessage(R.string.mod_manager_mod_delete_message)
+                .setPositiveButton(android.R.string.ok, (d, i) -> {
+                    target.jarFile.delete();
+                    mDisplayModInfos.remove(target);
+                    ModAdapter.this.notifyDataSetChanged();
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+    }
+
     private class ExpandedViewHolder extends ViewHolder {
         private final SwitchCompat disable;
         public ExpandedViewHolder(@NonNull View itemView) {
@@ -268,11 +281,7 @@ public class ModAdapter extends RecyclerView.Adapter<ModAdapter.ViewHolder> {
             View expansionView = ((ViewStub) itemView.findViewById(R.id.mod_limited_state_stub)).inflate();
             ImageButton delete = expansionView.findViewById(R.id.mod_manager_delete_button);
             disable = expansionView.findViewById(R.id.mod_manager_disable_button);
-            delete.setOnClickListener(v ->{
-                mModInfo.jarFile.delete();
-                mDisplayModInfos.remove(mModInfo);
-                ModAdapter.this.notifyDataSetChanged();
-            });
+            delete.setOnClickListener(v -> deleteMod(v.getContext(), mModInfo));
             disable.setOnClickListener(v -> {
                 toggleModWithDependencies(itemView.getContext(), mModInfo, mIndex);
                 disable.setChecked(!mModInfo.disabled);
