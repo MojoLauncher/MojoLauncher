@@ -21,6 +21,7 @@ import git.artdeell.mojo.contracts.OpenDocumentWithExtension;
 import git.artdeell.mojo.instances.Instance;
 import git.artdeell.mojo.instances.InstanceHint;
 import git.artdeell.mojo.instances.Instances;
+import git.artdeell.mojo.modding.modmanager.DependencyScanner;
 import git.artdeell.mojo.modding.modmanager.ModAdapter;
 import git.artdeell.mojo.modding.modmanager.ModInfo;
 import git.artdeell.mojo.modding.modmanager.ModScanner;
@@ -78,9 +79,10 @@ public class ModManagerFragment extends Fragment {
             Instance instance = Instances.loadSelectedInstance();
             Platform modPlatform = InstanceHint.asPlatform(instance.platformHint, instance.versionId);
             List<ModInfo> modInfoList = ModScanner.findMods(mModsFolder, modPlatform);
+            DependencyScanner scanner = new DependencyScanner(modPlatform, modInfoList);
             Tools.runOnUiThread(()->{
                 if(isRemoving() || isDetached()) return;
-                ModAdapter modAdapter = new ModAdapter(modInfoList, modPlatform);
+                ModAdapter modAdapter = new ModAdapter(modInfoList, modPlatform, scanner);
                 mModRecyclerView.setAdapter(modAdapter);
                 modAdapter.performSearch(m->true, mProgressBar);
             });

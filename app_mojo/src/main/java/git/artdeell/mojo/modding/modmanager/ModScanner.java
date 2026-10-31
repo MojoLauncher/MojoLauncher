@@ -44,7 +44,7 @@ public class ModScanner {
     }
 
     private void findModFiles(File directory) throws InterruptedException{
-        File[] files = directory.listFiles(((file,name) -> name.endsWith(".jar")));
+        File[] files = directory.listFiles(((file,name) -> name.endsWith(".jar") || name.endsWith(".jar.disabled")));
         File[] directories = directory.listFiles(File::isDirectory);
         if(directories != null) for(File f : directories) findModFiles(f);
         if(files == null) return;
@@ -82,6 +82,7 @@ public class ModScanner {
                     BasicModInfo basicModInfo = infos[0];
                     modInfo = new ContainedModInfo(mModFile, modFile, createSearchTerms(basicModInfo));
                 }
+                if(mModFile.getName().endsWith(".jar.disabled")) modInfo.disabled = true;
             } catch (ModInfoParseException e){
                 modInfo = new CorruptModInfo(mModFile, CorruptModInfo.CORRUPTION_REASON_NOT_A_MOD);
             } catch (IOException e) {

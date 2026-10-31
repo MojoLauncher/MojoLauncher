@@ -520,6 +520,10 @@
     <string name="mod_manager_mod_corrupt_not_a_mod">This file isn\'t a mod or isn\'t compatible with this mod loader</string>
     <string name="mod_manager_mod_unknown_description">No description</string>
     <string name="mod_manager_mod_unknown_version">Unknown version</string>
+    <string name="mod_manager_disable_title">Disable mod</string>
+    <string name="mod_manager_disable_message">Disabling this mod will also disable %1$d mods dependent on it. Do you want to continue?</string>
+    <string name="mod_manager_disable_toast">Mod has been disabled</string>
+    <string name="mod_manager_enable_toast">Mod has been enabled</string>
     <string name="loading_screen_booted">Ready - running on %1$s!</string>
     <string name="loading_screen_warning">If you are stuck here, the game might have crashed</string>
     <string name="preference_metadata_clear">Clear metadata cache</string>

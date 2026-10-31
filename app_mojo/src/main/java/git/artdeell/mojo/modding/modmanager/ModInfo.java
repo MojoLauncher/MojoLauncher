@@ -5,9 +5,10 @@ import java.io.File;
 import git.artdeell.mojo.utils.FileUtils;
 
 public abstract class ModInfo {
-    public final File jarFile;
+    public File jarFile;
     public final String searchTerms;
     public boolean expanded;
+    public boolean disabled;
 
     protected ModInfo(File jarFile, String searchTerms) {
         this.jarFile = jarFile;

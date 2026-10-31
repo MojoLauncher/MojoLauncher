@@ -1,10 +1,13 @@
 package git.artdeell.mojo.modding.modmanager;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -16,8 +19,10 @@ import android.view.ViewStub;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import git.artdeell.mojo.MojoApplication;
@@ -25,6 +30,7 @@ import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.modding.modpacks.SelfReferencingFuture;
 import git.artdeell.mojo.utils.FilteredSubList;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
@@ -35,6 +41,7 @@ import java.util.concurrent.Future;
 
 import git.artdeell.mojo.MojoApplication;
 import git.artdeell.mojo.R;
+import me.andreasmelone.basicmodinfoparser.modfile.DependencyChecker;
 import me.andreasmelone.basicmodinfoparser.modfile.ModFile;
 import me.andreasmelone.basicmodinfoparser.platform.BasicModInfo;
 import me.andreasmelone.basicmodinfoparser.platform.Platform;
@@ -45,10 +52,12 @@ public class ModAdapter extends RecyclerView.Adapter<ModAdapter.ViewHolder> {
     private final List<ModInfo> mModInfos;
     private final FilteredSubList<ModInfo> mDisplayModInfos;
     private final Platform mPlatform;
+    private final DependencyScanner mDependencyScanner;
 
-    public ModAdapter(List<ModInfo> modInfos, Platform mPlatform)  {
+    public ModAdapter(List<ModInfo> modInfos, Platform mPlatform, DependencyScanner dependencyScanner)  {
         this.mModInfos = modInfos;
         this.mPlatform = mPlatform;
+        this.mDependencyScanner = dependencyScanner;
         this.mDisplayModInfos = new FilteredSubList<>(Collections.emptySet(), i->true);
     }
 
@@ -93,6 +102,7 @@ public class ModAdapter extends RecyclerView.Adapter<ModAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private final ConstraintLayout mHeaderContainer;
         private final ImageView mThumbnail;
         private final TextView mName;
         private final TextView mDescription;
@@ -105,6 +115,7 @@ public class ModAdapter extends RecyclerView.Adapter<ModAdapter.ViewHolder> {
         protected int mIndex;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            mHeaderContainer = itemView.findViewById(R.id.mod_header_container);
             mThumbnail = itemView.findViewById(R.id.mod_thumbnail_imageview);
             mName = itemView.findViewById(R.id.mod_title_textview);
             mDescription = itemView.findViewById(R.id.mod_body_textview);
@@ -122,6 +133,7 @@ public class ModAdapter extends RecyclerView.Adapter<ModAdapter.ViewHolder> {
             mJarFile.setText(modInfo.jarFile.getName());
             if(modInfo instanceof ContainedModInfo) bindContained((ContainedModInfo) modInfo);
             else if(modInfo instanceof CorruptModInfo) bindCorrupt((CorruptModInfo) modInfo);
+            mHeaderContainer.setAlpha(modInfo.disabled ? 0.25f:1.0f);
         }
 
         private void setBitmapThumbnail(Bitmap bitmap) {
@@ -206,16 +218,60 @@ public class ModAdapter extends RecyclerView.Adapter<ModAdapter.ViewHolder> {
         }
     }
 
+    private boolean toggleMod(ModInfo modInfo) {
+        String name = modInfo.disabled ?
+                modInfo.jarFile.getAbsolutePath().replace(".jar.disabled", ".jar") :
+                modInfo.jarFile.getAbsolutePath() + ".disabled";
+        File newFile = new File(name);
+        if(modInfo.jarFile.renameTo(newFile)) {
+            modInfo.jarFile = newFile;
+            modInfo.disabled = !modInfo.disabled;
+            if(modInfo instanceof ContainedModInfo) {
+                try {
+                    ((ContainedModInfo)modInfo).modFile = ModFile.create(newFile);
+                    return true;
+                } catch (IOException e) {
+                    Log.e("ModAdapter", "Failed to rescan the mod!");
+                }
+            }
+        }
+        return false;
+    }
+    private void toggleModWithDependencies(Context context, ModInfo modInfo, int index) {
+        List<ModInfo> deps = !modInfo.disabled ? mDependencyScanner.getEnabledDependencies(modInfo) : null;
+        if(deps != null && !deps.isEmpty()) {
+            new AlertDialog.Builder(context)
+                    .setTitle(R.string.mod_manager_disable_title)
+                    .setMessage(context.getString(R.string.mod_manager_disable_message, deps.size()))
+                    .setPositiveButton(android.R.string.ok, (d, i) -> {
+                        for(ModInfo mod : deps) {
+                            toggleMod(mod);
+                        }
+                        toggleMod(modInfo);
+                        notifyDataSetChanged(); })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show();
+        }
+        else {
+            if(toggleMod(modInfo)) {
+                Toast.makeText(context, modInfo.disabled ? R.string.mod_manager_disable_toast : R.string.mod_manager_enable_toast, Toast.LENGTH_SHORT).show();
+                notifyItemChanged(index);
+            }
+        }
+    }
+
     private class ExpandedViewHolder extends ViewHolder {
         public ExpandedViewHolder(@NonNull View itemView) {
             super(itemView);
             View expansionView = ((ViewStub) itemView.findViewById(R.id.mod_limited_state_stub)).inflate();
             ImageButton delete = expansionView.findViewById(R.id.mod_manager_delete_button);
+            ImageButton disable = expansionView.findViewById(R.id.mod_manager_disable_button);
             delete.setOnClickListener(v ->{
                 mModInfo.jarFile.delete();
                 mDisplayModInfos.remove(mModInfo);
                 ModAdapter.this.notifyDataSetChanged();
             });
+            disable.setOnClickListener(v -> toggleModWithDependencies(v.getContext(), mModInfo, mIndex));
         }
     }
 }

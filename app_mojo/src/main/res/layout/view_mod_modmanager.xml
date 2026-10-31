@@ -11,6 +11,7 @@
     android:paddingVertical="@dimen/_2sdp"
     android:orientation="vertical">
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mod_header_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
