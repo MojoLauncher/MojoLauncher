@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.function.Consumer;
 
 import git.artdeell.mojo.MojoApplication;
 import git.artdeell.mojo.R;
@@ -261,17 +262,37 @@ public class ModAdapter extends RecyclerView.Adapter<ModAdapter.ViewHolder> {
         }
     }
 
-    private void deleteMod(Context context, ModInfo target) {
-        new AlertDialog.Builder(context)
+    private void deleteMod(ModInfo target) {
+        target.jarFile.delete();
+        mDisplayModInfos.remove(target);
+    }
+    private void deleteMods(ModInfo target, List<ModInfo> deps, boolean remove) {
+        for(ModInfo mod : deps) {
+            if(remove) deleteMod(mod);
+            else toggleMod(mod);
+        }
+        deleteMod(target);
+        ModAdapter.this.notifyDataSetChanged();
+    }
+
+    private void deleteModWithDependencies(Context context, ModInfo target) {
+        List<ModInfo> deps = mDependencyScanner.getEnabledDependencies(target);
+        if(deps.isEmpty())
+            new AlertDialog.Builder(context)
                 .setTitle(R.string.mod_manager_mod_delete_title)
                 .setMessage(R.string.mod_manager_mod_delete_message)
-                .setPositiveButton(android.R.string.ok, (d, i) -> {
-                    target.jarFile.delete();
-                    mDisplayModInfos.remove(target);
-                    ModAdapter.this.notifyDataSetChanged();
-                })
+                .setPositiveButton(android.R.string.ok, (d, i) -> deleteMods(target, Collections.emptyList(), false))
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
+        else {
+            new AlertDialog.Builder(context)
+                    .setTitle(R.string.mod_manager_mod_delete_title)
+                    .setMessage(R.string.mod_manager_mod_delete_message_deps)
+                    .setNeutralButton(android.R.string.cancel, null)
+                    .setNegativeButton(R.string.mod_manager_mod_disable, (d, i) -> deleteMods(target, deps, false))
+                    .setPositiveButton(R.string.mod_manager_mod_remove, (d, i) -> deleteMods(target, deps, true))
+                    .show();
+        }
     }
 
     private class ExpandedViewHolder extends ViewHolder {
@@ -281,7 +302,7 @@ public class ModAdapter extends RecyclerView.Adapter<ModAdapter.ViewHolder> {
             View expansionView = ((ViewStub) itemView.findViewById(R.id.mod_limited_state_stub)).inflate();
             ImageButton delete = expansionView.findViewById(R.id.mod_manager_delete_button);
             disable = expansionView.findViewById(R.id.mod_manager_disable_button);
-            delete.setOnClickListener(v -> deleteMod(v.getContext(), mModInfo));
+            delete.setOnClickListener(v -> deleteModWithDependencies(v.getContext(), mModInfo));
             disable.setOnClickListener(v -> {
                 toggleModWithDependencies(itemView.getContext(), mModInfo, mIndex);
                 disable.setChecked(!mModInfo.disabled);
