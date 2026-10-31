@@ -36,7 +36,7 @@ public class DependencyScanner {
             return infos.length > 0 ? infos[0] : null;
         } catch (ModInfoParseException e) {
             Log.e("DependencyScanner", "Unable to parse mod " + cmi.jarFile.getName() + "!");
-            return  null;
+            return null;
         }
     }
 

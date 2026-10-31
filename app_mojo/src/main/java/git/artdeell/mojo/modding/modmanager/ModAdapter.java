@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -261,17 +262,27 @@ public class ModAdapter extends RecyclerView.Adapter<ModAdapter.ViewHolder> {
     }
 
     private class ExpandedViewHolder extends ViewHolder {
+        private final SwitchCompat disable;
         public ExpandedViewHolder(@NonNull View itemView) {
             super(itemView);
             View expansionView = ((ViewStub) itemView.findViewById(R.id.mod_limited_state_stub)).inflate();
             ImageButton delete = expansionView.findViewById(R.id.mod_manager_delete_button);
-            ImageButton disable = expansionView.findViewById(R.id.mod_manager_disable_button);
+            disable = expansionView.findViewById(R.id.mod_manager_disable_button);
             delete.setOnClickListener(v ->{
                 mModInfo.jarFile.delete();
                 mDisplayModInfos.remove(mModInfo);
                 ModAdapter.this.notifyDataSetChanged();
             });
-            disable.setOnClickListener(v -> toggleModWithDependencies(v.getContext(), mModInfo, mIndex));
+            disable.setOnClickListener(v -> {
+                toggleModWithDependencies(itemView.getContext(), mModInfo, mIndex);
+                disable.setChecked(!mModInfo.disabled);
+            });
+        }
+
+        @Override
+        public void bind(int index, ModInfo modInfo) {
+            super.bind(index, modInfo);
+            disable.setChecked(!modInfo.disabled);
         }
     }
 }
