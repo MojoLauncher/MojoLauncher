@@ -48,10 +48,10 @@ public class PatchNotesFragment extends Fragment {
         Context c = requireContext();
         LinearLayout root = new LinearLayout(c);
         root.setOrientation(LinearLayout.VERTICAL);
-        root.setBackgroundColor(ContextCompat.getColor(c, R.color.background_app));
+        root.setBackgroundColor(ForkUi.BG);
         root.setPadding(ForkUi.dp(c, 16), ForkUi.dp(c, 12), ForkUi.dp(c, 16), ForkUi.dp(c, 12));
 
-        root.addView(ForkUi.text(c, getString(R.string.fork_patch_title), 22, true));
+        root.addView(ForkUi.pageHeader(c, requireActivity(), ForkUi.TAB_PATCH));
         LinearLayout tabs = ForkUi.row(c);
         mJavaTab = ForkUi.button(c, getString(R.string.fork_patch_java), true);
         mBedrockTab = ForkUi.button(c, getString(R.string.fork_patch_bedrock), false);

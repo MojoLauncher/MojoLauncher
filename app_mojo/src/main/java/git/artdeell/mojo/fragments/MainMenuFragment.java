@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -109,9 +110,17 @@ public class MainMenuFragment extends Fragment {
             Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG, modsArgs);
         });
         mBedrockButton.setOnClickListener(v -> openBedrock());
-        mSkinsButton.setOnClickListener(v -> Tools.swapFragment(requireActivity(), SkinsFragment.class, SkinsFragment.TAG, null));
-        mInstallsButton.setOnClickListener(v -> Tools.swapFragment(requireActivity(), InstallationsFragment.class, InstallationsFragment.TAG, null));
-        mPatchNotesButton.setOnClickListener(v -> Tools.swapFragment(requireActivity(), PatchNotesFragment.class, PatchNotesFragment.TAG, null));
+        // The landscape layout has these as tabs in the header instead of sidebar buttons
+        if(mSkinsButton != null) mSkinsButton.setOnClickListener(v -> Tools.swapFragment(requireActivity(), SkinsFragment.class, SkinsFragment.TAG, null));
+        if(mInstallsButton != null) mInstallsButton.setOnClickListener(v -> Tools.swapFragment(requireActivity(), InstallationsFragment.class, InstallationsFragment.TAG, null));
+        if(mPatchNotesButton != null) mPatchNotesButton.setOnClickListener(v -> Tools.swapFragment(requireActivity(), PatchNotesFragment.class, PatchNotesFragment.TAG, null));
+        ViewGroup tabsContainer = view.findViewById(R.id.launcher_tabs_container);
+        if(tabsContainer != null) {
+            tabsContainer.addView(git.artdeell.mojo.utils.ForkUi.pageHeader(requireContext(), requireActivity(),
+                    git.artdeell.mojo.utils.ForkUi.TAB_PLAY));
+        }
+        Button javaButton = view.findViewById(R.id.java_button);
+        if(javaButton != null) javaButton.setBackgroundColor(0xFF343434);
         mAppearanceButton.setOnClickListener(v -> showAppearanceDialog(mPlayButton));
         mLanButton.setOnClickListener(v -> Tools.swapFragment(requireActivity(), LanFragment.class, LanFragment.TAG, null));
         mCustomControlButton.setOnClickListener(v -> startActivity(new Intent(requireContext(), CustomControlsActivity.class)));

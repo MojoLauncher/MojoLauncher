@@ -636,4 +636,15 @@
     <string name="fork_color_purple">Purple</string>
     <string name="fork_color_gold">Gold</string>
     <string name="fork_color_teal">Teal</string>
+    <string name="fork_header_java">Minecraft: Java Edition</string>
+    <string name="fork_tab_play">Play</string>
+    <string name="fork_java_button">Java Edition</string>
+    <string name="fork_skins_change_title">Change Player Skin</string>
+    <string name="fork_skins_drop">Tap here or press \"Import skin\" to add a PNG</string>
+    <string name="fork_skins_classic">Classic</string>
+    <string name="fork_skins_slim">Slim</string>
+    <string name="fork_skins_import_skin">Import skin</string>
+    <string name="fork_skins_laby">Laby.net</string>
+    <string name="fork_skins_done">Done</string>
+    <string name="fork_skins_none">No skins yet</string>
 </resources>

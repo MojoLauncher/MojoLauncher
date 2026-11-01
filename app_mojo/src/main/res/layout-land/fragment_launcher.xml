@@ -8,14 +8,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background_app">
+    android:background="#1E1E1E">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/sidebar_guideline"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.32"/>
+        app:layout_constraintGuide_percent="0.22"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/play_start_guideline"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.47"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/play_end_guideline"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.76"/>
+
+    <FrameLayout
+        android:id="@+id/launcher_tabs_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/sidebar_guideline"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/bedrock_banner"
@@ -27,7 +49,7 @@
         app:layout_constraintBottom_toTopOf="@id/_background_display_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/sidebar_guideline"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/launcher_tabs_container" />
 
     <TextView
         android:id="@+id/bedrock_banner_title"
@@ -46,7 +68,7 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/background_bottom_bar"
+        android:background="#262626"
         app:layout_constraintBottom_toTopOf="@id/_background_display_view"
         app:layout_constraintEnd_toEndOf="@id/sidebar_guideline"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,33 +86,19 @@
                 android:drawableStart="@drawable/ic_px_book"
                 android:text="@string/mcl_tab_wiki" />
             <com.kdt.mcgui.LauncherMenuButton
+                android:id="@+id/java_button"
+                style="@style/LauncherMenuButton.Universal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:drawableStart="@drawable/ic_px_java_run"
+                android:text="@string/fork_java_button" />
+            <com.kdt.mcgui.LauncherMenuButton
                 android:id="@+id/bedrock_button"
                 style="@style/LauncherMenuButton.Universal"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
                 android:drawableStart="@drawable/ic_px_gamepad"
                 android:text="@string/fork_bedrock_button" />
-            <com.kdt.mcgui.LauncherMenuButton
-                android:id="@+id/skins_button"
-                style="@style/LauncherMenuButton.Universal"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
-                android:drawableStart="@drawable/ic_px_sliders"
-                android:text="@string/fork_skins_title" />
-            <com.kdt.mcgui.LauncherMenuButton
-                android:id="@+id/installs_button"
-                style="@style/LauncherMenuButton.Universal"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
-                android:drawableStart="@drawable/ic_px_folder"
-                android:text="@string/fork_installs_title" />
-            <com.kdt.mcgui.LauncherMenuButton
-                android:id="@+id/patch_notes_button"
-                style="@style/LauncherMenuButton.Universal"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
-                android:drawableStart="@drawable/ic_px_book"
-                android:text="@string/fork_patch_title" />
             <com.kdt.mcgui.LauncherMenuButton
                 android:id="@+id/appearance_button"
                 style="@style/LauncherMenuButton.Universal"
@@ -202,7 +210,8 @@
         android:text="@string/main_play"
         android:textAllCaps="true"
         app:layout_constraintBottom_toBottomOf="@+id/mc_version_spinner"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/play_end_guideline"
+        app:layout_constraintStart_toStartOf="@id/play_start_guideline"
         app:layout_constraintTop_toTopOf="@+id/mc_version_spinner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

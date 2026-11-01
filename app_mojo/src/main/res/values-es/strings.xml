@@ -445,4 +445,15 @@
     <string name="fork_color_purple">Morado</string>
     <string name="fork_color_gold">Dorado</string>
     <string name="fork_color_teal">Turquesa</string>
+    <string name="fork_header_java">Minecraft: Java Edition</string>
+    <string name="fork_tab_play">Jugar</string>
+    <string name="fork_java_button">Java Edition</string>
+    <string name="fork_skins_change_title">Cambiar skin del jugador</string>
+    <string name="fork_skins_drop">Toca aquí o pulsa «Importar skin» para añadir un PNG</string>
+    <string name="fork_skins_classic">Clásico</string>
+    <string name="fork_skins_slim">Delgado</string>
+    <string name="fork_skins_import_skin">Importar skin</string>
+    <string name="fork_skins_laby">Laby.net</string>
+    <string name="fork_skins_done">Listo</string>
+    <string name="fork_skins_none">Aún no hay skins</string>
 </resources>

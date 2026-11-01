@@ -93,6 +93,11 @@ public class SkinLibraryDialog {
     }
 
     public static void apply(Context context, SkinLibrary.Entry entry) {
+        apply(context, entry, null);
+    }
+
+    /** @param slimOverride true/false forces the arm model for Microsoft accounts, null detects it */
+    public static void apply(Context context, SkinLibrary.Entry entry, Boolean slimOverride) {
         Account account = Accounts.getCurrent();
         if(account == null) { toast(context, R.string.fork_skins_no_account); return; }
         if(account.isLocal()) {
@@ -105,7 +110,7 @@ public class SkinLibraryDialog {
         } else if(account.isMicrosoft) {
             toast(context, R.string.fork_skins_uploading);
             Bitmap bmp = SkinLibrary.load(entry);
-            boolean slim = bmp != null && SkinLibrary.isSlim(bmp);
+            boolean slim = slimOverride != null ? slimOverride : (bmp != null && SkinLibrary.isSlim(bmp));
             Handler main = new Handler(Looper.getMainLooper());
             MojoApplication.sExecutorService.execute(() -> {
                 String error = SkinLibrary.uploadToMicrosoft(account, entry.file, slim);

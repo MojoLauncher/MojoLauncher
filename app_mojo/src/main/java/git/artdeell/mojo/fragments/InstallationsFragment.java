@@ -38,12 +38,12 @@ public class InstallationsFragment extends Fragment {
         Context c = requireContext();
         LinearLayout root = new LinearLayout(c);
         root.setOrientation(LinearLayout.VERTICAL);
-        root.setBackgroundColor(ContextCompat.getColor(c, R.color.background_app));
+        root.setBackgroundColor(ForkUi.BG);
         root.setPadding(ForkUi.dp(c, 16), ForkUi.dp(c, 12), ForkUi.dp(c, 16), ForkUi.dp(c, 12));
 
+        root.addView(ForkUi.pageHeader(c, requireActivity(), ForkUi.TAB_INSTALLS));
         LinearLayout header = ForkUi.row(c);
-        TextView title = ForkUi.text(c, getString(R.string.fork_installs_title), 22, true);
-        header.addView(title, ForkUi.weight(1f));
+        header.addView(new View(c), ForkUi.weight(1f));
         Button create = ForkUi.button(c, getString(R.string.fork_installs_new), true);
         create.setOnClickListener(v -> Tools.swapFragment(requireActivity(), ProfileTypeSelectFragment.class,
                 ProfileTypeSelectFragment.TAG, null));
