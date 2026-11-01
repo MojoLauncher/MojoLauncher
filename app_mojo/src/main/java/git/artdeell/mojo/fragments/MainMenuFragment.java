@@ -78,9 +78,6 @@ public class MainMenuFragment extends Fragment {
         Button mModsButton = view.findViewById(R.id.mods_button);
         Button mLanButton = view.findViewById(R.id.lan_button);
         Button mBedrockButton = view.findViewById(R.id.bedrock_button);
-        Button mSkinsButton = view.findViewById(R.id.skins_button);
-        Button mInstallsButton = view.findViewById(R.id.installs_button);
-        Button mPatchNotesButton = view.findViewById(R.id.patch_notes_button);
         Button mAppearanceButton = view.findViewById(R.id.appearance_button);
         Button mCustomControlButton = view.findViewById(R.id.custom_control_button);
         Button mInstallJarButton = view.findViewById(R.id.install_jar_button);
@@ -110,10 +107,7 @@ public class MainMenuFragment extends Fragment {
             Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG, modsArgs);
         });
         mBedrockButton.setOnClickListener(v -> openBedrock());
-        // The landscape layout has these as tabs in the header instead of sidebar buttons
-        if(mSkinsButton != null) mSkinsButton.setOnClickListener(v -> Tools.swapFragment(requireActivity(), SkinsFragment.class, SkinsFragment.TAG, null));
-        if(mInstallsButton != null) mInstallsButton.setOnClickListener(v -> Tools.swapFragment(requireActivity(), InstallationsFragment.class, InstallationsFragment.TAG, null));
-        if(mPatchNotesButton != null) mPatchNotesButton.setOnClickListener(v -> Tools.swapFragment(requireActivity(), PatchNotesFragment.class, PatchNotesFragment.TAG, null));
+        // Skins, Installations and Patch notes are tabs in the header
         ViewGroup tabsContainer = view.findViewById(R.id.launcher_tabs_container);
         if(tabsContainer != null) {
             tabsContainer.addView(git.artdeell.mojo.utils.ForkUi.pageHeader(requireContext(), requireActivity(),
