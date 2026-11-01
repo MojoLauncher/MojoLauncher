@@ -54,17 +54,20 @@ public class SkinModelView extends GLSurfaceView {
         volatile boolean slim;
         volatile boolean spinning = true;
         private int texture = -1;
-        private float angle = 25f;
+        private float angle = 25f; // front (+Z) faces the camera, turned a little
         private long last = System.currentTimeMillis();
 
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             gl.glDisable(GL10.GL_DITHER);
             gl.glEnable(GL10.GL_TEXTURE_2D);
+            // Without depth testing the back faces were painted over the front ones (hair over the face)
+            gl.glEnable(GL10.GL_DEPTH_TEST);
+            gl.glDepthFunc(GL10.GL_LEQUAL);
             gl.glEnable(GL10.GL_ALPHA_TEST);
             gl.glAlphaFunc(GL10.GL_GREATER, 0.5f);
             gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
-            gl.glClearColor(0f, 0f, 0f, 0f);
+            gl.glClearColor(0.267f, 0.267f, 0.267f, 1f); // same gray as the dialog
             int[] ids = new int[1];
             gl.glGenTextures(1, ids, 0);
             texture = ids[0];

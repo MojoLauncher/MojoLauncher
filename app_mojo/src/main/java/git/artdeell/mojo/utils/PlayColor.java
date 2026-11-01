@@ -23,7 +23,8 @@ public class PlayColor {
             0xFFE0A526, // gold
             0xFF2AA8B5  // teal
     };
-    private static final String[] NAMES = {"Verde", "Azul", "Rojo", "Morado", "Dorado", "Turquesa"};
+    private static final int[] NAME_RES = {R.string.fork_color_green, R.string.fork_color_blue, R.string.fork_color_red,
+            R.string.fork_color_purple, R.string.fork_color_gold, R.string.fork_color_teal};
 
     public static int get() {
         return LauncherPreferences.DEFAULT_PREF.getInt(PREF, PRESETS[0]);
@@ -75,6 +76,12 @@ public class PlayColor {
         return s;
     }
 
+    private static String[] names(Context c) {
+        String[] out = new String[NAME_RES.length];
+        for(int i = 0; i < out.length; i++) out[i] = c.getString(NAME_RES[i]);
+        return out;
+    }
+
     private static Drawable solid(int color) {
         GradientDrawable g = new GradientDrawable();
         g.setColor(color);
@@ -85,7 +92,7 @@ public class PlayColor {
     public static void choose(Context c, Runnable onChanged) {
         new AlertDialog.Builder(c)
                 .setTitle(R.string.fork_play_color_title)
-                .setItems(NAMES, (d, which) -> {
+                .setItems(names(c), (d, which) -> {
                     LauncherPreferences.DEFAULT_PREF.edit().putInt(PREF, PRESETS[which]).apply();
                     onChanged.run();
                 })

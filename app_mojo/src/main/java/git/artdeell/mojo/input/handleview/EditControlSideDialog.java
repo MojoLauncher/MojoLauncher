@@ -63,7 +63,9 @@ public class EditControlSideDialog extends SideDialogView {
         }
     };
     private EditText mNameEditText, mWidthEditText, mHeightEditText;
-    private SwitchCompat mToggleSwitch, mPassthroughSwitch, mSwipeableSwitch, mForwardLockSwitch, mAbsoluteTrackingSwitch;
+    private SwitchCompat mToggleSwitch, mPassthroughSwitch, mSwipeableSwitch, mForwardLockSwitch, mAbsoluteTrackingSwitch, mLockStickCenterSwitch;
+    private SeekBar mStickSizeSeekbar;
+    private TextView mStickSizeLabel;
     private Spinner mOrientationSpinner;
     private final TextView[] mKeycodeTextviews = new TextView[4];
     private SeekBar mStrokeWidthSeekbar, mCornerRadiusSeekbar, mAlphaSeekbar;
@@ -166,6 +168,9 @@ public class EditControlSideDialog extends SideDialogView {
         mOrientationSpinner.setVisibility(GONE);
         mForwardLockSwitch.setVisibility(GONE);
         mAbsoluteTrackingSwitch.setVisibility(GONE);
+        mLockStickCenterSwitch.setVisibility(GONE);
+        mStickSizeSeekbar.setVisibility(GONE);
+        mStickSizeLabel.setVisibility(GONE);
 
         mNameEditText.setText(data.name);
         mWidthEditText.setText(String.valueOf(data.getWidth()));
@@ -255,6 +260,11 @@ public class EditControlSideDialog extends SideDialogView {
 
         mAbsoluteTrackingSwitch.setVisibility(VISIBLE);
         mAbsoluteTrackingSwitch.setChecked(data.absolute);
+        mLockStickCenterSwitch.setVisibility(VISIBLE);
+        mLockStickCenterSwitch.setChecked(data.lockCenter);
+        mStickSizeSeekbar.setVisibility(VISIBLE);
+        mStickSizeLabel.setVisibility(VISIBLE);
+        mStickSizeSeekbar.setProgress(Math.max(0, Math.min(100, Math.round(data.stickScale * 100f) - 50)));
 
         boolean inEditor = mCurrentlyEditedButton.getControlView().getContext() instanceof CustomControlsActivity;
         mSelectBackgroundBitmap.setVisibility(inEditor ? VISIBLE : GONE);
@@ -338,6 +348,9 @@ public class EditControlSideDialog extends SideDialogView {
         mSwipeableSwitch = mDialogContent.findViewById(R.id.checkboxSwipeable);
         mForwardLockSwitch = mDialogContent.findViewById(R.id.checkboxForwardLock);
         mAbsoluteTrackingSwitch = mDialogContent.findViewById(R.id.checkboxAbsoluteFingerTracking);
+        mLockStickCenterSwitch = mDialogContent.findViewById(R.id.checkboxLockStickCenter);
+        mStickSizeSeekbar = mDialogContent.findViewById(R.id.seekStickSize);
+        mStickSizeLabel = mDialogContent.findViewById(R.id.stickSizeLabel);
         mKeycodeSpinners[0] = mDialogContent.findViewById(R.id.editMapping_spinner_1);
         mKeycodeSpinners[1] = mDialogContent.findViewById(R.id.editMapping_spinner_2);
         mKeycodeSpinners[2] = mDialogContent.findViewById(R.id.editMapping_spinner_3);
@@ -450,6 +463,21 @@ public class EditControlSideDialog extends SideDialogView {
             if (internalChanges) return;
             if(mCurrentlyEditedButton.getProperties() instanceof ControlJoystickData){
                 ((ControlJoystickData) mCurrentlyEditedButton.getProperties()).absolute = isChecked;
+            }
+        });
+        mLockStickCenterSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (internalChanges) return;
+            if(mCurrentlyEditedButton.getProperties() instanceof ControlJoystickData){
+                ((ControlJoystickData) mCurrentlyEditedButton.getProperties()).lockCenter = isChecked;
+                mCurrentlyEditedButton.getControlView().invalidate();
+            }
+        });
+
+        mStickSizeSeekbar.setOnSeekBarChangeListener((SimpleSeekBarListener) (seekBar, progress, fromUser) -> {
+            if (internalChanges) return;
+            if(mCurrentlyEditedButton.getProperties() instanceof ControlJoystickData){
+                ((ControlJoystickData) mCurrentlyEditedButton.getProperties()).stickScale = (progress + 50) / 100f;
+                mCurrentlyEditedButton.getControlView().invalidate();
             }
         });
 

@@ -64,6 +64,41 @@
                 android:drawableStart="@drawable/ic_px_book"
                 android:text="@string/mcl_tab_wiki" />
             <com.kdt.mcgui.LauncherMenuButton
+                android:id="@+id/bedrock_button"
+                style="@style/LauncherMenuButton.Universal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:drawableStart="@drawable/ic_px_gamepad"
+                android:text="@string/fork_bedrock_button" />
+            <com.kdt.mcgui.LauncherMenuButton
+                android:id="@+id/skins_button"
+                style="@style/LauncherMenuButton.Universal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:drawableStart="@drawable/ic_px_sliders"
+                android:text="@string/fork_skins_title" />
+            <com.kdt.mcgui.LauncherMenuButton
+                android:id="@+id/installs_button"
+                style="@style/LauncherMenuButton.Universal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:drawableStart="@drawable/ic_px_folder"
+                android:text="@string/fork_installs_title" />
+            <com.kdt.mcgui.LauncherMenuButton
+                android:id="@+id/patch_notes_button"
+                style="@style/LauncherMenuButton.Universal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:drawableStart="@drawable/ic_px_book"
+                android:text="@string/fork_patch_title" />
+            <com.kdt.mcgui.LauncherMenuButton
+                android:id="@+id/appearance_button"
+                style="@style/LauncherMenuButton.Universal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:drawableStart="@drawable/ic_px_sliders"
+                android:text="@string/fork_appearance_title" />
+            <com.kdt.mcgui.LauncherMenuButton
                 android:id="@+id/social_media_button"
                 style="@style/LauncherMenuButton.Universal"
                 android:layout_width="match_parent"

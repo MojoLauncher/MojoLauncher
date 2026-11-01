@@ -92,7 +92,7 @@ public class SkinLibraryDialog {
         Toast.makeText(context, context.getString(res, args), Toast.LENGTH_LONG).show();
     }
 
-    private static void apply(Context context, SkinLibrary.Entry entry) {
+    public static void apply(Context context, SkinLibrary.Entry entry) {
         Account account = Accounts.getCurrent();
         if(account == null) { toast(context, R.string.fork_skins_no_account); return; }
         if(account.isLocal()) {

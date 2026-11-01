@@ -76,6 +76,11 @@ public class MainMenuFragment extends Fragment {
         Button mDiscordButton = view.findViewById(R.id.social_media_button);
         Button mModsButton = view.findViewById(R.id.mods_button);
         Button mLanButton = view.findViewById(R.id.lan_button);
+        Button mBedrockButton = view.findViewById(R.id.bedrock_button);
+        Button mSkinsButton = view.findViewById(R.id.skins_button);
+        Button mInstallsButton = view.findViewById(R.id.installs_button);
+        Button mPatchNotesButton = view.findViewById(R.id.patch_notes_button);
+        Button mAppearanceButton = view.findViewById(R.id.appearance_button);
         Button mCustomControlButton = view.findViewById(R.id.custom_control_button);
         Button mInstallJarButton = view.findViewById(R.id.install_jar_button);
         Button mShareLogsButton = view.findViewById(R.id.share_logs_button);
@@ -103,6 +108,11 @@ public class MainMenuFragment extends Fragment {
             modsArgs.putBoolean(SearchModFragment.ARG_MODPACK, false);
             Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG, modsArgs);
         });
+        mBedrockButton.setOnClickListener(v -> openBedrock());
+        mSkinsButton.setOnClickListener(v -> Tools.swapFragment(requireActivity(), SkinsFragment.class, SkinsFragment.TAG, null));
+        mInstallsButton.setOnClickListener(v -> Tools.swapFragment(requireActivity(), InstallationsFragment.class, InstallationsFragment.TAG, null));
+        mPatchNotesButton.setOnClickListener(v -> Tools.swapFragment(requireActivity(), PatchNotesFragment.class, PatchNotesFragment.TAG, null));
+        mAppearanceButton.setOnClickListener(v -> showAppearanceDialog(mPlayButton));
         mLanButton.setOnClickListener(v -> Tools.swapFragment(requireActivity(), LanFragment.class, LanFragment.TAG, null));
         mCustomControlButton.setOnClickListener(v -> startActivity(new Intent(requireContext(), CustomControlsActivity.class)));
         mInstallJarButton.setOnClickListener(v -> runInstallerWithConfirmation());
@@ -119,6 +129,42 @@ public class MainMenuFragment extends Fragment {
             Tools.swapFragment(requireActivity(), GamepadMapperFragment.class, GamepadMapperFragment.TAG, null);
             return true;
         });
+    }
+
+    /** Bedrock is a separate app: open it if installed, otherwise its store page. */
+    private void openBedrock() {
+        Context context = requireContext();
+        Intent launch = context.getPackageManager().getLaunchIntentForPackage("com.mojang.minecraftpe");
+        try {
+            if(launch != null) {
+                startActivity(launch);
+            } else {
+                Toast.makeText(context, R.string.fork_bedrock_missing, Toast.LENGTH_LONG).show();
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.mojang.minecraftpe")));
+            }
+        } catch (Exception e) {
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=com.mojang.minecraftpe")));
+            } catch (Exception ignored) {
+                Toast.makeText(context, R.string.fork_bedrock_missing, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private void showAppearanceDialog(Button playButton) {
+        String[] items = {getString(R.string.fork_banner_pick_title), getString(R.string.fork_play_color_title)};
+        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle(R.string.fork_appearance_title)
+                .setItems(items, (d, which) -> {
+                    if(which == 0) {
+                        BannerManager.showChooser(requireContext(), () -> mBannerPicker.launch("image/*"), this::refreshBanner);
+                    } else {
+                        git.artdeell.mojo.utils.PlayColor.choose(requireContext(), () ->
+                                playButton.setBackground(git.artdeell.mojo.utils.PlayColor.background(requireContext())));
+                    }
+                })
+                .show();
     }
 
     private void openGameDirectory(Context context) {

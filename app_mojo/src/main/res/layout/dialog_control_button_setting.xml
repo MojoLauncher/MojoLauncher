@@ -328,6 +328,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/checkboxForwardLock"/>
 
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/checkboxLockStickCenter"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_36sdp"
+        android:text="@string/fork_joy_lock_center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkboxAbsoluteFingerTracking"/>
+
+    <TextView
+        android:id="@+id/stickSizeLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/fork_joy_stick_size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkboxLockStickCenter"/>
+
+    <SeekBar
+        android:id="@+id/seekStickSize"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_30sdp"
+        android:max="100"
+        android:progress="50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/stickSizeLabel"/>
+
     <!-- BACKGROUND IMAGE SECTION -->
     <fr.spse.extended_view.ExtendedTextView
         android:id="@+id/setBackgroundBitmap_textView"
@@ -344,7 +369,7 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/checkboxAbsoluteFingerTracking" />
+        app:layout_constraintTop_toBottomOf="@id/seekStickSize" />
 
     <!-- JOYSTICK STICK IMAGE SECTION (joystick only) -->
     <fr.spse.extended_view.ExtendedTextView
