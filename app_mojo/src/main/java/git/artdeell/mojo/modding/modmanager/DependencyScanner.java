@@ -22,7 +22,6 @@ import me.andreasmelone.basicmodinfoparser.util.ModInfoParseException;
 // TODO: implement jar in jar scanning (this will fix fabric-api provides)
 public class DependencyScanner {
     private final Platform mPlatform;
-    private final Map<String, ModInfo> mProviders = new HashMap<>();
     private final Map<String, List<ModInfo>> mDeps = new HashMap<>();
 
     public DependencyScanner(Platform platform, List<ModInfo> modInfos) {
@@ -45,7 +44,6 @@ public class DependencyScanner {
             if(!(mi instanceof ContainedModInfo)) continue;
             BasicModInfo bmi = getBasicInfo((ContainedModInfo) mi);
             if(bmi == null) continue;
-            if(bmi.getId() != null) mProviders.put(bmi.getId(), mi);
             for(Dependency dep : bmi.getDependencies()) {
                 List<ModInfo> dependants = mDeps.get(dep.getModId());
                 if(dependants == null) {
