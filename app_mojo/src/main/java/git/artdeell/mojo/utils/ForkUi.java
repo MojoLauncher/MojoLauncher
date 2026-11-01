@@ -41,7 +41,6 @@ public class ForkUi {
     public static GradientDrawable box(Context c, int fill, int stroke, int strokeDp) {
         GradientDrawable g = new GradientDrawable();
         g.setColor(fill);
-        g.setCornerRadius(dp(c, 3));
         if(strokeDp > 0) g.setStroke(dp(c, strokeDp), stroke);
         return g;
     }
@@ -58,24 +57,17 @@ public class ForkUi {
         t.setText(content);
         t.setTextColor(Color.WHITE);
         t.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp);
-        if(bold) t.setTypeface(Typeface.DEFAULT_BOLD);
+        McStyle.text(t);
         return t;
     }
 
-    /** Flat button. green = the main action (Play style), otherwise gray. */
+    /** In-game style button. green = the main action (Play color), otherwise gray. */
     public static Button button(Context c, CharSequence label, boolean green) {
         Button b = new Button(c);
         b.setText(label);
-        b.setAllCaps(false);
-        b.setTextColor(Color.WHITE);
-        b.setTypeface(Typeface.DEFAULT_BOLD);
-        int base = green ? PlayColor.get() : 0xFF5A5A5A;
-        int dark = green ? 0xFF1F4A15 : 0xFF3A3A3A;
-        StateListDrawable s = new StateListDrawable();
-        s.addState(new int[]{android.R.attr.state_pressed}, box(c, dark, 0xFF111111, 2));
-        s.addState(new int[]{}, box(c, base, 0xFF111111, 2));
-        b.setBackground(s);
-        b.setMinHeight(dp(c, 44));
+        McStyle.button(b, green);
+        b.setMinHeight(dp(c, 40));
+        b.setMinimumHeight(dp(c, 40));
         return b;
     }
 

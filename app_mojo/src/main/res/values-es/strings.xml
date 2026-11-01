@@ -453,7 +453,21 @@
     <string name="fork_skins_classic">Clásico</string>
     <string name="fork_skins_slim">Delgado</string>
     <string name="fork_skins_import_skin">Importar skin</string>
-    <string name="fork_skins_laby">Laby.net</string>
     <string name="fork_skins_done">Listo</string>
     <string name="fork_skins_none">Aún no hay skins</string>
+    <string name="fork_skins_search_hint">Buscar skins…</string>
+    <string name="fork_skins_sort">Orden: %1$s</string>
+    <string name="fork_skins_sort_new">Más nuevas primero</string>
+    <string name="fork_skins_sort_old">Más nuevas al final</string>
+    <string name="fork_skins_sort_az">Alfabético</string>
+    <string name="fork_skins_favorite">Añadir a favoritos</string>
+    <string name="fork_skins_unfavorite">Quitar de favoritos</string>
+    <string name="fork_skins_rename">Renombrar</string>
+    <string name="fork_skins_rename_title">Renombrar archivo de skin</string>
+    <string name="fork_skins_rename_error">Ese nombre ya existe o no es válido</string>
+    <string name="fork_skins_delete_title">¿Eliminar skin?</string>
+    <string name="fork_skins_delete_confirm">¿Seguro que quieres eliminar \"%1$s\"?</string>
+    <string name="fork_skins_upload_title">Subir a Mojang</string>
+    <string name="fork_skins_upload_prompt">¿Subir esta skin a tu perfil de Mojang?\n\nSkin: %1$s\nModelo: %2$s</string>
+    <string name="fork_skins_namemc">NameMC</string>
 </resources>

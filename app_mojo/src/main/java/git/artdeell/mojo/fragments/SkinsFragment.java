@@ -12,7 +12,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,15 +27,25 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import git.artdeell.mojo.R;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.authenticator.accounts.SkinLibrary;
 import git.artdeell.mojo.prefs.LauncherPreferences;
+import git.artdeell.mojo.authenticator.accounts.Account;
+import git.artdeell.mojo.authenticator.accounts.Accounts;
+import git.artdeell.mojo.utils.FileUtils;
 import git.artdeell.mojo.utils.ForkUi;
+import git.artdeell.mojo.utils.McStyle;
 import git.artdeell.mojo.utils.SkinLibraryDialog;
 import git.artdeell.mojo.utils.SkinModelView;
 
@@ -44,11 +57,15 @@ public class SkinsFragment extends Fragment {
     public static final String TAG = "SkinsFragment";
     private static final String PREF_CURRENT = "current_skin_file";
     private static final String PREF_TYPE = "skin_type_";
+    private static final String PREF_SORT = "skin_sort";
+    private static final String PREF_FAVORITES = "skin_favorites";
     private static final int SELECTED_BLUE = 0xFF2F66C8;
     private static final int MODEL_PANEL = 0xFF444444;
 
     private SkinModelView mModel;
-    private TextView mNameField;
+    private EditText mSearch;
+    private Button mSort;
+    private String mQuery = "";
     private LinearLayout mList;
     private Button mClassic, mSlim, mUse, mDelete;
     private SkinLibrary.Entry mSelected;
@@ -84,12 +101,9 @@ public class SkinsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Context c = requireContext();
         FrameLayout frame = new FrameLayout(c);
-        ImageView back = new ImageView(c);
-        back.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        back.setImageResource(R.drawable.bedrock_banner_art);
-        frame.addView(back, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        frame.setBackground(McStyle.dirt(c));
         View shade = new View(c);
-        shade.setBackgroundColor(0xDD111111);
+        shade.setBackgroundColor(0x99000000);
         frame.addView(shade, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         LinearLayout root = new LinearLayout(c);
@@ -115,12 +129,24 @@ public class SkinsFragment extends Fragment {
         main.addView(left, leftLp);
 
         LinearLayout nameRow = ForkUi.row(c);
-        mNameField = ForkUi.text(c, "", 14, false);
-        mNameField.setBackground(ForkUi.box(c, Color.BLACK, 0xFFAAAAAA, 2));
-        mNameField.setGravity(Gravity.CENTER_VERTICAL);
-        mNameField.setPadding(ForkUi.dp(c, 8), 0, ForkUi.dp(c, 8), 0);
-        mNameField.setSingleLine(true);
-        nameRow.addView(mNameField, new LinearLayout.LayoutParams(0, ForkUi.dp(c, 36), 1f));
+        mSearch = new EditText(c);
+        mSearch.setHint(R.string.fork_skins_search_hint);
+        mSearch.setHintTextColor(0xFF777777);
+        mSearch.setTextColor(Color.WHITE);
+        mSearch.setTextSize(14);
+        mSearch.setSingleLine(true);
+        McStyle.text(mSearch);
+        mSearch.setBackground(ForkUi.box(c, Color.BLACK, 0xFFAAAAAA, 2));
+        mSearch.setPadding(ForkUi.dp(c, 8), 0, ForkUi.dp(c, 8), 0);
+        mSearch.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int st, int co, int af) {}
+            @Override public void onTextChanged(CharSequence s, int st, int be, int co) {}
+            @Override public void afterTextChanged(Editable e) {
+                mQuery = e.toString().trim().toLowerCase();
+                fillList();
+            }
+        });
+        nameRow.addView(mSearch, new LinearLayout.LayoutParams(0, ForkUi.dp(c, 36), 1f));
         Button plus = ForkUi.button(c, "+", false);
         plus.setMinWidth(0);
         plus.setMinimumWidth(0);
@@ -130,6 +156,19 @@ public class SkinsFragment extends Fragment {
         plusLp.leftMargin = ForkUi.dp(c, 6);
         nameRow.addView(plus, plusLp);
         left.addView(nameRow);
+
+        mSort = ForkUi.button(c, "", false);
+        mSort.setMinHeight(ForkUi.dp(c, 30));
+        mSort.setMinimumHeight(ForkUi.dp(c, 30));
+        mSort.setTextSize(12);
+        mSort.setOnClickListener(v -> {
+            int next = (sortMode() + 1) % 3;
+            LauncherPreferences.DEFAULT_PREF.edit().putInt(PREF_SORT, next).apply();
+            fillList();
+        });
+        LinearLayout.LayoutParams sortLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        sortLp.topMargin = ForkUi.dp(c, 4);
+        left.addView(mSort, sortLp);
 
         ScrollView scroll = new ScrollView(c);
         mList = new LinearLayout(c);
@@ -175,10 +214,10 @@ public class SkinsFragment extends Fragment {
         // --- bottom row ---
         LinearLayout bottom = ForkUi.row(c);
         Button importBtn = ForkUi.button(c, getString(R.string.fork_skins_import_skin), false);
-        Button laby = ForkUi.button(c, getString(R.string.fork_skins_laby), false);
+        Button namemc = ForkUi.button(c, getString(R.string.fork_skins_namemc), false);
         mDelete = ForkUi.button(c, getString(R.string.fork_skins_delete), false);
         Button done = ForkUi.button(c, getString(R.string.fork_skins_done), false);
-        Button[] all = {importBtn, laby, mDelete, done};
+        Button[] all = {importBtn, namemc, mDelete, done};
         for(int i = 0; i < all.length; i++) {
             LinearLayout.LayoutParams lp = ForkUi.weight(1f);
             lp.leftMargin = ForkUi.dp(c, i == 0 ? 0 : 3);
@@ -190,20 +229,24 @@ public class SkinsFragment extends Fragment {
         root.addView(bottom, bottomLp);
 
         importBtn.setOnClickListener(v -> mImport.launch("image/png"));
-        laby.setOnClickListener(v -> Tools.openURL(requireActivity(), "https://laby.net/skins"));
+        namemc.setOnClickListener(v -> Tools.openURL(requireActivity(), "https://namemc.com/minecraft-skins"));
         done.setOnClickListener(v -> requireActivity().getOnBackPressedDispatcher().onBackPressed());
-        mDelete.setOnClickListener(v -> {
-            if(mSelected == null) return;
-            SkinLibrary.delete(mSelected);
-            mSelected = null;
-            refresh();
-        });
+        mDelete.setOnClickListener(v -> confirmDelete(mSelected));
         mUse.setOnClickListener(v -> {
             if(mSelected == null) return;
-            Bitmap bmp = SkinLibrary.load(mSelected);
-            SkinLibraryDialog.apply(requireContext(), mSelected, isSlim(mSelected, bmp));
-            LauncherPreferences.DEFAULT_PREF.edit().putString(PREF_CURRENT, mSelected.file.getName()).apply();
-            refresh();
+            Account account = Accounts.getCurrent();
+            if(account != null && account.isMicrosoft) {
+                Bitmap bmp = SkinLibrary.load(mSelected);
+                String model = getString(isSlim(mSelected, bmp) ? R.string.fork_skins_slim : R.string.fork_skins_classic);
+                new AlertDialog.Builder(requireContext())
+                        .setTitle(R.string.fork_skins_upload_title)
+                        .setMessage(getString(R.string.fork_skins_upload_prompt, mSelected.name, model))
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .setPositiveButton(R.string.fork_skins_apply, (d, w) -> useSelected())
+                        .show();
+            } else {
+                useSelected();
+            }
         });
         mClassic.setOnClickListener(v -> setType(1));
         mSlim.setOnClickListener(v -> setType(2));
@@ -241,9 +284,6 @@ public class SkinsFragment extends Fragment {
             Bitmap bmp = SkinLibrary.load(mSelected);
             slim = isSlim(mSelected, bmp);
             if(bmp != null) mModel.setSkin(bmp, slim);
-            mNameField.setText(mSelected.name);
-        } else {
-            mNameField.setText(R.string.fork_skins_none);
         }
         mUse.setEnabled(mSelected != null);
         mDelete.setEnabled(mSelected != null);
@@ -252,13 +292,116 @@ public class SkinsFragment extends Fragment {
         mClassic.setAlpha(!slim ? 1f : 0.6f);
         mSlim.setAlpha(slim ? 1f : 0.6f);
 
-        mList.removeAllViews();
-        for(SkinLibrary.Entry entry : skins) {
-            mList.addView(row(c, entry));
-        }
+        fillList();
     }
 
-    private View row(Context c, SkinLibrary.Entry entry) {
+    private int sortMode() {
+        return LauncherPreferences.DEFAULT_PREF.getInt(PREF_SORT, 0);
+    }
+
+    private Set<String> favorites() {
+        return new HashSet<>(LauncherPreferences.DEFAULT_PREF.getStringSet(PREF_FAVORITES, new HashSet<>()));
+    }
+
+    private void fillList() {
+        Context c = getContext();
+        if(c == null || mList == null) return;
+        int mode = sortMode();
+        mSort.setText(getString(R.string.fork_skins_sort, getString(
+                mode == 0 ? R.string.fork_skins_sort_new : mode == 1 ? R.string.fork_skins_sort_old : R.string.fork_skins_sort_az)));
+        Set<String> favs = favorites();
+        List<SkinLibrary.Entry> shown = new ArrayList<>();
+        for(SkinLibrary.Entry e : SkinLibrary.list(c)) {
+            if(mQuery.isEmpty() || e.name.toLowerCase().contains(mQuery)) shown.add(e);
+        }
+        if(mode == 2) {
+            Collections.sort(shown, (a, b) -> a.name.compareToIgnoreCase(b.name));
+        } else {
+            Collections.sort(shown, (a, b) -> Long.compare(b.file.lastModified(), a.file.lastModified()));
+            if(mode == 1) Collections.reverse(shown);
+        }
+        // Favorites first, keeping the chosen order inside each group
+        List<SkinLibrary.Entry> ordered = new ArrayList<>();
+        for(SkinLibrary.Entry e : shown) if(favs.contains(e.file.getName())) ordered.add(e);
+        for(SkinLibrary.Entry e : shown) if(!favs.contains(e.file.getName())) ordered.add(e);
+        mList.removeAllViews();
+        for(SkinLibrary.Entry entry : ordered) mList.addView(row(c, entry, favs.contains(entry.file.getName())));
+    }
+
+    private void useSelected() {
+        if(mSelected == null) return;
+        Bitmap bmp = SkinLibrary.load(mSelected);
+        SkinLibraryDialog.apply(requireContext(), mSelected, isSlim(mSelected, bmp));
+        LauncherPreferences.DEFAULT_PREF.edit().putString(PREF_CURRENT, mSelected.file.getName()).apply();
+        refresh();
+    }
+
+    private void confirmDelete(SkinLibrary.Entry entry) {
+        if(entry == null) return;
+        new AlertDialog.Builder(requireContext())
+                .setTitle(R.string.fork_skins_delete_title)
+                .setMessage(getString(R.string.fork_skins_delete_confirm, entry.name))
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(R.string.fork_skins_delete, (d, w) -> {
+                    SkinLibrary.delete(entry);
+                    Set<String> favs = favorites();
+                    if(favs.remove(entry.file.getName())) {
+                        LauncherPreferences.DEFAULT_PREF.edit().putStringSet(PREF_FAVORITES, favs).apply();
+                    }
+                    if(mSelected != null && mSelected.file.equals(entry.file)) mSelected = null;
+                    refresh();
+                })
+                .show();
+    }
+
+    private void toggleFavorite(SkinLibrary.Entry entry) {
+        Set<String> favs = favorites();
+        if(!favs.remove(entry.file.getName())) favs.add(entry.file.getName());
+        LauncherPreferences.DEFAULT_PREF.edit().putStringSet(PREF_FAVORITES, favs).apply();
+        fillList();
+    }
+
+    private void rename(SkinLibrary.Entry entry) {
+        Context c = requireContext();
+        EditText input = new EditText(c);
+        input.setText(entry.name);
+        input.setSingleLine(true);
+        new AlertDialog.Builder(c)
+                .setTitle(R.string.fork_skins_rename_title)
+                .setView(input)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(android.R.string.ok, (d, w) -> {
+                    String name = FileUtils.escapeFileName(input.getText().toString().trim());
+                    if(name.isEmpty()) return;
+                    File target = new File(entry.file.getParentFile(), name + ".png");
+                    if(target.exists() || !entry.file.renameTo(target)) {
+                        Toast.makeText(c, R.string.fork_skins_rename_error, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    moveSettings(entry.file.getName(), target.getName());
+                    mSelected = null;
+                    refresh();
+                })
+                .show();
+    }
+
+    /** Keeps the favorite, type and "in use" marks when a skin file is renamed. */
+    private void moveSettings(String from, String to) {
+        android.content.SharedPreferences prefs = LauncherPreferences.DEFAULT_PREF;
+        android.content.SharedPreferences.Editor ed = prefs.edit();
+        if(from.equals(prefs.getString(PREF_CURRENT, null))) ed.putString(PREF_CURRENT, to);
+        int type = prefs.getInt(PREF_TYPE + from, 0);
+        if(type != 0) ed.putInt(PREF_TYPE + to, type);
+        ed.remove(PREF_TYPE + from);
+        Set<String> favs = favorites();
+        if(favs.remove(from)) {
+            favs.add(to);
+            ed.putStringSet(PREF_FAVORITES, favs);
+        }
+        ed.apply();
+    }
+
+    private View row(Context c, SkinLibrary.Entry entry, boolean favorite) {
         boolean selected = mSelected != null && entry.file.equals(mSelected.file);
         boolean current = entry.file.getName().equals(currentName());
         LinearLayout row = ForkUi.row(c);
@@ -273,7 +416,8 @@ public class SkinsFragment extends Fragment {
         LinearLayout texts = new LinearLayout(c);
         texts.setOrientation(LinearLayout.VERTICAL);
         texts.setPadding(ForkUi.dp(c, 10), 0, 0, 0);
-        TextView name = ForkUi.text(c, entry.name, 14, false);
+        TextView name = ForkUi.text(c, (favorite ? "★ " : "") + entry.name, 14, false);
+        if(favorite) name.setTextColor(0xFFFFD35A);
         name.setSingleLine(true);
         name.setEllipsize(android.text.TextUtils.TruncateAt.END);
         texts.addView(name);
@@ -286,6 +430,16 @@ public class SkinsFragment extends Fragment {
         row.setOnClickListener(v -> {
             mSelected = entry;
             refresh();
+        });
+        row.setOnLongClickListener(v -> {
+            String[] items = {getString(favorite ? R.string.fork_skins_unfavorite : R.string.fork_skins_favorite),
+                    getString(R.string.fork_skins_rename), getString(R.string.fork_skins_delete)};
+            new AlertDialog.Builder(c).setTitle(entry.name).setItems(items, (d, which) -> {
+                if(which == 0) toggleFavorite(entry);
+                else if(which == 1) rename(entry);
+                else confirmDelete(entry);
+            }).show();
+            return true;
         });
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lp.bottomMargin = ForkUi.dp(c, 3);

@@ -48,7 +48,7 @@ public class PatchNotesFragment extends Fragment {
         Context c = requireContext();
         LinearLayout root = new LinearLayout(c);
         root.setOrientation(LinearLayout.VERTICAL);
-        root.setBackgroundColor(ForkUi.BG);
+        root.setBackground(git.artdeell.mojo.utils.McStyle.screenBackground(c));
         root.setPadding(ForkUi.dp(c, 16), ForkUi.dp(c, 12), ForkUi.dp(c, 16), ForkUi.dp(c, 12));
 
         root.addView(ForkUi.pageHeader(c, requireActivity(), ForkUi.TAB_PATCH));

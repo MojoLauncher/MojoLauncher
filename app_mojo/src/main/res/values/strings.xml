@@ -644,7 +644,21 @@
     <string name="fork_skins_classic">Classic</string>
     <string name="fork_skins_slim">Slim</string>
     <string name="fork_skins_import_skin">Import skin</string>
-    <string name="fork_skins_laby">Laby.net</string>
     <string name="fork_skins_done">Done</string>
     <string name="fork_skins_none">No skins yet</string>
+    <string name="fork_skins_search_hint">Search skins…</string>
+    <string name="fork_skins_sort">Sorting: %1$s</string>
+    <string name="fork_skins_sort_new">Latest first</string>
+    <string name="fork_skins_sort_old">Latest last</string>
+    <string name="fork_skins_sort_az">Alphabetical</string>
+    <string name="fork_skins_favorite">Add to favorites</string>
+    <string name="fork_skins_unfavorite">Remove from favorites</string>
+    <string name="fork_skins_rename">Rename</string>
+    <string name="fork_skins_rename_title">Rename skin file</string>
+    <string name="fork_skins_rename_error">That name is already used or not valid</string>
+    <string name="fork_skins_delete_title">Delete skin?</string>
+    <string name="fork_skins_delete_confirm">Are you sure you want to delete \"%1$s\"?</string>
+    <string name="fork_skins_upload_title">Upload to Mojang</string>
+    <string name="fork_skins_upload_prompt">Upload this skin to your Mojang profile?\n\nSkin: %1$s\nModel: %2$s</string>
+    <string name="fork_skins_namemc">NameMC</string>
 </resources>
