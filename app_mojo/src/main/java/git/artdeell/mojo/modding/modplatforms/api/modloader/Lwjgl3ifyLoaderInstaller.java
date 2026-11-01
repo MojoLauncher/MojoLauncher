@@ -1,6 +1,5 @@
-package git.artdeell.mojo.modding.modpacks.api.modloader;
+package git.artdeell.mojo.modding.modplatforms.api.modloader;
 
-import git.artdeell.mojo.game.platform.Platform;
 import git.artdeell.mojo.instances.InstanceHint;
 import git.artdeell.mojo.instances.InstanceInstaller;
 import git.artdeell.mojo.modding.lwjgl3ify.Lwjgl3ifyUtils;

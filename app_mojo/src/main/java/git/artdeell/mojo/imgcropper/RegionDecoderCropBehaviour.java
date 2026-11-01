@@ -11,7 +11,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import git.artdeell.mojo.MojoApplication;
-import git.artdeell.mojo.modding.modpacks.SelfReferencingFuture;
+import git.artdeell.mojo.modding.modplatforms.SelfReferencingFuture;
 import git.artdeell.mojo.utils.MatrixUtils;
 
 import java.util.concurrent.Future;

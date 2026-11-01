@@ -1,4 +1,4 @@
-package git.artdeell.mojo.modding.modpacks.api;
+package git.artdeell.mojo.modding.modplatforms.api;
 
 
 import android.content.Context;
@@ -8,21 +8,22 @@ import com.kdt.mcgui.ProgressLayout;
 import git.artdeell.mojo.MojoApplication;
 import git.artdeell.mojo.R;
 import git.artdeell.mojo.Tools;
-import git.artdeell.mojo.modding.modpacks.api.modloader.LoaderInstaller;
-import git.artdeell.mojo.modding.modpacks.models.ModDetail;
-import git.artdeell.mojo.modding.modpacks.models.ModDownload;
-import git.artdeell.mojo.modding.modpacks.models.ModItem;
-import git.artdeell.mojo.modding.modpacks.models.ModSource;
-import git.artdeell.mojo.modding.modpacks.models.SearchFilters;
-import git.artdeell.mojo.modding.modpacks.models.SearchResult;
+import git.artdeell.mojo.modding.modplatforms.api.modloader.LoaderInstaller;
+import git.artdeell.mojo.modding.modplatforms.models.ModDetail;
+import git.artdeell.mojo.modding.modplatforms.models.ModDownload;
+import git.artdeell.mojo.modding.modplatforms.models.ModItem;
+import git.artdeell.mojo.modding.modplatforms.models.ModSource;
+import git.artdeell.mojo.modding.modplatforms.models.SearchFilters;
+import git.artdeell.mojo.modding.modplatforms.models.SearchResult;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  *
  */
-public interface ModpackApi {
+public interface ModdingApi {
 
     /**
      * @param searchFilters Filters
@@ -48,7 +49,36 @@ public interface ModpackApi {
         return new ModDetail(item, getDownloads(item));
     }
 
+    /**
+     * Fetch mod metadata
+     * @param source source of the mod
+     * @return mod metadata array
+     */
     ModDownload[] getDownloads(ModSource source);
+
+    default ModDownload[] getDownloads(ModSource source, SearchFilters filters) {
+        return getDownloads(source);
+    }
+
+    /**
+     * Fetch mod details with search filters
+     * @param item mod item
+     * @param filters search filters
+     * @return mod metadata array
+     */
+    default ModDetail getModDetails(ModItem item, SearchFilters filters) {
+        ModDownload[] downloads = getDownloads(item, filters);
+        if (downloads != null && filters != null) {
+            ArrayList<ModDownload> compatible = new ArrayList<>(downloads.length);
+            for (ModDownload download : downloads) {
+                if (download.matches(filters.mcVersion, filters.modLoader)) {
+                    compatible.add(download);
+                }
+            }
+            downloads = compatible.toArray(new ModDownload[0]);
+        }
+        return new ModDetail(item, downloads);
+    }
 
     /**
      * Download and install the modpack

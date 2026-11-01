@@ -1,4 +1,4 @@
-package git.artdeell.mojo.modding.modpacks.models;
+package git.artdeell.mojo.modding.modplatforms.models;
 
 public class Constants {
     private Constants(){}

@@ -1,4 +1,4 @@
-package git.artdeell.mojo.modding.modpacks.api;
+package git.artdeell.mojo.modding.modplatforms.api;
 
 import android.util.Log;
 
@@ -13,20 +13,20 @@ import com.kdt.mcgui.ProgressLayout;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.downloader.AcquireableTaskMetadata;
 import git.artdeell.mojo.downloader.Downloader;
-import git.artdeell.mojo.modding.modpacks.models.ModSource;
+import git.artdeell.mojo.modding.modplatforms.models.ModSource;
 import git.artdeell.mojo.tasks.mojson.mirrors.DownloadMirror;
 import git.artdeell.mojo.modding.fabric.FabriclikeUtils;
 import git.artdeell.mojo.modding.forge.ForgelikeUtils;
-import git.artdeell.mojo.modding.modpacks.api.modloader.FabriclikeLoaderInstaller;
-import git.artdeell.mojo.modding.modpacks.api.modloader.ForgelikeLoaderInstaller;
-import git.artdeell.mojo.modding.modpacks.api.modloader.LoaderInstaller;
-import git.artdeell.mojo.modding.modpacks.models.Constants;
-import git.artdeell.mojo.modding.modpacks.models.CurseManifest;
-import git.artdeell.mojo.modding.modpacks.models.ModDetail;
-import git.artdeell.mojo.modding.modpacks.models.ModDownload;
-import git.artdeell.mojo.modding.modpacks.models.ModItem;
-import git.artdeell.mojo.modding.modpacks.models.SearchFilters;
-import git.artdeell.mojo.modding.modpacks.models.SearchResult;
+import git.artdeell.mojo.modding.modplatforms.api.modloader.FabriclikeLoaderInstaller;
+import git.artdeell.mojo.modding.modplatforms.api.modloader.ForgelikeLoaderInstaller;
+import git.artdeell.mojo.modding.modplatforms.api.modloader.LoaderInstaller;
+import git.artdeell.mojo.modding.modplatforms.models.Constants;
+import git.artdeell.mojo.modding.modplatforms.models.CurseManifest;
+import git.artdeell.mojo.modding.modplatforms.models.ModDetail;
+import git.artdeell.mojo.modding.modplatforms.models.ModDownload;
+import git.artdeell.mojo.modding.modplatforms.models.ModItem;
+import git.artdeell.mojo.modding.modplatforms.models.SearchFilters;
+import git.artdeell.mojo.modding.modplatforms.models.SearchResult;
 import git.artdeell.mojo.utils.FileUtils;
 import git.artdeell.mojo.utils.GsonJsonUtils;
 import git.artdeell.mojo.utils.ZipUtils;
@@ -40,7 +40,7 @@ import java.util.HashMap;
 import java.util.regex.Pattern;
 import java.util.zip.ZipFile;
 
-public class CurseforgeApi implements ModpackApi{
+public class CurseforgeApi implements ModdingApi {
     private static final Pattern sMcVersionPattern = Pattern.compile("([0-9]+)\\.([0-9]+)\\.?([0-9]+)?");
     private static final int ALGO_SHA_1 = 1;
     // Stolen from

@@ -7,7 +7,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -19,7 +18,6 @@ import android.view.ViewStub;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
@@ -28,7 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import git.artdeell.mojo.MojoApplication;
 import git.artdeell.mojo.Tools;
-import git.artdeell.mojo.modding.modpacks.SelfReferencingFuture;
+import git.artdeell.mojo.modding.modplatforms.SelfReferencingFuture;
 import git.artdeell.mojo.utils.FilteredSubList;
 
 import java.io.File;
@@ -39,11 +37,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.function.Consumer;
 
-import git.artdeell.mojo.MojoApplication;
 import git.artdeell.mojo.R;
-import me.andreasmelone.basicmodinfoparser.modfile.DependencyChecker;
 import me.andreasmelone.basicmodinfoparser.modfile.ModFile;
 import me.andreasmelone.basicmodinfoparser.platform.BasicModInfo;
 import me.andreasmelone.basicmodinfoparser.platform.Platform;

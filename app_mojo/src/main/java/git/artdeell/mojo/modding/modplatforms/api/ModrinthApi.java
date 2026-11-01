@@ -1,4 +1,4 @@
-package git.artdeell.mojo.modding.modpacks.api;
+package git.artdeell.mojo.modding.modplatforms.api;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -8,22 +8,22 @@ import git.artdeell.mojo.R;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.downloader.Downloader;
 import git.artdeell.mojo.downloader.TaskMetadata;
-import git.artdeell.mojo.modding.modpacks.models.ModDownload;
-import git.artdeell.mojo.modding.modpacks.models.ModSource;
+import git.artdeell.mojo.modding.modplatforms.models.ModDownload;
+import git.artdeell.mojo.modding.modplatforms.models.ModSource;
 import git.artdeell.mojo.tasks.mojson.mirrors.DownloadMirror;
 import git.artdeell.mojo.modding.fabric.FabriclikeUtils;
 import git.artdeell.mojo.modding.forge.ForgelikeUtils;
 import git.artdeell.mojo.modding.lwjgl3ify.Lwjgl3ifyUtils;
-import git.artdeell.mojo.modding.modpacks.api.modloader.FabriclikeLoaderInstaller;
-import git.artdeell.mojo.modding.modpacks.api.modloader.ForgelikeLoaderInstaller;
-import git.artdeell.mojo.modding.modpacks.api.modloader.LoaderInstaller;
-import git.artdeell.mojo.modding.modpacks.api.modloader.Lwjgl3ifyLoaderInstaller;
-import git.artdeell.mojo.modding.modpacks.models.Constants;
-import git.artdeell.mojo.modding.modpacks.models.ModDetail;
-import git.artdeell.mojo.modding.modpacks.models.ModItem;
-import git.artdeell.mojo.modding.modpacks.models.ModrinthIndex;
-import git.artdeell.mojo.modding.modpacks.models.SearchFilters;
-import git.artdeell.mojo.modding.modpacks.models.SearchResult;
+import git.artdeell.mojo.modding.modplatforms.api.modloader.FabriclikeLoaderInstaller;
+import git.artdeell.mojo.modding.modplatforms.api.modloader.ForgelikeLoaderInstaller;
+import git.artdeell.mojo.modding.modplatforms.api.modloader.LoaderInstaller;
+import git.artdeell.mojo.modding.modplatforms.api.modloader.Lwjgl3ifyLoaderInstaller;
+import git.artdeell.mojo.modding.modplatforms.models.Constants;
+import git.artdeell.mojo.modding.modplatforms.models.ModDetail;
+import git.artdeell.mojo.modding.modplatforms.models.ModItem;
+import git.artdeell.mojo.modding.modplatforms.models.ModrinthIndex;
+import git.artdeell.mojo.modding.modplatforms.models.SearchFilters;
+import git.artdeell.mojo.modding.modplatforms.models.SearchResult;
 import git.artdeell.mojo.utils.FileUtils;
 import git.artdeell.mojo.utils.ZipUtils;
 
@@ -31,11 +31,12 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.ZipFile;
 
-public class ModrinthApi implements ModpackApi{
+public class ModrinthApi implements ModdingApi {
     private final ApiHandler mApiHandler;
     public ModrinthApi(){
         mApiHandler = new ApiHandler("https://api.modrinth.com/v2");
@@ -94,19 +95,20 @@ public class ModrinthApi implements ModpackApi{
         return modrinthSearchResult;
     }
 
-    @Override
-    public ModDownload[] getDownloads(ModSource item) {
+    private ModDownload[] parseVersions(JsonArray array) {
+        ModDownload[] downloads = new ModDownload[array.size()];
 
-        JsonArray response = mApiHandler.get(String.format("project/%s/version", item.id), JsonArray.class);
-        if(response == null) return null;
-        System.out.println(response);
-        ModDownload[] downloads = new ModDownload[response.size()];
-
-        for (int i=0; i<response.size(); ++i) {
-            JsonObject version = response.get(i).getAsJsonObject();
+        for (int i=0; i<array.size(); ++i) {
+            JsonObject version = array.get(i).getAsJsonObject();
             String name = version.get("name").getAsString();
             String mcName = version.get("game_versions").getAsJsonArray().get(0).getAsString();
             String url = version.get("files").getAsJsonArray().get(0).getAsJsonObject().get("url").getAsString();
+            String filename = version.get("files").getAsJsonArray().get(0).getAsJsonObject().get("filename").getAsString();
+            long filesize = version.get("files").getAsJsonArray().get(0).getAsJsonObject().get("size").getAsLong();
+            String versionId = version.get("id").getAsString();
+            String[] gameVersions = Tools.GLOBAL_GSON.fromJson(version.get("game_versions").getAsJsonArray(), String[].class);
+            String[] loaders = Tools.GLOBAL_GSON.fromJson(version.get("loaders").getAsJsonArray(), String[].class);
+
             String hash;
             // Assume there may not be hashes, in case the API changes
             JsonObject hashesMap = version.getAsJsonArray("files").get(0).getAsJsonObject()
@@ -116,10 +118,40 @@ public class ModrinthApi implements ModpackApi{
             }else {
                 hash = hashesMap.get("sha1").getAsString();
             }
-            downloads[i] = new ModDownload(name, mcName, url, hash);
+            downloads[i] = new ModDownload(name, mcName, url, hash, filename, versionId, filesize, gameVersions, loaders);
+        }
+        return downloads;
+    }
+
+    @Override
+    public ModDownload[] getDownloads(ModSource item) {
+
+        JsonArray response = mApiHandler.get(String.format("project/%s/version", item.id), JsonArray.class);
+        if(response == null) return null;
+        return parseVersions(response);
+    }
+
+    @Override
+    public ModDownload[] getDownloads(ModSource item, SearchFilters filters) {
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("include_changelog", false);
+
+        if (filters != null && filters.mcVersion != null && !filters.mcVersion.isEmpty()) {
+            params.put("game_versions", Tools.GLOBAL_GSON.toJson(
+                    Collections.singletonList(filters.mcVersion)));
         }
 
-        return downloads;
+        if (filters != null && filters.modLoader != null && !filters.modLoader.isEmpty()) {
+            ArrayList<String> loaders = new ArrayList<>();
+            loaders.add(filters.modLoader);
+            if (filters.modLoader.equalsIgnoreCase("quilt")) loaders.add("fabric");
+            params.put("loaders", Tools.GLOBAL_GSON.toJson(loaders));
+        }
+
+        JsonArray response = mApiHandler.get(
+                String.format("project/%s/version", item.id), params, JsonArray.class);
+        if(response == null) return null;
+        return parseVersions(response);
     }
 
     @Override

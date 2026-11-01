@@ -1,4 +1,4 @@
-package git.artdeell.mojo.modding.modpacks.api;
+package git.artdeell.mojo.modding.modplatforms.api;
 
 import android.widget.Toast;
 
@@ -10,11 +10,11 @@ import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.instances.InstanceInstaller;
 import git.artdeell.mojo.instances.Instances;
 import git.artdeell.mojo.instances.Instance;
-import git.artdeell.mojo.modding.modpacks.models.ModDownload;
+import git.artdeell.mojo.modding.modplatforms.models.ModDownload;
 import git.artdeell.mojo.utils.lifecycle.ContextExecutor;
-import git.artdeell.mojo.modding.modpacks.api.modloader.LoaderInstaller;
-import git.artdeell.mojo.modding.modpacks.imagecache.ModIconCache;
-import git.artdeell.mojo.modding.modpacks.models.ModDetail;
+import git.artdeell.mojo.modding.modplatforms.api.modloader.LoaderInstaller;
+import git.artdeell.mojo.modding.modplatforms.imagecache.ModIconCache;
+import git.artdeell.mojo.modding.modplatforms.models.ModDetail;
 import git.artdeell.mojo.progresskeeper.DownloaderProgressWrapper;
 import git.artdeell.mojo.utils.DownloadUtils;
 import git.artdeell.mojo.utils.FileUtils;

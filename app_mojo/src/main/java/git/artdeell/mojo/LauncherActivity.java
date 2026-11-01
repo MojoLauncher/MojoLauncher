@@ -37,7 +37,7 @@ import git.artdeell.mojo.instances.InstanceInstaller;
 import git.artdeell.mojo.instances.Instances;
 import git.artdeell.mojo.utils.lifecycle.ContextAwareDoneListener;
 import git.artdeell.mojo.utils.lifecycle.ContextExecutor;
-import git.artdeell.mojo.modding.modpacks.imagecache.IconCacheJanitor;
+import git.artdeell.mojo.modding.modplatforms.imagecache.IconCacheJanitor;
 import git.artdeell.mojo.prefs.LauncherPreferences;
 import git.artdeell.mojo.prefs.screens.LauncherPreferenceFragment;
 import git.artdeell.mojo.progresskeeper.ProgressKeeper;

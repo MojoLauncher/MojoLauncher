@@ -21,7 +21,6 @@ import com.kdt.mcgui.ProgressLayout;
 
 import git.artdeell.mojo.MojoApplication;
 import git.artdeell.mojo.R;
-import me.andreasmelone.basicmodinfoparser.platform.Platform;
 
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.extra.ExtraCore;
@@ -30,7 +29,7 @@ import git.artdeell.mojo.modding.fabric.FabriclikeUtils;
 import git.artdeell.mojo.modding.fabric.FabricVersion;
 import git.artdeell.mojo.modding.ModloaderDownloadListener;
 import git.artdeell.mojo.modding.ModloaderListenerProxy;
-import git.artdeell.mojo.modding.modpacks.SelfReferencingFuture;
+import git.artdeell.mojo.modding.modplatforms.SelfReferencingFuture;
 
 import java.io.File;
 import java.io.IOException;

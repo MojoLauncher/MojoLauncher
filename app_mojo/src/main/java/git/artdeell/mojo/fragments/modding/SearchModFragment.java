@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -30,10 +31,13 @@ import git.artdeell.mojo.R;
 
 import git.artdeell.mojo.MojoApplication;
 import git.artdeell.mojo.Tools;
-import git.artdeell.mojo.modding.modpacks.ModItemAdapter;
-import git.artdeell.mojo.modding.modpacks.api.CommonApi;
-import git.artdeell.mojo.modding.modpacks.api.ModpackApi;
-import git.artdeell.mojo.modding.modpacks.models.SearchFilters;
+import git.artdeell.mojo.instances.Instance;
+import git.artdeell.mojo.instances.Instances;
+import git.artdeell.mojo.modding.modplatforms.ModItemAdapter;
+import git.artdeell.mojo.modding.modplatforms.api.CommonApi;
+import git.artdeell.mojo.modding.modplatforms.api.ModInstaller;
+import git.artdeell.mojo.modding.modplatforms.api.ModdingApi;
+import git.artdeell.mojo.modding.modplatforms.models.SearchFilters;
 import git.artdeell.mojo.utils.profiles.VersionSelectorDialog;
 import git.artdeell.mojo.progresskeeper.ProgressKeeper;
 import git.artdeell.mojo.progresskeeper.TaskCountListener;
@@ -52,6 +56,11 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
     public static final String TAG = "SearchModFragment";
     private View mOverlay;
 
+    public static final String ARG_MODPACK_MODE = "modpack_mode";
+    private boolean mModpack = true;
+    private Instance instance;
+    private ModItemAdapter.ModInstallHandler mInstallHandler;
+
     private EditText mSearchEditText;
     private ImageButton mFilterButton;
     private RecyclerView mRecyclerview;
@@ -59,7 +68,7 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
     private ProgressBar mSearchProgressBar;
     private TextView mStatusTextView;
     private ColorStateList mDefaultTextColor;
-    private ModpackApi modpackApi;
+    private ModdingApi modpackApi;
 
     private final SearchFilters mSearchFilters;
 
@@ -108,15 +117,49 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        // TODO: instead of instance get a mods directory
+        instance = Instances.loadSelectedInstance();
+        mModpack = args == null || args.getBoolean(ARG_MODPACK_MODE, true);
+        mSearchFilters.isModpack = mModpack;
+    }
+
+    @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         modpackApi = new CommonApi(context.getString(R.string.curseforge_api_key));
     }
 
+    private int handleModInstall(Context context) {
+        // TODO: Yeah sure. Normal string here
+        Toast.makeText(context, R.string.modpack_install_toast_success,
+                Toast.LENGTH_SHORT).show();
+        if (isAdded()) {
+            getParentFragmentManager().popBackStackImmediate();
+        }
+        return 0;
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        // Create install handler
+        if(mModpack) mInstallHandler = modpackApi::handleModpackInstallation;
+        else {
+            // TODO: add real game version and other metadata stuff. It won't work for now
+            // TODO: yes, this means there's no filter for now
+            ModInstaller.Callback c = f -> handleModInstall(getContext());
+            mInstallHandler = ((context, detail, version) -> {
+                try {
+                    ModInstaller.install(context, instance, detail, version, c);
+                } catch (IOException e) {
+                    Tools.showError(context, e);
+                }
+            });
+        }
         // You can only access resources after attaching to current context
-        mModItemAdapter = new ModItemAdapter(getResources(), modpackApi, this);
+        mModItemAdapter = new ModItemAdapter(getResources(), modpackApi, this, mInstallHandler);
         ProgressKeeper.addTaskCountListener(mModItemAdapter);
 
         mOverlay = view.findViewById(R.id.search_mod_overlay);
@@ -127,6 +170,8 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
         mFilterButton = view.findViewById(R.id.search_mod_filter);
 
         mDefaultTextColor = mStatusTextView.getTextColors();
+
+        // TODO: USE SEPARATED TEXT FOR NON-MODPACK MODE
 
         mRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerview.setAdapter(mModItemAdapter);

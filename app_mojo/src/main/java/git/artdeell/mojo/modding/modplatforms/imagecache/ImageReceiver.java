@@ -1,4 +1,4 @@
-package git.artdeell.mojo.modding.modpacks.imagecache;
+package git.artdeell.mojo.modding.modplatforms.imagecache;
 
 import android.graphics.Bitmap;
 

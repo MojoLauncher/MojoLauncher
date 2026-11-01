@@ -1,4 +1,4 @@
-package git.artdeell.mojo.modding.modpacks.api;
+package git.artdeell.mojo.modding.modplatforms.api;
 
 import android.util.ArrayMap;
 import android.util.Log;

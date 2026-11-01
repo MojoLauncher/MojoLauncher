@@ -1,18 +1,18 @@
-package git.artdeell.mojo.modding.modpacks.api;
+package git.artdeell.mojo.modding.modplatforms.api;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import git.artdeell.mojo.MojoApplication;
-import git.artdeell.mojo.modding.modpacks.api.modloader.LoaderInstaller;
-import git.artdeell.mojo.modding.modpacks.models.Constants;
-import git.artdeell.mojo.modding.modpacks.models.ModDetail;
-import git.artdeell.mojo.modding.modpacks.models.ModDownload;
-import git.artdeell.mojo.modding.modpacks.models.ModItem;
-import git.artdeell.mojo.modding.modpacks.models.ModSource;
-import git.artdeell.mojo.modding.modpacks.models.SearchFilters;
-import git.artdeell.mojo.modding.modpacks.models.SearchResult;
+import git.artdeell.mojo.modding.modplatforms.api.modloader.LoaderInstaller;
+import git.artdeell.mojo.modding.modplatforms.models.Constants;
+import git.artdeell.mojo.modding.modplatforms.models.ModDetail;
+import git.artdeell.mojo.modding.modplatforms.models.ModDownload;
+import git.artdeell.mojo.modding.modplatforms.models.ModItem;
+import git.artdeell.mojo.modding.modplatforms.models.ModSource;
+import git.artdeell.mojo.modding.modplatforms.models.SearchFilters;
+import git.artdeell.mojo.modding.modplatforms.models.SearchResult;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,11 +26,11 @@ import java.util.zip.ZipFile;
 /**
  * Group all apis under the same umbrella, as another layer of abstraction
  */
-public class CommonApi implements ModpackApi {
+public class CommonApi implements ModdingApi {
 
-    private final ModpackApi mCurseforgeApi;
-    private final ModpackApi mModrinthApi;
-    private final ModpackApi[] mModpackApis;
+    private final ModdingApi mCurseforgeApi;
+    private final ModdingApi mModrinthApi;
+    private final ModdingApi[] mModpackApis;
 
     public static final byte PACK_MODRINTH = 1;
     public static final byte PACK_CURSEFORGE = 2;
@@ -40,10 +40,10 @@ public class CommonApi implements ModpackApi {
         mModrinthApi = new ModrinthApi();
         if ("DUMMY".equals(curseforgeApiKey)) {
             mCurseforgeApi = null;
-            mModpackApis = new ModpackApi[]{mModrinthApi};
+            mModpackApis = new ModdingApi[]{mModrinthApi};
         } else {
             mCurseforgeApi = new CurseforgeApi(curseforgeApiKey);
-            mModpackApis = new ModpackApi[]{mModrinthApi, mCurseforgeApi};
+            mModpackApis = new ModdingApi[]{mModrinthApi, mCurseforgeApi};
         }
     }
 
@@ -55,6 +55,8 @@ public class CommonApi implements ModpackApi {
                 new SearchResult[mModpackApis.length] : commonApiSearchResult.searchResults;
 
         int totalSize = 0;
+
+
 
         Future<?>[] futures = new Future<?>[mModpackApis.length];
         for(int i = 0; i < mModpackApis.length; i++) {
@@ -123,6 +125,12 @@ public class CommonApi implements ModpackApi {
     }
 
     @Override
+    public ModDownload[] getDownloads(ModSource item, SearchFilters filters) {
+        ModdingApi api = getModpackApi(item.apiSource);
+        return api.getDownloads(item, filters);
+    }
+
+    @Override
     public LoaderInstaller installModpack(ModDetail modDetail, int selectedVersion) throws IOException {
         return getModpackApi(modDetail.apiSource).installModpack(modDetail, selectedVersion);
     }
@@ -143,7 +151,7 @@ public class CommonApi implements ModpackApi {
         }
     }
 
-    private @NonNull ModpackApi getModpackApi(int apiSource) {
+    private @NonNull ModdingApi getModpackApi(int apiSource) {
         switch (apiSource) {
             case Constants.SOURCE_MODRINTH:
                 return mModrinthApi;

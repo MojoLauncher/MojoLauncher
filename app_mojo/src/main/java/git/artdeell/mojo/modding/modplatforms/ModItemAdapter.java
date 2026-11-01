@@ -1,8 +1,10 @@
-package git.artdeell.mojo.modding.modpacks;
+package git.artdeell.mojo.modding.modplatforms;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,15 +25,15 @@ import com.kdt.SimpleArrayAdapter;
 import git.artdeell.mojo.MojoApplication;
 import git.artdeell.mojo.R;
 import git.artdeell.mojo.Tools;
-import git.artdeell.mojo.modding.modpacks.api.ModpackApi;
-import git.artdeell.mojo.modding.modpacks.imagecache.ImageReceiver;
-import git.artdeell.mojo.modding.modpacks.imagecache.ModIconCache;
-import git.artdeell.mojo.modding.modpacks.models.Constants;
-import git.artdeell.mojo.modding.modpacks.models.ModDetail;
-import git.artdeell.mojo.modding.modpacks.models.ModDownload;
-import git.artdeell.mojo.modding.modpacks.models.ModItem;
-import git.artdeell.mojo.modding.modpacks.models.SearchFilters;
-import git.artdeell.mojo.modding.modpacks.models.SearchResult;
+import git.artdeell.mojo.modding.modplatforms.api.ModdingApi;
+import git.artdeell.mojo.modding.modplatforms.imagecache.ImageReceiver;
+import git.artdeell.mojo.modding.modplatforms.imagecache.ModIconCache;
+import git.artdeell.mojo.modding.modplatforms.models.Constants;
+import git.artdeell.mojo.modding.modplatforms.models.ModDetail;
+import git.artdeell.mojo.modding.modplatforms.models.ModDownload;
+import git.artdeell.mojo.modding.modplatforms.models.ModItem;
+import git.artdeell.mojo.modding.modplatforms.models.SearchFilters;
+import git.artdeell.mojo.modding.modplatforms.models.SearchResult;
 import git.artdeell.mojo.progresskeeper.TaskCountListener;
 
 import java.util.Arrays;
@@ -52,7 +54,7 @@ public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private final ModIconCache mIconCache = new ModIconCache();
     private final SearchResultCallback mSearchResultCallback;
     private ModItem[] mModItems;
-    private final ModpackApi mModpackApi;
+    private final ModdingApi mModpackApi;
 
     /* Cache for ever so slightly rounding the image for the corner not to stick out of the layout */
     private final float mCornerDimensionCache;
@@ -63,12 +65,23 @@ public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private boolean mLastPage;
     private boolean mTasksRunning;
 
+    public interface ModInstallHandler {
+        void install(Context context, ModDetail detail, int version);
+    }
 
-    public ModItemAdapter(Resources resources, ModpackApi api, SearchResultCallback callback) {
+    private final ModInstallHandler mInstallHandler;
+
+
+    public ModItemAdapter(Resources resources, ModdingApi api, SearchResultCallback callback) {
+        this(resources, api, callback, (api::handleModpackInstallation));
+    }
+
+    public ModItemAdapter(Resources resources, ModdingApi api, SearchResultCallback callback, ModInstallHandler handler) {
         mCornerDimensionCache = resources.getDimension(R.dimen._1sdp) / 250;
-        mModpackApi = api;
         mModItems = new ModItem[]{};
         mSearchResultCallback = callback;
+        mInstallHandler = handler;
+        mModpackApi = api;
     }
 
     public void performSearchQuery(SearchFilters searchFilters) {
@@ -177,7 +190,7 @@ public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     mExtendedSpinner = mExtendedLayout.findViewById(R.id.mod_extended_version_spinner);
                     mExtendedErrorTextView = mExtendedLayout.findViewById(R.id.mod_extended_error_textview);
 
-                    mExtendedButton.setOnClickListener(v1 -> mModpackApi.handleModpackInstallation(
+                    mExtendedButton.setOnClickListener(v1 -> mInstallHandler.install(
                             mExtendedButton.getContext().getApplicationContext(),
                             mModDetail,
                             mExtendedSpinner.getSelectedItemPosition()));
@@ -200,6 +213,7 @@ public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                          * If we didn't use a Future, we would have extended a ViewHolder with completely unrelated content
                          * or with an error that has never actually happened
                          */
+                        // TODO: getModDetails search filter is broken
                         mModDetail = mModpackApi.getModDetails(mModItem);
                         System.out.println(mModDetail);
                         Tools.runOnUiThread(() -> {
@@ -269,14 +283,16 @@ public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         /** Display extended info/interaction about a modpack */
         private void setStateDetailed(ModDetail detailedItem) {
-            if(detailedItem != null) {
+            if(detailedItem != null && detailedItem.downloads != null && detailedItem.downloads.length > 0) {
                 setInstallEnabled(true);
                 mExtendedErrorTextView.setVisibility(View.GONE);
                 mVersionAdapter.setObjects(Arrays.asList(detailedItem.downloads));
                 mExtendedSpinner.setAdapter(mVersionAdapter);
             } else {
                 closeDetailedView();
+                Log.e("ModItemAdapter", "Failed to fetch mod data??");
                 setInstallEnabled(false);
+                // TODO: add incompatibility message
                 mExtendedErrorTextView.setVisibility(View.VISIBLE);
                 mExtendedSpinner.setAdapter(null);
                 mVersionAdapter.setObjects(null);

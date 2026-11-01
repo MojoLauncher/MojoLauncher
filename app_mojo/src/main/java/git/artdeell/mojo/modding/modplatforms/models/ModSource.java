@@ -1,4 +1,4 @@
-package git.artdeell.mojo.modding.modpacks.models;
+package git.artdeell.mojo.modding.modplatforms.models;
 
 public class ModSource {
     public final int apiSource;

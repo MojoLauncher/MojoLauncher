@@ -46,6 +46,8 @@ public class ModManagerFragment extends Fragment {
     private EditText mSearchEditText;
     private File mModsFolder;
 
+    private Instance mInstance;
+
     private final ActivityResultLauncher<Object> mModImportLauncher =
             registerForActivityResult(new OpenDocumentWithExtension("jar"), (data)->{
                 if(data == null) return;
@@ -91,13 +93,19 @@ public class ModManagerFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        mModsFolder = new File(Instances.loadSelectedInstance().getGameDirectory(), "mods");
+        mInstance = Instances.loadSelectedInstance();
+        mModsFolder = new File(mInstance.getGameDirectory(), "mods");
         mModRecyclerView = view.findViewById(R.id.mod_manager_recyclerview);
         mProgressBar = view.findViewById(R.id.search_mod_progressbar);
         View mOverlay = view.findViewById(R.id.search_mod_overlay);
         Button mImportButton = view.findViewById(R.id.mod_manager_import_button);
         mImportButton.setOnClickListener(v->{
-            mModImportLauncher.launch(null);
+            if(mInstance == null) {
+                throw new IllegalArgumentException("Instance is null!");
+            }
+            Bundle b = new Bundle();
+            b.putBoolean(SearchModFragment.ARG_MODPACK_MODE, false);
+            Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG + "_mods", b);
         });
         mSearchEditText = view.findViewById(R.id.search_mod_edittext);
         mSearchEditText.setOnEditorActionListener(((textView, i, keyEvent) -> {
@@ -110,6 +118,11 @@ public class ModManagerFragment extends Fragment {
         }));
         mModRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         Tools.setupOverlayView(mModRecyclerView, mOverlay);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
         refreshModsList();
     }
 }

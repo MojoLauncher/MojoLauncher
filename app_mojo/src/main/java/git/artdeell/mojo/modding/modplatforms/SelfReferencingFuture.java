@@ -1,4 +1,4 @@
-package git.artdeell.mojo.modding.modpacks;
+package git.artdeell.mojo.modding.modplatforms;
 
 import android.util.Log;
 

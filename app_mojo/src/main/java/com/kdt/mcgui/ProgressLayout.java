@@ -40,6 +40,7 @@ public class ProgressLayout extends ConstraintLayout implements View.OnClickList
     public static final String INSTANCE_INSTALL = "instance_install";
     public static final String DATA_MIGRATION = "data_migration";
     public static final String DRIVER_INSTALL = "driver_install";
+    public static final String MOD_INSTALL = "mod_install";
 
     public ProgressLayout(@NonNull Context context) {
         super(context);
