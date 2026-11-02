@@ -64,6 +64,7 @@ public class LauncherActivity extends BaseActivity {
         public void onFragmentResumed(@NonNull FragmentManager fm, @NonNull Fragment f) {
             mSettingsButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), f instanceof MainMenuFragment
                     ? R.drawable.ic_px_sliders : R.drawable.ic_px_home));
+            updateTopTabs();
         }
     };
 
@@ -330,5 +331,32 @@ public class LauncherActivity extends BaseActivity {
         mFragmentView = findViewById(R.id.container_fragment);
         mSettingsButton = findViewById(R.id.setting_button);
         mProgressLayout = findViewById(R.id.progress_layout);
+        setupTopTabs();
+    }
+
+    private android.view.ViewGroup mTopTabs;
+
+    /** Title and tabs in the top bar. They are shown only on the four main screens. */
+    private void setupTopTabs() {
+        mTopTabs = findViewById(R.id.top_tabs_container);
+        if(mTopTabs == null) return;
+        updateTopTabs();
+    }
+
+    private void updateTopTabs() {
+        if(mTopTabs == null) return;
+        androidx.fragment.app.Fragment current = getSupportFragmentManager().findFragmentById(R.id.container_fragment);
+        int tab = -1;
+        if(current instanceof git.artdeell.mojo.fragments.MainMenuFragment) tab = git.artdeell.mojo.utils.ForkUi.TAB_PLAY;
+        else if(current instanceof git.artdeell.mojo.fragments.InstallationsFragment) tab = git.artdeell.mojo.utils.ForkUi.TAB_INSTALLS;
+        else if(current instanceof git.artdeell.mojo.fragments.SkinsFragment) tab = git.artdeell.mojo.utils.ForkUi.TAB_SKINS;
+        else if(current instanceof git.artdeell.mojo.fragments.PatchNotesFragment) tab = git.artdeell.mojo.utils.ForkUi.TAB_PATCH;
+        mTopTabs.removeAllViews();
+        if(tab < 0) {
+            mTopTabs.setVisibility(android.view.View.GONE);
+            return;
+        }
+        mTopTabs.setVisibility(android.view.View.VISIBLE);
+        mTopTabs.addView(git.artdeell.mojo.utils.ForkUi.pageHeader(this, this, tab));
     }
 }

@@ -30,6 +30,16 @@
 
 
 
+    <!-- Title and tabs (Play, Installations, Skins, Patch notes) of the launcher -->
+    <FrameLayout
+        android:id="@+id/top_tabs_container"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:paddingStart="@dimen/_8sdp"
+        app:layout_constraintBottom_toBottomOf="@id/account_spinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/account_spinner" />
+
     <!-- Holding most of the dynamic content -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/container_fragment"

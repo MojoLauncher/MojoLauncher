@@ -7,18 +7,16 @@
     android:paddingTop="@dimen/_14sdp"
     android:paddingBottom="@dimen/_4sdp">
 
-    <TextView
+    <com.kdt.mcgui.AccentText
         android:id="@android:id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/minecraft_ten"
         android:textAllCaps="true"
-        android:textColor="@color/bedrock_green_light"
         android:textSize="@dimen/_12ssp" />
 
-    <View
+    <com.kdt.mcgui.AccentLine
         android:layout_width="match_parent"
         android:layout_height="@dimen/_2sdp"
-        android:layout_marginTop="@dimen/_3sdp"
-        android:background="@color/bedrock_green_dark" />
+        android:layout_marginTop="@dimen/_3sdp" />
 </LinearLayout>

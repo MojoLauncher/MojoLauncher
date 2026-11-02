@@ -661,4 +661,10 @@
     <string name="fork_skins_upload_title">Upload to Mojang</string>
     <string name="fork_skins_upload_prompt">Upload this skin to your Mojang profile?\n\nSkin: %1$s\nModel: %2$s</string>
     <string name="fork_skins_namemc">NameMC</string>
+    <string name="fork_accent_title">Line color (green lines)</string>
+    <string name="fork_accent_custom">Custom (hex)…</string>
+    <string name="fork_accent_reset">Reset to green</string>
+    <string name="fork_accent_hex_hint">#RRGGBB</string>
+    <string name="fork_accent_invalid">That color is not valid</string>
+    <string name="fork_color_white">White</string>
 </resources>

@@ -2,20 +2,29 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
         <layer-list>
-            <item><shape android:shape="rectangle"><solid android:color="@color/bedrock_border"/></shape></item>
+            <item><shape android:shape="rectangle"><solid android:color="#FFFFFF"/></shape></item>
             <item android:left="2dp" android:top="2dp" android:right="2dp" android:bottom="2dp">
-                <shape android:shape="rectangle"><solid android:color="@color/bedrock_stone_pressed"/></shape>
+                <shape android:shape="rectangle"><solid android:color="#22284A"/></shape>
+            </item>
+            <item android:left="2dp" android:top="2dp" android:right="4dp" android:bottom="4dp">
+                <shape android:shape="rectangle"><solid android:color="#8795C6"/></shape>
+            </item>
+            <item android:left="4dp" android:top="4dp" android:right="4dp" android:bottom="4dp">
+                <shape android:shape="rectangle"><solid android:color="#5C6A9A"/></shape>
             </item>
         </layer-list>
     </item>
     <item>
         <layer-list>
-            <item><shape android:shape="rectangle"><solid android:color="@color/bedrock_border"/></shape></item>
+            <item><shape android:shape="rectangle"><solid android:color="#000000"/></shape></item>
             <item android:left="2dp" android:top="2dp" android:right="2dp" android:bottom="2dp">
-                <shape android:shape="rectangle"><solid android:color="@color/bedrock_stone"/></shape>
+                <shape android:shape="rectangle"><solid android:color="#3B3B3B"/></shape>
             </item>
-            <item android:left="2dp" android:top="4dp" android:right="2dp" android:bottom="2dp">
-                <shape android:shape="rectangle"><solid android:color="@color/bedrock_stone_dark"/></shape>
+            <item android:left="2dp" android:top="2dp" android:right="4dp" android:bottom="4dp">
+                <shape android:shape="rectangle"><solid android:color="#A6A6A6"/></shape>
+            </item>
+            <item android:left="4dp" android:top="4dp" android:right="4dp" android:bottom="4dp">
+                <shape android:shape="rectangle"><solid android:color="#6E6E6E"/></shape>
             </item>
         </layer-list>
     </item>

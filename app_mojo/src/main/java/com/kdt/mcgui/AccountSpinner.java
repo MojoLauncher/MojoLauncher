@@ -63,7 +63,7 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
 
         @Override
         public boolean onValueSet(String key, @NonNull String value) {
-            mLoginBarPaint.setColor(getResources().getColor(R.color.minebutton_color));
+            mLoginBarPaint.setColor(git.artdeell.mojo.utils.AccentColor.get());
             BackgroundLogin backgroundLogin = mAuthType.createAuth();
             backgroundLogin.createAccount(AccountSpinner.this, value);
             return false;
@@ -128,7 +128,7 @@ public class AccountSpinner extends AppCompatSpinner implements LoginListener, A
         reload();
 
         setBackgroundColor(getResources().getColor(R.color.background_status_bar));
-        mLoginBarPaint.setColor(getResources().getColor(R.color.minebutton_color));
+        mLoginBarPaint.setColor(git.artdeell.mojo.utils.AccentColor.get());
         mLoginBarPaint.setStrokeWidth(getResources().getDimensionPixelOffset(R.dimen._2sdp));
         mLoginStepAnimator.addUpdateListener(this);
         mLoginStep = mMaxSteps;

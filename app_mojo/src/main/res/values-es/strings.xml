@@ -470,4 +470,10 @@
     <string name="fork_skins_upload_title">Subir a Mojang</string>
     <string name="fork_skins_upload_prompt">¿Subir esta skin a tu perfil de Mojang?\n\nSkin: %1$s\nModelo: %2$s</string>
     <string name="fork_skins_namemc">NameMC</string>
+    <string name="fork_accent_title">Color de las rayas (verdes)</string>
+    <string name="fork_accent_custom">Personalizado (hex)…</string>
+    <string name="fork_accent_reset">Volver al verde</string>
+    <string name="fork_accent_hex_hint">#RRGGBB</string>
+    <string name="fork_accent_invalid">Ese color no es válido</string>
+    <string name="fork_color_white">Blanco</string>
 </resources>

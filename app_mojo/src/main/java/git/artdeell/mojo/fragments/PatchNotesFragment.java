@@ -51,7 +51,6 @@ public class PatchNotesFragment extends Fragment {
         root.setBackground(git.artdeell.mojo.utils.McStyle.screenBackground(c));
         root.setPadding(ForkUi.dp(c, 16), ForkUi.dp(c, 12), ForkUi.dp(c, 16), ForkUi.dp(c, 12));
 
-        root.addView(ForkUi.pageHeader(c, requireActivity(), ForkUi.TAB_PATCH));
         LinearLayout tabs = ForkUi.row(c);
         mJavaTab = ForkUi.button(c, getString(R.string.fork_patch_java), true);
         mBedrockTab = ForkUi.button(c, getString(R.string.fork_patch_bedrock), false);

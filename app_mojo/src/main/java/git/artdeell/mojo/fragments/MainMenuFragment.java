@@ -74,7 +74,6 @@ public class MainMenuFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Button mNewsButton = view.findViewById(R.id.news_button);
-        Button mDiscordButton = view.findViewById(R.id.social_media_button);
         Button mModsButton = view.findViewById(R.id.mods_button);
         Button mLanButton = view.findViewById(R.id.lan_button);
         Button mBedrockButton = view.findViewById(R.id.bedrock_button);
@@ -84,7 +83,6 @@ public class MainMenuFragment extends Fragment {
         Button mShareLogsButton = view.findViewById(R.id.share_logs_button);
         Button mOpenDirectoryButton = view.findViewById(R.id.open_files_button);
 
-        ImageButton mEditProfileButton = view.findViewById(R.id.edit_profile_button);
         Button mPlayButton = view.findViewById(R.id.play_button);
         mPlayButton.setBackground(git.artdeell.mojo.utils.PlayColor.background(requireContext()));
         mPlayButton.setOnLongClickListener(v -> {
@@ -100,26 +98,18 @@ public class MainMenuFragment extends Fragment {
         mVersionSpinner = view.findViewById(R.id.mc_version_spinner);
 
         mNewsButton.setOnClickListener(v -> Tools.openURL(requireActivity(), Tools.URL_HOME));
-        mDiscordButton.setOnClickListener(v -> Tools.openURL(requireActivity(), getString(R.string.social_media_invite)));
         mModsButton.setOnClickListener(v -> {
             Bundle modsArgs = new Bundle();
             modsArgs.putBoolean(SearchModFragment.ARG_MODPACK, false);
             Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG, modsArgs);
         });
         mBedrockButton.setOnClickListener(v -> openBedrock());
-        // Skins, Installations and Patch notes are tabs in the header
-        ViewGroup tabsContainer = view.findViewById(R.id.launcher_tabs_container);
-        if(tabsContainer != null) {
-            tabsContainer.addView(git.artdeell.mojo.utils.ForkUi.pageHeader(requireContext(), requireActivity(),
-                    git.artdeell.mojo.utils.ForkUi.TAB_PLAY));
-        }
         Button javaButton = view.findViewById(R.id.java_button);
         if(javaButton != null) javaButton.setBackgroundColor(0xFF343434);
         mAppearanceButton.setOnClickListener(v -> showAppearanceDialog(mPlayButton));
         mLanButton.setOnClickListener(v -> Tools.swapFragment(requireActivity(), LanFragment.class, LanFragment.TAG, null));
         mCustomControlButton.setOnClickListener(v -> startActivity(new Intent(requireContext(), CustomControlsActivity.class)));
         mInstallJarButton.setOnClickListener(v -> runInstallerWithConfirmation());
-        mEditProfileButton.setOnClickListener(v -> mVersionSpinner.openProfileEditor(requireActivity()));
 
         mPlayButton.setOnClickListener(v -> ExtraCore.setValue(ExtraConstants.LAUNCH_GAME, true));
 
@@ -156,15 +146,19 @@ public class MainMenuFragment extends Fragment {
     }
 
     private void showAppearanceDialog(Button playButton) {
-        String[] items = {getString(R.string.fork_banner_pick_title), getString(R.string.fork_play_color_title)};
+        String[] items = {getString(R.string.fork_banner_pick_title), getString(R.string.fork_play_color_title),
+                getString(R.string.fork_accent_title)};
         new androidx.appcompat.app.AlertDialog.Builder(requireContext())
                 .setTitle(R.string.fork_appearance_title)
                 .setItems(items, (d, which) -> {
                     if(which == 0) {
                         BannerManager.showChooser(requireContext(), () -> mBannerPicker.launch("image/*"), this::refreshBanner);
-                    } else {
+                    } else if(which == 1) {
                         git.artdeell.mojo.utils.PlayColor.choose(requireContext(), () ->
                                 playButton.setBackground(git.artdeell.mojo.utils.PlayColor.background(requireContext())));
+                    } else {
+                        // The top bar line and the tabs read the color when they are built, so rebuild the screen
+                        git.artdeell.mojo.utils.AccentColor.choose(requireContext(), () -> requireActivity().recreate());
                     }
                 })
                 .show();

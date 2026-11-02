@@ -5,8 +5,8 @@
     android:minHeight="@dimen/_44sdp"
     android:layout_marginHorizontal="@dimen/_6sdp"
     android:layout_marginVertical="@dimen/_2sdp"
-    android:paddingHorizontal="@dimen/_8sdp"
-    android:paddingVertical="@dimen/_6sdp"
+    android:paddingHorizontal="@dimen/_10sdp"
+    android:paddingVertical="@dimen/_8sdp"
     android:background="@drawable/bedrock_pref_row"
     android:gravity="center_vertical"
     android:orientation="horizontal">
@@ -31,6 +31,11 @@
             android:id="@android:id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/minecraft_ten"
+            android:shadowColor="#3F3F3F"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="1"
             android:textColor="@color/primary_text"
             android:textSize="@dimen/_12ssp" />
 
@@ -39,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="4"
-            android:textColor="@color/bedrock_stone_light"
+            android:textColor="#E2E2E2"
             android:textSize="@dimen/_10ssp" />
     </LinearLayout>
 
