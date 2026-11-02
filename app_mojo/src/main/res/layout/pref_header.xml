@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/_6sdp"
+    android:layout_marginTop="@dimen/_4sdp"
+    android:layout_marginBottom="@dimen/_2sdp"
+    android:background="@drawable/bedrock_pref_icon_bg"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="@dimen/_10sdp">
+
+    <ImageView
+        android:id="@android:id/icon"
+        android:layout_width="@dimen/_44sdp"
+        android:layout_height="@dimen/_44sdp"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:contentDescription="@null"
+        android:scaleType="fitCenter" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <com.kdt.mcgui.AccentText
+            android:id="@android:id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/minecraft_ten"
+            android:shadowColor="#3F3F3F"
+            android:shadowDx="3"
+            android:shadowDy="3"
+            android:shadowRadius="1"
+            android:textAllCaps="true"
+            android:textSize="@dimen/_20ssp" />
+
+        <com.kdt.mcgui.AccentLine
+            android:layout_width="@dimen/_72sdp"
+            android:layout_height="@dimen/_3sdp"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:layout_marginBottom="@dimen/_3sdp" />
+
+        <TextView
+            android:id="@android:id/summary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#CFCFCF"
+            android:textSize="@dimen/_10ssp" />
+    </LinearLayout>
+</LinearLayout>

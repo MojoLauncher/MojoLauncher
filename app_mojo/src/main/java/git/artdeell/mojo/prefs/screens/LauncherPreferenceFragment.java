@@ -65,6 +65,38 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
         setDividerHeight(0);
     }
 
+    /** The root settings show the categories as tiles, three per row. The sub screens stay as a list. */
+    @Override
+    public androidx.recyclerview.widget.RecyclerView.LayoutManager onCreateLayoutManager() {
+        if(getClass() != LauncherPreferenceFragment.class) return super.onCreateLayoutManager();
+        androidx.recyclerview.widget.GridLayoutManager manager =
+                new androidx.recyclerview.widget.GridLayoutManager(requireContext(), 6);
+        manager.setSpanSizeLookup(new androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                Preference p = visiblePreferenceAt(position);
+                return p != null && p.getLayoutResource() == R.layout.bedrock_preference_tile ? 2 : 6;
+            }
+        });
+        return manager;
+    }
+
+    private Preference visiblePreferenceAt(int position) {
+        if(getPreferenceScreen() == null) return null;
+        java.util.List<Preference> flat = new java.util.ArrayList<>();
+        flatten(getPreferenceScreen(), flat);
+        return position >= 0 && position < flat.size() ? flat.get(position) : null;
+    }
+
+    private static void flatten(androidx.preference.PreferenceGroup group, java.util.List<Preference> out) {
+        for(int i = 0; i < group.getPreferenceCount(); i++) {
+            Preference p = group.getPreference(i);
+            if(!p.isVisible()) continue;
+            out.add(p);
+            if(p instanceof androidx.preference.PreferenceGroup) flatten((androidx.preference.PreferenceGroup) p, out);
+        }
+    }
+
     @Override
     public void onCreatePreferences(Bundle b, String str) {
         mVisibilityUpdater = this::updateVisibility;

@@ -31,6 +31,16 @@ public interface RenderSpec {
     int displayName();
 
     /**
+     * Text shown in the renderer list. Imported renderers override it with their own name
+     *
+     * @param context application context
+     * @return display text
+     */
+    default String displayLabel(Context context) {
+        return context.getString(displayName());
+    }
+
+    /**
      * Renderer tag
      *
      * @return tag

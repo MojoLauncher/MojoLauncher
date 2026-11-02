@@ -46,6 +46,9 @@ import git.artdeell.mojo.authenticator.accounts.Accounts;
 import git.artdeell.mojo.utils.FileUtils;
 import git.artdeell.mojo.utils.ForkUi;
 import git.artdeell.mojo.utils.McStyle;
+import git.artdeell.mojo.utils.OnlineSkins;
+import git.artdeell.mojo.authenticator.AuthType;
+import git.artdeell.mojo.MojoApplication;
 import git.artdeell.mojo.utils.SkinLibraryDialog;
 import git.artdeell.mojo.utils.SkinModelView;
 
@@ -215,9 +218,10 @@ public class SkinsFragment extends Fragment {
         LinearLayout bottom = ForkUi.row(c);
         Button importBtn = ForkUi.button(c, getString(R.string.fork_skins_import_skin), false);
         Button namemc = ForkUi.button(c, getString(R.string.fork_skins_namemc), false);
+        Button online = ForkUi.button(c, getString(R.string.fork_skins_online), false);
         mDelete = ForkUi.button(c, getString(R.string.fork_skins_delete), false);
         Button done = ForkUi.button(c, getString(R.string.fork_skins_done), false);
-        Button[] all = {importBtn, namemc, mDelete, done};
+        Button[] all = {importBtn, online, namemc, mDelete, done};
         for(int i = 0; i < all.length; i++) {
             LinearLayout.LayoutParams lp = ForkUi.weight(1f);
             lp.leftMargin = ForkUi.dp(c, i == 0 ? 0 : 3);
@@ -229,13 +233,16 @@ public class SkinsFragment extends Fragment {
         root.addView(bottom, bottomLp);
 
         importBtn.setOnClickListener(v -> mImport.launch("image/png"));
+        online.setOnClickListener(v -> askOnlineName());
         namemc.setOnClickListener(v -> Tools.openURL(requireActivity(), "https://namemc.com/minecraft-skins"));
         done.setOnClickListener(v -> requireActivity().getOnBackPressedDispatcher().onBackPressed());
         mDelete.setOnClickListener(v -> confirmDelete(mSelected));
         mUse.setOnClickListener(v -> {
             if(mSelected == null) return;
             Account account = Accounts.getCurrent();
-            if(account != null && account.isMicrosoft) {
+            if(account != null && account.authType == AuthType.ELY_BY) {
+                exportForEly(mSelected);
+            } else if(account != null && account.isMicrosoft) {
                 Bitmap bmp = SkinLibrary.load(mSelected);
                 String model = getString(isSlim(mSelected, bmp) ? R.string.fork_skins_slim : R.string.fork_skins_classic);
                 new AlertDialog.Builder(requireContext())
@@ -326,6 +333,84 @@ public class SkinsFragment extends Fragment {
         for(SkinLibrary.Entry e : shown) if(!favs.contains(e.file.getName())) ordered.add(e);
         mList.removeAllViews();
         for(SkinLibrary.Entry entry : ordered) mList.addView(row(c, entry, favs.contains(entry.file.getName())));
+    }
+
+    /** Ely.by has no upload API for apps, so the skin is exported and the upload page is opened. */
+    private void exportForEly(SkinLibrary.Entry entry) {
+        Context context = requireContext();
+        new AlertDialog.Builder(context)
+                .setTitle(R.string.fork_skins_ely_title)
+                .setMessage(R.string.fork_skins_ely_message)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(R.string.fork_skins_ely_go, (d, w) -> {
+                    android.os.Handler main = new android.os.Handler(android.os.Looper.getMainLooper());
+                    MojoApplication.sExecutorService.execute(() -> {
+                        String error = null;
+                        String file = null;
+                        try {
+                            file = OnlineSkins.exportToDownloads(context, entry.file);
+                        } catch (Exception e) {
+                            error = String.valueOf(e.getMessage());
+                        }
+                        String finalError = error, finalFile = file;
+                        main.post(() -> {
+                            if(!isAdded()) return;
+                            if(finalError != null) {
+                                Toast.makeText(context, getString(R.string.fork_skins_ely_error, finalError), Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(context, getString(R.string.fork_skins_ely_saved, finalFile), Toast.LENGTH_LONG).show();
+                                LauncherPreferences.DEFAULT_PREF.edit().putString(PREF_CURRENT, entry.file.getName()).apply();
+                                Tools.openURL(requireActivity(), OnlineSkins.ELY_UPLOAD_PAGE);
+                            }
+                        });
+                    });
+                })
+                .show();
+    }
+
+    private void askOnlineName() {
+        Context context = requireContext();
+        EditText input = new EditText(context);
+        input.setSingleLine(true);
+        input.setHint(R.string.fork_skins_online_hint);
+        Account account = Accounts.getCurrent();
+        if(account != null && !account.isLocal()) input.setText(account.username);
+        FrameLayout box = new FrameLayout(context);
+        int pad = ForkUi.dp(context, 20);
+        box.setPadding(pad, ForkUi.dp(context, 8), pad, 0);
+        box.addView(input);
+        new AlertDialog.Builder(context)
+                .setTitle(R.string.fork_skins_online)
+                .setMessage(R.string.fork_skins_online_message)
+                .setView(box)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(R.string.fork_skins_online_get, (d, w) -> {
+                    String name = input.getText().toString().trim();
+                    if(name.isEmpty()) return;
+                    android.os.Handler main = new android.os.Handler(android.os.Looper.getMainLooper());
+                    Toast.makeText(context, R.string.fork_skins_online_loading, Toast.LENGTH_SHORT).show();
+                    MojoApplication.sExecutorService.execute(() -> {
+                        SkinLibrary.Entry entry = null;
+                        String error = null;
+                        try {
+                            entry = OnlineSkins.download(context, name);
+                        } catch (Exception e) {
+                            error = String.valueOf(e.getMessage());
+                        }
+                        SkinLibrary.Entry finalEntry = entry;
+                        String finalError = error;
+                        main.post(() -> {
+                            if(!isAdded()) return;
+                            if(finalEntry != null) {
+                                mSelected = finalEntry;
+                                refresh();
+                            } else {
+                                Toast.makeText(context, getString(R.string.fork_skins_online_error, name, finalError), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    });
+                })
+                .show();
     }
 
     private void useSelected() {

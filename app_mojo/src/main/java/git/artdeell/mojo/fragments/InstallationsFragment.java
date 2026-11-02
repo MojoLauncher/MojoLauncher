@@ -41,6 +41,7 @@ public class InstallationsFragment extends Fragment {
         root.setBackground(git.artdeell.mojo.utils.McStyle.screenBackground(c));
         root.setPadding(ForkUi.dp(c, 16), ForkUi.dp(c, 12), ForkUi.dp(c, 16), ForkUi.dp(c, 12));
 
+        root.addView(ForkUi.pageHeader(c, requireActivity(), ForkUi.TAB_INSTALLS));
         LinearLayout header = ForkUi.row(c);
         header.addView(new View(c), ForkUi.weight(1f));
         Button create = ForkUi.button(c, getString(R.string.fork_installs_new), true);

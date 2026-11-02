@@ -50,7 +50,14 @@ public class RendererCache {
             assert r != null;
             if (!r.compatibleDevice(context)) continue;
             rendererIds.add(renderer);
-            rendererNames.add(resources.getString(r.displayName()));
+            rendererNames.add(r.displayLabel(context));
+        }
+        // Renderers the user imported (see ExtraRenderers)
+        for (String tag : git.artdeell.mojo.game.renderer.extra.ExtraRenderers.tags()) {
+            RenderSpec r = GameRenderer.getKnownRenderer(tag);
+            if (r == null || !r.compatibleDevice(context)) continue;
+            rendererIds.add(tag);
+            rendererNames.add(r.displayLabel(context));
         }
         rendererIds.trimToSize();
         rendererNames.trimToSize();
@@ -61,6 +68,7 @@ public class RendererCache {
      * Destroy compatible renderers cache
      */
     public static void releaseRendererCache() {
+        if (sCompatibleRenderers == null) return;
         sCompatibleRenderers.rendererIds.clear();
         sCompatibleRenderers = null;
     }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_3sdp"
+    android:background="@drawable/bedrock_pref_row"
+    android:orientation="vertical">
+
+    <com.kdt.mcgui.AccentLine
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_3sdp"
+        android:layout_marginStart="@dimen/_2sdp"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_marginEnd="@dimen/_2sdp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/_62sdp"
+        android:orientation="horizontal"
+        android:padding="@dimen/_8sdp">
+
+        <ImageView
+            android:id="@android:id/icon"
+            android:layout_width="@dimen/_34sdp"
+            android:layout_height="@dimen/_34sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:background="@drawable/bedrock_pref_icon_bg"
+            android:contentDescription="@null"
+            android:padding="@dimen/_5sdp"
+            android:scaleType="fitCenter" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@android:id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/minecraft_ten"
+                android:shadowColor="#3F3F3F"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="1"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/_12ssp" />
+
+            <TextView
+                android:id="@android:id/summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="#E2E2E2"
+                android:textSize="@dimen/_10ssp" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -103,9 +103,9 @@ public class ForkUi {
     private static View tab(Context c, FragmentActivity act, int label, int index, int selected) {
         LinearLayout box = new LinearLayout(c);
         box.setOrientation(LinearLayout.VERTICAL);
-        TextView t = text(c, c.getString(label), 13, index == selected);
+        TextView t = text(c, c.getString(label), 15, index == selected);
         t.setTextColor(index == selected ? Color.WHITE : TAB_IDLE);
-        t.setPadding(dp(c, 12), dp(c, 3), dp(c, 12), dp(c, 3));
+        t.setPadding(dp(c, 12), dp(c, 8), dp(c, 12), dp(c, 4));
         t.setGravity(Gravity.CENTER);
         box.addView(t);
         View underline = new View(c);
@@ -123,10 +123,10 @@ public class ForkUi {
         LinearLayout box = new LinearLayout(c);
         box.setOrientation(LinearLayout.VERTICAL);
         box.setGravity(Gravity.CENTER_VERTICAL);
-        TextView title = text(c, c.getString(R.string.fork_header_java), 10, true);
+        TextView title = text(c, c.getString(R.string.fork_header_java), 12, true);
         title.setAllCaps(true);
         title.setLetterSpacing(0.06f);
-        title.setPadding(dp(c, 12), 0, 0, 0);
+        title.setPadding(dp(c, 12), dp(c, 6), 0, 0);
         box.addView(title);
         LinearLayout tabs = new LinearLayout(c);
         tabs.setOrientation(LinearLayout.HORIZONTAL);

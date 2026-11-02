@@ -92,6 +92,23 @@ public class SkinLibrary {
         return new Entry(n.substring(0, n.length() - 4), target);
     }
 
+    /** Saves a downloaded skin (64x64 or 64x32) under the given name. */
+    public static Entry saveBitmap(Context context, String name, Bitmap bitmap) throws IOException {
+        if(bitmap.getWidth() != 64 || (bitmap.getHeight() != 64 && bitmap.getHeight() != 32))
+            throw new IOException("A skin must be 64x64 or 64x32 pixels");
+        if(bitmap.getHeight() == 32) bitmap = convertLegacy(bitmap);
+        String base = FileUtils.escapeFileName(name);
+        if(base.isEmpty()) base = "skin";
+        File target = new File(dir(context), base + ".png");
+        for(int i = 2; target.exists(); i++) target = new File(dir(context), base + " (" + i + ").png");
+        FileUtils.ensureParentDirectory(target);
+        try (FileOutputStream out = new FileOutputStream(target)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+        }
+        String n = target.getName();
+        return new Entry(n.substring(0, n.length() - 4), target);
+    }
+
     public static void delete(Entry entry) {
         if(entry.file.exists()) entry.file.delete();
     }

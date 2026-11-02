@@ -83,6 +83,7 @@ public class MainMenuFragment extends Fragment {
         Button mShareLogsButton = view.findViewById(R.id.share_logs_button);
         Button mOpenDirectoryButton = view.findViewById(R.id.open_files_button);
 
+        ImageButton mEditProfileButton = view.findViewById(R.id.edit_profile_button);
         Button mPlayButton = view.findViewById(R.id.play_button);
         mPlayButton.setBackground(git.artdeell.mojo.utils.PlayColor.background(requireContext()));
         mPlayButton.setOnLongClickListener(v -> {
@@ -104,12 +105,19 @@ public class MainMenuFragment extends Fragment {
             Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG, modsArgs);
         });
         mBedrockButton.setOnClickListener(v -> openBedrock());
+        // Skins, Installations and Patch notes are tabs in the header
+        ViewGroup tabsContainer = view.findViewById(R.id.launcher_tabs_container);
+        if(tabsContainer != null) {
+            tabsContainer.addView(git.artdeell.mojo.utils.ForkUi.pageHeader(requireContext(), requireActivity(),
+                    git.artdeell.mojo.utils.ForkUi.TAB_PLAY));
+        }
         Button javaButton = view.findViewById(R.id.java_button);
         if(javaButton != null) javaButton.setBackgroundColor(0xFF343434);
         mAppearanceButton.setOnClickListener(v -> showAppearanceDialog(mPlayButton));
         mLanButton.setOnClickListener(v -> Tools.swapFragment(requireActivity(), LanFragment.class, LanFragment.TAG, null));
         mCustomControlButton.setOnClickListener(v -> startActivity(new Intent(requireContext(), CustomControlsActivity.class)));
         mInstallJarButton.setOnClickListener(v -> runInstallerWithConfirmation());
+        mEditProfileButton.setOnClickListener(v -> mVersionSpinner.openProfileEditor(requireActivity()));
 
         mPlayButton.setOnClickListener(v -> ExtraCore.setValue(ExtraConstants.LAUNCH_GAME, true));
 
@@ -157,7 +165,6 @@ public class MainMenuFragment extends Fragment {
                         git.artdeell.mojo.utils.PlayColor.choose(requireContext(), () ->
                                 playButton.setBackground(git.artdeell.mojo.utils.PlayColor.background(requireContext())));
                     } else {
-                        // The top bar line and the tabs read the color when they are built, so rebuild the screen
                         git.artdeell.mojo.utils.AccentColor.choose(requireContext(), () -> requireActivity().recreate());
                     }
                 })

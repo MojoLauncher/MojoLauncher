@@ -31,6 +31,13 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.76"/>
 
+    <FrameLayout
+        android:id="@+id/launcher_tabs_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/sidebar_guideline"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/bedrock_banner"
@@ -42,7 +49,7 @@
         app:layout_constraintBottom_toTopOf="@id/_background_display_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/sidebar_guideline"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/launcher_tabs_container" />
 
     <TextView
         android:id="@+id/bedrock_banner_title"
@@ -83,21 +90,21 @@
                 style="@style/LauncherMenuButton.Universal"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
-                android:drawableStart="@drawable/ic_px_creeper"
+                android:drawableStart="@drawable/ic_user_creeper"
                 android:text="@string/fork_java_button" />
             <com.kdt.mcgui.LauncherMenuButton
                 android:id="@+id/bedrock_button"
                 style="@style/LauncherMenuButton.Universal"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
-                android:drawableStart="@drawable/ic_px_bedrock"
+                android:drawableStart="@drawable/ic_user_bedrock"
                 android:text="@string/fork_bedrock_button" />
             <com.kdt.mcgui.LauncherMenuButton
                 android:id="@+id/appearance_button"
                 style="@style/LauncherMenuButton.Universal"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
-                android:drawableStart="@drawable/ic_px_sliders"
+                android:drawableStart="@drawable/ic_user_palette"
                 android:text="@string/fork_appearance_title" />
             <com.kdt.mcgui.LauncherMenuButton
                 android:id="@+id/mods_button"
@@ -159,9 +166,20 @@
         app:drawableStartIntegerScaling="true"
         app:drawableStartSize="@dimen/_36sdp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/play_start_guideline"
+        app:layout_constraintEnd_toStartOf="@+id/edit_profile_button"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <ImageButton
+        android:id="@+id/edit_profile_button"
+        android:layout_width="@dimen/_32sdp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/_8sdp"
+
+        android:background="?android:attr/selectableItemBackground"
+        android:src="@drawable/ic_px_edit"
+        app:layout_constraintBottom_toBottomOf="@+id/mc_version_spinner"
+        app:layout_constraintEnd_toStartOf="@+id/play_button"
+        app:layout_constraintTop_toTopOf="@+id/mc_version_spinner" />
 
 
     <!-- This view is for cosmetic purpose only -->

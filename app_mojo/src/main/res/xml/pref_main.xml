@@ -7,6 +7,11 @@
     app:key=""
     >
 
+    <git.artdeell.mojo.prefs.HeaderPreference
+        android:title="@string/fork_settings_title"
+        android:summary="@string/fork_settings_tagline"
+        android:icon="@drawable/ic_user_creeper" />
+
     <git.artdeell.mojo.prefs.BackButtonPreference />
 
     <PreferenceCategory
@@ -15,6 +20,7 @@
 
         <Preference
             android:key="video_screen_setting"
+            android:layout="@layout/bedrock_preference_tile"
             android:title="@string/preference_video_title"
             android:summary="@string/preference_video_description"
             android:fragment="git.artdeell.mojo.prefs.screens.LauncherPreferenceVideoFragment"
@@ -23,6 +29,7 @@
 
         <Preference
             android:key="control_screen_setting"
+            android:layout="@layout/bedrock_preference_tile"
             android:title="@string/preference_control_title"
             android:summary="@string/preference_control_description"
             android:fragment="git.artdeell.mojo.prefs.screens.LauncherPreferenceControlFragment"
@@ -31,6 +38,7 @@
 
         <Preference
             android:key="java_screen_setting"
+            android:layout="@layout/bedrock_preference_tile"
             android:title="@string/preference_java_title"
             android:summary="@string/preference_java_description"
             android:fragment="git.artdeell.mojo.prefs.screens.LauncherPreferenceJavaFragment"
@@ -39,6 +47,7 @@
 
         <Preference
             android:key="misc_screen_setting"
+            android:layout="@layout/bedrock_preference_tile"
             android:title="@string/preference_misc_title"
             android:summary="@string/preference_misc_description"
             android:fragment="git.artdeell.mojo.prefs.screens.LauncherPreferenceMiscellaneousFragment"
@@ -48,6 +57,7 @@
 
         <Preference
             android:key="experimental_screen_setting"
+            android:layout="@layout/bedrock_preference_tile"
             android:title="@string/preference_experimental_title"
             android:summary="@string/preference_experimental_description"
             android:fragment="git.artdeell.mojo.prefs.screens.LauncherPreferenceExperimentalFragment"

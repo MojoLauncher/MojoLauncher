@@ -60,6 +60,9 @@ public class GameRenderer {
      * @return RenderSpec instance if found, null otherwise
      */
     public static RenderSpec getKnownRenderer(String renderer) {
+        if (renderer != null && renderer.startsWith(git.artdeell.mojo.game.renderer.extra.ExtraRenderers.TAG_PREFIX)) {
+            return git.artdeell.mojo.game.renderer.extra.ExtraRenderers.find(renderer);
+        }
         switch (renderer) {
             // For compatibility
             case "opengles2_4":

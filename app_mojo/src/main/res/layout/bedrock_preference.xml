@@ -11,6 +11,11 @@
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
+    <com.kdt.mcgui.AccentLine
+        android:layout_width="@dimen/_3sdp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="@dimen/_8sdp" />
+
     <ImageView
         android:id="@android:id/icon"
         android:layout_width="@dimen/_28sdp"

@@ -30,15 +30,17 @@
 
 
 
-    <!-- Title and tabs (Play, Installations, Skins, Patch notes) of the launcher -->
-    <FrameLayout
-        android:id="@+id/top_tabs_container"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:paddingStart="@dimen/_8sdp"
-        app:layout_constraintBottom_toBottomOf="@id/account_spinner"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/account_spinner" />
+    <ImageButton
+        android:id="@+id/discord_button"
+        android:layout_width="@dimen/_52sdp"
+        android:layout_height="@dimen/_42sdp"
+        android:background="?attr/selectableItemBackground"
+        android:contentDescription="@string/mcl_button_social_media"
+        android:padding="@dimen/_8sdp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_user_discord"
+        app:layout_constraintEnd_toStartOf="@id/setting_button"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Holding most of the dynamic content -->
     <androidx.fragment.app.FragmentContainerView

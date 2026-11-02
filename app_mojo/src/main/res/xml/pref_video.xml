@@ -12,6 +12,18 @@
             android:icon="@drawable/ic_px_image_renderer"
             app2:useSimpleSummaryProvider="true"/>
 
+        <Preference
+            android:key="import_renderer"
+            android:title="@string/fork_renderer_import_title"
+            android:summary="@string/fork_renderer_import_summary"
+            android:icon="@drawable/ic_px_image_renderer" />
+
+        <Preference
+            android:key="remove_renderer"
+            android:title="@string/fork_renderer_remove_title"
+            android:summary="@string/fork_renderer_remove_summary"
+            android:icon="@drawable/ic_px_trash" />
+
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="ignoreNotch"
