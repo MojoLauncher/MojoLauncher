@@ -100,33 +100,32 @@ public class ForkUi {
         Tools.swapFragment(act, cls, tag, null);
     }
 
-    private static View tab(Context c, FragmentActivity act, int label, int index, int selected) {
-        LinearLayout box = new LinearLayout(c);
-        box.setOrientation(LinearLayout.VERTICAL);
+    private static TextView tab(Context c, FragmentActivity act, int label, int index, int selected) {
         TextView t = text(c, c.getString(label), 15, index == selected);
         t.setTextColor(index == selected ? Color.WHITE : TAB_IDLE);
-        t.setPadding(dp(c, 12), dp(c, 8), dp(c, 12), dp(c, 4));
+        t.setPadding(dp(c, 14), dp(c, 8), dp(c, 14), dp(c, 8));
         t.setGravity(Gravity.CENTER);
-        box.addView(t);
-        View underline = new View(c);
-        underline.setBackgroundColor(index == selected ? AccentColor.get() : Color.TRANSPARENT);
-        LinearLayout.LayoutParams ulp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(c, 3));
-        ulp.leftMargin = dp(c, 6);
-        ulp.rightMargin = dp(c, 6);
-        box.addView(underline, ulp);
-        if(index != selected) box.setOnClickListener(v -> openTab(act, index));
-        return box;
+        if(index == selected) {
+            GradientDrawable underline = new GradientDrawable();
+            underline.setColor(AccentColor.get());
+            android.graphics.drawable.LayerDrawable layers = new android.graphics.drawable.LayerDrawable(
+                    new android.graphics.drawable.Drawable[]{underline});
+            layers.setLayerInset(0, dp(c, 8), dp(c, 34), dp(c, 8), 0);
+            t.setBackground(layers);
+        } else {
+            t.setOnClickListener(v -> openTab(act, index));
+        }
+        return t;
     }
 
     /** Title "MINECRAFT: JAVA EDITION" and the Play / Installations / Skins / Patch notes tabs, for the top bar. */
     public static LinearLayout pageHeader(Context c, FragmentActivity act, int selected) {
         LinearLayout box = new LinearLayout(c);
         box.setOrientation(LinearLayout.VERTICAL);
-        box.setGravity(Gravity.CENTER_VERTICAL);
         TextView title = text(c, c.getString(R.string.fork_header_java), 12, true);
         title.setAllCaps(true);
         title.setLetterSpacing(0.06f);
-        title.setPadding(dp(c, 12), dp(c, 6), 0, 0);
+        title.setPadding(dp(c, 8), dp(c, 6), 0, 0);
         box.addView(title);
         LinearLayout tabs = new LinearLayout(c);
         tabs.setOrientation(LinearLayout.HORIZONTAL);

@@ -109,7 +109,8 @@ public class MainMenuFragment extends Fragment {
         ViewGroup tabsContainer = view.findViewById(R.id.launcher_tabs_container);
         if(tabsContainer != null) {
             tabsContainer.addView(git.artdeell.mojo.utils.ForkUi.pageHeader(requireContext(), requireActivity(),
-                    git.artdeell.mojo.utils.ForkUi.TAB_PLAY));
+                    git.artdeell.mojo.utils.ForkUi.TAB_PLAY), new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
         Button javaButton = view.findViewById(R.id.java_button);
         if(javaButton != null) javaButton.setBackgroundColor(0xFF343434);
