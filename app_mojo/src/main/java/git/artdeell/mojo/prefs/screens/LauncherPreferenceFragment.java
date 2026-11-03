@@ -104,6 +104,32 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
         setupNotificationRequestPreference();
         setupBannerPreference();
         setupSkinPreference();
+        setupCreditsPreference();
+    }
+
+    private void setupCreditsPreference() {
+        Preference credits = findPreference("credits_setting");
+        if(credits == null) return;
+        credits.setOnPreferenceClickListener(preference -> {
+            android.content.Context c = requireContext();
+            android.widget.TextView text = new android.widget.TextView(c);
+            text.setText(getString(R.string.fork_credits_text) + "\n\n" + getString(R.string.fork_credits_commit));
+            text.setTextSize(14);
+            int pad = (int) (16 * c.getResources().getDisplayMetrics().density);
+            text.setPadding(pad, pad / 2, pad, 0);
+            android.widget.ScrollView scroll = new android.widget.ScrollView(c);
+            scroll.addView(text);
+            new androidx.appcompat.app.AlertDialog.Builder(c)
+                    .setTitle(R.string.fork_credits_title)
+                    .setView(scroll)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .setNeutralButton(R.string.fork_credits_mojo, (d, w) ->
+                            git.artdeell.mojo.Tools.openURL(requireActivity(), "https://github.com/MojoLauncher/MojoLauncher"))
+                    .setNegativeButton(R.string.fork_credits_license, (d, w) ->
+                            git.artdeell.mojo.Tools.openURL(requireActivity(), "https://github.com/MojoLauncher/MojoLauncher/blob/v3_openjdk/LICENSE"))
+                    .show();
+            return true;
+        });
     }
 
     private void openSkinLibrary() {

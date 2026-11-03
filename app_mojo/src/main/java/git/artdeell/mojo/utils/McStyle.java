@@ -29,12 +29,22 @@ import git.artdeell.mojo.R;
 public class McStyle {
     private static Drawable sDirt;
 
+    /** Font for normal text (the game's regular font). */
     public static Typeface font(Context c) {
+        try {
+            Typeface t = ResourcesCompat.getFont(c, R.font.minecraft_regular);
+            if(t != null) return t;
+        } catch (Exception ignored) {}
+        return Typeface.DEFAULT;
+    }
+
+    /** Bold pixel font for the capitalized titles (MINECRAFT: JAVA EDITION, PLAY). */
+    public static Typeface heading(Context c) {
         try {
             Typeface t = ResourcesCompat.getFont(c, R.font.minecraft_ten);
             if(t != null) return t;
         } catch (Exception ignored) {}
-        return Typeface.DEFAULT;
+        return font(c);
     }
 
     /** A flat rectangle with a 2px black border and a light / dark bevel, like the game's buttons. */
@@ -85,6 +95,12 @@ public class McStyle {
     /** Pixel font, white text with the game's dark drop shadow. */
     public static void text(TextView t) {
         t.setTypeface(font(t.getContext()));
+        float d = t.getContext().getResources().getDisplayMetrics().density;
+        t.setShadowLayer(1f, d, d, 0xFF3F3F3F);
+    }
+
+    public static void headingText(TextView t) {
+        t.setTypeface(heading(t.getContext()));
         float d = t.getContext().getResources().getDisplayMetrics().density;
         t.setShadowLayer(1f, d, d, 0xFF3F3F3F);
     }

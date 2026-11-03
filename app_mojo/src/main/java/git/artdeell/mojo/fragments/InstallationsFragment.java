@@ -94,14 +94,14 @@ public class InstallationsFragment extends Fragment {
 
             LinearLayout texts = new LinearLayout(c);
             texts.setOrientation(LinearLayout.VERTICAL);
-            texts.addView(ForkUi.text(c, String.valueOf(instance.name), 16, true));
+            texts.addView(ForkUi.text(c, String.valueOf(instance.name), 16, false));
             TextView version = ForkUi.text(c, String.valueOf(instance.versionId), 13, false);
             version.setTextColor(0xFFBBBBBB);
             texts.addView(version);
             row.addView(texts, ForkUi.weight(1f));
 
             if(selected) {
-                TextView mark = ForkUi.text(c, getString(R.string.fork_installs_selected), 12, true);
+                TextView mark = ForkUi.text(c, getString(R.string.fork_installs_selected), 12, false);
                 mark.setTextColor(0xFF7CD65A);
                 mark.setGravity(Gravity.CENTER);
                 mark.setPadding(0, 0, ForkUi.dp(c, 8), 0);

@@ -57,7 +57,7 @@ public class ForkUi {
         t.setText(content);
         t.setTextColor(Color.WHITE);
         t.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp);
-        McStyle.text(t);
+        if(bold) McStyle.headingText(t); else McStyle.text(t);
         return t;
     }
 
@@ -101,7 +101,7 @@ public class ForkUi {
     }
 
     private static TextView tab(Context c, FragmentActivity act, int label, int index, int selected) {
-        TextView t = text(c, c.getString(label), 15, index == selected);
+        TextView t = text(c, c.getString(label), 15, false);
         t.setTextColor(index == selected ? Color.WHITE : TAB_IDLE);
         t.setPadding(dp(c, 14), dp(c, 8), dp(c, 14), dp(c, 8));
         t.setGravity(Gravity.CENTER);

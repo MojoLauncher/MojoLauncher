@@ -38,6 +38,7 @@ public class LauncherMenuButton extends ExtendedButton {
         setCompoundDrawablePadding(padding);
         setPaddingRelative(padding, 0, 0, 0);
         setGravity(Gravity.CENTER_VERTICAL);
+        setTypeface(git.artdeell.mojo.utils.McStyle.font(getContext()));
 
         setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen._12ssp));
 

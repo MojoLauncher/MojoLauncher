@@ -85,6 +85,7 @@ public class MainMenuFragment extends Fragment {
 
         ImageButton mEditProfileButton = view.findViewById(R.id.edit_profile_button);
         Button mPlayButton = view.findViewById(R.id.play_button);
+        git.artdeell.mojo.utils.McStyle.headingText(mPlayButton);
         mPlayButton.setBackground(git.artdeell.mojo.utils.PlayColor.background(requireContext()));
         mPlayButton.setOnLongClickListener(v -> {
             git.artdeell.mojo.utils.PlayColor.choose(requireContext(), () ->

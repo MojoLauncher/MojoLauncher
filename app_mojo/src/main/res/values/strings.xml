@@ -694,4 +694,10 @@
     <string name="fork_skins_ely_go">Save and open Ely.by</string>
     <string name="fork_skins_ely_saved">Saved %1$s in Downloads. Upload it on Ely.by.</string>
     <string name="fork_skins_ely_error">Could not save the skin: %1$s</string>
+    <string name="fork_credits_title">Credits and licenses</string>
+    <string name="fork_credits_summary">Mojang, MojoLauncher, PojavLauncher and other projects</string>
+    <string name="fork_credits_mojo">MojoLauncher</string>
+    <string name="fork_credits_license">License</string>
+    <string name="fork_credits_text">This is an unofficial fork. It is not made by, approved by or affiliated with Mojang Studios or Microsoft.\n\nMinecraft is a trademark of Mojang Studios. Minecraft: Java Edition and Minecraft: Bedrock Edition belong to Mojang Studios and Microsoft. You need your own copy of the game to play.\n\nThanks to the MojoLauncher team and contributors, whose launcher this fork is based on (github.com/MojoLauncher/MojoLauncher), and to the PojavLauncher team, whose work MojoLauncher continues.\n\nLicense: MojoLauncher is licensed under the GNU LGPL v3. The changes in this fork are released under the same license, and its source code is available in the fork\'s repository.\n\nThird party components: GL4ES (MIT), Mesa 3D (MIT), OpenJDK (GPLv2 + Classpath Exception), GLFW and SDL (zlib), LWJGL (BSD-3), mojoexec (MIT), bhook (MIT), authlib-injector (AGPL-3.0), OpenAL Soft (LGPL), oboe (Apache 2.0) and Terracotta. Their license files are included in the app.</string>
+    <string name="fork_credits_commit">If Mojang, Microsoft or the MojoLauncher developers ask us to change or remove anything (names, images, fonts, text or any other content), we will do it.</string>
 </resources>

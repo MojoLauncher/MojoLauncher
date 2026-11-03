@@ -36,7 +36,7 @@
             android:id="@android:id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/minecraft_ten"
+            android:fontFamily="@font/minecraft_regular"
             android:shadowColor="#3F3F3F"
             android:shadowDx="2"
             android:shadowDy="2"

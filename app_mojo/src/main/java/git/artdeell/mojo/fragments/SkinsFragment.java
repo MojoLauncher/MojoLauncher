@@ -47,30 +47,27 @@ import git.artdeell.mojo.utils.FileUtils;
 import git.artdeell.mojo.utils.ForkUi;
 import git.artdeell.mojo.utils.McStyle;
 import git.artdeell.mojo.utils.OnlineSkins;
+import git.artdeell.mojo.utils.SkinFigure;
 import git.artdeell.mojo.authenticator.AuthType;
 import git.artdeell.mojo.MojoApplication;
 import git.artdeell.mojo.utils.SkinLibraryDialog;
 import git.artdeell.mojo.utils.SkinModelView;
 
 /**
- * Skin changer laid out like the Quick Skin screen: the skin list and an import area on the left,
- * the 3D model with Classic / Slim on the right, and the Import / Laby.net / Delete / Done row below.
+ * Skin changer laid out like the official launcher: the current skin as a 3D model on the left and the
+ * library (New skin + saved skins, each with a Use button when selected) on the right.
  */
 public class SkinsFragment extends Fragment {
     public static final String TAG = "SkinsFragment";
     private static final String PREF_CURRENT = "current_skin_file";
     private static final String PREF_TYPE = "skin_type_";
-    private static final String PREF_SORT = "skin_sort";
     private static final String PREF_FAVORITES = "skin_favorites";
-    private static final int SELECTED_BLUE = 0xFF2F66C8;
-    private static final int MODEL_PANEL = 0xFF444444;
+    private static final int PANEL = 0xFF2B2B2B;
+    private static final int LINE = 0xFF4A4A4A;
+    private static final int COLUMNS = 4;
 
     private SkinModelView mModel;
-    private EditText mSearch;
-    private Button mSort;
-    private String mQuery = "";
-    private LinearLayout mList;
-    private Button mClassic, mSlim, mUse, mDelete;
+    private LinearLayout mGrid;
     private SkinLibrary.Entry mSelected;
 
     private final ActivityResultLauncher<String> mImport =
@@ -103,161 +100,67 @@ public class SkinsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Context c = requireContext();
-        FrameLayout frame = new FrameLayout(c);
-        frame.setBackground(McStyle.dirt(c));
-        View shade = new View(c);
-        shade.setBackgroundColor(0x99000000);
-        frame.addView(shade, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
         LinearLayout root = new LinearLayout(c);
         root.setOrientation(LinearLayout.VERTICAL);
-        root.setPadding(ForkUi.dp(c, 14), ForkUi.dp(c, 8), ForkUi.dp(c, 14), ForkUi.dp(c, 10));
-        frame.addView(root, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-        TextView title = ForkUi.text(c, getString(R.string.fork_skins_change_title), 16, false);
-        title.setGravity(Gravity.CENTER);
-        root.addView(title, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        root.setBackgroundColor(PANEL);
+        root.addView(ForkUi.pageHeader(c, requireActivity(), ForkUi.TAB_SKINS));
 
         LinearLayout main = new LinearLayout(c);
         main.setOrientation(LinearLayout.HORIZONTAL);
-        LinearLayout.LayoutParams mainLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f);
-        mainLp.topMargin = ForkUi.dp(c, 6);
-        root.addView(main, mainLp);
+        root.addView(main, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f));
 
-        // --- left: name field, skin list, import area ---
+        // --- left: Current ---
         LinearLayout left = new LinearLayout(c);
         left.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams leftLp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1.5f);
-        leftLp.rightMargin = ForkUi.dp(c, 10);
-        main.addView(left, leftLp);
+        left.setGravity(Gravity.CENTER_HORIZONTAL);
+        left.setPadding(ForkUi.dp(c, 8), ForkUi.dp(c, 10), ForkUi.dp(c, 8), ForkUi.dp(c, 8));
+        main.addView(left, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f));
+        TextView current = ForkUi.text(c, getString(R.string.fork_skins_current), 14, false);
+        current.setGravity(Gravity.CENTER);
+        left.addView(current, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        mModel = new SkinModelView(c);
+        LinearLayout.LayoutParams modelLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f);
+        modelLp.topMargin = ForkUi.dp(c, 6);
+        left.addView(mModel, modelLp);
 
-        LinearLayout nameRow = ForkUi.row(c);
-        mSearch = new EditText(c);
-        mSearch.setHint(R.string.fork_skins_search_hint);
-        mSearch.setHintTextColor(0xFF777777);
-        mSearch.setTextColor(Color.WHITE);
-        mSearch.setTextSize(14);
-        mSearch.setSingleLine(true);
-        McStyle.text(mSearch);
-        mSearch.setBackground(ForkUi.box(c, Color.BLACK, 0xFFAAAAAA, 2));
-        mSearch.setPadding(ForkUi.dp(c, 8), 0, ForkUi.dp(c, 8), 0);
-        mSearch.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int st, int co, int af) {}
-            @Override public void onTextChanged(CharSequence s, int st, int be, int co) {}
-            @Override public void afterTextChanged(Editable e) {
-                mQuery = e.toString().trim().toLowerCase();
-                fillList();
-            }
-        });
-        nameRow.addView(mSearch, new LinearLayout.LayoutParams(0, ForkUi.dp(c, 36), 1f));
-        Button plus = ForkUi.button(c, "+", false);
-        plus.setMinWidth(0);
-        plus.setMinimumWidth(0);
-        plus.setPadding(0, 0, 0, 0);
-        plus.setOnClickListener(v -> mImport.launch("image/png"));
-        LinearLayout.LayoutParams plusLp = new LinearLayout.LayoutParams(ForkUi.dp(c, 36), ForkUi.dp(c, 36));
-        plusLp.leftMargin = ForkUi.dp(c, 6);
-        nameRow.addView(plus, plusLp);
-        left.addView(nameRow);
+        View divider = new View(c);
+        divider.setBackgroundColor(LINE);
+        main.addView(divider, new LinearLayout.LayoutParams(ForkUi.dp(c, 1), ViewGroup.LayoutParams.MATCH_PARENT));
 
-        mSort = ForkUi.button(c, "", false);
-        mSort.setMinHeight(ForkUi.dp(c, 30));
-        mSort.setMinimumHeight(ForkUi.dp(c, 30));
-        mSort.setTextSize(12);
-        mSort.setOnClickListener(v -> {
-            int next = (sortMode() + 1) % 3;
-            LauncherPreferences.DEFAULT_PREF.edit().putInt(PREF_SORT, next).apply();
-            fillList();
-        });
-        LinearLayout.LayoutParams sortLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        sortLp.topMargin = ForkUi.dp(c, 4);
-        left.addView(mSort, sortLp);
-
-        ScrollView scroll = new ScrollView(c);
-        mList = new LinearLayout(c);
-        mList.setOrientation(LinearLayout.VERTICAL);
-        scroll.addView(mList);
-        LinearLayout.LayoutParams scrollLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f);
-        scrollLp.topMargin = ForkUi.dp(c, 6);
-        left.addView(scroll, scrollLp);
-
-        TextView drop = ForkUi.text(c, getString(R.string.fork_skins_drop), 13, false);
-        drop.setGravity(Gravity.CENTER);
-        drop.setTextColor(0xFFCCCCCC);
-        drop.setBackground(ForkUi.dashed(c, 0x33000000, 0xFF888888));
-        drop.setOnClickListener(v -> mImport.launch("image/png"));
-        LinearLayout.LayoutParams dropLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ForkUi.dp(c, 54));
-        dropLp.topMargin = ForkUi.dp(c, 6);
-        left.addView(drop, dropLp);
-
-        // --- right: 3D model, Classic / Slim, Use ---
+        // --- right: Library ---
         LinearLayout right = new LinearLayout(c);
         right.setOrientation(LinearLayout.VERTICAL);
-        right.setBackgroundColor(MODEL_PANEL);
-        right.setPadding(ForkUi.dp(c, 6), ForkUi.dp(c, 6), ForkUi.dp(c, 6), ForkUi.dp(c, 6));
-        main.addView(right, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f));
-        mModel = new SkinModelView(c);
-        right.addView(mModel, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f));
+        right.setPadding(ForkUi.dp(c, 10), ForkUi.dp(c, 10), ForkUi.dp(c, 10), ForkUi.dp(c, 4));
+        main.addView(right, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 2.4f));
 
-        LinearLayout types = ForkUi.row(c);
-        mClassic = ForkUi.button(c, getString(R.string.fork_skins_classic), false);
-        mSlim = ForkUi.button(c, getString(R.string.fork_skins_slim), false);
-        LinearLayout.LayoutParams t1 = ForkUi.weight(1f);
-        t1.rightMargin = ForkUi.dp(c, 3);
-        LinearLayout.LayoutParams t2 = ForkUi.weight(1f);
-        t2.leftMargin = ForkUi.dp(c, 3);
-        types.addView(mClassic, t1);
-        types.addView(mSlim, t2);
-        right.addView(types);
-        mUse = ForkUi.button(c, getString(R.string.fork_skins_apply), true);
-        LinearLayout.LayoutParams useLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        useLp.topMargin = ForkUi.dp(c, 4);
-        right.addView(mUse, useLp);
-
-        // --- bottom row ---
-        LinearLayout bottom = ForkUi.row(c);
-        Button importBtn = ForkUi.button(c, getString(R.string.fork_skins_import_skin), false);
-        Button namemc = ForkUi.button(c, getString(R.string.fork_skins_namemc), false);
+        LinearLayout top = ForkUi.row(c);
+        TextView library = ForkUi.text(c, getString(R.string.fork_skins_library), 14, false);
+        library.setGravity(Gravity.CENTER);
+        top.addView(library, ForkUi.weight(1f));
         Button online = ForkUi.button(c, getString(R.string.fork_skins_online), false);
-        mDelete = ForkUi.button(c, getString(R.string.fork_skins_delete), false);
-        Button done = ForkUi.button(c, getString(R.string.fork_skins_done), false);
-        Button[] all = {importBtn, online, namemc, mDelete, done};
-        for(int i = 0; i < all.length; i++) {
-            LinearLayout.LayoutParams lp = ForkUi.weight(1f);
-            lp.leftMargin = ForkUi.dp(c, i == 0 ? 0 : 3);
-            lp.rightMargin = ForkUi.dp(c, i == all.length - 1 ? 0 : 3);
-            bottom.addView(all[i], lp);
-        }
-        LinearLayout.LayoutParams bottomLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        bottomLp.topMargin = ForkUi.dp(c, 8);
-        root.addView(bottom, bottomLp);
-
-        importBtn.setOnClickListener(v -> mImport.launch("image/png"));
+        online.setMinHeight(ForkUi.dp(c, 30));
+        online.setMinimumHeight(ForkUi.dp(c, 30));
+        online.setTextSize(12);
         online.setOnClickListener(v -> askOnlineName());
+        Button namemc = ForkUi.button(c, getString(R.string.fork_skins_namemc), false);
+        namemc.setMinHeight(ForkUi.dp(c, 30));
+        namemc.setMinimumHeight(ForkUi.dp(c, 30));
+        namemc.setTextSize(12);
         namemc.setOnClickListener(v -> Tools.openURL(requireActivity(), "https://namemc.com/minecraft-skins"));
-        done.setOnClickListener(v -> requireActivity().getOnBackPressedDispatcher().onBackPressed());
-        mDelete.setOnClickListener(v -> confirmDelete(mSelected));
-        mUse.setOnClickListener(v -> {
-            if(mSelected == null) return;
-            Account account = Accounts.getCurrent();
-            if(account != null && account.authType == AuthType.ELY_BY) {
-                exportForEly(mSelected);
-            } else if(account != null && account.isMicrosoft) {
-                Bitmap bmp = SkinLibrary.load(mSelected);
-                String model = getString(isSlim(mSelected, bmp) ? R.string.fork_skins_slim : R.string.fork_skins_classic);
-                new AlertDialog.Builder(requireContext())
-                        .setTitle(R.string.fork_skins_upload_title)
-                        .setMessage(getString(R.string.fork_skins_upload_prompt, mSelected.name, model))
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .setPositiveButton(R.string.fork_skins_apply, (d, w) -> useSelected())
-                        .show();
-            } else {
-                useSelected();
-            }
-        });
-        mClassic.setOnClickListener(v -> setType(1));
-        mSlim.setOnClickListener(v -> setType(2));
-        return frame;
+        LinearLayout.LayoutParams btn = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        btn.leftMargin = ForkUi.dp(c, 6);
+        top.addView(online, btn);
+        top.addView(namemc, btn);
+        right.addView(top);
+
+        ScrollView scroll = new ScrollView(c);
+        mGrid = new LinearLayout(c);
+        mGrid.setOrientation(LinearLayout.VERTICAL);
+        scroll.addView(mGrid, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        LinearLayout.LayoutParams scrollLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f);
+        scrollLp.topMargin = ForkUi.dp(c, 8);
+        right.addView(scroll, scrollLp);
+        return root;
     }
 
     @Override
@@ -265,74 +168,184 @@ public class SkinsFragment extends Fragment {
         refresh();
     }
 
-    private void setType(int type) {
-        if(mSelected == null) return;
-        LauncherPreferences.DEFAULT_PREF.edit().putInt(PREF_TYPE + mSelected.file.getName(), type).apply();
-        refresh();
+    private SkinLibrary.Entry currentEntry(List<SkinLibrary.Entry> skins) {
+        for(SkinLibrary.Entry e : skins) if(e.file.getName().equals(currentName())) return e;
+        return null;
     }
 
     private void refresh() {
-        Context c = requireContext();
+        Context c = getContext();
+        if(c == null || mGrid == null) return;
         List<SkinLibrary.Entry> skins = SkinLibrary.list(c);
         SkinLibrary.Entry keep = null;
         for(SkinLibrary.Entry e : skins) {
             if(mSelected != null && e.file.equals(mSelected.file)) keep = e;
         }
-        if(keep == null) {
-            for(SkinLibrary.Entry e : skins) {
-                if(e.file.getName().equals(currentName())) keep = e;
-            }
-        }
-        if(keep == null && !skins.isEmpty()) keep = skins.get(0);
         mSelected = keep;
 
-        boolean slim = false;
-        if(mSelected != null) {
-            Bitmap bmp = SkinLibrary.load(mSelected);
-            slim = isSlim(mSelected, bmp);
-            if(bmp != null) mModel.setSkin(bmp, slim);
+        // The model on the left is the skin in use (or the selected one if none was applied yet)
+        SkinLibrary.Entry shown = currentEntry(skins);
+        if(shown == null) shown = mSelected;
+        if(shown == null && !skins.isEmpty()) shown = skins.get(0);
+        if(shown != null) {
+            Bitmap bmp = SkinLibrary.load(shown);
+            if(bmp != null) mModel.setSkin(bmp, isSlim(shown, bmp));
         }
-        mUse.setEnabled(mSelected != null);
-        mDelete.setEnabled(mSelected != null);
-        mClassic.setEnabled(mSelected != null);
-        mSlim.setEnabled(mSelected != null);
-        mClassic.setAlpha(!slim ? 1f : 0.6f);
-        mSlim.setAlpha(slim ? 1f : 0.6f);
-
-        fillList();
+        fillGrid(c, skins);
     }
 
-    private int sortMode() {
-        return LauncherPreferences.DEFAULT_PREF.getInt(PREF_SORT, 0);
+    private void fillGrid(Context c, List<SkinLibrary.Entry> skins) {
+        Set<String> favs = favorites();
+        List<SkinLibrary.Entry> ordered = new ArrayList<>();
+        Collections.sort(skins, (a, b) -> Long.compare(b.file.lastModified(), a.file.lastModified()));
+        for(SkinLibrary.Entry e : skins) if(favs.contains(e.file.getName())) ordered.add(e);
+        for(SkinLibrary.Entry e : skins) if(!favs.contains(e.file.getName())) ordered.add(e);
+
+        List<View> cards = new ArrayList<>();
+        cards.add(newSkinCard(c));
+        for(SkinLibrary.Entry e : ordered) cards.add(card(c, e, favs.contains(e.file.getName())));
+
+        mGrid.removeAllViews();
+        for(int i = 0; i < cards.size(); i += COLUMNS) {
+            LinearLayout row = new LinearLayout(c);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            for(int k = 0; k < COLUMNS; k++) {
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+                if(i + k < cards.size()) row.addView(cards.get(i + k), lp);
+                else row.addView(new View(c), lp);
+            }
+            LinearLayout.LayoutParams rowLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            rowLp.bottomMargin = ForkUi.dp(c, 8);
+            mGrid.addView(row, rowLp);
+        }
+    }
+
+    private View newSkinCard(Context c) {
+        LinearLayout card = new LinearLayout(c);
+        card.setOrientation(LinearLayout.VERTICAL);
+        card.setGravity(Gravity.CENTER_HORIZONTAL);
+        card.setPadding(ForkUi.dp(c, 4), ForkUi.dp(c, 4), ForkUi.dp(c, 4), ForkUi.dp(c, 4));
+        TextView label = ForkUi.text(c, getString(R.string.fork_skins_new), 11, false);
+        label.setGravity(Gravity.CENTER);
+        label.setSingleLine(true);
+        card.addView(label);
+        TextView plus = ForkUi.text(c, "+", 26, false);
+        plus.setGravity(Gravity.CENTER);
+        plus.setBackground(ForkUi.dashed(c, 0x22000000, 0xFF888888));
+        LinearLayout.LayoutParams plusLp = new LinearLayout.LayoutParams(ForkUi.dp(c, 52), ForkUi.dp(c, 104));
+        plusLp.topMargin = ForkUi.dp(c, 4);
+        card.addView(plus, plusLp);
+        card.setOnClickListener(v -> mImport.launch("image/png"));
+        return card;
+    }
+
+    private View card(Context c, SkinLibrary.Entry entry, boolean favorite) {
+        boolean selected = mSelected != null && entry.file.equals(mSelected.file);
+        boolean inUse = entry.file.getName().equals(currentName());
+        LinearLayout card = new LinearLayout(c);
+        card.setOrientation(LinearLayout.VERTICAL);
+        card.setGravity(Gravity.CENTER_HORIZONTAL);
+        card.setPadding(ForkUi.dp(c, 4), ForkUi.dp(c, 4), ForkUi.dp(c, 4), ForkUi.dp(c, 4));
+        if(selected) card.setBackground(ForkUi.box(c, 0xFF353535, 0xFF777777, 1));
+
+        TextView name = ForkUi.text(c, (favorite ? "* " : "") + entry.name, 11, false);
+        name.setGravity(Gravity.CENTER);
+        name.setSingleLine(true);
+        name.setEllipsize(android.text.TextUtils.TruncateAt.END);
+        if(favorite) name.setTextColor(0xFFFFD35A);
+        card.addView(name, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        Bitmap bmp = SkinLibrary.load(entry);
+        ImageView figure = new ImageView(c);
+        figure.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        if(bmp != null) {
+            android.graphics.drawable.BitmapDrawable d = new android.graphics.drawable.BitmapDrawable(
+                    c.getResources(), SkinFigure.render(bmp, isSlim(entry, bmp)));
+            d.setFilterBitmap(false);
+            figure.setImageDrawable(d);
+        }
+        LinearLayout.LayoutParams figLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ForkUi.dp(c, 104));
+        figLp.topMargin = ForkUi.dp(c, 4);
+        card.addView(figure, figLp);
+
+        if(selected) {
+            Button use = ForkUi.button(c, getString(R.string.fork_skins_apply), true);
+            use.setMinHeight(ForkUi.dp(c, 28));
+            use.setMinimumHeight(ForkUi.dp(c, 28));
+            use.setMinWidth(0);
+            use.setMinimumWidth(0);
+            use.setTextSize(12);
+            use.setPadding(0, 0, 0, 0);
+            use.setOnClickListener(v -> onUse());
+            LinearLayout.LayoutParams useLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ForkUi.dp(c, 28));
+            useLp.topMargin = ForkUi.dp(c, 4);
+            card.addView(use, useLp);
+            Button more = ForkUi.button(c, "...", false);
+            more.setMinHeight(ForkUi.dp(c, 24));
+            more.setMinimumHeight(ForkUi.dp(c, 24));
+            more.setMinWidth(0);
+            more.setMinimumWidth(0);
+            more.setTextSize(12);
+            more.setPadding(0, 0, 0, 0);
+            more.setOnClickListener(v -> showMenu(entry, favorite, isSlim(entry, bmp)));
+            LinearLayout.LayoutParams moreLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ForkUi.dp(c, 24));
+            moreLp.topMargin = ForkUi.dp(c, 3);
+            card.addView(more, moreLp);
+        } else if(inUse) {
+            TextView mark = ForkUi.text(c, getString(R.string.fork_installs_selected), 11, false);
+            mark.setGravity(Gravity.CENTER);
+            mark.setTextColor(0xFF7CD65A);
+            card.addView(mark);
+        }
+        card.setOnClickListener(v -> {
+            mSelected = entry;
+            fillGrid(c, SkinLibrary.list(c));
+        });
+        return card;
+    }
+
+    private void showMenu(SkinLibrary.Entry entry, boolean favorite, boolean slim) {
+        String[] items = {
+                getString(slim ? R.string.fork_skins_classic : R.string.fork_skins_slim),
+                getString(favorite ? R.string.fork_skins_unfavorite : R.string.fork_skins_favorite),
+                getString(R.string.fork_skins_rename), getString(R.string.fork_skins_delete)};
+        new AlertDialog.Builder(requireContext()).setTitle(entry.name).setItems(items, (d, which) -> {
+            if(which == 0) {
+                LauncherPreferences.DEFAULT_PREF.edit().putInt(PREF_TYPE + entry.file.getName(), slim ? 1 : 2).apply();
+                refresh();
+            } else if(which == 1) toggleFavorite(entry);
+            else if(which == 2) rename(entry);
+            else confirmDelete(entry);
+        }).show();
+    }
+
+    private void onUse() {
+        if(mSelected == null) return;
+        Account account = Accounts.getCurrent();
+        if(account != null && account.authType == AuthType.ELY_BY) {
+            exportForEly(mSelected);
+        } else if(account != null && account.isMicrosoft) {
+            Bitmap bmp = SkinLibrary.load(mSelected);
+            String model = getString(isSlim(mSelected, bmp) ? R.string.fork_skins_slim : R.string.fork_skins_classic);
+            new AlertDialog.Builder(requireContext())
+                    .setTitle(R.string.fork_skins_upload_title)
+                    .setMessage(getString(R.string.fork_skins_upload_prompt, mSelected.name, model))
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .setPositiveButton(R.string.fork_skins_apply, (d, w) -> useSelected())
+                    .show();
+        } else {
+            useSelected();
+        }
     }
 
     private Set<String> favorites() {
         return new HashSet<>(LauncherPreferences.DEFAULT_PREF.getStringSet(PREF_FAVORITES, new HashSet<>()));
     }
 
-    private void fillList() {
-        Context c = getContext();
-        if(c == null || mList == null) return;
-        int mode = sortMode();
-        mSort.setText(getString(R.string.fork_skins_sort, getString(
-                mode == 0 ? R.string.fork_skins_sort_new : mode == 1 ? R.string.fork_skins_sort_old : R.string.fork_skins_sort_az)));
-        Set<String> favs = favorites();
-        List<SkinLibrary.Entry> shown = new ArrayList<>();
-        for(SkinLibrary.Entry e : SkinLibrary.list(c)) {
-            if(mQuery.isEmpty() || e.name.toLowerCase().contains(mQuery)) shown.add(e);
-        }
-        if(mode == 2) {
-            Collections.sort(shown, (a, b) -> a.name.compareToIgnoreCase(b.name));
-        } else {
-            Collections.sort(shown, (a, b) -> Long.compare(b.file.lastModified(), a.file.lastModified()));
-            if(mode == 1) Collections.reverse(shown);
-        }
-        // Favorites first, keeping the chosen order inside each group
-        List<SkinLibrary.Entry> ordered = new ArrayList<>();
-        for(SkinLibrary.Entry e : shown) if(favs.contains(e.file.getName())) ordered.add(e);
-        for(SkinLibrary.Entry e : shown) if(!favs.contains(e.file.getName())) ordered.add(e);
-        mList.removeAllViews();
-        for(SkinLibrary.Entry entry : ordered) mList.addView(row(c, entry, favs.contains(entry.file.getName())));
+    private void setType(int type) {
+        if(mSelected == null) return;
+        LauncherPreferences.DEFAULT_PREF.edit().putInt(PREF_TYPE + mSelected.file.getName(), type).apply();
+        refresh();
     }
 
     /** Ely.by has no upload API for apps, so the skin is exported and the upload page is opened. */
@@ -443,7 +456,7 @@ public class SkinsFragment extends Fragment {
         Set<String> favs = favorites();
         if(!favs.remove(entry.file.getName())) favs.add(entry.file.getName());
         LauncherPreferences.DEFAULT_PREF.edit().putStringSet(PREF_FAVORITES, favs).apply();
-        fillList();
+        refresh();
     }
 
     private void rename(SkinLibrary.Entry entry) {
@@ -486,61 +499,4 @@ public class SkinsFragment extends Fragment {
         ed.apply();
     }
 
-    private View row(Context c, SkinLibrary.Entry entry, boolean favorite) {
-        boolean selected = mSelected != null && entry.file.equals(mSelected.file);
-        boolean current = entry.file.getName().equals(currentName());
-        LinearLayout row = ForkUi.row(c);
-        row.setPadding(ForkUi.dp(c, 8), ForkUi.dp(c, 6), ForkUi.dp(c, 8), ForkUi.dp(c, 6));
-        if(selected) row.setBackground(ForkUi.box(c, 0x552F66C8, SELECTED_BLUE, 2));
-
-        Bitmap bmp = SkinLibrary.load(entry);
-        ImageView face = new ImageView(c);
-        if(bmp != null) face.setImageBitmap(faceOf(bmp));
-        row.addView(face, new LinearLayout.LayoutParams(ForkUi.dp(c, 36), ForkUi.dp(c, 36)));
-
-        LinearLayout texts = new LinearLayout(c);
-        texts.setOrientation(LinearLayout.VERTICAL);
-        texts.setPadding(ForkUi.dp(c, 10), 0, 0, 0);
-        TextView name = ForkUi.text(c, (favorite ? "★ " : "") + entry.name, 14, false);
-        if(favorite) name.setTextColor(0xFFFFD35A);
-        name.setSingleLine(true);
-        name.setEllipsize(android.text.TextUtils.TruncateAt.END);
-        texts.addView(name);
-        TextView sub = ForkUi.text(c, getString(isSlim(entry, bmp) ? R.string.fork_skins_slim : R.string.fork_skins_classic)
-                + (current ? "  ·  " + getString(R.string.fork_installs_selected) : ""), 12, false);
-        sub.setTextColor(current ? 0xFF7CD65A : 0xFFAAAAAA);
-        texts.addView(sub);
-        row.addView(texts, ForkUi.weight(1f));
-
-        row.setOnClickListener(v -> {
-            mSelected = entry;
-            refresh();
-        });
-        row.setOnLongClickListener(v -> {
-            String[] items = {getString(favorite ? R.string.fork_skins_unfavorite : R.string.fork_skins_favorite),
-                    getString(R.string.fork_skins_rename), getString(R.string.fork_skins_delete)};
-            new AlertDialog.Builder(c).setTitle(entry.name).setItems(items, (d, which) -> {
-                if(which == 0) toggleFavorite(entry);
-                else if(which == 1) rename(entry);
-                else confirmDelete(entry);
-            }).show();
-            return true;
-        });
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp.bottomMargin = ForkUi.dp(c, 3);
-        row.setLayoutParams(lp);
-        return row;
-    }
-
-    /** The head (with hat layer) of a 64x64 skin, enlarged without smoothing. */
-    private static Bitmap faceOf(Bitmap skin) {
-        Bitmap out = Bitmap.createBitmap(64, 64, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(out);
-        Paint paint = new Paint();
-        paint.setFilterBitmap(false);
-        Rect dst = new Rect(0, 0, 64, 64);
-        canvas.drawBitmap(skin, new Rect(8, 8, 16, 16), dst, paint);
-        canvas.drawBitmap(skin, new Rect(40, 8, 48, 16), dst, paint);
-        return out;
-    }
 }

@@ -127,7 +127,7 @@ public class PatchNotesFragment extends Fragment {
             card.setOrientation(LinearLayout.VERTICAL);
             card.setBackground(ForkUi.box(c, ForkUi.CARD, 0xFF111111, 1));
             card.setPadding(ForkUi.dp(c, 12), ForkUi.dp(c, 10), ForkUi.dp(c, 12), ForkUi.dp(c, 10));
-            card.addView(ForkUi.text(c, title != null ? title : String.valueOf(version), 16, true));
+            card.addView(ForkUi.text(c, title != null ? title : String.valueOf(version), 16, false));
             String sub = (version != null ? version : "") + (type != null ? "  ·  " + type : "");
             TextView subView = ForkUi.text(c, sub, 12, false);
             subView.setTextColor(0xFF7CD65A);

@@ -78,6 +78,13 @@
         android:icon="@drawable/ic_px_image"
         />
 
+    <Preference
+        android:key="credits_setting"
+        android:title="@string/fork_credits_title"
+        android:summary="@string/fork_credits_summary"
+        android:icon="@drawable/ic_px_book"
+        />
+
     <SwitchPreferenceCompat
         android:title="@string/preference_force_english_title"
         android:key="force_english"
