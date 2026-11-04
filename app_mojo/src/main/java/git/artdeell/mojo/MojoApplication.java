@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 public class MojoApplication extends Application {
 	public static final String CRASH_REPORT_TAG = "MojoCrashReport";
 	public static final ExecutorService sExecutorService = new ThreadPoolExecutor(4, 4, 500, TimeUnit.MILLISECONDS,  new LinkedBlockingQueue<>());
+	public static boolean CHROMEBOOK = false;
 
 	private void installFatalErrorHandler() {
 		Thread.setDefaultUncaughtExceptionHandler((thread, th) -> {
@@ -63,6 +64,12 @@ public class MojoApplication extends Application {
 		});
 	}
 
+	private static boolean checkChromebook(PackageManager packageManager) {
+		return packageManager.hasSystemFeature("org.chromium.arc")
+				|| packageManager.hasSystemFeature("org.chromium.arc.device_management")
+				|| (Build.MODEL != null && Build.MODEL.startsWith("sdk_gpc_"));
+	}
+
 	@Override
 	public void onCreate() {
 		ContextExecutor.setApplication(this);
@@ -70,7 +77,9 @@ public class MojoApplication extends Application {
 		// (where i can find the cause and fix it)
         //noinspection ConstantValue
         if(!BuildConfig.BUILD_TYPE.equals("gplay")) installFatalErrorHandler();
-		
+
+		CHROMEBOOK = checkChromebook(getPackageManager());
+
 		try {
 			super.onCreate();
 			if(Tools.checkStorageRoot(this)){

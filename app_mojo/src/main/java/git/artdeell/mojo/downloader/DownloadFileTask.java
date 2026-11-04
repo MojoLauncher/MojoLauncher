@@ -1,9 +1,12 @@
 package git.artdeell.mojo.downloader;
 
+import android.util.Log;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 
+import git.artdeell.mojo.MojoApplication;
 import git.artdeell.mojo.utils.HashUtils;
 
 public class DownloadFileTask extends DownloaderTask implements BytesCopiedListener {
@@ -41,10 +44,36 @@ public class DownloadFileTask extends DownloaderTask implements BytesCopiedListe
                 .toString();
     }
 
+    /**
+     * When you're hammering the FS with many renames, not all of them seem to come through the ARC
+     * filesystem emulation layer. So, poll until they do, and only proceed then
+     */
+    private void arcFsMove(File source, File target) throws IOException {
+        try {
+            int pollTries = 0;
+            long wantedSize = source.length();
+
+            if(!source.renameTo(target))
+                throw new IOException("Failed to move downloaded partfile");
+
+            while (target.length() != wantedSize) {
+                if(pollTries++ > 5) throw new IOException("ARC metadata check failed");
+                Log.i("ArcFSWait", "Forced wait stall due to wrong metadata");
+                Thread.sleep(33);
+            }
+        }catch (InterruptedException e)  {
+            throw new InterruptedIOException();
+        }
+    }
+
     private void movePartFile() throws IOException {
         File original = mMetadata.path;
         if(original.exists() && !original.delete())
             throw new IOException("Failed to delete original file");
+        if(MojoApplication.CHROMEBOOK) {
+            arcFsMove(mPartFile, mMetadata.path);
+            return;
+        }
         if(!mPartFile.renameTo(mMetadata.path))
             throw new IOException("Failed to move downloaded partfile");
     }

@@ -4,6 +4,7 @@ import static android.os.Build.VERSION.SDK_INT;
 
 import android.content.Context;
 
+import git.artdeell.mojo.MojoApplication;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.game.renderer.RenderSpec;
 import git.artdeell.mojo.game.renderer.def.Renderers;
@@ -31,7 +32,7 @@ public class MesaRenderSpec implements RenderSpec {
         return SDK_INT >= 29 && new File(Tools.NATIVE_LIB_DIR, this.library()).exists();
     }
     public boolean compatibleDevice(Context context) {
-        return hasMesa() && GpuUtils.checkChromebook(context.getPackageManager());
+        return hasMesa() && MojoApplication.CHROMEBOOK;
     }
     public String name() {
         return "Mesa";
