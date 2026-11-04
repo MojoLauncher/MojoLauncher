@@ -2,7 +2,9 @@ package git.artdeell.mojo.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -32,17 +34,24 @@ public class LocalLoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mUsernameEditText = view.findViewById(R.id.login_edit_email);
         view.findViewById(R.id.login_button).setOnClickListener(v -> {
-            if(!checkEditText()) {
-                Context context = v.getContext();
-                Tools.dialog(context, context.getString(R.string.local_login_bad_username_title), context.getString(R.string.local_login_bad_username_text));
-                return;
-            }
-
-            ExtraCore.setValue(ExtraConstants.MOJANG_LOGIN_TODO, new String[]{
-                    mUsernameEditText.getText().toString(), "" });
-
-            Tools.swapFragment(requireActivity(), MainMenuFragment.class, MainMenuFragment.TAG, null);
+            performLogin(v.getContext());
         });
+        mUsernameEditText.setOnEditorActionListener((v, act, event)->{
+            performLogin(v.getContext());
+            return true;
+        });
+    }
+
+    private void performLogin(Context context) {
+        if(!checkEditText()) {
+            Tools.dialog(context, context.getString(R.string.local_login_bad_username_title), context.getString(R.string.local_login_bad_username_text));
+            return;
+        }
+
+        ExtraCore.setValue(ExtraConstants.MOJANG_LOGIN_TODO, new String[]{
+                mUsernameEditText.getText().toString(), "" });
+
+        Tools.swapFragment(requireActivity(), MainMenuFragment.class, MainMenuFragment.TAG, null);
     }
 
 
