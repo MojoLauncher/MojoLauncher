@@ -53,6 +53,8 @@ public class GameRenderer {
         this.currentRenderer = getKnownRenderer(currentRenderer);
         if(this.currentRenderer == null) this.currentRenderer = getKnownRenderer(GL4ES_RENDERER);
         if(this.currentRenderer == null) throw new IllegalStateException("Failed to create the current renderer!");
+        // Setting it up here so SDL/GLFW can take it later
+        MojoExec.setUseBigCoreAffinity(LauncherPreferences.PREF_BIG_CORE_AFFINITY);
     }
 
     /**
