@@ -1,5 +1,6 @@
 package git.artdeell.mojo.modding.modmanager;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayDeque;
@@ -86,7 +87,7 @@ public class DependencyScanner {
      * @return a list of dependencies
      */
     public List<ModInfo> getEnabledDependencies(ModInfo mi) {
-        BasicModInfo bmi = getBasicInfo((ContainedModInfo) mi);
+        BasicModInfo bmi = mi instanceof ContainedModInfo ? getBasicInfo((ContainedModInfo) mi) : null;
         if(bmi == null || bmi.getId() == null) return Collections.emptyList();
         List<ModInfo> res = new ArrayList<>();
         Set<ModInfo> visited = new HashSet<>();
