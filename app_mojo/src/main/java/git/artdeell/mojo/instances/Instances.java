@@ -261,6 +261,7 @@ public class Instances {
         instance.shortcutUuid = null;
         // We actually don't write the updated data here back because either it'll be updated and written
         // eventually in another method or the instance is being removed completely anyway
+        // (in fact, we could skip nulling too. I'm not sure)
     }
 
     /**

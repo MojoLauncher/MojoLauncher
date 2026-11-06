@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_app"
+    android:background="@color/background_bottom_bar"
     android:orientation="vertical"
     >
     <ScrollView
@@ -13,6 +13,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:fadeScrollbars="true"
+        android:background="@color/background_app"
         android:scrollbarThumbVertical="@color/minebutton_color">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -249,6 +250,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp"
 
                 android:text="@string/pedit_shortcut"
                 app:layout_constraintBottom_toBottomOf="parent"
