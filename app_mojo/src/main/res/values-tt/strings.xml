@@ -11,7 +11,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">Бу аккаунт бетереләчәк!</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">Мод утырткычын сайлагыз</string>
     <!-- Error messages -->
     <string name="error_fatal">MJLauncher сафтан көтелмичә чыкты</string>
     <string name="error_no_version">Версия юк!</string>
@@ -19,7 +18,6 @@
     <string name="error_show_less">Әзрәк күрсәтү</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">Саклау урыныннан уку/ясу рөхсәте кирәк!</string>
-    <string name="toast_optifine_success">Утыртылды</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -27,10 +25,7 @@
     <string name="mcl_tab_wiki">Вики</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">Кеш-файллар бетерүе</string>
-    <string name="mcl_launch_downloading">%s йөкләтүе</string>
     <string name="mcl_launch_downloading_progress">"%s йөкләтү (%.2f МБ / %.2f МБ)"</string>
-    <string name="mcl_launch_download_assets">Ресурс йөкләүгә әзерләнү</string>
     <string name="mcl_options">Көйләүләр</string>
     <string name="mcl_option_customcontrol">Көйләнелгән идарә</string>
     <string name="mcl_setting_title_buttonscale">Төймәләр масштабы</string>
@@ -79,7 +74,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">Мәҗбүри ябу</string>
     <string name="control_viewout">Журнал</string>
-    <string name="control_adebug">Кертү төзәтүе</string>
     <!-- ImportControlActivity Strings -->
     <string name="import_control_invalid_file">Хаталы яки бозылган файл</string>
     <string name="import_control_done">Импортлау тәмамланды</string>
@@ -97,10 +91,6 @@
     <string name="customctrl_addsubbutton">Төймәчәне өстәү</string>
     <string name="main_share_logs">Журнал файлын уртаклашу</string>
     <string name="main_play">Уйнарга</string>
-    <string name="mcl_setting_check_libraries">Йөкләтүдән соң китапханәләрне тикшерергә</string>
-    <string name="dl_library_sha_fail">%s китапханәсе ватылган һәм яңадан йөкләтәчәк</string>
-    <string name="dl_library_sha_unknown">%s китапханәсе тикшереп булмады; аның белән барысы да яхшы дип уйларга туры килә</string>
-    <string name="dl_library_sha_pass">%s китапханәсе тикшерелде һәм кулланырга мөмкин</string>
     <string name="mcl_disable_gestures">Ишарә сүндерергә</string>
     <string name="mcl_setting_title_mousespeed">Тычкан сизгерлеге</string>
     <string name="customctrl_passthru">Тычкан күрсәткече</string>
@@ -150,7 +140,6 @@
     <string name="fabric_dl_loader_version">%s йөкләүчесенең версиясе</string>
 
     <string name="fabric_dl_install">Утырту</string>
-    <string name="of_dl_progress">%s йөкләтүе</string>
     <string name="generic_install">Утырту</string>
     <string name="generic_debug">Төзәтү</string>
     <string name="preference_category_java_tweaks">Java төзәтмәләре</string>

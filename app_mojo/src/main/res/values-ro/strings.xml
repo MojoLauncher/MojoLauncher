@@ -10,7 +10,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">Acest cont va fi eliminat!</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">Selectează un instalator de mod</string>
     <!-- Error messages -->
     <string name="error_fatal">MJLauncher s-a oprit neașteptat</string>
     <string name="error_no_version">Fără versiune!</string>
@@ -18,7 +17,6 @@
     <string name="error_show_less">Arată mai puțin</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">Este necesară permisiunea de citire/scriere în memorie!</string>
-    <string name="toast_optifine_success">Instalare reușită</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -26,10 +24,7 @@
     <string name="mcl_tab_wiki">Wiki</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">Se șterg fișierele cache</string>
-    <string name="mcl_launch_downloading">Se descarcă %s</string>
     <string name="mcl_launch_downloading_progress">"Se descarcă %s (%.2f MB / %.2f MB)"</string>
-    <string name="mcl_launch_download_assets">Se pregătește pentru descărcarea resurselor</string>
     <string name="mcl_options">Opțiuni</string>
     <string name="mcl_option_customcontrol">Controale personalizate</string>
     <string name="mcl_setting_title_use_surface_view">Folosește randarea alternativă a suprafețelor</string>
@@ -83,7 +78,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">Oprește forțat</string>
     <string name="control_viewout">Ieșire jurnal</string>
-    <string name="control_adebug">Depanare intrare</string>
     <string name="control_customkey">Trimite personalizat cod cheie</string>
     <!-- ImportControlActivity Strings -->
     <string name="import_control_label">Importă controale</string>
@@ -111,10 +105,6 @@
     <string name="main_share_logs">Distribuie fişierul jurnal</string>
     <string name="main_play">Joacă</string>
     <string name="autoram_info_msg">Memorie setată la %d MB</string>
-    <string name="mcl_setting_check_libraries">Verifică bibliotecile după descărcare</string>
-    <string name="dl_library_sha_fail">Biblioteca %s este deteriorată și va fi redescărcată</string>
-    <string name="dl_library_sha_unknown">Biblioteca %s nu poate fi verificată, trebuie să presupunem că este bună</string>
-    <string name="dl_library_sha_pass">Biblioteca %s este bună și utilizabilă</string>
     <string name="mcl_disable_gestures">Dezactivează gesturi</string>
     <string name="mcl_disable_gestures_subtitle">Dezactivează gesturile, cum ar fi tine apasat pentru a sparge blocul, și apasă pentru a pune un bloc.</string>
     <string name="mcl_disable_swap_hand">Dezactivați apăsarea dublă pentru a schimba mâinile</string>
@@ -130,7 +120,6 @@
     <string name="multirt_progress_caching">Caching...</string>
     <string name="multirt_config_setdefault">Setaţi ca prestabilit</string>
     <string name="multirt_config_setdefault_already">Prestabilit</string>
-    <string name="multirt_nojava8rt">Nu s-a putut găsi Java 8. Pentru a folosi această opțiune, trebuie să instalezi Java 8.</string>
     <string name="pvc_gameDirectory">Dosarul jocului</string>
     <string name="pvc_jvmArgs">Argumente JVM</string>
     <string name="preference_mouse_start_title">Începe cu mouse-ul virtual activat</string>
@@ -184,7 +173,6 @@
     <string name="global_save_and_exit">Salvați și ieșiți</string>
     <string name="global_yes">Da</string>
     <string name="global_no">Nu</string>
-    <string name="of_dl_progress">Se descarcă %s</string>
     <string name="generic_debug">Depanare</string>
     <string name="preference_category_java_tweaks">Ajustări Java</string>
     <string name="preference_category_miscellaneous">Setări diverse</string>

@@ -11,7 +11,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">這個帳號將被移除！</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">選擇模組安裝程式</string>
     <!-- Error messages -->
     <string name="error_fatal">MJLauncher 非預期的崩潰</string>
     <string name="error_no_version">沒有版本！</string>
@@ -19,7 +18,6 @@
     <string name="error_show_less">顯示較少</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">需要儲存空間的讀取/寫入權限！</string>
-    <string name="toast_optifine_success">安裝成功</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -27,10 +25,7 @@
     <string name="mcl_tab_wiki">Wiki</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">正在清理快取</string>
-    <string name="mcl_launch_downloading">正在下載 %s</string>
     <string name="mcl_launch_downloading_progress">"正在下載 %s（%.2f MB/%.2f MB）"</string>
-    <string name="mcl_launch_download_assets">正在準備下載資源</string>
     <string name="mcl_options">選項</string>
     <string name="mcl_option_customcontrol">自訂控制鍵</string>
     <string name="mcl_setting_title_use_surface_view">使用替代表面繪製</string>
@@ -76,7 +71,6 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">應用程式/遊戲以代碼 %d 結束，請查看 latestlog.txt 以取得更多詳細資訊。</string>
     <string name="mcn_exit_confirm">您確定要強制關閉嗎？</string>
-    <string name="mcn_check_fail_vulkan_support">這部裝置不支援 Zink 渲染器！</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">聊天欄</string>
     <string name="control_debug">除錯</string>
@@ -97,7 +91,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">強制關閉</string>
     <string name="control_viewout">記錄輸出</string>
-    <string name="control_adebug">輸入除錯</string>
     <string name="control_customkey">傳送自訂鍵碼</string>
     <!-- ImportControlActivity Strings -->
     <string name="import_control_label">匯入控制鍵</string>
@@ -129,11 +122,6 @@
     <string name="main_install_jar_file">執行 .jar 檔案</string>
     <string name="main_play">開始遊戲</string>
     <string name="autoram_info_msg">記憶體已設為 %d MB</string>
-    <string name="mcl_setting_check_libraries">在下載後檢查執行庫</string>
-    <string name="mcl_setting_check_libraries_subtitle">此選項會強制啟動器檢查程式庫的雜湊值（如果可用）。這有助於防止下載到損壞的檔案。</string>
-    <string name="dl_library_sha_fail">執行庫 %s 損毀，將重新下載</string>
-    <string name="dl_library_sha_unknown">無法檢查執行庫 %s 的狀態，預設為狀況良好。</string>
-    <string name="dl_library_sha_pass">執行庫 %s 正常</string>
     <string name="mcl_disable_gestures">停用手勢</string>
     <string name="mcl_disable_gestures_subtitle">停用手勢，例如長按破壞方塊和點擊放置方塊。</string>
     <string name="mcl_disable_swap_hand">停用按兩下交換手中物品</string>
@@ -159,7 +147,6 @@
     <string name="multirt_config_setdefault_already">預設</string>
     <string name="multirt_config_removeerror_last">你必須至少安裝一個 Java 執行環境。</string>
     <string name="multirt_nocompatiblert">找不到任何相容的 Java 執行環境。這個版本需要 Java %d 或以上版本。</string>
-    <string name="multirt_nojava8rt">找不到已安裝的 Java 8。請安裝 Java 8 以使用此功能。</string>
     <string name="multirt_delete_runtime">刪除 Java 執行環境</string>
     <string name="pvc_gameDirectory">遊戲目錄</string>
     <string name="pvc_jvmArgs">JVM 參數</string>
@@ -227,7 +214,6 @@
     <string name="preference_enable_gyro_description">啟用此功能將允許你透過轉動手機來在遊戲中轉動視角。</string>
     <string name="preference_gyro_sensitivity_title">陀螺儀控制靈敏度</string>
     <string name="preference_gyro_sensitivity_description">調整陀螺儀控制的靈敏度</string>
-    <string name="toast_turn_on_gyro">需要先啟用陀螺儀控制才能使用</string>
     <string name="preference_gyro_sample_rate_title">陀螺儀取樣率</string>
     <string name="preference_gyro_sample_rate_description">如果你在陀螺儀控制上遇到效能問題，請增加此值。</string>
     <string name="microsoft_login_retry_later">你的操作過於頻繁，請稍後再試！</string>
@@ -253,8 +239,6 @@
     <string name="preference_force_big_core_title">強制渲染器在大核心上執行</string>
 
     <string name="version_select_hint">選擇版本</string>
-    <string name="forge_dl_progress">正在下載 %s 的安裝程式</string>
-    <string name="forge_dl_searching">正在搜尋 Forge 版本號</string>
     <string name="modloader_dl_failed_to_load_list">載入版本清單失敗！</string>
     <string name="forge_dl_no_installer">很抱歉，這個版本的 Forge 沒有安裝程式，所以現在還不受支援。</string>
     <string name="forge_dl_select_version">選擇 Forge 版本</string>
@@ -268,7 +252,6 @@
     <string name="fabric_dl_loader_title">選擇版本</string>
     <string name="of_dl_select_version">選擇 OptiFine 版本</string>
     <string name="of_dl_failed_to_scrape">無法收集 OptiFine 安裝資料</string>
-    <string name="of_dl_progress">正在下載 %s</string>
     <string name="hint_search_modpack">搜尋模組包</string>
     <string name="preference_vulkan_driver_system_title">使用系統 Vulkan 驅動</string>
     <string name="preference_vulkan_driver_system_description">強制啟動器在 Snapdragon Adreno GPU 上使用系統 Vulkan 而非 Turnip 驅動程式。僅影響呼叫 Vulkan 的 Zink 和模組</string>
@@ -279,13 +262,9 @@
     <string name="search_modpack_error">尋找模組包失敗</string>
     <string name="search_modpack_download_error">模組包中繼資料下載失敗</string>
     <string name="modpack_download_downloading_metadata">正在下載模組包中繼資料 (%.2f MB/%.2f MB)</string>
-    <string name="modpack_download_downloading_mods">正在下載模組 (%.2f MB/%.2f MB)</string>
-    <string name="modpack_download_downloading_mods_fc">正在下載模組（第 %d/%d 個檔案）</string>
     <string name="modpack_download_applying_overrides">正在套用覆蓋（%d/%d）</string>
     <string name="modpack_install_notification_title">MJ 模組包安裝程式</string>
     <string name="modpack_install_notification_success">按這裡完成模組包安裝</string>
-    <string name="modpack_install_notification_data_not_available">模組載入器資訊下載失敗！</string>
-    <string name="modpack_install_modloader_download_failed">模組載入器檔案下載失敗！</string>
     <string name="modpack_install_download_failed">模組包檔案下載失敗！</string>
     <string name="notif_error_occured">發生錯誤</string>
     <string name="notif_error_occured_desc">按此查看詳細資訊</string>
@@ -315,13 +294,8 @@
     <string name="notification_permission_toast">你隨時可以進入設定變更你的決定。</string>
     <string name="preference_ask_for_notification_title">允許通知</string>
     <string name="preference_ask_for_notification_description">按一下重新請求通知權限，這是遊戲/模組包背景下載正常運作所必需的。</string>
-    <string name="preference_vsync_in_zink_title">允許在使用 Zink 時啟用垂直同步</string>
-    <string name="preference_vsync_in_zink_description">允許啟動器使用內部系統 API 來啟用 Zink 的垂直同步。如果你的啟動器在系統更新後突然在使用 Zink 時崩潰，請關閉此功能。</string>
-    <string name="exception_failed_to_unpack_jre17">無法安裝 JRE 17</string>
     <string name="newdl_starting">正在讀取遊戲中繼資料……</string>
     <string name="newdl_downloading_metadata">正在下載遊戲中繼資料 (%s)</string>
-    <string name="newdl_downloading_game_files">正在下載遊戲……（%d/%d, %.2f MB/秒）</string>
-    <string name="newdl_downloading_game_files_size">正在下載遊戲……（%.2f/%.2f MB, %.2f MB/秒）</string>
     <string name="cropper_title">選擇圖片區域</string>
     <string name="cropper_lock_vertical">垂直鎖定</string>
     <string name="cropper_lock_horizontal">水平鎖定</string>
@@ -333,7 +307,6 @@
     <string name="log_view_button_output_on">輸出\n開啟</string>
     <string name="log_view_label_log_output">記錄輸出：</string>
     <string name="execute_jar_failed_to_read_file">讀取 .jar 檔案失敗</string>
-    <string name="execute_jar_incompatible_runtime">執行 .jar 功能與 Java %d 不相容</string>
     <string name="controller_button_a">A</string>
     <string name="controller_button_b">B</string>
     <string name="controller_button_x">X</string>

@@ -11,7 +11,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">이 계정이 제거될 거예요!</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">모드 설치기를 선택하세요</string>
     <!-- Error messages -->
     <string name="error_fatal">MJLauncher에 예기치 못한 충돌이 발생했어요</string>
     <string name="error_no_version">버전이 없습니다!</string>
@@ -19,7 +18,6 @@
     <string name="error_show_less">간략히 보기</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">저장소에 대한 읽고 쓰기 권한이 필요합니다!</string>
-    <string name="toast_optifine_success">설치 완료</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -27,10 +25,7 @@
     <string name="mcl_tab_wiki">위키</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">캐시 삭제</string>
-    <string name="mcl_launch_downloading">%s 다운로드 중</string>
     <string name="mcl_launch_downloading_progress">"%s 다운로드 중 (%.2f MB / %.2fMB)"</string>
-    <string name="mcl_launch_download_assets">다운로드 준비 중</string>
     <string name="mcl_options">설정</string>
     <string name="mcl_option_customcontrol">사용자 지정 조작</string>
     <string name="mcl_setting_title_use_surface_view">대체 표면 렌더링 사용</string>
@@ -75,7 +70,6 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">애플리케이션/게임이 코드 %d와 함께 종료되었습니다, lastestlog.txt를 확인하여 추가 정보를 확인하세요.</string>
     <string name="mcn_exit_confirm">강제 종료하시겠습니까?</string>
-    <string name="mcn_check_fail_vulkan_support">Zink (Vulkan) 렌더러는 이 기기를 지원하지 않습니다!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">채팅</string>
     <string name="control_debug">디버그</string>
@@ -96,7 +90,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">강제 종료</string>
     <string name="control_viewout">로그 출력</string>
-    <string name="control_adebug">디버그 입력</string>
     <string name="control_customkey">사용자 지정 키 보내기</string>
     <!-- ImportControlActivity Strings -->
     <string name="import_control_label">컨트롤 가져오기</string>
@@ -128,11 +121,6 @@
     <string name="main_install_jar_file">.jar 파일 실행</string>
     <string name="main_play">플레이</string>
     <string name="autoram_info_msg">메모리가 %dMB 할당되었습니다.</string>
-    <string name="mcl_setting_check_libraries">다운로드 후 라이브러리 확인</string>
-    <string name="mcl_setting_check_libraries_subtitle">이 설정은 가능한 경우 라이브러리 해시를 강제로 확인합니다. 잘못된 다운로드를 막을 수 있습니다.</string>
-    <string name="dl_library_sha_fail">라이브러리 %s가 손상되었기 때문에 다시 다운로드합니다</string>
-    <string name="dl_library_sha_unknown">%s 라이브러리를 확인할 수 없습니다.</string>
-    <string name="dl_library_sha_pass">%s 라이브러리를 이용할 수 있습니다.</string>
     <string name="mcl_disable_gestures">제스쳐 비활성화</string>
     <string name="mcl_disable_gestures_subtitle">탭하여 블록 설치, 길게 눌러 블록 파괴와 같은 제스쳐를 비활성화 합니다.</string>
     <string name="mcl_disable_swap_hand">두 번 탭하여 양손 들기 비활성화</string>
@@ -156,7 +144,6 @@
     <string name="multirt_config_setdefault">기본으로 설정</string>
     <string name="multirt_config_setdefault_already">기본값</string>
     <string name="multirt_config_removeerror_last">하나 이상의 Java 런타임이 필요합니다.</string>
-    <string name="multirt_nojava8rt">Java 8을 찾지 못했습니다. 이 옵션을 사용하려면, Java 8을 설치해야 합니다.</string>
     <string name="multirt_delete_runtime">런타임 제거</string>
     <string name="pvc_gameDirectory">게임 디렉토리</string>
     <string name="pvc_jvmArgs">JVM 실행 설정</string>
@@ -224,7 +211,6 @@
     <string name="preference_enable_gyro_description">이것을 활성화하면 휴대폰을 움직여 게임을 돌릴 수 있습니다.</string>
     <string name="preference_gyro_sensitivity_title">자이로스코프 감도 조절</string>
     <string name="preference_gyro_sensitivity_description">자이로스코프 감도를 조절합니다.</string>
-    <string name="toast_turn_on_gyro">이것을 사용하려면 자이로스코프를 활성하하세요!</string>
     <string name="preference_gyro_sample_rate_title">자이로스코프 샘플링 속도</string>
     <string name="preference_gyro_sample_rate_description">자이로스코프 컨트롤을 사용할때 성능 문제가 발생한다면 이것을 높이세요.</string>
     <string name="microsoft_login_retry_later">요청이 너무 많습니다. 잠시후 다시 시도해 주세요.</string>
@@ -249,8 +235,6 @@
     <string name="preference_force_big_core_title">렌더러를 강제로 큰 코어로 실행</string>
     <string name="preference_force_big_core_desc">마인크래프트의 렌더 스레드를 최대 효율을 갖는 코어에서 실행하도록 강제합니다.</string>
     <string name="version_select_hint">버전 선택</string>
-    <string name="forge_dl_progress">%s 설치기 다운로드중</string>
-    <string name="forge_dl_searching">Forge 버전을 찾는중</string>
     <string name="modloader_dl_failed_to_load_list">버전 목록 로드에 실패하였습니다!</string>
     <string name="forge_dl_no_installer">죄송합니다. 이 버전의 Forge는 아직 지원되는 설치기를 가지고 있지 않습니다.</string>
     <string name="forge_dl_select_version">Forge 버전 선택</string>
@@ -264,7 +248,6 @@
     <string name="fabric_dl_loader_title">버전 선택</string>
     <string name="of_dl_select_version">OptiFine 버전 선택</string>
     <string name="of_dl_failed_to_scrape">OptiFine 설치 정보 수집 실패</string>
-    <string name="of_dl_progress">%s 다운로드 중</string>
     <string name="hint_search_modpack">모드팩 검색</string>
     <string name="preference_vulkan_driver_system_title">시스템 Vulkan 드라이버 사용</string>
     <string name="preference_vulkan_driver_system_description">런처가 Adreno GPU에서 Turnip 대신 시스템 Vulkan 드라이버를 사용하도록 강제합니다. Vulkan을 사용하는 Zink 및 모드에서만 영향을 미칩니다.</string>
@@ -275,13 +258,9 @@
     <string name="search_modpack_error">모드팩을 찾는데 실패했습니다.</string>
     <string name="search_modpack_download_error">모드팩 메타데이터 다운로드에 실패 하였습니다.</string>
     <string name="modpack_download_downloading_metadata">모드팩 메타데이터 다운로드중.. (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods">모드 다운로드중 (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods_fc">모드 다운로드중 (%d중 파일 %d)</string>
     <string name="modpack_download_applying_overrides">덮어쓰는 중 (%d/%d)</string>
     <string name="modpack_install_notification_title">모드팩 인스톨러</string>
     <string name="modpack_install_notification_success">여기를 눌러 모드팩 다운로드를 끝냅니다.</string>
-    <string name="modpack_install_notification_data_not_available">모드 로더 정보 다운로드 실패</string>
-    <string name="modpack_install_modloader_download_failed">모드 로더 파일 다운로드 실패</string>
     <string name="modpack_install_download_failed">모드팩 파일 다운로드에 실패하였습니다</string>
     <string name="notif_error_occured">오류가 발생하였습니다.</string>
     <string name="notif_error_occured_desc">클릭하여 상세 정보 보기</string>
@@ -311,9 +290,6 @@
     <string name="notification_permission_toast">추후에 설정에서 언제든지 변경 가능합니다</string>
     <string name="preference_ask_for_notification_title">알람 허용</string>
     <string name="preference_ask_for_notification_description">게임/모드팩 백그라운드 다운로드가 제대로 작동하는 데 필요한 알림 권한을 다시 요청하려면 클릭하세요.</string>
-    <string name="preference_vsync_in_zink_title">Zink와 함께 수직 동기화 허용</string>
-    <string name="preference_vsync_in_zink_description">런처가 내부 시스템 API를 사용하여 Zink용 수직 동기화를 활성화할 수 있도록 허용합니다. 시스템 업데이트 후 런처가 갑자기 Zink와 충돌하는 경우 이 기능을 비활성화하세요.</string>
-    <string name="exception_failed_to_unpack_jre17">JRE 17 다운로드에 실패하였습니다</string>
     <string name="newdl_starting">게임 메타데이터를 읽고 있습니다…</string>
     <string name="newdl_downloading_metadata">게임 메타데이터를 다운로드하고 있습니다 (%s)</string>
     <string name="controller_button_a">A</string>

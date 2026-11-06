@@ -11,7 +11,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">このアカウントが削除されます！</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">Mod インストーラーを選択</string>
     <!-- Error messages -->
     <string name="error_fatal">MJLauncher が異常終了しました</string>
     <string name="error_no_version">バージョンがありません</string>
@@ -19,7 +18,6 @@
     <string name="error_show_less">詳細を閉じる</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">ストレージへの読み書き権限が必要です</string>
-    <string name="toast_optifine_success">インストールが完了しました</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -27,10 +25,7 @@
     <string name="mcl_tab_wiki">ウィキペディア</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">キャッシュファイルを消去中</string>
-    <string name="mcl_launch_downloading">%s をダウンロード中</string>
     <string name="mcl_launch_downloading_progress">"%s (%.2f MB / %.2f MB) をダウンロードしています"</string>
-    <string name="mcl_launch_download_assets">リソースのダウンロードを準備中</string>
     <string name="mcl_options">設定</string>
     <string name="mcl_option_customcontrol">カスタムコントロール</string>
     <string name="mcl_setting_title_use_surface_view">別のサーフェスレンダリングを使用する</string>
@@ -65,7 +60,6 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">アプリケーション/ゲームはコード %dで終了しました。詳細についてはlatestlog.txtをご確認ください</string>
     <string name="mcn_exit_confirm">強制終了しますか？</string>
-    <string name="mcn_check_fail_vulkan_support">Zink (Vulkan) レンダラーは、このデバイスでサポートされていません!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">チャット</string>
     <string name="control_debug">デバッグ</string>
@@ -86,7 +80,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">強制終了</string>
     <string name="control_viewout">ログ</string>
-    <string name="control_adebug">入力デバッグ</string>
     <string name="control_customkey">カスタムキーコードを送信する</string>
     <!-- ImportControlActivity Strings -->
     <string name="import_control_label">操作の読み込み</string>
@@ -116,10 +109,6 @@
     <string name="main_install_jar_file">.jar を実行する</string>
     <string name="main_play">プレイ</string>
     <string name="autoram_info_msg">メモリを %d MB に設定しました</string>
-    <string name="mcl_setting_check_libraries">ダウンロード後にライブラリを確認する</string>
-    <string name="dl_library_sha_fail">ライブラリ %s が破損しているため、再ダウンロードされます</string>
-    <string name="dl_library_sha_unknown">ライブラリ %s が破損しているため、再ダウンロードされます</string>
-    <string name="dl_library_sha_pass">ライブラリ %s は問題なく使用できます</string>
     <string name="mcl_disable_gestures">ジェスチャーの無効化</string>
     <string name="mcl_disable_gestures_subtitle">ブロックを壊すためのホールドなどのジェスチャーを無効にしたり、タップしてブロックを配置します。</string>
     <string name="mcl_disable_swap_hand">ダブルタップで手を入れ替えることができないようにする</string>
@@ -138,7 +127,6 @@
     <string name="multirt_progress_caching">キャッシュ中...</string>
     <string name="multirt_config_setdefault">デフォルトに設定</string>
     <string name="multirt_config_setdefault_already">デフォルト</string>
-    <string name="multirt_nojava8rt">Java 8が見つかりません。このオプションを使用するには、Java 8をインストールする必要があります。</string>
     <string name="multirt_delete_runtime">ランタイムを削除</string>
     <string name="pvc_gameDirectory">ゲームのディレクトリ</string>
     <string name="pvc_jvmArgs">JVM 引数</string>
@@ -215,7 +203,6 @@
     <string name="fabric_dl_install">インストール</string>
     <string name="fabric_dl_loader_title">バージョンの選択</string>
     <string name="of_dl_select_version">OptiFine のバージョンを選択</string>
-    <string name="of_dl_progress">%s をダウンロード中</string>
     <string name="preference_vulkan_driver_system_title">システム標準のVulkanドライバーを使用する</string>
     <string name="preference_vulkan_driver_system_description">ランチャーにAdreno GPUでTurnipの代わりにVulkanドライバを使用するよう強制します。Vulkanを使用するZinkとModにのみ影響します。</string>
     <string name="generic_install">インストール</string>

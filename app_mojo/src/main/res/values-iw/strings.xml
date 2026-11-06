@@ -10,7 +10,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">החשבון יוסר!</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">בחר מתקין mod</string>
     <!-- Error messages -->
     <string name="error_fatal">MJLauncher קרס באופן בלתי צפוי</string>
     <string name="error_no_version">אין גרסה!</string>
@@ -18,7 +17,6 @@
     <string name="error_show_less">הצג פחות</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">הרשאה לקריאה/כתיבה לאחסון נדרשת!</string>
-    <string name="toast_optifine_success">ההתקנה הסתיימה בהצלחה</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -26,10 +24,7 @@
     <string name="mcl_tab_wiki">ויקי</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">מנקה קבצי מטמון</string>
-    <string name="mcl_launch_downloading">מוריד %s</string>
     <string name="mcl_launch_downloading_progress">"מתקין %s (%.2f MB / %.2f MB)"</string>
-    <string name="mcl_launch_download_assets">מתכונן להורדת משאבים</string>
     <string name="mcl_options">אפשרויות</string>
     <string name="mcl_option_customcontrol">פקדים מותאמים אישית</string>
     <string name="mcl_setting_title_use_surface_view">השתמש ב רינדור משטח חלופי</string>
@@ -74,7 +69,6 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">היישומון / המשחק קרס, עם קוד שגיאה %d, בדוק את latestlog.txt למידע נוסף.</string>
     <string name="mcn_exit_confirm">האם אתה בטוח שאתה רוצה לכפות כיבוי?</string>
-    <string name="mcn_check_fail_vulkan_support">Zink (Vulkan) אינו נתמך במכשיר הזה!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">צ\'אט</string>
     <string name="control_debug">נפה באגים</string>
@@ -89,7 +83,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">כפה כיבוי</string>
     <string name="control_viewout">לוג פלט</string>
-    <string name="control_adebug">ניפוי שגיאות קלט</string>
     <string name="control_customkey">שלח קוד מקש מותאם אישית</string>
     <!-- ImportControlActivity Strings -->
     <string name="import_control_label">ייבוא פקדים</string>
@@ -121,11 +114,6 @@
     <string name="main_install_jar_file">הפעל קובץ .jar</string>
     <string name="main_play">הפעל</string>
     <string name="autoram_info_msg">זיכרון הוגדר ל %d MB</string>
-    <string name="mcl_setting_check_libraries">בדוק ספריות לאחר ההורדה</string>
-    <string name="mcl_setting_check_libraries_subtitle">אפשרות זו מאלצת את המשגר ​​לבדוק את ה hash של הספרייה אם הוא זמין. מונע הורדות שבורות.</string>
-    <string name="dl_library_sha_fail">הספרייה %s פגומה ולכן תורד מחדש</string>
-    <string name="dl_library_sha_unknown">לא ניתן לבדוק את הספרייה %s, אנו מניחים שהיא בסדר</string>
-    <string name="dl_library_sha_pass">הספרייה %s תקינה ואפשר להשתמש בה</string>
     <string name="mcl_disable_gestures">השבת מחוות</string>
     <string name="mcl_disable_gestures_subtitle">השבת מחוות, למשל: החזק כדי לשבור בלוק, וגע כדי לשים בלוק.</string>
     <string name="mcl_disable_swap_hand">השבת לחיצה כפולה להעברת ידיים</string>
@@ -148,7 +136,6 @@
     <string name="multirt_config_setdefault">הגדר כברירת מחדל</string>
     <string name="multirt_config_setdefault_already">ברירת מחדל</string>
     <string name="multirt_config_removeerror_last">עליך שהיה לפחות ג\'אווה רנטיים אחד מותקן.</string>
-    <string name="multirt_nojava8rt">לא מצאתי את Java 8. על מנת להשתמש באפשרות זו, עליך להתקין Java 8.</string>
     <string name="multirt_delete_runtime">מחק רנטיים</string>
     <string name="pvc_gameDirectory">תיקיית המשחק</string>
     <string name="pvc_jvmArgs">פרמטרים של JVM</string>
@@ -210,7 +197,6 @@
     <string name="preference_enable_gyro_description">הפעלת זה יאפשר לך להסתובב במשחק על ידי סיבוב הטלפון.</string>
     <string name="preference_gyro_sensitivity_title">רגישות בקרי חיישן הכיוון</string>
     <string name="preference_gyro_sensitivity_description">כוון את הרגישות של בקרי חיישן כיוון.</string>
-    <string name="toast_turn_on_gyro">הפעלו קודם את בקרי חיישן הכיוון בכדי להשתמש בזה!</string>
     <string name="preference_gyro_sample_rate_title">קצב דגימת חיישן הכיוון</string>
     <string name="preference_gyro_sample_rate_description">אם אתם חווים בעיות ביצועים עם בקרי חיישן הכיוון, הגדילו ערך זה.</string>
     <string name="microsoft_login_retry_later">יותר מדי בקשות, נסו שוב מאוחר יותר.</string>
@@ -234,15 +220,12 @@
     <string name="preference_force_big_core_title">כפה על מנוע הרינדור לפעול על הליבה הגדולה.</string>
 
     <string name="version_select_hint">בחר גרסה</string>
-    <string name="forge_dl_progress">מוריד מתקין עבור %s</string>
-    <string name="forge_dl_searching">מחפש מספר גרסה של Forge</string>
     <string name="modloader_dl_failed_to_load_list">טעינת רשימת הגרסאות נכשלה!</string>
     <string name="forge_dl_no_installer">מצטערים, אך לגרסת Forge זו אין מתקין, והיא אינה נתמכת בשלב זה.</string>
     <string name="forge_dl_select_version">בחר גירסת forge</string>
     <string name="fabric_dl_progress">מוריד מטא נתונים של מטעין %s</string>
     <string name="fabric_dl_loader_version">גרסת מטעין %s</string>
     <string name="fabric_dl_game_version">גרסת מינקראפט</string>
-    <string name="of_dl_progress">מוריד %s</string>
     <string name="generic_debug">נפה באגים</string>
     <string name="preference_category_java_tweaks">התאמות ל- Java</string>
     <string name="preference_category_miscellaneous">הגדרות שונות</string>

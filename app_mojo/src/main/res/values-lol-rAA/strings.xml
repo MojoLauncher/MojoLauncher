@@ -10,7 +10,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">Dis akownt wil be removed!</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">Chooz mod installr</string>
     <!-- Error messages -->
     <string name="error_fatal">Pojaw Launcher haz unexpectadly crashd</string>
     <string name="error_no_version">No vershun!</string>
@@ -18,7 +17,6 @@
     <string name="error_show_less">Show les</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">Teh riid/rite 2 storage permishun iz requird!</string>
-    <string name="toast_optifine_success">Instal succesful</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -26,10 +24,7 @@
     <string name="mcl_tab_wiki">Wikkiez</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">Cleanin cache filez</string>
-    <string name="mcl_launch_downloading">Downloadin %s</string>
     <string name="mcl_launch_downloading_progress">"Downloadin %s (%.2f MB / %.2f MB)"</string>
-    <string name="mcl_launch_download_assets">Preparin 2 download resourcez</string>
     <string name="mcl_options">Opshuns</string>
     <string name="mcl_option_customcontrol">Custom controls</string>
     <string name="mcl_setting_title_use_surface_view">USE ALTERNATE SURFACE RENDERIN</string>
@@ -74,7 +69,6 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Applicashun/game exitd wif code %d, chek lastestlog.txt 4 moar details.</string>
     <string name="mcn_exit_confirm">R u suer u wantz 2 forec cloes?</string>
-    <string name="mcn_check_fail_vulkan_support">Zink (vulkan) renderer is not supported on dis device!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">Chat</string>
     <string name="control_debug">Debug</string>
@@ -95,7 +89,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">Force close</string>
     <string name="control_viewout">tree input</string>
-    <string name="control_adebug">Input Debug</string>
     <string name="control_customkey">Send custom keycoed</string>
     <!-- ImportControlActivity Strings -->
     <string name="import_control_label">Import controls</string>
@@ -127,11 +120,6 @@
     <string name="main_install_jar_file">Run like a .jar</string>
     <string name="main_play">Pulay</string>
     <string name="autoram_info_msg">Memori setd 2 %d MB</string>
-    <string name="mcl_setting_check_libraries">Check libraries aftr downloadin</string>
-    <string name="mcl_setting_check_libraries_subtitle">Dis option forcez da launcher to check da library hash if it\'z available. Preventz broken downloadz.</string>
-    <string name="dl_library_sha_fail">Library %s iz breakd and wil’ be redownloaded</string>
-    <string name="dl_library_sha_unknown">Library %s cant’ be checkd, haz 2 assuem iz’ gud</string>
-    <string name="dl_library_sha_pass">Library %s iz prfekt an usabel</string>
     <string name="mcl_disable_gestures">Disabel gesturez</string>
     <string name="mcl_disable_gestures_subtitle">Disablez gesturez, laik hold 2 break block, an tap 2 plaec block.</string>
     <string name="mcl_disable_swap_hand">Disable double tap to swap handz</string>
@@ -155,7 +143,6 @@
     <string name="multirt_config_setdefault">Set favoritz</string>
     <string name="multirt_config_setdefault_already">My favritz</string>
     <string name="multirt_config_removeerror_last">Yyu have one Java Marathon here.</string>
-    <string name="multirt_nojava8rt">Ken´t find Java 8. In ordr 2 use dis opshun, u ned 2 install Java 8.</string>
     <string name="multirt_delete_runtime">Delete Marathon</string>
     <string name="pvc_gameDirectory">Gamez’ direktory</string>
     <string name="pvc_jvmArgs">CCz’UM argumentz</string>
@@ -221,7 +208,6 @@
     <string name="preference_enable_gyro_description">enablin\' dis will allow yu to turn in-game by turnin\' yor phone.</string>
     <string name="preference_gyro_sensitivity_title">Gyroscope controls sensitivity like a sigma</string>
     <string name="preference_gyro_sensitivity_description">adjust da sensitivity of gyroscopz controlz.</string>
-    <string name="toast_turn_on_gyro">enable gyroscopz controlz first to use dis!</string>
     <string name="preference_gyro_sample_rate_title">Gyroscope sampling rate</string>
     <string name="preference_gyro_sample_rate_description">if yu hav purrformance issuez wid gyroscopz controlz, increase dis.</string>
     <string name="microsoft_login_retry_later">too many requestz, purrlease try again later.</string>
@@ -246,8 +232,6 @@
     <string name="preference_force_big_core_title">force da renderer to run on da big core like big boy core</string>
 
     <string name="version_select_hint">Selcts a version of block game</string>
-    <string name="forge_dl_progress">Downloading more ram installer for %s</string>
-    <string name="forge_dl_searching">searchin\' for forge version numbur</string>
     <string name="modloader_dl_failed_to_load_list">faild to load teh versiunz list!</string>
     <string name="forge_dl_no_installer">sowwy, but dis vershun ov forge duz not haz an installur, wich iz not yet supported.</string>
     <string name="forge_dl_select_version">select forge vershun</string>
@@ -261,7 +245,6 @@
     <string name="fabric_dl_loader_title">Select versions</string>
     <string name="of_dl_select_version">Select optfine version</string>
     <string name="of_dl_failed_to_scrape">failed to collect data for optifine installashun</string>
-    <string name="of_dl_progress">Downloadin %s</string>
     <string name="hint_search_modpack">Search for modpacks</string>
     <string name="preference_vulkan_driver_system_title">Use system Vulkan driver</string>
     <string name="preference_vulkan_driver_system_description">force da launchur to use da system vulkan drivur instead of turnip on adreno gpus. only affectz zink an modz dat use vulkan so don\'t use with Mali frcoal.</string>
@@ -272,13 +255,9 @@
     <string name="search_modpack_error">Fualed to find movpacka</string>
     <string name="search_modpack_download_error">Failed to download modpack metadata</string>
     <string name="modpack_download_downloading_metadata">Downloading modpack metadata (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods">Downloading mods (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods_fc">Downloading mods (File %d out of %d)</string>
     <string name="modpack_download_applying_overrides">Applying overrides (%d/%d)</string>
     <string name="modpack_install_notification_title">MJ Modpack Installer really gud</string>
     <string name="modpack_install_notification_success">Click here to finish modpack installation</string>
-    <string name="modpack_install_notification_data_not_available">Failed to download mod loader information please stay like a sigma 😎😎</string>
-    <string name="modpack_install_modloader_download_failed">Failed to download the mod loader files</string>
     <string name="modpack_install_download_failed">Failed to download modpack files</string>
     <string name="notif_error_occured">An error has occurred</string>
     <string name="notif_error_occured_desc">Click to see more details</string>
@@ -308,9 +287,6 @@ if yu wanna use teh offishul download source, press "switch to offishul site" n 
     <string name="notification_permission_toast">You can always change your mind later by going into Settings</string>
     <string name="preference_ask_for_notification_title">Allow notifications</string>
     <string name="preference_ask_for_notification_description">click to re-request teh notifishun permisshun, required for game/modpack background downloadz to werk properly.</string>
-    <string name="preference_vsync_in_zink_title">Allow V-Sync with Zink</string>
-    <string name="preference_vsync_in_zink_description">lowz teh launchur to use internal system apis to enable v-sync for zink.turn dis off if ur launchur suddnly crashz wif zink afta a system update</string>
-    <string name="exception_failed_to_unpack_jre17">Failed to install JRE 17</string>
     <string name="newdl_starting">Reading game metadata…</string>
     <string name="newdl_downloading_metadata">Downloading game metadata (%s)</string>
     <string name="controller_button_select">Select</string>

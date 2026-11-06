@@ -17,7 +17,6 @@
     <string name="warning_remove_account">Tài khoản này sẽ bị xoá!</string>
 
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">Chọn một trình cài đặt mod</string>
 
     <!-- Error messages -->
     <string name="error_fatal">MJLauncher đã bất ngờ bị sập</string>
@@ -27,7 +26,6 @@
 
     <!-- Toast messages -->
     <string name="toast_permission_denied">Yêu cầu quyền đọc/ghi bộ nhớ!</string>
-    <string name="toast_optifine_success">Cài đặt thành công</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -38,10 +36,7 @@
     <!-- MCLauncherActivity: Account status -->
 
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">Đang làm sạch bộ nhớ đệm</string>
-    <string name="mcl_launch_downloading">Đang tải xuống %s</string>
     <string name="mcl_launch_downloading_progress">"Đang tải %s (%.2f MB / %.2f MB)"</string>
-    <string name="mcl_launch_download_assets">Chuẩn bị để tải xuống gói tài nguyên</string>
 
     <string name="mcl_options">Tùy chọn</string>
     <string name="mcl_option_customcontrol">Tùy chỉnh điều khiển</string>
@@ -90,7 +85,6 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">Ứng dụng/Trò chơi đã thoát với mã %d, kiểm tra nhật kí trình khởi chạy (latestlog.txt) để biết thêm chi tiết.</string>
     <string name="mcn_exit_confirm">Bạn có chắc muốn bắt buộc thoát chương trình?</string>
-    <string name="mcn_check_fail_vulkan_support">Trình kết xuất Zink (Vulkan) không được hỗ trợ trên thiết bị này!</string>
 
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">Trò chuyện</string>
@@ -113,7 +107,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">Đóng chương trình</string>
     <string name="control_viewout">Nhật ký ra </string>
-    <string name="control_adebug">Gỡ lỗi đầu vào</string>
     <string name="control_customkey">Gửi phím tùy chọn</string>
 
     <!-- ImportControlActivity Strings -->
@@ -152,11 +145,6 @@
     <string name="main_install_jar_file">Thực thi tệp .jar</string>
     <string name="main_play">Chơi</string>
     <string name="autoram_info_msg">Bộ nhớ được đặt thành %d MB</string>
-    <string name="mcl_setting_check_libraries">Kiểm tra các thư viện sau khi tải</string>
-    <string name="mcl_setting_check_libraries_subtitle">Tùy chọn này buộc trình khởi động kiểm tra hàm băm thư viện nếu có sẵn, ngăn chặn việc tải xuống lỗi.</string>
-    <string name="dl_library_sha_fail">Thư viện %s bị hỏng và sẽ được tải lại</string>
-    <string name="dl_library_sha_unknown">Thư viện %s không thể kiểm tra, cho rằng nó tốt</string>
-    <string name="dl_library_sha_pass">Library %s tốt và có thể sử dụng được</string>
     <string name="mcl_disable_gestures">Tắt cử chỉ</string>
     <string name="mcl_disable_gestures_subtitle">Tắt cử chỉ, ví dụ như giữ để phá khối, và chạm để đặt khối.</string>
     <string name="mcl_disable_swap_hand">Tắt nhấn đúp để đổi tay</string>
@@ -182,7 +170,6 @@
     <string name="multirt_config_setdefault_already">Mặc định</string>
     <string name="multirt_config_removeerror_last">Bạn phải có ít nhất một hệ thống thời gian chạy Java đã được cài đặt.</string>
     <string name="multirt_nocompatiblert">Không thể tìm thấy Java Runtime tương thích. Phiên bản này yêu cầu Java %d trở lên.</string>
-    <string name="multirt_nojava8rt">Không thể tìm thấy Java 8. Để sử dụng tùy chọn này, bạn cần cài đặt Java 8.</string>
     <string name="multirt_delete_runtime">Xóa runtime</string>
     <string name="pvc_gameDirectory">Đường dẫn thư mục của trò chơi</string>
     <string name="pvc_jvmArgs">Các chỉ số JVM</string>
@@ -257,7 +244,6 @@
     <string name="preference_enable_gyro_description">Bật cái này sẽ cho phép bạn quay trong trò chơi bằng cách quay điện thoại của bạn.</string>
     <string name="preference_gyro_sensitivity_title">Độ nhạy con quay hồi chuyển</string>
     <string name="preference_gyro_sensitivity_description">Điều chỉnh độ nhạy khi điều khiển con quay hồi chuyển.</string>
-    <string name="toast_turn_on_gyro">Bật chế độ con quay hồi chuyển trước khi sử dụng tính năng này!</string>
     <string name="preference_gyro_sample_rate_title">Tốc độ lấy mẫu con quay hồi chuyển</string>
     <string name="preference_gyro_sample_rate_description">..</string>
     <string name="microsoft_login_retry_later">Có quá nhiều yêu cầu, vui lòng thử lại sau.</string>
@@ -286,8 +272,6 @@
     <string name="preference_force_big_core_title">Buộc trình kết xuất chạy trên lõi lớn</string>
 
     <string name="version_select_hint">Chọn phiên bản</string>
-    <string name="forge_dl_progress">Đang tải xuống %s</string>
-    <string name="forge_dl_searching">Đang tìm số phiên bản của Forge</string>
     <string name="modloader_dl_failed_to_load_list">Tải xuống thất bại!</string>
     <string name="forge_dl_no_installer">Xin lỗi, nhưng phiên bản Forge này không có trình cài đặt tệp .jar, chưa hỗ trợ.</string>
     <string name="forge_dl_select_version">Chọn phiên bản Forge</string>
@@ -305,7 +289,6 @@
     <string name="fabric_dl_loader_title">Chọn phiên bản</string>
     <string name="of_dl_select_version">Chọn phiên bản OptiFine</string>
     <string name="of_dl_failed_to_scrape">Không thể thu thập dữ liệu để cài đặt OptiFine</string>
-    <string name="of_dl_progress">Đang tải xuống %s</string>
     <string name="mod_dl_install_optifine">Cài đặt OptiFine</string>
 
 
@@ -323,13 +306,9 @@
     <string name="search_modpack_download_error">Không thể tải dữ liệu modpack</string>
 
     <string name="modpack_download_downloading_metadata">Đang tải dữ liệu modpack (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods">Đang tải mod (%.2f MB / %.2f MB)</string>
-    <string name="modpack_download_downloading_mods_fc">Đang tải mod (Tệp %d trên %d)</string>
     <string name="modpack_download_applying_overrides">Áp dụng các thay đổi (%d/%d)</string>
     <string name="modpack_install_notification_title">Trình cài đặt modpack</string>
     <string name="modpack_install_notification_success">Nhấn để hoàn thành cài đặt modpack</string>
-    <string name="modpack_install_notification_data_not_available">Không thể tải thông tin trình cài đặt mod</string>
-    <string name="modpack_install_modloader_download_failed">Không thể tải các tệp của trình cài đặt mod</string>
     <string name="modpack_install_download_failed">Không thể tải các tệp của modpack</string>
     <string name="modpack_install_instance_button">Tạo thư mục modpack mới</string>
 
@@ -362,13 +341,8 @@
     <string name="notification_permission_toast">Bạn luôn có thể thay đổi ý định của mình bằng cách vào Cài đặt</string>
     <string name="preference_ask_for_notification_title">Cho phép Gửi thông báo</string>
     <string name="preference_ask_for_notification_description">Nhấp để yêu cầu lại quyền thông báo, điều này là cần thiết để trò chơi/gói tích hợp tải xuống bình thường ở chế độ nền.</string>
-    <string name="preference_vsync_in_zink_title">Cho phép V-Sync với trình kết xuất Zink</string>
-    <string name="preference_vsync_in_zink_description">Cho phép trình khởi chạy sử dụng API hệ thống nội bộ để kích hoạt đồng bộ dọc cho trình kết xuất Zink. Tắt cài đặt này nếu trình khởi chạy bất ngờ bị văng với Zink sau một bản cập nhật hệ thống.</string>
-    <string name="exception_failed_to_unpack_jre17">Cài Đặt thất bại JRE 17</string>
     <string name="newdl_starting">Đang đọc siêu dữ liệu trò chơi…</string>
     <string name="newdl_downloading_metadata">Đang tải xuống siêu dữ liệu trò chơi (%s)</string>
-    <string name="newdl_downloading_game_files">Đang tải xuống trò chơi… (%d/%d, %.2f MB)</string>
-    <string name="newdl_downloading_game_files_size">Đang tải xuống trò chơi… (%.2f/%.2f MB, %.2f MB)</string>
     <string name="cropper_title">Chọn vùng hình ảnh</string>
     <string name="cropper_lock_vertical">Khóa trục dọc</string>
     <string name="cropper_lock_horizontal">Khóa trục ngang</string>
@@ -380,7 +354,6 @@
     <string name="log_view_button_output_on">In ra MH\nBật</string>
     <string name="log_view_label_log_output">Đầu ra nhật ký:</string>
     <string name="execute_jar_failed_to_read_file">Không thể đọc tệp .jar</string>
-    <string name="execute_jar_incompatible_runtime">Chức năng thực thi .jar không tương thích với Java %d</string>
     <string name="controller_button_a">A</string>
     <string name="controller_button_b">B</string>
     <string name="controller_button_x">X</string>
@@ -422,7 +395,6 @@
     <string name="bta_installer_untested_versions">Những phiên bản BTA chưa được thử</string>
     <string name="bta_installer_nightly_versions">Những phiên bản nightly BTA </string>
     <string name="newdl_extracting_native_libraries">Đang giải nén những thư viện gốc (%d/%d)</string>
-    <string name="compat_version_not_supported">Thiết bị của bạn không thể chạy trình kết xuất LTW bởi vì nó không được hỗ trợ trên thiết bị của bạn.</string>
     <string name="oauth_unknown_error">Lỗi xác thực không xác định</string>
     <string name="oauth_web_complete">Đang xác thực…</string>
     <string name="auth_select_microsoft">Tài khoản Microsoft</string>
