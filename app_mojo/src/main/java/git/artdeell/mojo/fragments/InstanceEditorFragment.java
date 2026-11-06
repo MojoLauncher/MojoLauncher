@@ -175,8 +175,6 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         mDefaultName.setText(nullToEmpty(instance.name));
         mDefaultControl.setText(mSelectedControlLayout == null ? nullToEmpty(instance.controlLayout) : mSelectedControlLayout);
         mSharedDataCheckbox.setChecked(instance.sharedData);
-
-        // Shortcut MineButton
         mPinShortcutButton.setOnClickListener(v -> Instances.manageInstanceShortcut(instance, getContext(), false));
     }
 
