@@ -213,8 +213,7 @@ public class Instances {
 
     private static String makeInstanceLabel(Instance instance){
         String label = Tools.validOrNullString(instance.name);
-        if(label == null) label = instance.versionId;
-        label = "MJ - " + label;
+        if(label == null) label = "MJ - " +  instance.versionId;
         return label;
     }
 
