@@ -1,0 +1,49 @@
+package git.artdeell.mojo.downloader;
+
+import git.artdeell.mojo.prefs.LauncherPreferences;
+import git.artdeell.mojo.utils.HashUtils;
+
+import java.io.File;
+import java.io.IOException;
+
+public class CheckFileOnDiskTask extends DownloaderTask {
+    private final boolean mAfterDownload;
+    CheckFileOnDiskTask(TaskMetadata mMetadata, Downloader mHostDownloader) {
+        super(mMetadata, mHostDownloader);
+        this.mAfterDownload = false;
+    }
+
+    CheckFileOnDiskTask(TaskMetadata mMetadata, Downloader mHostDownloader, boolean mAfterDownload) {
+        super(mMetadata, mHostDownloader);
+        this.mAfterDownload = mAfterDownload;
+    }
+
+    protected void ensureUrlAndSubmit() throws IOException {
+        if(mMetadata.url == null) throw new VerificationException("File "+mMetadata.path.getPath()+" does not have a download URL");
+        mDownloader.submitFileForDownload(mMetadata);
+    }
+
+    @Override
+    protected void performTask() throws IOException {
+        boolean checkResult = checkFile();
+        if(checkResult) {
+            if(!mAfterDownload) mDownloader.addSize(mMetadata.size);
+            mDownloader.fileComplete();
+        }else {
+            if(!mAfterDownload) ensureUrlAndSubmit();
+            else throw new VerificationException("Failed to verify "+mMetadata.toString());
+        }
+    }
+
+    private boolean checkFile() throws IOException {
+        File localFile = mMetadata.path;
+        if(!localFile.exists()) return false;
+        if(!LauncherPreferences.PREF_VERIFY_FILES) return true;
+        if(mMetadata.size != -1) {
+            if(mMetadata.size != localFile.length()) return false;
+            if(LauncherPreferences.PREF_RAPID_START && !mAfterDownload) return true;
+        }
+        return mMetadata.sha1Hash == null || HashUtils.compareSHA1(localFile, mMetadata.sha1Hash);
+    }
+
+}
