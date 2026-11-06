@@ -11,6 +11,7 @@ import android.content.Context;
 
 import git.artdeell.mojo.Architecture;
 import git.artdeell.mojo.game.renderer.impl.GLESRenderSpec;
+import git.artdeell.mojo.prefs.LauncherPreferences;
 import git.artdeell.mojo.utils.plugins.LibraryPlugin;
 
 import java.io.File;
@@ -189,7 +190,9 @@ public interface GLESProvider {
             return plugin != null && plugin.checkLibraries(ANGLE_EGL, ANGLE_GLES);
         }
         public boolean requiresNamespace() {
-            return false;
+            // Our ANGLE plugin is patched to accept mjlvlk reference same way as Mesa (in a custom namespace)
+            // This allows it to use the overridden Vulkan driver. Useful when the system driver is poo
+            return !LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER;
         }
     }
     // One might add other OpenGLES providers (such as Mesa and/or bundled ANGLE), but this is not something we want right now
