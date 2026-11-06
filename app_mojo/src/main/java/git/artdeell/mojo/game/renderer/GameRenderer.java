@@ -171,5 +171,8 @@ public class GameRenderer {
         File config = new File(Tools.DIR_GAME_HOME, "qgl_config.txt");
         if(config.exists() && config.isFile()) MojoExec.setQglConfigPath(config.getAbsolutePath());
         MojoExec.configureCustomVulkanDriver(driver.getMainLibrary(), root == null ? null : root.getAbsolutePath());
+        // Overridden driver requires dlopen'ing a custom loader to make apps load it automagically
+        // instead of the system driver
+        MojoExec.preloadVulkan();
     }
 }

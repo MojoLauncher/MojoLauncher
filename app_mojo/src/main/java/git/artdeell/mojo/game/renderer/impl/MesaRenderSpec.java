@@ -65,10 +65,6 @@ public class MesaRenderSpec implements RenderSpec {
             envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6");
             super.setupEnvironment(context, envMap);
         }
-        public boolean setupRenderer() {
-            MojoExec.preloadVulkan();
-            return super.setupRenderer();
-        }
         public boolean compatibleDevice(Context context) {
             return hasMesa() && GpuUtils.checkVulkanSupport(context.getPackageManager());
         }
@@ -151,10 +147,6 @@ public class MesaRenderSpec implements RenderSpec {
             envMap.put("MESA_GL_VERSION_OVERRIDE", "4.3");
             envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
             envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
-        }
-        public boolean setupRenderer() {
-            MojoExec.preloadVulkan();
-            return super.setupRenderer();
         }
         public boolean compatibleDevice(Context context) {
             return GpuUtils.checkVulkanSupport(context.getPackageManager()) && super.compatibleDevice(context);
