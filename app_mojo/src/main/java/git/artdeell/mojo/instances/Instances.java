@@ -226,6 +226,7 @@ public class Instances {
     public static void manageInstanceShortcut(Instance instance, Context context, boolean update){
         if(update && instance.shortcutUuid == null) return;
         if(!ShortcutUtils.isSupported(context)) return;
+        if(!update && instance.shortcutUuid != null) removeInstanceShortcut(instance, context);
         Drawable drawable = InstanceIconProvider.fetchIcon(context.getResources(), instance);
         BitmapDrawable bm = drawable instanceof BitmapDrawable ? (BitmapDrawable) drawable : null;
         String label = makeInstanceLabel(instance);
@@ -257,6 +258,9 @@ public class Instances {
     public static void removeInstanceShortcut(Instance instance, Context context){
         if(instance.shortcutUuid == null || !ShortcutUtils.isSupported(context)) return;
         ShortcutUtils.disableShortcut(context, UUID.fromString(instance.shortcutUuid), context.getString(R.string.shortcut_disabled));
+        instance.shortcutUuid = null;
+        // We actually don't write the updated data here back because either it'll be updated and written
+        // eventually in another method or the instance is being removed completely anyway
     }
 
     /**
