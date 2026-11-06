@@ -48,6 +48,7 @@ public class GameRenderer {
     private final static String FALLBACK_RENDERER = GL4ES_RENDERER;
     private RenderSpec currentRenderer;
     private Map<String, String> environment = new HashMap<>();
+    private boolean customVulkan = false;
 
     public GameRenderer(String currentRenderer) {
         this.currentRenderer = getKnownRenderer(currentRenderer);
@@ -150,6 +151,9 @@ public class GameRenderer {
      */
     public boolean maybeSetupRenderer() {
         setRendererLibraryPath(Tools.NATIVE_LIB_DIR, currentRenderer.librarySearchPath());
+        // Overridden driver requires dlopen'ing a custom loader to make apps load it automagically
+        // instead of the system driver
+        if(customVulkan) MojoExec.preloadVulkan();
         if (!currentRenderer.setupRenderer()) {
             Log.e(TAG, "Failed to setup renderer " + currentRenderer.name() + ", falling back to " + FALLBACK_RENDERER);
             // Hopefully (yes, it's going to be fun if it returns null for the fallback renderer. Shouldn't happen though)
@@ -171,8 +175,6 @@ public class GameRenderer {
         File config = new File(Tools.DIR_GAME_HOME, "qgl_config.txt");
         if(config.exists() && config.isFile()) MojoExec.setQglConfigPath(config.getAbsolutePath());
         MojoExec.configureCustomVulkanDriver(driver.getMainLibrary(), root == null ? null : root.getAbsolutePath());
-        // Overridden driver requires dlopen'ing a custom loader to make apps load it automagically
-        // instead of the system driver
-        MojoExec.preloadVulkan();
+        customVulkan = true;
     }
 }
