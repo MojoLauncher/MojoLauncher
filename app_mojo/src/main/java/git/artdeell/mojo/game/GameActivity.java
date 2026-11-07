@@ -86,6 +86,7 @@ import git.artdeell.mojo.R;
 public class GameActivity extends BaseActivity implements ControlButtonMenuListener, EditorExitable, ServiceConnection {
     public static final String INTENT_LAUNCH_VERSION = "intent_version";
     public static final String INTENT_LAUNCH_CLASSPATH = "intent_classpath";
+    public static final String INTENT_LAUNCH_INSTANCE = "intent_instance";
 
     public static TouchCharInput touchCharInput;
     private GameView launcherGLView;
@@ -117,7 +118,8 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        instance = Instances.loadSelectedInstance();
+        String bootInstance = getIntent().getStringExtra(INTENT_LAUNCH_INSTANCE);
+        instance = bootInstance == null ? Instances.loadSelectedInstance() : Instances.getInstance(bootInstance, Instance.class);
         account = Accounts.getCurrent();
         if(instance == null) {
             Toast.makeText(this, R.string.instance_dir_missing, Toast.LENGTH_LONG).show();
@@ -243,6 +245,7 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
 
             activityIntent.removeExtra(INTENT_LAUNCH_VERSION);
             activityIntent.removeExtra(INTENT_LAUNCH_CLASSPATH);
+            activityIntent.removeExtra(INTENT_LAUNCH_INSTANCE);
 
             setIntent(activityIntent);
 
