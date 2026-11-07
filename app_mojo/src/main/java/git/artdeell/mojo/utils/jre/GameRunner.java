@@ -1,5 +1,6 @@
 package git.artdeell.mojo.utils.jre;
 
+import android.content.Context;
 import android.util.ArrayMap;
 import android.util.Log;
 import android.widget.Toast;
@@ -9,11 +10,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import git.artdeell.mojo.Architecture;
 import git.artdeell.mojo.JVersionList;
+import git.artdeell.mojo.Logger;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.authenticator.accounts.Account;
 import git.artdeell.mojo.game.renderer.def.Renderers;
 import git.artdeell.mojo.game.renderer.impl.GLESRenderSpec;
 import git.artdeell.mojo.instances.Instance;
+import git.artdeell.mojo.utils.DownloadUtils;
 import git.artdeell.mojo.utils.lifecycle.LifecycleAwareAlertDialog;
 import git.artdeell.mojo.multirt.MultiRTUtils;
 import git.artdeell.mojo.multirt.Runtime;
@@ -148,6 +151,8 @@ public class GameRunner {
 
     public static void launchGame(final AppCompatActivity activity, Account account,
                                   Instance instance, String versionId, File[] classpath, GameRenderer gameRenderer) throws Throwable {
+        if(!performAuthPing(activity, account)) account = account.toLocal();
+
         int freeDeviceMemory = Tools.getFreeDeviceMemory(activity);
         int localeString;
         int freeAddressSpace = Architecture.is32BitsDevice() ? Tools.getMaxContinuousAddressSpaceSize() : -1;
@@ -295,6 +300,7 @@ public class GameRunner {
         javaArgList.add("-Dorg.lwjgl.system.SharedLibraryExtractPath="+lwjglExtractDir.getAbsolutePath());
 
         addAuthlibInjectorArgs(javaArgList, account);
+        addNoBlocklistArgs(javaArgList);
 
         mergeMoJsonArgs(javaArgList, getMoJsonJvmArgs(versionId));
 
@@ -362,10 +368,25 @@ public class GameRunner {
         }
     }
 
+    private static boolean performAuthPing(Context context, Account account) {
+        String injectorUrl = account.authType.injectorUrl;
+        if(injectorUrl == null) return true;
+        Logger.appendToLog("Pinging authentication service...");
+        if(DownloadUtils.pingInjectorUrl(injectorUrl)) return true;
+        Logger.appendToLog("Authentication service did not respond, disabling");
+        Tools.runOnUiThread(()-> Toast.makeText(context, context.getString(R.string.warn_auth_type_missing, injectorUrl), Toast.LENGTH_SHORT).show());
+        return false;
+    }
+
     private static void addAuthlibInjectorArgs(List<String> javaArgList, Account account) {
         String injectorUrl = account.authType.injectorUrl;
         if(injectorUrl == null) return;
         javaArgList.add("-javaagent:"+Tools.DIR_DATA+"/authlib-injector/authlib-injector.jar="+injectorUrl);
+    }
+
+    private static void addNoBlocklistArgs(List<String> javaArgList) {
+        if(!LauncherPreferences.PREF_DISABLE_BLOCKLIST) return;
+        javaArgList.add("-javaagent:"+Tools.DIR_DATA+"/noblocklist/NoBlocklist-1.0-SNAPSHOT-all.jar");
     }
 
     // Skip setting essential flags from the version JSON as we already override them
@@ -442,7 +463,7 @@ public class GameRunner {
         varArgMap.put("auth_xuid", profile.xuid);
         varArgMap.put("assets_root", Tools.ASSETS_PATH);
         varArgMap.put("assets_index_name", versionInfo.assets);
-        varArgMap.put("game_assets", Tools.ASSETS_PATH);
+        varArgMap.put("game_assets", Tools.ASSETS_PATH + File.separator + "virtual" + File.separator + versionInfo.assets);
         varArgMap.put("game_directory", gameDir.getAbsolutePath());
         varArgMap.put("user_properties", "{}");
         varArgMap.put("user_type", userType);

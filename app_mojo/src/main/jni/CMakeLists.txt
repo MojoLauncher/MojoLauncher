@@ -36,8 +36,7 @@ target_link_libraries(SDL3-shared PRIVATE mojoexec)
 
 project("MojoLauncher")
 
-add_library(pojavexec SHARED
-        affinity.c
+add_library(mojort SHARED
         jvm_hooks/emui_iterator_fix_hook.c
         jvm_hooks/java_exec_hooks.c
         jvm_hooks/lwjgl_dlopen_hook.c
@@ -50,10 +49,10 @@ add_library(pojavexec SHARED
         minibridge.c
 )
 
-target_include_directories(pojavexec PRIVATE .)
-target_link_libraries(pojavexec PRIVATE log mojoexec)
+target_include_directories(mojort PRIVATE .)
+target_link_libraries(mojort PRIVATE log mojoexec)
 
-add_library(pojavexec_awt SHARED
+add_library(mojoawt SHARED
 		awt/awt.c
 		awt/awt_window.c
 		awt/awt_util.c
@@ -62,7 +61,7 @@ add_library(pojavexec_awt SHARED
         awt/awt_mapper.c
 )
 
-target_link_libraries(pojavexec_awt PRIVATE android log)
+target_link_libraries(mojoawt PRIVATE android log)
 
 add_library(awt_headless SHARED 
 	awt_xawt/dummy.c

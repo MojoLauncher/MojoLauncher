@@ -16,6 +16,7 @@ import git.artdeell.mojo.*;
 
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.multirt.MultiRTUtils;
+import git.artdeell.mojo.utils.GpuUtils;
 import git.artdeell.mojo.utils.JREUtils;
 
 import java.io.IOException;
@@ -77,6 +78,8 @@ public class LauncherPreferences {
     public static boolean PREF_SHOW_MEMORY_WARNING_DIALOG = true;
     public static short PREF_BUTTON_TRANSPARENCY = 100;
     public static boolean PREF_UBWC_WORKAROUND = false;
+    public static boolean PREF_DISABLE_BLOCKLIST = false;
+    public static String PREF_VULKAN_DRIVER = null;
 
     public static void loadPreferences(Context ctx) {
         //Required for CTRLDEF_FILE and MultiRT
@@ -112,7 +115,7 @@ public class LauncherPreferences {
         PREF_DUMP_SHADERS = DEFAULT_PREF.getBoolean("dump_shaders", false);
         PREF_DEADZONE_SCALE = ((float) DEFAULT_PREF.getInt("gamepad_deadzone_scale", 100))/100f;
         PREF_BIG_CORE_AFFINITY = DEFAULT_PREF.getBoolean("bigCoreAffinity", false);
-        PREF_ZINK_PREFER_SYSTEM_DRIVER = DEFAULT_PREF.getBoolean("zinkPreferSystemDriver", false);
+        PREF_ZINK_PREFER_SYSTEM_DRIVER = DEFAULT_PREF.getBoolean("zinkPreferSystemDriver", !hasVulkanDrivers());
         PREF_DOWNLOAD_SOURCE = DEFAULT_PREF.getString("downloadSource", "default");
         PREF_VERIFY_MANIFEST = DEFAULT_PREF.getBoolean("verifyManifest", true);
         PREF_SKIP_NOTIFICATION_PERMISSION_CHECK = DEFAULT_PREF.getBoolean(PREF_KEY_SKIP_NOTIFICATION_CHECK, false);
@@ -125,6 +128,8 @@ public class LauncherPreferences {
         PREF_SHOW_MEMORY_WARNING_DIALOG = DEFAULT_PREF.getBoolean("showMemoryWarning", true);
         PREF_BUTTON_TRANSPARENCY = (short) DEFAULT_PREF.getInt("buttonTransparency", 100);
         PREF_UBWC_WORKAROUND = DEFAULT_PREF.getBoolean("ubwcWorkaround", false);
+        PREF_DISABLE_BLOCKLIST = DEFAULT_PREF.getBoolean("disableServerBlocklist", true);
+        PREF_VULKAN_DRIVER = DEFAULT_PREF.getString("customVulkanDriver", null);
 
         String argLwjglLibname = "-Dorg.lwjgl.opengl.libname=";
         for (String arg : JREUtils.parseJavaArguments(PREF_CUSTOM_JAVA_ARGS)) {
@@ -224,5 +229,9 @@ public class LauncherPreferences {
             Log.i("NOTCH DETECTION", "No notch detected, or the device if in split screen mode");
             return false;
         }
+    }
+
+    public static boolean hasVulkanDrivers() {
+        return GpuUtils.getGlInfo().isAdreno();
     }
 }

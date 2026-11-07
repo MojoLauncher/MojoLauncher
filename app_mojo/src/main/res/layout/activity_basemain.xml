@@ -25,6 +25,8 @@
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
 				android:defaultFocusHighlightEnabled="false"
+				android:focusable="true"
+				android:descendantFocusability="blocksDescendants"
                 tools:ignore="UnusedAttribute">
 
 				<git.artdeell.mojo.game.GameCursorView

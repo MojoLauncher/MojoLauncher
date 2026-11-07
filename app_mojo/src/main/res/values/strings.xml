@@ -334,7 +334,7 @@
     <string name="hint_search_modpack">Search for modpacks</string>
 
     <string name="preference_vulkan_driver_system_title">Use system Vulkan driver</string>
-    <string name="preference_vulkan_driver_system_description">Force the launcher to use the system Vulkan driver instead of Turnip on Adreno GPUs. Only affects Zink and mods that use Vulkan.</string>
+    <string name="preference_vulkan_driver_system_description">Force the launcher to use the system Vulkan driver. Affects anything that uses Vulkan API.</string>
 
     <string name="generic_install">Install</string>
     <string name="generic_apply">Apply</string>
@@ -539,6 +539,31 @@
     <string name="mjdl_disk_error_subtitle_2">Failed to save instance after updating the Java Runtime.</string>
     <string name="mjdl_download_error_title">Download error</string>
     <string name="mjdl_download_error_subtitle">Download failed. Check your internet connection and make sure that you have enough free disk space.</string>
-    <string name="mjdl_download_error_subtitle_2">File verification failed. Please try again. If this error keeps happening, contact us on GitHub or on Discord.</string>
+    <string name="mjdl_download_error_subtitle_2">File verification failed. Please try again. If this is a modded version, please try reinstalling. Otherwise, if this error keeps happening, contact us on GitHub or on Discord.</string>
     <string name="bta_configuring">Configuring BTA…</string>
+    <string name="pref_blocklist_disable_title">Disable server blocklist</string>
+    <string name="pref_blocklist_disable_description">Prevent the MC server blocklist from loading. This allows you to play on blocked servers (like 6b6t.org)</string>
+    <string name="driver_default_name">Built-in driver</string>
+    <string name="driver_default_extra_name">MJLauncher</string>
+    <string name="driver_config_title">Installed Drivers</string>
+    <string name="driver_config_pref_title">Vulkan Driver</string>
+    <string name="driver_config_pref_subtitle">Manage installed AdrenoTools Vulkan drivers and install new</string>
+    <string name="driver_config_import">Add</string>
+    <string name="driver_config_delete">Remove</string>
+    <string name="driver_config_use">Use</string>
+    <string name="driver_config_already_used">In use</string>
+    <string name="driver_config_select">Select</string>
+    <string name="driver_config_import_failed">Failed to add the selected driver!</string>
+    <string name="driver_config_import_invalid">Incorrect or corrupted driver package, try another</string>
+    <string name="driver_config_import_notify">Select a valid AdrenoTools driver package</string>
+    <string name="driver_config_corrupted">Invalid or corrupted driver</string>
+    <string name="driver_config_remove_failed">Unable to remove the driver package</string>
+    <string name="driver_progress_validate">Validating driver package</string>
+    <string name="driver_progress_install">Installing driver package</string>
+
+    <string name="pref_clean_partfiles_title">Clear download cache</string>
+    <string name="pref_clean_partfiles_subtitle_wait">Clear partially downloaded game files. Calculating used space…</string>
+    <string name="pref_clean_partfiles_subtitle">Clear partially downloaded game files. %.2f MB of space in use</string>
+    <string name="clean_partfiles_wait">Clearing download cache…</string>
+    <string name="warn_auth_type_missing">%s is not available, using local account</string>
 </resources>

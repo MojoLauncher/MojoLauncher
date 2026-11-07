@@ -5,7 +5,6 @@ import android.view.View;
 
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.input.mouse.LeftClickGesture;
-import git.artdeell.mojo.input.mouse.PointerTracker;
 import git.artdeell.mojo.input.mouse.Scroller;
 import git.artdeell.mojo.input.mouse.TapDetector;
 import git.artdeell.mojo.prefs.LauncherPreferences;
@@ -15,8 +14,6 @@ import git.artdeell.mojo.CallbackBridge;
 public class InGUIEventProcessor extends TouchEventProcessor {
     public static final float FINGER_SCROLL_THRESHOLD = Tools.dpToPx(6);
     public static final float FINGER_STILL_THRESHOLD = Tools.dpToPx(5);
-
-    private final PointerTracker mTracker = new PointerTracker();
     private final TapDetector mSingleTapDetector;
     private View mTouchpad;
     private boolean mIsMouseDown = false;
@@ -37,10 +34,7 @@ public class InGUIEventProcessor extends TouchEventProcessor {
                 mTracker.startTracking(motionEvent);
                 if(!touchpadDisplayed()) {
                     sendTouchCoordinates(motionEvent.getX(), motionEvent.getY());
-
-                    // disabled gestures means no scrolling possible, send gesture early
-                    if (LauncherPreferences.PREF_DISABLE_GESTURES) enableMouse();
-                    else setGestureStart(motionEvent);
+                    setMoveStart(motionEvent);
                 }
                 break;
 
@@ -56,9 +50,13 @@ public class InGUIEventProcessor extends TouchEventProcessor {
                         sendTouchCoordinates(mainPointerX, mainPointerY);
 
                         if(!mIsMouseDown) {
-                            if(!hasGestureStarted()) setGestureStart(motionEvent);
-                            if(!LeftClickGesture.isFingerStill(mStartX, mStartY, mainPointerX, mainPointerY, FINGER_STILL_THRESHOLD))
+                            if(LauncherPreferences.PREF_DISABLE_GESTURES) {
                                 enableMouse();
+                            }else {
+                                if(!hasStartedMoving()) setMoveStart(motionEvent);
+                                if(!LeftClickGesture.isFingerStill(mStartX, mStartY, mainPointerX, mainPointerY, FINGER_STILL_THRESHOLD))
+                                    enableMouse();
+                            }
                         }
 
                     }
@@ -70,13 +68,10 @@ public class InGUIEventProcessor extends TouchEventProcessor {
                 mScroller.resetScrollOvershoot();
                 mTracker.cancelTracking();
 
-                // Handle single tap on gestures
-                if((!LauncherPreferences.PREF_DISABLE_GESTURES || touchpadDisplayed()) && !mIsMouseDown && singleTap) {
-                    CallbackBridge.performClick(MotionEvent.BUTTON_PRIMARY);
-                }
+                if(singleTap && !mIsMouseDown) CallbackBridge.performClick(MotionEvent.BUTTON_PRIMARY);
 
                 if(mIsMouseDown) disableMouse();
-                resetGesture();
+                resetMove();
         }
 
 
@@ -101,22 +96,24 @@ public class InGUIEventProcessor extends TouchEventProcessor {
         mIsMouseDown = false;
     }
 
-    private void setGestureStart(MotionEvent event) {
+    private void setMoveStart(MotionEvent event) {
         mStartX = event.getX();
         mStartY = event.getY();
     }
 
-    private void resetGesture() {
+    private void resetMove() {
         mStartX = mStartY = -1;
     }
 
-    private boolean hasGestureStarted() {
+    private boolean hasStartedMoving() {
         return mStartX != -1 || mStartY != -1;
     }
 
     @Override
-    public void cancelPendingActions() {
+    public void prepareForSwitching() {
+        super.prepareForSwitching();
         mScroller.resetScrollOvershoot();
+        resetMove();
         if(mIsMouseDown) disableMouse();
     }
 }

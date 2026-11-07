@@ -7,3 +7,6 @@
 [submodule "sdl"]
 	path = sdl
 	url = https://github.com/MojoLauncher/MojoSDL
+[submodule "NoBlocklist"]
+	path = NoBlocklist
+	url = https://github.com/MojoLauncher/NoBlocklist

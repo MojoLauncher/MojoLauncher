@@ -4,8 +4,6 @@ plugins {
     id 'org.ajoberstar.grgit' version '5.3.2'
 }
 
-apply from: rootProject.file('gradle/prefab_bypass.gradle')
-
 import de.undercouch.gradle.tasks.download.Download
 
 static def getDate() { return new Date().format('yyyyMMdd') }
@@ -242,7 +240,7 @@ class AssetTaskRegistrar {
 	    mergeAssetsTask.dependsOn(onlineUnzipTask downloadUrl, name, assetDestination(relativePath))
     }
 
-    def projectJarDependency(Project project, String relativePath) {
+    def projectJarDependency(Project targetProject, String relativePath) {
         def assetTargetDir = assetDestination(relativePath)
         def jarTargetDir = new File(projectJarDir, relativePath)
         createDirectories assetTargetDir
@@ -252,19 +250,19 @@ class AssetTaskRegistrar {
         def copyTask = project.tasks.register(copyTaskName, Copy) {
             from jarTargetDir
             into assetTargetDir
-            // Nasty hack: explicitly reference project by name to force Gradle to configure it.
-            // Makes jar task search below work properly for fresh configurations.
-            dependsOn ":${project.name}:jar"
-        }
-
-        mergeAssetsTask.dependsOn copyTask
-
-        project.tasks.withType(org.gradle.jvm.tasks.Jar.class).configureEach {
-            it.destinationDirectory = jarTargetDir
             doLast {
                 if(!it.didWork) return
                 writeVersion jarTargetDir
             }
+            // Nasty hack: explicitly reference project by name to force Gradle to configure it.
+            // Makes task search below work properly for fresh configurations.
+            dependsOn ":${targetProject.name}:assemble"
+        }
+
+        mergeAssetsTask.dependsOn copyTask
+
+        targetProject.tasks.withType(org.gradle.jvm.tasks.Jar.class).configureEach {
+            it.destinationDirectory = jarTargetDir
         }
     }
 
@@ -297,6 +295,7 @@ afterEvaluate {
         registrar.setVariant(variant)
 
         registrar.projectJarDependency project(":forge_installer"), "components/forge_installer"
+        registrar.projectJarDependency project(":NoBlocklist"), "components/noblocklist"
 
 		if (variant.getName().toLowerCase().contains("full")) {
             registrar.jreRuntimeDependency 8, "components/jre"
@@ -304,10 +303,10 @@ afterEvaluate {
         
 		def cacioJarUrl = "https://jitpack.io/com/github/MojoLauncher/%1\$s/%2\$s/%3\$s/%2\$s-%3\$s%4\$s.jar"
 
-        registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-shared", "-9ba6264d8c-1", "", "components/caciocavallo"
-        registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-androidnw", "-9ba6264d8c-1", "", "components/caciocavallo"
+        registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-shared", "d0efb5aaba", "", "components/caciocavallo"
+        registrar.onlineJarDependency cacioJarUrl, "caciocavallo", "cacio-androidnw", "d0efb5aaba", "", "components/caciocavallo"
 
-        registrar.onlineJarDependency cacioJarUrl, "caciocavallo17", "cacio-tta", "d4553e5689", "-jar-with-dependencies", "components/caciocavallo17"
+        registrar.onlineJarDependency cacioJarUrl, "caciocavallo17", "cacio-tta", "-411454b006-1", "-jar-with-dependencies", "components/caciocavallo17"
     }
 }
 
@@ -337,7 +336,6 @@ dependencies {
     // Our version of exp4j can be built from source at
     // https://github.com/PojavLauncherTeam/exp4j
     implementation 'net.sourceforge.htmlcleaner:htmlcleaner:2.29'
-    implementation 'com.bytedance:bytehook:1.1.1'
 
     implementation 'com.github.MojoLauncher:alsoft-android-aar:f369161d5f'
 

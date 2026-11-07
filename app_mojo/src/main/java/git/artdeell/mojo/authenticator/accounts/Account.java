@@ -22,7 +22,7 @@ import org.apache.commons.io.IOUtils;
 
 @Keep
 public class Account {
-    public transient File mSaveLocation;
+    protected transient File mSaveLocation;
     public String accessToken = "0"; // access token
     public String profileId = "00000000-0000-0000-0000-000000000000"; // profile UUID, for obtaining skin
     public String username = "Steve";
@@ -63,8 +63,16 @@ public class Account {
     public boolean isLocal(){
         return accessToken.equals("0");
     }
-    
+
+    public Account toLocal() {
+        Account localAccount = new Account();
+        localAccount.username = this.username;
+        localAccount.authType = AuthType.LOCAL;
+        return localAccount;
+    }
+
     public void save() throws IOException {
+        if(mSaveLocation == null) throw new RuntimeException("Not supposed to save ephemeral account");
         FileUtils.ensureParentDirectory(mSaveLocation);
         JSONUtils.writeToFile(mSaveLocation, this);
     }

@@ -8,18 +8,18 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.kdt.mcgui.ProgressLayout;
 
 import git.artdeell.mojo.R;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.extra.ExtraCore;
 import git.artdeell.mojo.modding.ModloaderDownloadListener;
 import git.artdeell.mojo.modding.ModloaderListenerProxy;
-import git.artdeell.mojo.progresskeeper.ProgressKeeper;
 
 import java.io.File;
 import java.io.IOException;
@@ -98,10 +98,7 @@ public abstract class ModVersionListFragment<T> extends Fragment implements Runn
 
     @Override
     public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
-        if(ProgressKeeper.hasOngoingTasks()) {
-            Toast.makeText(expandableListView.getContext(), R.string.tasks_ongoing, Toast.LENGTH_LONG).show();
-            return true;
-        }
+        if(!ProgressLayout.ensureNoOngoingTasks(getContext())) return true;
         Object forgeVersion = expandableListView.getExpandableListAdapter().getChild(i, i1);
         ModloaderListenerProxy taskProxy = new ModloaderListenerProxy();
         Runnable downloadTask = createDownloadTask(forgeVersion, taskProxy);

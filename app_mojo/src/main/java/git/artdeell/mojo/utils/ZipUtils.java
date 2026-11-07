@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 public class ZipUtils {
     /**
@@ -49,6 +50,25 @@ public class ZipUtils {
             try (InputStream inputStream = zipFile.getInputStream(zipEntry);
                  OutputStream outputStream = new FileOutputStream(zipDestination)) {
                 IOUtils.copy(inputStream, outputStream);
+            }
+        }
+    }
+
+    /**
+     * Extract ZipInputStream to destination
+     * @param inputStream ZipInputStream
+     * @param destination Destination path
+     * @throws IOException if file extraction failed
+     */
+    public static void zipStreamExtract(ZipInputStream inputStream, File destination) throws IOException {
+        ZipEntry entry;
+        while((entry = inputStream.getNextEntry()) != null) {
+            if(entry.isDirectory()) {
+                FileUtils.ensureDirectory(new File(destination, entry.getName()));
+                continue;
+            }
+            try(FileOutputStream fs = new FileOutputStream(new File(destination, entry.getName()))) {
+                IOUtils.copy(inputStream, fs);
             }
         }
     }

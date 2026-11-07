@@ -1721,9 +1721,9 @@
       "name": "org.lwjgl.lwjgl:lwjgl-platform:2.9.4-mojo",
       "natives": {
         "android-arm": "natives-linux-arm32",
-        "android-x86_64": "natives-linux",
+        "android-x86_64": "natives-linux-x86",
         "android-arm64": "natives-linux-arm64",
-        "android-x86": "natives-linux-x86"
+        "android-x86": "natives-linux"
       },
       "downloads": {
         "classifiers": {

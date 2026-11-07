@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +39,7 @@ public class ProgressLayout extends ConstraintLayout implements View.OnClickList
     public static final String EXTRACT_SINGLE_FILES = "extract_single_files";
     public static final String INSTANCE_INSTALL = "instance_install";
     public static final String DATA_MIGRATION = "data_migration";
+    public static final String DRIVER_INSTALL = "driver_install";
 
     public ProgressLayout(@NonNull Context context) {
         super(context);
@@ -106,6 +108,22 @@ public class ProgressLayout extends ConstraintLayout implements View.OnClickList
     /** Update the text and progress content */
     public static void clearProgress(String progressKey){
         setProgress(progressKey, -1, -1);
+    }
+
+    public static boolean ensureNoOngoingTasks(Context context) {
+        if(ProgressKeeper.hasOngoingTasks()) {
+            Toast.makeText(context, R.string.tasks_ongoing, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean ensureNoOngoingTasks(Context context, String key) {
+        if(ProgressKeeper.hasProgressKey(key)) {
+            Toast.makeText(context, R.string.tasks_ongoing, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
     }
 
     @Override

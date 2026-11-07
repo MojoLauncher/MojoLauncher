@@ -1,6 +1,9 @@
 package git.artdeell.mojo.downloader;
 
+import android.util.Log;
+
 import java.io.IOException;
+import java.io.InterruptedIOException;
 
 public abstract class DownloaderTask implements Runnable {
     protected final TaskMetadata mMetadata;
@@ -15,7 +18,8 @@ public abstract class DownloaderTask implements Runnable {
     public final void run() {
         try {
             performTask();
-        }catch (IOException e) {
+        } catch (InterruptedIOException ignored) {
+        } catch (IOException e) {
             mDownloader.taskException(e);
         }
     }

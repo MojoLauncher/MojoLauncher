@@ -542,7 +542,7 @@ public final class Tools {
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 
-    public static void printLauncherInfo(String gameVersion, String javaArguments, RenderSpec renderer, Context ctx) {
+    public static void printLauncherInfo(String gameVersion, String javaArguments, RenderSpec renderer, String runtimeName, Context ctx) {
         Logger.appendToLog("Info: Launcher version: " + BuildConfig.VERSION_NAME);
         Logger.appendToLog("Info: Build type: " + BuildConfig.BUILD_TYPE);
         Logger.appendToLog("Info: Architecture: " + Architecture.archAsString(DEVICE_ARCHITECTURE));
@@ -555,6 +555,7 @@ public final class Tools {
         Logger.appendToLog("Info: RAM allocated: " + LauncherPreferences.PREF_RAM_ALLOCATION + " Mb");
         Logger.appendToLog("Info: Graphics device: "+info.vendor+ " "+info.renderer+" (OpenGL ES "+info.glesMajorVersion+")");
         Logger.appendToLog("Info: Selected renderer: " + renderer.tag() + " (" + renderer.name() + ")");
+        Logger.appendToLog("Info: Selected runtime: " + runtimeName);
     }
 
     public static JVersionList.Version getVersionInfo(String versionName) {

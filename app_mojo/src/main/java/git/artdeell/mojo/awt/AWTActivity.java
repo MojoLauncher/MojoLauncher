@@ -309,11 +309,11 @@ public class AWTActivity extends BaseActivity implements View.OnTouchListener {
         
         switch (v.getId()) {
             case R.id.installmod_mouse_pri:
-                Platform.sendMouseEvent(MotionEvent.BUTTON_PRIMARY, isDown ? 1 : 0, CallbackBridge.getCurrentMods());
+                Platform.sendMouseButtonEvent(MotionEvent.BUTTON_PRIMARY, isDown ? 1 : 0, CallbackBridge.getCurrentMods());
                 break;
                 
             case R.id.installmod_mouse_sec:
-                Platform.sendMouseEvent(MotionEvent.BUTTON_SECONDARY, isDown ? 1 : 0, CallbackBridge.getCurrentMods());
+                Platform.sendMouseButtonEvent(MotionEvent.BUTTON_SECONDARY, isDown ? 1 : 0, CallbackBridge.getCurrentMods());
                 break;
         }
         if(isDown) switch(v.getId()) {
@@ -391,7 +391,7 @@ public class AWTActivity extends BaseActivity implements View.OnTouchListener {
             JavaRunner.nativeSetupExit(this.getApplicationContext());
             JavaRunner.startJvm(runtime, javaArgList, Collections.singletonList(modFile.getAbsolutePath()), mainClass, Collections.emptyList());
 
-            JREUtils.launchJavaVM(this, runtime,null,javaArgList, LauncherPreferences.PREF_CUSTOM_JAVA_ARGS);
+            Tools.fullyExit();
         } catch (Throwable th) {
             Tools.showError(this, th, true);
         }

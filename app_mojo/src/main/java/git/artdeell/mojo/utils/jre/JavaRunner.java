@@ -296,8 +296,6 @@ public class JavaRunner {
         Tools.maybeClearList(classpathEntries);
         runtimeArgs.add(classpathBuilder.toString());
 
-        //JREUtils.initializeHooks();
-
         setImmutableEnvVars(runtimeHomeDir);
         relocateLdLibPath(vmPath, null);
 
