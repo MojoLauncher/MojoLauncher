@@ -237,17 +237,17 @@ public class Instances {
                 .addCategory(Intent.CATEGORY_LAUNCHER)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(LAUNCH_BOOT_INSTANCE, instance.mInstanceRoot.getName());
-        UUID pre = instance.shortcutUuid == null ? null : UUID.fromString(instance.shortcutUuid);
+        String pre = instance.shortcutUuid == null ? null : instance.shortcutUuid;
         ShortcutUtils.ShortcutAction action = update ?
                 si -> ShortcutManagerCompat.updateShortcuts(context, List.of(si)) :
                 si -> ShortcutManagerCompat.requestPinShortcut(context, si, null);
-        UUID uuid = ShortcutUtils.manageShortcut(context, pre,
+        String uuid = ShortcutUtils.manageShortcut(context, pre,
                 context.getString(R.string.shortcut_long_label, instance.name),
                 label,
                 target,
                 bm, action);
         if(!update) {
-            instance.shortcutUuid = uuid.toString();
+            instance.shortcutUuid = uuid;
             instance.maybeWrite();
         }
     }
@@ -259,7 +259,7 @@ public class Instances {
      */
     public static void removeInstanceShortcut(Instance instance, Context context){
         if(instance.shortcutUuid == null || !ShortcutUtils.isSupported(context)) return;
-        ShortcutUtils.disableShortcut(context, UUID.fromString(instance.shortcutUuid), context.getString(R.string.shortcut_disabled));
+        ShortcutUtils.disableShortcut(context, instance.shortcutUuid, context.getString(R.string.shortcut_disabled));
         instance.shortcutUuid = null;
         // We actually don't write the updated data here back because either it'll be updated and written
         // eventually in another method or the instance is being removed completely anyway

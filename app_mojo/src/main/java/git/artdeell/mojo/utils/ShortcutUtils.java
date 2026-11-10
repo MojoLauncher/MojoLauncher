@@ -20,14 +20,14 @@ public class ShortcutUtils {
         return ShortcutManagerCompat.isRequestPinShortcutSupported(context);
     }
 
-    public static UUID manageShortcut(Context context,
-                                      UUID uuid,
+    public static String manageShortcut(Context context,
+                                      String uuid,
                                       String label,
                                       String shortLabel,
                                       Intent intent,
                                       BitmapDrawable drawable,
                                       ShortcutAction action) {
-        uuid = uuid == null ? UUID.randomUUID() : uuid;
+        uuid = uuid == null ? UUID.randomUUID().toString() : uuid;
         ShortcutInfoCompat si = new ShortcutInfoCompat.Builder(context, uuid.toString())
                 .setIntent(intent)
                 .setIcon(drawable != null ? IconCompat.createWithBitmap(drawable.getBitmap()) : null)
@@ -37,10 +37,10 @@ public class ShortcutUtils {
         action.call(si);
         return uuid;
     }
-    public static void disableShortcut(Context context, UUID uuid, String message) {
-        List<String> shortcuts = List.of(uuid.toString());
+    public static void disableShortcut(Context context, String uuid, String message) {
+        List<String> shortcuts = List.of(uuid);
         ShortcutManagerCompat.disableShortcuts(context, shortcuts, message);
         // In theory this should remove the shortcut. Yet, it doesn't happen on my device
-        ShortcutManagerCompat.removeDynamicShortcuts(context, List.of(uuid.toString()));
+        ShortcutManagerCompat.removeDynamicShortcuts(context, List.of(uuid));
     }
 }
