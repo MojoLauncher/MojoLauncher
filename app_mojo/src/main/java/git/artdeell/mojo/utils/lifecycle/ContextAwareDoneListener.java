@@ -1,6 +1,7 @@
 package git.artdeell.mojo.utils.lifecycle;
 
 import static git.artdeell.mojo.game.GameActivity.INTENT_LAUNCH_CLASSPATH;
+import static git.artdeell.mojo.game.GameActivity.INTENT_LAUNCH_INSTANCE;
 import static git.artdeell.mojo.game.GameActivity.INTENT_LAUNCH_VERSION;
 
 import android.app.Activity;
@@ -10,6 +11,7 @@ import android.content.Intent;
 import git.artdeell.mojo.game.GameActivity;
 import git.artdeell.mojo.R;
 import git.artdeell.mojo.Tools;
+import git.artdeell.mojo.instances.Instance;
 import git.artdeell.mojo.progresskeeper.ProgressKeeper;
 import git.artdeell.mojo.tasks.mojson.MoJsonExtras;
 import git.artdeell.mojo.utils.NotificationUtils;
@@ -20,16 +22,19 @@ public class ContextAwareDoneListener implements MoJsonExtras.DoneListener, Cont
     private final String mErrorString;
     private final String mNormalizedVersionid;
     private File[] classpath;
+    private final String bootInstance;
 
-    public ContextAwareDoneListener(Context baseContext, String versionId) {
+    public ContextAwareDoneListener(Context baseContext, String versionId, String bootInstance) {
         this.mErrorString = baseContext.getString(R.string.mc_download_failed);
         this.mNormalizedVersionid = versionId;
+        this.bootInstance = bootInstance;
     }
 
     private Intent createGameStartIntent(Context context) {
         Intent mainIntent = new Intent(context, GameActivity.class);
         mainIntent.putExtra(INTENT_LAUNCH_VERSION, mNormalizedVersionid);
         mainIntent.putExtra(INTENT_LAUNCH_CLASSPATH, classpath);
+        if(bootInstance != null) mainIntent.putExtra(INTENT_LAUNCH_INSTANCE, bootInstance);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         return mainIntent;
     }
