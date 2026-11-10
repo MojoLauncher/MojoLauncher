@@ -1,5 +1,7 @@
 package git.artdeell.mojo;
 
+import static git.artdeell.mojo.LauncherActivity.LAUNCH_BOOT_INSTANCE;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -96,8 +98,8 @@ public class TestStorageActivity extends Activity {
         AsyncAssetManager.unpackSingleFiles(this);
 
         Intent intent =  new Intent(this, LauncherActivity.class);
-        String instance = getIntent().getStringExtra("bootInstance");
-        if(instance != null) intent.putExtra("bootInstance", instance);
+        String instance = getIntent().getStringExtra(LAUNCH_BOOT_INSTANCE);
+        if(instance != null) intent.putExtra(LAUNCH_BOOT_INSTANCE, instance);
         startActivity(intent);
         finish();
     }

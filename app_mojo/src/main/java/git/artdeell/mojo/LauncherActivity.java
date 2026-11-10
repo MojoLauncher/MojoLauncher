@@ -52,6 +52,9 @@ import git.artdeell.mojo.utils.NotificationUtils;
 public class LauncherActivity extends BaseActivity {
     public static final String SETTING_FRAGMENT_TAG = "SETTINGS_FRAGMENT";
 
+    // autoboot instance
+    public static final String LAUNCH_BOOT_INSTANCE = "bootInstance";
+
     private FragmentContainerView mFragmentView;
     private ImageButton mSettingsButton;
     private ProgressLayout mProgressLayout;
@@ -103,7 +106,7 @@ public class LauncherActivity extends BaseActivity {
     private final ExtraListener<Boolean> mLaunchGameListener = (key, value) -> {
         if(!ProgressLayout.ensureNoOngoingTasks(this)) return false;
 
-        String instance = getIntent().getStringExtra("bootInstance");
+        String instance = getIntent().getStringExtra(LAUNCH_BOOT_INSTANCE);
         Instance selectedInstance = instance == null ? Instances.loadSelectedInstance() : Instances.getInstance(instance, Instance.class);
 
         if(selectedInstance == null) {
@@ -205,7 +208,7 @@ public class LauncherActivity extends BaseActivity {
         mProgressLayout.observe(ProgressLayout.INSTANCE_INSTALL);
         mProgressLayout.observe(ProgressLayout.DATA_MIGRATION);
 
-        String instance = getIntent().getStringExtra("bootInstance");
+        String instance = getIntent().getStringExtra(LAUNCH_BOOT_INSTANCE);
         if(instance != null){
             Log.i("LauncherActivity", "Autolaunching instance " + instance);
             ProgressKeeper.waitUntilDone(() -> ExtraCore.setValue(ExtraConstants.LAUNCH_GAME, true));

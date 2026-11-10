@@ -1,5 +1,7 @@
 package git.artdeell.mojo.instances;
 
+import static git.artdeell.mojo.LauncherActivity.LAUNCH_BOOT_INSTANCE;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
@@ -234,7 +236,7 @@ public class Instances {
                 .setAction(Intent.ACTION_MAIN)
                 .addCategory(Intent.CATEGORY_LAUNCHER)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra("bootInstance", instance.mInstanceRoot.getName());
+                .putExtra(LAUNCH_BOOT_INSTANCE, instance.mInstanceRoot.getName());
         UUID pre = instance.shortcutUuid == null ? null : UUID.fromString(instance.shortcutUuid);
         ShortcutUtils.ShortcutAction action = update ?
                 si -> ShortcutManagerCompat.updateShortcuts(context, List.of(si)) :
