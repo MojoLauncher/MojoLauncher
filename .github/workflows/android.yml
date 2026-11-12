@@ -37,7 +37,7 @@ jobs:
           repo: MojoLauncher/mesa-unified2
           workflow: android.yml
           workflow_conclusion: success
-          branch: mojo/26.2
+          branch: mojo/26.3
           name: mesa-aar
           path: app_mojo/libs
 
