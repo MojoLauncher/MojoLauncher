@@ -46,7 +46,7 @@
 ```
 При сборке на Windows:
 * Замените `./gradlew` на `.\gradlew.bat`
-* Убедитесь, что у вас стоит symlink `mojoexec`, `sdl`, `glfw` в `app_pojavlauncher/src/main/jni/`
+* Убедитесь, что у вас стоит symlink `mojoexec`, `sdl`, `glfw` в `app_mojo/src/main/jni/`
 
 ## Текущие планы
 - [x] Система инстансов на замену профилям версий

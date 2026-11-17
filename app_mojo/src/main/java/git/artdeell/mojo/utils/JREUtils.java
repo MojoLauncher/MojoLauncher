@@ -104,14 +104,6 @@ public class JREUtils {
         }
     }
 
-    public static void launchJavaVM(final AppCompatActivity activity, final Runtime runtime, File gameDirectory, final List<String> JVMArgs, final String userArgsString) throws Throwable {
-
-        // Force LWJGL to use the Freetype library intended for it, instead of using the one
-        // that we ship with Java (since it may be older than what's needed)
-        //
-        Tools.fullyExit();
-    }
-
     /**
      * Parse and separate java arguments in a user friendly fashion
      * It supports multi line and absence of spaces between arguments

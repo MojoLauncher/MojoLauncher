@@ -1,5 +1,6 @@
 package git.artdeell.mojo.utils.jre;
 
+import android.content.Context;
 import android.util.ArrayMap;
 import android.util.Log;
 import android.widget.Toast;
@@ -9,11 +10,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import git.artdeell.mojo.Architecture;
 import git.artdeell.mojo.JVersionList;
+import git.artdeell.mojo.Logger;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.authenticator.accounts.Account;
 import git.artdeell.mojo.game.renderer.def.Renderers;
 import git.artdeell.mojo.game.renderer.impl.GLESRenderSpec;
 import git.artdeell.mojo.instances.Instance;
+import git.artdeell.mojo.utils.DownloadUtils;
 import git.artdeell.mojo.utils.lifecycle.LifecycleAwareAlertDialog;
 import git.artdeell.mojo.multirt.MultiRTUtils;
 import git.artdeell.mojo.multirt.Runtime;
@@ -147,6 +150,8 @@ public class GameRunner {
 
     public static void launchGame(final AppCompatActivity activity, Account account,
                                   Instance instance, String versionId, File[] classpath, GameRenderer gameRenderer) throws Throwable {
+        if(!performAuthPing(activity, account)) account = account.toLocal();
+
         int freeDeviceMemory = Tools.getFreeDeviceMemory(activity);
         int localeString;
         int freeAddressSpace = Architecture.is32BitsDevice() ? Tools.getMaxContinuousAddressSpaceSize() : -1;
@@ -345,6 +350,16 @@ public class GameRunner {
         } else {
             Log.w(Tools.APP_NAME, "Failed to create the configuration directory");
         }
+    }
+
+    private static boolean performAuthPing(Context context, Account account) {
+        String injectorUrl = account.authType.injectorUrl;
+        if(injectorUrl == null) return true;
+        Logger.appendToLog("Pinging authentication service...");
+        if(DownloadUtils.pingInjectorUrl(injectorUrl)) return true;
+        Logger.appendToLog("Authentication service did not respond, disabling");
+        Tools.runOnUiThread(()-> Toast.makeText(context, context.getString(R.string.warn_auth_type_missing, injectorUrl), Toast.LENGTH_SHORT).show());
+        return false;
     }
 
     private static void addAuthlibInjectorArgs(List<String> javaArgList, Account account) {

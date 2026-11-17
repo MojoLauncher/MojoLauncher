@@ -15,7 +15,7 @@ import git.artdeell.mojo.game.platform.Platform;
 import git.artdeell.mojo.prefs.LauncherPreferences;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
-public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChangeListener, View.OnCapturedPointerListener {
+public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChangeListener, View.OnCapturedPointerListener, View.OnFocusChangeListener {
     private static final float TOUCHPAD_SCROLL_THRESHOLD = 1;
     private final View mTouchpadView;
     private final View mHostView;
@@ -30,6 +30,7 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
     public AndroidPointerCapture(View touchpad, View hostView) {
         this.mTouchpadView = touchpad;
         this.mHostView = hostView;
+        hostView.setOnFocusChangeListener(this);
         hostView.setOnCapturedPointerListener(this);
         hostView.getViewTreeObserver().addOnWindowFocusChangeListener(this);
     }
@@ -39,7 +40,9 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
     }
 
     public void handleAutomaticCapture() {
-        if(!mHostView.hasWindowFocus()) {
+        if(mHostView.hasPointerCapture()) return;
+        if(!mHostView.hasWindowFocus()) return;
+        if(!mHostView.hasFocus()) {
             mHostView.requestFocus();
         } else {
             mHostView.requestPointerCapture();
@@ -90,14 +93,14 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
             mVector[0] *= mMousePrescale;
             mVector[1] *= mMousePrescale;
             if(event.getPointerCount() < 2) {
-                applyMotionVector(view, LauncherPreferences.PREF_MOUSESPEED);
+                applyMotionVector(LauncherPreferences.PREF_MOUSESPEED);
                 mScroller.resetScrollOvershoot();
             } else {
                 mScroller.performScroll(mVector);
             }
         } else {
             // Position is updated by many events, hence it is send regardless of the event value
-            applyMotionVector(view, 1);
+            applyMotionVector(1);
         }
 
         switch (event.getActionMasked()) {
@@ -119,7 +122,7 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
         }
     }
 
-    private void applyMotionVector(View view, float speed) {
+    private void applyMotionVector(float speed) {
         Platform.cursorX += mVector[0] * speed;
         Platform.cursorY += mVector[1] * speed;
         Platform.sendCursorPosition();
@@ -147,12 +150,22 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
     }
 
     @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        if(hasFocus && Tools.isAndroid8OrHigher()) mHostView.requestPointerCapture();
+    public void onWindowFocusChanged(boolean hasWindowFocus) {
+        if(!hasWindowFocus) return;
+        if(!mHostView.hasFocus()) mHostView.requestFocus();
+        else mHostView.requestPointerCapture();
     }
 
     public void detach() {
         mHostView.setOnCapturedPointerListener(null);
         mHostView.getViewTreeObserver().removeOnWindowFocusChangeListener(this);
+        mHostView.setOnFocusChangeListener(null);
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if(v != mHostView) return;
+        if(hasFocus && mHostView.hasWindowFocus()) mHostView.requestPointerCapture();
+        if(!hasFocus) mHostView.releasePointerCapture();
     }
 }

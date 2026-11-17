@@ -4,8 +4,6 @@ plugins {
     id 'org.ajoberstar.grgit' version '5.3.2'
 }
 
-apply from: rootProject.file('gradle/prefab_bypass.gradle')
-
 import de.undercouch.gradle.tasks.download.Download
 
 static def getDate() { return new Date().format('yyyyMMdd') }
@@ -338,7 +336,6 @@ dependencies {
     // Our version of exp4j can be built from source at
     // https://github.com/PojavLauncherTeam/exp4j
     implementation 'net.sourceforge.htmlcleaner:htmlcleaner:2.29'
-    implementation 'com.bytedance:bytehook:1.1.1'
 
     implementation 'com.github.MojoLauncher:alsoft-android-aar:f369161d5f'
 

@@ -554,7 +554,7 @@
     <string name="mjdl_disk_error_subtitle_2">Failed to save instance after updating the Java Runtime.</string>
     <string name="mjdl_download_error_title">Download error</string>
     <string name="mjdl_download_error_subtitle">Download failed. Check your internet connection and make sure that you have enough free disk space.</string>
-    <string name="mjdl_download_error_subtitle_2">File verification failed. Please try again. If this error keeps happening, contact us on GitHub or on Discord.</string>
+    <string name="mjdl_download_error_subtitle_2">File verification failed. Please try again. If this is a modded version, please try reinstalling. Otherwise, if this error keeps happening, contact us on GitHub or on Discord.</string>
     <string name="bta_configuring">Configuring BTA…</string>
     <string name="pref_blocklist_disable_title">Disable server blocklist</string>
     <string name="pref_blocklist_disable_description">Prevent the MC server blocklist from loading. This allows you to play on blocked servers (like 6b6t.org)</string>
@@ -580,4 +580,5 @@
     <string name="pref_clean_partfiles_subtitle_wait">Clear partially downloaded game files. Calculating used space…</string>
     <string name="pref_clean_partfiles_subtitle">Clear partially downloaded game files. %.2f MB of space in use</string>
     <string name="clean_partfiles_wait">Clearing download cache…</string>
+    <string name="warn_auth_type_missing">%s is not available, using local account</string>
 </resources>

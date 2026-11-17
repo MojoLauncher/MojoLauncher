@@ -18,6 +18,11 @@ public class CheckFileOnDiskTask extends DownloaderTask {
         this.mAfterDownload = mAfterDownload;
     }
 
+    protected void ensureUrlAndSubmit() throws IOException {
+        if(mMetadata.url == null) throw new VerificationException("File "+mMetadata.path.getPath()+" does not have a download URL");
+        mDownloader.submitFileForDownload(mMetadata);
+    }
+
     @Override
     protected void performTask() throws IOException {
         boolean checkResult = checkFile();
@@ -25,7 +30,7 @@ public class CheckFileOnDiskTask extends DownloaderTask {
             if(!mAfterDownload) mDownloader.addSize(mMetadata.size);
             mDownloader.fileComplete();
         }else {
-            if(!mAfterDownload) mDownloader.submitFileForDownload(mMetadata);
+            if(!mAfterDownload) ensureUrlAndSubmit();
             else throw new VerificationException("Failed to verify "+mMetadata.toString());
         }
     }
