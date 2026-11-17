@@ -10,7 +10,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">Энэ данс устах болон!</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">Татах гэж буй client, mod-ийнхаа .jar file-ийг сонгоно уу.</string>
     <!-- Error messages -->
     <string name="error_fatal">MJ эхлүүлэгчэд гэнэт алдаа гарлаа</string>
     <string name="error_no_version">Хувилбар сонгоогүй</string>
@@ -18,7 +17,6 @@
     <string name="error_show_less">Бүгдийн нуух</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">Унших/бичих зөвшөөрөл хэрэгтэй!</string>
-    <string name="toast_optifine_success">Амжилттай татсан!</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -26,10 +24,7 @@
     <string name="mcl_tab_wiki">Вики</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">Завсарийн санах ойн файлуудийг цэвэрлэж байна</string>
-    <string name="mcl_launch_downloading">Татаж байна %s</string>
     <string name="mcl_launch_downloading_progress">"Татаж байна %s (%.2f МБ / %.2f МБ)"</string>
-    <string name="mcl_launch_download_assets">Татаж авхад бэлдэж байна</string>
     <string name="mcl_options">Тохиргоо</string>
     <string name="mcl_option_customcontrol">Control солих</string>
     <string name="mcl_setting_title_use_surface_view">Alternate surface rendering-ийг ашиглах</string>
@@ -57,7 +52,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">Хүчээр гарах</string>
     <string name="control_viewout">Явц харах</string>
-    <string name="control_adebug">Дэбаг хийх</string>
     <string name="control_customkey">Өөрийн key явуулах</string>
     <!-- ImportControlActivity Strings -->
     <string name="import_control_label">Control оруулах</string>
@@ -86,6 +80,5 @@
     <string name="pvc_jvmArgs">JVM-үүд</string>
     <string name="preference_mouse_start_title">Хулгантай эхлүүлэх</string>
     <string name="preference_video_title">Видёо болон уншуулагч</string>
-    <string name="of_dl_progress">Татаж байна %s</string>
     <string name="generic_debug">Дэбаг</string>
 </resources>

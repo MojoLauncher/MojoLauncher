@@ -11,7 +11,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">Aalisin ang account na ito!</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">Pumili ng mod installer</string>
     <!-- Error messages -->
     <string name="error_fatal">Ang MJLauncher ay hindi inaasahang nag-crash</string>
     <string name="error_no_version">Walang bersyon!</string>
@@ -19,7 +18,6 @@
     <string name="error_show_less">Magpakita ng kaunti</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">Kinakailangan ang basahin / sumulat sa pahintulot sa pag-iimbak!</string>
-    <string name="toast_optifine_success">Ang pag-install ay matagumpay</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -27,10 +25,7 @@
     <string name="mcl_tab_wiki">Wiki</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">Nililinis ang mga file ng cache</string>
-    <string name="mcl_launch_downloading">Nagda-download %s</string>
     <string name="mcl_launch_downloading_progress">"Dina-download ang %s (%.2f MB / %.2f MB)"</string>
-    <string name="mcl_launch_download_assets">Naghahanda upang mag-download ng mga mapagkukunan</string>
     <string name="mcl_options">Mga pilian</string>
     <string name="mcl_option_customcontrol">Pasadyang mga kontrol</string>
     <string name="mcl_setting_title_use_surface_view">Gumamit ng alternatibong surface rendering</string>
@@ -79,7 +74,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">Piliting isara</string>
     <string name="control_viewout">Output ng log</string>
-    <string name="control_adebug">Input Debug</string>
     <string name="control_customkey">Magpadala ng pasadyang keycode</string>
     <!-- ImportControlActivity Strings -->
     <string name="import_control_label">Mag Import ng mga kontrol</string>
@@ -107,10 +101,6 @@
     <string name="main_share_logs">I-pasa ang log file</string>
     <string name="main_play">Maglaro</string>
     <string name="autoram_info_msg">Nakatakda ang memorya sa %d MB</string>
-    <string name="mcl_setting_check_libraries">Suriin ang mga libraries pagkatapos mag-download</string>
-    <string name="dl_library_sha_fail">Ang library ay nasira %s at mai-download</string>
-    <string name="dl_library_sha_unknown">Hindi masuri ang library %s, kailangang ipalagay na mabuti ito</string>
-    <string name="dl_library_sha_pass">Ang library %s ay mabuti at magagamit</string>
     <string name="mcl_disable_gestures">Paganahin ang mga galaw</string>
     <string name="mcl_disable_gestures_subtitle">Hindi pinagagana ang mga kilos, tulad ng pagpindot upang masira ang bloke, at i-tap upang maglagay ng isang bloke.</string>
     <string name="mcl_disable_swap_hand">Alisin ang pagdalawang pindot para palitan ang kamay</string>
@@ -126,7 +116,6 @@
     <string name="multirt_progress_caching">Pag-cache...</string>
     <string name="multirt_config_setdefault">Itakda ang default</string>
     <string name="multirt_config_setdefault_already">Default</string>
-    <string name="multirt_nojava8rt">Hindi mahanap ang Java 8. Upang magamit ang opsyong ito, kailangan mong i-install ang Java 8.</string>
     <string name="pvc_gameDirectory">Direktoryo ng laro</string>
     <string name="pvc_jvmArgs">Argumento ng JVM</string>
     <string name="preference_mouse_start_title">Magsimula sa virtual na mouse</string>
@@ -152,7 +141,6 @@
     <string name="notif_channel_name">Pangkalahatan</string>
     <string name="lazy_service_default_title">Serbisyong Harapan ng MJ</string>
     <string name="mcl_setting_veroption_installed">Naka-Install</string>
-    <string name="of_dl_progress">Nagda-download %s</string>
     <string name="generic_debug">Debug</string>
     <string name="preference_category_java_tweaks">Mga tweaks sa Java</string>
     <string name="preference_category_miscellaneous">Karagdagang setting</string>

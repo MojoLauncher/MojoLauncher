@@ -10,7 +10,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">Dieses Konto wird entfernt!</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">Wahlweise einen Mod-Installer</string>
     <!-- Error messages -->
     <string name="error_fatal">MJLauncher ist unerwartet abgestürzt</string>
     <string name="error_no_version">Keine Version!</string>
@@ -18,7 +17,6 @@
     <string name="error_show_less">Weniger anzeigen</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">Die Lese/Schreib-Berechtigung für den Speicher ist benötigt!</string>
-    <string name="toast_optifine_success">Installation erfolgreich</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -26,10 +24,7 @@
     <string name="mcl_tab_wiki">Wiki</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">Cache-Dateien bereinigen</string>
-    <string name="mcl_launch_downloading">Lade %s herunter</string>
     <string name="mcl_launch_downloading_progress">"Lade %s herunter (%.2f MB / %.2f MB)"</string>
-    <string name="mcl_launch_download_assets">Bereite das Herunterladen der Ressourcen vor</string>
     <string name="mcl_options">Optionen</string>
     <string name="mcl_option_customcontrol">Benutzerdefinierte Steuerung</string>
     <string name="mcl_setting_title_use_surface_view">Verwende alternatives Oberflächen-Rendering</string>
@@ -73,5 +68,4 @@
 -->
     <string name="profiles_profile_name">Name</string>
     <string name="pedit_renderer">Renderer</string>
-    <string name="of_dl_progress">Lade %s herunter</string>
 </resources>
