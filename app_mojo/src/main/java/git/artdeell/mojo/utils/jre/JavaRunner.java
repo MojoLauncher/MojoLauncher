@@ -11,6 +11,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import git.artdeell.mojo.Architecture;
+import git.artdeell.mojo.Logger;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.awt.AWTView;
 import git.artdeell.mojo.multirt.MultiRTUtils;
@@ -310,6 +311,8 @@ public class JavaRunner {
 
         if(javaArgsL == 0 || appArgsL == 0)
             throw new VMLoadException("Failed to transfer arguments", -1, -4);
+
+        Logger.appendToLog("About to load JVM runtime " + runtime.name + " (Java " + runtime.javaVersion + ")");
 
         System.gc();
 
