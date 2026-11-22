@@ -12,6 +12,8 @@ import java.io.File;
 import java.security.MessageDigest;
 import java.util.Set;
 
+import git.artdeell.mojo.BuildConfig;
+
 public class LibraryPlugin {
     private static final String TAG = "LibraryPlugin";
 
@@ -37,11 +39,13 @@ public class LibraryPlugin {
         String libraryPath;
         try {
             PackageInfo pluginPackage = ctx.getPackageManager().getPackageInfo(appId, PackageManager.GET_SHARED_LIBRARY_FILES | PackageManager.GET_SIGNATURES);
-            Signature[] sigs = pluginPackage.signatures;
-            if(sigs == null  || sigs.length != 1) throw new IllegalArgumentException("Invalid plugin signature!");
-            byte[] dig = MessageDigest.getInstance("SHA-256").digest(sigs[0].toByteArray());
-            String b64dig = Base64.encodeToString(dig, Base64.NO_WRAP);
-            if(!SIGNATURES.contains(b64dig)) throw new IllegalArgumentException("Signatures don't match: unknown sig " + b64dig + "! Plugin won't be loaded");
+            if(BuildConfig.BUILD_TYPE.equals("gplay")) {
+                Signature[] sigs = pluginPackage.signatures;
+                if(sigs == null  || sigs.length != 1) throw new IllegalArgumentException("Invalid plugin signature!");
+                byte[] dig = MessageDigest.getInstance("SHA-256").digest(sigs[0].toByteArray());
+                String b64dig = Base64.encodeToString(dig, Base64.NO_WRAP);
+                if(!SIGNATURES.contains(b64dig)) throw new IllegalArgumentException("Signatures don't match: unknown sig " + b64dig + "! Plugin won't be loaded");
+            }
             libraryPath = pluginPackage.applicationInfo.nativeLibraryDir;
         } catch (Exception e){
             Log.e(TAG, "Plugin discover failed: " + e.getMessage());
