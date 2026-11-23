@@ -43,6 +43,7 @@
         tools:ignore="UnusedAttribute">
         <activity
             android:name=".MissingStorageActivity"
+            android:screenOrientation="landscape"
             android:exported="false" />
 
         <meta-data
