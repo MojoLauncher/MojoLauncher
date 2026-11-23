@@ -125,17 +125,15 @@
 		app:layout_constraintTop_toTopOf="@id/mc_version_spinner" />
 
 	<com.kdt.mcgui.MineButton
-		android:id="@+id/play_button"
-		android:layout_width="match_parent"
-		android:layout_height="@dimen/_62sdp"
-
-		android:layout_marginHorizontal="@dimen/_17sdp"
-		android:layout_marginBottom="@dimen/_15sdp"
-
-		android:textAllCaps="true"
-		android:text="@string/main_play"
-		app:layout_constraintBottom_toBottomOf="parent"
-		/>
+    android:id="@+id/play_button"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_62sdp"
+    android:layout_marginHorizontal="@dimen/_17sdp"
+    android:layout_marginBottom="@dimen/_15sdp"
+    android:background="@drawable/karabakh_play_button"
+    android:textAllCaps="true"
+    android:text="@string/main_play"
+    app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
