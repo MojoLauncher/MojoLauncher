@@ -48,7 +48,7 @@ configurations {
 }
 
 android {
-    namespace 'git.artdeell.mojo'
+    namespace 'az.karabakh.launcher'
 
     compileSdk = 36
 
@@ -78,7 +78,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "git.artdeell.mjlaunch"
+        applicationId "az.karabakh.launcher"
         minSdkVersion 21
         targetSdkVersion 36
         versionCode getDateSeconds()
@@ -108,8 +108,8 @@ android {
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.customDebug
-            resValue 'string', 'application_package', 'git.artdeell.mjlaunch.debug'
-            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mjlaunch.scoped.gamefolder.debug'
+            resValue 'string', 'application_package', 'az.karabakh.launcher.debug'
+            resValue 'string', 'storageProviderAuthorities', 'az.karabakh.launcher.scoped.gamefolder.debug'
         }
         proguard {
             initWith debug
@@ -129,8 +129,8 @@ android {
             // defaultConfig already set
             // multiDexEnabled = true
             // debuggable = true
-            resValue 'string', 'storageProviderAuthorities', 'git.artdeell.mjlaunch.scoped.gamefolder'
-            resValue 'string', 'application_package', 'git.artdeell.mjlaunch'
+            resValue 'string', 'storageProviderAuthorities', 'az.karabakh.launcher.scoped.gamefolder'
+            resValue 'string', 'application_package', 'az.karabakh.launcher'
         }
         gplay {
             initWith release
