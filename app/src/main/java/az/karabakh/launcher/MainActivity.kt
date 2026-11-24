@@ -48,6 +48,10 @@ class MainActivity:ComponentActivity(){
  var query by remember{mutableStateOf("")}
  var snapshots by remember{mutableStateOf(false)}
  var mods by remember{mutableStateOf(listOf<String>())}
+ var accountMode by remember{mutableStateOf("Login")}
+ var adminName by remember{mutableStateOf("")}
+ var adminEmail by remember{mutableStateOf("")}
+ var adminCode by remember{mutableStateOf("")}
  val picker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()){ uri:Uri? ->
   if(uri!=null){runCatching{ctx.contentResolver.takePersistableUriPermission(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION)}; val n=uri.lastPathSegment?.substringAfterLast('/')?: "Mod.jar"; mods=(mods+n).distinct(); notice="Mod siyahıya əlavə edildi: "+n}
  }
@@ -100,11 +104,34 @@ class MainActivity:ComponentActivity(){
       }}}
      }
      "Hesab"->CardPanel{
-      Text("Microsoft / Minecraft hesabı",fontSize=18.sp,fontWeight=FontWeight.Bold)
-      Text("Bu buraxılışda launcher-ə hesab girişi hələ qoşulmayıb. Microsoft OAuth tətbiq qeydiyyatı tələb olunur.",color=Muted,fontSize=12.sp)
-      Button(onClick={ctx.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("https://www.microsoft.com/")) )}){Text("MICROSOFT SAYTI")}
-      OutlinedButton(onClick={ctx.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("https://www.minecraft.net/msaprofile")))}){Text("MINECRAFT HESABI / PROFİL")}
-      Text("Qeydiyyatı rəsmi saytda et; şifrəni launcher-ə daxil etmə.",color=Muted,fontSize=11.sp)
+      Text("Hesab mərkəzi",fontSize=18.sp,fontWeight=FontWeight.Bold)
+      Row(horizontalArrangement=Arrangement.spacedBy(7.dp)){
+       listOf("Login","Register","Admin Register").forEach{mode->
+        FilterChip(selected=accountMode==mode,onClick={accountMode=mode},label={Text(mode,fontSize=11.sp)})
+       }
+      }
+      when(accountMode){
+       "Login"->{
+        Text("Microsoft / Minecraft hesabına giriş",fontWeight=FontWeight.Bold)
+        Text("Real launcher girişi hələ aktiv deyil. Təhlükəsiz Microsoft OAuth inteqrasiyası tələb olunur.",color=Muted,fontSize=12.sp)
+        Button(onClick={ctx.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("https://www.microsoft.com/")))}){Text("MICROSOFT LOGIN")}
+       }
+       "Register"->{
+        Text("Yeni Minecraft hesabı yarat",fontWeight=FontWeight.Bold)
+        Text("Qeydiyyat yalnız rəsmi Microsoft səhifəsində aparılır.",color=Muted,fontSize=12.sp)
+        Button(onClick={ctx.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("https://www.microsoft.com/")))}){Text("REGISTER")}
+        OutlinedButton(onClick={ctx.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("https://www.minecraft.net/msaprofile")))}){Text("MINECRAFT PROFİLİ")}
+       }
+       else->{
+        Text("Admin qeydiyyatı",fontWeight=FontWeight.Bold)
+        Text("Admin olmaq üçün server sahibinin verdiyi dəvət kodu lazımdır. Bu forma hələ serverə sorğu göndərmir və kodu təsdiqləmir.",color=Muted,fontSize=12.sp)
+        OutlinedTextField(adminName,{adminName=it},modifier=Modifier.fillMaxWidth(),singleLine=true,label={Text("İstifadəçi adı")})
+        OutlinedTextField(adminEmail,{adminEmail=it},modifier=Modifier.fillMaxWidth(),singleLine=true,label={Text("E-poçt")})
+        OutlinedTextField(adminCode,{adminCode=it},modifier=Modifier.fillMaxWidth(),singleLine=true,label={Text("Admin dəvət kodu")})
+        Button(onClick={notice=if(adminName.isBlank()||adminEmail.isBlank()||adminCode.isBlank()) "Bütün xanaları doldur." else "Forma hazırdır. Admin təsdiqi üçün backend/server inteqrasiyası lazımdır."}){Text("ADMIN QEYDİYYAT SORĞUSU")}
+       }
+      }
+      Text("Şifrənı bu tətbiqə yazma; hesab təhlükəsizliyi rəsmi Microsoft girişindən istifadə etməlidir.",color=Muted,fontSize=11.sp)
      }
      else->CardPanel{
       Text("Yaddaş (RAM)",fontSize=18.sp,fontWeight=FontWeight.Bold);Text("%.1f GB".format(ram),color=Purple,fontSize=23.sp)
