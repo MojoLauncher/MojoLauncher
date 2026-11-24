@@ -566,4 +566,5 @@
     <string name="pref_clean_partfiles_subtitle">Clear partially downloaded game files. %.2f MB of space in use</string>
     <string name="clean_partfiles_wait">Clearing download cache…</string>
     <string name="warn_auth_type_missing">%s is not available, using local account</string>
+    <string name="app_short_name">KarabakhLauncher</string>
 </resources>
