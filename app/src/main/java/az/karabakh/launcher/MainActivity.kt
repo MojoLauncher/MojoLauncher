@@ -5,8 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,9 +17,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Dispatchers
@@ -29,114 +29,172 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.net.URL
 
-private val Back=Color(0xFF0B0912); private val Panel=Color(0xFF171321)
-private val Purple=Color(0xFF9B5CFF); private val Muted=Color(0xFFAAA3B8); private val White=Color(0xFFF7F2FF)
+private val Back=Color(0xFF090A0F)
+private val Panel=Color(0xFF141720)
+private val Purple=Color(0xFF9B5CFF)
+private val Green=Color(0xFF65D69A)
+private val Muted=Color(0xFF9CA3B4)
+private val White=Color(0xFFF5F6FA)
 private data class McVersion(val id:String,val type:String)
 
 class MainActivity:ComponentActivity(){
- override fun onCreate(savedInstanceState:Bundle?){super.onCreate(savedInstanceState); requestedOrientation=android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE; setContent{KarabakhApp()}}
+ override fun onCreate(savedInstanceState:Bundle?){
+  super.onCreate(savedInstanceState)
+  requestedOrientation=android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+  setContent{KarabakhApp()}
+ }
 }
 
 @Composable private fun KarabakhApp(){
- val ctx= LocalContext.current
+ val ctx=LocalContext.current
  var page by remember{mutableStateOf("Ana səhifə")}
  var version by remember{mutableStateOf("1.21.1")}
  var ram by remember{mutableFloatStateOf(1.5f)}
- var notice by remember{mutableStateOf("KarabakhLauncher 0.2.0")}
+ var notice by remember{mutableStateOf("KarabakhLauncher • Welcome back")}
  var versions by remember{mutableStateOf<List<McVersion>>(emptyList())}
  var loading by remember{mutableStateOf(false)}
  var query by remember{mutableStateOf("")}
  var snapshots by remember{mutableStateOf(false)}
- var mods by remember{mutableStateOf(listOf<String>())}
  var accountMode by remember{mutableStateOf("Login")}
+ var username by remember{mutableStateOf("")}
+ var password by remember{mutableStateOf("")}
+ var email by remember{mutableStateOf("")}
  var adminName by remember{mutableStateOf("")}
- var adminEmail by remember{mutableStateOf("")}
  var adminCode by remember{mutableStateOf("")}
- val picker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()){ uri:Uri? ->
-  if(uri!=null){runCatching{ctx.contentResolver.takePersistableUriPermission(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION)}; val n=uri.lastPathSegment?.substringAfterLast('/')?: "Mod.jar"; mods=(mods+n).distinct(); notice="Mod siyahıya əlavə edildi: "+n}
+ var ownerName by remember{mutableStateOf("")}
+ var ownerPassword by remember{mutableStateOf("")}
+ LaunchedEffect(page){
+  if(page=="Versiyalar"&&versions.isEmpty()&&!loading){
+   loading=true
+   try{
+    versions=withContext(Dispatchers.IO){
+     val a=JSONObject(URL("https://launchermeta.mojang.com/mc/game/version_manifest_v2.json").readText()).getJSONArray("versions")
+     buildList{for(i in 0 until a.length()){val x=a.getJSONObject(i);add(McVersion(x.getString("id"),x.getString("type")))}}
+    }
+    notice="Minecraft versiyaları yükləndi."
+   }catch(e:Exception){notice="Versiyalar yüklənmədi. İnterneti yoxla."}
+   finally{loading=false}
+  }
  }
- LaunchedEffect(page){if(page=="Versiyalar"&&versions.isEmpty()&&!loading){loading=true;try{versions=withContext(Dispatchers.IO){val a=JSONObject(URL("https://launchermeta.mojang.com/mc/game/version_manifest_v2.json").readText()).getJSONArray("versions");buildList{for(i in 0 until a.length()){val x=a.getJSONObject(i);add(McVersion(x.getString("id"),x.getString("type")))}}};notice="Rəsmi Minecraft versiya siyahısı yükləndi."}catch(e:Exception){notice="Versiyalar yüklənmədi. İnterneti yoxla."}finally{loading=false}}}
  MaterialTheme(colorScheme=darkColorScheme(background=Back,surface=Panel,primary=Purple,onSurface=White)){
-  Row(Modifier.fillMaxSize().background(Back).padding(12.dp)){
-   Column(Modifier.width(175.dp).fillMaxHeight().background(Panel,RoundedCornerShape(18.dp)).padding(12.dp),verticalArrangement=Arrangement.SpaceBetween){
+  Row(Modifier.fillMaxSize().background(Brush.horizontalGradient(listOf(Back,Color(0xFF101522)))).padding(12.dp)){
+   Column(Modifier.width(190.dp).fillMaxHeight().background(Panel,RoundedCornerShape(18.dp)).padding(12.dp),verticalArrangement=Arrangement.SpaceBetween){
     Column{
-     Text("KARABAKH",fontWeight=FontWeight.Black,fontSize=19.sp,color=White);Text("LAUNCHER",color=Purple,letterSpacing=3.sp)
-     Spacer(Modifier.height(16.dp))
-     listOf("Ana səhifə","Versiyalar","Modlar","Hesab","Parametrlər").forEach{p->
-      Text(p,Modifier.fillMaxWidth().background(if(page==p)Purple.copy(alpha=.2f) else Color.Transparent,RoundedCornerShape(10.dp)).clickable{page=p}.padding(12.dp),color=if(page==p)White else Muted,fontWeight=if(page==p)FontWeight.Bold else FontWeight.Normal)
+     Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(9.dp)){
+      Box(Modifier.size(42.dp).background(Brush.linearGradient(listOf(Purple,Color(0xFF44228B))),RoundedCornerShape(13.dp)),contentAlignment=Alignment.Center){
+       Text("K",fontSize=29.sp,fontWeight=FontWeight.Black,color=White)
+      }
+      Column{Text("KARABAKH",fontWeight=FontWeight.Black,fontSize=17.sp,color=White);Text("JAVA LAUNCHER",color=Purple,letterSpacing=2.sp,fontSize=9.sp)}
+     }
+     Spacer(Modifier.height(22.dp))
+     listOf("Ana səhifə","Versiyalar","CurseForge","Modrinth","Hesab","Admin panel","Qurucu panel","Parametrlər").forEach{p->
+      Row(Modifier.fillMaxWidth().padding(vertical=2.dp).background(if(page==p)Purple.copy(alpha=.19f) else Color.Transparent,RoundedCornerShape(10.dp)).clickable{page=p}.padding(horizontal=10.dp,vertical=11.dp),verticalAlignment=Alignment.CenterVertically){
+       Text(p,color=if(page==p)White else Muted,fontWeight=if(page==p)FontWeight.Bold else FontWeight.Medium,fontSize=13.sp)
+      }
      }
     }
-    Text("BUILD 0.2.0",color=Muted,fontSize=10.sp)
+    Text("KARABAKH • BETA",color=Muted,fontSize=9.sp,letterSpacing=1.5.sp)
    }
-   Spacer(Modifier.width(12.dp))
+   Spacer(Modifier.width(13.dp))
    Column(Modifier.weight(1f).fillMaxHeight()){
-    Text(page.uppercase(),color=Muted,fontSize=10.sp,letterSpacing=2.sp);Text("KarabakhLauncher",fontSize=20.sp,fontWeight=FontWeight.Bold)
+    Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween,verticalAlignment=Alignment.CenterVertically){
+     Column{Text("MINECRAFT JAVA",color=Muted,fontSize=9.sp,letterSpacing=2.sp);Text(page,fontSize=22.sp,fontWeight=FontWeight.Bold)}
+     Text("ONLINE • READY",color=Green,fontSize=10.sp,fontWeight=FontWeight.Bold)
+    }
     Spacer(Modifier.height(10.dp))
     when(page){
      "Ana səhifə"->CardPanel{
-      Text("Minecraft Java",fontSize=25.sp,fontWeight=FontWeight.Black)
-      Text("Seçilmiş versiya: "+version,color=Purple)
-      Text("Mod sayı: "+mods.size,color=Muted)
-      Button(onClick={notice="Minecraft mühərriki hələ əlavə edilməyib."}){Text("OYUNU BAŞLAT")}
+      Box(Modifier.fillMaxWidth().weight(1f).background(Brush.linearGradient(listOf(Color(0xFF28203E),Color(0xFF141923))),RoundedCornerShape(16.dp)).padding(22.dp)){
+       Column(Modifier.align(Alignment.CenterStart),verticalArrangement=Arrangement.spacedBy(9.dp)){
+        Text("YOUR WORLD. YOUR RULES.",color=Purple,fontSize=10.sp,letterSpacing=2.sp,fontWeight=FontWeight.Bold)
+        Text("KarabakhLauncher",fontSize=31.sp,fontWeight=FontWeight.Black)
+        Text("Minecraft Java üçün yeni başlanğıc.",color=Muted,fontSize=13.sp)
+        Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(8.dp)){
+         Text("VERSİYA  $version",color=White,fontWeight=FontWeight.Bold)
+         Text("•",color=Purple)
+         Text("RAM  %.1f GB".format(ram),color=Muted)
+        }
+        Button(onClick={notice="Minecraft oyun mühərriki hələ inteqrasiya edilməyib."}){Text("OYUNU BAŞLAT")}
+       }
+      }
+      Text("SÜRƏTLİ KEÇİD",color=Muted,fontSize=10.sp,letterSpacing=2.sp)
+      Row(horizontalArrangement=Arrangement.spacedBy(8.dp)){
+       OutlinedButton(onClick={page="CurseForge"},modifier=Modifier.weight(1f)){Text("CurseForge")}
+       OutlinedButton(onClick={page="Modrinth"},modifier=Modifier.weight(1f)){Text("Modrinth")}
+       OutlinedButton(onClick={page="Versiyalar"},modifier=Modifier.weight(1f)){Text("Versiyalar")}
+      }
      }
      "Versiyalar"->CardPanel{
-      Text("Bütün Minecraft versiyaları",fontSize=18.sp,fontWeight=FontWeight.Bold)
-      OutlinedTextField(query,{query=it},modifier=Modifier.fillMaxWidth(),singleLine=true,label={Text("Axtar")})
+      Text("Minecraft versiyaları",fontSize=18.sp,fontWeight=FontWeight.Bold)
+      OutlinedTextField(query,{query=it},modifier=Modifier.fillMaxWidth(),singleLine=true,label={Text("Versiya axtar")})
       Row(verticalAlignment=Alignment.CenterVertically){
        FilterChip(selected=!snapshots,onClick={snapshots=false},label={Text("Release")})
        Spacer(Modifier.width(6.dp));FilterChip(selected=snapshots,onClick={snapshots=true},label={Text("Snapshot / digər")})
        Spacer(Modifier.width(8.dp));if(loading)CircularProgressIndicator(Modifier.size(18.dp),strokeWidth=2.dp)
       }
-      val list=versions.filter{(if(snapshots)it.type!="release" else it.type=="release")&&it.id.contains(query,true)}
-      LazyColumn(Modifier.fillMaxSize()){items(list){v->
-       Row(Modifier.fillMaxWidth().clickable{version=v.id;notice="Seçildi: "+v.id}.padding(7.dp),verticalAlignment=Alignment.CenterVertically){
+      LazyColumn(Modifier.fillMaxSize()){items(versions.filter{(if(snapshots)it.type!="release" else it.type=="release")&&it.id.contains(query,true)}){v->
+       Row(Modifier.fillMaxWidth().clickable{version=v.id;notice="Seçildi: "+v.id}.padding(8.dp),verticalAlignment=Alignment.CenterVertically){
         Column(Modifier.weight(1f)){Text(v.id,fontWeight=FontWeight.Bold);Text(v.type,color=Muted,fontSize=10.sp)}
-        if(version==v.id)Text("SEÇİLİB",color=Purple,fontSize=10.sp)
+        if(version==v.id)Text("SEÇİLİB",color=Green,fontSize=10.sp)
        };HorizontalDivider(color=Muted.copy(alpha=.15f))
       }}
      }
-     "Modlar"->CardPanel{
-      Text("Mod meneceri",fontSize=18.sp,fontWeight=FontWeight.Bold)
-      Text("JAR mod fayllarını telefondan seç. Uyğun Fabric / Forge loader tələb olunur.",color=Muted,fontSize=12.sp)
-      Button(onClick={picker.launch(arrayOf("application/java-archive","application/octet-stream","*/*"))}){Icon(Icons.Default.Add,null);Text("MOD JAR ƏLAVƏ ET")}
-      LazyColumn(Modifier.fillMaxSize()){items(mods){m->Row(verticalAlignment=Alignment.CenterVertically){
-       Text(m,Modifier.weight(1f),fontSize=12.sp);IconButton(onClick={mods=mods-m}){Icon(Icons.Default.Delete,null)}
-      }}}
-     }
+     "CurseForge"->ModSourcePanel("CurseForge","Mod və modpack kataloqu","https://www.curseforge.com/minecraft","CurseForge səhifəsini aç")
+     "Modrinth"->ModSourcePanel("Modrinth","Açıq mod və modpack kataloqu","https://modrinth.com/mods","Modrinth səhifəsini aç")
      "Hesab"->CardPanel{
-      Text("Hesab mərkəzi",fontSize=18.sp,fontWeight=FontWeight.Bold)
+      Text("Hesab mərkəzi",fontSize=19.sp,fontWeight=FontWeight.Bold)
       Row(horizontalArrangement=Arrangement.spacedBy(7.dp)){
-       listOf("Login","Register","Admin Register").forEach{mode->
-        FilterChip(selected=accountMode==mode,onClick={accountMode=mode},label={Text(mode,fontSize=11.sp)})
-       }
+       listOf("Login","Register","Admin Register").forEach{m->FilterChip(selected=accountMode==m,onClick={accountMode=m},label={Text(m,fontSize=11.sp)})}
       }
       when(accountMode){
        "Login"->{
-        Text("Microsoft / Minecraft hesabına giriş",fontWeight=FontWeight.Bold)
-        Text("Real launcher girişi hələ aktiv deyil. Təhlükəsiz Microsoft OAuth inteqrasiyası tələb olunur.",color=Muted,fontSize=12.sp)
-        Button(onClick={ctx.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("https://www.microsoft.com/")))}){Text("MICROSOFT LOGIN")}
+        Text("Hesabına daxil ol",fontWeight=FontWeight.Bold)
+        OutlinedTextField(username,{username=it},modifier=Modifier.fillMaxWidth(),singleLine=true,label={Text("İstifadəçi adı")})
+        OutlinedTextField(password,{password=it},modifier=Modifier.fillMaxWidth(),singleLine=true,visualTransformation=PasswordVisualTransformation(),label={Text("Şifrə")})
+        Button(onClick={notice="Login üçün təhlükəsiz server autentifikasiyası qoşulmalıdır."}){Text("DAXİL OL")}
        }
        "Register"->{
-        Text("Yeni Minecraft hesabı yarat",fontWeight=FontWeight.Bold)
-        Text("Qeydiyyat yalnız rəsmi Microsoft səhifəsində aparılır.",color=Muted,fontSize=12.sp)
-        Button(onClick={ctx.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("https://www.microsoft.com/")))}){Text("REGISTER")}
-        OutlinedButton(onClick={ctx.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("https://www.minecraft.net/msaprofile")))}){Text("MINECRAFT PROFİLİ")}
+        Text("Yeni launcher hesabı yarat",fontWeight=FontWeight.Bold)
+        OutlinedTextField(username,{username=it},modifier=Modifier.fillMaxWidth(),singleLine=true,label={Text("İstifadəçi adı")})
+        OutlinedTextField(email,{email=it},modifier=Modifier.fillMaxWidth(),singleLine=true,label={Text("E-poçt")})
+        OutlinedTextField(password,{password=it},modifier=Modifier.fillMaxWidth(),singleLine=true,visualTransformation=PasswordVisualTransformation(),label={Text("Şifrə")})
+        Button(onClick={notice="Qeydiyyat forması hazırdır; hesab yaratmaq üçün backend lazımdır."}){Text("QEYDİYYAT")}
        }
        else->{
-        Text("Admin qeydiyyatı",fontWeight=FontWeight.Bold)
-        Text("Admin olmaq üçün server sahibinin verdiyi dəvət kodu lazımdır. Bu forma hələ serverə sorğu göndərmir və kodu təsdiqləmir.",color=Muted,fontSize=12.sp)
+        Text("Admin olmaq üçün müraciət",fontWeight=FontWeight.Bold)
         OutlinedTextField(adminName,{adminName=it},modifier=Modifier.fillMaxWidth(),singleLine=true,label={Text("İstifadəçi adı")})
-        OutlinedTextField(adminEmail,{adminEmail=it},modifier=Modifier.fillMaxWidth(),singleLine=true,label={Text("E-poçt")})
-        OutlinedTextField(adminCode,{adminCode=it},modifier=Modifier.fillMaxWidth(),singleLine=true,label={Text("Admin dəvət kodu")})
-        Button(onClick={notice=if(adminName.isBlank()||adminEmail.isBlank()||adminCode.isBlank()) "Bütün xanaları doldur." else "Forma hazırdır. Admin təsdiqi üçün backend/server inteqrasiyası lazımdır."}){Text("ADMIN QEYDİYYAT SORĞUSU")}
+        OutlinedTextField(adminCode,{adminCode=it},modifier=Modifier.fillMaxWidth(),singleLine=true,visualTransformation=PasswordVisualTransformation(),label={Text("Dəvət kodu")})
+        Button(onClick={notice="Admin müraciəti serverə göndərilmir: backend qoşulmayıb."}){Text("QURUCUYA MÜRACİƏT GÖNDƏR")}
        }
       }
-      Text("Şifrənı bu tətbiqə yazma; hesab təhlükəsizliyi rəsmi Microsoft girişindən istifadə etməlidir.",color=Muted,fontSize=11.sp)
+      Text("Qeyd: bu ekranların real hesab yaratması üçün server bağlantısı hələ qurulmayıb.",color=Muted,fontSize=11.sp)
+     }
+     "Admin panel"->CardPanel{
+      Text("ADMIN PANEL",fontSize=19.sp,fontWeight=FontWeight.Bold)
+      Text("Admin alətləri",color=Purple,fontWeight=FontWeight.Bold)
+      listOf("Oyunçuların siyahısı","Dəstək müraciətləri","Server elanları","Admin icazələri").forEach{Text("•  $it",color=White,modifier=Modifier.fillMaxWidth().background(Back,RoundedCornerShape(9.dp)).padding(12.dp))}
+      Text("Admin hüquqları yalnız Qurucunun server təsdiqindən sonra aktiv olmalıdır.",color=Muted,fontSize=11.sp)
+     }
+     "Qurucu panel"->CardPanel{
+      Text("QURUCU PANELİ",fontSize=20.sp,fontWeight=FontWeight.Black,color=Purple)
+      Text("Yalnız serverdə Qurucu rolu təsdiqlənmiş hesab istifadə edə bilər.",color=Muted,fontSize=12.sp)
+      OutlinedTextField(ownerName,{ownerName=it},modifier=Modifier.fillMaxWidth(),singleLine=true,label={Text("Qurucu istifadəçi adı")})
+      OutlinedTextField(ownerPassword,{ownerPassword=it},modifier=Modifier.fillMaxWidth(),singleLine=true,visualTransformation=PasswordVisualTransformation(),label={Text("Şifrə")})
+      Button(onClick={notice="Qurucu girişi serverə qoşulmayıb. Bu forma hələ heç kimi autentifikasiya etmir."}){Text("QURUCU KİMİ DAXİL OL")}
+      HorizontalDivider(color=Muted.copy(alpha=.2f))
+      Text("ADMIN SORĞULARI",fontWeight=FontWeight.Bold)
+      Text("Gözləyən müraciət yoxdur — server bağlantısı qurulmayıb.",color=Muted,fontSize=12.sp)
+      Row(horizontalArrangement=Arrangement.spacedBy(8.dp)){
+       OutlinedButton(onClick={notice="Təsdiq funksiyası backend qoşulandan sonra işləyəcək."}){Text("Təsdiqlə")}
+       OutlinedButton(onClick={notice="Rədd etmə funksiyası backend qoşulandan sonra işləyəcək."}){Text("Rədd et")}
+      }
      }
      else->CardPanel{
-      Text("Yaddaş (RAM)",fontSize=18.sp,fontWeight=FontWeight.Bold);Text("%.1f GB".format(ram),color=Purple,fontSize=23.sp)
+      Text("Parametrlər",fontSize=19.sp,fontWeight=FontWeight.Bold)
+      Text("Yaddaş (RAM)",color=Muted)
+      Text("%.1f GB".format(ram),color=Purple,fontSize=24.sp,fontWeight=FontWeight.Bold)
       Slider(value=ram,onValueChange={ram=it},valueRange=.75f..2f,steps=4)
-      Text("RAM seçimi mühərrikə hələ qoşulmayıb.",color=Muted,fontSize=12.sp)
+      Text("RAM seçimi oyun mühərriki qoşulandan sonra tətbiq ediləcək.",color=Muted,fontSize=11.sp)
      }
     }
     Spacer(Modifier.height(5.dp));Text(notice,color=Muted,fontSize=10.sp,maxLines=2)
@@ -144,4 +202,24 @@ class MainActivity:ComponentActivity(){
   }
  }
 }
-@Composable private fun CardPanel(content:@Composable ColumnScope.()->Unit){Column(Modifier.fillMaxSize().background(Panel,RoundedCornerShape(18.dp)).padding(16.dp),verticalArrangement=Arrangement.spacedBy(9.dp),content=content)}
+
+@Composable private fun ModSourcePanel(title:String,subtitle:String,url:String,button:String){
+ val ctx=LocalContext.current
+ CardPanel{
+  Text(title,fontSize=24.sp,fontWeight=FontWeight.Black)
+  Text(subtitle,color=Muted)
+  Box(Modifier.fillMaxWidth().weight(1f).background(Brush.linearGradient(listOf(Color(0xFF24233B),Color(0xFF121722))),RoundedCornerShape(15.dp)).padding(22.dp),contentAlignment=Alignment.Center){
+   Column(horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(10.dp)){
+    Text(if(title=="CurseForge")"CF" else "M",fontSize=46.sp,fontWeight=FontWeight.Black,color=Purple)
+    Text("$title Minecraft",fontSize=21.sp,fontWeight=FontWeight.Bold)
+    Text("Modları və modpack-ləri kataloqda araşdır.",color=Muted)
+    Button(onClick={ctx.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(url)))}){Text(button)}
+   }
+  }
+  Text("Kataloq hazırda rəsmi saytda açılır. Birbaşa launcher daxilində mod quraşdırılması ayrıca inteqrasiya tələb edir.",color=Muted,fontSize=11.sp)
+ }
+}
+
+@Composable private fun CardPanel(content:@Composable ColumnScope.()->Unit){
+ Column(Modifier.fillMaxSize().background(Panel,RoundedCornerShape(18.dp)).padding(16.dp),verticalArrangement=Arrangement.spacedBy(9.dp),content=content)
+}
