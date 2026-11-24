@@ -500,26 +500,25 @@
     <string name="preference_keyboard_autopan_title">कीबोर्ड पैनिंग सक्षम करें</string>
     <string name="preference_keyboard_autopan_summary">यदि आपका आखिरी टच स्क्रीन के निचले हिस्से में था, तो यह ऑन-स्क्रीन कीबोर्ड को गेम विंडो के ऊपर आने के बजाय उसे खिसकाने की अनुमति देता है। समान फ़ंक्शन वाले कस्टम कंट्रोल लेआउट बटन्स पर इसका कोई प्रभाव नहीं पड़ता।</string>
         <string name="social_media_invite" translatable="false">https://discord.gg/VHdwQFsaGX</string>
-            <string name="preference_data_migration_title">Import data</string>
-    <string name="preference_data_migration_summary">Begin importing data (instances, control maps) from the old app installation</string>
-    <string name="migration_progress_foreign">Provide a correct old installation!</string>
-    <string name="migration_progress_failed">Failed to migrate data!</string>
-    <string name="migration_progress_finish">Data migration finished!</string>
-    <string name="migration_progress_self">You cannot import data from the same app!</string>
-    <string name="migration_progress_copying">Copying %1s</string>
-    <string name="migration_progress_warning_title">Data Migration</string>
-    <string name="migration_progress_warning_summary">You\'re going to launch a data migration process. This process will copy all selected launcher\'s instances and control maps to the current app installation. All conflicting files will be OVERWRITTEN! Consider making backups. You have been warned.</string>
-    <string name="migration_progress_space">Your device does not have enough space for data migration. Free minimum $%1l MB or greater to continue.</string>
-    <string name="migration_notice">Looks like you have already used this application in the past. You can import old launcher installation data from miscellaneous settings.</string>
-    <string name="preference_alsoft_opensl_title">Forcefully use OpenSL for audio</string>
-    <string name="preference_alsoft_opensl_summary">Forcefully enables OpenSL backend in ALSoft instead of Oboe. Can fix audio capture issues on some devices. Disable if you see audio playback/capture issues</string>
-    <string name="loading_screen_title">Waiting for a game window to appear…</string>
-    <string name="loading_screen_booted">Ready - running on %1$s!</string>
-    <string name="loading_screen_warning">If you are stuck here, the game might have crashed</string>
+            <string name="preference_data_migration_title">डेटा इंपोर्ट करें</string>
+    <string name="preference_data_migration_summary">पुराने ऐप इंस्टॉलेशन से डेटा (इंस्टेंस, कंट्रोल मैप्स) इंपोर्ट करना शुरू करें</string>
+    <string name="migration_progress_foreign">सही पुराना इंस्टॉलेशन चुनें!</string>
+    <string name="migration_progress_failed">डेटा माइग्रेट करने में विफल!</string>
+    <string name="migration_progress_finish">डेटा माइग्रेशन पूरा हुआ!</string>
+    <string name="migration_progress_self">आप एक ही ऐप से डेटा इंपोर्ट नहीं कर सकते!</string>
+    <string name="migration_progress_copying">%1s कॉपी किया जा रहा है</string>
+    <string name="migration_progress_warning_title">डेटा माइग्रेशन</string>
+    <string name="migration_progress_warning_summary">आप डेटा माइग्रेशन प्रक्रिया शुरू करने वाले हैं। यह प्रक्रिया चयनित लॉन्चर के सभी इंस्टेंस और कंट्रोल मैप्स को मौजूदा ऐप इंस्टॉलेशन में कॉपी करेगी। टकराव वाली सभी फ़ाइलें ओवरराइट हो जाएँगी! बैकअप बनाने पर विचार करें। आपको चेतावनी दी जा रही है।</string>
+    <string name="migration_progress_space">आपके डिवाइस में डेटा माइग्रेशन के लिए पर्याप्त स्थान नहीं है। जारी रखने के लिए कम से कम $%1l MB या उससे अधिक खाली करें।</string>
+    <string name="migration_notice">लगता है आपने पहले भी इस ऐप का उपयोग किया है। आप अन्य सेटिंग्स से पुराने लॉन्चर इंस्टॉलेशन का डेटा इंपोर्ट कर सकते हैं।</string>
+    <string name="preference_alsoft_opensl_title">ऑडियो के लिए बलपूर्वक OpenSL का उपयोग करें</string>
+    <string name="preference_alsoft_opensl_summary">ALSoft में Oboe की जगह बलपूर्वक OpenSL बैकएंड सक्षम करता है। कुछ डिवाइस पर ऑडियो कैप्चर की समस्याएँ ठीक कर सकता है। यदि ऑडियो चलाने/कैप्चर करने में समस्या दिखे तो इसे बंद कर दें</string>
+    <string name="loading_screen_title">गेम विंडो दिखने की प्रतीक्षा हो रही है…</string>
+    <string name="loading_screen_booted">तैयार - %1$s पर चल रहा है!</string>
+    <string name="loading_screen_warning">यदि आप यहीं अटके हुए हैं, तो गेम क्रैश हो गया हो सकता है</string>
     
         
 
-    <!-- Strings added upstream, translated to Hindi -->
     <string name="mcl_setting_renderer_vulkan_lzink">लेगेसी ज़िंक (Vulkan) - सभी वर्ज़न, कम प्रदर्शन</string>
     <string name="mcl_setting_renderer_mesa_desktop">Mesa (DRM) - सभी वर्ज़न</string>
     <string name="mcl_setting_renderer_mesa_desktop_ext">Mesa (DRM, बाहरी) - सभी वर्ज़न</string>
