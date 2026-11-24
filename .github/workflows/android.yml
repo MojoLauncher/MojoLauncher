@@ -58,6 +58,9 @@ jobs:
           gradle :app_mojo:bundleFullGplay
           mv app_mojo/build/outputs/bundle/fullGplay/app_mojo-full-gplay.aab out/app-gplay.aab
 
+      - name: Normalize Android library plugin declarations
+        run: |
+          sed -i "s/id 'com.android.library' version '8.11.1'/id 'com.android.library'/" glfw/jni_bindings/build.gradle mojoexec/jni_bindings/build.gradle sdl/jni_bindings/build.gradle
       - name: Build KarabakhLauncher Minecraft Java APK
         run: |
           # Build the launcher
