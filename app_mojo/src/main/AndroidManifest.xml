@@ -44,6 +44,10 @@
         <activity
             android:name=".MissingStorageActivity"
             android:exported="false" />
+        <activity
+            android:name=".ProfileActivity"
+            android:screenOrientation="landscape"
+            android:exported="false" />
 
         <meta-data
             android:name="android.max_aspect"
