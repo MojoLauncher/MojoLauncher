@@ -63,6 +63,15 @@ public class ModrinthApi implements ModdingApi {
         facetString.append(String.format("[\"project_type:%s\"]", searchFilters.isModpack ? "modpack" : "mod"));
         if(searchFilters.mcVersion != null && !searchFilters.mcVersion.isEmpty())
             facetString.append(String.format(",[\"versions:%s\"]", searchFilters.mcVersion));
+        String loader = searchFilters.modLoader;
+        if (loader != null && !loader.isEmpty()) {
+            // You should know that Quilt runs Fabric mods too so we kinda put fabric here too
+            if (loader.equalsIgnoreCase("quilt")) {
+                facetString.append(",[\"categories:quilt\",\"categories:fabric\"]");
+            } else {
+                facetString.append(String.format(",[\"categories:%s\"]", loader));
+            }
+        }
         facetString.append("]");
         params.put("facets", facetString.toString());
         params.put("query", searchFilters.name);

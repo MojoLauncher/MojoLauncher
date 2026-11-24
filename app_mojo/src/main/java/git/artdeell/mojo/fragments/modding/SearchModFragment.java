@@ -41,6 +41,7 @@ import git.artdeell.mojo.modding.modplatforms.models.SearchFilters;
 import git.artdeell.mojo.utils.profiles.VersionSelectorDialog;
 import git.artdeell.mojo.progresskeeper.ProgressKeeper;
 import git.artdeell.mojo.progresskeeper.TaskCountListener;
+import me.andreasmelone.basicmodinfoparser.platform.Platform;
 
 import org.apache.commons.io.IOUtils;
 
@@ -116,6 +117,18 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
         mSearchFilters.isModpack = true;
     }
 
+    private static String loaderName(Platform platform) {
+        switch (platform) {
+            case FABRIC: return "fabric";
+            case QUILT: return "quilt";
+            case NEOFORGE: return "neoforge";
+            // There's of course a question how will the filter handle that
+            case FORGE:
+            case FORGE_LEGACY: return "forge";
+            default: return null;
+        }
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,6 +137,10 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
         instance = Instances.loadSelectedInstance();
         mModpack = args == null || args.getBoolean(ARG_MODPACK_MODE, true);
         mSearchFilters.isModpack = mModpack;
+        if (!mModpack && instance != null && instance.moddingData != null) {
+            mSearchFilters.mcVersion = instance.moddingData.gameVersion;
+            mSearchFilters.modLoader = loaderName(instance.moddingData.platform);
+        }
     }
 
     @Override

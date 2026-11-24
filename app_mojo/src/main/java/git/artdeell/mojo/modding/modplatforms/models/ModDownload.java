@@ -15,7 +15,7 @@ public class ModDownload {
     public final String[] loaders;
 
     public ModDownload(String versionName, String mcVersion, String versionUrl, String versionHash, String fileName, String versionId, long fileSize, String[] gameVersions, String[] loaders) {
-        if(!versionName.contains(mcVersion)) versionName = versionName + " - " + mcVersion;
+        if(mcVersion != null && !versionName.contains(mcVersion)) versionName = versionName + " - " + mcVersion;
         this.versionName = versionName;
         this.mcVersion = mcVersion;
         this.versionUrl = versionUrl;
@@ -37,21 +37,23 @@ public class ModDownload {
     }
 
     public boolean matches(String mcVersion, String modLoader) {
-        // TODO: This is shit. I know. I will improve it in the future.
-        if(loaders == null) return true;
-        boolean res = false;
-        for(String loader : loaders) {
-            if (modLoader.equalsIgnoreCase(loader)) {
-                res = true; break;
+        if(modLoader != null && loaders != null) {
+            boolean loaderMatch = false;
+            for(String loader : loaders) {
+                // As usual, the fabric/quilt handling
+                if(modLoader.equalsIgnoreCase(loader) || (modLoader.equalsIgnoreCase("quilt") && loader.equalsIgnoreCase("fabric"))) {
+                    loaderMatch = true;
+                    break;
+                }
             }
+            if(!loaderMatch) return false;
         }
-        if(gameVersions == null) return res;
-        res = false;
-        for(String version : gameVersions) {
-            if (mcVersion.equalsIgnoreCase(version)) {
-                res = true; break;
+        if(mcVersion != null && gameVersions != null) {
+            for(String version : gameVersions) {
+                if(mcVersion.equalsIgnoreCase(version)) return true;
             }
+            return false;
         }
-        return res;
+        return true;
     }
 }
