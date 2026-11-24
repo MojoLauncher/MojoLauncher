@@ -37,6 +37,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.regex.Pattern;
 import java.util.zip.ZipFile;
 
@@ -53,6 +54,23 @@ public class CurseforgeApi implements ModdingApi {
     private static final int CURSEFORGE_PAGINATION_SIZE = 50;
     private static final int CURSEFORGE_PAGINATION_END_REACHED = -1;
     private static final int CURSEFORGE_PAGINATION_ERROR = -2;
+
+    // Mod loader magic constants (idk if they're correct)
+    private static final int CURSEFORGE_LOADER_FORGE = 1;
+    private static final int CURSEFORGE_LOADER_FABRIC = 4;
+    private static final int CURSEFORGE_LOADER_QUILT = 5;
+    private static final int CURSEFORGE_LOADER_NEOFORGE = 6;
+
+    private static int getModLoaderType(String modLoader) {
+        if (modLoader == null) return 0;
+        switch (modLoader.toLowerCase(Locale.ROOT)) {
+            case "forge": return CURSEFORGE_LOADER_FORGE;
+            case "fabric": return CURSEFORGE_LOADER_FABRIC;
+            case "quilt": return CURSEFORGE_LOADER_QUILT;
+            case "neoforge": return CURSEFORGE_LOADER_NEOFORGE;
+            default: return 0;
+        }
+    }
 
     private final ApiHandler mApiHandler;
     public CurseforgeApi(String apiKey) {
@@ -86,7 +104,7 @@ public class CurseforgeApi implements ModdingApi {
             // Gson automatically casts null to false, which leans to issues
             // So, only check the distribution flag if it is non-null
             if(!allowModDistribution.isJsonNull() && !allowModDistribution.getAsBoolean()) {
-                Log.i("CurseforgeApi", "Skipping modpack "+dataElement.get("name").getAsString() + " because curseforge sucks");
+                Log.i("CurseforgeApi", "Skipping item "+dataElement.get("name").getAsString() + " because curseforge sucks");
                 continue;
             }
             ModItem modItem = new ModItem(Constants.SOURCE_CURSEFORGE,
@@ -106,40 +124,52 @@ public class CurseforgeApi implements ModdingApi {
     }
 
     @Override
-    public ModDownload[] getDownloads(ModSource item) {
+    public ModDownload[] getDownloads(ModSource source) {
+        return getDownloads(source, null);
+    }
+
+    @Override
+    public ModDownload[] getDownloads(ModSource item, SearchFilters filters) {
         ArrayList<JsonObject> allModDetails = new ArrayList<>();
         int index = 0;
         while(index != CURSEFORGE_PAGINATION_END_REACHED &&
                 index != CURSEFORGE_PAGINATION_ERROR) {
-            index = getPaginatedDetails(allModDetails, index, item.id);
+            index = getPaginatedDetails(allModDetails, index, item.id, filters);
         }
         if(index == CURSEFORGE_PAGINATION_ERROR) return null;
         int length = allModDetails.size();
         ModDownload[] downloads = new ModDownload[length];
         for(int i = 0; i < allModDetails.size(); i++) {
             JsonObject modDetail = allModDetails.get(i);
+            // TODO: be more robust
             String versionName = modDetail.get("displayName").getAsString();
             String downloadUrl = modDetail.get("downloadUrl").getAsString();
+            String fileName = modDetail.get("fileName").getAsString();
+            String versionId = modDetail.get("id").getAsString();
+            long fileSize = modDetail.get("fileLength").getAsLong();
+
             String mcVersion = null;
+            ArrayList<String> gameVersionList = new ArrayList<>();
+            ArrayList<String> loaderList = new ArrayList<>();
             JsonArray gameVersions = modDetail.getAsJsonArray("gameVersions");
             for(JsonElement jsonElement : gameVersions) {
                 String gameVersion = jsonElement.getAsString();
-                if(!sMcVersionPattern.matcher(gameVersion).matches()) {
-                    continue;
-                }
-                mcVersion = gameVersion;
+                if(sMcVersionPattern.matcher(gameVersion).matches()) {
+                    gameVersionList.add(gameVersion);
+                    if(mcVersion == null) mcVersion = gameVersion;
+                } else loaderList.add(gameVersion);
                 break;
             }
 
             String hash = getSha1FromModData(modDetail);
-            downloads[i] = new ModDownload(versionName, mcVersion, downloadUrl, hash);
+            downloads[i] = new ModDownload(versionName, mcVersion, downloadUrl, hash, fileName, versionId, fileSize,
+                    gameVersionList.toArray(new String[0]), loaderList.toArray(new String[0]));
         }
         return downloads;
     }
 
     @Override
     public LoaderInstaller installModpack(ModDetail modDetail, int selectedVersion) throws IOException{
-        //TODO considering only modpacks for now
         return ModpackInstaller.downloadModpack(modDetail, selectedVersion, this::installCurseforgeZip);
     }
 
@@ -147,10 +177,21 @@ public class CurseforgeApi implements ModdingApi {
         return ModpackInstaller.installModpack(modpackName, modpackName, modpackFile, icon, this::installCurseforgeZip);
     }
 
-    private int getPaginatedDetails(ArrayList<JsonObject> objectList, int index, String modId) {
+    private int getPaginatedDetails(ArrayList<JsonObject> objectList, int index, String modId, SearchFilters filters) {
         HashMap<String, Object> params = new HashMap<>();
         params.put("index", index);
         params.put("pageSize", CURSEFORGE_PAGINATION_SIZE);
+
+        if(filters != null) {
+            if (filters.mcVersion != null && !filters.mcVersion.isEmpty()) {
+                params.put("gameVersion", filters.mcVersion);
+            }
+            int loaderType = getModLoaderType(filters.modLoader);
+            // Can't use quilt or fabric for CF. CF sucks.
+            if(loaderType != 0 && loaderType != CURSEFORGE_LOADER_QUILT) {
+                params.put("modLoaderType", loaderType);
+            }
+        }
 
         JsonObject response = mApiHandler.get("mods/"+modId+"/files", params, JsonObject.class);
         JsonArray data = GsonJsonUtils.getJsonArraySafe(response, "data");
