@@ -113,7 +113,7 @@ private fun KarabakhApp() {
 
 @Composable
 private fun InfoCard(title:String,value:String,sub:String) {
-    Column(Modifier.fillMaxWidth().weight(1f).background(Panel,RoundedCornerShape(16.dp)).padding(15.dp),verticalArrangement=Arrangement.Center) {
+    Column(Modifier.fillMaxWidth().height(100.dp).background(Panel,RoundedCornerShape(16.dp)).padding(15.dp),verticalArrangement=Arrangement.Center) {
         Text(title,color=Muted,fontSize=9.sp,letterSpacing=1.5.sp); Spacer(Modifier.height(6.dp)); Text(value,fontSize=21.sp,fontWeight=FontWeight.Bold); Text(sub,color=Muted,fontSize=10.sp)
     }
 }
