@@ -1,10 +1,15 @@
 package az.karabakh.launcher
 
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -47,6 +52,13 @@ class MainActivity:ComponentActivity(){
 
 @Composable private fun KarabakhApp(){
  val ctx=LocalContext.current
+ val logoBitmap = remember {
+  runCatching {
+   val encoded = ctx.assets.open("karabakh_logo.webp.b64").bufferedReader().use { it.readText() }
+   val bytes = Base64.decode(encoded, Base64.DEFAULT)
+   BitmapFactory.decodeByteArray(bytes, 0, bytes.size).asImageBitmap()
+  }.getOrNull()
+ }
  var page by remember{mutableStateOf("Ana səhifə")}
  var version by remember{mutableStateOf("1.21.1")}
  var ram by remember{mutableFloatStateOf(1.5f)}
@@ -81,8 +93,9 @@ class MainActivity:ComponentActivity(){
    Column(Modifier.width(190.dp).fillMaxHeight().background(Panel,RoundedCornerShape(18.dp)).padding(12.dp),verticalArrangement=Arrangement.SpaceBetween){
     Column{
      Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(9.dp)){
-      Box(Modifier.size(42.dp).background(Brush.linearGradient(listOf(Purple,Color(0xFF44228B))),RoundedCornerShape(13.dp)),contentAlignment=Alignment.Center){
-       Text("K",fontSize=29.sp,fontWeight=FontWeight.Black,color=White)
+      Box(Modifier.size(48.dp).background(Color.Black,RoundedCornerShape(12.dp)),contentAlignment=Alignment.Center){
+       if(logoBitmap!=null) Image(bitmap=logoBitmap,contentDescription="KarabakhLauncher loqosu",modifier=Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
+       else Text("K",fontSize=29.sp,fontWeight=FontWeight.Black,color=White)
       }
       Column{Text("KARABAKH",fontWeight=FontWeight.Black,fontSize=17.sp,color=White);Text("JAVA LAUNCHER",color=Purple,letterSpacing=2.sp,fontSize=9.sp)}
      }
