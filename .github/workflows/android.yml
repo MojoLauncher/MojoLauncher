@@ -1,4 +1,4 @@
-name: Android CI
+name: KarabakhLauncher Android Core Build
 
 on:
   push:
@@ -58,7 +58,7 @@ jobs:
           gradle :app_mojo:bundleFullGplay
           mv app_mojo/build/outputs/bundle/fullGplay/app_mojo-full-gplay.aab out/app-gplay.aab
 
-      - name: Build Debug .apk
+      - name: Build KarabakhLauncher Minecraft Java APK
         run: |
           # Build the launcher
           gradle :app_mojo:assembleFullDebug
@@ -81,13 +81,13 @@ jobs:
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug
+          name: KarabakhLauncher-Minecraft-Java
           path: out/app-debug-full.apk
 
       - name: Upload Debug APK (No runtime)
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug-noruntime
+          name: KarabakhLauncher-NoRuntime
           path: out/app-debug-noruntime.apk
 
       - name: Release Nightly APK
