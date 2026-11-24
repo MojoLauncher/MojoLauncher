@@ -10,11 +10,19 @@
 #include <jvm_hooks/jvm_hooks.h>
 #include "elf_hinter.h"
 #include "load_stages.h"
+#include "utils.h"
 
 #define TAG __FILE_NAME__
 #include <log.h>
+#include <libgen.h>
+#include <linux/limits.h>
 
 extern bool apiRequiresHints();
+
+static char* additional_natives_dir = NULL;
+
+static char* replacements = NULL;
+
 
 // Java 21 style hook
 typedef jboolean (*NativeLibraries_load)(JNIEnv *env, jclass cls, jobject lib, jstring name, jboolean isBuiltin, jboolean throwExceptionIfFail);
@@ -43,10 +51,25 @@ static void library_preload_hook(JNIEnv *env, const char* name) {
     }
 }
 
+// Redirects known libraries load path to predefined one
+static jstring library_redirect_hook(JNIEnv* env, jstring original_name, const char* name){
+    if(!additional_natives_dir || !replacements) return original_name;
+    char* base = basename(name);
+    if(strstr(replacements, base) == NULL) {
+        return original_name;
+    }
+    char buf[PATH_MAX];
+    snprintf(buf, PATH_MAX, "%s/%s", additional_natives_dir, base);
+    printf("Redirecting library load: %s -> %s\n", name, buf);
+    jstring new = (*env)->NewStringUTF(env, buf);
+    return new;
+}
+
 #define NATIVES_HOOK(CALLTHROUGH, RESULT, RESULT_RETURN) \
 do { \
     const char *name_n = (*env)->GetStringUTFChars(env, name, NULL); \
     library_preload_hook(env, name_n); \
+    name = library_redirect_hook(env, name, name_n); \
     const bool hintsRequired = apiRequiresHints(); \
     hinter_t hinter; \
     if (hintsRequired) hinter_process(&hinter, name_n); \
@@ -118,4 +141,11 @@ bool installClassLoaderHooks(JNIEnv *env, JNIEnv* vm_env) {
     err:
     throwException(env, STAGE_FIND_HOOKS, JNI_ERR, "Cannot find hook target.");
     return false;
+}
+
+JNIEXPORT void JNICALL
+Java_git_artdeell_mojo_utils_JREUtils_setLibraryOverrides(JNIEnv *env, jclass clazz,
+                                                            jstring base_path, jstring libs) {
+    save_jvm_string(env, base_path, &additional_natives_dir);
+    save_jvm_string(env, libs, &replacements);
 }
