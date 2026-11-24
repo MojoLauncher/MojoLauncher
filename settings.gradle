@@ -1,24 +1,9 @@
 pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-    }
+    repositories { google(); mavenCentral(); gradlePluginPortal() }
 }
-
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        maven { url "https://jitpack.io" }
-    }
+    repositories { google(); mavenCentral() }
 }
-
-rootProject.name='MojoLauncher'
-include ':app_mojo'
-
-include ':forge_installer'
-include ':NoBlocklist'
-include ':glfw:jni_bindings'
-include ':mojoexec:jni_bindings'
-include ':sdl:jni_bindings'
+rootProject.name = "KarabakhLauncher"
+include(":app")
