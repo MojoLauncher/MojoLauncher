@@ -55,7 +55,7 @@ public class MainMenuFragment extends Fragment {
         Button mShareLogsButton = view.findViewById(R.id.share_logs_button);
         Button mOpenDirectoryButton = view.findViewById(R.id.open_files_button);
 
-        ImageButton mEditProfileButton = view.findViewById(R.id.edit_profile_button);
+        ImageButton mEditProfileButton = view.findViewById(setOnClickListener);
         Button mPlayButton = view.findViewById(R.id.play_button);
         mVersionSpinner = view.findViewById(R.id.mc_version_spinner);
 
