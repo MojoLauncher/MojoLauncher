@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#100B18"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="KARABAKH NETWORK"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="ADMIN CONTROL CENTER"
+            android:textColor="#B77AFF"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:background="#21152F"
+            android:padding="20dp"
+            android:text="Welcome to Karabakh Admin Panel"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="UPDATE MANAGEMENT"
+            android:textColor="#B77AFF"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/admin_version"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="12dp"
+            android:background="#21152F"
+            android:hint="Yeni versiya (məs: 1.0.1)"
+            android:padding="14dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#C5B6D8"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/admin_apk_url"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="10dp"
+            android:background="#21152F"
+            android:hint="APK yükləmə linki"
+            android:padding="14dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#C5B6D8"
+            android:inputType="textUri" />
+
+        <Button
+            android:id="@+id/admin_publish_update"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="#8B3DFF"
+            android:text="PUBLISH UPDATE"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="ANNOUNCEMENTS"
+            android:textColor="#B77AFF"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/admin_announcement"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:layout_marginTop="12dp"
+            android:background="#21152F"
+            android:gravity="top"
+            android:hint="Elan mətnini yaz..."
+            android:padding="14dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#C5B6D8" />
+
+        <Button
+            android:id="@+id/admin_publish_announcement"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="#8B3DFF"
+            android:text="PUBLISH ANNOUNCEMENT"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/admin_back"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="25dp"
+            android:backgroundTint="#38204F"
+            android:text="BACK"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+</ScrollView>
