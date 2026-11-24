@@ -55,6 +55,11 @@
            android:screenOrientation="landscape"
            android:exported="false" />
 
+        <activity
+    android:name=".ModsCenterActivity"
+    android:screenOrientation="landscape"
+    android:exported="false" />
+
         <meta-data
             android:name="android.max_aspect"
             android:value="ratio_float" />
