@@ -75,6 +75,8 @@ class MainActivity:ComponentActivity(){
  var adminCode by remember{mutableStateOf("")}
  var ownerName by remember{mutableStateOf("")}
  var ownerPassword by remember{mutableStateOf("")}
+ var logoTapCount by remember{mutableIntStateOf(0)}
+ var modSearch by remember{mutableStateOf("")}
  LaunchedEffect(page){
   if(page=="Versiyalar"&&versions.isEmpty()&&!loading){
    loading=true
@@ -93,14 +95,14 @@ class MainActivity:ComponentActivity(){
    Column(Modifier.width(190.dp).fillMaxHeight().background(Panel,RoundedCornerShape(18.dp)).padding(12.dp),verticalArrangement=Arrangement.SpaceBetween){
     Column{
      Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(9.dp)){
-      Box(Modifier.size(48.dp).background(Color.Black,RoundedCornerShape(12.dp)),contentAlignment=Alignment.Center){
+      Box(Modifier.size(48.dp).background(Color.Black,RoundedCornerShape(12.dp)).clickable{logoTapCount++;if(logoTapCount>=7){page="Qurucu panel";logoTapCount=0}},contentAlignment=Alignment.Center){
        if(logoBitmap!=null) Image(bitmap=logoBitmap,contentDescription="KarabakhLauncher loqosu",modifier=Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
        else Text("K",fontSize=29.sp,fontWeight=FontWeight.Black,color=White)
       }
       Column{Text("KARABAKH",fontWeight=FontWeight.Black,fontSize=17.sp,color=White);Text("JAVA LAUNCHER",color=Purple,letterSpacing=2.sp,fontSize=9.sp)}
      }
      Spacer(Modifier.height(22.dp))
-     listOf("Ana səhifə","Versiyalar","CurseForge","Modrinth","Hesab","Admin panel","Qurucu panel","Parametrlər").forEach{p->
+     listOf("Ana səhifə","Versiyalar","Modlar","Modpack-lər","Hesab","Parametrlər").forEach{p->
       Row(Modifier.fillMaxWidth().padding(vertical=2.dp).background(if(page==p)Purple.copy(alpha=.19f) else Color.Transparent,RoundedCornerShape(10.dp)).clickable{page=p}.padding(horizontal=10.dp,vertical=11.dp),verticalAlignment=Alignment.CenterVertically){
        Text(p,color=if(page==p)White else Muted,fontWeight=if(page==p)FontWeight.Bold else FontWeight.Medium,fontSize=13.sp)
       }
@@ -152,8 +154,8 @@ class MainActivity:ComponentActivity(){
        };HorizontalDivider(color=Muted.copy(alpha=.15f))
       }}
      }
-     "CurseForge"->ModSourcePanel("CurseForge","Mod və modpack kataloqu","https://www.curseforge.com/minecraft","CurseForge səhifəsini aç")
-     "Modrinth"->ModSourcePanel("Modrinth","Açıq mod və modpack kataloqu","https://modrinth.com/mods","Modrinth səhifəsini aç")
+     "Modlar"->ModHubPanel(modSearch,{modSearch=it},false)
+     "Modpack-lər"->ModHubPanel(modSearch,{modSearch=it},true)
      "Hesab"->CardPanel{
       Text("Hesab mərkəzi",fontSize=19.sp,fontWeight=FontWeight.Bold)
       Row(horizontalArrangement=Arrangement.spacedBy(7.dp)){
@@ -190,13 +192,19 @@ class MainActivity:ComponentActivity(){
      }
      "Qurucu panel"->CardPanel{
       Text("QURUCU PANELİ",fontSize=20.sp,fontWeight=FontWeight.Black,color=Purple)
-      Text("Yalnız serverdə Qurucu rolu təsdiqlənmiş hesab istifadə edə bilər.",color=Muted,fontSize=12.sp)
+      Text("Gizli menyu • yalnız Qurucu hesabı üçün nəzərdə tutulub.",color=Muted,fontSize=12.sp)
       OutlinedTextField(ownerName,{ownerName=it},modifier=Modifier.fillMaxWidth(),singleLine=true,label={Text("Qurucu istifadəçi adı")})
       OutlinedTextField(ownerPassword,{ownerPassword=it},modifier=Modifier.fillMaxWidth(),singleLine=true,visualTransformation=PasswordVisualTransformation(),label={Text("Şifrə")})
       Button(onClick={notice="Qurucu girişi serverə qoşulmayıb. Bu forma hələ heç kimi autentifikasiya etmir."}){Text("QURUCU KİMİ DAXİL OL")}
       HorizontalDivider(color=Muted.copy(alpha=.2f))
-      Text("ADMIN SORĞULARI",fontWeight=FontWeight.Bold)
-      Text("Gözləyən müraciət yoxdur — server bağlantısı qurulmayıb.",color=Muted,fontSize=12.sp)
+      Text("İDARƏETMƏ",fontWeight=FontWeight.Bold)
+      Row(horizontalArrangement=Arrangement.spacedBy(8.dp)){
+       OutlinedButton(onClick={page="Admin panel"}){Text("Admin paneli")}
+       OutlinedButton(onClick={page="Versiyalar"}){Text("Versiyaları idarə et")}
+      }
+      Text("PANEL ALƏTLƏRİ",fontWeight=FontWeight.Bold)
+      listOf("Versiya əlavə et / sil","Yeni menyu bölməsi yarat","İstifadəçi və admin icazələri","Mod və modpack kataloqu").forEach{Text("•  $it",color=White,modifier=Modifier.fillMaxWidth().background(Back,RoundedCornerShape(9.dp)).padding(10.dp))}
+      Text("Bu idarəetmə əməliyyatları server bağlantısı qurulduqdan sonra aktiv olacaq.",color=Muted,fontSize=11.sp)
       Row(horizontalArrangement=Arrangement.spacedBy(8.dp)){
        OutlinedButton(onClick={notice="Təsdiq funksiyası backend qoşulandan sonra işləyəcək."}){Text("Təsdiqlə")}
        OutlinedButton(onClick={notice="Rədd etmə funksiyası backend qoşulandan sonra işləyəcək."}){Text("Rədd et")}
@@ -213,6 +221,31 @@ class MainActivity:ComponentActivity(){
     Spacer(Modifier.height(5.dp));Text(notice,color=Muted,fontSize=10.sp,maxLines=2)
    }
   }
+ }
+}
+
+@Composable private fun ModHubPanel(query:String,onQuery:(String)->Unit,modpacks:Boolean){
+ val ctx=LocalContext.current
+ val title=if(modpacks)"Modpack kataloqu" else "Mod kataloqu"
+ CardPanel{
+  Text(title,fontSize=24.sp,fontWeight=FontWeight.Black)
+  Text("CurseForge və Modrinth • Minecraft Java",color=Muted,fontSize=12.sp)
+  OutlinedTextField(query,onQuery,modifier=Modifier.fillMaxWidth(),singleLine=true,label={Text(if(modpacks)"Modpack axtar" else "Mod axtar")},leadingIcon={Icon(Icons.Filled.Search,null)})
+  Row(horizontalArrangement=Arrangement.spacedBy(10.dp),modifier=Modifier.fillMaxWidth()){
+   Column(Modifier.weight(1f).background(Color(0xFF211B31),RoundedCornerShape(14.dp)).clickable{
+    val base=if(modpacks)"https://www.curseforge.com/minecraft/search?class=modpacks" else "https://www.curseforge.com/minecraft/search?class=mc-mods"
+    ctx.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(base+"&search="+Uri.encode(query))))
+   }.padding(14.dp),verticalArrangement=Arrangement.spacedBy(8.dp)){
+    Text("CF",fontSize=27.sp,fontWeight=FontWeight.Black,color=Color(0xFFFF9A45));Text("CurseForge",fontWeight=FontWeight.Bold);Text("Modlar və modpack-lər",fontSize=11.sp,color=Muted);Text("Kataloqa bax  →",fontSize=11.sp,color=Purple)
+   }
+   Column(Modifier.weight(1f).background(Color(0xFF172A2A),RoundedCornerShape(14.dp)).clickable{
+    val base=if(modpacks)"https://modrinth.com/modpacks" else "https://modrinth.com/mods"
+    ctx.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(base+"?query="+Uri.encode(query))))
+   }.padding(14.dp),verticalArrangement=Arrangement.spacedBy(8.dp)){
+    Text("M",fontSize=27.sp,fontWeight=FontWeight.Black,color=Color(0xFF58D69A));Text("Modrinth",fontWeight=FontWeight.Bold);Text("Açıq mod kataloqu",fontSize=11.sp,color=Muted);Text("Kataloqa bax  →",fontSize=11.sp,color=Green)
+   }
+  }
+  Text("Axtarış hər iki kataloqda seçdiyin sözü açır. Modları birbaşa oyuna quraşdırmaq üçün launcher mühərriki və fayl inteqrasiyası ayrıca tamamlanmalıdır.",color=Muted,fontSize=11.sp)
  }
 }
 
