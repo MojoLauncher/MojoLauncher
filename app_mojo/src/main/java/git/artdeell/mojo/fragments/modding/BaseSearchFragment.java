@@ -15,12 +15,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.io.IOException;
 
 import git.artdeell.mojo.R;
 import git.artdeell.mojo.Tools;
@@ -28,12 +25,10 @@ import git.artdeell.mojo.instances.Instance;
 import git.artdeell.mojo.instances.Instances;
 import git.artdeell.mojo.modding.modplatforms.ModItemAdapter;
 import git.artdeell.mojo.modding.modplatforms.api.CommonApi;
-import git.artdeell.mojo.modding.modplatforms.api.ModInstaller;
 import git.artdeell.mojo.modding.modplatforms.api.ModdingApi;
 import git.artdeell.mojo.modding.modplatforms.models.SearchFilters;
 import git.artdeell.mojo.progresskeeper.ProgressKeeper;
 import git.artdeell.mojo.progresskeeper.TaskCountListener;
-import git.artdeell.mojo.utils.profiles.VersionSelectorDialog;
 
 public abstract class BaseSearchFragment extends Fragment implements ModItemAdapter.SearchResultCallback {
     private View overlay;
