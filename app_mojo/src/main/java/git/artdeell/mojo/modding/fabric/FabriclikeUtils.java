@@ -3,10 +3,10 @@ package git.artdeell.mojo.modding.fabric;
 import com.google.gson.JsonSyntaxException;
 
 import git.artdeell.mojo.Tools;
-import git.artdeell.mojo.instances.InstanceAdapter;
-import git.artdeell.mojo.instances.InstanceHint;
+import git.artdeell.mojo.instances.InstanceMetadata;
 import git.artdeell.mojo.utils.DownloadUtils;
 import git.artdeell.mojo.utils.FileUtils;
+import me.andreasmelone.basicmodinfoparser.platform.Platform;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,9 +19,9 @@ import java.net.URLEncoder;
 
 public class FabriclikeUtils {
 
-    public static final FabriclikeUtils FABRIC_UTILS = new FabriclikeUtils("https://meta.fabricmc.net/v2", "fabric", "Fabric", "fabric", InstanceHint.FABRIC);
-    public static final FabriclikeUtils QUILT_UTILS = new FabriclikeUtils("https://meta.quiltmc.org/v3", "quilt", "Quilt", "quilt", InstanceHint.QUILT);
-    public static final FabriclikeUtils LEGACY_FABRIC_UTILS = new FabriclikeUtils("https://meta.legacyfabric.net/v2", "legacy_fabric", "Legacy Fabric", "fabric", InstanceHint.LEGACY_FABRIC);
+    public static final FabriclikeUtils FABRIC_UTILS = new FabriclikeUtils("https://meta.fabricmc.net/v2", "fabric", "Fabric", "fabric", Platform.FABRIC);
+    public static final FabriclikeUtils QUILT_UTILS = new FabriclikeUtils("https://meta.quiltmc.org/v3", "quilt", "Quilt", "quilt", Platform.QUILT);
+    public static final FabriclikeUtils LEGACY_FABRIC_UTILS = new FabriclikeUtils("https://meta.legacyfabric.net/v2", "legacy_fabric", "Legacy Fabric", "fabric", Platform.FABRIC);
     private static final String LOADER_METADATA_URL = "%s/versions/loader/%s";
     private static final String GAME_METADATA_URL = "%s/versions/game";
 
@@ -31,14 +31,14 @@ public class FabriclikeUtils {
     private final String mCachePrefix;
     private final String mName;
     private final String mIconName;
-    private final InstanceHint mHint;
+    private final Platform mPlatform;
 
-    private FabriclikeUtils(String mApiUrl, String cachePrefix, String mName, String iconName, InstanceHint hint) {
+    private FabriclikeUtils(String mApiUrl, String cachePrefix, String mName, String iconName, Platform platform) {
         this.mApiUrl = mApiUrl;
         this.mCachePrefix = cachePrefix;
         this.mIconName = iconName;
         this.mName = mName;
-        this.mHint = hint;
+        this.mPlatform = platform;
     }
 
     public FabricVersion[] downloadGameVersions() throws IOException{
@@ -84,8 +84,8 @@ public class FabriclikeUtils {
         return mIconName;
     }
 
-    public InstanceHint getHint() {
-        return mHint;
+    public Platform getPlatform() {
+        return mPlatform;
     }
 
     public String install(String gameVersion, String loaderVersion) throws IOException {

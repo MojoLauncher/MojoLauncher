@@ -3,10 +3,11 @@ package git.artdeell.mojo.modding.forge;
 import android.util.Log;
 
 import git.artdeell.mojo.Tools;
-import git.artdeell.mojo.instances.InstanceHint;
 import git.artdeell.mojo.instances.InstanceInstaller;
+import git.artdeell.mojo.instances.InstanceMetadata;
 import git.artdeell.mojo.modding.ComparableVersionString;
 import git.artdeell.mojo.utils.DownloadUtils;
+import me.andreasmelone.basicmodinfoparser.platform.Platform;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -31,9 +32,9 @@ public abstract class ForgelikeUtils {
     private final String mMetadataUrl;
     private final String mInstallerUrl;
     private final boolean mVersionOrderInversed;
-    private final InstanceHint mHint;
+    private final Platform mPlatform;
 
-    private ForgelikeUtils(String name, String cachePrefix, String iconName, String versionResolver, String metadataUrl, String installerUrl, boolean versionOrderInversed, InstanceHint hint) {
+    private ForgelikeUtils(String name, String cachePrefix, String iconName, String versionResolver, String metadataUrl, String installerUrl, boolean versionOrderInversed, Platform platform) {
         this.mName = name;
         this.mCachePrefix = cachePrefix;
         this.mIconName = iconName;
@@ -41,7 +42,7 @@ public abstract class ForgelikeUtils {
         this.mMetadataUrl = metadataUrl;
         this.mInstallerUrl = installerUrl;
         this.mVersionOrderInversed = versionOrderInversed;
-        this.mHint = hint;
+        this.mPlatform = platform;
     }
 
     public List<String> downloadVersions() throws IOException {
@@ -108,16 +109,26 @@ public abstract class ForgelikeUtils {
         return mIconName;
     }
 
-    public abstract String processVersionString(String version);
+    public abstract String getGameVersionString(String version);
+    public abstract String getLoaderVersionString(String version);
 
     public abstract boolean shouldSkipVersion(String version);
 
     public boolean isVersionOrderInversed() {
         return mVersionOrderInversed;
     }
+    public abstract boolean isLegacy(String gameVersion);
 
-    public InstanceHint getHint() {
-        return mHint;
+    public Platform getPlatform() {
+        return mPlatform;
+    }
+
+    public InstanceMetadata createMetadata(String gameVersion, String loaderVersion){
+        Platform p = isLegacy(gameVersion) ? Platform.FORGE_LEGACY : mPlatform;
+        return new InstanceMetadata(loaderVersion, gameVersion, p);
+    }
+    public InstanceMetadata createMetadata(String version) {
+        return createMetadata(getGameVersionString(version), getLoaderVersionString(version));
     }
 
     private static String getMcVersionForNeoVersion(String neoVersion) {
@@ -146,18 +157,45 @@ public abstract class ForgelikeUtils {
                     "https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml",
                     "https://maven.minecraftforge.net/net/minecraftforge/forge/%1$s/forge-%1$s-installer.jar",
                     false,
-                    InstanceHint.FORGE
+                    Platform.FORGE
             );
         }
 
         @Override
-        public String processVersionString(String version) {
+        public String getGameVersionString(String version) {
             int dashIndex = version.indexOf("-");
+            if(dashIndex < 0) return version;
             return version.substring(0, dashIndex);
         }
 
         @Override
+        public String getLoaderVersionString(String version) {
+            int dashIndex = version.indexOf("-");
+            if(dashIndex < 0) return version;
+            String loader = version.substring(dashIndex+1);
+            // Forge moment (old versions can have appended game version in the end)
+            if(loader.indexOf('-') > -1) return loader.substring(0, loader.indexOf('-'));
+            return loader;
+        }
+
+        @Override
         public boolean shouldSkipVersion(String version) {
+            return false;
+        }
+
+        @Override
+        public boolean isLegacy(String gameVersion) {
+            // I think legacy forge is forge below 1.12.2?
+            String[] parts = gameVersion.split("\\.");
+            if(parts.length < 3) return false;
+            try {
+                // TODO: I'm not sure if this looks good
+                int major = Integer.parseInt(parts[0]);
+                int minor = Integer.parseInt(parts[1]);
+                if(major == 1 && minor <= 12) return true;
+            } catch (NumberFormatException e) {
+                return false;
+            }
             return false;
         }
     }
@@ -169,18 +207,28 @@ public abstract class ForgelikeUtils {
                     "https://maven.neoforged.net/releases/net/neoforged/neoforge/maven-metadata.xml",
                     "https://maven.neoforged.net/releases/net/neoforged/neoforge/%1$s/neoforge-%1$s-installer.jar",
                     true,
-                    InstanceHint.NEOFORGE
+                    Platform.NEOFORGE
             );
         }
 
         @Override
-        public String processVersionString(String version) {
+        public String getGameVersionString(String version) {
             return ComparableVersionString.parse(getMcVersionForNeoVersion(version)).getProper();
+        }
+
+        @Override
+        public String getLoaderVersionString(String version) {
+            return version; // On NeoForge we just use the full loader version, it has custom format anyway
         }
 
         @Override
         public boolean shouldSkipVersion(String version) {
             return version.startsWith("0");
+        }
+
+        @Override
+        public boolean isLegacy(String version) {
+            return false;
         }
     }
 }

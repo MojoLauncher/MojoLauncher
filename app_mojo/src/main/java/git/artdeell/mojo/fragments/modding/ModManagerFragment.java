@@ -19,7 +19,6 @@ import git.artdeell.mojo.MojoApplication;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.contracts.OpenDocumentWithExtension;
 import git.artdeell.mojo.instances.Instance;
-import git.artdeell.mojo.instances.InstanceHint;
 import git.artdeell.mojo.instances.Instances;
 import git.artdeell.mojo.modding.modmanager.DependencyScanner;
 import git.artdeell.mojo.modding.modmanager.ModAdapter;
@@ -79,7 +78,11 @@ public class ModManagerFragment extends Fragment {
         mProgressBar.setVisibility(View.VISIBLE);
         MojoApplication.sExecutorService.execute(()->{
             Instance instance = Instances.loadSelectedInstance();
-            Platform modPlatform = InstanceHint.asPlatform(instance.platformHint, instance.versionId);
+            if(instance == null  || instance.moddingData == null || instance.moddingData.platform == null) {
+                Tools.runOnUiThread(() -> mProgressBar.setVisibility(View.GONE));
+                return;
+            }
+            Platform modPlatform = instance.moddingData.platform;
             List<ModInfo> modInfoList = ModScanner.findMods(mModsFolder, modPlatform);
             DependencyScanner scanner = new DependencyScanner(modPlatform, modInfoList);
             Tools.runOnUiThread(()->{

@@ -21,7 +21,7 @@ public class ForgelikeVersionListAdapter extends BaseExpandableListAdapter imple
         mLoaderVersions = new ArrayList<>();
         for(String version : forgeVersions) {
             if(utils.shouldSkipVersion(version)) continue;
-            String gameVersion = utils.processVersionString(version);
+            String gameVersion = utils.getGameVersionString(version);
             List<String> versionList;
             int gameVersionIndex = mGameVersions.indexOf(gameVersion);
             if(gameVersionIndex != -1) {

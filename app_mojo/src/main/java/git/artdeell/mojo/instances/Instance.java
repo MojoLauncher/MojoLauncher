@@ -28,7 +28,7 @@ public class Instance extends DisplayInstance {
     public String selectedRuntime;
     public String controlLayout;
     public boolean sharedData;
-    public InstanceHint platformHint;
+    public InstanceMetadata moddingData;
 
     protected Instance() {
     }
@@ -37,6 +37,8 @@ public class Instance extends DisplayInstance {
     protected void sanitize() {
         super.sanitize();
         sanitizeArgs();
+        // Just in case
+        if (moddingData != null && moddingData.platform == null) moddingData = null;
     }
 
     private void sanitizeArgs() {

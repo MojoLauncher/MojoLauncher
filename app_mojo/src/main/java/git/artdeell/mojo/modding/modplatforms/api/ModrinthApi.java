@@ -181,7 +181,7 @@ public class ModrinthApi implements ModdingApi {
         } else if(dependencies.size() == 1) {
             // "Vanilla" pack. Possibly GT:NH, let's try to detect lwjgl3ify
             File lwjgl3ifyJar = Lwjgl3ifyUtils.detectLwjgl3ifyJar(installDestination);
-            if(lwjgl3ifyJar != null) return new Lwjgl3ifyLoaderInstaller(lwjgl3ifyJar);
+            if(lwjgl3ifyJar != null) return new Lwjgl3ifyLoaderInstaller(lwjgl3ifyJar, mcVersion);
         }
 
         return null;
