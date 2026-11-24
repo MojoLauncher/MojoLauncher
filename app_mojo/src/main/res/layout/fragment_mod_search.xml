@@ -38,7 +38,6 @@
             android:translationZ="2dp"
 
             android:ems="10"
-            android:hint="@string/hint_search_modpack"
             android:inputType="textPersonName"
             android:paddingHorizontal="@dimen/padding_heavy"
             app:layout_constraintTop_toTopOf="parent"
@@ -110,7 +109,6 @@
         android:enabled="false"
         android:layout_marginTop="@dimen/padding_moderate"
         android:layout_marginBottom="@dimen/padding_moderate"
-        android:text="@string/import_local_modpack"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

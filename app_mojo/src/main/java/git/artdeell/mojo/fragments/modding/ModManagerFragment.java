@@ -47,31 +47,8 @@ public class ModManagerFragment extends Fragment {
 
     private Instance mInstance;
 
-    private final ActivityResultLauncher<Object> mModImportLauncher =
-            registerForActivityResult(new OpenDocumentWithExtension("jar"), (data)->{
-                if(data == null) return;
-                Context context = getContext();
-                if(context == null) return;
-                String fileName = Tools.getFileName(context, data);
-                MojoApplication.sExecutorService.execute(()->importMod(fileName, data, context));
-            });
-
     public ModManagerFragment() {
         super(R.layout.fragment_mod_manager);
-    }
-
-    private void importMod(String fileName, Uri modUri, Context context) {
-        FileUtils.ensureDirectorySilently(mModsFolder);
-        try (InputStream inputStream = context.getContentResolver().openInputStream(modUri);
-             OutputStream outputStream = new FileOutputStream(new File(mModsFolder, fileName))){
-                if(inputStream == null) throw new IOException("Failed to open mod input stream");
-                IOUtils.copy(inputStream, outputStream);
-        }catch (IOException e) {
-            Tools.showErrorRemote(e);
-        }
-        Tools.runOnUiThread(()->{
-            if(!isDetached()) refreshModsList();
-        });
     }
 
     private void refreshModsList() {
@@ -107,8 +84,7 @@ public class ModManagerFragment extends Fragment {
                 throw new IllegalArgumentException("Instance is null!");
             }
             Bundle b = new Bundle();
-            b.putBoolean(SearchModFragment.ARG_MODPACK_MODE, false);
-            Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG + "_mods", b);
+            Tools.swapFragment(requireActivity(), ModSearchFragment.class, ModSearchFragment.TAG, b);
         });
         mSearchEditText = view.findViewById(R.id.search_mod_edittext);
         mSearchEditText.setOnEditorActionListener(((textView, i, keyEvent) -> {

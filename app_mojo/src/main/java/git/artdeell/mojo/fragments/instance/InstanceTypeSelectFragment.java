@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 
 import git.artdeell.mojo.R;
 import git.artdeell.mojo.Tools;
+import git.artdeell.mojo.fragments.modding.ModpackSearchFragment;
 import git.artdeell.mojo.fragments.modding.instance.BTAInstallFragment;
 import git.artdeell.mojo.fragments.modding.instance.FabricInstallFragment;
 import git.artdeell.mojo.fragments.modding.instance.ForgeInstallFragment;
@@ -16,7 +17,6 @@ import git.artdeell.mojo.fragments.modding.instance.LegacyFabricInstallFragment;
 import git.artdeell.mojo.fragments.modding.instance.NeoforgeInstallFragment;
 import git.artdeell.mojo.fragments.modding.instance.OptiFineInstallFragment;
 import git.artdeell.mojo.fragments.modding.instance.QuiltInstallFragment;
-import git.artdeell.mojo.fragments.modding.SearchModFragment;
 import git.artdeell.mojo.instances.Instance;
 import git.artdeell.mojo.instances.Instances;
 
@@ -52,7 +52,7 @@ public class InstanceTypeSelectFragment extends Fragment {
         view.findViewById(R.id.modded_profile_forge).setOnClickListener((v)->
                 Tools.swapFragment(requireActivity(), ForgeInstallFragment.class, ForgeInstallFragment.TAG, null));
         view.findViewById(R.id.modded_profile_modpack).setOnClickListener((v)->
-                Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG, null));
+                Tools.swapFragment(requireActivity(), ModpackSearchFragment.class, ModpackSearchFragment.TAG, null));
         view.findViewById(R.id.modded_profile_quilt).setOnClickListener((v)->
                 Tools.swapFragment(requireActivity(), QuiltInstallFragment.class, QuiltInstallFragment.TAG, null));
         view.findViewById(R.id.modded_profile_bta).setOnClickListener((v)->
