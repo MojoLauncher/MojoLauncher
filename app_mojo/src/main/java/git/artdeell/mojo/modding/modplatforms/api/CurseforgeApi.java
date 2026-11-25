@@ -158,7 +158,6 @@ public class CurseforgeApi implements ModdingApi {
                     gameVersionList.add(gameVersion);
                     if(mcVersion == null) mcVersion = gameVersion;
                 } else loaderList.add(gameVersion);
-                break;
             }
 
             String hash = getSha1FromModData(modDetail);
