@@ -1,18 +1,18 @@
-package git.artdeell.mojo.instances;
+package git.artdeell.mojo.modding;
 
 import me.andreasmelone.basicmodinfoparser.platform.Platform;
 
 /**
  * Additional instance metadata for modding
  */
-public class InstanceMetadata {
+public class PlatformMetadata {
     public String modloaderVersion;
     public String gameVersion;
     public Platform platform;
 
-    protected InstanceMetadata() {}
+    protected PlatformMetadata() {}
 
-    public InstanceMetadata(String modloaderVersion, String gameVersion, Platform platform) {
+    public PlatformMetadata(String modloaderVersion, String gameVersion, Platform platform) {
         this.modloaderVersion = modloaderVersion;
         this.gameVersion = gameVersion;
         this.platform = platform;

@@ -3,7 +3,6 @@ package git.artdeell.mojo.modding.fabric;
 import com.google.gson.JsonSyntaxException;
 
 import git.artdeell.mojo.Tools;
-import git.artdeell.mojo.instances.InstanceMetadata;
 import git.artdeell.mojo.utils.DownloadUtils;
 import git.artdeell.mojo.utils.FileUtils;
 import me.andreasmelone.basicmodinfoparser.platform.Platform;

@@ -5,6 +5,7 @@ import android.os.Build;
 import android.util.Log;
 
 import git.artdeell.mojo.Tools;
+import git.artdeell.mojo.modding.PlatformMetadata;
 import git.artdeell.mojo.prefs.LauncherPreferences;
 import git.artdeell.mojo.utils.JSONUtils;
 
@@ -28,7 +29,7 @@ public class Instance extends DisplayInstance {
     public String selectedRuntime;
     public String controlLayout;
     public boolean sharedData;
-    public InstanceMetadata moddingData;
+    public PlatformMetadata moddingData;
 
     protected Instance() {
     }

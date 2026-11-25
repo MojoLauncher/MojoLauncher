@@ -4,7 +4,7 @@ import android.util.Log;
 
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.instances.InstanceInstaller;
-import git.artdeell.mojo.instances.InstanceMetadata;
+import git.artdeell.mojo.modding.PlatformMetadata;
 import git.artdeell.mojo.modding.ComparableVersionString;
 import git.artdeell.mojo.utils.DownloadUtils;
 import me.andreasmelone.basicmodinfoparser.platform.Platform;
@@ -123,11 +123,11 @@ public abstract class ForgelikeUtils {
         return mPlatform;
     }
 
-    public InstanceMetadata createMetadata(String gameVersion, String loaderVersion){
+    public PlatformMetadata createMetadata(String gameVersion, String loaderVersion){
         Platform p = isLegacy(gameVersion) ? Platform.FORGE_LEGACY : mPlatform;
-        return new InstanceMetadata(loaderVersion, gameVersion, p);
+        return new PlatformMetadata(loaderVersion, gameVersion, p);
     }
-    public InstanceMetadata createMetadata(String version) {
+    public PlatformMetadata createMetadata(String version) {
         return createMetadata(getGameVersionString(version), getLoaderVersionString(version));
     }
 

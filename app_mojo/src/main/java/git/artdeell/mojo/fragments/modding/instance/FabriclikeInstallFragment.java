@@ -24,7 +24,7 @@ import git.artdeell.mojo.R;
 
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.extra.ExtraCore;
-import git.artdeell.mojo.instances.InstanceMetadata;
+import git.artdeell.mojo.modding.PlatformMetadata;
 import git.artdeell.mojo.instances.Instances;
 import git.artdeell.mojo.modding.fabric.FabriclikeUtils;
 import git.artdeell.mojo.modding.fabric.FabricVersion;
@@ -117,7 +117,7 @@ public abstract class FabriclikeInstallFragment extends Fragment implements Modl
                 i.name = mFabriclikeUtils.getName();
                 i.icon = mFabriclikeUtils.getIconName();
                 i.versionId = versionId;
-                i.moddingData = new InstanceMetadata(mSelectedLoaderVersion, mSelectedGameVersion, mFabriclikeUtils.getPlatform());
+                i.moddingData = new PlatformMetadata(mSelectedLoaderVersion, mSelectedGameVersion, mFabriclikeUtils.getPlatform());
             }, versionId);
             getListenerProxy().onDownloadFinished(null);
         }catch (IOException e) {

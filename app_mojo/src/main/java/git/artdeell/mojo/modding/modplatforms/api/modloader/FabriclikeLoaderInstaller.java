@@ -1,7 +1,7 @@
 package git.artdeell.mojo.modding.modplatforms.api.modloader;
 
 import git.artdeell.mojo.instances.InstanceInstaller;
-import git.artdeell.mojo.instances.InstanceMetadata;
+import git.artdeell.mojo.modding.PlatformMetadata;
 import git.artdeell.mojo.modding.fabric.FabriclikeUtils;
 
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class FabriclikeLoaderInstaller implements LoaderInstaller {
     }
 
     @Override
-    public InstanceMetadata getMetadata() {
-        return new InstanceMetadata(loaderVersion, gameVersion, mUtils.getPlatform());
+    public PlatformMetadata getMetadata() {
+        return new PlatformMetadata(loaderVersion, gameVersion, mUtils.getPlatform());
     }
 }
