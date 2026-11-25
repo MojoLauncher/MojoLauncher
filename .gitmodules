@@ -10,3 +10,6 @@
 [submodule "NoBlocklist"]
 	path = NoBlocklist
 	url = https://github.com/MojoLauncher/NoBlocklist
+[submodule "BasicModInfoParser"]
+	path = BasicModInfoParser
+	url = https://github.com/MojoLauncher/BasicModInfoParser

@@ -339,6 +339,9 @@ dependencies {
 
     implementation 'com.github.MojoLauncher:alsoft-android-aar:f369161d5f'
 
+    // Mod Manager dependency
+    implementation project(":BasicModInfoParser") exclude group: 'com.google.code.gson', module: 'gson'
+
     implementation project(":glfw:jni_bindings")
     implementation project(":sdl:jni_bindings")
     implementation 'org.tomlj:tomlj:1.1.1'
