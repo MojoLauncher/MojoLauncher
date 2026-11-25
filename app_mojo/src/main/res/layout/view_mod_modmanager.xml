@@ -17,10 +17,12 @@
         <ImageView
             android:id="@+id/mod_thumbnail_imageview"
             android:layout_width="@dimen/_65sdp"
-            android:layout_height="@dimen/_65sdp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
 
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:src="@mipmap/ic_launcher_foreground" />
         <TextView
             android:id="@+id/mod_title_textview"
