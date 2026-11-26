@@ -47,13 +47,10 @@ public abstract class BaseSearchFragment extends Fragment implements ModItemAdap
     private ColorStateList defaultTextColor;
     private TaskCountListener taskCountListener;
 
-
-
     protected BaseSearchFragment() {
         super(R.layout.fragment_mod_search);
     }
 
-    protected abstract boolean isModpack();
     protected abstract int getSearchHint();
     protected abstract int getNoResultsString();
     protected abstract int getErrorString();
@@ -67,7 +64,6 @@ public abstract class BaseSearchFragment extends Fragment implements ModItemAdap
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         searchFilters = new SearchFilters();
-        searchFilters.isModpack = isModpack();
         instance = Instances.loadSelectedInstance();
         prepareFilters(searchFilters);
     }

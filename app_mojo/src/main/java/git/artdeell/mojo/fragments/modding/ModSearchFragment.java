@@ -30,10 +30,6 @@ import me.andreasmelone.basicmodinfoparser.platform.Platform;
 public class ModSearchFragment extends BaseSearchFragment {
 
     public static final String TAG = "ModSearchFragment";
-    @Override
-    protected boolean isModpack() {
-        return false;
-    }
 
     @Override
     protected int getSearchHint() {
@@ -64,6 +60,7 @@ public class ModSearchFragment extends BaseSearchFragment {
 
     @Override
     protected void prepareFilters(SearchFilters filters) {
+        filters.isModpack = false;
         if(instance == null || instance.moddingData == null) return;
         filters.mcVersion = instance.moddingData.gameVersion;
         filters.modLoader = loaderName(instance.moddingData.platform);

@@ -25,6 +25,7 @@ import git.artdeell.mojo.MojoApplication;
 import git.artdeell.mojo.R;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.modding.modplatforms.ModItemAdapter;
+import git.artdeell.mojo.modding.modplatforms.models.SearchFilters;
 import git.artdeell.mojo.utils.profiles.VersionSelectorDialog;
 
 public class ModpackSearchFragment extends BaseSearchFragment {
@@ -65,9 +66,10 @@ public class ModpackSearchFragment extends BaseSearchFragment {
             ProgressLayout.clearProgress(ProgressLayout.INSTALL_MODPACK);
         }
     }
+
     @Override
-    protected boolean isModpack() {
-        return true;
+    protected void prepareFilters(SearchFilters filters) {
+        filters.isModpack = true;
     }
 
     @Override
