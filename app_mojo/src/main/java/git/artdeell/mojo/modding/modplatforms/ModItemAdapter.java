@@ -280,7 +280,7 @@ public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         }
 
-        /** Display extended info/interaction about a modpack */
+        /** Display extended info/interaction about an item */
         private void setStateDetailed(ModDetail detailedItem) {
             if(detailedItem != null && detailedItem.downloads != null && detailedItem.downloads.length > 0) {
                 setInstallEnabled(true);

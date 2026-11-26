@@ -116,9 +116,6 @@ public class ModSearchFragment extends BaseSearchFragment {
     private void onModInstalled(Context context) {
         Toast.makeText(context, R.string.mod_install_toast_success,
                 Toast.LENGTH_SHORT).show();
-        if (isAdded()) {
-            getParentFragmentManager().popBackStackImmediate();
-        }
     }
 
 }
