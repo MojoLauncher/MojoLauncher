@@ -43,14 +43,6 @@ public class ModScanner {
         return modInfos;
     }
 
-    // TODO: Actually fix this in the library
-    // The issue is that Quilt accepts Fabric mods, but the library doesn't
-    public static BasicModInfo getModInfo(ModFile modFile, Platform platform) {
-        BasicModInfo[] infos = modFile.getInfo(platform);
-        if(infos.length == 0 && platform == Platform.QUILT) infos = modFile.getInfo(Platform.FABRIC);
-        return infos.length > 0 ? infos[0] : null;
-    }
-
     private void findModFiles(File directory) throws InterruptedException{
         File[] files = directory.listFiles(((file,name) -> name.endsWith(".jar") || name.endsWith(".jar.disabled")));
         File[] directories = directory.listFiles(File::isDirectory);
@@ -83,11 +75,12 @@ public class ModScanner {
             ModInfo modInfo;
             try {
                 ModFile modFile = ModFile.create(mModFile);
-                BasicModInfo info = getModInfo(modFile, mPlatform);
-                if (info == null) {
+                BasicModInfo[] infos = modFile.getInfo(mPlatform);
+                if (infos.length == 0) {
                     modInfo = new CorruptModInfo(mModFile, CorruptModInfo.CORRUPTION_REASON_NOT_A_MOD);
                 } else {
-                    modInfo = new ContainedModInfo(mModFile, modFile, createSearchTerms(info));
+                    BasicModInfo basicModInfo = infos[0];
+                    modInfo = new ContainedModInfo(mModFile, modFile, createSearchTerms(basicModInfo));
                 }
                 if(mModFile.getName().endsWith(".jar.disabled")) modInfo.disabled = true;
             } catch (ModInfoParseException e){

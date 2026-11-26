@@ -175,7 +175,7 @@ public class ModAdapter extends RecyclerView.Adapter<ModAdapter.ViewHolder> {
         private void bindContained(ContainedModInfo containedModInfo) {
             mName.setTextColor(mDefaultNameColor);
             mDescription.setTextColor(mDefaultDescriptionColor);
-            BasicModInfo basicModInfo = ModScanner.getModInfo(containedModInfo.modFile, mPlatform);
+            BasicModInfo basicModInfo = containedModInfo.modFile.getInfo(mPlatform)[0];
             String name = basicModInfo.getName();
             String description = basicModInfo.getDescription();
             Version<?> version = basicModInfo.getVersion();
