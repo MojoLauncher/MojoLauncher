@@ -10,7 +10,6 @@
     <!-- Warnings -->
     <string name="warning_remove_account">Сіи документы будутъ удалены!</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_installmod">Выберите установщикъ модификаціи</string>
     <!-- Error messages -->
     <string name="error_fatal">MJLauncher былъ остановленъ въ результатѣ курьёза</string>
     <string name="error_no_version">Нѣтъ версій!</string>
@@ -18,7 +17,6 @@
     <string name="error_show_less">Свернуть</string>
     <!-- Toast messages -->
     <string name="toast_permission_denied">Требуется разрѣшеніе на чтеніе/запись въ хранилищѣ!</string>
-    <string name="toast_optifine_success">Установка прошла успѣшно</string>
     <!--
     <string name="toast_3">Exit</string>
     -->
@@ -26,10 +24,7 @@
     <string name="mcl_tab_wiki">Энциклопедія \"Википедія\"</string>
     <!-- MCLauncherActivity: Account status -->
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_launch_cleancache">Очистка файловъ кэша</string>
-    <string name="mcl_launch_downloading">Загрузка %s</string>
     <string name="mcl_launch_downloading_progress">"Загрузка %s (%.2f МБайтъ / %.2f МБайтъ)"</string>
-    <string name="mcl_launch_download_assets">Подготовка къ загрузкѣ ресурсовъ</string>
     <string name="mcl_options">Настройки</string>
     <string name="mcl_option_customcontrol">Пользовательское управленіе</string>
     <string name="mcl_setting_title_use_surface_view">Использовать альтернативный визуализаторъ</string>
@@ -83,7 +78,6 @@
     <!-- MainActivity: Menu advanced controls -->
     <string name="control_forceclose">Принудительное закрытіе</string>
     <string name="control_viewout">Журналъ</string>
-    <string name="control_adebug">Отладка ввода</string>
     <string name="control_customkey">Отправить пользовательскій кодъ кнопки</string>
     <!-- ImportControlActivity Strings -->
     <!--
@@ -104,10 +98,6 @@
     <string name="customctrl_addsubbutton">Добавить подъ-кнопку</string>
     <string name="main_play">Играть</string>
     <string name="autoram_info_msg">Выделено %d МБайтъ О.З.У.</string>
-    <string name="mcl_setting_check_libraries">Провѣрка библіотекъ послѣ загрузки</string>
-    <string name="dl_library_sha_fail">Библіотека %s повреждена и будетъ загружена повторно</string>
-    <string name="dl_library_sha_unknown">Библіотека %s не можетъ быть провѣрена, будемъ надѣяться, что оная въ порядкѣ</string>
-    <string name="dl_library_sha_pass">Библіотека %s провѣрена и можетъ быть использована</string>
     <string name="mcl_disable_gestures">Отключеніе жестовъ</string>
     <string name="mcl_disable_gestures_subtitle">Отключаетъ жесты, такіе какъ удержаніе, чтобы сломать блокъ, и нажатіе, чтобы размѣстить блокъ.</string>
     <string name="mcl_setting_title_mousespeed">Чувствительность мыши</string>
@@ -125,7 +115,6 @@
     <string name="pvc_jvmArgs">Аргументы JVM</string>
     <string name="profiles_profile_name">Имя</string>
     <string name="pedit_renderer">Визуализаторъ</string>
-    <string name="of_dl_progress">Загрузка %s</string>
     <string name="generic_debug">Отладка</string>
     <string name="controller_button_select">Сдѣлать выборъ</string>
 </resources>
