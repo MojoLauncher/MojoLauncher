@@ -12,7 +12,7 @@
     <string name="login_online_login_label">लॉगिन</string>
 
     <!-- Hint -->
-    <string name="hint_control_mapping">संदर्भ मेनू खोलने के लिए कॉगव्हील आइकन ⚙ को स्पर्श करें।\nकस्टमाइज़ करने के लिए किसी बटन को टैप करें: एडिट करें, आकार बदलें, हटाएँ, या कीबाइंड्स बदलें।</string>
+    <string name="hint_control_mapping">Context menu खोलने के लिए कॉगव्हील ⚙ आइकन को स्पर्श करें।\nकस्टमाइज़ करने के लिए किसी बटन को टैप करें: उसे एडिट करें, उसका आकार बदलें, हटाएँ या उसकी कीबाइंड्स बदलें।</string>
 
     <!-- Warnings -->
     <string name="warning_remove_account">यह खाता हटा दिया जाएगा!</string>
@@ -21,13 +21,13 @@
     <string name="alerttitle_installmod">मॉड इंस्टॉलर को चुने</string>
 
     <!-- Error messages -->
-    <string name="error_fatal">मोजो लांचर अप्रत्याशित क्रैश हो गया है</string>
+    <string name="error_fatal">MJLauncher अप्रत्याशित क्रैश हो गया है</string>
     <string name="error_no_version">कोई संस्करण नहीं!</string>
     <string name="error_show_more">ज्यादा दिखाएँ </string>
     <string name="error_show_less">कम दिखाएँ</string>
 
     <!-- Toast messages -->
-    <string name="toast_permission_denied">भंडारण अनुमति आवश्यक है। कृपया पढ़ने और लिखने की अनुमति दें</string>
+    <string name="toast_permission_denied">Storage अनुमति आवश्यक है। कृपया पढ़ने और लिखने की अनुमति दें</string>
     <string name="toast_optifine_success">सफलतापूर्वक स्थापित किया गया</string>
     <!--
     <string name="toast_3">Exit</string>
@@ -42,14 +42,13 @@
     <string name="mcl_launch_cleancache">कैशे फ़ाइलों की सफाई</string>
     <string name="mcl_launch_downloading">डाउनलोड हो रहा है %s</string>
     <string name="mcl_launch_downloading_progress">"%s डाउनलोड हो रहा है (%.2f MB / %.2f MB)"</string>
-    <string name="mcl_launch_download_assets">संसाधन डाउनलोड करने की तैयारी हो रही है</string>
+    <string name="mcl_launch_download_assets">Resources डाउनलोड करने की तैयारी हो रही है</string>
 
     <string name="mcl_options">विकल्प</string>
-    <string name="mcl_option_customcontrol">अनुकूलित नियंत्रण</string>
-
+    <string name="mcl_option_customcontrol">Custom controls</string>
 
     <string name="mcl_setting_title_use_surface_view">वैकल्पिक सरफेस रेंडरिंग का उपयोग करें</string>
-    <string name="mcl_setting_subtitle_use_surface_view">यह GPU-बाधित स्थितियों में प्रदर्शन को बेहतर बनाने में मदद कर सकता है।</string>
+    <string name="mcl_setting_subtitle_use_surface_view">यह GPU-bound स्थितियों में प्रदर्शन को बेहतर बनाने में मदद कर सकता है।</string>
     <string name="mcl_setting_title_ignore_notch">नॉच को अनदेखा करें</string>
     <string name="mcl_setting_subtitle_ignore_notch">नॉच को अनदेखा करता है और स्क्रीन को उसके नीचे तक फैलाता है।\nआपको अधिक इमर्सिव अनुभव देता है।</string>
     <string name="mcl_setting_title_resolution_scaler">रिज़ॉल्यूशन स्केलर</string>
@@ -62,15 +61,15 @@
     <string name="mcl_setting_title_javaargs">JVM लॉन्च आर्ग्यूमेंट्स</string>
     <string name="mcl_setting_subtitle_javaargs">सावधान रहें, ज्ञान के बिना संशोधित करने पर गेम क्रैश हो सकता है।</string>
     <string name="mcl_setting_category_renderer">रेंडरर</string>
-    <string name="mcl_setting_renderer_gles2_4">होली GL4ES - (सभी संस्करण, तेज़)</string>
-    <string name="mcl_setting_renderer_vulkan_zink">ज़िंक (वल्कन) - (सभी संस्करण, मध्यम)</string>
-    <string name="mcl_setting_renderer_ltw">LTW (ओपनजीएल ईएस 3) - केवल 1.17+</string>
+    <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (1.21.4 तक के सभी संस्करण, तेज़़)</string>
+    <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) - (सभी संस्करण, मध्यम)</string>
+    <string name="mcl_setting_renderer_ltw">LTW (OpenGL ES 3) - केवल 1.17+, तेज़</string>
     <string name="mcl_setting_veroption_release">रीलीज़</string>
     <string name="mcl_setting_veroption_snapshot">स्नैपशॉट</string>
     <string name="mcl_setting_veroption_oldalpha">ओल्ड-अल्फा</string>
     <string name="mcl_setting_veroption_oldbeta">ओल्ड-बीटा</string>
-    <string name="mcl_setting_java_sandbox">सैंडबॉक्स .jar निष्पादन</string>
-    <string name="mcl_setting_java_sandbox_subtitle">फ़ाइल निष्पादित करते समय सैंडबॉक्स सुरक्षा मैनेजर की उपलब्धता को नियंत्रित करें।</string>
+    <string name="mcl_setting_java_sandbox">Sandbox .jar execution</string>
+    <string name="mcl_setting_java_sandbox_subtitle">फ़ाइल execute करते समय Sandbox security manager की उपलब्धता को नियंत्रित करें।</string>
     <string name="mcl_version_clone">क्लोन</string>
 
     <!-- Global strings -->
@@ -92,7 +91,7 @@
     <!-- MainActivity: strings -->
     <string name="mcn_exit_title">एप्लिकेशन/गेम कोड %d के साथ बंद हो गया, अधिक जानकारी के लिए latestlog.txt देखें।</string>
     <string name="mcn_exit_confirm">क्या आप वाकई ज़बरदस्ती बंद करना चाहते हैं?</string>
-    <string name="mcn_check_fail_vulkan_support">ज़िंक (वल्कन) रेंडरर इस डिवाइस पर समर्थित नहीं/नहीं चलेगा  है!</string>
+    <string name="mcn_check_fail_vulkan_support">Zink (Vulkan) रेंडरर इस डिवाइस पर समर्थित नहीं/नहीं चलेगा  है!</string>
 
     <!-- MainActivity: Control buttons -->
     <string name="control_chat">Chat</string>
@@ -128,7 +127,7 @@
     <!--
     <string name="control_more3"></string>
     <string name="control_more4"></string>
--->
+    -->
 
     <string name="customctrl_toggle">टॉगल करने योग्य</string>
     <string name="customctrl_size">आकार</string>
@@ -142,7 +141,7 @@
     <string name="customctrl_stroke_width">स्ट्रोक चौड़ाई</string>
     <string name="customctrl_stroke_color">स्ट्रोक रंग</string>
 
-    <string name="customctrl_button_opacity">बटन अपारदर्शिता</string>
+    <string name="customctrl_button_opacity">बटन Opacity</string>
 
     <string name="customctrl_addbutton">बटन जोड़ें</string>
     <string name="customctrl_addbutton_drawer">बटन ड्रॉअर जोड़ें</string>
@@ -153,10 +152,10 @@
     <string name="customctrl_export">कंट्रोलमैप एक्सपोर्ट करें</string>
 
     <string name="main_share_logs">लॉग फ़ाइल साझा करें</string>
-    <string name="main_install_jar_file"> एक .jar निष्पादित करें</string>
+    <string name="main_install_jar_file">एक .jar execute करें</string>
     <string name="main_play">खेले</string>
     <string name="autoram_info_msg">मेमोरी %d MB पर सेट है</string>
-    <string name="mcl_setting_check_libraries"> डाउनलोड करने के बाद लाइब्रेरीज़ जाँचें</string>
+    <string name="mcl_setting_check_libraries">डाउनलोड करने के बाद लाइब्रेरीज़ जाँचें</string>
     <string name="mcl_setting_check_libraries_subtitle">यह विकल्प लॉन्चर को उपलब्ध होने पर लाइब्रेरी हैश की जाँच करने के लिए बाध्य करता है। यह टूटे हुए डाउनलोड्स को रोकता है।</string>
     <string name="dl_library_sha_unknown">लाइब्रेरी %s की जाँच नहीं की जा सकती, इसे सही माना जाएगा</string>
     <string name="dl_library_sha_pass">लाइब्रेरी %s ठीक है और उपयोग करने योग्य है</string>
@@ -170,22 +169,23 @@
     <string name="customctrl_swipeable">स्वाइप करने योग्य</string>
     <string name="customctrl_forward_lock">फॉरवर्ड लॉक</string>
     <string name="customctrl_absolute_tracking">एब्सोल्यूट फिंगर ट्रैकिंग</string>
-    <string name="memory_warning_msg">मौजूदा उपलब्ध RAM (%d) आवंटित RAM (%d) से कम है, जिससे गेम क्रैश हो सकता है। यदि गेम क्रैश होता है, तो आवंटन बदलें।</string>
-    <string name="address_memory_warning_msg">मौजूदा उपलब्ध एड्रेसेबल RAM स्पेस (%d) आवंटित RAM (%d) से कम है, जिससे गेम क्रैश हो जाएगा। यदि गेम क्रैश होता है, तो आवंटन बदलें।</string>
-    <string name="mcl_memory_allocation">मेमोरी आवंटन</string>
+    <string name="memory_warning_msg">मौजूदा उपलब्ध RAM (%d) allocated RAM (%d) से कम है, जिससे गेम क्रैश हो सकता है। यदि गेम क्रैश होता है, तो allocation बदलें।</string>
+    <string name="address_memory_warning_msg">मौजूदा उपलब्ध addressable RAM space (%d) allocated RAM (%d) से कम है, जिससे गेम क्रैश हो जाएगा। यदि गेम क्रैश होता है, तो allocation बदलें।</string>
+    <string name="mcl_memory_allocation">Memory allocation</string>
+    <string name="mcl_memory_allocation_subtitle">नियंत्रित करता है कि Java रनटाइम को कितनी मेमोरी दी जाती है।</string>
 
-    <string name="multirt_runtime_corrupt">खराब जावा रनटाइम</string>
+    <string name="multirt_runtime_corrupt">खराब Java रनटाइम</string>
     <string name="multirt_runtime_incompatiblearch">असंगत आर्किटेक्चर: %s</string>
-    <string name="multirt_config_title">जावा रनटाइम</string>
+    <string name="multirt_config_title">Java रनटाइम</string>
     <string name="multirt_config_add">नया जोड़ें</string>
     <string name="multirt_title">रनटाइम मैनेजर</string>
-    <string name="multirt_subtitle">इंस्टॉल किए गए जावा रनटाइम मैनेज करें।</string>
+    <string name="multirt_subtitle">इंस्टॉल किए गए Java रनटाइम मैनेज करें।</string>
     <string name="multirt_progress_caching">कैशिंग हो रही है...</string>
     <string name="multirt_config_setdefault">डिफ़ॉल्ट सेट करें</string>
     <string name="multirt_config_setdefault_already">डिफ़ॉल्ट</string>
-    <string name="multirt_config_removeerror_last">आपके पास कम से कम एक जावा रनटाइम इंस्टॉल होना चाहिए।</string>
-    <string name="multirt_nocompatiblert">कोई संगत जावा रनटाइम नहीं मिल रहा है। इस वर्ज़न के लिए जावा %d या नया चाहिए।</string>
-    <string name="multirt_nojava8rt">जावा 8 नहीं मिल रहा है। इस विकल्प का उपयोग करने के लिए, आपको जावा 8 इंस्टॉल करना होगा।</string>
+    <string name="multirt_config_removeerror_last">आपके पास कम से कम एक Java रनटाइम इंस्टॉल होना चाहिए।</string>
+    <string name="multirt_nocompatiblert">कोई संगत Java रनटाइम नहीं मिल रहा है। इस वर्ज़न के लिए Java %d या नया चाहिए।</string>
+    <string name="multirt_nojava8rt">Java 8 नहीं मिल रहा है। इस विकल्प का उपयोग करने के लिए, आपको Java 8 इंस्टॉल करना होगा।</string>
     <string name="multirt_delete_runtime">रनटाइम डिलीट करें</string>
     <string name="pvc_gameDirectory">गेम डायरेक्टरी</string>
     <string name="pvc_jvmArgs">JVM आर्ग्यूमेंट्स</string>
@@ -194,15 +194,15 @@
     <string name="preference_mouse_start_description">यह विकल्प ऑन होने पर वर्चुअल माउस स्टार्टअप पर दिखाई देता है।</string>
     <string name="preference_video_title">वीडियो और रेंडरर</string>
     <string name="preference_video_description">रिज़ॉल्यूशन, रेंडरर और प्रदर्शन</string>
-    <string name="preference_control_title">नियंत्रण कस्टमाइज़ेशन</string>
+    <string name="preference_control_title">Control कस्टमाइज़ेशन</string>
     <string name="preference_control_description">जेस्चर, बटन और स्केलिंग</string>
-    <string name="preference_java_title">जावा ट्वीक्स</string>
-    <string name="preference_java_description">जावा रनटाइम, JVM आर्ग्यूमेंट्स, RAM और सैंडबॉक्स</string>
+    <string name="preference_java_title">Java ट्वीक्स</string>
+    <string name="preference_java_description">Java रनटाइम, JVM आर्ग्यूमेंट्स, RAM और सैंडबॉक्स</string>
     <string name="preference_misc_title">अन्य सेटिंग्स</string>
     <string name="preference_misc_description">संस्करण सूची और लाइब्रेरीज़ जाँच</string>
     <string name="preference_experimental_title">प्रायोगिक चीज़ें</string>
     <string name="preference_experimental_description">वहां की चीज़ों का सावधानी से उपयोग करें, कोई सपोर्ट नहीं है।</string>
-    <string name="preference_sustained_performance_title">निरंतर प्रदर्शन मोड सक्षम करें</string>
+    <string name="preference_sustained_performance_title">Sustained performance mode सक्षम करें</string>
     <string name="preference_sustained_performance_description">पीक प्रदर्शन को सीमित करके थर्मल थ्रॉटलिंग को सीमित करें।</string>
     <string name="preference_force_vsync_title">VSync को बलपूर्वक सक्षम करें</string>
     <string name="preference_force_vsync_description">पीक प्रदर्शन को सीमित करके थर्मल थ्रॉटलिंग को सीमित करें।</string>
@@ -214,10 +214,10 @@
     <string name="preference_category_gyro_controls">गाइरोस्कोप कंट्रोल्स</string>
     <string name="preference_category_virtual_mouse">वर्चुअल माउस</string>
 
-    <string name="preference_gyro_invert_x_axis">X-अक्ष उलटा करें</string>
-    <string name="preference_gyro_invert_y_axis">Y-अक्ष उलटा करें</string>
-    <string name="preference_gyro_invert_x_axis_description">क्षैतिज अक्ष को उलटा करें।</string>
-    <string name="preference_gyro_invert_y_axis_description">ऊर्ध्वाधर अक्ष को उलटा करें।</string>
+    <string name="preference_gyro_invert_x_axis">X-axis उलटा करें</string>
+    <string name="preference_gyro_invert_y_axis">Y-axis उलटा करें</string>
+    <string name="preference_gyro_invert_x_axis_description">Horizontal axis को उलटा करें।</string>
+    <string name="preference_gyro_invert_y_axis_description">Vertical axis को उलटा करें।</string>
     <string name="preference_gyro_smoothing_title">गाइरोस्कोप स्मूथिंग सक्षम करें</string>
     <string name="preference_gyro_smoothing_description">लेटेंसी के बदले जिटर कम करें।</string>
 
@@ -231,12 +231,13 @@
     <string name="instance_shared_data_on">गेम डेटा को साझा डायरेक्टरी में स्टोर करें</string>
     <string name="instance_shared_data_off">गेम डेटा को इंस्टेंस डायरेक्टरी में स्टोर करें</string>
     <string name="global_delete">डिलीट करें</string>
-    <string name="pedit_java_runtime">जावा रनटाइम</string>
+    <string name="pedit_java_runtime">Java रनटाइम</string>
     <string name="pedit_renderer">रेंडरर</string>
     <string name="color_default_hex" translatable="false">FFFF0000</string>
     <string name="notif_channel_name">सामान्य</string>
     <string name="notif_channel_id" translatable="false">channel_id</string>
-    <string name="lazy_service_default_title">मोजो फोरग्राउंड सर्विस</string>
+    <string name="lazy_service_default_title">MJ फोरग्राउंड सर्विस</string>
+
     <string name="mcl_setting_veroption_installed">इंस्टॉल किया गया</string>
     <string name="use_global_default">(ग्लोबल डिफ़ॉल्ट का उपयोग करें)</string>
     <string name="default_control">डिफ़ॉल्ट कंट्रोलमैप</string>
@@ -251,22 +252,25 @@
     <string name="main_add_account">अकाउंट जोड़ें</string>
     <string name="tasks_ongoing">कार्य प्रगति पर हैं, कृपया प्रतीक्षा करें</string>
     <string name="no_saved_accounts">कोई सेव किए गए अकाउंट नहीं</string>
-    <string name="mc_download_failed">यह खराब नेटवर्क कनेक्शन, गलत तरीके से रखी गई फ़ाइलों, आदि के कारण हो सकता है। </string>
-    <string name="xerr_unknown">अज्ञात Xbox Live API त्रुटि %d</string>
+    <string name="mc_download_failed">गेम डाउनलोड करने में विफल! यह खराब नेटवर्क कनेक्शन, गलत तरीके से रखी गई फ़ाइलों, आदि के कारण हो सकता है।</string>
 
+    <string name="xerr_unknown">अज्ञात Xbox Live API त्रुटि %d</string>
+    <string name="xerr_no_account">आपके पास कोई Xbox Live अकाउंट नहीं लगता। कृपया https://minecraft.net/ पर एक बार लॉगिन करें और फिर से प्रयास करें।</string>
     <string name="xerr_adult_verification">आपके अकाउंट को किसी वयस्क द्वारा सत्यापित किया जाना ज़रूरी है।</string>
     <string name="xerr_child">आपका अकाउंट एक चाइल्ड अकाउंट है, और लॉगिन करने के लिए इसे एक फैमिली में जोड़ा जाना चाहिए।</string>
+    <string name="mc_not_owned">लगता है इस अकाउंट में कोई MC प्रोफ़ाइल नहीं है। अगर आपके पास Xbox Game Pass है, तो कृपया गेम की वेबसाइट पर लॉगिन करें और अपनी प्रोफ़ाइल सेट करें।</string>
 
     <string name="xerr_not_available">Xbox Live आपके देश में उपलब्ध नहीं है</string>
     <string name="preference_enable_gyro_title">गाइरोस्कोप कंट्रोल्स सक्षम करें</string>
     <string name="preference_enable_gyro_description">इसे सक्षम करने से आप अपने फ़ोन को मोड़कर गेम में घूम सकेंगे।</string>
-    <string name="preference_gyro_sensitivity_title">गाइरोस्कोप कंट्रोल्स संवेदनशीलता</string>
-    <string name="preference_gyro_sensitivity_description">गाइरोस्कोप कंट्रोल्स की संवेदनशीलता समायोजित करें।</string>
+    <string name="preference_gyro_sensitivity_title">गाइरोस्कोप कंट्रोल्स sensitivity</string>
+    <string name="preference_gyro_sensitivity_description">गाइरोस्कोप कंट्रोल्स की sensitivity समायोजित करें।</string>
     <string name="toast_turn_on_gyro">इसका उपयोग करने के लिए पहले गाइरोस्कोप कंट्रोल्स सक्षम करें!</string>
     <string name="preference_gyro_sample_rate_title">गाइरोस्कोप सैंपलिंग रेट</string>
     <string name="preference_gyro_sample_rate_description">अगर आपको गाइरोस्कोप कंट्रोल्स के साथ प्रदर्शन संबंधी समस्याएँ आती हैं, तो इसे बढ़ाएँ।</string>
     <string name="microsoft_login_retry_later">बहुत ज़्यादा रिक्वेस्ट हैं, कृपया बाद में फिर से प्रयास करें।</string>
-    <string name="storage_required">मोजो लॉन्चर को बाहरी स्टोरेज अटैच होना ज़रूरी है। कृपया इसे फिर से कनेक्ट करें और ऐप रीस्टार्ट करें।</string>
+    <string name="storage_required">MJLauncher को बाहरी स्टोरेज अटैच होना ज़रूरी है। कृपया इसे फिर से कनेक्ट करें और ऐप रीस्टार्ट करें।</string>
+
     <string name="mcl_setting_title_buttonallcaps">बटन लेबल में केवल बड़े अक्षरों का उपयोग करें</string>
     <string name="mcl_setting_subtitle_buttonallcaps">यदि आप अपने कंट्रोल्स में छोटे अक्षरों का उपयोग करना चाहते हैं तो इसे डिसेबल करें।</string>
     <string name="create_instance">नया इंस्टेंस बनाएँ</string>
@@ -282,44 +286,44 @@
     <string name="global_no">नहीं</string>
 
     <string name="preference_controller_map_wiped">कंट्रोलर कॉन्फ़िग मिटा दिया गया है।</string>
-      <string name="preference_category_controller_settings">कंट्रोलर सेटिंग्स </string>
+    <string name="preference_category_controller_settings">कंट्रोलर सेटिंग्स </string>
     <string name="preference_wipe_controller_title">कंट्रोलर मैपिंग रीसेट करें</string>
     <string name="preference_wipe_controller_description">यह आपको कंट्रोलर बटन को फिर से मैप करने की अनुमति देता है।</string>
     <string name="preference_deadzone_scale_title">जॉयस्टिक डेडज़ोन स्केल</string>
     <string name="preference_deadzone_scale_description">अगर जॉयस्टिक ड्रिफ्ट करती है तो इसे बढ़ाएँ।</string>
 
-
-    <string name="preference_force_big_core_title">रेंडरर को बड़े कोर पर चलाने के लिए बल दें</string>
+    <string name="preference_force_big_core_title">रेंडरर को big core पर चलाने के लिए बल दें</string>
+    <string name="preference_force_big_core_desc">गेम के रेंडर थ्रेड को सबसे ज़्यादा अधिकतम फ़्रीक्वेंसी वाले कोर पर चलने के लिए बाध्य करता है।</string>
 
     <string name="version_select_hint">एक संस्करण चुनें</string>
     <string name="forge_dl_progress">%s के लिए इंस्टॉलर डाउनलोड हो रहा है</string>
-    <string name="forge_dl_searching">फोर्ज संस्करण नंबर खोजा जा रहा है</string>
+    <string name="forge_dl_searching">Forge संस्करण नंबर खोजा जा रहा है</string>
     <string name="modloader_dl_failed_to_load_list">संस्करण सूची लोड करने में विफल!</string>
-    <string name="forge_dl_no_installer">माफ़ करें, लेकिन फोर्ज के इस संस्करण में इंस्टॉलर नहीं है, जो अभी तक समर्थित नहीं है।</string>
-    <string name="forge_dl_select_version">फोर्ज संस्करण चुनें</string>
+    <string name="forge_dl_no_installer">माफ़ करें, लेकिन Forge के इस संस्करण में इंस्टॉलर नहीं है, जो अभी तक समर्थित नहीं है।</string>
+    <string name="forge_dl_select_version">Forge संस्करण चुनें</string>
     <string name="fabric_dl_progress">%s लोडर मेटाडेटा डाउनलोड हो रहा है</string>
     <string name="fabric_dl_loader_version">%s लोडर संस्करण</string>
+    <string name="fabric_dl_game_version">गेम संस्करण</string>
 
     <string name="fabric_dl_install">इंस्टॉल करें</string>
     <string name="fabric_dl_cant_read_meta">%s लोडर मेटाडेटा पढ़ने में विफल। कृपया बाद में फिर से प्रयास करें।</string>
-    <string name="fabric_dl_cant_read_meta2">फैब्रिक लोडर मेटाडेटा पढ़ने में विफल। कृपया बाद में फिर से प्रयास करें।</string>
-    <string name="modloader_dl_install_fabric_instance">फैब्रिक इंस्टेंस बनाएँ</string>
-    <string name="modloader_dl_install_quilt_instance">क्विल्ट इंस्टेंस बनाएँ</string>
-    <string name="modloader_dl_install_forge_instance">फोर्ज इंस्टेंस बनाएँ</string>
+    <string name="fabric_dl_cant_read_meta2">Fabric लोडर मेटाडेटा पढ़ने में विफल। कृपया बाद में फिर से प्रयास करें।</string>
+    <string name="modloader_dl_install_fabric_instance">Fabric इंस्टेंस बनाएँ</string>
+    <string name="modloader_dl_install_quilt_instance">Quilt इंस्टेंस बनाएँ</string>
+    <string name="modloader_dl_install_forge_instance">Forge इंस्टेंस बनाएँ</string>
     <string name="create_instance_vanilla">वैनिला इंस्टेंस बनाएँ</string>
     <string name="create_profile_vanilla_like_versions">वैनिला जैसी संस्करण</string>
     <string name="create_profile_modded_versions">मॉड की गई संस्करण</string>
     <string name="fabric_dl_loader_title">संस्करण चुनें</string>
-    <string name="of_dl_select_version">ऑप्टिफाइन संस्करण चुनें</string>
-    <string name="of_dl_failed_to_scrape">ऑप्टिफाइन इंस्टॉलेशन के लिए डेटा एकत्र करने में विफल।</string>
+    <string name="of_dl_select_version">OptiFine संस्करण चुनें</string>
+    <string name="of_dl_failed_to_scrape">OptiFine इंस्टॉलेशन के लिए डेटा एकत्र करने में विफल।</string>
     <string name="of_dl_progress">%s डाउनलोड हो रहा है</string>
-    <string name="mod_dl_install_optifine">ऑप्टिफाइन इंस्टॉल करें</string>
-
+    <string name="mod_dl_install_optifine">OptiFine इंस्टॉल करें</string>
 
     <string name="hint_search_modpack">मॉडपैक खोजें</string>
 
-    <string name="preference_vulkan_driver_system_title">सिस्टम वल्कन ड्राइवर का उपयोग करें</string>
-    <string name="preference_vulkan_driver_system_description">लॉन्चर को एड्रेनो GPU पर टर्निप के बजाय सिस्टम वल्कन ड्राइवर का उपयोग करने के लिए बाध्य करें। यह केवल ज़िंक और वल्कन का उपयोग करने वाले मॉड्स को प्रभावित करता है।</string>
+    <string name="preference_vulkan_driver_system_title">सिस्टम Vulkan ड्राइवर का उपयोग करें</string>
+    <string name="preference_vulkan_driver_system_description">लॉन्चर को Adreno GPU पर Turnip के बजाय सिस्टम Vulkan ड्राइवर का उपयोग करने के लिए बाध्य करें। यह केवल Zink और Vulkan का उपयोग करने वाले मॉड्स को प्रभावित करता है।</string>
 
     <string name="generic_install">इंस्टॉल करें</string>
     <string name="generic_apply">लागू करें</string>
@@ -333,7 +337,8 @@
     <string name="modpack_download_downloading_mods">मॉड्स डाउनलोड हो रहे हैं (%.2f MB / %.2f MB)</string>
     <string name="modpack_download_downloading_mods_fc">मॉड्स डाउनलोड हो रहे हैं (फ़ाइल %d/%d)</string>
     <string name="modpack_download_applying_overrides">ओवरराइड्स लागू हो रहे हैं (%d/%d)</string>
-    <string name="modpack_install_notification_title">मोजो मॉडपैक इंस्टॉलर</string>
+    <string name="modpack_install_notification_title">MJ मॉडपैक इंस्टॉलर</string>
+
     <string name="modpack_install_notification_success">मॉडपैक इंस्टॉलेशन पूरा करने के लिए यहां क्लिक करें</string>
     <string name="modpack_install_notification_data_not_available">मॉड लोडर जानकारी डाउनलोड करने में विफल</string>
     <string name="modpack_install_modloader_download_failed">मॉड लोडर फ़ाइलें डाउनलोड करने में विफल</string>
@@ -344,7 +349,7 @@
     <string name="notif_error_occured_desc">अधिक जानकारी देखने के लिए क्लिक करें</string>
     <string name="fabric_dl_only_stable">केवल स्थिर संस्करण दिखाएँ</string>
     <string name="dl_tampered_manifest_title">फ़ाइल सत्यापन चेतावनी</string>
-    <string name="dl_tampered_manifest"><![CDATA[मिरर पर गेम संस्करण मैनिफेस्ट आधिकारिक मोजांग संस्करण मैनिफेस्ट से मेल नहीं खाता है, जिसका अर्थ है कि इसमें छेड़छाड़ की गई हो सकती है।<br/><b>यह सुरक्षित नहीं है। यदि आप जारी रखते हैं तो आपकी व्यक्तिगत जानकारी खतरे में पड़ सकती है।</b><br/>यदि आप अभी भी मिरर का उपयोग करना चाहते हैं, तो "मैनिफेस्ट जांच बंद करें" दबाएं और डाउनलोड फिर से शुरू करें।<br/>यदि आप आधिकारिक डाउनलोड स्रोत का उपयोग करना चाहते हैं, तो "आधिकारिक साइट पर स्विच करें" दबाएं और डाउनलोड फिर से शुरू करें।<br/>]]>
+    <string name="dl_tampered_manifest"><![CDATA[मिरर पर गेम संस्करण मैनिफेस्ट आधिकारिक Mojang संस्करण मैनिफेस्ट से मेल नहीं खाता है, जिसका अर्थ है कि इसमें छेड़छाड़ की गई हो सकती है।<br/><b>यह सुरक्षित नहीं है। यदि आप जारी रखते हैं तो आपकी व्यक्तिगत जानकारी खतरे में पड़ सकती है।</b><br/>यदि आप अभी भी मिरर का उपयोग करना चाहते हैं, तो "मैनिफेस्ट जांच बंद करें" दबाएं और डाउनलोड फिर से शुरू करें।<br/>यदि आप आधिकारिक डाउनलोड स्रोत का उपयोग करना चाहते हैं, तो "आधिकारिक साइट पर स्विच करें" दबाएं और डाउनलोड फिर से शुरू करें।<br/>]]>
     </string>
     <string name="dl_turn_off_manifest_checks">मैनिफेस्ट जांच बंद करें</string>
     <string name="dl_switch_to_official_site">आधिकारिक साइट पर स्विच करें</string>
@@ -357,17 +362,18 @@
     <string name="preference_category_gestures">जेस्चर</string>
     <string name="preference_category_buttons">बटन</string>
     <string name="preference_category_experimental_settings">प्रायोगिक गड़बड़ियाँ</string>
-    <string name="preference_category_java_tweaks">जावा ट्वीक्स</string>
+    <string name="preference_category_java_tweaks">Java ट्वीक्स</string>
     <string name="preference_category_main_categories">श्रेणियाँ</string>
     <string name="preference_category_miscellaneous">अन्य सेटिंग्स</string>
     <string name="preference_category_video">वीडियो सेटिंग्स</string>
     <string name="notification_permission_dialog_title">अनुमति अनुरोध</string>
-    <string name="notification_permission_dialog_text">जब आप ऐप से बाहर निकलते हैं तो गेम/मॉडपैक डाउनलोड्स को रुकने से रोकने के लिए मोजो लॉन्चर को नोटिफिकेशन्स पोस्ट करने की अनुमति चाहिए। इस अनुमति के बिना, जब आप मोजो लॉन्चर को बैकग्राउंड मोड में डालते हैं तो Android आपके डाउनलोड्स को बंद कर सकता है।</string>
+    <string name="notification_permission_dialog_text">जब आप ऐप से बाहर निकलते हैं तो गेम/मॉडपैक डाउनलोड्स को रुकने से रोकने के लिए MJLauncher को नोटिफिकेशन्स पोस्ट करने की अनुमति चाहिए। इस अनुमति के बिना, जब आप MJLauncher को बैकग्राउंड मोड में डालते हैं तो Android आपके डाउनलोड्स को बंद कर सकता है।</string>
+
     <string name="notification_permission_toast">आप सेटिंग्स में जाकर बाद में कभी भी अपना मन बदल सकते हैं।</string>
     <string name="preference_ask_for_notification_title">नोटिफिकेशन्स की अनुमति दें</string>
     <string name="preference_ask_for_notification_description">नोटिफिकेशन अनुमति को फिर से रिक्वेस्ट करने के लिए क्लिक करें, गेम/मॉडपैक बैकग्राउंड डाउनलोड्स के सही ढंग से काम करने के लिए इसकी आवश्यकता है।</string>
-    <string name="preference_vsync_in_zink_title">ज़िंक के साथ V-Sync की अनुमति दें</string>
-    <string name="preference_vsync_in_zink_description">लॉन्चर को ज़िंक के लिए V-Sync सक्षम करने हेतु इंटरनल सिस्टम API का उपयोग करने की अनुमति देता है। यदि सिस्टम अपडेट के बाद ज़िंक के साथ आपका लॉन्चर अचानक क्रैश हो जाता है, तो इसे बंद कर दें।</string>
+    <string name="preference_vsync_in_zink_title">Zink के साथ V-Sync की अनुमति दें</string>
+    <string name="preference_vsync_in_zink_description">लॉन्चर को Zink के लिए V-Sync सक्षम करने हेतु इंटरनल सिस्टम API का उपयोग करने की अनुमति देता है। यदि सिस्टम अपडेट के बाद Zink के साथ आपका लॉन्चर अचानक क्रैश हो जाता है, तो इसे बंद कर दें।</string>
     <string name="exception_failed_to_unpack_jre17">JRE 17 इंस्टॉल करने में विफल</string>
     <string name="newdl_starting">गेम मेटाडेटा पढ़ा जा रहा है…</string>
     <string name="newdl_downloading_metadata">गेम मेटाडेटा डाउनलोड हो रहा है (%s)</string>
@@ -384,7 +390,7 @@
     <string name="log_view_button_output_on">आउटपुट\nचालू</string>
     <string name="log_view_label_log_output">लॉग आउटपुट:</string>
     <string name="execute_jar_failed_to_read_file">.jar फ़ाइल पढ़ने में विफल</string>
-    <string name="execute_jar_incompatible_runtime">.jar निष्पादन सुविधा जावा %d के साथ संगत नहीं है</string>
+    <string name="execute_jar_incompatible_runtime">.jar execution सुविधा Java %d के साथ संगत नहीं है</string>
     <string name="controller_button_a">A</string>
     <string name="controller_button_b">B</string>
     <string name="controller_button_x">X</string>
@@ -408,29 +414,162 @@
     <string name="controller_remapper_exit_part1">पकड़े</string>
     <string name="controller_remapper_exit_part2">बाहर निकलने के लिए</string>
     <string name="controller_remapper_operating_mode">वर्तमान मोड</string>
-    <string name="customctrl_visibility_title">दृश्यता</string>
+    <string name="customctrl_visibility_title">Visibility</string>
     <string name="customctrl_visibility_ingame">गेम में</string>
     <string name="customctrl_visibility_in_menus">मेन्यू में</string>
     <string name="controller_remapper_expand_entry">कीकोड बदलने के लिए विस्तार करें</string>
     <string name="preference_remap_controller_title">कंट्रोलर की बाइंडिंग बदलें</string>
-    <string name="preference_remap_controller_description">यह आपको प्रत्येक कंट्रोलर बटन से बाउंड कीबोर्ड कुंजियों को संशोधित करने की अनुमति देता है</string>
-    <string name="mcl_button_social_media">डिस्कॉर्ड</string>
-    <string name="ltw_render_distance_warning_msg">आपका GPU सोडियम या अन्य समान मॉड्स के बिना 7 से ज़्यादा रेंडर दूरी पर रेंडर करने में सक्षम नहीं है। जब आप "ठीक है" पर क्लिक करेंगे तो रेंडर दूरी अपने आप कम हो जाएगी।</string>
+    <string name="preference_remap_controller_description">यह आपको प्रत्येक कंट्रोलर बटन से बाउंड कीबोर्ड keys को संशोधित करने की अनुमति देता है</string>
+    <string name="mcl_button_social_media">Discord</string>
+    <string name="ltw_render_distance_warning_msg">आपका GPU Sodium या अन्य समान मॉड्स के बिना 7 से ज़्यादा render distance पर रेंडर करने में सक्षम नहीं है। जब आप "ठीक है" पर क्लिक करेंगे तो render distance अपने आप कम हो जाएगी।</string>
     <string name="mcl_button_open_directory">गेम डायरेक्टरी खोलें</string>
     <string name="local_login_bad_username_title">अनुपयुक्त यूज़रनेम</string>
     <string name="local_login_bad_username_text">यूज़रनेम 3–16 अक्षरों का होना चाहिए, और इसमें केवल लैटिन अक्षर, 0–9 अंक और अंडरस्कोर होने चाहिए।</string>
     <string name="quick_setting_title">त्वरित सेटिंग्स</string>
-    <string name="create_bta_instance">बेटर दैन एडवेंचर!" इंस्टेंस बनाएँ!"</string>
-    <string name="select_bta_version">बेटर दैन एडवेंचर!" संस्करण चुनें</string>
+    <string name="create_bta_instance">\"Better than Adventure!\" इंस्टेंस बनाएँ</string>
+    <string name="select_bta_version">\"Better than Adventure!\" संस्करण चुनें</string>
     <string name="bta_installer_available_versions">समर्थित BTA संस्करण</string>
     <string name="bta_installer_untested_versions">अपरिक्षित BTA संस्करण</string>
     <string name="bta_installer_nightly_versions">नाइटली BTA संस्करण</string>
     <string name="newdl_extracting_native_libraries">नेटिव लाइब्रेरीज़ निकाली जा रही हैं (%d/%d)</string>
     <string name="compat_version_not_supported">आपका डिवाइस यह संस्करण नहीं चला सकता क्योंकि LTW आपके डिवाइस पर समर्थित नहीं है।</string>
-    <string name="oauth_unknown_error">अज्ञात प्रमाणीकरण त्रुटि</string>
-    <string name="oauth_web_complete">प्रमाणीकरण हो रहा है…</string>
-    <string name="auth_select_microsoft">माइक्रोसॉफ्ट अकाउंट</string>
+    <string name="oauth_unknown_error">अज्ञात authentication त्रुटि</string>
+    <string name="oauth_web_complete">Authentication हो रहा है…</string>
+    <string name="auth_select_microsoft">Microsoft अकाउंट</string>
     <string name="auth_select_elyby">Ely.by अकाउंट</string>
     <string name="auth_select_local">स्थानीय अकाउंट</string>
     <string name="instance_dir_missing">इंस्टेंस गायब है</string>
+    <string name="mcl_setting_renderer_freedreno_kgsl">Freedreno - सभी versions, fast, सिर्फ Adreno</string>
+    <string name="dl_library_sha_fail">Library %s ख़राब हो गई है और इसे फिर से डाउनलोड किया जाएगा।</string>
+    <string name="preference_use_angle_title">ANGLE का उपयोग करें</string>
+    <string name="preference_use_angle_description">सिस्टम ड्राइवर के बजाय ANGLE का उपयोग करने की अनुमति देता है। कुछ GPUs पर मॉड्स के साथ ग्राफिकल समस्याओं को ठीक कर सकता है।</string>
+    <string name="preference_microphone_access_title">माइक्रोफ़ोन एक्सेस की अनुमति का अनुरोध करें</string>
+    <string name="preference_microphone_access_description">गेम के लिए डिवाइस माइक्रोफ़ोन का एक्सेस देने के लिए सिस्टम से अनुरोध करता है।</string>
+    <string name="neoforge_dl_no_installer">माफ़ करें, लेकिन NeoForge के इस संस्करण में इंस्टॉलर नहीं है, जो अभी तक समर्थित नहीं है।</string>
+    <string name="neoforge_dl_select_version">NeoForge वर्ज़न चुनें</string>
+    <string name="modloader_dl_install_neoforge_instance">NeoForge इंस्टेंस बनाएँ</string>
+    <string name="compat_sodium_not_supported">आपका डिवाइस इस वर्ज़न पर Sodium नहीं चला सकता क्योंकि LTW आपके डिवाइस पर समर्थित नहीं है।</string>
+
+    <string name="gamedir_open_failed">गेम डायरेक्टरी खोलने में विफल</string>
+    <string name="newerdl_inserting_metadata">फ़ाइल मेटाडेटा खोजा जा रहा है…</string>
+    <string name="newerdl_inserting_metadata_count">फ़ाइल मेटाडेटा खोजा जा रहा है… (%d/%d)</string>
+    <string name="newerdl_downloading_files_count">फ़ाइलें डाउनलोड हो रही हैं… (%d/%d, %.2f MB/s)</string>
+    <string name="newerdl_downloading_files_size">फ़ाइलें डाउनलोड हो रही हैं… (%.2f/%.2f MB, %.2f MB/s)</string>
+    <string name="preference_verify_game_files_title">गेम फ़ाइलें सत्यापित करें</string>
+    <string name="preference_verify_game_files_description">मेटाडेटा में सेट किए गए चेकसम और आकार के विरुद्ध डाउनलोड की गई गेम फ़ाइलों को सत्यापित करें। मेटाडेटा JSON फ़ाइलें इस सेटिंग की परवाह किए बिना सत्यापित की जाती हैं।</string>
+    <string name="preference_go_vroom_title">तेज़ गेम स्टार्टअप</string>
+    <string name="preference_go_vroom_description">क्रमिक रीस्टार्ट पर फ़ाइल चेकसम को सत्यापित न करें। इससे गेम बहुत तेज़ी से शुरू होता है।</string>
+    <string name="vml_fail_load_runtime">Java वर्चुअल मशीन लोड करने में विफल: %s</string>
+    <string name="vml_fail_create_runtime">Java वर्चुअल मशीन बनाने में विफल: %s</string>
+    <string name="vml_fail_find_hooks_native">नेटिव हुक्स खोजने में विफल।</string>
+    <string name="vml_fail_find_hooks">Hook targets खोजने में विफल। विवरण के लिए latestlog.txt देखें</string>
+    <string name="vml_fail_insert_hooks">हुक्स इंस्टॉल करने में विफल: %s</string>
+    <string name="vml_fail_load_classpath">क्लासपाथ लोड करने में विफल। विवरण के लिए latestlog.txt देखें</string>
+    <string name="vml_fail_run_main">Main class शुरू करने में विफल। विवरण के लिए latestlog.txt देखें</string>
+    <string name="vml_huh">\???</string>
+    <string name="vml_err_ok">सफलता</string>
+    <string name="vml_err_unknown">अज्ञात त्रुटि</string>
+    <string name="vml_err_detached">थ्रेड Java VM से अलग हो गया है</string>
+    <string name="vml_err_version">असंगत JNI संस्करण</string>
+    <string name="vml_err_nomem">RAM खत्म हो गई है</string>
+    <string name="vml_err_exists">VM पहले से ही लोड है</string>
+    <string name="vml_err_inval">अमान्य आर्ग्यूमेंट्स</string>
+    <string name="gr_err_renderer_load_Failed">रेंडरर लाइब्रेरी लोड करने में विफल</string>
+    <string name="ltw_4x_msaa_warning_msg">ऐसा लगता है कि आपने डेवलपर सेटिंग्स में \"4x एमएसएए हमेशा चालू रखें\" ऑन कर दिया है। रेंडरिंग समस्याओं से बचने के लिए कृपया इसे बंद करें।</string>
+    <string name="no_instance">कोई इंस्टेंस नहीं चुना गया है। कृपया एक इंस्टेंस बनाएँ या चुनें।</string>
+    <string name="downloading_java_runtime_uni">रनटाइम डाउनलोड हो रहा है, चरण 1/2 (%.2f/%.2f MB)</string>
+    <string name="downloading_java_runtime_platform">रनटाइम डाउनलोड हो रहा है, चरण 2/2 (%.2f/%.2f MB)</string>
+    <string name="runtime_error_title">रनटाइम उपलब्ध नहीं है</string>
+    <string name="runtime_error_missing">Java %d अभी तक इंस्टॉल नहीं हुआ है। कृपया कोई अन्य संगत रनटाइम चुनें या इसे स्वचालित रूप से इंस्टॉल करने के लिए इंटरनेट से कनेक्ट करें।</string>
+    <string name="runtime_error_install_failed">Java %d इंस्टॉल करने में विफल। कृपया अपना इंटरनेट कनेक्शन जांचें और पुनः प्रयास करें।</string>
+    <string name="modloader_dl_install_legacy_fabric_instance">Legacy Fabric इंस्टेंस बनाएँ</string>
+    <string name="instance_delete">इंस्टेंस डिलीट करें</string>
+    <string name="instance_delete_confirmation">क्या आप वाकई इंस्टेंस डिलीट करना चाहते हैं? यह इंस्टेंस डायरेक्टरी में मौजूद सभी वर्ल्ड्स, मॉड्स, रिसोर्सेज और किसी भी अन्य डेटा को स्थायी रूप से हटा देगा। यह क्रिया पूर्ववत नहीं की जा सकती!</string>
+    <string name="import_local_modpack">लोकल मॉडपैक इंपोर्ट करें</string>
+    <string name="preference_sysmem_title">सिस्टम मेमोरी में रेंडरिंग के लिए बाध्य करें</string>
+    <string name="preference_sysmem_summary">Freedreno को सीधे सिस्टम मेमोरी में रेंडर करने के लिए बाध्य करता है। यदि प्रदर्शन कम है या आपको रेंडरिंग समस्याओं का अनुभव होता है तो इसे सक्षम करें</string>
+    <string name="mcl_setting_title_buttonscale">कंट्रोल बटन्स स्केलिंग</string>
+    <string name="mcn_abort_title">एप्लिकेशन/गेम रद्द कर दिया गया, अधिक जानकारी के लिए latestlog.txt देखें।</string>
+    <string name="preference_force_legacy_zink_title">Legacy Zink का उपयोग करें</string>
+    <string name="preference_force_legacy_zink_description">वर्तमान डिवाइस के अनुसार चुनने के बजाय बलपूर्वक Legacy Zink का उपयोग करें। यह कुछ ग्राफिकल समस्याओं को ठीक कर सकता है। यदि गेम धीमा हो जाए तो इसे बंद कर दें।</string>
+    <string name="preference_category_keyboard">कीबोर्ड सेटिंग्स</string>
+    <string name="preference_keyboard_autopan_title">कीबोर्ड पैनिंग सक्षम करें</string>
+    <string name="preference_keyboard_autopan_summary">यदि आपका आखिरी टच स्क्रीन के निचले हिस्से में था, तो यह ऑन-स्क्रीन कीबोर्ड को गेम विंडो के ऊपर आने के बजाय उसे खिसकाने की अनुमति देता है। समान फ़ंक्शन वाले कस्टम कंट्रोल लेआउट बटन्स पर इसका कोई प्रभाव नहीं पड़ता।</string>
+    <string name="social_media_invite" translatable="false">https://discord.gg/VHdwQFsaGX</string>
+    <string name="preference_data_migration_title">डेटा इंपोर्ट करें</string>
+    <string name="preference_data_migration_summary">पुराने ऐप इंस्टॉलेशन से डेटा (इंस्टेंस, कंट्रोल मैप्स) इंपोर्ट करना शुरू करें</string>
+    <string name="migration_progress_foreign">सही पुराना इंस्टॉलेशन चुनें!</string>
+    <string name="migration_progress_failed">डेटा माइग्रेट करने में विफल!</string>
+    <string name="migration_progress_finish">डेटा माइग्रेशन पूरा हुआ!</string>
+    <string name="migration_progress_self">आप एक ही ऐप से डेटा इंपोर्ट नहीं कर सकते!</string>
+    <string name="migration_progress_copying">%1s कॉपी किया जा रहा है</string>
+    <string name="migration_progress_warning_title">डेटा माइग्रेशन</string>
+    <string name="migration_progress_warning_summary">आप डेटा माइग्रेशन प्रक्रिया शुरू करने वाले हैं। यह प्रक्रिया चयनित लॉन्चर के सभी इंस्टेंस और कंट्रोल मैप्स को मौजूदा ऐप इंस्टॉलेशन में कॉपी करेगी। टकराव वाली सभी फ़ाइलें ओवरराइट हो जाएँगी! बैकअप बनाने पर विचार करें। आपको चेतावनी दी जा रही है।</string>
+    <string name="migration_progress_space">आपके डिवाइस में डेटा माइग्रेशन के लिए पर्याप्त स्थान नहीं है। जारी रखने के लिए कम से कम $%1l MB या उससे अधिक खाली करें।</string>
+    <string name="migration_notice">लगता है आपने पहले भी इस ऐप का उपयोग किया है। आप अन्य सेटिंग्स से पुराने लॉन्चर इंस्टॉलेशन का डेटा इंपोर्ट कर सकते हैं।</string>
+    <string name="preference_alsoft_opensl_title">ऑडियो के लिए बलपूर्वक OpenSL का उपयोग करें</string>
+    <string name="preference_alsoft_opensl_summary">ALSoft में Oboe की जगह बलपूर्वक OpenSL बैकएंड सक्षम करता है। कुछ डिवाइस पर ऑडियो कैप्चर की समस्याएँ ठीक कर सकता है। यदि ऑडियो चलाने/कैप्चर करने में समस्या दिखे तो इसे बंद कर दें</string>
+    <string name="loading_screen_title">गेम विंडो दिखने की प्रतीक्षा हो रही है…</string>
+    <string name="loading_screen_booted">तैयार - %1$s पर चल रहा है!</string>
+    <string name="loading_screen_warning">यदि आप यहीं अटके हुए हैं, तो गेम क्रैश हो गया हो सकता है</string>
+
+    <string name="mcl_setting_renderer_vulkan_lzink">Legacy Zink (Vulkan) - सभी वर्ज़न, कम प्रदर्शन</string>
+    <string name="mcl_setting_renderer_mesa_desktop">Mesa (DRM) - सभी वर्ज़न</string>
+    <string name="mcl_setting_renderer_mesa_desktop_ext">Mesa (DRM, external) - सभी वर्ज़न</string>
+    <string name="microsoft_login_generic">त्रुटि: %s</string>
+    <string name="modpack_install_toast_success">मॉडपैक इंस्टॉलेशन पूरा हुआ!</string>
+    <string name="preference_show_memory_warning_title">मेमोरी चेतावनी डायलॉग दिखाएँ</string>
+    <string name="preference_show_memory_warning_summary">सक्षम होने पर, गेम लॉन्च के दौरान चेतावनी डायलॉग दिखाता है यदि उपलब्ध free memory गेम के लिए allocated memory से कम हो</string>
+    <string name="option_do_not_show_again">दोबारा न दिखाएँ</string>
+    <string name="preference_metadata_clear">मेटाडेटा कैश साफ़ करें</string>
+    <string name="preference_metadata_clear_summary">सभी स्ट्रिंग्स मेटाडेटा कैश हटाता है और रीबिल्ड करता है। इसका उपयोग करें यदि लॉन्चर को नए गेम या मॉडलोडर वर्ज़न दिखाई नहीं दे रहे हों</string>
+    <string name="preference_metadata_clear_fail">कैश फ़ाइलें हटाने में विफल</string>
+    <string name="preference_metadata_clear_complete">पूरा हुआ। बदलाव लागू करने के लिए लॉन्चर को पुनः आरंभ करें</string>
+    <string name="preference_button_transparency">बटन transparency</string>
+    <string name="preference_button_transparency_summary">स्क्रीन पर दिखने वाले बटनों की transparency बदलता है</string>
+    <string name="main_please_restart">कृपया लॉन्चर होमस्क्रीन से गेम को पुनः आरंभ करें</string>
+    <string name="preference_ubwc_title">UBWC कम्प्रेशन वर्कअराउंड सक्षम करें</string>
+    <string name="preference_ubwc_summary">चुनिंदा Adreno GPU (Adreno 740) के लिए आवश्यक \"tp_ubwc_flag_hint\" फ़्लैग सक्षम करता है। यदि freedreno या Turnip पर रेंडरिंग समस्याएँ दिखें तो इसे सक्षम करें</string>
+    <string name="mjdl_submap_error_title">लॉन्चर डाउनलोड डेटा त्रुटि</string>
+    <string name="mjdl_submap_error_subtitle">गेम डाउनलोड करने के लिए आवश्यक डेटा अभी लोड नहीं हुआ है। कृपया पुनः प्रयास करें।</string>
+    <string name="mjdl_json_error_title">गेम मेटाडेटा त्रुटि</string>
+    <string name="mjdl_json_error_subtitle_1">इस वर्ज़न का डेटा उपलब्ध नहीं है। अपना इंटरनेट कनेक्शन जाँचें या इसे पुनः इंस्टॉल करें।</string>
+    <string name="mjdl_json_error_subtitle_3">इस वर्ज़न का डेटा ख़राब है। गेम मैनिफ़ेस्ट सत्यापन चालू करें और फिर से डाउनलोड करने का प्रयास करें।</string>
+    <string name="mjdl_json_error_subtitle_2">इस वर्ज़न का डेटा विकृत है। कृपया इसकी रिपोर्ट हमारे GitHub या Discord पर करें। (%s)</string>
+    <string name="mjdl_native_error_title">गेम लाइब्रेरी त्रुटि</string>
+    <string name="mjdl_native_error_subtitle_1">लाइब्रेरी %s को %s के लिए कोड चाहिए, लेकिन यह शामिल नहीं है।</string>
+    <string name="mjdl_native_error_subtitle_2">नेटिव लाइब्रेरीज़ निकालने में विफल</string>
+    <string name="mjdl_disk_error_title">डिस्क एक्सेस त्रुटि</string>
+    <string name="mjdl_disk_error_subtitle_1">फ़ोल्डर %s बनाने में विफल। सुनिश्चित करें कि आपके पास पर्याप्त खाली डिस्क स्थान है।</string>
+    <string name="mjdl_disk_error_subtitle_4">इस वर्ज़न का डेटा पढ़ा नहीं जा सकता। पुनः प्रयास करें या एप्लिकेशन को पुनः इंस्टॉल करें।</string>
+    <string name="mjdl_disk_error_subtitle_3">वर्ज़न %s के लिए गेम फ़ाइलें कॉपी करने में विफल। सुनिश्चित करें कि आपके पास पर्याप्त खाली डिस्क स्थान है।</string>
+    <string name="mjdl_disk_error_subtitle_2">Java रनटाइम अपडेट करने के बाद इंस्टेंस सहेजने में विफल।</string>
+    <string name="mjdl_download_error_title">डाउनलोड त्रुटि</string>
+    <string name="mjdl_download_error_subtitle">डाउनलोड विफल। अपना इंटरनेट कनेक्शन जाँचें और सुनिश्चित करें कि आपके पास पर्याप्त खाली डिस्क स्थान है।</string>
+    <string name="mjdl_download_error_subtitle_2">फ़ाइल सत्यापन विफल। कृपया पुनः प्रयास करें। यदि यह मॉडेड वर्ज़न है, तो कृपया पुनः इंस्टॉल करने का प्रयास करें। अन्यथा, यदि यह त्रुटि बार-बार होती रहे, तो GitHub या Discord पर हमसे संपर्क करें।</string>
+    <string name="bta_configuring">BTA कॉन्फ़िगर हो रहा है…</string>
+    <string name="pref_blocklist_disable_title">सर्वर ब्लॉकलिस्ट अक्षम करें</string>
+    <string name="pref_blocklist_disable_description">MC सर्वर ब्लॉकलिस्ट को लोड होने से रोकें। इससे आप ब्लॉक किए गए सर्वर (जैसे 6b6t.org) पर खेल सकते हैं</string>
+    <string name="driver_default_name">Built-in ड्राइवर</string>
+    <string name="driver_default_extra_name">MJLauncher</string>
+    <string name="driver_config_title">इंस्टॉल किए गए ड्राइवर</string>
+    <string name="driver_config_pref_title">Vulkan ड्राइवर</string>
+    <string name="driver_config_pref_subtitle">इंस्टॉल किए गए AdrenoTools Vulkan ड्राइवर प्रबंधित करें और नए इंस्टॉल करें</string>
+    <string name="driver_config_import">जोड़ें</string>
+    <string name="driver_config_delete">हटाएँ</string>
+    <string name="driver_config_use">उपयोग करें</string>
+    <string name="driver_config_already_used">उपयोग में</string>
+    <string name="driver_config_select">चुनें</string>
+    <string name="driver_config_import_failed">चयनित ड्राइवर जोड़ने में विफल!</string>
+    <string name="driver_config_import_invalid">गलत या ख़राब ड्राइवर पैकेज, किसी अन्य को आज़माएँ</string>
+    <string name="driver_config_import_notify">एक मान्य AdrenoTools ड्राइवर पैकेज चुनें</string>
+    <string name="driver_config_corrupted">अमान्य या ख़राब ड्राइवर</string>
+    <string name="driver_config_remove_failed">ड्राइवर पैकेज हटाने में असमर्थ</string>
+    <string name="driver_progress_validate">ड्राइवर पैकेज सत्यापित किया जा रहा है</string>
+    <string name="driver_progress_install">ड्राइवर पैकेज इंस्टॉल किया जा रहा है</string>
+    <string name="pref_clean_partfiles_title">डाउनलोड कैश साफ़ करें</string>
+    <string name="pref_clean_partfiles_subtitle_wait">आंशिक रूप से डाउनलोड की गई गेम फ़ाइलें साफ़ करें। उपयोग किया गया स्थान गणना किया जा रहा है…</string>
+    <string name="pref_clean_partfiles_subtitle">आंशिक रूप से डाउनलोड की गई गेम फ़ाइलें साफ़ करें। %.2f MB स्थान उपयोग में है</string>
+    <string name="clean_partfiles_wait">डाउनलोड कैश साफ़ किया जा रहा है…</string>
+    <string name="warn_auth_type_missing">%s उपलब्ध नहीं है, स्थानीय खाते का उपयोग किया जा रहा है</string>
 </resources>
