@@ -167,6 +167,31 @@ public class DownloadUtils {
         return -1;
     }
 
+    /**
+     * Ping an authlib-injector URL to check if it's available
+     * @param url the URL to ping
+     * @return whether the ping was successful
+     */
+    public static boolean pingInjectorUrl(String url) {
+        try {
+            HttpURLConnection urlConnection = (HttpURLConnection) new URL("https", url, "/").openConnection();
+            urlConnection.setRequestMethod("HEAD");
+            urlConnection.setConnectTimeout(2000);
+            urlConnection.setReadTimeout(500);
+            urlConnection.setDoInput(false);
+            urlConnection.setDoOutput(false);
+            urlConnection.setRequestProperty("User-Agent", "MojoLauncher-Ping/1.0");
+            urlConnection.connect();
+            int responseCode = urlConnection.getResponseCode();
+            if(responseCode != 200) return false;
+            if(urlConnection.getHeaderField("x-authlib-injector-api-location") == null) return false;
+            return true;
+        }catch (IOException e) {
+            Log.w("DownloadUtils", "Failed to ping injector url", e);
+            return false;
+        }
+    }
+
     public interface ParseCallback<T> {
         T process(String input) throws ParseException;
     }

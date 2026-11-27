@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.WebSettings;
+import android.webkit.WebStorage;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -33,6 +34,10 @@ public abstract class WebViewCompletionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mWebview = (WebView) inflater.inflate(R.layout.fragment_microsoft_login, container, false);
+        mWebview.requestFocus();
+        mWebview.setOnFocusChangeListener((v,f)->{
+            if(!f) mWebview.requestFocus();
+        });
         setWebViewSettings();
         if(savedInstanceState == null) startNewSession();
         else restoreWebViewState(savedInstanceState);
@@ -46,6 +51,7 @@ public abstract class WebViewCompletionFragment extends Fragment {
     private void setWebViewSettings() {
         WebSettings settings = mWebview.getSettings();
         settings.setJavaScriptEnabled(true);
+        settings.setDomStorageEnabled(true);
         mWebview.setWebViewClient(new WebViewTrackClient());
         mBlankClient = false;
     }
@@ -56,6 +62,7 @@ public abstract class WebViewCompletionFragment extends Fragment {
             mWebview.clearCache(true);
             mWebview.clearFormData();
             mWebview.clearHistory();
+            WebStorage.getInstance().deleteAllData();
             mWebview.loadUrl(mAuthUrl);
         });
     }

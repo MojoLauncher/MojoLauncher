@@ -158,7 +158,9 @@ public class GameView extends FrameLayout implements PlatformGrabListener, Surfa
     }
 
     /**
-     * The event for mouse/joystick movements
+     * The event for mouse/joystick movements.
+     * Note that the mouse motion here is a fallback in case if AndroidPointerCapture has not
+     * grabbed the mouse yet (or if it's not supported)
      */
     @SuppressLint("NewApi")
     @Override
@@ -179,10 +181,6 @@ public class GameView extends FrameLayout implements PlatformGrabListener, Surfa
             break;
         }
         if(mouseCursorIndex == -1) return false; // we cant consoom that, theres no mice!
-
-        // Make sure we grabbed the mouse if necessary
-        // Avoid going through the JNI each time.
-        updateGrabState(Platform.isGrabbing());
 
         switch(event.getActionMasked()) {
             case MotionEvent.ACTION_HOVER_MOVE:

@@ -121,3 +121,9 @@ JNIEnv* get_attached_env(JavaVM* jvm) {
     }
     return jvm_env;
 }
+
+void save_jvm_string(JNIEnv* env, jstring src, char** dst) {
+    char* _src = (*env)->GetStringUTFChars(env, src, NULL);
+    *dst = strdup(_src);
+    (*env)->ReleaseStringUTFChars(env, src, _src);
+}

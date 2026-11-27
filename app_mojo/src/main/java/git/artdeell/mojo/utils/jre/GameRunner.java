@@ -1,5 +1,6 @@
 package git.artdeell.mojo.utils.jre;
 
+import android.content.Context;
 import android.util.ArrayMap;
 import android.util.Log;
 import android.widget.Toast;
@@ -9,11 +10,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import git.artdeell.mojo.Architecture;
 import git.artdeell.mojo.JVersionList;
+import git.artdeell.mojo.Logger;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.authenticator.accounts.Account;
 import git.artdeell.mojo.game.renderer.def.Renderers;
 import git.artdeell.mojo.game.renderer.impl.GLESRenderSpec;
 import git.artdeell.mojo.instances.Instance;
+import git.artdeell.mojo.utils.DownloadUtils;
 import git.artdeell.mojo.utils.lifecycle.LifecycleAwareAlertDialog;
 import git.artdeell.mojo.multirt.MultiRTUtils;
 import git.artdeell.mojo.multirt.Runtime;
@@ -28,6 +31,7 @@ import git.artdeell.mojo.utils.JREUtils;
 import git.artdeell.mojo.utils.JSONUtils;
 import git.artdeell.mojo.utils.MCOptionUtils;
 import git.artdeell.mojo.utils.OldVersionsUtils;
+import git.artdeell.mojo.utils.plugins.LibraryPlugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -147,6 +151,8 @@ public class GameRunner {
 
     public static void launchGame(final AppCompatActivity activity, Account account,
                                   Instance instance, String versionId, File[] classpath, GameRenderer gameRenderer) throws Throwable {
+        if(!performAuthPing(activity, account)) account = account.toLocal();
+
         int freeDeviceMemory = Tools.getFreeDeviceMemory(activity);
         int localeString;
         int freeAddressSpace = Architecture.is32BitsDevice() ? Tools.getMaxContinuousAddressSpaceSize() : -1;
@@ -263,15 +269,30 @@ public class GameRunner {
             javaArgList.add("-Dlog4j.configurationFile=" + configFile);
         }
 
+        // This allows some mods to use additional libs provided via plugin so we don't need to bloat our app with uncommon stuff
+        String additionalNativesDir;
+        LibraryPlugin natives;
+        if((natives = LibraryPlugin.discoverPlugin(activity, LibraryPlugin.ID_NATIVES_PLUGIN)) != null){
+            additionalNativesDir = natives.getLibraryPath();
+            File dir = new File(additionalNativesDir);
+            if(dir.isDirectory()){
+                String overrides = String.join(" ", dir.list((f, s) -> s.endsWith(".so")));
+                JREUtils.setLibraryOverrides(additionalNativesDir, overrides);
+            }
+            additionalNativesDir = ':' + additionalNativesDir;
+        } else additionalNativesDir = "";
+
         versionInfo.logging = null;
 
         File versionSpecificNativesDir = new File(Tools.DIR_CACHE, "natives/"+versionId);
         if(versionSpecificNativesDir.exists()) {
             String dirPath = versionSpecificNativesDir.getAbsolutePath();
-            javaArgList.add("-Djava.library.path="+dirPath+":"+Tools.NATIVE_LIB_DIR);
+            javaArgList.add("-Djava.library.path="+dirPath+":"+Tools.NATIVE_LIB_DIR+additionalNativesDir);
             javaArgList.add("-Djna.boot.library.path="+dirPath);
             // Sometimes, the game can extract natives itself onto this path
             javaArgList.add("-Dorg.lwjgl.librarypath="+dirPath);
+        } else {
+            javaArgList.add("-Djava.library.path="+Tools.NATIVE_LIB_DIR+additionalNativesDir);
         }
 
         File lwjglExtractDir = new File(Tools.DIR_CACHE, "lwjgl_native/"+versionId);
@@ -345,6 +366,16 @@ public class GameRunner {
         } else {
             Log.w(Tools.APP_NAME, "Failed to create the configuration directory");
         }
+    }
+
+    private static boolean performAuthPing(Context context, Account account) {
+        String injectorUrl = account.authType.injectorUrl;
+        if(injectorUrl == null) return true;
+        Logger.appendToLog("Pinging authentication service...");
+        if(DownloadUtils.pingInjectorUrl(injectorUrl)) return true;
+        Logger.appendToLog("Authentication service did not respond, disabling");
+        Tools.runOnUiThread(()-> Toast.makeText(context, context.getString(R.string.warn_auth_type_missing, injectorUrl), Toast.LENGTH_SHORT).show());
+        return false;
     }
 
     private static void addAuthlibInjectorArgs(List<String> javaArgList, Account account) {
