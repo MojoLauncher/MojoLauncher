@@ -37,6 +37,7 @@ import git.artdeell.mojo.instances.InstanceAdapterExtra;
 import java.io.IOException;
 
 import fr.spse.extended_view.ExtendedTextView;
+import git.artdeell.mojo.utils.FragmentUtils;
 
 /**
  * A class implementing custom spinner like behavior, notably:
@@ -88,7 +89,7 @@ public class mcVersionSpinner extends ExtendedTextView {
         if(currentSelection instanceof InstanceAdapterExtra) {
             performExtraAction((InstanceAdapterExtra) currentSelection);
         }else{
-            Tools.swapFragment(fragmentActivity, InstanceEditorFragment.class, InstanceEditorFragment.TAG, null);
+            FragmentUtils.swapFragment(fragmentActivity, InstanceEditorFragment.class, InstanceEditorFragment.TAG, null);
         }
     }
 
@@ -142,7 +143,7 @@ public class mcVersionSpinner extends ExtendedTextView {
     private void performExtraAction(InstanceAdapterExtra extra) {
         //Replace with switch-case if you want to add more extra actions
         if (extra.id == VERSION_SPINNER_PROFILE_CREATE) {
-            Tools.swapFragment((FragmentActivity) getContext(), ProfileTypeSelectFragment.class,
+            FragmentUtils.swapFragment((FragmentActivity) getContext(), ProfileTypeSelectFragment.class,
                     ProfileTypeSelectFragment.TAG, null);
         }
     }

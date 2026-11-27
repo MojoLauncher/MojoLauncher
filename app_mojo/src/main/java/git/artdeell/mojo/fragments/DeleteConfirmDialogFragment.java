@@ -13,6 +13,8 @@ import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.instances.Instance;
 import git.artdeell.mojo.instances.Instances;
 import git.artdeell.mojo.instances.InstanceIconProvider;
+import git.artdeell.mojo.utils.FragmentUtils;
+
 import java.io.IOException;
 
 
@@ -29,7 +31,7 @@ public class DeleteConfirmDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.global_delete, (dialog, which) -> {
                     if (mInstance == null) return;
                     InstanceIconProvider.dropIcon(mInstance);
-                    Tools.removeCurrentFragment(requireActivity());
+                    FragmentUtils.removeCurrentFragment(requireActivity());
                     try {
                         Instances.removeInstance(mInstance);
                     } catch (IOException e) {

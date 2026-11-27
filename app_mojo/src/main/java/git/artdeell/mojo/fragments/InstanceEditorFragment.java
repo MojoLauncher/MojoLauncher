@@ -32,6 +32,7 @@ import git.artdeell.mojo.multirt.MultiRTUtils;
 import git.artdeell.mojo.multirt.RTSpinnerAdapter;
 import git.artdeell.mojo.multirt.Runtime;
 import git.artdeell.mojo.instances.InstanceIconProvider;
+import git.artdeell.mojo.utils.FragmentUtils;
 import git.artdeell.mojo.utils.profiles.VersionSelectorDialog;
 import git.artdeell.mojo.utils.CropperUtils;
 
@@ -86,7 +87,7 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         mSaveButton.setOnClickListener(v -> {
             InstanceIconProvider.dropIcon(mInstance);
             save();
-            Tools.backToMainMenu(requireActivity());
+            FragmentUtils.backToMainMenu(requireActivity());
         });
 
         mDeleteButton.setOnClickListener(v -> {
@@ -133,7 +134,7 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
             bundle.putBoolean(FileSelectorFragment.BUNDLE_SELECT_FOLDER, false);
             bundle.putString(FileSelectorFragment.BUNDLE_ROOT_PATH, Tools.CTRLMAP_PATH);
 
-            Tools.swapFragment(requireActivity(),
+            FragmentUtils.swapFragment(requireActivity(),
                     FileSelectorFragment.class, FileSelectorFragment.TAG, bundle);
         };
     }

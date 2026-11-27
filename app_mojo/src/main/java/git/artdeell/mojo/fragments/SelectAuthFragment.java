@@ -14,6 +14,7 @@ import com.kdt.mcgui.ProgressLayout;
 import git.artdeell.mojo.R;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.progresskeeper.ProgressKeeper;
+import git.artdeell.mojo.utils.FragmentUtils;
 
 public class SelectAuthFragment extends Fragment {
     public static final String TAG = "AUTH_SELECT_FRAGMENT";
@@ -35,6 +36,6 @@ public class SelectAuthFragment extends Fragment {
 
     private void launchAuthFragment(Class<? extends  Fragment> fragmentClass, String fragmentTag) {
         if(!ProgressLayout.ensureNoOngoingTasks(requireContext(), ProgressLayout.AUTHENTICATE)) return;
-        Tools.swapFragment(requireActivity(), fragmentClass, fragmentTag, null);
+        FragmentUtils.swapFragment(requireActivity(), fragmentClass, fragmentTag, null);
     }
 }

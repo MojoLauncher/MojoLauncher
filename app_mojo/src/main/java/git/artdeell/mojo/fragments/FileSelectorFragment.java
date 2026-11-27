@@ -20,6 +20,7 @@ import git.artdeell.mojo.R;
 import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.extra.ExtraConstants;
 import git.artdeell.mojo.extra.ExtraCore;
+import git.artdeell.mojo.utils.FragmentUtils;
 
 import java.io.File;
 public class FileSelectorFragment extends Fragment {
@@ -78,14 +79,14 @@ public class FileSelectorFragment extends Fragment {
 
         mSelectFolderButton.setOnClickListener(v -> {
             ExtraCore.setValue(ExtraConstants.FILE_SELECTOR, removeLockPath(mFileListView.getFullPath().getAbsolutePath()));
-            Tools.removeCurrentFragment(requireActivity());
+            FragmentUtils.removeCurrentFragment(requireActivity());
         });
 
         mFileListView.setFileSelectedListener(new FileSelectedListener() {
             @Override
             public void onFileSelected(File file, String path) {
                 ExtraCore.setValue(ExtraConstants.FILE_SELECTOR, removeLockPath(path));
-                Tools.removeCurrentFragment(requireActivity());
+                FragmentUtils.removeCurrentFragment(requireActivity());
             }
         });
     }

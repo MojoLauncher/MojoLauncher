@@ -10,6 +10,7 @@ import git.artdeell.mojo.Tools;
 import git.artdeell.mojo.extra.ExtraCore;
 
 import git.artdeell.mojo.R;
+import git.artdeell.mojo.utils.FragmentUtils;
 
 public class OAuthFragment extends WebViewCompletionFragment {
 
@@ -50,6 +51,6 @@ public class OAuthFragment extends WebViewCompletionFragment {
         // Captured by the listener in the mcAccountSpinner
         ExtraCore.setValue(mExtraCoreConstant, code);
         Toast.makeText(activity, R.string.oauth_web_complete, Toast.LENGTH_SHORT).show();
-        Tools.backToMainMenu(activity);
+        FragmentUtils.backToMainMenu(activity);
     }
 }

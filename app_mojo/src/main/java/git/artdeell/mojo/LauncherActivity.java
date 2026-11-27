@@ -35,6 +35,7 @@ import git.artdeell.mojo.fragments.SelectAuthFragment;
 import git.artdeell.mojo.instances.Instance;
 import git.artdeell.mojo.instances.InstanceInstaller;
 import git.artdeell.mojo.instances.Instances;
+import git.artdeell.mojo.utils.FragmentUtils;
 import git.artdeell.mojo.utils.lifecycle.ContextAwareDoneListener;
 import git.artdeell.mojo.utils.lifecycle.ContextExecutor;
 import git.artdeell.mojo.modding.modpacks.imagecache.IconCacheJanitor;
@@ -82,7 +83,7 @@ public class LauncherActivity extends BaseActivity {
         // Allow starting the add account only from the main menu, should it be moved to fragment itself ?
         if(!(fragment instanceof MainMenuFragment)) return false;
 
-        Tools.swapFragment(this, SelectAuthFragment.class, SelectAuthFragment.TAG, null);
+        FragmentUtils.swapFragment(this, SelectAuthFragment.class, SelectAuthFragment.TAG, null);
         return false;
     };
 
@@ -92,10 +93,10 @@ public class LauncherActivity extends BaseActivity {
         if(manager.isStateSaved()) return;
         Fragment fragment = manager.findFragmentById(mFragmentView.getId());
         if(fragment instanceof MainMenuFragment){
-            Tools.swapFragment(this, LauncherPreferenceFragment.class, SETTING_FRAGMENT_TAG, null);
+            FragmentUtils.swapFragment(this, LauncherPreferenceFragment.class, SETTING_FRAGMENT_TAG, null);
         } else{
             // The setting button doubles as a home button now
-            Tools.backToMainMenu(this);
+            FragmentUtils.backToMainMenu(this);
         }
     };
 

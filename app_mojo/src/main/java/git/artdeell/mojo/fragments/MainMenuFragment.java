@@ -29,6 +29,7 @@ import git.artdeell.mojo.extra.ExtraCore;
 import git.artdeell.mojo.instances.Instance;
 import git.artdeell.mojo.instances.Instances;
 import git.artdeell.mojo.utils.FileUtils;
+import git.artdeell.mojo.utils.FragmentUtils;
 
 import java.io.File;
 
@@ -73,7 +74,7 @@ public class MainMenuFragment extends Fragment {
 
 
         mNewsButton.setOnLongClickListener((v)->{
-            Tools.swapFragment(requireActivity(), GamepadMapperFragment.class, GamepadMapperFragment.TAG, null);
+            FragmentUtils.swapFragment(requireActivity(), GamepadMapperFragment.class, GamepadMapperFragment.TAG, null);
             return true;
         });
     }
