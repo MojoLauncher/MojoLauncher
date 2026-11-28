@@ -10,9 +10,11 @@ import static git.artdeell.mojo.CallbackBridge.windowWidth;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -21,6 +23,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.hardware.display.DisplayManagerCompat;
 
 import git.artdeell.mojo.CallbackBridge;
 import git.artdeell.mojo.Tools;
@@ -282,7 +285,9 @@ public class GameView extends FrameLayout implements PlatformGrabListener, Surfa
             Log.w("MGLSurface", "Attempt to refresh size on null surface");
             return;
         }
-        windowRate = mSurface.getDisplay().getRefreshRate();
+        Display current = mSurface.getDisplay();
+        // Default to 60Hz update rate if we can't fetch Display object
+        windowRate = current != null ? current.getRefreshRate() : 60f;
         MojoExec.setDisplayParams(windowWidth, windowHeight, windowRate);
         mSurfaceProvider.updateSize();
     }
